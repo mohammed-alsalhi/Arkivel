@@ -10,9 +10,14 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "20");
 
+  const status = searchParams.get("status");
+  const slug = searchParams.get("slug");
+
   const where: Record<string, unknown> = {};
   if (category) where.category = { slug: category };
   if (tag) where.tags = { some: { tag: { slug: tag } } };
+  if (status) where.status = status;
+  if (slug) where.slug = slug;
 
   const [articles, total] = await Promise.all([
     prisma.article.findMany({
@@ -36,7 +41,7 @@ export async function POST(request: NextRequest) {
   if (denied) return denied;
 
   const body = await request.json();
-  const { title, content, contentRaw, excerpt, coverImage, categoryId, tagIds, isDisambiguation, redirectTo, infobox } = body;
+  const { title, content, contentRaw, excerpt, coverImage, categoryId, tagIds, isDisambiguation, redirectTo, infobox, status: articleStatus, isPinned } = body;
 
   if (!title || !content) {
     return NextResponse.json({ error: "Title and content are required" }, { status: 400 });
@@ -62,6 +67,8 @@ export async function POST(request: NextRequest) {
       redirectTo: redirectTo || null,
       infobox: infobox || null,
       categoryId: categoryId || null,
+      status: articleStatus || "published",
+      isPinned: isPinned || false,
       tags: tagIds?.length
         ? { create: tagIds.map((tagId: string) => ({ tagId })) }
         : undefined,

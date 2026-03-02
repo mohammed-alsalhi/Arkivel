@@ -25,7 +25,7 @@ After changing `prisma/schema.prisma`, always run `npx prisma generate` and dele
 
 **Configuration:** All branding is driven by `NEXT_PUBLIC_*` env vars read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via Vercel env vars.
 
-**Auth:** Single admin password via `ADMIN_SECRET` env var. Cookie-based (`admin_token`). If `ADMIN_SECRET` is empty, all users are admin (local dev). Check with `isAdmin()` from `src/lib/auth.ts`. API routes use `requireAdmin(await isAdmin())` guard pattern.
+**Auth:** Dual auth system. Legacy: single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. Multi-user: bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
 
 **Prisma:** Uses `@prisma/adapter-pg` with raw `pg` pool (required for Neon). Singleton in `src/lib/prisma.ts` with `globalThis` caching for dev hot-reload.
 
@@ -50,10 +50,37 @@ After changing `prisma/schema.prisma`, always run `npx prisma generate` and dele
 
 `/api/search` and `/app/search/page.tsx` both implement relevance-ranked search. Multi-word queries use AND logic (every word must appear in title/content/excerpt). Results sorted by: exact title match (100) > starts with (80) > title contains (60) > content only (0).
 
+**Footnotes:** Custom Tiptap `FootnoteRef` node extension. Stored as `<sup data-footnote="text">` in HTML. Auto-numbered via CSS counters. Footnote section appended at display time by `appendFootnoteSection()`.
+
+**Syntax Highlighting:** Code blocks use `@tiptap/extension-code-block-lowlight` with lowlight (highlight.js). Language selection on insert, theme-aware CSS.
+
+**Article Status:** Articles have `status` field ("draft", "review", "published"). Non-published articles hidden from non-admins. `isPinned` boolean for featuring at top of category pages.
+
+**Semantic Links:** `ArticleLink` model with relation types (related-to, is-part-of, etc.). Defined in `src/lib/relations.ts`. Displayed via `SemanticRelations` component.
+
+**Graph:** D3 force-directed graph at `/graph`. API at `/api/graph` returns nodes/edges from wiki links and ArticleLink table. Supports BFS subgraph via `?center=slug&depth=N`.
+
+**Feeds & API:** RSS at `/feed.xml`, Atom at `/feed/atom`. Public REST API at `/api/v1/` with API key auth (`X-API-Key` header). Webhooks dispatched on article events.
+
+**Plugins:** Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in `src/lib/plugins/registry.ts`. Plugin state in `PluginState` table.
+
 ## Database Models
 
-- **Article** — main content with slug, HTML content, category, tags, revisions
+- **Article** — main content with slug, HTML content, category, tags, revisions, status, sortOrder, isPinned
 - **Category** — hierarchical (self-referential `parentId`), ordered by `sortOrder`
-- **Tag** — flat labels, many-to-many with articles via `ArticleTag`
-- **ArticleRevision** — immutable snapshots created on every edit
-- **MapMarker** — coordinates + optional article link, grouped by `mapId`
+- **Tag** — hierarchical (self-referential `parentId`), many-to-many with articles via `ArticleTag`
+- **ArticleRevision** — immutable snapshots created on every edit, with userId attribution
+- **ArticleTranslation** — multi-language article content (locale, title, content)
+- **User** — multi-user accounts (username, email, passwordHash, role)
+- **Session** — auth sessions with token and expiry
+- **Watchlist** — user-article watch pairs for notifications
+- **Notification** — edit/reply/mention notifications per user
+- **ApiKey** — public API authentication keys per user
+- **Webhook** / **WebhookDelivery** — event webhooks with delivery logging
+- **ArticleLink** — semantic wiki links with relation types
+- **MapMarker** — coordinates + optional article link, grouped by `mapId`, with zoom levels
+- **MapConfig** / **MapLayer** / **MapDetailLevel** — multi-map system with layers
+- **PluginState** — plugin enable/disable config
+- **MetricLog** — performance metric logging
+- **CollaborationSession** — real-time collab Yjs document storage
+- **Discussion** — article discussion comments with optional userId

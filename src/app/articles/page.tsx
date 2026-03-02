@@ -42,6 +42,7 @@ function ArticlesPageContent() {
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "";
   const tag = searchParams.get("tag") || "";
+  const statusFilter = searchParams.get("status") || "";
   const pageStr = searchParams.get("page") || "1";
   const page = parseInt(pageStr);
 
@@ -64,6 +65,7 @@ function ArticlesPageContent() {
     const params = new URLSearchParams();
     if (category) params.set("category", category);
     if (tag) params.set("tag", tag);
+    if (statusFilter) params.set("status", statusFilter);
     params.set("page", page.toString());
     params.set("limit", limit.toString());
 

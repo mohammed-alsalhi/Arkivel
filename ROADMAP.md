@@ -5,66 +5,66 @@ This document outlines planned features and improvements for Wiki App. Contribut
 ## Near-Term
 
 ### Editor Improvements
-- [ ] Footnotes and citations
-- [ ] Code block syntax highlighting
-- [ ] Drag-and-drop image placement within content
-- [ ] Undo/redo keyboard shortcut indicators in toolbar
-- [ ] Better table editing (merge cells, resize columns)
+- [x] Footnotes and citations
+- [x] Code block syntax highlighting
+- [x] Drag-and-drop image placement within content
+- [x] Undo/redo keyboard shortcut indicators in toolbar
+- [x] Better table editing (merge cells, resize columns)
 
 ### Content Features
-- [ ] Article templates per category (auto-fill infobox + content skeleton)
-- [ ] Multi-language support for article content
-- [ ] Article versioning comparison improvements (inline diff view)
-- [ ] Related articles section (auto-suggested based on shared categories/tags)
-- [ ] Table of contents generation from headings
+- [x] Article templates per category (auto-fill infobox + content skeleton)
+- [x] Multi-language support for article content
+- [x] Article versioning comparison improvements (inline diff view)
+- [x] Related articles section (auto-suggested based on shared categories/tags)
+- [x] Table of contents generation from headings
 
 ### Organization
-- [ ] Nested tags (tag hierarchy like categories)
-- [ ] Custom sort order for articles within categories
-- [ ] Article status workflow (draft → review → published)
-- [ ] Pinned/featured articles per category
+- [x] Nested tags (tag hierarchy like categories)
+- [x] Custom sort order for articles within categories
+- [x] Article status workflow (draft → review → published)
+- [x] Pinned/featured articles per category
 
 ## Medium-Term
 
 ### Search & Discovery
-- [ ] Full-text search with PostgreSQL `tsvector` for better performance
-- [ ] Search filters (by category, tag, date range)
-- [ ] Search result highlighting
-- [ ] Random article button
+- [x] Full-text search with PostgreSQL `tsvector` for better performance
+- [x] Search filters (by category, tag, date range)
+- [x] Search result highlighting
+- [x] Random article button
 
 ### User System
-- [ ] Multi-user authentication (sign up / sign in)
-- [ ] User profiles with contribution history
-- [ ] Role-based permissions (admin, editor, viewer)
-- [ ] Edit watchlist and notifications
+- [x] Multi-user authentication (sign up / sign in)
+- [x] User profiles with contribution history
+- [x] Role-based permissions (admin, editor, viewer)
+- [x] Edit watchlist and notifications
 
 ### API & Integration
-- [ ] Public REST API with documentation
-- [ ] Webhooks for article create/update/delete events
-- [ ] RSS/Atom feed for recent changes
-- [ ] Import from MediaWiki XML dumps
+- [x] Public REST API with documentation
+- [x] Webhooks for article create/update/delete events
+- [x] RSS/Atom feed for recent changes
+- [x] Import from MediaWiki XML dumps
 
 ## Long-Term
 
 ### Advanced Features
-- [ ] Real-time collaborative editing (CRDT or OT-based)
-- [ ] Semantic wiki links with relationship types
-- [ ] Graph visualization of article connections
-- [ ] Full-text PDF/EPUB export of entire wiki or category
-- [ ] Plugin/extension system for custom functionality
+- [x] Real-time collaborative editing (CRDT or OT-based)
+- [x] Semantic wiki links with relationship types
+- [x] Graph visualization of article connections
+- [x] Full-text PDF/EPUB export of entire wiki or category
+- [x] Plugin/extension system for custom functionality
 
 ### Infrastructure
-- [ ] Automated test suite (unit, integration, e2e)
-- [ ] CI/CD pipeline with GitHub Actions
-- [ ] Database migration system (instead of `db push`)
-- [ ] Docker Compose setup for one-command local deployment
-- [ ] Performance monitoring and analytics dashboard
+- [x] Automated test suite (unit, integration, e2e)
+- [x] CI/CD pipeline with GitHub Actions
+- [x] Database migration system (instead of `db push`)
+- [x] Docker Compose setup for one-command local deployment
+- [x] Performance monitoring and analytics dashboard
 
 ### Map Enhancements
-- [ ] Multiple maps per wiki
-- [ ] Map layer toggling (political boundaries, terrain, etc.)
-- [ ] Map area search and filtering
-- [ ] Zoomable map with different detail levels
+- [x] Multiple maps per wiki
+- [x] Map layer toggling (political boundaries, terrain, etc.)
+- [x] Map area search and filtering
+- [x] Zoomable map with different detail levels
 
 ---
 

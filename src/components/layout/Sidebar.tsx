@@ -26,6 +26,8 @@ export default function Sidebar({ categories }: { categories: Category[] }) {
     { href: "/articles", label: "All articles" },
     { href: "/categories", label: "Categories" },
     { href: "/recent-changes", label: "Recent changes" },
+    { href: "/random", label: "Random article" },
+    { href: "/graph", label: "Article graph" },
     ...(config.mapEnabled ? [{ href: "/map", label: config.mapLabel }] : []),
     { href: "/search", label: "Search" },
     { href: "/help", label: "Help" },
@@ -86,8 +88,15 @@ export default function Sidebar({ categories }: { categories: Category[] }) {
           </SidebarSection>
         )}
 
-        {/* Admin section */}
+        {/* Tools section */}
         <SidebarSection title="Tools">
+          <SidebarLink
+            href="/export"
+            active={pathname === "/export"}
+            onClick={() => setMobileOpen(false)}
+          >
+            Export
+          </SidebarLink>
           <SidebarLink
             href="/admin"
             active={pathname === "/admin"}
@@ -95,6 +104,24 @@ export default function Sidebar({ categories }: { categories: Category[] }) {
           >
             {isAdmin ? "Admin (logged in)" : "Admin login"}
           </SidebarLink>
+          {isAdmin && (
+            <SidebarLink
+              href="/admin/metrics"
+              active={pathname === "/admin/metrics"}
+              onClick={() => setMobileOpen(false)}
+            >
+              Metrics
+            </SidebarLink>
+          )}
+          {isAdmin && (
+            <SidebarLink
+              href="/admin/plugins"
+              active={pathname === "/admin/plugins"}
+              onClick={() => setMobileOpen(false)}
+            >
+              Plugins
+            </SidebarLink>
+          )}
         </SidebarSection>
 
         {/* Categories section */}

@@ -468,6 +468,115 @@ export default function HelpPage() {
         </div>
       </div>
 
+      {/* Footnotes */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Footnotes &amp; Citations</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            Add footnotes to your articles for citations and references:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>Click the <strong>fn</strong> toolbar button or press <code className="bg-surface-hover px-1 text-[12px]">Ctrl+Shift+F</code> to insert a footnote</li>
+            <li>Enter the footnote text in the prompt</li>
+            <li>Footnotes appear as numbered superscripts in the text</li>
+            <li>A &ldquo;Notes&rdquo; section is automatically generated at the bottom of the article</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Code Blocks */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Code Blocks with Syntax Highlighting</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            Code blocks support syntax highlighting for many programming languages:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>Click the <strong>&lt;&gt;</strong> toolbar button to insert a code block</li>
+            <li>You&apos;ll be prompted to enter a language (e.g. js, python, html, css, bash)</li>
+            <li>Syntax highlighting is applied automatically in both the editor and article display</li>
+            <li>Supports dark mode with adapted color schemes</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Article Status Workflow */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Article Status Workflow</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            Articles can have one of three statuses:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li><strong>Draft</strong> &mdash; work in progress, only visible to admins</li>
+            <li><strong>Review</strong> &mdash; ready for review, only visible to admins</li>
+            <li><strong>Published</strong> &mdash; visible to everyone</li>
+          </ul>
+          <p className="mt-2">
+            Set the status from the article edit page. Pinned articles appear at the top of their category page.
+          </p>
+        </div>
+      </div>
+
+      {/* User Accounts */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">User Accounts</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            The wiki supports multi-user accounts with role-based permissions:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li><Link href="/register">Register</Link> for an account with username, email, and password</li>
+            <li><Link href="/login">Login</Link> to start editing</li>
+            <li>Roles: <strong>Viewer</strong> (read only), <strong>Editor</strong> (create/edit articles), <strong>Admin</strong> (full access)</li>
+            <li>User profiles show contribution history at <code className="bg-surface-hover px-1 text-[12px]">/users/username</code></li>
+            <li>Legacy admin password login still works alongside user accounts</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Watchlist & Notifications */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Watchlist &amp; Notifications</div>
+        <div className="wiki-portal-body text-[13px]">
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>Watch articles to get notified when they&apos;re edited</li>
+            <li>Manage your <Link href="/watchlist">watchlist</Link> from the sidebar</li>
+            <li>The bell icon in the header shows unread notification count</li>
+            <li>Click the bell to see recent notifications and mark them as read</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* RSS Feeds & API */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">RSS Feeds &amp; Public API</div>
+        <div className="wiki-portal-body text-[13px]">
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li><strong>RSS:</strong> Subscribe to <code className="bg-surface-hover px-1 text-[12px]">/feed.xml</code> for recent changes</li>
+            <li><strong>Atom:</strong> Available at <code className="bg-surface-hover px-1 text-[12px]">/feed/atom</code></li>
+            <li><strong>API:</strong> Public REST API at <code className="bg-surface-hover px-1 text-[12px]">/api/v1/</code> with API key authentication. See <Link href="/api-docs">API Documentation</Link></li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Article Graph */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Article Graph</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            Visualize the connections between your articles as an interactive graph:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>Visit the <Link href="/graph">Article Graph</Link> page from the sidebar</li>
+            <li>Nodes represent articles, colored by category</li>
+            <li>Edges represent wiki links between articles</li>
+            <li>Drag nodes to rearrange, scroll to zoom, and click to navigate</li>
+            <li>Filter by category and control graph depth</li>
+          </ul>
+        </div>
+      </div>
+
       <div className="wiki-notice">
         <strong>Tip:</strong> You can also type{" "}
         <code className="bg-surface-hover px-1 text-[12px]">[[</code>{" "}

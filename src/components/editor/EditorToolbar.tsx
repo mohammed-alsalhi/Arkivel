@@ -23,6 +23,18 @@ export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, de
   const groups: ToolbarButton[][] = [
     [
       {
+        label: "Undo (Ctrl+Z)",
+        icon: "\u21A9",
+        action: () => editor.chain().focus().undo().run(),
+      },
+      {
+        label: "Redo (Ctrl+Y)",
+        icon: "\u21AA",
+        action: () => editor.chain().focus().redo().run(),
+      },
+    ],
+    [
+      {
         label: "Bold",
         icon: "B",
         action: () => editor.chain().focus().toggleBold().run(),
@@ -83,7 +95,17 @@ export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, de
       {
         label: "Code Block",
         icon: "<>",
-        action: () => editor.chain().focus().toggleCodeBlock().run(),
+        action: () => {
+          if (editor.isActive("codeBlock")) {
+            editor.chain().focus().toggleCodeBlock().run();
+          } else {
+            const lang = window.prompt("Language (e.g. js, python, html):", "");
+            editor.chain().focus().toggleCodeBlock().run();
+            if (lang) {
+              editor.chain().focus().updateAttributes("codeBlock", { language: lang }).run();
+            }
+          }
+        },
         isActive: () => editor.isActive("codeBlock"),
       },
     ],
@@ -108,6 +130,19 @@ export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, de
         label: "Image",
         icon: "\u{1F5BC}",
         action: onImageUpload,
+      },
+      {
+        label: "Footnote (Ctrl+Shift+F)",
+        icon: "fn",
+        action: () => {
+          const note = window.prompt("Footnote text:");
+          if (note) {
+            editor.chain().focus().insertContent({
+              type: "footnoteRef",
+              attrs: { note },
+            }).run();
+          }
+        },
       },
       {
         label: "Wiki Link",
@@ -156,6 +191,30 @@ export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, de
         label: "Delete Column",
         icon: "-Col",
         action: () => editor.chain().focus().deleteColumn().run(),
+        hidden: () => !editor.isActive("table"),
+      },
+      {
+        label: "Merge Cells",
+        icon: "Merge",
+        action: () => editor.chain().focus().mergeCells().run(),
+        hidden: () => !editor.isActive("table"),
+      },
+      {
+        label: "Split Cell",
+        icon: "Split",
+        action: () => editor.chain().focus().splitCell().run(),
+        hidden: () => !editor.isActive("table"),
+      },
+      {
+        label: "Toggle Header Row",
+        icon: "HRow",
+        action: () => editor.chain().focus().toggleHeaderRow().run(),
+        hidden: () => !editor.isActive("table"),
+      },
+      {
+        label: "Toggle Header Column",
+        icon: "HCol",
+        action: () => editor.chain().focus().toggleHeaderColumn().run(),
         hidden: () => !editor.isActive("table"),
       },
       {

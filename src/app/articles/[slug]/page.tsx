@@ -7,10 +7,28 @@ import { resolveWikiLinks, getBacklinks } from "@/lib/wikilinks";
 import AdminEditTab from "@/components/AdminEditTab";
 import ArticleExportButtons from "@/components/ArticleExportButtons";
 import InfoboxDisplay from "@/components/InfoboxDisplay";
+import TableOfContents, { addHeadingIds } from "@/components/TableOfContents";
+import RelatedArticles from "@/components/RelatedArticles";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+function appendFootnoteSection(html: string): string {
+  const footnotes: string[] = [];
+  const regex = /data-footnote="([^"]*)"/g;
+  let m;
+  while ((m = regex.exec(html)) !== null) {
+    footnotes.push(m[1]);
+  }
+  if (footnotes.length === 0) return html;
+
+  const items = footnotes
+    .map((note, i) => `<div class="footnote-item" style="padding-left:1.5rem"><sup style="position:absolute;left:0;font-weight:700;color:var(--color-accent)">[${i + 1}]</sup> ${note}</div>`)
+    .join("");
+
+  return html + `<div class="footnote-section"><div class="footnote-section-title">Notes</div>${items}</div>`;
+}
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
@@ -77,6 +95,19 @@ export default async function ArticlePage({ params }: Props) {
           />
         </div>
 
+        {/* Status badge */}
+        {article.status !== "published" && (
+          <div className={`wiki-notice ${article.status === "draft" ? "border-l-3 border-l-yellow-500" : "border-l-3 border-l-blue-500"}`}>
+            <strong>{article.status === "draft" ? "Draft" : "Under Review"}</strong>
+            {" — "} This article has not been published yet.
+          </div>
+        )}
+
+        {/* Pinned indicator */}
+        {article.isPinned && (
+          <div className="text-[11px] text-muted mb-1">📌 Pinned article</div>
+        )}
+
         {/* Disambiguation notice */}
         {article.isDisambiguation && (
           <div className="wiki-disambiguation-notice">
@@ -97,10 +128,13 @@ export default async function ArticlePage({ params }: Props) {
           updatedAt={article.updatedAt}
         />
 
+        {/* Table of contents */}
+        <TableOfContents html={resolvedContent} />
+
         {/* Article content */}
         <div
           className="wiki-content"
-          dangerouslySetInnerHTML={{ __html: resolvedContent }}
+          dangerouslySetInnerHTML={{ __html: addHeadingIds(appendFootnoteSection(resolvedContent)) }}
         />
 
         {/* Clear float from infobox */}
@@ -128,6 +162,13 @@ export default async function ArticlePage({ params }: Props) {
             </>
           )}
         </div>
+
+        {/* Related articles */}
+        <RelatedArticles
+          articleId={article.id}
+          categoryId={article.categoryId}
+          tagIds={article.tags.map(t => t.tag.id)}
+        />
 
         {/* What links here */}
         {backlinks.length > 0 && (

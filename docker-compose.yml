@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: wiki
+      POSTGRES_PASSWORD: wiki_password
+      POSTGRES_DB: wiki
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wiki"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://wiki:wiki_password@db:5432/wiki"
+      ADMIN_SECRET: "${ADMIN_SECRET:-}"
+      NEXT_PUBLIC_WIKI_NAME: "${NEXT_PUBLIC_WIKI_NAME:-My Wiki}"
+      NEXT_PUBLIC_WIKI_TAGLINE: "${NEXT_PUBLIC_WIKI_TAGLINE:-A personal wiki}"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

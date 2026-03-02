@@ -1,0 +1,173 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
+type Category = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+export default function ExportPage() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [scope, setScope] = useState<"all" | "category">("all");
+  const [categorySlug, setCategorySlug] = useState("");
+  const [format, setFormat] = useState<"markdown" | "html">("markdown");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((r) => r.json())
+      .then((data) => setCategories(Array.isArray(data) ? data : []))
+      .catch(() => setCategories([]));
+  }, []);
+
+  async function handleExport() {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (scope === "category" && categorySlug) {
+        params.set("category", categorySlug);
+      }
+
+      const endpoint = format === "markdown"
+        ? "/api/export/markdown"
+        : "/api/export/html";
+
+      const url = `${endpoint}?${params.toString()}`;
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        throw new Error("Export failed");
+      }
+
+      const blob = await res.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = format === "markdown"
+        ? (scope === "category" ? `wiki-export-${categorySlug}.md` : "wiki-export.md")
+        : (scope === "category" ? `wiki-export-${categorySlug}.html` : "wiki-export.html");
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(downloadUrl);
+    } catch {
+      alert("Export failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div>
+      <h1
+        className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-4"
+        style={{ fontFamily: "var(--font-serif)" }}
+      >
+        Export Wiki
+      </h1>
+
+      <div className="wiki-notice mb-4">
+        Export your wiki articles as a single downloadable file. Choose the scope
+        and format below.
+      </div>
+
+      <div className="max-w-lg space-y-4">
+        {/* Scope selection */}
+        <fieldset className="border border-border p-3">
+          <legend className="px-2 text-[12px] font-bold text-muted uppercase">
+            Scope
+          </legend>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-[13px] text-foreground cursor-pointer">
+              <input
+                type="radio"
+                name="scope"
+                value="all"
+                checked={scope === "all"}
+                onChange={() => setScope("all")}
+              />
+              Entire wiki
+            </label>
+            <label className="flex items-center gap-2 text-[13px] text-foreground cursor-pointer">
+              <input
+                type="radio"
+                name="scope"
+                value="category"
+                checked={scope === "category"}
+                onChange={() => setScope("category")}
+              />
+              By category
+            </label>
+
+            {scope === "category" && (
+              <select
+                value={categorySlug}
+                onChange={(e) => setCategorySlug(e.target.value)}
+                className="ml-6 w-full max-w-xs border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              >
+                <option value="">Select a category...</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.slug}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        </fieldset>
+
+        {/* Format selection */}
+        <fieldset className="border border-border p-3">
+          <legend className="px-2 text-[12px] font-bold text-muted uppercase">
+            Format
+          </legend>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-[13px] text-foreground cursor-pointer">
+              <input
+                type="radio"
+                name="format"
+                value="markdown"
+                checked={format === "markdown"}
+                onChange={() => setFormat("markdown")}
+              />
+              Markdown (.md)
+              <span className="text-[11px] text-muted">
+                &mdash; plain text, good for backups
+              </span>
+            </label>
+            <label className="flex items-center gap-2 text-[13px] text-foreground cursor-pointer">
+              <input
+                type="radio"
+                name="format"
+                value="html"
+                checked={format === "html"}
+                onChange={() => setFormat("html")}
+              />
+              HTML (.html)
+              <span className="text-[11px] text-muted">
+                &mdash; styled, with table of contents
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        {/* Download button */}
+        <button
+          onClick={handleExport}
+          disabled={loading || (scope === "category" && !categorySlug)}
+          className="bg-accent px-4 py-1.5 text-[13px] font-bold text-white hover:bg-accent-hover disabled:opacity-40"
+        >
+          {loading ? "Exporting..." : "Download"}
+        </button>
+
+        {loading && (
+          <p className="text-[12px] text-muted italic">
+            Preparing export, please wait...
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

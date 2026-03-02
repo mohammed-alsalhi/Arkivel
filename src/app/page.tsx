@@ -6,7 +6,7 @@ import { config } from "@/lib/config";
 async function getRecentArticles() {
   return prisma.article.findMany({
     take: 10,
-    where: { published: true },
+    where: { published: true, status: "published" },
     orderBy: { updatedAt: "desc" },
     include: {
       category: true,
@@ -16,9 +16,16 @@ async function getRecentArticles() {
 }
 
 async function getFeaturedArticle() {
-  // Pick the published article with the longest content as the "featured" one
+  // Prefer pinned articles; fall back to longest content
+  const pinned = await prisma.article.findFirst({
+    where: { published: true, isPinned: true, status: "published" },
+    orderBy: { updatedAt: "desc" },
+    include: { category: true },
+  });
+  if (pinned) return pinned;
+
   const articles = await prisma.article.findMany({
-    where: { published: true, excerpt: { not: "" } },
+    where: { published: true, status: "published", excerpt: { not: "" } },
     orderBy: { updatedAt: "desc" },
     take: 5,
     include: { category: true },

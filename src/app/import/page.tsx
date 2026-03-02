@@ -12,7 +12,7 @@ type ImportResult = {
   error?: string;
 };
 
-const ACCEPTED = ".md,.markdown,.txt,.text,.html,.htm,.json";
+const ACCEPTED = ".md,.markdown,.txt,.text,.html,.htm,.json,.xml";
 
 export default function ImportPage() {
   const isAdmin = useAdmin();
@@ -42,7 +42,7 @@ export default function ImportPage() {
   function addFiles(newFiles: FileList | File[]) {
     const arr = Array.from(newFiles).filter((f) => {
       const ext = f.name.split(".").pop()?.toLowerCase();
-      return ["md", "markdown", "txt", "text", "html", "htm", "json"].includes(
+      return ["md", "markdown", "txt", "text", "html", "htm", "json", "xml"].includes(
         ext || ""
       );
     });
@@ -64,6 +64,7 @@ export default function ImportPage() {
       html: "HTML",
       htm: "HTML",
       json: "JSON",
+      xml: "XML",
     };
     return map[ext] || ext.toUpperCase();
   }
@@ -125,7 +126,7 @@ export default function ImportPage() {
               Drag and drop files here, or click to browse
             </p>
             <p className="text-[12px] text-muted">
-              Supported: Markdown (.md), Text (.txt), HTML (.html), JSON (.json)
+              Supported: Markdown (.md), Text (.txt), HTML (.html), JSON (.json), MediaWiki XML (.xml)
             </p>
             <input
               ref={fileInputRef}
@@ -273,6 +274,14 @@ export default function ImportPage() {
             <code className="bg-surface-hover px-1 text-[12px]">
               format: &quot;markdown&quot;
             </code>
+          </li>
+          <li>
+            <strong>MediaWiki XML</strong> (.xml) — Standard MediaWiki export
+            format with{" "}
+            <code className="bg-surface-hover px-1 text-[12px]">
+              &lt;page&gt;
+            </code>{" "}
+            elements containing title and revision text
           </li>
         </ul>
       </div>

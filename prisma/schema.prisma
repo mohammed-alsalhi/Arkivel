@@ -24,11 +24,25 @@ model Article {
   mapMarkers       MapMarker[]
   revisions        ArticleRevision[]
   discussions      Discussion[]
+  translations     ArticleTranslation[]
+  outgoingLinks    ArticleLink[] @relation("OutgoingLinks")
+  watchedBy        Watchlist[]
+  notifications    Notification[]
+
+  // Phase 2 additions
+  sortOrder        Int      @default(0)
+  status           String   @default("published") // "draft", "review", "published"
+  isPinned         Boolean  @default(false)
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id])
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   @@index([slug])
   @@index([categoryId])
+  @@index([status])
+  @@index([userId])
 }
 
 model Category {
@@ -52,7 +66,12 @@ model Tag {
   name     String       @unique
   slug     String       @unique
   color    String?
+  parentId String?
+  parent   Tag?         @relation("TagTree", fields: [parentId], references: [id])
+  children Tag[]        @relation("TagTree")
   articles ArticleTag[]
+
+  @@index([parentId])
 }
 
 model ArticleTag {
@@ -74,10 +93,13 @@ model ArticleRevision {
   title       String
   infobox     Json?
   editSummary String?
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
 
   @@index([articleId])
   @@index([createdAt])
+  @@index([userId])
 }
 
 model Discussion {
@@ -86,6 +108,8 @@ model Discussion {
   article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   author    String   @default("Anonymous")
   content   String   @db.Text
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 
   @@index([articleId])
@@ -95,12 +119,215 @@ model Discussion {
 model MapMarker {
   id        String   @id @default(cuid())
   label     String
-  polygon   Json     // Array of [lat, lng] coordinate pairs
-  color     String?  // Optional highlight color
+  polygon   Json
+  color     String?
   mapId     String   @default("default")
   articleId String?
   article   Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  minZoom   Float?
+  maxZoom   Float?
   createdAt DateTime @default(now())
 
   @@index([mapId])
+}
+
+// ── Multi-language support ──
+model ArticleTranslation {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  locale     String   // e.g. "en", "fr", "ar"
+  title      String
+  content    String   @db.Text
+  contentRaw String?  @db.Text
+  excerpt    String?  @db.Text
+  updatedAt  DateTime @updatedAt
+
+  @@unique([articleId, locale])
+  @@index([articleId])
+  @@index([locale])
+}
+
+// ── User system ──
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  email        String    @unique
+  passwordHash String
+  displayName  String?
+  role         String    @default("viewer") // "admin", "editor", "viewer"
+  articles     Article[]
+  revisions    ArticleRevision[]
+  discussions  Discussion[]
+  sessions     Session[]
+  watchlist    Watchlist[]
+  notifications Notification[]
+  apiKeys      ApiKey[]
+  createdAt    DateTime  @default(now())
+
+  @@index([role])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}
+
+// ── Watchlist & Notifications ──
+model Watchlist {
+  userId    String
+  articleId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, articleId])
+  @@index([userId])
+  @@index([articleId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId String?
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  type      String   // "edit", "reply", "mention"
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+  @@index([articleId])
+}
+
+// ── Public API ──
+model ApiKey {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key        String   @unique
+  name       String
+  lastUsedAt DateTime?
+  createdAt  DateTime @default(now())
+
+  @@index([key])
+  @@index([userId])
+}
+
+// ── Webhooks ──
+model Webhook {
+  id         String   @id @default(cuid())
+  url        String
+  events     String[] // ["article.created", "article.updated", "article.deleted"]
+  secret     String?
+  active     Boolean  @default(true)
+  deliveries WebhookDelivery[]
+  createdAt  DateTime @default(now())
+}
+
+model WebhookDelivery {
+  id           String   @id @default(cuid())
+  webhookId    String
+  webhook      Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event        String
+  payload      Json
+  status       String   // "success", "failed"
+  responseCode Int?
+  createdAt    DateTime @default(now())
+
+  @@index([webhookId])
+  @@index([createdAt])
+}
+
+// ── Semantic wiki links ──
+model ArticleLink {
+  id         String   @id @default(cuid())
+  sourceId   String
+  targetSlug String
+  relation   String   @default("related-to")
+  source     Article  @relation("OutgoingLinks", fields: [sourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([sourceId, targetSlug, relation])
+  @@index([sourceId])
+  @@index([targetSlug])
+  @@index([relation])
+}
+
+// ── Plugin system ──
+model PluginState {
+  id        String   @id // Plugin ID from manifest
+  enabled   Boolean  @default(false)
+  config    Json?
+  updatedAt DateTime @updatedAt
+}
+
+// ── Performance monitoring ──
+model MetricLog {
+  id        String   @id @default(cuid())
+  type      String   // "api_request", "page_view", "error"
+  path      String
+  duration  Int      // milliseconds
+  status    Int?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([createdAt])
+  @@index([path])
+}
+
+// ── Map system ──
+model MapConfig {
+  id          String   @id @default(cuid())
+  mapId       String   @unique
+  name        String
+  description String?
+  imageUrl    String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([sortOrder])
+}
+
+model MapLayer {
+  id        String   @id @default(cuid())
+  mapId     String
+  name      String
+  imageUrl  String
+  opacity   Float    @default(0.7)
+  sortOrder Int      @default(0)
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([mapId])
+}
+
+model MapDetailLevel {
+  id       String @id @default(cuid())
+  mapId    String
+  minZoom  Float
+  maxZoom  Float
+  imageUrl String
+  bounds   Json   // [[y1,x1],[y2,x2]]
+
+  @@index([mapId])
+}
+
+// ── Collaboration ──
+model CollaborationSession {
+  id        String   @id @default(cuid())
+  articleId String   @unique
+  ydoc      Bytes
+  updatedAt DateTime @updatedAt
+
+  @@index([articleId])
 }

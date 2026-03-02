@@ -6,8 +6,11 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { TableKit } from "@tiptap/extension-table";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { common, createLowlight } from "lowlight";
 import { WikiLink } from "./WikiLinkExtension";
 import { PotentialLink } from "./PotentialLinkExtension";
+import { FootnoteRef } from "./FootnoteExtension";
 import EditorToolbar from "./EditorToolbar";
 import WikiLinkSuggester from "./WikiLinkSuggester";
 import LinkBubble from "./LinkBubble";
@@ -32,10 +35,13 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     const [detectedCount, setDetectedCount] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const lowlight = createLowlight(common);
+
     const editor = useEditor({
       immediatelyRender: false,
       extensions: [
-        StarterKit,
+        StarterKit.configure({ codeBlock: false }),
+        CodeBlockLowlight.configure({ lowlight }),
         Image.configure({ inline: false }),
         Link.configure({ openOnClick: false }).extend({
           parseHTML() {
@@ -45,12 +51,61 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         Placeholder.configure({ placeholder }),
         WikiLink,
         PotentialLink,
+        FootnoteRef,
         TableKit,
       ],
       content,
       editorProps: {
         attributes: {
           class: "tiptap max-w-none",
+        },
+        handleDrop(view, event) {
+          const files = event.dataTransfer?.files;
+          if (!files || files.length === 0) return false;
+
+          const imageFile = Array.from(files).find(f => f.type.startsWith("image/"));
+          if (!imageFile) return false;
+
+          event.preventDefault();
+
+          const coords = view.posAtCoords({ left: event.clientX, top: event.clientY });
+          const formData = new FormData();
+          formData.append("file", imageFile);
+
+          fetch("/api/upload", { method: "POST", body: formData })
+            .then(res => res.json())
+            .then(({ url }) => {
+              const node = view.state.schema.nodes.image.create({ src: url });
+              const pos = coords?.pos ?? view.state.doc.content.size;
+              const tr = view.state.tr.insert(pos, node);
+              view.dispatch(tr);
+            });
+
+          return true;
+        },
+        handlePaste(view, event) {
+          const items = event.clipboardData?.items;
+          if (!items) return false;
+
+          const imageItem = Array.from(items).find(i => i.type.startsWith("image/"));
+          if (!imageItem) return false;
+
+          event.preventDefault();
+          const file = imageItem.getAsFile();
+          if (!file) return false;
+
+          const formData = new FormData();
+          formData.append("file", file);
+
+          fetch("/api/upload", { method: "POST", body: formData })
+            .then(res => res.json())
+            .then(({ url }) => {
+              const node = view.state.schema.nodes.image.create({ src: url });
+              const tr = view.state.tr.replaceSelectionWith(node);
+              view.dispatch(tr);
+            });
+
+          return true;
         },
         handleClick(view, pos) {
           const resolved = view.state.doc.resolve(pos);

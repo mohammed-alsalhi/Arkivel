@@ -1,6 +1,7 @@
 import { marked } from "marked";
+import { XMLParser } from "fast-xml-parser";
 
-export type ImportFormat = "md" | "txt" | "json" | "html";
+export type ImportFormat = "md" | "txt" | "json" | "html" | "xml";
 
 export type ImportedArticle = {
   title: string;
@@ -34,6 +35,7 @@ export function detectFormat(filename: string): ImportFormat | null {
     json: "json",
     html: "html",
     htm: "html",
+    xml: "xml",
   };
   return map[ext || ""] || null;
 }
@@ -104,6 +106,103 @@ function extractHtmlTitle(html: string): string | null {
 function extractBody(html: string): string {
   const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
   return bodyMatch ? bodyMatch[1].trim() : html;
+}
+
+function wikitextToHtml(wikitext: string): string {
+  let html = wikitext;
+
+  // Headings: ======X====== (h6) down to ==X== (h2)
+  html = html.replace(/^======\s*(.+?)\s*======$/gm, "<h6>$1</h6>");
+  html = html.replace(/^=====\s*(.+?)\s*=====$/gm, "<h5>$1</h5>");
+  html = html.replace(/^====\s*(.+?)\s*====$/gm, "<h4>$1</h4>");
+  html = html.replace(/^===\s*(.+?)\s*===$/gm, "<h3>$1</h3>");
+  html = html.replace(/^==\s*(.+?)\s*==$/gm, "<h2>$1</h2>");
+
+  // Bold and italic: '''bold''', ''italic''
+  html = html.replace(/'''(.+?)'''/g, "<strong>$1</strong>");
+  html = html.replace(/''(.+?)''/g, "<em>$1</em>");
+
+  // Wiki links: [[Target|Display]] or [[Target]]
+  html = html.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, (_match, target, display) => {
+    return `<a href="/articles/${target.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}" class="wiki-link" data-wiki-link="${escapeHtml(target.trim())}">${escapeHtml(display.trim())}</a>`;
+  });
+  html = html.replace(/\[\[([^\]]+)\]\]/g, (_match, target) => {
+    return `<a href="/articles/${target.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}" class="wiki-link" data-wiki-link="${escapeHtml(target.trim())}">${escapeHtml(target.trim())}</a>`;
+  });
+
+  // Unordered lists: * item
+  html = html.replace(/^(\*+)\s+(.+)$/gm, (_match, stars, text) => {
+    const depth = stars.length;
+    return `<li style="margin-left:${(depth - 1) * 20}px">${text}</li>`;
+  });
+
+  // Ordered lists: # item
+  html = html.replace(/^(#+)\s+(.+)$/gm, (_match, hashes, text) => {
+    const depth = hashes.length;
+    return `<li style="margin-left:${(depth - 1) * 20}px">${text}</li>`;
+  });
+
+  // Paragraphs: double newlines
+  html = html
+    .split(/\n\n+/)
+    .map((block) => {
+      const trimmed = block.trim();
+      if (!trimmed) return "";
+      // Don't wrap blocks that are already HTML elements
+      if (/^<(h[1-6]|li|ul|ol|div|table|p)\b/i.test(trimmed)) return trimmed;
+      return `<p>${trimmed.replace(/\n/g, "<br>")}</p>`;
+    })
+    .join("\n");
+
+  return html;
+}
+
+export function parseMediaWikiXml(content: string): ImportedArticle[] {
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    isArray: (name) => name === "page",
+  });
+
+  const parsed = parser.parse(content);
+
+  // Navigate the MediaWiki XML structure
+  const mediawiki = parsed.mediawiki || parsed;
+  const pages = mediawiki.page;
+
+  if (!pages || (Array.isArray(pages) && pages.length === 0)) {
+    throw new Error("No pages found in MediaWiki XML");
+  }
+
+  const pageList = Array.isArray(pages) ? pages : [pages];
+
+  return pageList
+    .map((page: { title?: string; revision?: { text?: string | { "#text"?: string } } }) => {
+      const title = page.title;
+      if (!title) return null;
+
+      // Get the latest revision text
+      const revision = page.revision;
+      let rawText = "";
+      if (revision) {
+        if (typeof revision.text === "string") {
+          rawText = revision.text;
+        } else if (revision.text && typeof revision.text === "object" && "#text" in revision.text) {
+          rawText = revision.text["#text"] || "";
+        }
+      }
+
+      if (!rawText.trim()) return null;
+
+      const htmlContent = wikitextToHtml(rawText);
+
+      return {
+        title,
+        content: htmlContent,
+        contentRaw: rawText,
+        excerpt: stripHtml(htmlContent).substring(0, 200),
+      };
+    })
+    .filter(Boolean) as ImportedArticle[];
 }
 
 export function parseImportFile(
@@ -180,6 +279,13 @@ export function parseImportFile(
         excerpt: first.excerpt || stripHtml(html).substring(0, 200),
       };
     }
+    case "xml": {
+      const articles = parseMediaWikiXml(content);
+      if (articles.length === 0) {
+        throw new Error("No pages found in MediaWiki XML");
+      }
+      return articles[0];
+    }
   }
 }
 
@@ -188,6 +294,9 @@ export function parseImportFileAll(
   content: string
 ): ImportedArticle[] {
   const format = detectFormat(filename);
+  if (format === "xml") {
+    return parseMediaWikiXml(content);
+  }
   if (format === "json") {
     const parsed = JSON.parse(content);
     if (Array.isArray(parsed)) {

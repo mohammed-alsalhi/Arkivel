@@ -39,8 +39,8 @@ export default async function CategoryPage({ params }: Props) {
 
   const [articles, parentChain] = await Promise.all([
     prisma.article.findMany({
-      where: { categoryId: category.id },
-      orderBy: { updatedAt: "desc" },
+      where: { categoryId: category.id, status: "published" },
+      orderBy: [{ isPinned: "desc" }, { sortOrder: "asc" }, { updatedAt: "desc" }],
       include: {
         category: true,
         tags: { include: { tag: true } },
@@ -123,6 +123,7 @@ export default async function CategoryPage({ params }: Props) {
               {articles.map((article) => (
                 <tr key={article.id} className="hover:bg-surface-hover">
                   <td className="border border-border px-3 py-1.5">
+                    {article.isPinned && <span title="Pinned" className="mr-1">📌</span>}
                     <Link href={`/articles/${article.slug}`} className="font-medium">
                       {article.title}
                     </Link>

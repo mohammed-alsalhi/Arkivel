@@ -5,6 +5,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import SearchBar from "@/components/layout/SearchBar";
 import { AdminProvider } from "@/components/AdminContext";
 import ThemeToggle from "@/components/ThemeToggle";
+import NotificationBell from "@/components/NotificationBell";
 import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
 import { Analytics } from "@vercel/analytics/next";
@@ -53,6 +54,8 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="alternate" type="application/rss+xml" title={`${config.name} RSS Feed`} href="/feed.xml" />
+        <link rel="alternate" type="application/atom+xml" title={`${config.name} Atom Feed`} href="/feed/atom" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();`,
@@ -70,6 +73,7 @@ export default async function RootLayout({
                 <span className="text-xs text-muted">{config.tagline}</span>
               </div>
               <div className="flex items-center gap-2">
+                <NotificationBell />
                 <ThemeToggle />
                 <SearchBar />
               </div>

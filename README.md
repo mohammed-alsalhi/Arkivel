@@ -2,7 +2,7 @@
 
 A configurable, self-hosted wiki application with a MediaWiki-inspired interface. Build your own personal encyclopedia for worldbuilding, knowledge management, or any topic.
 
-**Features:** Rich text editor with wiki links, revision history, dark mode, sub-categories, article templates, search, interactive map, PDF/Markdown export, disambiguation pages.
+**Features:** Rich text editor with wiki links and syntax highlighting, footnotes/citations, revision history with inline diff, dark mode, sub-categories, nested tags, article templates, full-text search with filters, interactive map with layers, article graph visualization, multi-user auth with roles, RSS/Atom feeds, public REST API, webhooks, MediaWiki import, PDF/Markdown/HTML export, article status workflow, watchlist & notifications, disambiguation pages, plugin system.
 
 ## Deploy to Vercel (Recommended)
 
@@ -47,6 +47,16 @@ Only `DATABASE_URL` and `ADMIN_SECRET` are required — everything else has sens
 | `NEXT_PUBLIC_MAP_LABEL` | No | Label for the map in navigation (default: `Map`) |
 | `NEXT_PUBLIC_MAP_IMAGE` | No | Path or URL to the map background image |
 | `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob token for image uploads |
+
+### Additional Features
+
+- **RSS Feed:** Subscribe at `/feed.xml` (RSS 2.0) or `/feed/atom` (Atom)
+- **Public API:** REST API at `/api/v1/` with API key auth — see `/api-docs` for documentation
+- **Webhooks:** Configure webhook URLs for article create/update/delete events
+- **User Accounts:** Multi-user auth with viewer/editor/admin roles at `/register` and `/login`
+- **Article Graph:** Interactive D3 network visualization at `/graph`
+- **MediaWiki Import:** Import `.xml` MediaWiki dumps alongside .md, .txt, .html, .json formats
+- **CI/CD:** GitHub Actions workflow included for linting, type-checking, and building
 
 > **Tip:** Variables starting with `NEXT_PUBLIC_` control the wiki's branding and are baked in at build time. If you change them, you'll need to redeploy/rebuild for the changes to take effect.
 
@@ -153,19 +163,13 @@ wiki.yourdomain.com {
 
 ### Option 3: Docker
 
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npx prisma generate
-RUN npx next build
-EXPOSE 3000
-CMD ["npm", "start"]
-```
+A `Dockerfile` and `docker-compose.yml` are included in the repo:
 
 ```bash
+# Using Docker Compose (includes PostgreSQL):
+docker compose up -d
+
+# Or build and run manually:
 docker build -t wiki-app .
 docker run -p 3000:3000 --env-file .env wiki-app
 ```

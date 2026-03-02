@@ -10,8 +10,21 @@ import InfoboxEditor from "@/components/InfoboxEditor";
 import TemplatePicker from "@/components/TemplatePicker";
 import { useAdmin } from "@/components/AdminContext";
 import type { ArticleTemplate } from "@/lib/templates";
+import { getCategoryTemplate } from "@/lib/category-templates";
 
 type CategoryItem = { id: string; name: string; slug: string; icon: string | null; parentId: string | null; children?: CategoryItem[] };
+
+function flattenCategories(cats: CategoryItem[]): CategoryItem[] {
+  const flat: CategoryItem[] = [];
+  function walk(list: CategoryItem[]) {
+    for (const c of list) {
+      flat.push(c);
+      if (c.children) walk(c.children);
+    }
+  }
+  walk(cats);
+  return flat;
+}
 
 type SimilarArticle = {
   id: string;
@@ -158,7 +171,20 @@ export default function NewArticlePage() {
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label className="block text-[13px] font-bold text-heading mb-1">Category:</label>
-              <CategorySelect value={categoryId} onChange={setCategoryId} categories={categories} />
+              <CategorySelect value={categoryId} onChange={(id) => {
+                setCategoryId(id);
+                // Auto-apply category template if user hasn't manually selected one
+                if (id && templateId === "blank" && editorRef.current) {
+                  const cat = flattenCategories(categories).find(c => c.id === id);
+                  if (cat) {
+                    const tmpl = getCategoryTemplate(cat.slug, categories);
+                    if (tmpl) {
+                      setTemplateId(tmpl.id);
+                      editorRef.current.setContent(tmpl.content);
+                    }
+                  }
+                }
+              }} categories={categories} />
             </div>
             <div>
               <label className="block text-[13px] font-bold text-heading mb-1">Tags:</label>

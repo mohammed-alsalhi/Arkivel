@@ -2,6 +2,156 @@
 
 All notable changes to this project are documented here.
 
+## [2.0.0] - 2026-03-02
+
+Complete roadmap implementation — 39 features across 8 phases.
+
+### Editor Improvements (Phase 1)
+- Added undo/redo buttons to editor toolbar with keyboard shortcut indicators
+- Added code block syntax highlighting via lowlight + highlight.js with dark mode support
+- Added drag-and-drop and paste image upload directly into editor
+- Added footnotes and citations via custom Tiptap extension (Ctrl+Shift+F) with auto-numbered superscripts and footnote section
+- Added merge/split cells, toggle header row/column buttons to table editor
+- Added auto-generated table of contents from headings on article pages (hidden if <3 headings)
+- Added word-level inline diff view with toggle between line-diff and inline modes
+- Added related articles section below content, ranked by shared category/tag overlap
+
+### Organization & Content (Phase 2)
+- Article templates auto-apply based on category selection (person, place, event, thing, group)
+- Added article status workflow: draft → review → published with status selector in edit page
+- Added pinned/featured articles per category, shown at top with pin icon
+- Added custom sort order for articles within categories
+- Added multi-language support with ArticleTranslation model, translations API, and LanguageSwitcher component
+- Random article link in sidebar navigation
+
+### Tag Hierarchy & Management
+- Updated Tags API (`/api/tags`) to return nested hierarchy with parent/children relations
+- Added PUT and DELETE endpoints at `/api/tags/[id]` for editing and deleting tags
+- Created TagManager client component with create, edit, delete, parent assignment, and color picker
+- TagManager added to the `/categories` page below CategoryManager
+
+### Article Reorder API
+- Improved `/api/articles/reorder` POST endpoint to use Prisma transactions for atomic sort order updates
+
+### Translations API
+- New `GET/POST /api/articles/[id]/translations` for listing and creating article translations
+- New `GET/PUT/DELETE /api/articles/[id]/translations/[locale]` for per-locale translation management
+- Created LanguageSwitcher client component with locale dropdown and `?locale=xx` URL switching
+
+### Advanced Search
+- Added category, tag, date range filters to `/api/search` endpoint
+- Added search result highlighting with `<mark>` tags around matching terms
+- Redesigned search page as client component with "Advanced search" toggle
+- Filter sidebar includes category dropdown, tag multi-select with checkboxes, and date range inputs
+- Highlighted excerpts rendered with `dangerouslySetInnerHTML`
+
+### Multi-user Authentication
+- Added `POST /api/auth/register` with bcryptjs password hashing and validation
+- Extended `POST /api/auth/login` to support both legacy admin password and username/password session auth
+- Added `getSession()` and `requireRole()` to `src/lib/auth.ts` with backward-compatible `isAdmin()`
+- Session-based auth with 30-day expiry stored in `Session` table
+- Updated `/api/auth/check` to return session user info alongside admin status
+- Updated `/api/auth/logout` to clear both admin and session cookies
+- Created `/register` page with account creation form and auto-login
+- Created `/login` page with username/password form
+- Created `/users/[username]` user profile page showing articles created, edit history, and discussions
+
+### Watchlist & Notifications
+- New `GET/POST/DELETE /api/watchlist` for managing watched articles (session-authenticated)
+- New `GET/PUT /api/notifications` for listing and marking notifications as read
+- Created `/watchlist` page showing watched articles with unwatch controls
+- Created NotificationBell component with unread count badge, dropdown list, and mark-all-read
+- NotificationBell added to site header next to theme toggle
+- Article PUT now notifies all watchers (except the editor) when an article is edited
+- Article revisions now record the editing user's ID for attribution
+
+### RSS/Atom Feeds
+- Added RSS 2.0 feed at `/feed.xml` with last 50 published articles
+- Added Atom feed at `/feed/atom` with matching content
+- Added `<link rel="alternate">` tags in HTML head for RSS and Atom autodiscovery
+
+### Public REST API v1
+- Added API key authentication via `X-API-Key` header validated against `ApiKey` table
+- New `GET /api/v1/articles` endpoint with pagination, category/tag filters
+- New `GET /api/v1/categories` endpoint listing all categories with counts
+- New `GET /api/v1/tags` endpoint listing all tags with counts
+- New `GET /api/v1/search` endpoint with relevance-ranked search
+- Added API documentation page at `/api-docs` with endpoint reference and curl examples
+
+### Webhooks
+- Added `dispatchWebhook()` fire-and-forget function with HMAC-SHA256 signing
+- New `GET/POST /api/webhooks` for listing and creating webhooks (admin only)
+- New `PUT/DELETE /api/webhooks/[id]` for updating and deleting webhooks
+- Added admin webhook management UI at `/admin/webhooks` with delivery log
+- Webhook deliveries logged in `WebhookDelivery` table with status and response code
+
+### MediaWiki Import
+- Added `parseMediaWikiXml()` function parsing MediaWiki XML export format
+- Converts basic wikitext to HTML (headings, bold, italic, wiki links, lists)
+- Import page and API now accept `.xml` files alongside existing formats
+- Installed `fast-xml-parser` dependency
+
+### Semantic Wiki Links
+- Added relation types system with labeled, invertible semantic link types
+- New `SemanticRelations` server component displaying grouped outgoing/incoming links
+- New `GET/POST /api/articles/[id]/links` endpoint for managing semantic links
+- Seven relation types: related-to, is-part-of, contains, preceded-by, followed-by, see-also, derived-from
+
+### Article Graph Visualization
+- Added `GET /api/graph` endpoint returning nodes and edges from wiki links and semantic links
+- Supports `?center=slug&depth=N` for local subgraph extraction via BFS
+- New full-page graph page at `/graph` with D3 force-directed layout
+- Nodes colored by category, with drag, zoom/pan, hover tooltips, and click navigation
+- Graph controls panel with category filter, depth slider, and node/edge stats
+- Added "Article graph" link to sidebar navigation
+- Installed `d3` and `@types/d3` dependencies
+
+### Export System
+- Added wiki export page at `/export` with scope (entire wiki or by category) and format (Markdown or HTML) selection
+- New `/api/export/markdown` endpoint generates downloadable `.md` file with table of contents
+- New `/api/export/html` endpoint generates styled HTML document with TOC and wiki-style CSS
+- Uses `contentRaw` (Markdown) when available, falls back to HTML-to-text stripping
+- Added "Export" link in sidebar under Tools section
+
+### CI/CD Pipeline
+- Added GitHub Actions CI workflow (`.github/workflows/ci.yml`) with lint, type-check, and build jobs
+- Lint and type-check job runs ESLint and `tsc --noEmit` after Prisma generate
+- Build job depends on lint passing, uses fake DATABASE_URL for static build validation
+- Added Dependabot configuration for weekly npm and GitHub Actions dependency updates
+- Minor/patch updates grouped into single PRs to reduce noise
+
+### Docker Setup
+- Added multi-stage Dockerfile: deps, builder, and runner stages for optimized production images
+- Added `docker-compose.yml` with PostgreSQL 16 and app services with health checks
+- Added `.dockerignore` to exclude node_modules, .next, .git, and other dev files
+- Docker CMD runs `prisma db push` before starting the app server
+
+### Performance Monitoring
+- Added `/api/health` endpoint returning status, uptime, DB connectivity, version, and article count
+- Added `/api/metrics` endpoint (admin only) with comprehensive dashboard data
+- New `src/lib/metrics.ts` with `getMetricsSummary()` aggregating articles, categories, tags, revisions, discussions, and recent activity
+- Added admin metrics dashboard at `/admin/metrics` with stat cards, bar charts for top categories and articles by month
+- Added "Metrics" link in sidebar Tools section (admin only)
+
+### Map Enhancements
+- Added multiple maps support with `MapConfig` management via `/api/maps` endpoints (GET, POST)
+- Per-map CRUD at `/api/maps/[mapId]` (PUT, DELETE) with cascading cleanup of layers, detail levels, and markers
+- Map layer system via `/api/maps/[mapId]/layers` with create/list and per-layer update/delete
+- Map detail levels via `/api/maps/[mapId]/detail-levels` for zoom-dependent imagery
+- New `MapSelector` component showing tabs/links for switching between maps
+- New `MapManager` admin component for creating, editing, and deleting map configurations
+- New `LayerControl` overlay with visibility toggles and opacity sliders per layer
+- New `MapSearch` overlay for filtering markers by label or linked article name
+- Added `/map/[mapId]` dynamic route page with map selector, layers, and search integration
+
+### Plugin System
+- Defined `WikiPlugin` and `PluginManifest` interfaces in `src/lib/plugins/types.ts`
+- Created plugin registry with `registerPlugin()`, `loadPlugins()`, `getEnabledPlugins()`, and `runArticleRenderHooks()`
+- Plugin state persisted in `PluginState` database table with enable/disable toggle
+- Added `/api/plugins` endpoint (admin only) for listing plugins (GET) and toggling state (PUT)
+- Added admin plugin management page at `/admin/plugins` with enable/disable controls per plugin
+- Added "Plugins" link in sidebar Tools section (admin only)
+
 ## [1.9.0] - 2026-02-25
 
 - Added category edit and delete functionality for admin users

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "highlight.js/styles/github.css";
 
 @theme {
   /* ── Standard wiki color scheme (light) ── */
@@ -71,6 +72,17 @@ html[data-theme="dark"] {
   --color-diff-added: #1a3a2a;
   --color-diff-removed: #3a1a1a;
 }
+
+/* Dark mode syntax highlighting overrides */
+html[data-theme="dark"] .hljs { background: var(--color-background); color: var(--color-foreground); }
+html[data-theme="dark"] .hljs-keyword { color: #ff7b72; }
+html[data-theme="dark"] .hljs-string { color: #a5d6ff; }
+html[data-theme="dark"] .hljs-comment { color: #8b949e; }
+html[data-theme="dark"] .hljs-number { color: #79c0ff; }
+html[data-theme="dark"] .hljs-function { color: #d2a8ff; }
+html[data-theme="dark"] .hljs-title { color: #d2a8ff; }
+html[data-theme="dark"] .hljs-built_in { color: #ffa657; }
+html[data-theme="dark"] .hljs-type { color: #ff7b72; }
 
 body {
   background: var(--color-background);
@@ -152,11 +164,55 @@ a:hover {
   padding: 0.1rem 0.3rem;
   font-size: 0.875em;
 }
-.wiki-content pre code { background: none; padding: 0; color: inherit; }
+.wiki-content pre code { background: none; padding: 0; color: inherit; font-family: var(--font-mono); }
+.wiki-content pre code .hljs-keyword { color: #d73a49; }
+.wiki-content pre code .hljs-string { color: #032f62; }
+.wiki-content pre code .hljs-comment { color: #6a737d; }
+.wiki-content pre code .hljs-number { color: #005cc5; }
+.wiki-content pre code .hljs-function { color: #6f42c1; }
 .wiki-content hr {
   border: none;
   border-top: 1px solid var(--color-border);
   margin: 1rem 0;
+}
+
+/* ── Footnote styles ── */
+.wiki-content { counter-reset: footnote; }
+.tiptap { counter-reset: footnote; }
+.footnote-ref {
+  counter-increment: footnote;
+  color: var(--color-accent);
+  cursor: help;
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+  text-decoration: none;
+}
+.footnote-ref::after { content: "[" counter(footnote) "]"; }
+.footnote-section {
+  border-top: 1px solid var(--color-border);
+  margin-top: 2rem;
+  padding-top: 0.75rem;
+  font-size: 0.85rem;
+}
+.footnote-section-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-heading);
+}
+.footnote-item {
+  margin: 0.25rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+.footnote-item::before {
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 0.8rem;
 }
 
 /* ── Wiki link node styles ── */
@@ -382,6 +438,29 @@ a:hover {
 .tiptap .selectedCell {
   background: var(--color-accent-soft);
 }
+.tiptap .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--color-accent);
+  cursor: col-resize;
+  z-index: 20;
+}
+.tiptap table .grip-column,
+.tiptap table .grip-row {
+  background: var(--color-surface-hover);
+  cursor: pointer;
+}
+.tiptap table .grip-column:hover,
+.tiptap table .grip-row:hover {
+  background: var(--color-accent-soft);
+}
+.tiptap td.has-focus,
+.tiptap th.has-focus {
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+}
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 8px; }
@@ -430,6 +509,26 @@ a:hover {
 .diff-removed {
   background: var(--color-diff-removed);
   text-decoration: line-through;
+}
+.diff-inline-added {
+  background: var(--color-diff-added);
+  padding: 0.1rem 0;
+}
+.diff-inline-removed {
+  background: var(--color-diff-removed);
+  text-decoration: line-through;
+  padding: 0.1rem 0;
+}
+
+/* ── Search result highlighting ── */
+mark, .search-highlight {
+  background: rgba(255, 215, 0, 0.35);
+  padding: 0.1rem 0.15rem;
+  border-radius: 2px;
+}
+html[data-theme="dark"] mark,
+html[data-theme="dark"] .search-highlight {
+  background: rgba(255, 215, 0, 0.2);
 }
 
 /* ── Disambiguation notice ── */

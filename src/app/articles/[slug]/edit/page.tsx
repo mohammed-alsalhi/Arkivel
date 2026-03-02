@@ -19,6 +19,8 @@ type Article = {
   categoryId: string | null;
   redirectTo: string | null;
   infobox: Record<string, string> | null;
+  status: string;
+  isPinned: boolean;
   tags: { tag: { id: string } }[];
 };
 
@@ -36,6 +38,8 @@ export default function EditArticlePage() {
   const [infobox, setInfobox] = useState<Record<string, string>>({});
   const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [editSummary, setEditSummary] = useState("");
+  const [status, setStatus] = useState("published");
+  const [isPinned, setIsPinned] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -66,6 +70,8 @@ export default function EditArticlePage() {
               setCategoryId(articleData.categoryId || "");
               setRedirectTo(articleData.redirectTo || "");
               setInfobox(articleData.infobox || {});
+              setStatus(articleData.status || "published");
+              setIsPinned(articleData.isPinned || false);
               setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
             }
           }
@@ -82,6 +88,8 @@ export default function EditArticlePage() {
         setCategoryId(articleData.categoryId || "");
         setRedirectTo(articleData.redirectTo || "");
         setInfobox(articleData.infobox || {});
+        setStatus(articleData.status || "published");
+        setIsPinned(articleData.isPinned || false);
         setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
       }
       setLoading(false);
@@ -111,6 +119,8 @@ export default function EditArticlePage() {
         redirectTo: redirectTo.trim() || null,
         infobox: Object.keys(infobox).length > 0 ? infobox : null,
         editSummary: editSummary.trim() || null,
+        status,
+        isPinned,
       }),
     });
 
@@ -250,6 +260,31 @@ export default function EditArticlePage() {
           <div>
             <label className="block text-[13px] font-bold text-heading mb-1">Content:</label>
             <TiptapEditor ref={editorRef} content={article.content} />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="block text-[13px] font-bold text-heading mb-1">Status:</label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground focus:border-accent focus:outline-none"
+              >
+                <option value="draft">Draft</option>
+                <option value="review">Review</option>
+                <option value="published">Published</option>
+              </select>
+            </div>
+            <div className="flex items-end pb-1">
+              <label className="flex items-center gap-2 text-[13px]">
+                <input
+                  type="checkbox"
+                  checked={isPinned}
+                  onChange={(e) => setIsPinned(e.target.checked)}
+                />
+                <span className="font-bold text-heading">Pin to category page</span>
+              </label>
+            </div>
           </div>
 
           <div>

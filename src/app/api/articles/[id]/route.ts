@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { generateSlug } from "@/lib/utils";
-import { isAdmin, requireAdmin } from "@/lib/auth";
+import { isAdmin, requireAdmin, getSession } from "@/lib/auth";
 
 export async function GET(
   _request: NextRequest,
@@ -33,7 +33,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const { title, slug: newSlug, content, contentRaw, excerpt, coverImage, categoryId, tagIds, redirectTo, infobox, editSummary } = body;
+  const { title, slug: newSlug, content, contentRaw, excerpt, coverImage, categoryId, tagIds, redirectTo, infobox, editSummary, status: articleStatus, isPinned, sortOrder } = body;
 
   // Snapshot current content as a revision before updating
   const current = await prisma.article.findUnique({
@@ -41,6 +41,9 @@ export async function PUT(
     select: { title: true, content: true, contentRaw: true, infobox: true },
   });
   if (current) {
+    // Get current user for revision attribution
+    const session = await getSession();
+
     await prisma.articleRevision.create({
       data: {
         articleId: id,
@@ -49,6 +52,7 @@ export async function PUT(
         contentRaw: current.contentRaw,
         infobox: current.infobox || undefined,
         editSummary: editSummary || null,
+        userId: session?.id || null,
       },
     });
   }
@@ -88,6 +92,9 @@ export async function PUT(
       ...(categoryId !== undefined && { categoryId: categoryId || null }),
       ...(redirectTo !== undefined && { redirectTo: redirectTo || null }),
       ...(infobox !== undefined && { infobox: infobox || null }),
+      ...(articleStatus !== undefined && { status: articleStatus }),
+      ...(isPinned !== undefined && { isPinned }),
+      ...(sortOrder !== undefined && { sortOrder }),
       ...(tagIds !== undefined && {
         tags: { create: tagIds.map((tagId: string) => ({ tagId })) },
       }),
@@ -97,6 +104,9 @@ export async function PUT(
       tags: { include: { tag: true } },
     },
   });
+
+  // Notify watchers (async, don't block response)
+  notifyWatchers(id, article.title).catch(() => {});
 
   return NextResponse.json(article);
 }
@@ -111,4 +121,33 @@ export async function DELETE(
   const { id } = await params;
   await prisma.article.delete({ where: { id } });
   return NextResponse.json({ success: true });
+}
+
+async function notifyWatchers(articleId: string, articleTitle: string) {
+  // Get current editor to exclude from notifications
+  const session = await getSession();
+  const editorId = session?.id;
+
+  // Find all watchers of this article (except the editor)
+  const watchers = await prisma.watchlist.findMany({
+    where: {
+      articleId,
+      ...(editorId ? { NOT: { userId: editorId } } : {}),
+    },
+    select: { userId: true },
+  });
+
+  if (watchers.length === 0) return;
+
+  const editorName = session?.displayName || session?.username || "Someone";
+
+  // Create notifications for all watchers
+  await prisma.notification.createMany({
+    data: watchers.map((w) => ({
+      userId: w.userId,
+      articleId,
+      type: "edit",
+      message: `${editorName} edited "${articleTitle}"`,
+    })),
+  });
 }

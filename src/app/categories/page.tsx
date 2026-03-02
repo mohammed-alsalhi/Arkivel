@@ -1,6 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import CategoryManager from "@/components/CategoryManager";
+import TagManager from "@/components/TagManager";
 
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({
@@ -47,6 +48,9 @@ export default async function CategoriesPage() {
 
       {/* Admin-only create form (client component) */}
       <CategoryManager />
+
+      {/* Admin-only tag management */}
+      <TagManager />
     </div>
   );
 }
