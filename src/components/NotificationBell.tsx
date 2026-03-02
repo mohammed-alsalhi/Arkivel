@@ -24,15 +24,18 @@ export default function NotificationBell() {
 
   useEffect(() => {
     // Check if user is logged in via session
+    let cancelled = false;
     fetch("/api/auth/check")
       .then((r) => r.json())
       .then((data) => {
+        if (cancelled) return;
         if (data.user) {
           setHasUser(true);
           fetchNotifications();
         }
       })
       .catch(() => {});
+    return () => { cancelled = true; };
   }, []);
 
   async function fetchNotifications() {

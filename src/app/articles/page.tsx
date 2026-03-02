@@ -97,7 +97,7 @@ function ArticlesPageContent() {
       setTags(await tagsRes.json());
     }
     setLoading(false);
-  }, [category, tag, page]);
+  }, [category, tag, statusFilter, page]);
 
   useEffect(() => {
     loadData();

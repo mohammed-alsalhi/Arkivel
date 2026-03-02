@@ -49,7 +49,9 @@ export default function WebhooksPage() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) fetchWebhooks();
+    if (isAdmin) {
+      fetchWebhooks();
+    }
   }, [isAdmin, fetchWebhooks]);
 
   if (!isAdmin) {

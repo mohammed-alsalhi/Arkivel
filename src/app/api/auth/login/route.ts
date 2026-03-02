@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import crypto from "crypto";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
   // Path 1: User-based login (username + password)
   if (body.username && body.password) {
-    const bcrypt = require("bcryptjs");
     const user = await prisma.user.findUnique({
       where: { username: body.username },
     });

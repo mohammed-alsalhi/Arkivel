@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
-  const bcrypt = require("bcryptjs");
   const { username, email, password } = await request.json();
 
   if (!username || !email || !password) {

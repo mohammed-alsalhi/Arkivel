@@ -79,8 +79,8 @@ export default function MapDetailPage({ params }: { params: Promise<{ mapId: str
     );
   }, []);
 
-  const handleMarkerSelect = useCallback((_markerId: string) => {
-    // Could pan map to marker - for now just a placeholder
+  const handleMarkerSelect = useCallback(() => {
+    // Could pan map to marker - placeholder for future implementation
   }, []);
 
   if (loading) {
