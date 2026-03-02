@@ -83,7 +83,7 @@ The search bar in the top-right corner provides instant results as you type. Pre
 
 **Categories** are hierarchical groups shown in the sidebar. Each article can belong to one category. Categories can have sub-categories for deeper organization. Browse all categories at `/categories`.
 
-**Tags** are flat labels that can be assigned freely. An article can have multiple tags. Tags appear at the bottom of articles and link to a tag page listing all articles with that tag.
+**Tags** are hierarchical labels that can be assigned freely. An article can have multiple tags. Tags can have sub-tags for deeper organization, similar to categories. Tags appear at the bottom of articles and link to a tag page listing all articles with that tag. Browse all tags at `/tags`, which features a tag cloud with size-scaled tags.
 
 ## Revision History
 
@@ -98,8 +98,11 @@ Every time you save an article, the previous version is automatically preserved 
 
 - **Backlinks:** At the bottom of each article, a "Pages that link here" section lists all articles that reference the current one via wiki links.
 - **Table of contents:** Articles with multiple headings automatically get a table of contents at the top.
+- **Breadcrumb navigation:** Article pages show the category hierarchy as clickable breadcrumbs.
 - **Recent changes:** The Recent Changes page (`/recent-changes`) shows a timeline of all article edits grouped by date.
 - **Disambiguation:** When you create an article with a title similar to existing ones, a notice appears linking to the similar articles.
+- **Reading progress bar:** A progress indicator at the top of article pages shows how far you've scrolled.
+- **Back to top button:** Appears when scrolling down for quick navigation back to the top.
 
 ## Import & Export
 
@@ -119,9 +122,12 @@ Every time you save an article, the previous version is automatically preserved 
 
 The interactive map feature is optional and disabled by default. When enabled (via the `NEXT_PUBLIC_MAP_ENABLED=true` environment variable), it adds a map page with:
 
-- A custom map image as the background
+- Multiple maps per wiki, each with its own background image
 - Clickable polygon areas linked to articles
 - Hover tooltips showing area names with a color tint
+- Toggleable map layers (political boundaries, terrain, etc.)
+- Zoomable maps with different detail levels at each zoom
+- Map area search and filtering
 - Edit mode for drawing new polygon areas (admin only)
 
 ### Editing areas (admin)
@@ -138,8 +144,10 @@ Toggle **Edit Mode** to access area management. In edit mode:
 
 ## Administration
 
-- **Login:** Go to `/admin` and enter the admin password (set via `ADMIN_SECRET` environment variable)
+- **Multi-user login:** Register for an account or login with your credentials at `/login`. Roles: Viewer (read only), Editor (create/edit), Admin (full access).
+- **Legacy admin login:** Go to `/admin` and enter the admin password (set via `ADMIN_SECRET` environment variable). Both login methods work side by side.
 - **Local development:** If `ADMIN_SECRET` is empty, everyone has admin access automatically
+- **Admin dashboard:** Access the admin dashboard for a review queue of articles needing approval, wiki statistics, webhook management, and plugin configuration.
 - **Theme:** Toggle between light and dark mode using the sun/moon icon in the top-right corner
 - **Customization:** Wiki name, tagline, welcome text, footer, and more are all configurable via `NEXT_PUBLIC_*` environment variables. See `.env.example` for the full list.
 
@@ -192,6 +200,84 @@ Admins can perform bulk actions on articles from the All Articles page (`/articl
 
 Batch operations are only visible when logged in as admin.
 
+## Footnotes & Citations
+
+Add footnotes to your articles for citations and references:
+
+- Click the **fn** toolbar button or press `Ctrl+Shift+F` to insert a footnote
+- Enter the footnote text in the prompt
+- Footnotes appear as numbered superscripts in the text
+- A "Notes" section is automatically generated at the bottom of the article
+
+## Code Blocks with Syntax Highlighting
+
+Code blocks support syntax highlighting for many programming languages:
+
+- Click the **<>** toolbar button to insert a code block
+- You'll be prompted to enter a language (e.g. js, python, html, css, bash)
+- Syntax highlighting is applied automatically in both the editor and article display
+- Supports dark mode with adapted color schemes
+
+## Article Status Workflow
+
+Articles can have one of three statuses:
+
+- **Draft** — work in progress, only visible to admins
+- **Review** — ready for review, only visible to admins
+- **Published** — visible to everyone
+
+Set the status from the article edit page. Pinned articles appear at the top of their category page.
+
+## User Accounts
+
+The wiki supports multi-user accounts with role-based permissions:
+
+- Register for an account at `/register` with username, email, and password
+- Login at `/login` to start editing
+- Roles: **Viewer** (read only), **Editor** (create/edit articles), **Admin** (full access)
+- User profiles show contribution history at `/users/username`
+- Legacy admin password login still works alongside user accounts
+
+## Watchlist & Notifications
+
+- Watch articles to get notified when they're edited
+- Manage your watchlist from `/watchlist` in the sidebar
+- The bell icon in the header shows unread notification count
+- Click the bell to see recent notifications and mark them as read
+
+## RSS Feeds & Public API
+
+- **RSS:** Subscribe to `/feed.xml` for recent changes
+- **Atom:** Available at `/feed/atom`
+- **API:** Public REST API at `/api/v1/` with API key authentication. See `/api-docs` for documentation.
+
+## Semantic Links & Relations
+
+Beyond wiki links, you can create typed semantic relationships between articles:
+
+- On any article's edit page, use the **Relations** section to add semantic links
+- Available relation types: *related to*, *is part of*, *see also*, and more
+- Relations are displayed on the article page and are visible in the Article Graph
+- Relations are bidirectional — linking A to B also shows on B's page
+
+## Multi-Language Translations
+
+Articles can have translations in multiple languages:
+
+- On an article's edit page, use the **Translations** tab to add content in other languages
+- Each translation has its own title and content
+- A language switcher appears on articles that have translations available
+
+## Article Graph
+
+Visualize the connections between your articles as an interactive graph:
+
+- Visit the Article Graph page at `/graph` from the sidebar
+- Nodes represent articles, colored by category
+- Edges represent wiki links between articles
+- Drag nodes to rearrange, scroll to zoom, and click to navigate
+- Filter by category and control graph depth
+
 ## Keyboard Shortcuts
 
 These shortcuts work inside the rich text editor. Replace Ctrl with Cmd on Mac.
@@ -223,24 +309,3 @@ These shortcuts work inside the rich text editor. Replace Ctrl with Cmd on Mac.
 | `g` then `r` | Go to recent changes |
 | `g` then `g` | Go to article graph |
 | `Esc` | Close dialog / blur input |
-
-## New in v2.1
-
-- **Reading progress bar** at top of article pages
-- **Back to top button** when scrolling down
-- **Word count & reading time** on article pages and in editor
-- **Copy Link / Share / Print** buttons on articles
-- **Breadcrumb navigation** showing category hierarchy
-- **"On this day"** homepage section
-- **Tag cloud** at `/tags`
-- **Article status badges** in listings
-- **Last edited by** attribution
-- **Editor status bar** with word/char counts
-- **Insert date** toolbar button
-- **Collapsible sidebar** sections
-- **Toast notifications** system
-- **SEO** — Open Graph, JSON-LD, sitemap.xml, robots.txt
-- **15 new API endpoints** — stats, backlinks, orphans, dead-links, etc.
-- **Review queue** in admin dashboard
-- **Print styles** for clean printing
-- **Keyboard accessibility** improvements

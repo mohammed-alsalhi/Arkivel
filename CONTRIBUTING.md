@@ -50,8 +50,9 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 
 ### Adding a new API route
 1. Create the route file under `src/app/api/`
-2. Use `requireAdmin(await isAdmin())` for admin-only routes
-3. Use the Prisma client from `src/lib/prisma.ts`
+2. For admin-only routes, use `requireAdmin(await isAdmin())`
+3. For role-based routes, use `requireRole(user, 'editor')` with the appropriate role
+4. Use the Prisma client from `src/lib/prisma.ts`
 
 ### Adding a new page
 1. Create the page under `src/app/` following Next.js App Router conventions
@@ -91,7 +92,7 @@ Contributions of all kinds are welcome:
 - **Documentation** — improvements to README, help page, or code comments
 - **Performance** — optimizations to database queries, rendering, or bundle size
 - **Accessibility** — keyboard navigation, screen reader support, ARIA attributes
-- **Tests** — the project currently has no test suite; adding one would be valuable
+- **Tests** — the project has CI (lint + type-check + build via GitHub Actions) but no test suite yet; adding one would be very valuable (see [ROADMAP.md](ROADMAP.md))
 
 ## Reporting Issues
 

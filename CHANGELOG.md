@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here.
 
+## [2.1.1] - 2026-03-02
+
+Directory cleanup and documentation overhaul.
+
+### Cleanup
+- Removed 5 unused Next.js scaffold SVGs from `public/` (file.svg, globe.svg, next.svg, vercel.svg, window.svg)
+- Moved `help.md` to `docs/help.md` to separate reference docs from project root
+- Fixed `package.json` prisma seed command referencing nonexistent `prisma/seed.ts` (now correctly points to `prisma/seed.mjs`)
+
+### Documentation
+- Rewrote `ARCHITECTURE.md` to reflect current state: dual auth system, all 20 API route groups, 22 database models, complete directory structure, and all key patterns (semantic links, graph, feeds, plugins, footnotes)
+- Refreshed `ROADMAP.md` with new forward-looking goals (testing, slash commands, search filters, mobile UX, OAuth, AI features) and archived completed items in a collapsible section
+- Updated `CONTRIBUTING.md` with `requireRole()` auth pattern and CI pipeline mention
+- Added 5 missing environment variables to `README.md` (locale, articles per page, upload size, registration, discussions)
+- Updated help page and `docs/help.md` with: hierarchical tags, multi-user auth in admin section, multiple maps with layers, semantic links/relations section, multi-language translations section, breadcrumbs, reading progress bar
+
 ## [2.1.0] - 2026-03-02
 
 Improvements across utilities, config, CSS, components, API routes, pages, sidebar, editor, and SEO.

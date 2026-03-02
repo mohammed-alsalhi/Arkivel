@@ -46,6 +46,11 @@ Only `DATABASE_URL` and `ADMIN_SECRET` are required — everything else has sens
 | `NEXT_PUBLIC_MAP_ENABLED` | No | Set to `true` to enable the interactive map page |
 | `NEXT_PUBLIC_MAP_LABEL` | No | Label for the map in navigation (default: `Map`) |
 | `NEXT_PUBLIC_MAP_IMAGE` | No | Path or URL to the map background image |
+| `NEXT_PUBLIC_DEFAULT_LOCALE` | No | Default locale for the wiki (default: `en`) |
+| `NEXT_PUBLIC_ARTICLES_PER_PAGE` | No | Articles per page in listings (default: `20`) |
+| `NEXT_PUBLIC_MAX_UPLOAD_SIZE` | No | Max image upload size in bytes (default: `5242880` / 5 MB) |
+| `NEXT_PUBLIC_ENABLE_REGISTRATION` | No | Enable user registration (default: `true`) |
+| `NEXT_PUBLIC_ENABLE_DISCUSSIONS` | No | Enable article discussion threads (default: `true`) |
 | `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob token for image uploads |
 
 ### Additional Features

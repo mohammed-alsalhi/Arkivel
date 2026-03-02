@@ -181,8 +181,10 @@ export default function HelpPage() {
             <Link href="/categories">Categories page</Link>.
           </p>
           <p>
-            <strong>Tags</strong> are flat labels that can be assigned freely. An article can have multiple tags.
+            <strong>Tags</strong> are hierarchical labels that can be assigned freely. An article can have multiple tags.
+            Tags can have sub-tags for deeper organization, similar to categories.
             Tags appear at the bottom of articles and link to a tag page listing all articles with that tag.
+            Browse all tags at the <Link href="/tags">Tags page</Link>, which features a tag cloud with size-scaled tags.
           </p>
         </div>
       </div>
@@ -272,9 +274,12 @@ export default function HelpPage() {
             <Link href="/map">map page</Link> with:
           </p>
           <ul className="list-disc pl-5 mb-3 space-y-0.5">
-            <li>A custom map image as the background</li>
+            <li>Multiple maps per wiki, each with its own background image</li>
             <li>Clickable polygon areas linked to articles</li>
             <li>Hover tooltips showing area names with a color tint</li>
+            <li>Toggleable map layers (political boundaries, terrain, etc.)</li>
+            <li>Zoomable maps with different detail levels at each zoom</li>
+            <li>Map area search and filtering</li>
             <li>Edit mode for drawing new polygon areas (admin only)</li>
           </ul>
 
@@ -300,16 +305,25 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li>
-              <strong>Login:</strong> Go to{" "}
+              <strong>Multi-user login:</strong> <Link href="/register">Register</Link> for an account or <Link href="/login">login</Link> with
+              your credentials. Roles: Viewer (read only), Editor (create/edit), Admin (full access).
+            </li>
+            <li>
+              <strong>Legacy admin login:</strong> Go to{" "}
               <Link href="/admin">Admin</Link> and enter the admin password
               (set via{" "}
               <code className="bg-surface-hover px-1 text-[12px]">ADMIN_SECRET</code>{" "}
-              environment variable)
+              environment variable). Both login methods work side by side.
             </li>
             <li>
               <strong>Local development:</strong> If{" "}
               <code className="bg-surface-hover px-1 text-[12px]">ADMIN_SECRET</code>{" "}
               is empty, everyone has admin access automatically
+            </li>
+            <li>
+              <strong>Admin dashboard:</strong> Access the{" "}
+              <Link href="/admin">admin dashboard</Link> for a review queue of articles needing approval,
+              wiki statistics, webhook management, and plugin configuration.
             </li>
             <li>
               <strong>Theme:</strong> Toggle between light and dark mode using the sun/moon
@@ -643,6 +657,37 @@ export default function HelpPage() {
             <li>Edges represent wiki links between articles</li>
             <li>Drag nodes to rearrange, scroll to zoom, and click to navigate</li>
             <li>Filter by category and control graph depth</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Semantic Links */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Semantic Links &amp; Relations</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            Beyond wiki links, you can create typed semantic relationships between articles:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>On any article&apos;s edit page, use the <strong>Relations</strong> section to add semantic links</li>
+            <li>Available relation types: <em>related to</em>, <em>is part of</em>, <em>see also</em>, and more</li>
+            <li>Relations are displayed on the article page and are visible in the <Link href="/graph">Article Graph</Link></li>
+            <li>Relations are bidirectional &mdash; linking A to B also shows on B&apos;s page</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Translations */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Multi-Language Translations</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            Articles can have translations in multiple languages:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>On an article&apos;s edit page, use the <strong>Translations</strong> tab to add content in other languages</li>
+            <li>Each translation has its own title and content</li>
+            <li>A language switcher appears on articles that have translations available</li>
           </ul>
         </div>
       </div>

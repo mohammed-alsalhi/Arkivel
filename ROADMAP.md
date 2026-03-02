@@ -4,67 +4,129 @@ This document outlines planned features and improvements for Wiki App. Contribut
 
 ## Near-Term
 
+### Testing & Quality
+- [ ] Unit test suite with Vitest for utility functions and API routes
+- [ ] Integration tests for auth flows and article CRUD
+- [ ] E2E tests with Playwright for critical user journeys
+- [ ] Automated accessibility audit (axe-core) in CI pipeline
+
 ### Editor Improvements
-- [x] Footnotes and citations
-- [x] Code block syntax highlighting
-- [x] Drag-and-drop image placement within content
-- [x] Undo/redo keyboard shortcut indicators in toolbar
-- [x] Better table editing (merge cells, resize columns)
+- [ ] Slash command menu (`/` to insert blocks, headings, callouts)
+- [ ] Drag-and-drop block reordering
+- [ ] Inline comments and annotations
+- [ ] Markdown paste detection (paste Markdown, render as rich text)
+- [ ] Collapsible/toggle blocks
 
 ### Content Features
-- [x] Article templates per category (auto-fill infobox + content skeleton)
-- [x] Multi-language support for article content
-- [x] Article versioning comparison improvements (inline diff view)
-- [x] Related articles section (auto-suggested based on shared categories/tags)
-- [x] Table of contents generation from headings
-
-### Organization
-- [x] Nested tags (tag hierarchy like categories)
-- [x] Custom sort order for articles within categories
-- [x] Article status workflow (draft → review → published)
-- [x] Pinned/featured articles per category
+- [ ] Article templates marketplace (community-contributed templates)
+- [ ] Scheduled publishing (set a future publish date)
+- [ ] Article archival with soft-delete and restore
+- [ ] Content linting (warn about broken links, missing excerpts, orphaned articles)
+- [ ] Bulk tag editing from tag management page
 
 ## Medium-Term
 
 ### Search & Discovery
-- [x] Full-text search with PostgreSQL `tsvector` for better performance
-- [x] Search filters (by category, tag, date range)
-- [x] Search result highlighting
-- [x] Random article button
+- [ ] PostgreSQL `tsvector` full-text search for better performance at scale
+- [ ] Search filters UI (by category, tag, date range, author, status)
+- [ ] Saved searches and search history
+- [ ] Fuzzy matching and typo tolerance
 
-### User System
-- [x] Multi-user authentication (sign up / sign in)
-- [x] User profiles with contribution history
-- [x] Role-based permissions (admin, editor, viewer)
-- [x] Edit watchlist and notifications
+### User Experience
+- [ ] Mobile-responsive layout improvements
+- [ ] Customizable dashboard / home page widgets
+- [ ] User preferences (default editor mode, notification settings, locale)
+- [ ] Inline article previews on wiki link hover
+- [ ] Keyboard-driven command palette (Ctrl+K)
 
-### API & Integration
-- [x] Public REST API with documentation
-- [x] Webhooks for article create/update/delete events
-- [x] RSS/Atom feed for recent changes
-- [x] Import from MediaWiki XML dumps
+### Collaboration
+- [ ] Real-time collaborative editing improvements (cursor presence, conflict resolution)
+- [ ] Article review workflow with reviewer assignment and inline feedback
+- [ ] Change request / suggestion mode (propose edits without direct write access)
+- [ ] Activity feed showing recent edits across the wiki
 
 ## Long-Term
 
+### Infrastructure
+- [ ] S3/R2-compatible object storage as alternative to Vercel Blob
+- [ ] Redis caching layer for search and frequently accessed articles
+- [ ] Database read replicas for horizontal scaling
+- [ ] Incremental static regeneration for published articles
+
+### API & Integrations
+- [ ] API v2 with pagination cursors and field selection
+- [ ] OAuth2/OIDC login (Google, GitHub, custom SAML)
+- [ ] Zapier/Make integration triggers
+- [ ] CLI tool for managing wiki content from the terminal
+
 ### Advanced Features
-- [x] Real-time collaborative editing (CRDT or OT-based)
+- [ ] Fine-grained RBAC (per-category and per-article permissions)
+- [ ] Custom theme builder with live preview
+- [ ] AI-assisted features (auto-summarize, suggest related articles, content generation)
+- [ ] Multi-wiki support (multiple wikis from a single deployment)
+- [ ] Full offline mode with sync on reconnect
+
+---
+
+## Completed (v1.0 - v2.1)
+
+<details>
+<summary>All features shipped through v2.1.0</summary>
+
+### Editor
+- [x] Footnotes and citations
+- [x] Code block syntax highlighting
+- [x] Drag-and-drop image placement
+- [x] Table editing (merge cells, resize columns)
+- [x] Wiki link autocomplete
+
+### Content
+- [x] Article templates per category
+- [x] Multi-language support
+- [x] Revision history with inline diff
+- [x] Related articles (auto-suggested)
+- [x] Table of contents generation
+- [x] Article status workflow (draft / review / published)
+- [x] Pinned/featured articles per category
 - [x] Semantic wiki links with relationship types
-- [x] Graph visualization of article connections
-- [x] Full-text PDF/EPUB export of entire wiki or category
-- [x] Plugin/extension system for custom functionality
+
+### Organization
+- [x] Nested tags (hierarchical like categories)
+- [x] Custom sort order for articles within categories
+- [x] Breadcrumb navigation
+- [x] Tag cloud
+
+### Search & Discovery
+- [x] Relevance-ranked full-text search with AND logic
+- [x] Random article button
+- [x] Article graph visualization (D3)
+
+### Users & Auth
+- [x] Multi-user authentication
+- [x] User profiles with contribution history
+- [x] Role-based permissions (admin, editor, viewer)
+- [x] Watchlist and notifications
+
+### API & Integration
+- [x] Public REST API with documentation
+- [x] Webhooks for article events
+- [x] RSS/Atom feeds
+- [x] MediaWiki XML import
 
 ### Infrastructure
-- [x] Automated test suite (unit, integration, e2e)
-- [x] CI/CD pipeline with GitHub Actions
-- [x] Database migration system (instead of `db push`)
-- [x] Docker Compose setup for one-command local deployment
-- [x] Performance monitoring and analytics dashboard
+- [x] CI/CD pipeline with GitHub Actions (lint, type-check, build)
+- [x] Database migration system
+- [x] Docker Compose setup
+- [x] Performance monitoring dashboard
+- [x] Plugin/extension system
 
-### Map Enhancements
+### Map
 - [x] Multiple maps per wiki
-- [x] Map layer toggling (political boundaries, terrain, etc.)
+- [x] Layer toggling
 - [x] Map area search and filtering
-- [x] Zoomable map with different detail levels
+- [x] Zoomable map with detail levels
+
+</details>
 
 ---
 

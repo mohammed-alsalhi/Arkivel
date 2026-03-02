@@ -9,83 +9,162 @@ This document describes the technical architecture of Wiki App for contributors 
 | Framework | Next.js 16 (App Router) |
 | UI | React 19, TypeScript |
 | Styling | Tailwind CSS 4 with CSS variable theming |
-| Editor | Tiptap (ProseMirror-based) |
+| Editor | Tiptap 3 (ProseMirror-based) |
 | Database | PostgreSQL via Prisma 7 ORM |
-| Auth | Cookie-based single admin password |
-| Hosting | Vercel (recommended), any Node.js host |
+| Auth | Dual: legacy admin password + multi-user with roles (admin, editor, viewer) |
+| Hosting | Vercel (recommended), Docker, or any Node.js host |
 | Image Storage | Vercel Blob |
 
 ## Directory Structure
 
 ```
 src/
-  app/                    # Next.js App Router pages and API routes
+  app/                        # Next.js App Router pages and API routes
     api/
-      articles/           # CRUD + batch + import + search + titles
-      categories/         # Category CRUD
-      tags/               # Tag CRUD
-      auth/               # Login/logout/check
-      map-markers/        # Map area CRUD
-      search/             # Full-text search
-      upload/             # Image upload to Vercel Blob
+      articles/               # CRUD, batch, import, reorder, titles, similar, recent, orphans, dead-links
+        [id]/                  # Single article + backlinks, discussions, export, links, rating, related, revisions, status, translations, views, word-count
+      auth/                   # Login, logout, register, check
+      categories/             # Category CRUD + tree view
+        [id]/
+      tags/                   # Tag CRUD + popular
+        [id]/
+      search/                 # Full-text search
+      graph/                  # Knowledge graph (BFS subgraph support)
+      map-markers/            # Marker CRUD
+        [id]/
+      maps/                   # Multi-map management
+        [mapId]/
+      users/                  # User accounts
+      v1/                     # Public REST API (articles, categories, search, tags)
+      export/                 # Batch HTML/Markdown export
+      upload/                 # Image upload to Vercel Blob
+      stats/                  # Wiki statistics
+      metrics/                # Performance metrics
+      health/                 # Health check
+      notifications/          # User notifications
+      watchlist/              # Article watch subscriptions
+      webhooks/               # Webhook management
+      plugins/                # Plugin management
+      sitemap/                # Dynamic sitemap data
     articles/
-      [slug]/             # Article display, edit, history, diff, discussion
-      new/                # Create article page
-    categories/           # Category listing and individual category pages
-    tags/                 # Tag-based article listing
-    map/                  # Interactive map page
-    help/                 # In-app documentation
-    import/               # Bulk article import (admin)
-    admin/                # Admin login page
+      [slug]/                 # Article display, edit, history, diff, discussion
+      new/                    # Create article page
+    categories/               # Category listing and individual pages
+    tags/                     # Tag-based article listing
+    graph/                    # Interactive D3 knowledge graph
+    map/                      # Interactive map pages
+      [mapId]/
+    search/                   # Search results page
+    login/                    # Login page
+    register/                 # Registration page
+    admin/                    # Admin dashboard
+      metrics/                # Performance metrics page
+      plugins/                # Plugin management page
+      webhooks/               # Webhook management page
+    recent-changes/           # Timeline of all edits
+    random/                   # Random article redirect
+    watchlist/                # User's watched articles
+    import/                   # Bulk article import (admin)
+    export/                   # Bulk export page
+    api-docs/                 # Public API documentation
+    help/                     # In-app feature guide
+    users/
+      [username]/             # User profile page
+    feed.xml/                 # RSS 2.0 feed
+    feed/atom/                # Atom feed
   components/
-    editor/               # Tiptap editor and extensions
-      TiptapEditor.tsx    # Main rich text editor component
-      EditorToolbar.tsx   # Formatting toolbar
+    editor/                   # Tiptap editor and extensions
+      TiptapEditor.tsx        # Main rich text editor component
+      EditorToolbar.tsx       # Formatting toolbar
       WikiLinkExtension.ts    # [[Article Name]] node extension
+      WikiLinkSuggester.tsx   # Autocomplete dropdown for wiki links
+      useWikiLinkSuggester.ts # Hook for wiki link suggestions
+      FootnoteExtension.ts    # Footnote/citation support
       PotentialLinkExtension.ts # Detected link mark extension
-      WikiLinkSuggester.tsx    # Autocomplete dropdown for wiki links
-      LinkBubble.tsx      # Floating edit/remove tooltip for links
-    layout/               # Sidebar, header, footer
-    map/                  # Leaflet map components (dynamically imported)
-    InfoboxEditor.tsx     # Category-specific field editor
-    InfoboxDisplay.tsx    # Category-specific field display
-    CategorySelect.tsx    # Hierarchical category dropdown
-    TagPicker.tsx         # Multi-select tag picker
-    TemplatePicker.tsx    # Article template selector
-    ThemeToggle.tsx       # Dark/light mode toggle
+      LinkBubble.tsx          # Floating edit/remove tooltip for links
+    layout/                   # Sidebar, search bar
+      Sidebar.tsx
+      SearchBar.tsx
+    graph/                    # D3 force-directed graph
+      ArticleGraph.tsx
+      GraphControls.tsx
+    map/                      # Leaflet map components (dynamically imported)
+      WorldMap.tsx
+      MapManager.tsx
+      MapSelector.tsx
+      LayerControl.tsx
+      MapSearch.tsx
+    articles/                 # Article display components
+      ArticleCard.tsx
+    (37 root-level components)  # Badge, Breadcrumb, Toast, Pagination, ThemeToggle,
+                                # KeyboardShortcuts, NotificationBell, UserAvatar,
+                                # CategoryManager, TagManager, TagPicker, etc.
   lib/
-    prisma.ts             # Prisma client singleton
-    auth.ts               # Admin authentication helpers
-    config.ts             # Environment-driven branding config
-    wikilinks.ts          # Wiki link resolution and backlink queries
-    infobox-schema.ts     # Category-specific infobox field definitions
-    templates.ts          # Article starter templates
-    utils.ts              # Slug generation, date formatting
-    import.ts             # Article import parsing utilities
+    prisma.ts                 # Prisma client singleton (globalThis caching for dev)
+    auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
+    api-auth.ts               # API key validation for public REST API
+    config.ts                 # Environment-driven branding config
+    wikilinks.ts              # Wiki link resolution and backlink queries
+    infobox-schema.ts         # Category-specific infobox field definitions
+    templates.ts              # Article starter templates
+    category-templates.ts     # Category-specific templates
+    relations.ts              # Semantic link relation types
+    utils.ts                  # Slug generation, date formatting, text utilities
+    import.ts                 # Article import parsing utilities
+    metrics.ts                # Performance metric logging
+    webhooks.ts               # Event webhook dispatch
+    plugins/
+      types.ts                # Plugin interface definition
+      registry.ts             # Plugin registry
 prisma/
-  schema.prisma           # Database schema
-  seed.mjs                # Category and subcategory seeder
+  schema.prisma               # Database schema (22 models)
+  seed.mjs                    # Category and subcategory seeder
+  migrations/                 # Versioned migration history
+scripts/
+  import-articles.ts          # CLI for bulk article import
+public/
+  maps/world.webp             # Default map background image
+  uploads/                    # User-uploaded files
+docs/
+  help.md                     # Feature guide reference
 ```
 
 ## Database Models
 
-### Article
-The central content model. Stores HTML content from Tiptap, optional raw Markdown, excerpt, cover image, and category-specific infobox data as JSON. Supports redirects (`redirectTo`) and disambiguation pages.
+### Core Content
+- **Article** — Central content model. Stores HTML from Tiptap, optional raw Markdown, excerpt, cover image, infobox data (JSON), status (draft/review/published), sortOrder, isPinned. Supports redirects and disambiguation pages.
+- **ArticleRevision** — Immutable snapshots created automatically on every edit. Stores content, title, and infobox state before changes. Powers history timeline and diff viewer. Tracks userId for attribution.
+- **Category** — Hierarchical with self-referencing `parentId`. Six root categories with subcategories. Drives infobox field schemas. Ordered by `sortOrder`.
+- **Tag** — Hierarchical with self-referencing `parentId`. Many-to-many with articles via `ArticleTag` join table.
+- **ArticleTranslation** — Multi-language article content (locale, title, content).
+- **Discussion** — Per-article comment threads with optional user attribution.
 
-### Category
-Hierarchical with self-referencing `parentId`. Six root categories (People, Places, Organizations, Events, Things, Concepts) each with subcategories. Categories drive which infobox fields are shown for articles.
+### Users & Auth
+- **User** — Multi-user accounts (username, email, passwordHash, role: admin/editor/viewer).
+- **Session** — Auth sessions with token and expiry, linked to User.
 
-### ArticleRevision
-Immutable snapshots created automatically on every article edit. Stores the content, title, and infobox state before the edit was applied. Powers the history timeline and diff viewer.
+### Relationships & Links
+- **ArticleLink** — Semantic wiki links with typed relations (related-to, is-part-of, etc.). Defined in `src/lib/relations.ts`.
 
-### Tag
-Flat labels with many-to-many relationship to articles via `ArticleTag` join table.
+### Maps
+- **MapMarker** — Coordinates + optional article link, grouped by `mapId`, with zoom levels. Supports polygon areas (JSON).
+- **MapConfig** — Multi-map system configuration.
+- **MapLayer** — Map layer definitions for toggling.
+- **MapDetailLevel** — Zoom-dependent detail levels.
 
-### Discussion
-Per-article comment threads. Anyone can post; admin can delete.
+### API & Integration
+- **ApiKey** — Public API authentication keys, linked to User.
+- **Webhook** — Event webhook endpoints for article create/update/delete.
+- **WebhookDelivery** — Webhook delivery logging with status tracking.
 
-### MapMarker
-Polygon areas on an interactive map. Each area has coordinates (JSON array), optional color, and an optional link to an article.
+### User Features
+- **Watchlist** — User-article watch pairs for change notifications.
+- **Notification** — Edit/reply/mention notifications per user.
+
+### System
+- **PluginState** — Plugin enable/disable configuration.
+- **MetricLog** — Performance metric logging.
+- **CollaborationSession** — Real-time collaborative editing (Yjs document storage).
 
 ## Key Patterns
 
@@ -93,45 +172,94 @@ Polygon areas on an interactive map. Each area has coordinates (JSON array), opt
 All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables.
 
 ### Authentication
-Single admin password via `ADMIN_SECRET` env var. Cookie-based using `admin_token`. When `ADMIN_SECRET` is unset, all users have admin access (useful for local development). API routes guard with `requireAdmin(await isAdmin())`.
+Dual auth system. **Legacy:** single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. **Multi-user:** bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns the current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
 
 ### Wiki Links
-Articles cross-reference using `[[Article Name]]` syntax. The custom Tiptap `WikiLink` extension (an atom node) renders these as `<a data-wiki-link="Title">` in the editor. At display time, `resolveWikiLinks()` queries the database to verify targets exist and marks broken links with a CSS class. `getBacklinks()` finds articles that reference a given slug.
+Articles cross-reference using `[[Article Name]]` syntax. The custom Tiptap `WikiLink` extension renders these as `<a data-wiki-link="Title">` in the editor. At display time, `resolveWikiLinks()` queries the database to verify targets exist and marks broken links with a CSS class. `getBacklinks()` finds articles that reference a given slug.
 
 ### Content Storage
 Articles store `content` (HTML from Tiptap) and optionally `contentRaw` (Markdown for export). HTML is the canonical format displayed to users.
 
 ### Revision System
-Every PUT to an article endpoint first snapshots the current state into `ArticleRevision`, then applies the update. This provides a complete edit history without explicit user action.
+Every PUT to an article endpoint first snapshots the current state into `ArticleRevision`, then applies the update. Revisions track the editing user for attribution.
+
+### Footnotes
+Custom Tiptap `FootnoteRef` node extension. Stored as `<sup data-footnote="text">` in HTML. Auto-numbered via CSS counters. Footnote section appended at display time by `appendFootnoteSection()`.
 
 ### Category-Specific Infoboxes
-Each root category defines a field schema in `src/lib/infobox-schema.ts`. Subcategories inherit their parent's schema via a parent chain walk. Fields support types: text, textarea, number, wikilink (renders as article link), and list (comma-separated). Infobox data is stored as JSON on the Article model.
+Each root category defines a field schema in `src/lib/infobox-schema.ts`. Subcategories inherit their parent's schema via a parent chain walk. Fields support types: text, textarea, number, wikilink, and list. Infobox data is stored as JSON on the Article model.
 
 ### Theming
 CSS variables in `src/app/globals.css` under a `@theme` block. Dark mode applies overrides via `html[data-theme="dark"]`. Uses `@theme` (not `@theme inline`) so CSS variable overrides work correctly with Tailwind.
 
 ### Search
-Relevance-ranked full-text search. Multi-word queries use AND logic. Results scored by: exact title match (100) > starts with (80) > title contains (60) > content only (0).
+Relevance-ranked full-text search. Multi-word queries use AND logic. Results scored by: exact title match (100) > starts with (80) > title contains (60) > content only (0). Search covers titles, content, and excerpts.
 
 ### Map
-Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet with `CRS.Simple` for pixel coordinates on a custom image. Dynamically imported to avoid SSR issues. Areas are clickable polygons that link to articles.
+Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet with `CRS.Simple` for pixel coordinates on a custom image. Dynamically imported to avoid SSR issues. Supports multiple maps, layers, and zoom-dependent detail levels.
+
+### Semantic Links
+`ArticleLink` model with typed relations (related-to, is-part-of, see-also, etc.). Defined in `src/lib/relations.ts`. Displayed via `SemanticRelations` component. Visualized in the article graph.
+
+### Graph
+D3 force-directed graph at `/graph`. API at `/api/graph` returns nodes/edges from wiki links and `ArticleLink` table. Supports BFS subgraph via `?center=slug&depth=N`.
+
+### Feeds & API
+RSS at `/feed.xml`, Atom at `/feed/atom`. Public REST API at `/api/v1/` with API key auth (`X-API-Key` header). Webhooks dispatched on article events. API docs at `/api-docs`.
+
+### Plugins
+Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in `src/lib/plugins/registry.ts`. Plugin state stored in `PluginState` table. Managed via `/admin/plugins`.
 
 ## API Routes
 
+### Articles
 | Route | Methods | Description |
 |-------|---------|-------------|
 | `/api/articles` | GET, POST | List/create articles |
 | `/api/articles/[id]` | GET, PUT, DELETE | Single article CRUD |
-| `/api/articles/[id]/revisions` | GET | Article revision history |
+| `/api/articles/[id]/backlinks` | GET | Articles linking to this one |
 | `/api/articles/[id]/discussions` | GET, POST, DELETE | Article comments |
-| `/api/articles/batch` | PUT, DELETE | Bulk operations on articles |
+| `/api/articles/[id]/export` | GET | Export article as Markdown/HTML |
+| `/api/articles/[id]/links` | GET, POST, DELETE | Semantic article links |
+| `/api/articles/[id]/rating` | GET, POST | Article ratings |
+| `/api/articles/[id]/related` | GET | Related articles by category/tags |
+| `/api/articles/[id]/revisions` | GET | Revision history |
+| `/api/articles/[id]/status` | PATCH | Update article status |
+| `/api/articles/[id]/translations` | GET, POST, PUT | Article translations |
+| `/api/articles/[id]/views` | POST | Track article views |
+| `/api/articles/[id]/word-count` | GET | Word count and reading time |
+| `/api/articles/batch` | PUT, DELETE | Bulk operations |
+| `/api/articles/dead-links` | GET | Articles with broken wiki links |
 | `/api/articles/import` | POST | Import articles from files |
-| `/api/articles/similar` | GET | Find articles with similar titles |
-| `/api/articles/titles` | GET | Lightweight list of all article titles |
+| `/api/articles/orphans` | GET | Articles with no incoming links |
+| `/api/articles/recent` | GET | Recently modified articles |
+| `/api/articles/reorder` | PUT | Reorder articles within category |
+| `/api/articles/similar` | GET | Find similar titles |
+| `/api/articles/titles` | GET | Lightweight title list |
+
+### Other Resources
+| Route | Methods | Description |
+|-------|---------|-------------|
+| `/api/auth/*` | POST | Login, logout, register, check |
 | `/api/categories` | GET, POST | List/create categories |
+| `/api/categories/[id]` | GET, PUT, DELETE | Category CRUD |
+| `/api/categories/tree` | GET | Full category tree |
 | `/api/tags` | GET, POST | List/create tags |
+| `/api/tags/[id]` | GET, PUT, DELETE | Tag CRUD |
+| `/api/tags/popular` | GET | Most-used tags |
 | `/api/search` | GET | Full-text search |
-| `/api/map-markers` | GET, POST | List/create map areas |
-| `/api/map-markers/[id]` | PUT, DELETE | Update/delete map areas |
+| `/api/graph` | GET | Knowledge graph nodes/edges |
+| `/api/map-markers` | GET, POST | List/create map markers |
+| `/api/map-markers/[id]` | PUT, DELETE | Update/delete markers |
+| `/api/maps/[mapId]` | GET, PUT, DELETE | Map configuration |
+| `/api/users` | GET | User list |
 | `/api/upload` | POST | Upload images to Vercel Blob |
-| `/api/auth/*` | POST | Login, logout, auth check |
+| `/api/export` | GET | Batch wiki export |
+| `/api/stats` | GET | Wiki statistics |
+| `/api/metrics` | GET, POST | Performance metrics |
+| `/api/health` | GET | Health check |
+| `/api/notifications` | GET, PATCH | User notifications |
+| `/api/watchlist` | GET, POST, DELETE | Article watch subscriptions |
+| `/api/webhooks` | GET, POST, PUT, DELETE | Webhook management |
+| `/api/plugins` | GET, PUT | Plugin management |
+| `/api/v1/*` | GET | Public REST API (articles, categories, search, tags) |
