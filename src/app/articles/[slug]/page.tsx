@@ -18,6 +18,9 @@ import BackToTop from "@/components/BackToTop";
 import ReadingProgress from "@/components/ReadingProgress";
 import Breadcrumb from "@/components/Breadcrumb";
 import { renderSpecialBlocks } from "@/lib/renderSpecialBlocks";
+import SessionReadingTrail from "@/components/SessionReadingTrail";
+import BookmarkButton from "@/components/BookmarkButton";
+import AddToReadingList from "@/components/AddToReadingList";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -171,6 +174,8 @@ export default async function ArticlePage({ params }: Props) {
             >
               Present
             </Link>
+            <BookmarkButton articleId={article.id} />
+            <AddToReadingList articleId={article.id} />
             <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/articles/${article.slug}`} label="Copy link" />
             <ShareButton title={article.title} />
             <PrintButton />
@@ -276,6 +281,7 @@ export default async function ArticlePage({ params }: Props) {
           </div>
         )}
 
+        <SessionReadingTrail slug={article.slug} title={article.title} />
         <BackToTop />
         <ReadingProgress />
       </div>

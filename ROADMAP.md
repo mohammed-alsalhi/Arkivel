@@ -156,13 +156,13 @@ This document outlines planned features and improvements for Wiki App. Contribut
 
 ### Discovery & Navigation
 
-- [ ] **Smart collections** — define a collection by a tag/category/author query; it stays live and auto-updates as matching articles are created or edited
+- [x] **Smart collections** — define a collection by a tag/category/author query; it stays live and auto-updates as matching articles are created or edited
 - [ ] **Concept map per category** — an auto-generated, force-directed mind-map of all articles in a category and their wiki-link relationships; zoomable and clickable
-- [ ] **Session reading trail** — a collapsible "you were here" panel showing the last N articles visited in this browser session with forward/back navigation
-- [ ] **Personal bookmarks with sticky notes** — bookmark any article with a private freetext note visible only to you; listed on your profile
-- [ ] **Shareable reading lists** — any user can build a named, ordered list of articles and share a public link; useful for onboarding packs or curated references
-- [ ] **Guided "Explore" mode** — a "take me somewhere interesting" button that random-walks through the wiki following semantic similarity rather than pure chance, showing a breadcrumb of the path taken
-- [ ] **"Today I Learned" board** — community-curated TIL snippets (max 280 chars + article link) posted by any user; filterable by tag; archived monthly
+- [x] **Session reading trail** — a collapsible "you were here" panel showing the last N articles visited in this browser session with forward/back navigation
+- [x] **Personal bookmarks with sticky notes** — bookmark any article with a private freetext note visible only to you; listed on your profile
+- [x] **Shareable reading lists** — any user can build a named, ordered list of articles and share a public link; useful for onboarding packs or curated references
+- [x] **Guided "Explore" mode** — a "take me somewhere interesting" button that random-walks through the wiki following semantic similarity rather than pure chance, showing a breadcrumb of the path taken
+- [x] **"Today I Learned" board** — community-curated TIL snippets (max 280 chars + article link) posted by any user; filterable by tag; archived monthly
 
 ### Collaboration 2.0
 

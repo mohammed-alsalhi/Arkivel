@@ -127,6 +127,31 @@ export default function Sidebar({ categories, articleCount }: { categories: Cate
           )}
         </SidebarSection>
 
+        {/* Discover section */}
+        <SidebarSection title="Discover">
+          <SidebarLink href="/explore" active={pathname === "/explore"} onClick={() => setMobileOpen(false)}>
+            Explore
+          </SidebarLink>
+          <SidebarLink href="/collections" active={pathname.startsWith("/collections")} onClick={() => setMobileOpen(false)}>
+            Collections
+          </SidebarLink>
+          <SidebarLink href="/reading-lists" active={pathname.startsWith("/reading-lists")} onClick={() => setMobileOpen(false)}>
+            Reading Lists
+          </SidebarLink>
+          <SidebarLink href="/bookmarks" active={pathname === "/bookmarks"} onClick={() => setMobileOpen(false)}>
+            Bookmarks
+          </SidebarLink>
+          <SidebarLink href="/til" active={pathname === "/til"} onClick={() => setMobileOpen(false)}>
+            Today I Learned
+          </SidebarLink>
+          <SidebarLink href="/learning-paths" active={pathname.startsWith("/learning-paths")} onClick={() => setMobileOpen(false)}>
+            Learning Paths
+          </SidebarLink>
+          <SidebarLink href="/flashcards" active={pathname === "/flashcards"} onClick={() => setMobileOpen(false)}>
+            Flashcards
+          </SidebarLink>
+        </SidebarSection>
+
         {/* Categories section */}
         <SidebarSection title="Categories">
           {categories.map((cat) => (

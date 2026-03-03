@@ -2,6 +2,29 @@
 
 All notable changes to this project are documented here.
 
+## [4.3.0] - 2026-03-03
+
+### Discovery & Navigation
+
+- Added `SmartCollection` model — live collection defined by tag/category/author/date query; auto-updates as articles change
+- Added `Bookmark` model — per-user article bookmarks with optional private note
+- Added `ReadingList` + `ReadingListItem` models — named, ordered article lists with public share token
+- Added `TILPost` model — "Today I Learned" snippets (max 280 chars) with tag support
+- Added `GET|POST /api/smart-collections`, `GET|PUT|DELETE /api/smart-collections/[id]` — CRUD + live article query execution
+- Added `GET|POST|DELETE /api/bookmarks` — bookmark management with per-article notes
+- Added `GET|POST /api/reading-lists`, `GET|PUT|DELETE /api/reading-lists/[id]`, `GET|POST|DELETE /api/reading-lists/[id]/items`
+- Added `GET|POST /api/til`, `DELETE /api/til/[id]` — TIL feed with tag filtering and 280-char validation
+- Added `/collections` and `/collections/[id]` — smart collection browse + live article list
+- Added `/bookmarks` — personal bookmark list with inline search
+- Added `/reading-lists` and `/reading-lists/[id]` — list browse + ordered articles with share link
+- Added `/til` — community TIL board with post form, tag filter, character counter
+- Added `/explore` — guided semantic-walk "take me somewhere interesting" (fallback to random)
+- Added `SessionReadingTrail` — collapsible "you were here" breadcrumb in article pages (sessionStorage-backed)
+- Added `BookmarkButton` — bookmark button with note popover for article action bar
+- Added `AddToReadingList` — reading-list picker dropdown for article action bar
+- Added Discover sidebar section with links to all new features
+- Modified article page — added `SessionReadingTrail`, `BookmarkButton`, `AddToReadingList`
+
 ## [4.2.0] - 2026-03-03
 
 ### Rich Content Blocks
