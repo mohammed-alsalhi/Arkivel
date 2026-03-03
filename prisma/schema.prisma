@@ -70,6 +70,10 @@ model Article {
   reactions        ArticleReaction[]
   bounties         KnowledgeBounty[]
 
+  // v4.5 additions
+  issueLinks       IssueLink[]
+  embedTokens      EmbedToken[]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -831,5 +835,32 @@ model ArticleReaction {
   user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@unique([articleId, userId])
+  @@index([articleId])
+}
+
+// v4.5 models
+
+model IssueLink {
+  id            String    @id @default(cuid())
+  articleId     String
+  url           String
+  provider      String    // github | jira | linear
+  issueId       String
+  title         String?
+  status        String?   // open | closed | in_progress
+  lastCheckedAt DateTime?
+  createdAt     DateTime  @default(now())
+  article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+}
+
+model EmbedToken {
+  id        String   @id @default(cuid())
+  articleId String
+  token     String   @unique @default(cuid())
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
   @@index([articleId])
 }

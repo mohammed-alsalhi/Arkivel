@@ -240,6 +240,28 @@ export default function ImportPage() {
         </div>
       )}
 
+      {/* Other import sources */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-4">
+        <a
+          href="/import/obsidian"
+          className="border border-border rounded p-4 hover:bg-surface-hover transition-colors"
+        >
+          <div className="font-medium mb-1">Obsidian Vault</div>
+          <div className="text-xs text-muted">
+            Import .md files or a .zip vault with front matter and [[wiki links]]
+          </div>
+        </a>
+        <a
+          href="/import/notion"
+          className="border border-border rounded p-4 hover:bg-surface-hover transition-colors"
+        >
+          <div className="font-medium mb-1">Notion Page</div>
+          <div className="text-xs text-muted">
+            Import a Notion page via integration token — headings, lists, and images preserved
+          </div>
+        </a>
+      </div>
+
       {/* Help section */}
       <div className="wiki-notice mt-4">
         <strong>File formats:</strong>

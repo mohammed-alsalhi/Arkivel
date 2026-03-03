@@ -23,6 +23,8 @@ import BookmarkButton from "@/components/BookmarkButton";
 import AddToReadingList from "@/components/AddToReadingList";
 import ArticleReactionBar from "@/components/ArticleReactionBar";
 import CertifiedBadge from "@/components/CertifiedBadge";
+import IssueLinkBadge from "@/components/IssueLinkBadge";
+import ArticleExportMenu from "@/components/ArticleExportMenu";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -192,6 +194,7 @@ export default async function ArticlePage({ params }: Props) {
               contentRaw={article.contentRaw}
               contentHtml={resolvedContent}
             />
+            <ArticleExportMenu articleId={article.id} articleSlug={article.slug} />
           </div>
         </div>
 
@@ -259,6 +262,9 @@ export default async function ArticlePage({ params }: Props) {
             </>
           )}
         </div>
+
+        {/* Issue links */}
+        <IssueLinkBadge articleId={article.id} />
 
         {/* Reaction bar */}
         <ArticleReactionBar articleId={article.id} />

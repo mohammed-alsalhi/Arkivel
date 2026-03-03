@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented here.
 
+## [4.5.0] - 2026-03-03
+
+### Integrations & Export
+
+- Added `IssueLink` model — attach GitHub/Jira/Linear issue URLs to articles with live status refresh via GitHub API
+- Added `EmbedToken` model — generate secure tokens for embedding articles on external sites
+- Added ePub export (`/api/export/epub`) — single-article ePub 3 with valid container, OPF, and nav
+- Added DOCX export (`/api/export/docx`) — Word document with headings, paragraphs, and metadata
+- Added category ZIP export (`/api/export/category`) — all published articles as Markdown files in a zip
+- Added Obsidian vault import (`/api/import/obsidian`) — .md or .zip vault; front matter, tags, `[[wikilinks]]` converted
+- Added Notion page import (`/api/import/notion`) — fetch via integration token, blocks converted to HTML
+- Added Slack bot (`/api/integrations/slack`) — `/wiki <query>` slash command with signature verification
+- Added Discord bot (`/api/integrations/discord`) — `/wiki` interaction command with Ed25519 signature verification
+- Added embed token API (`/api/embed/token`) — create tokens, serve articles at `/embed/[token]` (minimal iframe view)
+- Added `ArticleExportMenu` component — ePub, DOCX, PDF (print) export dropdown replacing export buttons
+- Added `IssueLinkBadge` component — inline badges showing issue status with provider icon on article pages
+- Added `/import/obsidian` page — drag-drop vault upload UI with import preview
+- Added `/import/notion` page — integration token + page ID form
+- Updated import index page with Obsidian and Notion import cards
+- Bumped version 4.4.0 → 4.5.0
+
 ## [4.4.0] - 2026-03-03
 
 ### Build Fixes (v4.2.0 regression)

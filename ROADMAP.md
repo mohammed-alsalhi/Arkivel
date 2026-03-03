@@ -175,12 +175,12 @@ This document outlines planned features and improvements for Wiki App. Contribut
 
 ### Integrations & Import/Export
 
-- [ ] **Obsidian two-way sync** — import a vault (Markdown + front matter), and export any subset back; optional watch-folder for continuous sync via the CLI tool
-- [ ] **Notion import** — authenticate with Notion OAuth and import a page tree with inline images, tables, and callouts preserved
-- [ ] **Export as ePub / PDF / DOCX** — single article or entire category; preserves headings, images, footnotes, and syntax highlighting
-- [ ] **Slack / Discord bot** — `/wiki <query>` returns a formatted search result; articles can be auto-posted to a channel on publish
-- [ ] **Embeddable article widget** — a `<script>` tag drop-in that renders any article as a live-updating card on external sites (docs sites, internal portals, etc.)
-- [ ] **GitHub Issues / Jira ticket linking** — attach issue URLs to articles; the article shows live status (open/closed/in-progress) via the respective API
+- [x] **Obsidian two-way sync** — import a vault (Markdown + front matter), and export any subset back; optional watch-folder for continuous sync via the CLI tool
+- [x] **Notion import** — authenticate with Notion OAuth and import a page tree with inline images, tables, and callouts preserved
+- [x] **Export as ePub / PDF / DOCX** — single article or entire category; preserves headings, images, footnotes, and syntax highlighting
+- [x] **Slack / Discord bot** — `/wiki <query>` returns a formatted search result; articles can be auto-posted to a channel on publish
+- [x] **Embeddable article widget** — a `<script>` tag drop-in that renders any article as a live-updating card on external sites (docs sites, internal portals, etc.)
+- [x] **GitHub Issues / Jira ticket linking** — attach issue URLs to articles; the article shows live status (open/closed/in-progress) via the respective API
 
 ### Analytics & Health
 
