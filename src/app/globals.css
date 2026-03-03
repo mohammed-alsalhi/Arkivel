@@ -1092,3 +1092,54 @@ kbd {
 html[data-theme="dark"] .wiki-link-preview-card {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
+
+/* ── v4.7: Dyslexia-friendly mode ── */
+html[data-dyslexia] {
+  --font-sans: "OpenDyslexic", "Comic Sans MS", sans-serif;
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  line-height: 1.9;
+}
+html[data-dyslexia] .wiki-content {
+  max-width: 65ch;
+  background: #fffdf0;
+}
+html[data-dyslexia][data-theme="dark"] .wiki-content {
+  background: #1a180e;
+}
+
+/* ── v4.7: RTL support ── */
+[dir="rtl"] .wiki-content {
+  text-align: right;
+}
+[dir="rtl"] .toc {
+  float: left;
+  margin: 0 0 1em 1em;
+}
+[dir="rtl"] .infobox {
+  float: left;
+  margin: 0 0 1em 1em;
+}
+[dir="rtl"] .wiki-categories {
+  text-align: right;
+}
+[dir="rtl"] .breadcrumb {
+  direction: rtl;
+}
+
+/* ── v4.7: Skip to content ── */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent);
+  color: white;
+  font-size: 0.875rem;
+  border-radius: 0 0 4px 0;
+  transition: top 0.1s;
+}
+.skip-to-content:focus {
+  top: 0;
+}

@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented here.
 
+## [4.7.0] - 2026-03-03
+
+### Accessibility & Internationalisation
+
+- Added `dir` field (`"ltr"` / `"rtl"`) to Article model for per-article text direction
+- Added `src/lib/translation.ts` — machine translation via DeepL or Google Translate API (env-gated)
+- Added `src/lib/tts.ts` — optional ElevenLabs speech synthesis + browser TTS fallback
+- Added `/api/articles/[id]/translate` — POST to create machine-translated draft ArticleTranslation
+- Added `/api/articles/[id]/narrate` — GET to stream audio via ElevenLabs; returns 501 instructing client to use browser TTS when key not set
+- Added `AudioNarrationPlayer` component — play/pause/stop/speed controls; uses ElevenLabs API when available, falls back to browser `speechSynthesis`
+- Added `DyslexiaToggle` component — toggles `data-dyslexia` on `<html>`; persists to localStorage
+- Added `RTLToggle` component — per-article toggle overriding text direction without page reload
+- Added `TranslateButton` component — locale picker triggering POST to translate API with inline status
+- Added dyslexia-friendly CSS: OpenDyslexic font stack, increased letter/word spacing, warm background tint
+- Added RTL CSS: mirrored infobox and TOC floats, right-aligned text, `direction: rtl` on breadcrumb
+- Added skip-to-content link (`<a href="#main-content">`) at top of body for keyboard navigation
+- Added `id="main-content"` to `<main>` element in layout
+- Added `id="article-content"` wrapper div with `dir` attribute on article content
+- Updated article page action bar with DyslexiaToggle, RTLToggle, TranslateButton, AudioNarrationPlayer
+- Bumped version 4.6.0 → 4.7.0
+
 ## [4.6.0] - 2026-03-03
 
 ### Analytics & Health

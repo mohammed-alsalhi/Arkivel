@@ -69,6 +69,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <a href="#main-content" className="skip-to-content">Skip to content</a>
         <AdminProvider>
         <ToastProvider>
           {/* Top banner bar */}
@@ -91,7 +92,7 @@ export default async function RootLayout({
 
             {/* Content area */}
             <div className="flex-1 min-w-0 bg-surface border-l border-border">
-              <main className="max-w-6xl px-6 py-4">
+              <main id="main-content" className="max-w-6xl px-6 py-4">
                 {children}
               </main>
               <footer className="border-t border-border px-6 py-3 text-center text-[11px] text-muted">

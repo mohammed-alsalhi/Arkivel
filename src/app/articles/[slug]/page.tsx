@@ -27,6 +27,11 @@ import IssueLinkBadge from "@/components/IssueLinkBadge";
 import ArticleExportMenu from "@/components/ArticleExportMenu";
 import ScrollDepthTracker from "@/components/ScrollDepthTracker";
 import ReaderPathTracker from "@/components/ReaderPathTracker";
+import AudioNarrationPlayer from "@/components/AudioNarrationPlayer";
+import DyslexiaToggle from "@/components/DyslexiaToggle";
+import RTLToggle from "@/components/RTLToggle";
+import TranslateButton from "@/components/TranslateButton";
+import { htmlToSpeakableText } from "@/lib/tts";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -197,6 +202,9 @@ export default async function ArticlePage({ params }: Props) {
               contentHtml={resolvedContent}
             />
             <ArticleExportMenu articleId={article.id} articleSlug={article.slug} />
+            <DyslexiaToggle />
+            <RTLToggle defaultDir={article.dir ?? "ltr"} />
+            <TranslateButton articleId={article.id} />
           </div>
         </div>
 
@@ -233,11 +241,19 @@ export default async function ArticlePage({ params }: Props) {
           updatedAt={article.updatedAt}
         />
 
+        {/* Audio narration */}
+        <AudioNarrationPlayer
+          articleId={article.id}
+          articleText={htmlToSpeakableText(article.content).slice(0, 3000)}
+        />
+
         {/* Table of contents */}
         <TableOfContents html={resolvedContent} />
 
         {/* Article content */}
-        <SpecialBlocksRenderer html={addHeadingIds(appendFootnoteSection(resolvedContent))} />
+        <div id="article-content" dir={article.dir ?? "ltr"}>
+          <SpecialBlocksRenderer html={addHeadingIds(appendFootnoteSection(resolvedContent))} />
+        </div>
 
         {/* Clear float from infobox */}
         <div className="clear-both" />

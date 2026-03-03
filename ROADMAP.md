@@ -193,11 +193,11 @@ This document outlines planned features and improvements for Wiki App. Contribut
 
 ### Accessibility & Internationalisation
 
-- [ ] **Full RTL support** — Arabic, Hebrew, Persian language articles with mirrored layout, correct bidirectional text handling in the editor, and RTL-aware CSS
-- [ ] **Machine translation drafts** — one-click "Translate to…" via DeepL or Google Translate API creates a draft `ArticleTranslation`; editors can then review and publish
-- [ ] **Dyslexia-friendly reading mode** — toggle OpenDyslexic font, increased letter/word spacing, pastel background tint, and wider line measure; persisted in user preferences
-- [ ] **Article audio narration** — browser TTS (or optional ElevenLabs API) generates a playable audio version of any article; player appears below the title
-- [ ] **Complete keyboard navigation** — every interactive element reachable and operable without a mouse; focus-visible styles throughout; skip-to-content link on every page
+- [x] **Full RTL support** — Arabic, Hebrew, Persian language articles with mirrored layout, correct bidirectional text handling in the editor, and RTL-aware CSS
+- [x] **Machine translation drafts** — one-click "Translate to…" via DeepL or Google Translate API creates a draft `ArticleTranslation`; editors can then review and publish
+- [x] **Dyslexia-friendly reading mode** — toggle OpenDyslexic font, increased letter/word spacing, pastel background tint, and wider line measure; persisted in user preferences
+- [x] **Article audio narration** — browser TTS (or optional ElevenLabs API) generates a playable audio version of any article; player appears below the title
+- [x] **Complete keyboard navigation** — every interactive element reachable and operable without a mouse; focus-visible styles throughout; skip-to-content link on every page
 
 ---
 
