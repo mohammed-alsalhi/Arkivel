@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import crypto from "crypto";
 import path from "path";
 import { isAdmin, requireAdmin } from "@/lib/auth";
+import { getStorage } from "@/lib/storage";
 
 export async function POST(request: NextRequest) {
   const denied = requireAdmin(await isAdmin());
@@ -18,9 +18,9 @@ export async function POST(request: NextRequest) {
   const ext = path.extname(file.name) || ".png";
   const filename = `uploads/${crypto.randomUUID()}${ext}`;
 
-  const blob = await put(filename, file, {
-    access: "public",
-  });
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const storage = getStorage();
+  const { url } = await storage.upload(buffer, filename, file.type);
 
-  return NextResponse.json({ url: blob.url });
+  return NextResponse.json({ url });
 }

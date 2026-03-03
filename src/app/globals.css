@@ -940,3 +940,155 @@ kbd {
 }
 .back-to-top.visible { opacity: 1; transform: translateY(0); }
 .back-to-top:hover { background: var(--color-surface-hover); color: var(--color-foreground); }
+
+/* ── #36: Command Palette ── */
+.command-palette-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+  animation: fade-in 0.15s ease-out;
+}
+.command-palette {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  width: 90%;
+  max-width: 520px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+.command-palette-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.command-palette-search-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
+.command-palette-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9rem;
+  color: var(--color-foreground);
+}
+.command-palette-input::placeholder { color: var(--color-muted); }
+.command-palette-esc {
+  flex-shrink: 0;
+}
+.command-palette-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.25rem 0;
+}
+.command-palette-group {
+  padding: 0.25rem 0;
+}
+.command-palette-group-title {
+  padding: 0.35rem 0.75rem 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+}
+.command-palette-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-foreground);
+  font-size: 0.85rem;
+  transition: background-color 0.1s;
+}
+.command-palette-item:hover,
+.command-palette-item-active {
+  background: var(--color-surface-hover);
+}
+.command-palette-item-label { flex: 1; }
+.command-palette-item-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+.command-palette-item-category {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+.command-palette-loading,
+.command-palette-empty {
+  padding: 1rem 0.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+/* ── #37: Wiki Link Preview Card ── */
+.wiki-link-preview-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  font-size: 0.85rem;
+  pointer-events: auto;
+  animation: fade-in 0.15s ease-out;
+}
+.wiki-link-preview-image {
+  border-bottom: 1px solid var(--color-border-light);
+}
+.wiki-link-preview-image img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+.wiki-link-preview-body {
+  padding: 0.6rem 0.75rem;
+}
+.wiki-link-preview-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-heading);
+  margin-bottom: 0.2rem;
+}
+.wiki-link-preview-broken {
+  color: var(--color-wiki-link-broken);
+}
+.wiki-link-preview-category {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-bottom: 0.3rem;
+}
+.wiki-link-preview-excerpt {
+  color: var(--color-foreground);
+  line-height: 1.5;
+  font-size: 0.8rem;
+}
+.wiki-link-preview-date {
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--color-muted);
+}
+html[data-theme="dark"] .wiki-link-preview-card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}

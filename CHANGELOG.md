@@ -2,6 +2,214 @@
 
 All notable changes to this project are documented here.
 
+## [3.0.0] - 2026-03-03
+
+Complete implementation of all roadmap features — 40 items across 10 phases.
+
+### Phase 1: Testing Infrastructure
+- Added Vitest unit test suite for `utils.ts`, `auth.ts`, `wikilinks.ts`, `config.ts`, `relations.ts`
+- Added integration tests for article CRUD and auth flows in `src/app/api/__tests__/`
+- Added Playwright E2E tests for homepage, navigation, and critical user journeys in `e2e/`
+- Added axe-core accessibility audit tests via `@axe-core/playwright` on key pages
+- Updated CI pipeline with separate `test` and `e2e` jobs in GitHub Actions
+- Added `"test"`, `"test:watch"`, `"test:e2e"` scripts to `package.json`
+
+### Phase 2: Editor Improvements
+- Added slash command menu (`/` trigger) via new `SlashCommandExtension.ts` + `SlashCommandMenu.tsx` with 10+ block types
+- Added inline comments and annotations via new `InlineCommentExtension.ts` Tiptap mark
+- Added collapsible/toggle blocks via new `CollapsibleBlockExtension.ts` rendering `<details><summary>` HTML
+- Added Markdown paste detection — pasting Markdown text auto-converts to rich text using `marked`
+- Extended `TiptapEditor.tsx` to use all new extensions
+
+### Phase 3: Content Features
+- Added article templates marketplace with `ArticleTemplate` model, `/api/templates` route, and `/admin/templates` management page
+- Added scheduled publishing with `publishAt` field on Article and `/api/articles/[id]/schedule` endpoint
+- Added article archival with `archivedAt` field and restore capability
+- Added content linting system in `src/lib/linting.ts` — checks broken links, missing excerpts, orphaned articles, short content, no tags/category
+- Added `/api/articles/lint` bulk lint endpoint and `/admin/lint` report page
+- Added bulk tag editing via `POST /api/tags/bulk-assign` supporting add/remove operations
+
+### Phase 4: Search & Discovery
+- Added PostgreSQL `tsvector` full-text search in `src/lib/search.ts` with `tsvectorSearch()` — GIN-indexed, trigger-updated, falls back to LIKE on failure
+- Added trigram fuzzy matching via `pg_trgm` extension; migration in `prisma/migrations/add_tsvector/`
+- Added saved searches with `SavedSearch` model and `/api/saved-searches` endpoints
+- Added search history with `SearchHistory` model and `/api/search-history` endpoints
+- Added author and status filters to search page via `/api/users/contributors` endpoint
+
+### Phase 5: User Experience
+- Added bottom mobile navigation bar (`MobileNavigation.tsx`) — 5 tabs, active state, safe area support
+- Added VS Code-style command palette (`CommandPalette.tsx`) — Ctrl+K, fuzzy filtering, 18 commands, article search
+- Added `src/lib/commands.ts` command registry with navigation, action, and admin command groups
+- Added inline article link previews (`WikiLinkPreview.tsx`) — 300ms hover delay, cached, portal-rendered
+- Added `/api/articles/preview` lightweight preview endpoint
+- Added user settings page at `/settings` with editor, notifications, display, and locale sections
+- Added `UserPreference` model, `/api/preferences` endpoint, `src/lib/preferences.ts`
+
+### Phase 6: Collaboration
+- Added activity feed system with `ActivityEvent` model, `src/lib/activity.ts` `logActivity()` utility, `/api/activity` paginated API, and `/activity` page
+- Added article review workflow with `ReviewRequest` + `ReviewComment` models, `/api/reviews` CRUD endpoints, review comments, and `/reviews` dashboard
+- Added change request (suggestion) mode with `ChangeRequest` model, `/api/change-requests` CRUD endpoints, accept-applies-content flow, and `/change-requests` page
+- Added real-time collaborative editing via `server/collab-server.ts` (standalone WebSocket server) and `src/lib/collaboration/provider.ts` client
+- WebSocket server uses Yjs CRDT + y-protocols for sync and awareness
+
+### Phase 7: Infrastructure
+- Added S3/R2 storage provider in `src/lib/storage.ts` — `StorageProvider` interface, `VercelBlobStorage` and `S3Storage` implementations, config via `STORAGE_PROVIDER` env var
+- Added Redis caching layer in `src/lib/cache.ts` — ioredis singleton, `cacheGet`/`cacheSet`/`cacheInvalidate`/`cacheDel`, graceful degradation
+- Added database read replica support in `src/lib/prisma-replica.ts` — `prismaRead` client, falls back to primary
+- Added Incremental Static Regeneration to article pages — `revalidate = 300` + `revalidatePath()` calls on article update/delete
+
+### Phase 8: API & Integrations
+- Added API v2 at `/api/v2/` — cursor-based pagination, field selection, consistent `{ data, meta }` envelope
+  - Endpoints: `articles`, `articles/[id]`, `search`, `categories`, `tags`
+- Added OAuth2 login via NextAuth v4 — Google and GitHub providers, `src/lib/oauth.ts`, `/api/auth/[...nextauth]` route, links accounts by email
+- Added `OAuthAccount` model for storing provider tokens
+- Added Zapier/Make integration — subscribe/unsubscribe REST hooks at `/api/webhooks/zapier`, polling trigger at `/api/webhooks/zapier/poll`
+- Added CLI tool in `cli/` — `wiki articles list|get|create`, `wiki search`, `wiki export`, `wiki import` — uses API v2, reads config from `~/.wiki-cli.json`
+
+### Phase 9: Advanced Features
+- Added fine-grained RBAC with `PermissionGrant` model and `src/lib/permissions.ts` — per-category and per-article `view`/`edit`/`admin` permissions
+- Added `/api/permissions` admin endpoints for granting/revoking permissions
+- Added custom theme builder at `/admin/theme` — color pickers for all CSS variables, live preview panel, save/load/export/import themes
+- Added `ThemeConfig` model and `/api/themes` CRUD endpoints
+- Added AI-assisted features via Vercel AI SDK + Anthropic (`claude-haiku-4-5`):
+  - `src/lib/ai.ts` with `summarizeArticle()`, `suggestRelatedTopics()`, `generateContent()`
+  - `/api/ai` dispatcher and `/api/ai/summarize` article summarizer
+  - Gated by `AI_API_KEY` env var, returns 501 when not configured
+- Added multi-wiki support with `Wiki` + `WikiMembership` models, `/api/wikis` CRUD, member management
+- Added full offline mode: `public/sw.js` service worker with cache-first strategy, IndexedDB sync queue, background sync
+- Added `public/offline.html` fallback page
+
+### Schema Changes (v3.0.0)
+12 new Prisma models: `SavedSearch`, `SearchHistory`, `UserPreference`, `ReviewRequest`, `ReviewComment`, `ChangeRequest`, `ActivityEvent`, `OAuthAccount`, `PermissionGrant`, `ThemeConfig`, `Wiki`, `WikiMembership`, `ArticleTemplate`
+Modified: `Article` (added `publishAt`, `archivedAt`, `wikiId`), `User` (added all new relations)
+
+### Dependencies Added
+`@tiptap/suggestion`, `ioredis`, `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner`, `next-auth`, `@auth/prisma-adapter`, `ai`, `@ai-sdk/anthropic`, `yjs`, `y-prosemirror`, `y-protocols`, `ws`, `diff`
+Dev: `vitest`, `@vitejs/plugin-react`, `happy-dom`, `@playwright/test`, `@axe-core/playwright`
+
+## [2.5.0] - 2026-03-03
+
+Advanced features: fine-grained RBAC, theme builder, AI integration, multi-wiki support, offline service worker, and contributor API.
+
+### Permissions (Fine-grained RBAC)
+- Added `src/lib/permissions.ts` with `checkPermission()`, `grantPermission()`, `revokePermission()`, `getUserPermissions()`, `getResourcePermissions()`, and `checkSessionPermission()` helpers
+- `checkPermission()` checks explicit `PermissionGrant` rows first, falls back to role-based defaults; admin role always passes all checks
+- Added `GET/POST/DELETE /api/permissions` for listing, granting, and revoking resource permissions (admin only)
+
+### Theme Builder
+- Added `src/app/admin/theme/page.tsx` — client-side visual theme builder at `/admin/theme`
+- Color pickers for six CSS variables: `--color-accent`, `--color-background`, `--color-surface`, `--color-foreground`, `--color-muted`, `--color-border`
+- Live preview panel showing article card, button variants, badges, color swatches, and a form input; preview uses inline CSS variable injection
+- Save theme, load from saved-themes dropdown, export as JSON, import from JSON file, and reset to defaults
+- Added `GET /api/themes` listing global and user-owned themes (no auth required for global themes)
+- Added `POST /api/themes` for creating/saving themes (auth required); handles `isDefault` unset logic
+- Added `GET/PUT/DELETE /api/themes/[id]` for single-theme retrieval, update (own theme or admin), and delete
+
+### AI Integration
+- Added `src/lib/ai.ts` using Vercel AI SDK (`ai`) + Anthropic provider (`@ai-sdk/anthropic`)
+- `summarizeArticle(content)` — strips HTML, limits to 3000 chars, prompts for 2-3 sentence summary
+- `suggestRelatedTopics(title, content, existingTags)` — returns up to 5 suggested article topic titles
+- `generateContent(prompt, existingContent?)` — generates or continues article content; wraps prompt differently when existing content provided
+- All functions check `AI_API_KEY` env var and return null/empty gracefully when not configured
+- Added `POST /api/ai` dispatcher for `action: "summarize"|"suggest"|"generate"` (auth required; 501 when AI not configured; 400 for unknown action)
+- Added `POST /api/ai/summarize` that fetches an article by ID, enforces visibility, and returns AI summary (auth required)
+
+### Multi-Wiki Support
+- Added `GET /api/wikis` listing wikis the user owns or is a member of
+- Added `POST /api/wikis` for creating wikis with slug format + uniqueness validation; creator auto-added as admin member via nested create
+- Added `GET/PUT/DELETE /api/wikis/[id]` — single wiki with member/article counts; PUT requires wiki admin role; DELETE requires owner
+- Added `GET/POST/DELETE /api/wikis/[id]/members` — list members, add (upsert with role), remove members; wiki admin required; owner removal blocked
+
+### Offline Service Worker
+- Added `public/sw.js` — vanilla JS service worker with install-time precaching, network-first strategy, and background sync
+- Precaches `/`, `/help`, `/search`, and `/offline` on install; activates immediately via `skipWaiting()`
+- Caches successful GET responses for `/api/articles/*` and `/articles/*` routes
+- Non-GET requests queued in IndexedDB `wiki-sync` → `syncQueue` store when offline; returns 202 Accepted with `queued: true`
+- Replays queued mutations on Background Sync `sync` event (`wiki-sync-mutations` tag) or explicit `REPLAY_QUEUE` message
+- Shows `/offline` cached HTML page for failed HTML navigation requests
+- Added `public/offline.html` — minimal offline page with "You're offline" message, cached-content notice, "Try again" reload button, and footer nav links; respects `prefers-color-scheme` for dark mode
+
+### Contributors API
+- Updated `GET /api/users/contributors` to filter only users with at least one published article, return `{ contributors: [...] }` wrapper shape, and include proper try/catch error handling
+
+## [2.4.0] - 2026-03-03
+
+API v2 routes with cursor pagination, OAuth/NextAuth stub, Zapier webhooks, and CLI tool.
+
+### New API Routes — v2 (cursor-based pagination)
+- Added `GET /api/v2/articles` — cursor-paginated article listing with API key or session auth, field selection via `?fields=`, filters for category/tag/status/search, admin-gated visibility for non-published articles; response shape `{ data, meta: { hasMore, nextCursor, total } }`
+- Added `GET /api/v2/articles/:id` — fetch article by id or slug with field selection; includes category, tags, and revision count; non-admins blocked from non-published articles
+- Added `GET /api/v2/search` — cursor-paginated, relevance-ranked full-text search; scores: exact title=100, starts-with=80, contains=60, content-only=10; response includes `highlightedExcerpt` and `totalEstimate`
+- Added `GET /api/v2/categories` — public hierarchical category tree (recursive build from flat list) with article counts per node, sorted by `sortOrder` at each level
+- Added `GET /api/v2/tags` — cursor-paginated tag listing sorted alphabetically with article counts; no auth required
+- Cursor format for articles/search: `base64url("<createdAt ISO>|<id>")`, for tags: `base64url("<name>|<id>")`
+
+### OAuth / NextAuth Integration (stub)
+- Added `src/lib/oauth.ts` exporting `authOptions` for NextAuth v4 with Google and GitHub providers
+- `signIn` callback links OAuth accounts to existing wiki users by email or creates new viewer-role users; stores `OAuthAccount` record with access/refresh tokens
+- `session` callback augments the NextAuth session with wiki user `id`, `role`, `username`, and `displayName`
+- Generates unique usernames from provider display name with numeric suffix on collision
+- Added `src/app/api/auth/[...nextauth]/route.ts` — NextAuth catch-all handler exporting GET and POST
+
+### Zapier / Make Webhook Integration
+- Added `GET /api/webhooks/zapier` — list Zapier subscriptions (Webhook rows with `zapier:`-prefixed events) for the authenticated API key
+- Added `POST /api/webhooks/zapier` — subscribe to an event (`article.created`, `article.updated`, `article.deleted`, `article.published`, `comment.created`); body `{ hookUrl, event }`; returns 409 on duplicate
+- Added `DELETE /api/webhooks/zapier` — unsubscribe by `hookUrl` (body or query param); returns 404 if no matching subscription
+- Added `GET /api/webhooks/zapier/poll` — Zapier polling trigger; returns array of recently created published articles (default last 15 min); returns sample object when empty so Zapier can map fields during setup
+
+### CLI Tool (`cli/`)
+- Added `cli/package.json` and `cli/index.js` — standalone ESM CLI using only Node.js 18+ built-ins (no npm dependencies)
+- Config stored at `~/.wiki-cli.json` or read from `WIKI_URL` + `WIKI_API_KEY` env vars
+- Commands: `config set/show`, `articles list/get/create`, `search`, `export`, `import`, `help`
+- `articles list` uses v2 cursor API by default; falls back to v1 page-based when `--page` is passed
+- `export` paginates through all articles and writes `.md` (with YAML frontmatter) or `.html` files
+- `import` parses YAML frontmatter from Markdown files and POSTs to `/api/articles`
+- Pretty-printed aligned tables with ANSI colour (disabled when stdout is not a TTY)
+
+## [2.3.0] - 2026-03-02
+
+Infrastructure features: storage abstraction, Redis cache, read replica, and full-text search.
+
+### New Infrastructure
+- Added `StorageProvider` interface in `src/lib/storage.ts` with `upload()`, `delete()`, and `getSignedUrl()` methods
+- Implemented `VercelBlobStorage` provider using `@vercel/blob` (default)
+- Implemented `S3Storage` provider using `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` for S3/R2/MinIO
+- Storage provider selected via `STORAGE_PROVIDER` env var (`"vercel-blob"` or `"s3"`)
+- Added Redis caching layer in `src/lib/cache.ts` with `cacheGet()`, `cacheSet()`, `cacheInvalidate()`, and `cacheDel()`
+- Redis client is singleton with lazy connect, exponential back-off reconnect, and graceful degradation when `REDIS_URL` is not set
+- Cache invalidation uses SCAN-based pattern matching to avoid blocking Redis on large key sets
+- Added read replica support in `src/lib/prisma-replica.ts` exporting `prismaRead` PrismaClient
+- Replica client uses `DATABASE_REPLICA_URL` env var; falls back to primary when not configured
+- Replica client cached on `globalThis` in development to survive hot-reload
+
+### Migrations
+- Added `prisma/migrations/add_tsvector/migration.sql` for PostgreSQL full-text search
+- Enables `pg_trgm` extension for fuzzy matching
+- Adds `searchVector` tsvector column to Article table with GIN index
+- Adds trigram GIN index on Article title for fuzzy title matching
+- Creates trigger to auto-update search vector on Article insert/update
+- Backfills existing articles with weighted search vectors (title A, excerpt B, content C)
+
+### Changes
+- Updated `src/app/api/upload/route.ts` to use `getStorage()` abstraction instead of direct `@vercel/blob` usage
+
+## [2.2.0] - 2026-03-02
+
+User experience features: mobile navigation, command palette, wiki link previews, user preferences, and settings page.
+
+### New Features
+- Added `MobileNavigation` bottom bar component with 5 icons (Home, Search, Create, Recent, Menu) visible only on mobile
+- Added `CommandPalette` component (Ctrl+K / Cmd+K) with filterable commands grouped by Navigation, Actions, and Admin
+- Added `WikiLinkPreview` component for inline article previews on `.wiki-link` hover with 300ms delay and caching
+- Added user settings page (`/settings`) with Editor, Notifications, Display, and Locale sections
+- Added preferences API route (`/api/preferences`) with GET/PUT for authenticated user preferences
+- Added command registry (`src/lib/commands.ts`) with 18 commands including admin-only commands
+- Added preference utilities (`src/lib/preferences.ts`) with defaults and merge function
+
+### Styles
+- Added CSS styles for command palette overlay, input, item groups, keyboard navigation, and active states
+- Added CSS styles for wiki link preview floating card with image, excerpt, category, and broken-link state
+
 ## [2.1.1] - 2026-03-02
 
 Directory cleanup and documentation overhaul.

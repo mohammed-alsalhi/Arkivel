@@ -36,6 +36,16 @@ model Article {
   userId           String?
   user             User?    @relation(fields: [userId], references: [id])
 
+  // v3.0 additions
+  publishAt        DateTime?
+  archivedAt       DateTime?
+  wikiId           String?
+  wiki             Wiki?    @relation(fields: [wikiId], references: [id])
+
+  reviews          ReviewRequest[]
+  changeRequests   ChangeRequest[]
+  activityEvents   ActivityEvent[]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -43,6 +53,7 @@ model Article {
   @@index([categoryId])
   @@index([status])
   @@index([userId])
+  @@index([wikiId])
 }
 
 model Category {
@@ -156,13 +167,29 @@ model User {
   passwordHash String
   displayName  String?
   role         String    @default("viewer") // "admin", "editor", "viewer"
-  articles     Article[]
-  revisions    ArticleRevision[]
-  discussions  Discussion[]
-  sessions     Session[]
-  watchlist    Watchlist[]
-  notifications Notification[]
-  apiKeys      ApiKey[]
+  articles        Article[]
+  revisions       ArticleRevision[]
+  discussions     Discussion[]
+  sessions        Session[]
+  watchlist       Watchlist[]
+  notifications   Notification[]
+  apiKeys         ApiKey[]
+
+  // v3.0 additions
+  savedSearches    SavedSearch[]
+  searchHistory    SearchHistory[]
+  preferences      UserPreference?
+  oauthAccounts    OAuthAccount[]
+  reviewsAuthored  ReviewRequest[]   @relation("ReviewAuthor")
+  reviewsAssigned  ReviewRequest[]   @relation("ReviewAssigned")
+  reviewComments   ReviewComment[]
+  changeRequests   ChangeRequest[]
+  activityEvents   ActivityEvent[]
+  permissionGrants PermissionGrant[]
+  themeConfigs     ThemeConfig[]
+  ownedWikis       Wiki[]
+  wikiMemberships  WikiMembership[]
+
   createdAt    DateTime  @default(now())
 
   @@index([role])
@@ -330,4 +357,202 @@ model CollaborationSession {
   updatedAt DateTime @updatedAt
 
   @@index([articleId])
+}
+
+// ── v3.0: Search ──
+model SavedSearch {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  query     String
+  filters   Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model SearchHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  query     String
+  filters   Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ── v3.0: User Preferences ──
+model UserPreference {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data   Json   // { dashboardWidgets, editorMode, notifications, locale, theme, etc. }
+
+  @@index([userId])
+}
+
+// ── v3.0: Review Workflow ──
+model ReviewRequest {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User     @relation("ReviewAuthor", fields: [authorId], references: [id])
+  reviewerId  String?
+  reviewer    User?    @relation("ReviewAssigned", fields: [reviewerId], references: [id])
+  status      String   @default("pending") // "pending", "in_review", "approved", "changes_requested", "rejected"
+  message     String?  @db.Text
+  comments    ReviewComment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([authorId])
+  @@index([reviewerId])
+  @@index([status])
+}
+
+model ReviewComment {
+  id              String        @id @default(cuid())
+  reviewRequestId String
+  reviewRequest   ReviewRequest @relation(fields: [reviewRequestId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  content         String        @db.Text
+  selector        String?       // JSON: text range for inline comments
+  resolved        Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+
+  @@index([reviewRequestId])
+  @@index([userId])
+}
+
+// ── v3.0: Change Requests ──
+model ChangeRequest {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  title       String
+  description String?  @db.Text
+  content     String   @db.Text
+  status      String   @default("open") // "open", "accepted", "rejected", "withdrawn"
+  reviewedBy  String?
+  reviewNote  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([authorId])
+  @@index([status])
+}
+
+// ── v3.0: Activity Feed ──
+model ActivityEvent {
+  id        String   @id @default(cuid())
+  type      String   // "article_created", "article_edited", "article_published", etc.
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  articleId String?
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([userId])
+  @@index([articleId])
+  @@index([createdAt])
+}
+
+// ── v3.0: OAuth ──
+model OAuthAccount {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider          String   // "google", "github"
+  providerAccountId String
+  accessToken       String?  @db.Text
+  refreshToken      String?  @db.Text
+  expiresAt         Int?
+  createdAt         DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+// ── v3.0: Fine-grained RBAC ──
+model PermissionGrant {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resourceType String   // "category", "article"
+  resourceId   String
+  permission   String   // "view", "edit", "admin"
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, resourceType, resourceId, permission])
+  @@index([userId])
+  @@index([resourceType, resourceId])
+}
+
+// ── v3.0: Theme Builder ──
+model ThemeConfig {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  variables Json     // CSS variable overrides
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ── v3.0: Multi-Wiki ──
+model Wiki {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  settings    Json?
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  articles    Article[]
+  memberships WikiMembership[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([ownerId])
+}
+
+model WikiMembership {
+  id     String @id @default(cuid())
+  wikiId String
+  wiki   Wiki   @relation(fields: [wikiId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   String @default("viewer") // "admin", "editor", "viewer"
+
+  @@unique([wikiId, userId])
+  @@index([wikiId])
+  @@index([userId])
+}
+
+// ── v3.0: Article Templates ──
+model ArticleTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  content     String   @db.Text
+  categoryId  String?
+  authorId    String?
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

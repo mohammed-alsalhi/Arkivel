@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, ReactRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -8,9 +8,15 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { TableKit } from "@tiptap/extension-table";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { common, createLowlight } from "lowlight";
+import { marked } from "marked";
+import { DOMParser as ProseMirrorDOMParser, Slice } from "@tiptap/pm/model";
 import { WikiLink } from "./WikiLinkExtension";
 import { PotentialLink } from "./PotentialLinkExtension";
 import { FootnoteRef } from "./FootnoteExtension";
+import { SlashCommandExtension, type SlashCommandItem } from "./SlashCommandExtension";
+import SlashCommandMenu, { type SlashCommandMenuRef } from "./SlashCommandMenu";
+import { CollapsibleBlock } from "./CollapsibleBlockExtension";
+import { InlineComment } from "./InlineCommentExtension";
 import EditorToolbar from "./EditorToolbar";
 import WikiLinkSuggester from "./WikiLinkSuggester";
 import LinkBubble from "./LinkBubble";
@@ -27,6 +33,33 @@ type Props = {
   content?: string;
   placeholder?: string;
 };
+
+/**
+ * Detect whether a plain-text string looks like Markdown.
+ * We check for common Markdown constructs — headings, bold/italic,
+ * unordered/ordered lists, links, images, code fences, blockquotes.
+ */
+function looksLikeMarkdown(text: string): boolean {
+  const patterns = [
+    /^#{1,6}\s/m,           // headings
+    /\*\*.+?\*\*/,          // bold
+    /\*.+?\*/,              // italic
+    /^[-*+]\s/m,            // unordered list
+    /^\d+\.\s/m,            // ordered list
+    /\[.+?\]\(.+?\)/,       // links
+    /!\[.*?\]\(.+?\)/,      // images
+    /^```/m,                // code fences
+    /^>\s/m,                // blockquotes
+  ];
+
+  let matchCount = 0;
+  for (const pattern of patterns) {
+    if (pattern.test(text)) matchCount++;
+  }
+
+  // Require at least 2 different Markdown indicators to avoid false positives
+  return matchCount >= 2;
+}
 
 const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
   function TiptapEditor({ content = "", placeholder = "Start writing..." }, ref) {
@@ -54,6 +87,47 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         PotentialLink,
         FootnoteRef,
         TableKit,
+        CollapsibleBlock,
+        InlineComment,
+        SlashCommandExtension.configure({
+          suggestion: {
+            render: () => {
+              let component: ReactRenderer<SlashCommandMenuRef> | null = null;
+
+              return {
+                onStart: (props) => {
+                  component = new ReactRenderer(SlashCommandMenu, {
+                    props: {
+                      items: props.items,
+                      command: props.command,
+                      clientRect: props.clientRect,
+                    },
+                    editor: props.editor,
+                  });
+                },
+                onUpdate: (props) => {
+                  component?.updateProps({
+                    items: props.items,
+                    command: props.command,
+                    clientRect: props.clientRect,
+                  });
+                },
+                onKeyDown: (props) => {
+                  if (props.event.key === "Escape") {
+                    component?.destroy();
+                    component = null;
+                    return true;
+                  }
+                  return component?.ref?.onKeyDown(props) ?? false;
+                },
+                onExit: () => {
+                  component?.destroy();
+                  component = null;
+                },
+              };
+            },
+          },
+        }),
       ],
       content,
       editorProps: {
@@ -88,6 +162,29 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
           const items = event.clipboardData?.items;
           if (!items) return false;
 
+          // Check for Markdown in text/plain content (only when no text/html is present)
+          const hasHtml = Array.from(items).some(i => i.type === "text/html");
+          if (!hasHtml) {
+            const textItem = Array.from(items).find(i => i.type === "text/plain");
+            if (textItem) {
+              const text = event.clipboardData?.getData("text/plain");
+              if (text && looksLikeMarkdown(text)) {
+                event.preventDefault();
+                const html = marked.parse(text, { async: false }) as string;
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = html;
+                const pmParser = ProseMirrorDOMParser.fromSchema(view.state.schema);
+                const parsed = pmParser.parse(tempDiv);
+                const { tr } = view.state;
+                view.dispatch(
+                  tr.replaceSelection(new Slice(parsed.content, 0, 0))
+                );
+                return true;
+              }
+            }
+          }
+
+          // Check for pasted images
           const imageItem = Array.from(items).find(i => i.type.startsWith("image/"));
           if (!imageItem) return false;
 

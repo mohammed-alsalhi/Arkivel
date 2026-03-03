@@ -18,6 +18,9 @@ import BackToTop from "@/components/BackToTop";
 import ReadingProgress from "@/components/ReadingProgress";
 import Breadcrumb from "@/components/Breadcrumb";
 
+// ISR: revalidate published articles every 5 minutes
+export const revalidate = 300;
+
 type Props = {
   params: Promise<{ slug: string }>;
 };

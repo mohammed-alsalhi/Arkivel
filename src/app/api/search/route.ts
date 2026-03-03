@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { tsvectorSearch, SearchOptions } from "@/lib/search";
+import { findFuzzyMatches } from "@/lib/fuzzy";
 
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get("q")?.trim();
@@ -8,11 +10,124 @@ export async function GET(request: NextRequest) {
   const tagSlugs = request.nextUrl.searchParams.get("tags") || null; // comma-separated tag slugs
   const dateFrom = request.nextUrl.searchParams.get("dateFrom") || null;
   const dateTo = request.nextUrl.searchParams.get("dateTo") || null;
+  const author = request.nextUrl.searchParams.get("author") || null;
+  const status = request.nextUrl.searchParams.get("status") || null;
 
   if (!query || query.length < 2) {
-    return NextResponse.json([]);
+    return NextResponse.json({ results: [], suggestions: [] });
   }
 
+  // Build search options for tsvector
+  const searchOptions: SearchOptions = {
+    limit,
+    categoryId: categoryId || undefined,
+    tagSlugs: tagSlugs ? tagSlugs.split(",").map((s) => s.trim()).filter(Boolean) : undefined,
+    dateFrom: dateFrom || undefined,
+    dateTo: dateTo || undefined,
+    author: author || undefined,
+    status: status || undefined,
+  };
+
+  // Try tsvector search first
+  let usedTsvector = false;
+  let results: SearchResult[] = [];
+
+  try {
+    const tsvResults = await tsvectorSearch(query, searchOptions);
+
+    if (tsvResults.length > 0) {
+      usedTsvector = true;
+      // Enrich tsvector results with category/tag info
+      const articleIds = tsvResults.map((r) => r.id);
+      const enriched = await prisma.article.findMany({
+        where: { id: { in: articleIds } },
+        select: {
+          id: true,
+          updatedAt: true,
+          category: { select: { id: true, name: true, icon: true, slug: true } },
+          tags: { include: { tag: true } },
+        },
+      });
+
+      const enrichedMap = new Map(enriched.map((a) => [a.id, a]));
+
+      results = tsvResults.map((r) => {
+        const extra = enrichedMap.get(r.id);
+        return {
+          id: r.id,
+          title: r.title,
+          slug: r.slug,
+          excerpt: r.excerpt,
+          highlightedExcerpt: r.headline,
+          updatedAt: extra?.updatedAt ?? null,
+          category: extra?.category ?? null,
+          tags: extra?.tags ?? [],
+        };
+      });
+    }
+  } catch {
+    // tsvector search threw — fall through to LIKE-based search
+  }
+
+  // Fall back to LIKE-based search if tsvector returned no results
+  if (!usedTsvector || results.length === 0) {
+    results = await likeBasedSearch(query, limit, categoryId, tagSlugs, dateFrom, dateTo, author, status);
+  }
+
+  // Fuzzy fallback: when we have few results, suggest similar titles
+  let suggestions: string[] | undefined;
+
+  if (results.length < 3) {
+    try {
+      const allTitles = await prisma.article.findMany({
+        where: { status: status || "published" },
+        select: { title: true },
+      });
+
+      const titleList = allTitles.map((a) => a.title);
+      const fuzzyMatches = findFuzzyMatches(query, titleList, 0.2);
+
+      // Exclude titles already in results
+      const resultTitles = new Set(results.map((r) => r.title));
+      suggestions = fuzzyMatches
+        .filter((m) => !resultTitles.has(m.title))
+        .slice(0, 5)
+        .map((m) => m.title);
+
+      if (suggestions.length === 0) {
+        suggestions = undefined;
+      }
+    } catch {
+      // Fuzzy matching failed — not critical, skip suggestions
+    }
+  }
+
+  return NextResponse.json({ results, suggestions });
+}
+
+type SearchResult = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  highlightedExcerpt: string;
+  updatedAt: Date | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  category: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tags: any[];
+};
+
+async function likeBasedSearch(
+  query: string,
+  limit: number,
+  categoryId: string | null,
+  tagSlugs: string | null,
+  dateFrom: string | null,
+  dateTo: string | null,
+  author: string | null,
+  status: string | null
+): Promise<SearchResult[]> {
   const select = {
     id: true,
     title: true,
@@ -51,6 +166,9 @@ export async function GET(request: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filters: any[] = [];
 
+  // Default to published unless explicitly overridden
+  filters.push({ status: status || "published" });
+
   if (categoryId) {
     filters.push({ categoryId });
   }
@@ -79,11 +197,12 @@ export async function GET(request: NextRequest) {
     filters.push({ updatedAt: { lt: endDate } });
   }
 
+  if (author) {
+    filters.push({ userId: author });
+  }
+
   // Combine text search with filters
-  const where =
-    filters.length > 0
-      ? { AND: [textWhere, ...filters] }
-      : textWhere;
+  const where = { AND: [textWhere, ...filters] };
 
   // Fetch more than needed so we can re-sort by relevance
   const articles = await prisma.article.findMany({
@@ -99,7 +218,7 @@ export async function GET(request: NextRequest) {
   });
 
   // Add highlighted excerpts
-  const results = articles.slice(0, limit).map((article) => {
+  return articles.slice(0, limit).map((article) => {
     const highlightedExcerpt = highlightText(
       article.excerpt || stripHtml(article.content).substring(0, 300),
       words.length > 0 ? words : [query]
@@ -116,8 +235,6 @@ export async function GET(request: NextRequest) {
       tags: article.tags,
     };
   });
-
-  return NextResponse.json(results);
 }
 
 function relevanceScore(title: string, query: string): number {

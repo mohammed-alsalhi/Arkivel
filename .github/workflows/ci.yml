@@ -19,6 +19,37 @@ jobs:
       - run: npm run lint
       - run: npx tsc --noEmit
 
+  test:
+    runs-on: ubuntu-latest
+    needs: lint-and-type-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run test
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      DATABASE_URL: "postgresql://fake:fake@localhost:5432/fake"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+        env:
+          BASE_URL: "http://localhost:3000"
+
   build:
     runs-on: ubuntu-latest
     needs: lint-and-type-check

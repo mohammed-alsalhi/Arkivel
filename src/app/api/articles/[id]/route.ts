@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { generateSlug } from "@/lib/utils";
 import { isAdmin, requireAdmin, getSession } from "@/lib/auth";
@@ -108,6 +109,13 @@ export async function PUT(
   // Notify watchers (async, don't block response)
   notifyWatchers(id, article.title).catch(() => {});
 
+  // Revalidate ISR cached pages
+  revalidatePath(`/articles/${article.slug}`);
+  revalidatePath("/");
+  if (article.category?.slug) {
+    revalidatePath(`/categories/${article.category.slug}`);
+  }
+
   return NextResponse.json(article);
 }
 
@@ -119,7 +127,10 @@ export async function DELETE(
   if (denied) return denied;
 
   const { id } = await params;
+  const article = await prisma.article.findUnique({ where: { id }, select: { slug: true } });
   await prisma.article.delete({ where: { id } });
+  if (article?.slug) revalidatePath(`/articles/${article.slug}`);
+  revalidatePath("/");
   return NextResponse.json({ success: true });
 }
 
