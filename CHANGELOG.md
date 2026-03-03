@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.7.1] - 2026-03-03
+
+### Bug Fixes
+
+- Fixed duplicate `link` Tiptap extension warning: disabled Link from StarterKit (`link: false`) since it's registered manually with custom `parseHTML` rules
+- Fixed `You should provide an instance of lowlight` Tiptap error: `MermaidBlock` (which extends `CodeBlockLowlight`) now receives the `lowlight` instance via `.configure({ lowlight })`
+- Both fixes resolve editor crash and `TypeError: Cannot read properties of undefined (reading 'length')` cascade error
+
 ## [4.7.0] - 2026-03-03
 
 ### Accessibility & Internationalisation

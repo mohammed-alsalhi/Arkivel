@@ -80,7 +80,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     const editor = useEditor({
       immediatelyRender: false,
       extensions: [
-        StarterKit.configure({ codeBlock: false }),
+        StarterKit.configure({ codeBlock: false, link: false }),
         CodeBlockLowlight.configure({ lowlight }),
         Image.configure({ inline: false }),
         Link.configure({ openOnClick: false }).extend({
@@ -134,7 +134,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             },
           },
         }),
-        MermaidBlock,
+        MermaidBlock.configure({ lowlight }),
         InlineMath,
         BlockMath,
         DataTable,
