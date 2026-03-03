@@ -109,6 +109,19 @@ export async function PUT(
   // Notify watchers (async, don't block response)
   notifyWatchers(id, article.title).catch(() => {});
 
+  // Background: update AI summary and embedding (fire-and-forget)
+  if (content !== undefined) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    Promise.all([
+      fetch(`${baseUrl}/api/articles/${id}/summarize`, { method: "POST" }).catch(() => {}),
+      fetch(`${baseUrl}/api/ai/embeddings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ articleId: id }),
+      }).catch(() => {}),
+    ]).catch(() => {});
+  }
+
   // Revalidate ISR cached pages
   revalidatePath(`/articles/${article.slug}`);
   revalidatePath("/");

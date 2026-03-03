@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { tsvectorSearch, SearchOptions } from "@/lib/search";
 import { findFuzzyMatches } from "@/lib/fuzzy";
+import { semanticSearch } from "@/lib/embeddings";
 
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get("q")?.trim();
   const limit = parseInt(request.nextUrl.searchParams.get("limit") || "20");
+  const includeSemantic = request.nextUrl.searchParams.get("semantic") === "1";
   const categoryId = request.nextUrl.searchParams.get("category") || null;
   const tagSlugs = request.nextUrl.searchParams.get("tags") || null; // comma-separated tag slugs
   const dateFrom = request.nextUrl.searchParams.get("dateFrom") || null;
@@ -102,7 +104,35 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ results, suggestions });
+  // Blend semantic results if requested and OPENAI_API_KEY is set
+  let semanticResults: typeof results = [];
+  if (includeSemantic && process.env.OPENAI_API_KEY) {
+    try {
+      const semHits = await semanticSearch(query, 5);
+      const existingSlugs = new Set(results.map((r) => r.slug));
+      const extra = semHits.filter((h) => !existingSlugs.has(h.slug));
+
+      if (extra.length > 0) {
+        const extraArticles = await prisma.article.findMany({
+          where: { id: { in: extra.map((e) => e.id) }, status: "published" },
+          select: {
+            id: true, title: true, slug: true, excerpt: true, updatedAt: true,
+            category: { select: { id: true, name: true, icon: true, slug: true } },
+            tags: { include: { tag: true } },
+          },
+        });
+        semanticResults = extraArticles.map((a) => ({
+          id: a.id, title: a.title, slug: a.slug, excerpt: a.excerpt,
+          highlightedExcerpt: a.excerpt || "",
+          updatedAt: a.updatedAt, category: a.category, tags: a.tags,
+        }));
+      }
+    } catch {
+      // Semantic search failed — skip silently
+    }
+  }
+
+  return NextResponse.json({ results, semanticResults, suggestions });
 }
 
 type SearchResult = {

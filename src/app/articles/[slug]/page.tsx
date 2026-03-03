@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await prisma.article.findUnique({
     where: { slug },
-    select: { title: true, excerpt: true, coverImage: true, slug: true },
+    select: { title: true, excerpt: true, summaryShort: true, coverImage: true, slug: true },
   });
 
   if (!article) return { title: "Not Found" };
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${article.title} — ${config.name}`,
-    description: article.excerpt || undefined,
+    description: article.summaryShort || article.excerpt || undefined,
     alternates: {
       canonical: `${baseUrl}/articles/${article.slug}`,
     },

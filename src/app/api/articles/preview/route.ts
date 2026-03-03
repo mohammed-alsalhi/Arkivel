@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
     select: {
       title: true,
       excerpt: true,
+      summaryShort: true,
       coverImage: true,
       updatedAt: true,
       category: {
@@ -33,6 +34,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     title: article.title,
     excerpt: article.excerpt,
+    summaryShort: article.summaryShort,
     coverImage: article.coverImage,
     category: article.category,
     updatedAt: article.updatedAt,

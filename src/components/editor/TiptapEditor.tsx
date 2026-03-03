@@ -20,6 +20,7 @@ import { InlineComment } from "./InlineCommentExtension";
 import EditorToolbar from "./EditorToolbar";
 import WikiLinkSuggester from "./WikiLinkSuggester";
 import LinkBubble from "./LinkBubble";
+import WritingCoachPanel from "./WritingCoachPanel";
 import { useWikiLinkSuggester } from "./useWikiLinkSuggester";
 import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef } from "react";
 
@@ -458,6 +459,14 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         />
 
         {!markdownMode && <LinkBubble editor={editor} />}
+
+        {/* Writing Coach — collapsible analysis panel */}
+        {!markdownMode && editor && (
+          <WritingCoachPanel
+            getHtml={() => editor.getHTML()}
+            hasExcerpt={false}
+          />
+        )}
       </div>
     );
   }
