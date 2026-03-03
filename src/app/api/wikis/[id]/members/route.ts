@@ -29,7 +29,7 @@ export async function GET(
 
     const members = await prisma.wikiMembership.findMany({
       where: { wikiId },
-      orderBy: { createdAt: "asc" },
+      orderBy: { id: "asc" },
       include: {
         user: {
           select: {

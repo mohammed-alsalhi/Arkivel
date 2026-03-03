@@ -2,6 +2,38 @@
 
 All notable changes to this project are documented here.
 
+## [4.0.0] - 2026-03-03
+
+### AI Intelligence Layer
+
+- Added `ArticleEmbedding` model for storing article embeddings (Float[]) with `pgvector`-compatible schema
+- Added `summary` and `summaryShort` fields to `Article` for AI-generated descriptions
+- Added `src/lib/embeddings.ts` — `generateEmbedding()`, `cosineSimilarity()`, `upsertArticleEmbedding()`, `semanticSearch()` via OpenAI `text-embedding-3-small` (gated on `OPENAI_API_KEY`)
+- Added `src/lib/writing-coach.ts` — pure-JS Flesch-Kincaid readability, passive-voice detection, long-sentence analysis, `analyzeWriting()` and `computeReadability()`
+- Added `POST /api/articles/[id]/summarize` — generate and persist `summary` + `summaryShort` via Claude Haiku
+- Added `GET|POST /api/ai/embeddings` — generate article embeddings; list articles missing embeddings
+- Added `GET /api/ai/semantic-search` — cosine-rank articles by query embedding
+- Added `GET /api/ai/knowledge-gaps` — find wiki-link references with no backing article, sorted by reference count
+- Added `POST /api/ai/check-duplicate` — compare new content against existing embeddings to detect near-duplicates
+- Added `POST /api/ai/writing-coach` — readability analysis + optional Claude suggestions
+- Added `GET /api/ai/category-gaps` — Claude-generated list of missing sub-topics for a category
+- Added `WritingCoachPanel` component — collapsible analysis panel below editor with score meter and issue list
+- Added `/admin/knowledge-gaps` page — table of missing topics with "Create article" shortcut
+- Added `/admin/embeddings` page — embedding coverage dashboard with "Generate all" button
+- Modified `PUT /api/articles/[id]` — background-fires summarise and embedding generation after save
+- Modified `GET /api/articles/preview` — includes `summaryShort` in response
+- Modified `GET /api/search` — blends semantic results when `?semantic=1` and `OPENAI_API_KEY` is set
+- Modified article page metadata — uses `summaryShort` as OG/meta description when available
+- Installed `pgvector` and `@ai-sdk/openai` packages
+
+## [3.0.3] - 2026-03-03
+
+### Fixed
+- Fixed `WikiMembership` orderBy using non-existent `createdAt` field — changed to `id`
+- Fixed `activity.ts` metadata JSON field type error — cast `Record<string, unknown>` to `Prisma.InputJsonValue`
+- Re-ran `prisma generate` to include `ArticleEmbedding` model missing from previous client generation
+- Confirmed zero TypeScript errors via `tsc --noEmit` before pushing
+
 ## [3.0.2] - 2026-03-03
 
 ### Fixed
