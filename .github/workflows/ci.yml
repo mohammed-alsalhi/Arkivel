@@ -45,8 +45,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx prisma generate
+      - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npm run dev &
+      - run: npx next start &
       - run: npx wait-on --timeout 60000 http://localhost:3000
       - run: npx playwright test
         env:

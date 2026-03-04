@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.8.7] - 2026-03-04
+
+### CI Fixes
+
+- Fixed e2e timeout: replaced `npm run dev` with `npm run build && next start` so the server starts in ~2s instead of waiting for Turbopack to compile from scratch in CI
+
 ## [4.8.6] - 2026-03-04
 
 ### CI Fixes
