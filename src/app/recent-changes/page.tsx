@@ -142,3 +142,5 @@ export default async function RecentChangesPage() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

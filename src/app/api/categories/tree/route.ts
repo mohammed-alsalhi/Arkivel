@@ -22,3 +22,5 @@ export async function GET() {
   const tree = categories.filter((c) => !c.parentId);
   return NextResponse.json(tree);
 }
+
+export const dynamic = "force-dynamic";

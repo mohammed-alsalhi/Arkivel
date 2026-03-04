@@ -22,3 +22,5 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   return NextResponse.json(backlinks);
 }
+
+export const dynamic = "force-dynamic";

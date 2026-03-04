@@ -25,3 +25,5 @@ export async function GET() {
     recentEditsThisWeek: recentEdits,
   });
 }
+
+export const dynamic = "force-dynamic";

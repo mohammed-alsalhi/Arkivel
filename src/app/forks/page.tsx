@@ -85,3 +85,5 @@ export default async function ForksPage() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

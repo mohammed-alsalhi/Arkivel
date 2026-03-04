@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.8.4] - 2026-03-04
+
+### CI Fixes
+
+- Fixed build prerender failures: added `export const dynamic = "force-dynamic"` to all 148 route handlers and pages that query Prisma, so Next.js doesn't attempt static prerendering without a real database
+- Fixed root layout DB calls crashing `/_not-found` prerender: wrapped `getCategories()` and `article.count()` in try/catch with empty-array/0 fallbacks
+- Fixed `sitemap.ts` prerender failure with same `force-dynamic` opt-out
+
 ## [4.8.3] - 2026-03-04
 
 ### CI Fixes

@@ -53,3 +53,5 @@ export async function DELETE(request: NextRequest) {
   await prisma.article.deleteMany({ where: { id: { in: ids } } });
   return NextResponse.json({ success: true, count: ids.length });
 }
+
+export const dynamic = "force-dynamic";

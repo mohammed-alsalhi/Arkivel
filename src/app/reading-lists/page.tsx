@@ -64,3 +64,5 @@ export default async function ReadingListsPage() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

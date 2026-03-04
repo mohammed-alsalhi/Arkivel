@@ -180,3 +180,5 @@ async function notifyWatchers(articleId: string, articleTitle: string) {
     })),
   });
 }
+
+export const dynamic = "force-dynamic";

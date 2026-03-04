@@ -47,3 +47,5 @@ ${article.content}
     },
   });
 }
+
+export const dynamic = "force-dynamic";

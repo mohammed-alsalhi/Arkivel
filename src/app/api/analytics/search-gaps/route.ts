@@ -21,3 +21,5 @@ export async function GET() {
 
   return NextResponse.json(sorted);
 }
+
+export const dynamic = "force-dynamic";

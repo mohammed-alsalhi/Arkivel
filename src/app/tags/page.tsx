@@ -48,3 +48,5 @@ export default async function TagsPage() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

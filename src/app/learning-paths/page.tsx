@@ -49,3 +49,5 @@ export default async function LearningPathsPage() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

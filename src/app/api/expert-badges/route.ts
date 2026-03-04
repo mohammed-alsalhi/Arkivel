@@ -33,3 +33,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json(badge, { status: 201 });
 }
+
+export const dynamic = "force-dynamic";

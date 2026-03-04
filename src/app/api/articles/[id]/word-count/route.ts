@@ -17,3 +17,5 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
   return NextResponse.json({ words, characters, readingTime });
 }
+
+export const dynamic = "force-dynamic";

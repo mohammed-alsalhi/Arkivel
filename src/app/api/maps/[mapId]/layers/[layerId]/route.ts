@@ -45,3 +45,5 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
   await prisma.mapLayer.delete({ where: { id: layerId } });
   return NextResponse.json({ success: true });
 }
+
+export const dynamic = "force-dynamic";

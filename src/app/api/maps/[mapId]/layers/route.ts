@@ -49,3 +49,5 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
   return NextResponse.json(layer, { status: 201 });
 }
+
+export const dynamic = "force-dynamic";

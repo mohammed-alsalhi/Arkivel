@@ -293,3 +293,5 @@ function highlightText(text: string, words: string[]): string {
 
   return text.replace(pattern, "<mark>$1</mark>");
 }
+
+export const dynamic = "force-dynamic";

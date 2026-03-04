@@ -54,3 +54,5 @@ ${plainText}`,
     return NextResponse.json({ error: "Quiz generation failed" }, { status: 500 });
   }
 }
+
+export const dynamic = "force-dynamic";

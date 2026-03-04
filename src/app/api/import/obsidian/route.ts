@@ -61,3 +61,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ imported: results.filter((r) => r.created).length, results });
 }
+
+export const dynamic = "force-dynamic";

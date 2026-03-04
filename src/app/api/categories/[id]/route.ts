@@ -89,3 +89,5 @@ export async function DELETE(request: NextRequest, { params }: Context) {
   await prisma.category.delete({ where: { id } });
   return NextResponse.json({ success: true });
 }
+
+export const dynamic = "force-dynamic";

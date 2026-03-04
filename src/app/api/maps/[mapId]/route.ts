@@ -51,3 +51,5 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
 
   return NextResponse.json({ success: true });
 }
+
+export const dynamic = "force-dynamic";

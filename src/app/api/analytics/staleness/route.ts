@@ -30,3 +30,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json(staleDays);
 }
+
+export const dynamic = "force-dynamic";

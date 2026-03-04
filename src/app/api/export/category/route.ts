@@ -37,3 +37,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ error: "Unsupported format" }, { status: 400 });
 }
+
+export const dynamic = "force-dynamic";

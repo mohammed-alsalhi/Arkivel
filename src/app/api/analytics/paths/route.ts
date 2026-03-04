@@ -28,3 +28,5 @@ export async function GET(request: Request) {
     events.map((e) => ({ toSlug: e.toSlug, count: e._count.toSlug }))
   );
 }
+
+export const dynamic = "force-dynamic";

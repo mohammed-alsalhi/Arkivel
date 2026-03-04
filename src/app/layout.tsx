@@ -31,20 +31,24 @@ export function generateMetadata(): Metadata {
 }
 
 async function getCategories() {
-  const all = await prisma.category.findMany({
-    orderBy: { sortOrder: "asc" },
-    include: {
-      _count: { select: { articles: true } },
-      children: {
-        orderBy: { sortOrder: "asc" },
-        include: {
-          _count: { select: { articles: true } },
+  try {
+    const all = await prisma.category.findMany({
+      orderBy: { sortOrder: "asc" },
+      include: {
+        _count: { select: { articles: true } },
+        children: {
+          orderBy: { sortOrder: "asc" },
+          include: {
+            _count: { select: { articles: true } },
+          },
         },
       },
-    },
-  });
-  // Return only root categories (no parent) with children nested
-  return all.filter((c) => !c.parentId);
+    });
+    // Return only root categories (no parent) with children nested
+    return all.filter((c) => !c.parentId);
+  } catch {
+    return [];
+  }
 }
 
 export default async function RootLayout({
@@ -53,7 +57,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = await getCategories();
-  const articleCount = await prisma.article.count({ where: { published: true } });
+  const articleCount = await prisma.article.count({ where: { published: true } }).catch(() => 0);
 
   return (
     <html lang="en" suppressHydrationWarning>

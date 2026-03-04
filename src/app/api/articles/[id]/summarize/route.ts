@@ -55,3 +55,5 @@ export async function POST(
     return NextResponse.json({ error: "Summarization failed" }, { status: 500 });
   }
 }
+
+export const dynamic = "force-dynamic";

@@ -24,3 +24,5 @@ export async function GET() {
     orphans.map(({ id, title, slug }) => ({ id, title, slug }))
   );
 }
+
+export const dynamic = "force-dynamic";

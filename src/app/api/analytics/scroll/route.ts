@@ -46,3 +46,5 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ articleId, avgDepth, total, buckets });
 }
+
+export const dynamic = "force-dynamic";

@@ -215,3 +215,5 @@ export async function DELETE(request: NextRequest) {
 
   return NextResponse.json({ data: { deleted: count } });
 }
+
+export const dynamic = "force-dynamic";

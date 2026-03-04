@@ -66,3 +66,5 @@ export async function POST(
 
   return NextResponse.json(article);
 }
+
+export const dynamic = "force-dynamic";

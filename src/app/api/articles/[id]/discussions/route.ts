@@ -54,3 +54,5 @@ export async function DELETE(
   await prisma.discussion.delete({ where: { id: discussionId } });
   return NextResponse.json({ success: true });
 }
+
+export const dynamic = "force-dynamic";

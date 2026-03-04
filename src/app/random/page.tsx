@@ -21,3 +21,5 @@ export default async function RandomArticlePage() {
 
   redirect(`/articles/${article.slug}`);
 }
+
+export const dynamic = "force-dynamic";

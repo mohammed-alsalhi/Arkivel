@@ -156,3 +156,5 @@ function DiffForm({
     </form>
   );
 }
+
+export const dynamic = "force-dynamic";

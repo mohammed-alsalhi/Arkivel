@@ -20,3 +20,5 @@ export async function GET(
 
   return NextResponse.json(revisions);
 }
+
+export const dynamic = "force-dynamic";

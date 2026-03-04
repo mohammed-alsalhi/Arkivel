@@ -82,3 +82,5 @@ export default async function LearningPathPage({ params }: Props) {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

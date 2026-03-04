@@ -39,3 +39,5 @@ export async function DELETE(
   await prisma.mapMarker.delete({ where: { id } });
   return NextResponse.json({ success: true });
 }
+
+export const dynamic = "force-dynamic";

@@ -52,3 +52,5 @@ export async function GET() {
 
   return NextResponse.json({ gaps });
 }
+
+export const dynamic = "force-dynamic";

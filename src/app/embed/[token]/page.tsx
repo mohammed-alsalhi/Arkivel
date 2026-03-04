@@ -56,3 +56,5 @@ export default async function EmbedPage({ params }: Props) {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

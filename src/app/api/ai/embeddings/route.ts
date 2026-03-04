@@ -37,3 +37,5 @@ export async function GET() {
     missing,
   });
 }
+
+export const dynamic = "force-dynamic";

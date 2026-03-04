@@ -27,3 +27,5 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({ success: true, updated: articleIds.length });
 }
+
+export const dynamic = "force-dynamic";

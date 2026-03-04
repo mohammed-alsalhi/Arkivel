@@ -68,3 +68,5 @@ export async function POST(
 
   return NextResponse.json(translation, { status: 201 });
 }
+
+export const dynamic = "force-dynamic";

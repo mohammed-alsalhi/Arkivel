@@ -163,3 +163,5 @@ export async function DELETE(
     message: "Scheduled publication cancelled.",
   });
 }
+
+export const dynamic = "force-dynamic";

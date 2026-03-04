@@ -82,3 +82,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json({ error: "Unknown interaction type" }, { status: 400 });
 }
+
+export const dynamic = "force-dynamic";

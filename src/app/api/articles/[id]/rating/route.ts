@@ -20,3 +20,5 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     count: ratings.length,
   });
 }
+
+export const dynamic = "force-dynamic";

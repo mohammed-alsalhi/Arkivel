@@ -93,3 +93,5 @@ function CategoryTreeRow({ category, depth }: { category: TreeCategory; depth: n
     </>
   );
 }
+
+export const dynamic = "force-dynamic";

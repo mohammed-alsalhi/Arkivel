@@ -33,3 +33,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ tags: formatted });
 }
+
+export const dynamic = "force-dynamic";

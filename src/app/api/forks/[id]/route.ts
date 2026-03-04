@@ -82,3 +82,5 @@ export async function POST(request: Request, { params }: Params) {
 
   return NextResponse.json({ error: "Unknown action" }, { status: 400 });
 }
+
+export const dynamic = "force-dynamic";

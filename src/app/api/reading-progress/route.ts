@@ -51,3 +51,5 @@ export async function GET() {
 
   return NextResponse.json({ totalRead: reads.length, stats });
 }
+
+export const dynamic = "force-dynamic";

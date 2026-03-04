@@ -218,3 +218,5 @@ export default async function UserProfilePage({ params }: Props) {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

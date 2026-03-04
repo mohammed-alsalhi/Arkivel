@@ -58,3 +58,5 @@ function htmlToSlides(articleTitle: string, html: string): Slide[] {
 
   return slides.filter((s) => s.title || s.content);
 }
+
+export const dynamic = "force-dynamic";

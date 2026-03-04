@@ -66,3 +66,5 @@ export default async function ReadingListPage({ params }: Props) {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

@@ -15,3 +15,5 @@ export async function DELETE(_req: Request, { params }: Params) {
   await prisma.expertBadge.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }
+
+export const dynamic = "force-dynamic";

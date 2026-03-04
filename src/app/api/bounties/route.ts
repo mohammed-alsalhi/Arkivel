@@ -32,3 +32,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json(bounty, { status: 201 });
 }
+
+export const dynamic = "force-dynamic";

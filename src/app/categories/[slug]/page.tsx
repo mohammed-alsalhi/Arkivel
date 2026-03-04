@@ -156,3 +156,5 @@ export default async function CategoryPage({ params }: Props) {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

@@ -44,3 +44,5 @@ export async function GET(
     results,
   });
 }
+
+export const dynamic = "force-dynamic";

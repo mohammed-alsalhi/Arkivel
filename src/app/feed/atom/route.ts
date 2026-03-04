@@ -64,3 +64,5 @@ ${entries}
     },
   });
 }
+
+export const dynamic = "force-dynamic";

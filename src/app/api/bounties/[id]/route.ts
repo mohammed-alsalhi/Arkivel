@@ -67,3 +67,5 @@ export async function PUT(request: Request, { params }: Params) {
   });
   return NextResponse.json(updated);
 }
+
+export const dynamic = "force-dynamic";

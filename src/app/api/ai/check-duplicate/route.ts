@@ -42,3 +42,5 @@ export async function POST(request: NextRequest) {
     matchSlug: best.slug || null,
   });
 }
+
+export const dynamic = "force-dynamic";

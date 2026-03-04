@@ -48,3 +48,5 @@ export async function DELETE(request: Request, { params }: Params) {
   await prisma.readingListItem.deleteMany({ where: { listId: id, articleId } });
   return NextResponse.json({ ok: true });
 }
+
+export const dynamic = "force-dynamic";

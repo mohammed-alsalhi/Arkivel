@@ -99,3 +99,5 @@ export async function DELETE(
   await prisma.issueLink.deleteMany({ where: { id: linkId, articleId: id } });
   return NextResponse.json({ ok: true });
 }
+
+export const dynamic = "force-dynamic";

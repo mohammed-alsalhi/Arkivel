@@ -105,3 +105,5 @@ export async function GET(
 
   return NextResponse.json({ data: formatted });
 }
+
+export const dynamic = "force-dynamic";

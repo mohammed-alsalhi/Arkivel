@@ -91,3 +91,5 @@ export default async function ExplorePage({ searchParams }: Props) {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

@@ -38,3 +38,5 @@ export async function POST(request: Request) {
 
   return NextResponse.json(article, { status: 201 });
 }
+
+export const dynamic = "force-dynamic";

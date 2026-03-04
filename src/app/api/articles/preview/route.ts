@@ -39,3 +39,5 @@ export async function GET(request: NextRequest) {
     updatedAt: article.updatedAt,
   });
 }
+
+export const dynamic = "force-dynamic";

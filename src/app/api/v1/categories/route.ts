@@ -35,3 +35,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ categories: formatted });
 }
+
+export const dynamic = "force-dynamic";

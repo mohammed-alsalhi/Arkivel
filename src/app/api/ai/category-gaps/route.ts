@@ -47,3 +47,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ suggestions: [] });
   }
 }
+
+export const dynamic = "force-dynamic";

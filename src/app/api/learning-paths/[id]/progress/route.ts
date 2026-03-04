@@ -41,3 +41,5 @@ export async function POST(
 
   return NextResponse.json(progress);
 }
+
+export const dynamic = "force-dynamic";

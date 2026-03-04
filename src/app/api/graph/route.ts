@@ -148,3 +148,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ nodes, edges: allEdges });
 }
+
+export const dynamic = "force-dynamic";

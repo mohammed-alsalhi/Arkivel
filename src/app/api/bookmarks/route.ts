@@ -43,3 +43,5 @@ export async function DELETE(request: Request) {
   await prisma.bookmark.deleteMany({ where: { userId: user.id, articleId } });
   return NextResponse.json({ ok: true });
 }
+
+export const dynamic = "force-dynamic";

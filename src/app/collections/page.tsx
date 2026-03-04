@@ -56,3 +56,5 @@ export default async function CollectionsPage() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

@@ -354,3 +354,5 @@ export default async function ArticlePage({ params }: Props) {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";

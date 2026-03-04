@@ -27,3 +27,5 @@ export async function GET() {
 
   return NextResponse.json(users);
 }
+
+export const dynamic = "force-dynamic";

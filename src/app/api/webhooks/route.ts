@@ -52,3 +52,5 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(webhook, { status: 201 });
 }
+
+export const dynamic = "force-dynamic";
