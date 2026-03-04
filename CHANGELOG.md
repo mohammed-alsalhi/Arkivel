@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.8.8] - 2026-03-04
+
+### CI Fixes
+
+- Added log capture for `next start` (`> /tmp/next.log 2>&1`) so crash output is visible when wait-on times out
+- Switched wait-on from `http://localhost:3000` to `tcp:3000` to avoid IPv4/IPv6 ambiguity in Node 20
+
 ## [4.8.7] - 2026-03-04
 
 ### CI Fixes
