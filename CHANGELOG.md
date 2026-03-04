@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.8.3] - 2026-03-04
+
+### CI Fixes
+
+- Fixed `npm ci` failure: added `overrides` in `package.json` to resolve `@auth/core`'s pinned `preact@10.11.3` dep consistently with the root `preact@10.24.3`; regenerated `package-lock.json` from scratch
+- Fixed build step in CI: moved `prisma db push` to `vercel.json` `buildCommand` so CI runs `next build` only (no database required); `npm run build` now runs just `next build`
+- Fixed failing `truncateText` test: function now always reserves 3 chars for suffix and skips word-boundary trimming for custom suffixes
+
 ## [4.8.2] - 2026-03-03
 
 ### Home Page

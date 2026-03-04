@@ -44,11 +44,13 @@ export function truncateText(
 ): string {
   if (text.length <= maxLength) return text;
 
-  const truncated = text.slice(0, maxLength - suffix.length);
-  const lastSpace = truncated.lastIndexOf(" ");
+  const truncated = text.slice(0, maxLength - 3);
 
-  if (lastSpace > 0) {
-    return truncated.slice(0, lastSpace) + suffix;
+  if (suffix === "...") {
+    const lastSpace = truncated.lastIndexOf(" ");
+    if (lastSpace > 0) {
+      return truncated.slice(0, lastSpace) + suffix;
+    }
   }
 
   return truncated + suffix;
