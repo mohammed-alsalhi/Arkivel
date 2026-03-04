@@ -20,7 +20,9 @@ function TreeNode({ node, depth = 0 }: NodeProps) {
             onClick={() => setExpanded((e) => !e)}
             className="text-[10px] text-muted mt-0.5"
           >
-            {expanded ? "▼" : "▶"}
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${expanded ? "" : "-rotate-90"}`}>
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
           </button>
         )}
         <div className={`border rounded px-3 py-1.5 text-sm ${

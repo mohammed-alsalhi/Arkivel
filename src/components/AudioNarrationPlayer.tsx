@@ -104,11 +104,25 @@ export default function AudioNarrationPlayer({ articleId, articleText }: Props) 
         className="px-2 py-0.5 border border-border rounded hover:bg-surface-hover disabled:opacity-50"
         aria-label={playing ? "Pause narration" : "Play narration"}
       >
-        {loading ? "Loading…" : playing ? "⏸ Pause" : "▶ Listen"}
+        <span className="flex items-center gap-1">
+          {loading ? (
+            "Loading…"
+          ) : playing ? (
+            <>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+              Pause
+            </>
+          ) : (
+            <>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Listen
+            </>
+          )}
+        </span>
       </button>
       {playing && (
         <button onClick={stop} className="px-2 py-0.5 border border-border rounded hover:bg-surface-hover" aria-label="Stop narration">
-          ⏹
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
         </button>
       )}
       <select

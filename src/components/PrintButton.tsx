@@ -4,7 +4,7 @@ export default function PrintButton({ className = "" }: { className?: string }) 
   return (
     <button
       onClick={() => window.print()}
-      className={`border border-border bg-surface-hover px-2 py-1 text-[12px] hover:bg-surface transition-colors ${className}`}
+      className={`flex items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors ${className}`}
       title="Print this page"
     >
       Print

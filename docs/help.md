@@ -1,6 +1,8 @@
 # Help & Features Guide
 
-This guide covers all the features and tricks available in the wiki app.
+This guide covers all features available in the wiki. Use the sections below to learn how to create, edit, organize, and get the most from your articles.
+
+---
 
 ## Getting Started
 
@@ -8,279 +10,316 @@ To create a new article, click **Create new article** in the sidebar or navigate
 
 Each article has:
 
-- **Title** — the article name, also used to generate the URL slug
-- **Content** — rich text body written in the editor
+- **Title** — the article name, used to generate the URL slug
+- **Content** — rich text body written in the Tiptap editor
 - **Category** — optional, for organizing articles into groups
 - **Tags** — optional labels for cross-cutting topics
 - **Excerpt** — short summary shown in search results and article lists
+- **Status** — Draft (admin-only), Review, or Published (visible to all)
 
-Articles can be saved as **drafts** (unpublished, admin-only) or **published** (visible to everyone).
+---
 
 ## The Editor
 
-The rich text editor provides a toolbar with these formatting options:
+The rich text editor provides a toolbar with formatting options:
 
 | Button | Action |
 |--------|--------|
-| **B** / **I** / **S** | Bold, Italic, Strikethrough |
-| **H1** / **H2** / **H3** | Heading levels |
-| **•** / **1.** | Bullet and ordered lists |
+| **B / I / S** | Bold, Italic, Strikethrough |
+| **H1 / H2 / H3** | Heading levels |
+| **• / 1.** | Bullet and ordered lists |
 | **"** | Blockquote |
-| **<>** | Code block |
+| **<>** | Code block with syntax highlighting |
 | **—** | Horizontal rule |
 | Link icon | Insert a URL link |
 | Image icon | Upload an image |
 | **[[]]** | Insert a wiki link |
-| **Table** | Insert a table (see Tables section) |
+| **Table** | Insert a table |
 | **Detect Links** | Scan text for potential wiki links |
+| **fn** | Insert a footnote / citation |
+| **Mermaid** | Insert a diagram (via `/mermaid` slash command) |
+| **Σ** | Insert a math expression (KaTeX) |
+| **Microphone** | Voice dictation (browser speech recognition) |
 
-**Markdown mode:** Click the `Markdown` button in the top-right corner of the editor to switch to raw markdown editing. Click `Rich Text` to switch back. Wiki links, bold, italic, and headings are preserved across modes.
+**Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, and all heading/list types.
 
-**Templates:** When creating a new article, you can choose from predefined templates (Person, Place, Event, Thing, Group) that provide a starting structure with an infobox and sections.
+**Markdown mode:** Click `Markdown` to switch to raw markdown editing. Click `Rich Text` to switch back.
+
+**Templates:** When creating a new article, choose from predefined templates (Person, Place, Event, Thing, Group) that provide a starting structure with an infobox and sections.
+
+---
+
+## Rich Content Blocks
+
+Beyond standard text, the editor supports specialized content blocks inserted via slash commands:
+
+- **Mermaid diagrams** — write `graph TD; A-->B` syntax; renders as a flowchart, sequence diagram, Gantt chart, etc. on the article page
+- **Math (KaTeX)** — inline math with `$...$` and block math with `$$...$$`
+- **Excalidraw** — embed an interactive whiteboard drawing; stored as JSON and rendered read-only on the article page
+- **Data table** — paste CSV or JSON data to create a sortable, filterable table with a CSV download button
+- **Decision tree** — define a yes/no tree as JSON; renders as an interactive SVG with expand/collapse
+
+**Voice dictation:** Click the microphone button in the toolbar to speak — your words are inserted at the cursor using the browser's speech recognition.
+
+---
+
+## Presentation Mode
+
+Click **Present** in the article action bar to open the article as a slideshow. Each H2 / H3 heading becomes a new slide. Use arrow keys or click to advance. Press Esc to exit.
+
+---
+
+## Article Action Bar
+
+The toolbar below the article title provides quick actions grouped into four sections:
+
+| Action | Description |
+|--------|-------------|
+| **Present** | Open as a slideshow |
+| **Bookmark** | Save to your personal bookmarks with an optional note |
+| **+ List** | Add to one of your reading lists |
+| **Copy link** | Copy the article URL to the clipboard |
+| **Share** | Native share sheet (or clipboard fallback) |
+| **Print** | Clean print layout (hides navigation UI) |
+| **Export ▾** | Download as PDF, Markdown, ePub, or Word (.docx) |
+| **Aa** | Toggle dyslexia-friendly font and spacing |
+| **RTL** | Toggle right-to-left reading direction for the article |
+| **Translate ▾** | Machine-translate to another language (requires API key) |
+
+---
 
 ## Wiki Links
 
-Wiki links connect articles together. There are several ways to create them:
-
 ### Typing syntax
 
-- Type `[[Article Name]]` — auto-converts to a wiki link when you close the brackets
-- Type `[[Article Name|Display Text]]` — creates a link to "Article Name" but displays "Display Text"
+- Type `[[Article Name]]` — auto-converts to a wiki link
+- Type `[[Article Name|Display Text]]` — link with custom display text
 
 ### Link suggester
 
-When you type `[[`, an autocomplete dropdown appears showing matching articles. Use **Arrow keys** to navigate, **Enter** to select, or **Escape** to dismiss. The dropdown searches as you type.
-
-### Toolbar & keyboard
-
-- Click the **[[]]** toolbar button — prompts for an article title. If text is selected, it becomes the display text.
-- Press `Ctrl+Shift+L` (or `Cmd+Shift+L` on Mac) — same as the toolbar button.
+Type `[[` to open the autocomplete dropdown. Use arrow keys to navigate, Enter to select, Escape to dismiss.
 
 ### Link status
 
-- Wiki links to existing articles appear in **blue**
-- Links to articles that don't exist yet appear in **red** (broken links), which is a visual cue to create that article
+- Links to existing articles appear in **blue**
+- Links to missing articles appear in **red** — a cue to create that article
 
-## Link Detection
+### Keyboard shortcut
 
-The **Detect Links** button in the editor toolbar scans your article text for phrases that match existing article titles.
+Press `Ctrl+Shift+L` (Cmd on Mac) to insert a wiki link.
 
-- Matching phrases are highlighted with a dashed underline
-- Hover over a highlight, then **click** to convert it into a wiki link
-- The toolbar button shows a count badge (e.g. "Detect Links (5)") with remaining matches
-- Text inside headings and existing wiki links is skipped
-- Longer article titles take priority over shorter ones to avoid partial matches
+---
 
 ## Search
 
-The search bar in the top-right corner provides instant results as you type. Press **Enter** or click "See all results" for the full search page.
-
+- The search bar provides instant results as you type; press **Enter** for the full search page
 - Multi-word queries use **AND** logic — every word must appear somewhere in the article
-- Results are ranked: exact title match > title starts with query > title contains query > content-only match
-- Search covers article titles, content, and excerpts
+- Results are ranked: exact title match > starts with > title contains > content-only
+- **Semantic search:** set `OPENAI_API_KEY` to blend AI-ranked results based on meaning, not just keywords
+
+---
+
+## AI Features
+
+AI features are gated on environment variables and degrade gracefully when keys are absent.
+
+- **Writing Coach** — collapsible panel at the bottom of the editor. Shows Flesch-Kincaid readability score, passive-voice count, sentence length stats, and AI suggestions.
+- **Article summaries** — auto-generated on save; used as the page meta description.
+- **Semantic search** — vector embeddings via OpenAI. Requires `OPENAI_API_KEY`.
+- **Knowledge gaps** — `/admin/knowledge-gaps` lists referenced but uncreated article titles, sorted by incoming-link count.
+- **Duplicate detection** — checks for semantically similar existing articles when creating a new one.
+- **Category suggestions** — Claude suggests topics missing from a category.
+- **Quiz generation** — Claude generates 5 multiple-choice questions from any article for self-testing.
+
+---
+
+## Learning & Retention
+
+- **Learning Paths** — curated sequences of articles. Browse at `/learning-paths` or create your own. Progress is tracked per path.
+- **Flashcards** — create flashcards from any article. Review due cards at `/flashcards` using the SM-2 spaced repetition algorithm (grade 0–5 after each card).
+- **Quizzes** — AI-generated multiple choice questions per article. Results saved to your quiz history.
+- **Reading progress** — mark articles as read. Track completion by category via the progress ring on category pages.
+- **Email digest** — opt in under Settings → Digest to receive a scheduled summary email of watchlist changes.
+
+---
+
+## Discovery & Navigation
+
+- **Bookmarks** — save articles with optional notes at `/bookmarks`.
+- **Reading Lists** — organize articles into ordered lists at `/reading-lists`. Lists can be made public and shared via a link.
+- **Smart Collections** — saved searches with filters (tags, category, author, date range) at `/collections`.
+- **TIL (Today I Learned)** — post short (280-char) notes at `/til`. Tag them for discovery.
+- **Explore mode** — guided walk through articles using semantic similarity at `/explore`.
+- **Session reading trail** — collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.
+
+---
+
+## Collaboration
+
+- **Article reactions** — mark articles as Helpful, Insightful, Outdated, or Confusing via the reaction bar at the bottom.
+- **Article forks** — propose a complete rewrite of any article. Admins review, merge, or reject forks at `/forks`.
+- **Knowledge bounties** — request articles on specific topics at `/bounties`. Contributors can claim and fulfil them.
+- **Expert badges** — admins grant expert badges per category. Expert contributors are highlighted in revision history and bylines.
+- **Article certification** — admins can certify articles reviewed by at least two experts. Certified articles show a "Verified by experts" badge.
+- **Discussions** — every article has a Discussion tab. Mention `@username` to notify a contributor.
+
+---
+
+## Accessibility & Reading Comfort
+
+- **Dyslexia mode (Aa)** — click *Aa* in the action bar to switch to OpenDyslexic font with increased spacing and a warm background tint. Persists across sessions.
+- **RTL toggle** — click *RTL* to switch article content to right-to-left reading direction.
+- **Audio narration** — click *Listen* on any article to hear it read aloud. Uses ElevenLabs if `ELEVENLABS_API_KEY` is configured; otherwise browser speech synthesis. Includes speed control.
+- **Machine translation** — click *Translate ▾* and select a language. Creates a draft translation via DeepL or Google Translate (requires API key).
+- **Skip-to-content link** — first focusable element on every page, visible on keyboard focus.
+
+---
 
 ## Categories & Tags
 
-**Categories** are hierarchical groups shown in the sidebar. Each article can belong to one category. Categories can have sub-categories for deeper organization. Browse all categories at `/categories`.
+**Categories** are hierarchical groups shown in the sidebar. Each article belongs to one category. Browse all at `/categories`.
 
-**Tags** are hierarchical labels that can be assigned freely. An article can have multiple tags. Tags can have sub-tags for deeper organization, similar to categories. Tags appear at the bottom of articles and link to a tag page listing all articles with that tag. Browse all tags at `/tags`, which features a tag cloud with size-scaled tags.
+**Tags** are hierarchical labels; an article can have multiple tags. Browse all at `/tags`, which shows a size-scaled tag cloud.
+
+---
 
 ## Revision History
 
-Every time you save an article, the previous version is automatically preserved as a revision.
-
+- Every save auto-snapshots the current state as a revision
 - Click the **History** tab on any article to see all past revisions
-- Each revision shows the date, time, and content at that point
-- Select any two revisions and click **Compare** to see a side-by-side diff
-- Added text is highlighted in green and removed text in red
+- Select two revisions and click **Compare** for a side-by-side diff
+- Added text shown in green, removed in red
 
-## Navigation & Organization
-
-- **Backlinks:** At the bottom of each article, a "Pages that link here" section lists all articles that reference the current one via wiki links.
-- **Table of contents:** Articles with multiple headings automatically get a table of contents at the top.
-- **Breadcrumb navigation:** Article pages show the category hierarchy as clickable breadcrumbs.
-- **Recent changes:** The Recent Changes page (`/recent-changes`) shows a timeline of all article edits grouped by date.
-- **Disambiguation:** When you create an article with a title similar to existing ones, a notice appears linking to the similar articles.
-- **Reading progress bar:** A progress indicator at the top of article pages shows how far you've scrolled.
-- **Back to top button:** Appears when scrolling down for quick navigation back to the top.
+---
 
 ## Import & Export
 
 ### Import
 
-- **Web UI:** Go to `/import` and drag-and-drop files (.md, .txt, .html, .json)
-- **CLI:** Run `npm run import -- path/to/files` for bulk import with `--draft`, `--category`, `--dry-run` flags
-- Markdown files with frontmatter extract the title automatically
-- JSON files can contain a single article object or an array of articles
+- **File upload:** drag-and-drop `.md`, `.txt`, `.html`, or `.json` at `/import`
+- **Obsidian vault:** upload a `.zip` at `/import/obsidian`. Front matter and `[[wikilinks]]` are resolved automatically.
+- **Notion:** connect your Notion integration token and import a page tree at `/import/notion`.
 
 ### Export
 
-- **PDF:** Click "Export PDF" on any article — uses your browser's print dialog
-- **Markdown:** Click "Export Markdown" to download the article as a .md file
+All formats are in the **Export ▾** dropdown on every article page.
+
+- **PDF** — print-ready window using your browser's print dialog
+- **Markdown** — downloads as a `.md` file
+- **ePub** — downloads as a valid ePub 3 e-book
+- **Word (.docx)** — downloads as a Microsoft Word document
+- **Category export** — export an entire category as a multi-chapter ePub or zip from the admin area
+
+---
+
+## Analytics & Wiki Health
+
+- **Analytics dashboard** — scroll depth heatmap, reader navigation paths, search gap tracking
+- **Search gaps** — `/admin/search-gaps` shows top zero-result queries
+- **Stale articles** — `/admin/staleness` lists articles not updated in 180+ days
+- **Wiki health score** — `/admin/health` gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %
+- **Embeddings coverage** — `/admin/embeddings` shows AI embedding status per article
+
+---
+
+## Contributor Achievements
+
+Achievements are awarded automatically:
+
+- **First edit, 10 edits, 100 edits** — contribution milestones
+- **7-day streak / 30-day streak** — editing on consecutive days
+- **Category expert** — significant contributions to a single category
+
+Unlock notifications appear as a toast after saving.
+
+---
+
+## Integrations
+
+- **Slack:** `/wiki <query>` slash command to search articles from Slack. Requires `SLACK_SIGNING_SECRET`.
+- **Discord:** `/wiki` slash command in Discord. Requires `DISCORD_PUBLIC_KEY`.
+- **Issue links:** link GitHub, Jira, or Linear issues to articles. Status badges appear inline on the article page.
+- **Embeds:** generate an embed token for any article. The view at `/embed/[token]` is iframe-safe with no navigation.
+
+---
 
 ## Interactive Map
 
-The interactive map feature is optional and disabled by default. When enabled (via the `NEXT_PUBLIC_MAP_ENABLED=true` environment variable), it adds a map page with:
+Optional feature, disabled by default. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 
-- Multiple maps per wiki, each with its own background image
-- Clickable polygon areas linked to articles
-- Hover tooltips showing area names with a color tint
-- Toggleable map layers (political boundaries, terrain, etc.)
-- Zoomable maps with different detail levels at each zoom
-- Map area search and filtering
-- Edit mode for drawing new polygon areas (admin only)
+- Multiple maps with background images and layers
+- Clickable polygon areas linked to articles with hover tooltips
+- Zoomable with different detail levels per zoom
+- Edit mode: draw, reshape, recolor, link to articles (admin only)
 
-### Editing areas (admin)
+---
 
-Toggle **Edit Mode** to access area management. In edit mode:
+## Navigation & Organization
 
-- **Draw new areas** — click the map to place polygon vertices, then click "Finish Drawing" to complete the shape
-- **Select existing areas** — click any polygon to select it; an edit panel appears on the right
-- **Edit properties** — change the label, linked article, or color of the selected area
-- **Reshape polygons** — drag the white vertex handles to move individual polygon points in real-time
-- **Color picker** — choose from 8 preset colors or pick any custom color via the color input
-- **Delete areas** — click the delete button in the edit panel to remove an area
-- Click empty space on the map to deselect the current area
+- **Backlinks** — "What links here" at the bottom of every article
+- **Table of contents** — auto-generated for articles with multiple headings
+- **Breadcrumb** — category hierarchy shown above the article title
+- **Recent changes** — `/recent-changes`, timeline of all edits grouped by date
+- **Article graph** — `/graph`, D3 force-directed graph of wiki link connections; filter by category, zoom by BFS depth
+- **Disambiguation** — articles with ambiguous titles get a notice
+- **Redirects** — set a "Redirect to" slug in the editor to forward the old URL automatically
+
+---
 
 ## Administration
 
-- **Multi-user login:** Register for an account or login with your credentials at `/login`. Roles: Viewer (read only), Editor (create/edit), Admin (full access).
-- **Legacy admin login:** Go to `/admin` and enter the admin password (set via `ADMIN_SECRET` environment variable). Both login methods work side by side.
-- **Local development:** If `ADMIN_SECRET` is empty, everyone has admin access automatically
-- **Admin dashboard:** Access the admin dashboard for a review queue of articles needing approval, wiki statistics, webhook management, and plugin configuration.
-- **Theme:** Toggle between light and dark mode using the sun/moon icon in the top-right corner
-- **Customization:** Wiki name, tagline, welcome text, footer, and more are all configurable via `NEXT_PUBLIC_*` environment variables. See `.env.example` for the full list.
+- **Roles:** Viewer (read only), Editor (create/edit), Admin (full access)
+- **Legacy admin login:** enter `ADMIN_SECRET` at `/admin`; works alongside user accounts
+- **Admin dashboard:** review queue, statistics, webhooks, plugins, expert badges, embed tokens
+- **Batch operations:** on `/articles`, bulk-assign category, publish/unpublish, or delete
+- **Webhooks:** HTTP callbacks for article create/update/delete events
+- **Theme:** toggle light/dark mode via the sun/moon icon in the header
+- **Customization:** name, tagline, welcome text, footer set via `NEXT_PUBLIC_*` environment variables
 
-## Tables
-
-The editor supports inserting and editing tables directly in your articles.
-
-- Click the **Table** toolbar button to insert a 3×3 table with a header row
-- When your cursor is inside a table, additional buttons appear: **+Row**, **+Col**, **-Row**, **-Col**, **xTable**
-- Click cells to edit them directly; use Tab to move between cells
-- Selected cells are highlighted with a blue tint
-- Tables render with borders and header styling on both the editor and the article display
-
-## Link Editing
-
-When you hover over a link (either a regular URL link or a wiki link) in the editor, a floating bubble appears below it with two options:
-
-- **Edit** — opens an inline text input to change the URL (for regular links) or the article title (for wiki links)
-- **Remove** — removes the link but keeps the text in place
-
-Press **Enter** to save your edit, or **Escape** to cancel. The bubble also appears when you navigate to a link via keyboard.
-
-## Redirect Pages
-
-When an article moves to a new URL, you can set up a redirect so the old slug automatically takes visitors to the new article.
-
-- Open the article editor and fill in the **Redirect to** field with the target article's slug
-- Visitors who navigate to the redirecting article will be automatically sent to the target
-- Redirects still appear in search results — clicking them triggers the redirect
-- Leave the redirect field empty for normal (non-redirecting) articles
-
-## Discussion Pages
-
-Every article has a **Discussion** tab where users can post comments and discuss the article content, similar to Wikipedia talk pages.
-
-- Click the **Discussion** tab on any article to view and post comments
-- Comments are open to everyone — no login required
-- Enter an optional author name (defaults to "Anonymous")
-- Comments are shown chronologically with timestamps
-- Admins can delete individual comments
-
-## Batch Operations
-
-Admins can perform bulk actions on articles from the All Articles page (`/articles`).
-
-- Select articles using the checkboxes in the first column, or use the header checkbox to select all
-- **Set Category** — assign a category to all selected articles at once
-- **Publish / Unpublish** — toggle visibility of selected articles
-- **Delete** — permanently delete selected articles (requires confirmation)
-
-Batch operations are only visible when logged in as admin.
-
-## Footnotes & Citations
-
-Add footnotes to your articles for citations and references:
-
-- Click the **fn** toolbar button or press `Ctrl+Shift+F` to insert a footnote
-- Enter the footnote text in the prompt
-- Footnotes appear as numbered superscripts in the text
-- A "Notes" section is automatically generated at the bottom of the article
-
-## Code Blocks with Syntax Highlighting
-
-Code blocks support syntax highlighting for many programming languages:
-
-- Click the **<>** toolbar button to insert a code block
-- You'll be prompted to enter a language (e.g. js, python, html, css, bash)
-- Syntax highlighting is applied automatically in both the editor and article display
-- Supports dark mode with adapted color schemes
-
-## Article Status Workflow
-
-Articles can have one of three statuses:
-
-- **Draft** — work in progress, only visible to admins
-- **Review** — ready for review, only visible to admins
-- **Published** — visible to everyone
-
-Set the status from the article edit page. Pinned articles appear at the top of their category page.
+---
 
 ## User Accounts
 
-The wiki supports multi-user accounts with role-based permissions:
+- Register at `/register` with username, email, and password
+- User profiles at `/users/username` show contribution history and achievements
+- Manage display name, password, notifications, digest schedule, and accessibility defaults at `/settings`
 
-- Register for an account at `/register` with username, email, and password
-- Login at `/login` to start editing
-- Roles: **Viewer** (read only), **Editor** (create/edit articles), **Admin** (full access)
-- User profiles show contribution history at `/users/username`
-- Legacy admin password login still works alongside user accounts
+---
 
 ## Watchlist & Notifications
 
-- Watch articles to get notified when they're edited
-- Manage your watchlist from `/watchlist` in the sidebar
+- Watch articles to get notified when they're edited. Manage your watchlist at `/watchlist`.
 - The bell icon in the header shows unread notification count
-- Click the bell to see recent notifications and mark them as read
+- `@username` mentions in discussions trigger a notification
+- Enable the daily digest under Settings → Digest for a scheduled summary email
+
+---
 
 ## RSS Feeds & Public API
 
-- **RSS:** Subscribe to `/feed.xml` for recent changes
-- **Atom:** Available at `/feed/atom`
-- **API:** Public REST API at `/api/v1/` with API key authentication. See `/api-docs` for documentation.
+- **RSS:** `/feed.xml`
+- **Atom:** `/feed/atom`
+- **Public REST API:** `/api/v1/` with `X-API-Key` authentication. See `/api-docs` for documentation.
 
-## Semantic Links & Relations
-
-Beyond wiki links, you can create typed semantic relationships between articles:
-
-- On any article's edit page, use the **Relations** section to add semantic links
-- Available relation types: *related to*, *is part of*, *see also*, and more
-- Relations are displayed on the article page and are visible in the Article Graph
-- Relations are bidirectional — linking A to B also shows on B's page
-
-## Multi-Language Translations
-
-Articles can have translations in multiple languages:
-
-- On an article's edit page, use the **Translations** tab to add content in other languages
-- Each translation has its own title and content
-- A language switcher appears on articles that have translations available
-
-## Article Graph
-
-Visualize the connections between your articles as an interactive graph:
-
-- Visit the Article Graph page at `/graph` from the sidebar
-- Nodes represent articles, colored by category
-- Edges represent wiki links between articles
-- Drag nodes to rearrange, scroll to zoom, and click to navigate
-- Filter by category and control graph depth
+---
 
 ## Keyboard Shortcuts
 
-These shortcuts work inside the rich text editor. Replace Ctrl with Cmd on Mac.
+### Global
+
+| Shortcut | Action |
+|----------|--------|
+| `?` | Show keyboard shortcuts overlay |
+| `/` | Focus search bar |
+| `g` then `h` | Go to home page |
+| `g` then `a` | All articles |
+| `g` then `n` | New article |
+| `g` then `s` | Search page |
+| `g` then `r` | Recent changes |
+| `g` then `g` | Article graph |
+| `Esc` | Close dialog / blur input |
+
+### In the editor (Ctrl = Cmd on Mac)
 
 | Shortcut | Action |
 |----------|--------|
@@ -288,24 +327,13 @@ These shortcuts work inside the rich text editor. Replace Ctrl with Cmd on Mac.
 | `Ctrl+I` | Italic |
 | `Ctrl+Shift+X` | Strikethrough |
 | `Ctrl+Shift+L` | Insert wiki link |
+| `Ctrl+Shift+F` | Insert footnote |
 | `Ctrl+Shift+7` | Ordered list |
 | `Ctrl+Shift+8` | Bullet list |
 | `Ctrl+Shift+B` | Blockquote |
 | `Ctrl+Shift+E` | Code block |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / Redo |
 
-> **Tip:** You can type `[[` anywhere in the editor to quickly search and link to existing articles without leaving the keyboard.
+---
 
-## Keyboard Shortcuts (Global)
-
-| Shortcut | Action |
-|----------|--------|
-| `?` | Show keyboard shortcuts overlay |
-| `/` | Focus search bar |
-| `g` then `h` | Go to home page |
-| `g` then `a` | Go to all articles |
-| `g` then `n` | Create new article |
-| `g` then `s` | Go to search |
-| `g` then `r` | Go to recent changes |
-| `g` then `g` | Go to article graph |
-| `Esc` | Close dialog / blur input |
+> **Tip:** Type `[[` anywhere in the editor to search and link to existing articles. Type `/` to open the slash command menu for rich content blocks.

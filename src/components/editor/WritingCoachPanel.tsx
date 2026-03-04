@@ -81,7 +81,9 @@ export default function WritingCoachPanel({ getHtml, hasExcerpt }: WritingCoachP
         className="w-full flex items-center justify-between px-3 py-2 text-[12px] text-muted hover:bg-surface-hover transition-colors"
       >
         <span className="font-medium">Writing Coach</span>
-        <span>{open ? "▲" : "▼"}</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${open ? "rotate-180" : ""}`}>
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
       </button>
 
       {open && (

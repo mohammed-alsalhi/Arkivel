@@ -42,13 +42,16 @@ export default function BookmarkButton({ articleId, initialBookmarked = false }:
       <button
         onClick={toggle}
         title={bookmarked ? "Remove bookmark" : "Bookmark this article"}
-        className={`px-2 py-0.5 text-[11px] border rounded transition-colors ${
+        className={`flex items-center gap-1 h-6 px-2 text-[11px] border rounded transition-colors ${
           bookmarked
             ? "border-accent bg-accent/10 text-accent"
-            : "border-border text-muted hover:border-accent/40 hover:text-foreground"
+            : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
         }`}
       >
-        {bookmarked ? "★ Bookmarked" : "☆ Bookmark"}
+        <svg width="11" height="11" viewBox="0 0 24 24" fill={bookmarked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+        </svg>
+        {bookmarked ? "Saved" : "Bookmark"}
       </button>
 
       {showNote && (

@@ -73,7 +73,20 @@ export default function VoiceDictationButton({ editor }: Props) {
         recording ? "bg-red-500 text-white" : "text-muted hover:text-foreground hover:bg-surface-hover"
       }`}
     >
-      {recording ? "🔴" : "🎤"}
+      {recording ? (
+        /* Stop / recording indicator */
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+        </svg>
+      ) : (
+        /* Microphone */
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="9" y="2" width="6" height="11" rx="3" />
+          <path d="M5 10a7 7 0 0 0 14 0" />
+          <line x1="12" y1="19" x2="12" y2="22" />
+          <line x1="9" y1="22" x2="15" y2="22" />
+        </svg>
+      )}
     </button>
   );
 }

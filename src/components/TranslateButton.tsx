@@ -47,11 +47,18 @@ export default function TranslateButton({ articleId }: Props) {
       <button
         onClick={() => setOpen((o) => !o)}
         disabled={loading}
-        className="text-xs px-2 py-0.5 border border-border rounded hover:bg-surface-hover disabled:opacity-50"
+        className="flex items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors disabled:opacity-50"
         aria-haspopup="true"
         aria-expanded={open}
       >
-        {loading ? "Translating…" : "Translate ▾"}
+        {loading ? "Translating…" : (
+          <span className="flex items-center gap-1">
+            Translate
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${open ? "rotate-180" : ""}`}>
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </span>
+        )}
       </button>
 
       {open && (

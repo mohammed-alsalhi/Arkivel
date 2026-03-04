@@ -21,7 +21,7 @@ export default function RTLToggle({ defaultDir }: Props) {
     <button
       onClick={toggle}
       title={dir === "rtl" ? "Switch to LTR reading" : "Switch to RTL reading"}
-      className="text-xs px-2 py-0.5 border border-border rounded hover:bg-surface-hover"
+      className="flex items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
       aria-label="Toggle text direction"
     >
       {dir === "rtl" ? "LTR" : "RTL"}

@@ -34,7 +34,7 @@ export default function ShareButton({ title, url }: Props) {
   return (
     <button
       onClick={handleShare}
-      className="border border-border bg-surface-hover px-2 py-1 text-[12px] hover:bg-surface transition-colors"
+      className="flex items-center gap-1 h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
       title="Share this article"
     >
       {shared ? "Link copied!" : "Share"}

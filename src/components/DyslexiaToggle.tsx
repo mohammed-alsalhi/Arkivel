@@ -28,8 +28,10 @@ export default function DyslexiaToggle() {
       onClick={toggle}
       title={enabled ? "Disable dyslexia-friendly mode" : "Enable dyslexia-friendly mode"}
       aria-pressed={enabled}
-      className={`text-xs px-2 py-0.5 border border-border rounded hover:bg-surface-hover transition-colors ${
-        enabled ? "bg-accent/10 border-accent" : ""
+      className={`flex items-center h-6 px-2 text-[11px] border rounded transition-colors ${
+        enabled
+          ? "border-accent bg-accent/10 text-accent"
+          : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
       }`}
     >
       Aa

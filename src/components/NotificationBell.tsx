@@ -90,7 +90,7 @@ export default function NotificationBell() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative text-muted hover:text-foreground p-1"
+        className="relative w-7 h-7 flex items-center justify-center rounded text-muted hover:text-foreground hover:bg-surface-hover"
         title="Notifications"
       >
         {/* Bell icon (SVG) */}
