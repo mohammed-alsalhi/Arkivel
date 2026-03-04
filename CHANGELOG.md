@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here.
 
+## [4.8.0] - 2026-03-03
+
+### Navigation
+
+- Redesigned sidebar with comprehensive section coverage — all app pages now listed
+- Replaced all unicode symbols (▶ ▼ ✕ ☰) with inline SVG icons per design standards
+- Added animated SVG chevrons (`transition-transform`) for section collapse/expand
+- Reorganised into six logical sections: Navigation, Discover, Personal, Tools, Contribute (admin), Admin (admin)
+- **Navigation**: added `/tags` page
+- **Discover**: added `/activity`, `/change-requests`, `/reviews`, `/bounties`, `/forks`
+- **Personal**: added `/watchlist`, `/settings`
+- **Contribute** (admin): added `/import/obsidian` and `/import/notion` as indented sub-items
+- **Admin** (admin): added `/admin/analytics`, `/admin/health`, `/admin/webhooks`, `/admin/templates`, `/admin/theme`, `/admin/lint`, `/admin/knowledge-gaps`, `/admin/embeddings`, `/admin/search-gaps`, `/admin/staleness`
+- Admin section defaults to collapsed to keep sidebar compact
+- Mobile toggle button upgraded to SVG hamburger/close icons with `aria-label` and `aria-pressed`
+
 ## [4.7.1] - 2026-03-03
 
 ### Bug Fixes

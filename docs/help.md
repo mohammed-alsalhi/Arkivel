@@ -256,11 +256,40 @@ Optional feature, disabled by default. Enable with `NEXT_PUBLIC_MAP_ENABLED=true
 
 ## Navigation & Organization
 
+The sidebar is divided into collapsible sections — click any section header to collapse or expand it.
+
+**Navigation section:**
+- **Main Page** — `/`, the wiki home
+- **All articles** — `/articles`, full article list with count
+- **Recent changes** — `/recent-changes`, timeline of all edits grouped by date
+- **Random article** — `/random`, jump to a random published article
+- **Search** — `/search`, full-text search with relevance ranking
+- **Tags** — `/tags`, browse all tags and their articles
+- **Article graph** — `/graph`, D3 force-directed graph of wiki link connections
+- **Help** — this page
+
+**Discover section:**
+- **Explore** — `/explore`, curated entry points into the wiki
+- **Activity** — `/activity`, a feed of recent contributions
+- **Collections** — `/collections`, curated article sets
+- **Change requests** — `/change-requests`, pending edits awaiting review
+- **Reviews** — `/reviews`, articles flagged for quality review
+- **Bounties** — `/bounties`, open writing/improvement tasks
+- **Forks** — `/forks`, divergent article versions
+
+**Personal section:**
+- **Reading lists** — `/reading-lists`, saved ordered reading sequences
+- **Bookmarks** — `/bookmarks`, articles you have starred
+- **Watchlist** — `/watchlist`, articles you are watching for changes
+- **Flashcards** — `/flashcards`, spaced-repetition study from article content
+- **Learning paths** — `/learning-paths`, structured sequences of articles
+- **Today I Learned** — `/til`, short TIL notes
+- **Settings** — `/settings`, personal preferences
+
+**Article structure:**
 - **Backlinks** — "What links here" at the bottom of every article
 - **Table of contents** — auto-generated for articles with multiple headings
 - **Breadcrumb** — category hierarchy shown above the article title
-- **Recent changes** — `/recent-changes`, timeline of all edits grouped by date
-- **Article graph** — `/graph`, D3 force-directed graph of wiki link connections; filter by category, zoom by BFS depth
 - **Disambiguation** — articles with ambiguous titles get a notice
 - **Redirects** — set a "Redirect to" slug in the editor to forward the old URL automatically
 
@@ -270,10 +299,20 @@ Optional feature, disabled by default. Enable with `NEXT_PUBLIC_MAP_ENABLED=true
 
 - **Roles:** Viewer (read only), Editor (create/edit), Admin (full access)
 - **Legacy admin login:** enter `ADMIN_SECRET` at `/admin`; works alongside user accounts
-- **Admin dashboard:** review queue, statistics, webhooks, plugins, expert badges, embed tokens
+- **Admin dashboard** — `/admin`, review queue, statistics, embed tokens
+- **Analytics** — `/admin/analytics`, page views and usage trends
+- **Metrics** — `/admin/metrics`, performance and system metrics
+- **Health** — `/admin/health`, service health checks
+- **Plugins** — `/admin/plugins`, enable/disable wiki plugins
+- **Webhooks** — `/admin/webhooks`, HTTP callbacks for article events
+- **Templates** — `/admin/templates`, reusable article templates
+- **Theme** — `/admin/theme`, site-wide colour and typography settings
+- **Content lint** — `/admin/lint`, automated quality checks across all articles
+- **Knowledge gaps** — `/admin/knowledge-gaps`, topics referenced but not yet written
+- **Embeddings** — `/admin/embeddings`, semantic search index management
+- **Search gaps** — `/admin/search-gaps`, common searches returning no results
+- **Staleness** — `/admin/staleness`, articles not updated in a long time
 - **Batch operations:** on `/articles`, bulk-assign category, publish/unpublish, or delete
-- **Webhooks:** HTTP callbacks for article create/update/delete events
-- **Theme:** toggle light/dark mode via the sun/moon icon in the header
 - **Customization:** name, tagline, welcome text, footer set via `NEXT_PUBLIC_*` environment variables
 
 ---

@@ -335,12 +335,27 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Navigation &amp; Organization</div>
         <div className="wiki-portal-body text-[13px]">
+          <p className="mb-1">The sidebar is divided into collapsible sections — click any section header to collapse or expand it.</p>
+          <p className="font-semibold mb-0.5">Navigation</p>
+          <ul className="list-disc pl-5 space-y-0.5 mb-2">
+            <li><Link href="/">Main Page</Link>, <Link href="/articles">All articles</Link>, <Link href="/recent-changes">Recent changes</Link>, <Link href="/random">Random article</Link></li>
+            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/graph">Article graph</Link></li>
+          </ul>
+          <p className="font-semibold mb-0.5">Discover</p>
+          <ul className="list-disc pl-5 space-y-0.5 mb-2">
+            <li><Link href="/explore">Explore</Link> — curated entry points; <Link href="/activity">Activity</Link> — recent contribution feed</li>
+            <li><Link href="/collections">Collections</Link>, <Link href="/change-requests">Change requests</Link>, <Link href="/reviews">Reviews</Link>, <Link href="/bounties">Bounties</Link>, <Link href="/forks">Forks</Link></li>
+          </ul>
+          <p className="font-semibold mb-0.5">Personal</p>
+          <ul className="list-disc pl-5 space-y-0.5 mb-2">
+            <li><Link href="/reading-lists">Reading lists</Link>, <Link href="/bookmarks">Bookmarks</Link>, <Link href="/watchlist">Watchlist</Link></li>
+            <li><Link href="/flashcards">Flashcards</Link>, <Link href="/learning-paths">Learning paths</Link>, <Link href="/til">Today I Learned</Link>, <Link href="/settings">Settings</Link></li>
+          </ul>
+          <p className="font-semibold mb-0.5">Article structure</p>
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Backlinks:</strong> &ldquo;What links here&rdquo; at the bottom of every article</li>
             <li><strong>Table of contents:</strong> auto-generated for articles with multiple headings</li>
             <li><strong>Breadcrumb:</strong> category hierarchy shown above the article title</li>
-            <li><strong>Recent changes:</strong> <Link href="/recent-changes">timeline of all edits</Link> grouped by date</li>
-            <li><strong>Article graph:</strong> D3 force-directed <Link href="/graph">graph</Link> of wiki link connections; filter by category, zoom by BFS depth</li>
             <li><strong>Disambiguation:</strong> articles with ambiguous titles get a notice</li>
             <li><strong>Redirects:</strong> set a &ldquo;Redirect to&rdquo; slug in the editor to forward the old URL automatically</li>
           </ul>
@@ -354,10 +369,11 @@ export default function HelpPage() {
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Roles:</strong> Viewer (read only), Editor (create/edit), Admin (full access)</li>
             <li><strong>Legacy admin login:</strong> enter the <code className="bg-surface-hover px-1 text-[12px]">ADMIN_SECRET</code> at <Link href="/admin">/admin</Link>; works alongside user accounts</li>
-            <li><strong>Admin dashboard:</strong> review queue, statistics, webhooks, plugins, expert badges, embed tokens</li>
+            <li><Link href="/admin">Dashboard</Link> — review queue, statistics, embed tokens</li>
+            <li><Link href="/admin/analytics">Analytics</Link>, <Link href="/admin/metrics">Metrics</Link>, <Link href="/admin/health">Health</Link></li>
+            <li><Link href="/admin/plugins">Plugins</Link>, <Link href="/admin/webhooks">Webhooks</Link>, <Link href="/admin/templates">Templates</Link>, <Link href="/admin/theme">Theme</Link></li>
+            <li><Link href="/admin/lint">Content lint</Link>, <Link href="/admin/knowledge-gaps">Knowledge gaps</Link>, <Link href="/admin/search-gaps">Search gaps</Link>, <Link href="/admin/staleness">Staleness</Link>, <Link href="/admin/embeddings">Embeddings</Link></li>
             <li><strong>Batch operations:</strong> on <Link href="/articles">All Articles</Link>, bulk-assign category, publish/unpublish, or delete</li>
-            <li><strong>Webhooks:</strong> HTTP callbacks for article create/update/delete events</li>
-            <li><strong>Theme:</strong> toggle light/dark mode via the sun/moon icon in the header</li>
             <li><strong>Customization:</strong> name, tagline, welcome text, footer set via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

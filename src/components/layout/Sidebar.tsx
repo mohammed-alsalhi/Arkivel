@@ -16,31 +16,69 @@ type Category = {
   children?: Category[];
 };
 
-export default function Sidebar({ categories, articleCount }: { categories: Category[]; articleCount?: number }) {
+// ── SVG primitives ────────────────────────────────────────────────────────────
+
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="11" height="11"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={clsx("transition-transform flex-shrink-0", !open && "-rotate-90")}
+      aria-hidden="true"
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+// ── Main sidebar ──────────────────────────────────────────────────────────────
+
+export default function Sidebar({
+  categories,
+  articleCount,
+}: {
+  categories: Category[];
+  articleCount?: number;
+}) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const isAdmin = useAdmin();
-
-  const navItems = [
-    { href: "/", label: "Main Page" },
-    { href: "/articles", label: articleCount ? `All articles (${articleCount})` : "All articles" },
-    { href: "/categories", label: "Categories" },
-    { href: "/recent-changes", label: "Recent changes" },
-    { href: "/random", label: "Random article" },
-    { href: "/graph", label: "Article graph" },
-    ...(config.mapEnabled ? [{ href: "/map", label: config.mapLabel }] : []),
-    { href: "/search", label: "Search" },
-    { href: "/help", label: "Help" },
-  ];
+  const close = () => setMobileOpen(false);
 
   return (
     <>
       {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed top-1.5 left-2 z-50 bg-surface border border-border p-1.5 text-sm text-foreground md:hidden"
+        aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+        aria-pressed={mobileOpen}
+        className="fixed top-1.5 left-2 z-50 flex items-center justify-center w-7 h-7 bg-surface border border-border text-foreground md:hidden"
       >
-        {mobileOpen ? "\u2715" : "\u2630"}
+        {mobileOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
       <aside
@@ -52,7 +90,7 @@ export default function Sidebar({ categories, articleCount }: { categories: Cate
       >
         {/* Logo / Title */}
         <div className="px-3 py-3 border-b border-border">
-          <Link href="/" className="block text-center hover:no-underline">
+          <Link href="/" className="block text-center hover:no-underline" onClick={close}>
             <h1
               className="text-lg font-bold text-heading"
               style={{ fontFamily: "var(--font-serif)" }}
@@ -62,97 +100,171 @@ export default function Sidebar({ categories, articleCount }: { categories: Cate
           </Link>
         </div>
 
-        {/* Navigation section */}
+        {/* Navigation */}
         <SidebarSection title="Navigation">
-          {navItems.map((item) => (
-            <SidebarLink
-              key={item.href}
-              href={item.href}
-              active={pathname === item.href}
-              onClick={() => setMobileOpen(false)}
-            >
-              {item.label}
+          <SidebarLink href="/" active={pathname === "/"} onClick={close}>
+            Main Page
+          </SidebarLink>
+          <SidebarLink href="/articles" active={pathname === "/articles"} onClick={close}>
+            All articles{articleCount ? ` (${articleCount})` : ""}
+          </SidebarLink>
+          <SidebarLink href="/recent-changes" active={pathname === "/recent-changes"} onClick={close}>
+            Recent changes
+          </SidebarLink>
+          <SidebarLink href="/random" active={pathname === "/random"} onClick={close}>
+            Random article
+          </SidebarLink>
+          <SidebarLink href="/search" active={pathname === "/search"} onClick={close}>
+            Search
+          </SidebarLink>
+          <SidebarLink href="/tags" active={pathname === "/tags" || pathname.startsWith("/tags/")} onClick={close}>
+            Tags
+          </SidebarLink>
+          <SidebarLink href="/graph" active={pathname === "/graph"} onClick={close}>
+            Article graph
+          </SidebarLink>
+          {config.mapEnabled && (
+            <SidebarLink href="/map" active={pathname === "/map" || pathname.startsWith("/map/")} onClick={close}>
+              {config.mapLabel}
             </SidebarLink>
-          ))}
+          )}
+          <SidebarLink href="/help" active={pathname === "/help"} onClick={close}>
+            Help
+          </SidebarLink>
         </SidebarSection>
 
-        {/* Contribute section (admin only) */}
+        {/* Discover */}
+        <SidebarSection title="Discover">
+          <SidebarLink href="/explore" active={pathname === "/explore"} onClick={close}>
+            Explore
+          </SidebarLink>
+          <SidebarLink href="/activity" active={pathname === "/activity"} onClick={close}>
+            Activity
+          </SidebarLink>
+          <SidebarLink href="/collections" active={pathname.startsWith("/collections")} onClick={close}>
+            Collections
+          </SidebarLink>
+          <SidebarLink href="/change-requests" active={pathname === "/change-requests"} onClick={close}>
+            Change requests
+          </SidebarLink>
+          <SidebarLink href="/reviews" active={pathname === "/reviews"} onClick={close}>
+            Reviews
+          </SidebarLink>
+          <SidebarLink href="/bounties" active={pathname === "/bounties"} onClick={close}>
+            Bounties
+          </SidebarLink>
+          <SidebarLink href="/forks" active={pathname === "/forks"} onClick={close}>
+            Forks
+          </SidebarLink>
+        </SidebarSection>
+
+        {/* Personal */}
+        <SidebarSection title="Personal">
+          <SidebarLink href="/reading-lists" active={pathname.startsWith("/reading-lists")} onClick={close}>
+            Reading lists
+          </SidebarLink>
+          <SidebarLink href="/bookmarks" active={pathname === "/bookmarks"} onClick={close}>
+            Bookmarks
+          </SidebarLink>
+          <SidebarLink href="/watchlist" active={pathname === "/watchlist"} onClick={close}>
+            Watchlist
+          </SidebarLink>
+          <SidebarLink href="/flashcards" active={pathname === "/flashcards"} onClick={close}>
+            Flashcards
+          </SidebarLink>
+          <SidebarLink href="/learning-paths" active={pathname.startsWith("/learning-paths")} onClick={close}>
+            Learning paths
+          </SidebarLink>
+          <SidebarLink href="/til" active={pathname === "/til"} onClick={close}>
+            Today I Learned
+          </SidebarLink>
+          <SidebarLink href="/settings" active={pathname === "/settings"} onClick={close}>
+            Settings
+          </SidebarLink>
+        </SidebarSection>
+
+        {/* Tools */}
+        <SidebarSection title="Tools">
+          <SidebarLink href="/export" active={pathname === "/export"} onClick={close}>
+            Export
+          </SidebarLink>
+          <SidebarLink href="/api-docs" active={pathname === "/api-docs"} onClick={close}>
+            API docs
+          </SidebarLink>
+          <SidebarLink href="/feed.xml" onClick={close}>
+            RSS feed
+          </SidebarLink>
+          {!isAdmin && (
+            <SidebarLink href="/admin" active={pathname === "/admin"} onClick={close}>
+              Admin login
+            </SidebarLink>
+          )}
+        </SidebarSection>
+
+        {/* Contribute (admin only) */}
         {isAdmin && (
           <SidebarSection title="Contribute">
-            <SidebarLink href="/articles/new" onClick={() => setMobileOpen(false)}>
-              Create new article
+            <SidebarLink href="/articles/new" onClick={close}>
+              New article
             </SidebarLink>
-            <SidebarLink href="/import" onClick={() => setMobileOpen(false)}>
+            <SidebarLink href="/import" active={pathname === "/import"} onClick={close}>
               Import articles
+            </SidebarLink>
+            <SidebarLink href="/import/obsidian" active={pathname === "/import/obsidian"} onClick={close} indent>
+              From Obsidian
+            </SidebarLink>
+            <SidebarLink href="/import/notion" active={pathname === "/import/notion"} onClick={close} indent>
+              From Notion
             </SidebarLink>
           </SidebarSection>
         )}
 
-        {/* Tools section */}
-        <SidebarSection title="Tools">
-          <SidebarLink
-            href="/export"
-            active={pathname === "/export"}
-            onClick={() => setMobileOpen(false)}
-          >
-            Export
-          </SidebarLink>
-          <SidebarLink href="/feed.xml" onClick={() => setMobileOpen(false)}>
-            RSS Feed
-          </SidebarLink>
-          <SidebarLink
-            href="/admin"
-            active={pathname === "/admin"}
-            onClick={() => setMobileOpen(false)}
-          >
-            {isAdmin ? "Admin (logged in)" : "Admin login"}
-          </SidebarLink>
-          {isAdmin && (
-            <SidebarLink
-              href="/admin/metrics"
-              active={pathname === "/admin/metrics"}
-              onClick={() => setMobileOpen(false)}
-            >
+        {/* Admin (admin only) */}
+        {isAdmin && (
+          <SidebarSection title="Admin" defaultOpen={false}>
+            <SidebarLink href="/admin" active={pathname === "/admin"} onClick={close}>
+              Dashboard
+            </SidebarLink>
+            <SidebarLink href="/admin/analytics" active={pathname === "/admin/analytics"} onClick={close}>
+              Analytics
+            </SidebarLink>
+            <SidebarLink href="/admin/metrics" active={pathname === "/admin/metrics"} onClick={close}>
               Metrics
             </SidebarLink>
-          )}
-          {isAdmin && (
-            <SidebarLink
-              href="/admin/plugins"
-              active={pathname === "/admin/plugins"}
-              onClick={() => setMobileOpen(false)}
-            >
+            <SidebarLink href="/admin/health" active={pathname === "/admin/health"} onClick={close}>
+              Health
+            </SidebarLink>
+            <SidebarLink href="/admin/plugins" active={pathname === "/admin/plugins"} onClick={close}>
               Plugins
             </SidebarLink>
-          )}
-        </SidebarSection>
+            <SidebarLink href="/admin/webhooks" active={pathname === "/admin/webhooks"} onClick={close}>
+              Webhooks
+            </SidebarLink>
+            <SidebarLink href="/admin/templates" active={pathname === "/admin/templates"} onClick={close}>
+              Templates
+            </SidebarLink>
+            <SidebarLink href="/admin/theme" active={pathname === "/admin/theme"} onClick={close}>
+              Theme
+            </SidebarLink>
+            <SidebarLink href="/admin/lint" active={pathname === "/admin/lint"} onClick={close}>
+              Content lint
+            </SidebarLink>
+            <SidebarLink href="/admin/knowledge-gaps" active={pathname === "/admin/knowledge-gaps"} onClick={close}>
+              Knowledge gaps
+            </SidebarLink>
+            <SidebarLink href="/admin/embeddings" active={pathname === "/admin/embeddings"} onClick={close}>
+              Embeddings
+            </SidebarLink>
+            <SidebarLink href="/admin/search-gaps" active={pathname === "/admin/search-gaps"} onClick={close}>
+              Search gaps
+            </SidebarLink>
+            <SidebarLink href="/admin/staleness" active={pathname === "/admin/staleness"} onClick={close}>
+              Staleness
+            </SidebarLink>
+          </SidebarSection>
+        )}
 
-        {/* Discover section */}
-        <SidebarSection title="Discover">
-          <SidebarLink href="/explore" active={pathname === "/explore"} onClick={() => setMobileOpen(false)}>
-            Explore
-          </SidebarLink>
-          <SidebarLink href="/collections" active={pathname.startsWith("/collections")} onClick={() => setMobileOpen(false)}>
-            Collections
-          </SidebarLink>
-          <SidebarLink href="/reading-lists" active={pathname.startsWith("/reading-lists")} onClick={() => setMobileOpen(false)}>
-            Reading Lists
-          </SidebarLink>
-          <SidebarLink href="/bookmarks" active={pathname === "/bookmarks"} onClick={() => setMobileOpen(false)}>
-            Bookmarks
-          </SidebarLink>
-          <SidebarLink href="/til" active={pathname === "/til"} onClick={() => setMobileOpen(false)}>
-            Today I Learned
-          </SidebarLink>
-          <SidebarLink href="/learning-paths" active={pathname.startsWith("/learning-paths")} onClick={() => setMobileOpen(false)}>
-            Learning Paths
-          </SidebarLink>
-          <SidebarLink href="/flashcards" active={pathname === "/flashcards"} onClick={() => setMobileOpen(false)}>
-            Flashcards
-          </SidebarLink>
-        </SidebarSection>
-
-        {/* Categories section */}
+        {/* Categories */}
         <SidebarSection title="Categories">
           {categories.map((cat) => (
             <SidebarCategoryItem
@@ -160,29 +272,21 @@ export default function Sidebar({ categories, articleCount }: { categories: Cate
               category={cat}
               pathname={pathname}
               depth={0}
-              onNavigate={() => setMobileOpen(false)}
+              onNavigate={close}
             />
           ))}
         </SidebarSection>
 
-        {/* Footer links */}
-        <div className="mt-auto border-t border-border">
-          <div className="px-3 py-2 space-y-1">
-            <SidebarLink href="/api-docs" onClick={() => setMobileOpen(false)}>
-              API Docs
-            </SidebarLink>
-            <SidebarLink href="/feed.xml" onClick={() => setMobileOpen(false)}>
-              RSS Feed
-            </SidebarLink>
-          </div>
-          <div className="px-3 py-2 text-[10px] text-muted text-center border-t border-border">
-            v{process.env.NEXT_PUBLIC_APP_VERSION}
-          </div>
+        {/* Footer */}
+        <div className="mt-auto border-t border-border px-3 py-2 text-[10px] text-muted text-center">
+          v{process.env.NEXT_PUBLIC_APP_VERSION}
         </div>
       </aside>
     </>
   );
 }
+
+// ── Sub-components ────────────────────────────────────────────────────────────
 
 function SidebarCategoryItem({
   category,
@@ -201,24 +305,26 @@ function SidebarCategoryItem({
   return (
     <div>
       <div className="flex items-center" style={{ paddingLeft: `${depth * 12}px` }}>
-        {hasChildren && (
+        {hasChildren ? (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="text-[10px] text-muted w-4 flex-shrink-0 hover:text-foreground"
+            className="flex items-center justify-center w-4 flex-shrink-0 text-muted hover:text-foreground transition-colors"
+            aria-label={expanded ? "Collapse" : "Expand"}
           >
-            {expanded ? "\u25BC" : "\u25B6"}
+            <ChevronIcon open={expanded} />
           </button>
+        ) : (
+          <span className="w-4 flex-shrink-0" />
         )}
-        {!hasChildren && <span className="w-4 flex-shrink-0" />}
         <SidebarLink
           href={`/categories/${category.slug}`}
           active={pathname === `/categories/${category.slug}`}
           onClick={onNavigate}
         >
           <span className="flex items-center justify-between w-full">
-            <span>{category.icon} {category.name}</span>
+            <span>{category.icon ? `${category.icon} ` : ""}{category.name}</span>
             {category._count.articles > 0 && (
-              <span className="text-[10px] text-muted">
+              <span className="text-[10px] text-muted ml-1 flex-shrink-0">
                 {category._count.articles}
               </span>
             )}
@@ -242,22 +348,27 @@ function SidebarCategoryItem({
   );
 }
 
-function SidebarSection({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+function SidebarSection({
+  title,
+  children,
+  defaultOpen = true,
+}: {
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="border-b border-border">
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center justify-between w-full bg-infobox-header px-3 py-1 text-[11px] font-bold text-foreground uppercase tracking-wider hover:bg-surface-hover transition-colors"
+        aria-expanded={open}
       >
         <span>{title}</span>
-        <span className="text-[9px] text-muted">{open ? "\u25BC" : "\u25B6"}</span>
+        <ChevronIcon open={open} />
       </button>
-      {open && (
-        <div className="px-2 py-1">
-          {children}
-        </div>
-      )}
+      {open && <div className="px-2 py-1">{children}</div>}
     </div>
   );
 }
@@ -267,21 +378,22 @@ function SidebarLink({
   active,
   onClick,
   children,
+  indent,
 }: {
   href: string;
   active?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
+  indent?: boolean;
 }) {
   return (
     <Link
       href={href}
       onClick={onClick}
       className={clsx(
-        "block px-2 py-[3px] text-[13px] transition-colors",
-        active
-          ? "font-bold text-heading"
-          : "text-wiki-link hover:underline"
+        "block py-[3px] text-[13px] transition-colors",
+        indent ? "px-4" : "px-2",
+        active ? "font-bold text-heading" : "text-wiki-link hover:underline"
       )}
     >
       {children}
