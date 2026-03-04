@@ -41,7 +41,7 @@ describe("formatDate", () => {
     expect(result).toContain("March");
   });
   it("formats date string", () => {
-    const result = formatDate("2024-01-01");
+    const result = formatDate("2024-01-15");
     expect(result).toContain("January");
   });
 });
