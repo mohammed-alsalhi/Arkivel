@@ -40,6 +40,8 @@ export default function EditArticlePage() {
   const [editSummary, setEditSummary] = useState("");
   const [status, setStatus] = useState("published");
   const [isPinned, setIsPinned] = useState(false);
+  const [expiresAt, setExpiresAt] = useState("");
+  const [reviewDueAt, setReviewDueAt] = useState("");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -72,6 +74,8 @@ export default function EditArticlePage() {
               setInfobox(articleData.infobox || {});
               setStatus(articleData.status || "published");
               setIsPinned(articleData.isPinned || false);
+              setExpiresAt(articleData.expiresAt ? articleData.expiresAt.slice(0, 10) : "");
+              setReviewDueAt(articleData.reviewDueAt ? articleData.reviewDueAt.slice(0, 10) : "");
               setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
             }
           }
@@ -90,6 +94,8 @@ export default function EditArticlePage() {
         setInfobox(articleData.infobox || {});
         setStatus(articleData.status || "published");
         setIsPinned(articleData.isPinned || false);
+        setExpiresAt(articleData.expiresAt ? articleData.expiresAt.slice(0, 10) : "");
+        setReviewDueAt(articleData.reviewDueAt ? articleData.reviewDueAt.slice(0, 10) : "");
         setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
       }
       setLoading(false);
@@ -121,6 +127,8 @@ export default function EditArticlePage() {
         editSummary: editSummary.trim() || null,
         status,
         isPinned,
+        expiresAt: expiresAt || null,
+        reviewDueAt: reviewDueAt || null,
       }),
     });
 
@@ -284,6 +292,29 @@ export default function EditArticlePage() {
                 />
                 <span className="font-bold text-heading">Pin to category page</span>
               </label>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[13px] font-bold text-heading mb-1">Expires on:</label>
+              <input
+                type="date"
+                value={expiresAt}
+                onChange={(e) => setExpiresAt(e.target.value)}
+                className="w-full border border-border bg-surface px-3 py-1.5 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              />
+              <p className="text-[11px] text-muted mt-0.5">Auto-archives to draft when passed</p>
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-heading mb-1">Review due by:</label>
+              <input
+                type="date"
+                value={reviewDueAt}
+                onChange={(e) => setReviewDueAt(e.target.value)}
+                className="w-full border border-border bg-surface px-3 py-1.5 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              />
+              <p className="text-[11px] text-muted mt-0.5">Shows in Content Schedule when overdue</p>
             </div>
           </div>
 

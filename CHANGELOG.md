@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here.
 
+## [4.9.5] - 2026-03-04
+
+### New Features
+
+- **Article expiry / auto-archive** — set an `Expires on` date on any article; POST `/api/cron/expire-articles` auto-archives (status → draft) all articles past their expiry date
+- **Scheduled review reminders** — set a `Review due by` date; overdue articles surface in the Content Schedule admin page
+- Added `expiresAt` and `reviewDueAt` optional DateTime fields to `Article` model
+- Article edit form now shows "Expires on" and "Review due by" date pickers
+- GET `/api/admin/content-schedule` returns expired, expiring-soon, review-overdue, and review-due-soon articles
+- Admin page `/admin/content-schedule` shows four categorised tables with "Run auto-archive" button
+- Added Content schedule link to admin sidebar
+
 ## [4.9.4] - 2026-03-04
 
 ### New Features

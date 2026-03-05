@@ -80,6 +80,10 @@ model Article {
   // v4.7 additions
   dir              String   @default("ltr")  // "ltr" | "rtl"
 
+  // v4.9 additions
+  expiresAt        DateTime?   // auto-archive when this date passes
+  reviewDueAt      DateTime?   // remind editors to review by this date
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

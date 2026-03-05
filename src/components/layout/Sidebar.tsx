@@ -266,6 +266,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/kanban" active={pathname === "/admin/kanban"} onClick={close}>
               Article pipeline
             </SidebarLink>
+            <SidebarLink href="/admin/content-schedule" active={pathname === "/admin/content-schedule"} onClick={close}>
+              Content schedule
+            </SidebarLink>
             <SidebarLink href="/admin/audit-log" active={pathname === "/admin/audit-log"} onClick={close}>
               Audit log
             </SidebarLink>
