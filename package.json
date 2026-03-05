@@ -1,6 +1,6 @@
 {
   "name": "wiki-app",
-  "version": "4.9.7",
+  "version": "4.9.8",
   "private": true,
   "scripts": {
     "dev": "next dev",

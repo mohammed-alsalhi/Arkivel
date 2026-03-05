@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.9.8] - 2026-03-05
+
+### New Features
+
+- **Concept map per category** — force-directed mind-map at `/categories/[slug]/concept-map` showing all articles in a category and their wiki-link relationships; zoomable, draggable, clickable nodes
+- GET `/api/categories/[id]/concept-map` parses `data-wiki-link` attributes from article HTML to derive intra-category edges
+- Concept map link added to category page footer
+
 ## [4.9.7] - 2026-03-05
 
 ### New Features

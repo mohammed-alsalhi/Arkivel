@@ -150,8 +150,11 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       )}
 
-      <p className="mt-4 text-[13px]">
+      <p className="mt-4 text-[13px] flex items-center gap-4">
         <Link href="/categories">&larr; All categories</Link>
+        <Link href={`/categories/${category.slug}/concept-map`} className="text-muted hover:text-foreground">
+          Concept map
+        </Link>
       </p>
     </div>
   );
