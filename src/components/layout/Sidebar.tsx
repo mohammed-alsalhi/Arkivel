@@ -177,6 +177,9 @@ export default function Sidebar({
           <SidebarLink href="/til" active={pathname === "/til"} onClick={close}>
             Today I Learned
           </SidebarLink>
+          <SidebarLink href="/scratchpad" active={pathname === "/scratchpad"} onClick={close}>
+            Scratchpad
+          </SidebarLink>
           <SidebarLink href="/settings" active={pathname === "/settings"} onClick={close}>
             Settings
           </SidebarLink>

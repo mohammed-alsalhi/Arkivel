@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## [4.9.2] - 2026-03-04
+
+### New Features
+
+- **Personal scratchpad** — private per-user notes page at `/scratchpad`; content never appears in search or article listings
+- Added `Scratchpad` model to Prisma schema (userId unique, content Text, updatedAt auto-updated)
+- Added `scratchpad` relation to User model
+- GET/PUT `/api/scratchpad` — upserts content for the authenticated user
+- Scratchpad page uses TiptapEditor with 2-second debounced autosave and manual save button; shows last-saved time
+- Added "Scratchpad" link in sidebar Personal section
+
 ## [4.9.1] - 2026-03-04
 
 ### New Features

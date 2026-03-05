@@ -251,6 +251,9 @@ model User {
   // v4.6 additions
   achievements     ContributorAchievement[]
 
+  // v4.9 additions
+  scratchpad       Scratchpad?
+
   createdAt    DateTime  @default(now())
 
   @@index([role])
@@ -913,5 +916,15 @@ model ContributorAchievement {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, badge])
+  @@index([userId])
+}
+
+model Scratchpad {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String   @db.Text @default("")
+  updatedAt DateTime @updatedAt
+
   @@index([userId])
 }
