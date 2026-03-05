@@ -49,6 +49,7 @@ function GraphPageContent() {
     searchParams.get("center") || ""
   );
   const [loading, setLoading] = useState(true);
+  const [clusterMode, setClusterMode] = useState(false);
 
   const fetchGraph = useCallback(async () => {
     setLoading(true);
@@ -115,6 +116,8 @@ function GraphPageContent() {
         onCenterChange={handleCenterChange}
         nodeCount={filteredNodes.length}
         edgeCount={filteredEdges.length}
+        clusterMode={clusterMode}
+        onClusterModeChange={setClusterMode}
       />
 
       {loading ? (
@@ -131,6 +134,7 @@ function GraphPageContent() {
           edges={filteredEdges}
           onNodeClick={handleNodeClick}
           centerSlug={centerSlug}
+          clusterMode={clusterMode}
         />
       )}
     </div>

@@ -10,6 +10,8 @@ type Props = {
   onCenterChange: (slug: string) => void;
   nodeCount: number;
   edgeCount: number;
+  clusterMode: boolean;
+  onClusterModeChange: (v: boolean) => void;
 };
 
 export default function GraphControls({
@@ -22,6 +24,8 @@ export default function GraphControls({
   onCenterChange,
   nodeCount,
   edgeCount,
+  clusterMode,
+  onClusterModeChange,
 }: Props) {
   return (
     <div className="absolute top-3 left-3 z-10 bg-surface border border-border p-3 text-[12px] space-y-2 shadow-sm max-w-[220px]">
@@ -77,6 +81,18 @@ export default function GraphControls({
           </div>
         </div>
       )}
+
+      {/* Cluster mode */}
+      <div>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={clusterMode}
+            onChange={(e) => onClusterModeChange(e.target.checked)}
+          />
+          <span className="text-muted">Show clusters</span>
+        </label>
+      </div>
 
       {/* Stats */}
       <div className="text-muted border-t border-border pt-1">

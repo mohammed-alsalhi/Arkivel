@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.9.7] - 2026-03-05
+
+### New Features
+
+- **Graph clustering** — label-propagation community detection on the knowledge graph; "Show clusters" toggle in Graph Controls colors nodes by cluster and draws translucent convex hull outlines around each community
+- Clusters recomputed each time graph data changes; hull outlines update on every simulation tick
+
 ## [4.9.6] - 2026-03-05
 
 ### New Features
