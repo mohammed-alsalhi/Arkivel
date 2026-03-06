@@ -287,6 +287,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/metadata-schemas" active={pathname === "/admin/metadata-schemas"} onClick={close}>
               Metadata schemas
             </SidebarLink>
+            <SidebarLink href="/admin/federated-peers" active={pathname === "/admin/federated-peers"} onClick={close}>
+              Federated peers
+            </SidebarLink>
           </SidebarSection>
         )}
 

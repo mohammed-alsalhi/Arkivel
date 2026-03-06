@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.10.4] - 2026-03-06
+
+### New Features
+
+- **Cross-wiki federated search** — search results page fans out queries to configured peer wikis and shows their results under "Results from other wikis"
+- `FederatedPeer` model (name, baseUrl, optional apiKey, enabled toggle)
+- GET `/api/federated-search?q=` fans out to all enabled peers' `/api/v1/articles` endpoint with a 5-second timeout per peer; results merged from all fulfilled responses
+- Admin page at `/admin/federated-peers`: add/edit/delete peer wikis, toggle enabled per peer; sidebar link added
+
 ## [4.10.3] - 2026-03-06
 
 ### New Features

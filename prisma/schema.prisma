@@ -978,6 +978,18 @@ model Whiteboard {
   @@index([authorId])
 }
 
+// ── v4.10: Federated Search Peers ──
+model FederatedPeer {
+  id        String   @id @default(cuid())
+  name      String   // Display name for the remote wiki
+  baseUrl   String   // e.g. "https://otherwiki.example.com"
+  apiKey    String?  // Optional X-API-Key for private wikis
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([enabled])
+}
+
 // ── v4.10: Macros / Shortcodes ──
 model Macro {
   id          String   @id @default(cuid())

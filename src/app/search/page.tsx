@@ -38,6 +38,8 @@ function SearchContent() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [qaAnswer, setQaAnswer] = useState<{ answer: string; sources: { id: string; title: string; slug: string }[] } | null>(null);
   const [qaLoading, setQaLoading] = useState(false);
+  const [federatedResults, setFederatedResults] = useState<{ peerName: string; peerUrl: string; id: string; title: string; slug: string; excerpt: string | null; url: string }[]>([]);
+  const [federatedLoading, setFederatedLoading] = useState(false);
 
   // Filter state
   const [categories, setCategories] = useState<Category[]>([]);
@@ -92,6 +94,17 @@ function SearchContent() {
   useEffect(() => {
     doSearch();
   }, [doSearch]);
+
+  // Federated search
+  useEffect(() => {
+    if (!q || q.length < 2) { setFederatedResults([]); return; }
+    setFederatedLoading(true);
+    fetch(`/api/federated-search?q=${encodeURIComponent(q)}`)
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setFederatedResults(data); })
+      .catch(() => {})
+      .finally(() => setFederatedLoading(false));
+  }, [q]);
 
   // Q&A: trigger when query looks like a question
   useEffect(() => {
@@ -345,6 +358,43 @@ function SearchContent() {
           )}
         </div>
       </div>
+
+      {/* Federated results */}
+      {(federatedLoading || federatedResults.length > 0) && (
+        <div className="mt-6">
+          <h2
+            className="text-base font-normal text-heading border-b border-border pb-0.5 mb-2"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            Results from other wikis
+          </h2>
+          {federatedLoading ? (
+            <p className="text-[13px] text-muted italic">Searching federated wikis…</p>
+          ) : (
+            <ul className="text-[13px] space-y-2">
+              {federatedResults.map((r) => (
+                <li key={`${r.peerUrl}/${r.id}`} className="border-b border-border pb-2">
+                  <div>
+                    <a
+                      href={r.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-[15px]"
+                      style={{ fontFamily: "var(--font-serif)" }}
+                    >
+                      {r.title}
+                    </a>
+                    <span className="text-muted text-[12px] ml-2">({r.peerName})</span>
+                  </div>
+                  {r.excerpt && (
+                    <p className="text-muted mt-0.5 leading-relaxed">{r.excerpt}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
     </div>
   );
 }
