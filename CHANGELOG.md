@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.10.0] - 2026-03-06
+
+### New Features
+
+- **Macro / shortcode system** — admins define reusable HTML snippets at `/admin/macros`; authors embed them in articles with `{{macroName|arg}}` syntax; expanded at display time with `{{{body}}}` / `{{{1}}}` / `{{{2}}}` template variables
+- GET/POST `/api/macros` and PUT/DELETE `/api/macros/[id]` for CRUD; cache invalidated on every save
+- Three built-in presets: `warning` (yellow), `note` (blue), `tip` (green) — available as quick-add buttons
+- Live HTML preview shown in the admin editor before saving
+- Macros expanded in article content via `expandMacros()` in `src/lib/macros.ts`, called before wiki-link resolution
+
 ## [4.9.9] - 2026-03-04
 
 ### New Features

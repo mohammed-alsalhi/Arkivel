@@ -275,6 +275,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/audit-log" active={pathname === "/admin/audit-log"} onClick={close}>
               Audit log
             </SidebarLink>
+            <SidebarLink href="/admin/macros" active={pathname === "/admin/macros"} onClick={close}>
+              Macros
+            </SidebarLink>
           </SidebarSection>
         )}
 

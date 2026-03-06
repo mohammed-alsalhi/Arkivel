@@ -948,3 +948,15 @@ model AuditLog {
   @@index([action])
   @@index([userId])
 }
+
+// ── v4.10: Macros / Shortcodes ──
+model Macro {
+  id          String   @id @default(cuid())
+  name        String   @unique  // e.g. "warning", "note", "tip"
+  description String?
+  template    String   @db.Text // HTML template; use {{{1}}}, {{{2}}}, {{{body}}} for params
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([name])
+}

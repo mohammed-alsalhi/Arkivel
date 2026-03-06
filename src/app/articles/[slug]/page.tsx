@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { config } from "@/lib/config";
 import { resolveWikiLinks, getBacklinks } from "@/lib/wikilinks";
+import { expandMacros } from "@/lib/macros";
 import AdminEditTab from "@/components/AdminEditTab";
 import InfoboxDisplay from "@/components/InfoboxDisplay";
 import TableOfContents, { addHeadingIds } from "@/components/TableOfContents";
@@ -101,8 +102,9 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) notFound();
   if (article.redirectTo) redirect(`/articles/${article.redirectTo}`);
 
+  const expandedContent = await expandMacros(article.content);
   const [resolvedContent, backlinks, allCategories] = await Promise.all([
-    resolveWikiLinks(article.content),
+    resolveWikiLinks(expandedContent),
     getBacklinks(slug),
     prisma.category.findMany({
       orderBy: { sortOrder: "asc" },
