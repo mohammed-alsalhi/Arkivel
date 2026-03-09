@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.10.7] - 2026-03-06
+
+### New Features
+
+- **Confluence import** — POST `/api/import/confluence` accepts a Confluence HTML export body; extracts title from `<title>`/`<h1 id="title">`, extracts content from `#main-content` div, strips Confluence macros/metadata, imports as draft article
+- Admin UI at `/admin/import`: upload `.html` file or paste HTML directly, optional category ID, shows link to drafted article on success
+- Also surfaces existing Notion and Obsidian import endpoints in the UI
+- Sidebar link added under admin section
+
 ## [4.10.6] - 2026-03-06
 
 ### New Features

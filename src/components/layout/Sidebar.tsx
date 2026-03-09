@@ -293,6 +293,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/federated-peers" active={pathname === "/admin/federated-peers"} onClick={close}>
               Federated peers
             </SidebarLink>
+            <SidebarLink href="/admin/import" active={pathname === "/admin/import"} onClick={close}>
+              Import
+            </SidebarLink>
           </SidebarSection>
         )}
 
