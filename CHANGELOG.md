@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.10.8] - 2026-03-06
+
+### New Features
+
+- **Save to wiki bookmarklet** — `/bookmarklet` page provides a drag-to-install bookmarklet and copy-to-clipboard fallback
+- Clicking the bookmarklet on any page saves the URL + title (or selected text) as a draft via POST `/api/bookmarklet`
+- Selected text wrapped in `<blockquote>` with source link; full-page HTML has nav/header/footer/scripts stripped
+- Unique slug generation with collision handling
+- Sidebar link added
+
 ## [4.10.7] - 2026-03-06
 
 ### New Features
