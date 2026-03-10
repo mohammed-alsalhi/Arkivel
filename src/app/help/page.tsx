@@ -197,6 +197,23 @@ export default function HelpPage() {
             <li><strong>TIL (Today I Learned)</strong> &mdash; post short (280-char) notes at <Link href="/til">/til</Link>. Tag them for discovery.</li>
             <li><strong>Explore mode</strong> &mdash; guided walk through articles using semantic similarity at <Link href="/explore">/explore</Link>.</li>
             <li><strong>Session reading trail</strong> &mdash; collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.</li>
+            <li><strong>Popularity leaderboard</strong> &mdash; <Link href="/popular">/popular</Link> ranks published articles by read and reaction activity.</li>
+            <li><strong>Article comparison</strong> &mdash; open two articles side by side at <code className="bg-surface-hover px-1 text-[12px]">/compare?a=slug1&amp;b=slug2</code>.</li>
+            <li><strong>Contributor leaderboard</strong> &mdash; <Link href="/leaderboard">/leaderboard</Link> shows top editors ranked by revision count.</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Article Page */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Article Page Features</div>
+        <div className="wiki-portal-body text-[13px]">
+          <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Reading time</strong> &mdash; every article shows &ldquo;~X min read&rdquo; in the byline, estimated at 200 words per minute.</li>
+            <li><strong>Draft share links</strong> &mdash; admins can generate a secret URL (<code className="bg-surface-hover px-1 text-[12px]">POST /api/articles/[id]/share-token</code>) so anyone with the link can preview a draft at <code className="bg-surface-hover px-1 text-[12px]">/share/[token]</code> without needing to log in.</li>
+            <li><strong>Expiry warning banner</strong> &mdash; a yellow notice appears when an article&apos;s <em>Review due</em> date is within 30 days, prompting editors to verify its accuracy.</li>
+            <li><strong>Mark as verified</strong> &mdash; admins see a &ldquo;Mark as verified&rdquo; button at the bottom of each article. Clicking it stamps the current date as <em>lastVerifiedAt</em>, shown as a &ldquo;✓ Verified&rdquo; badge in the byline.</li>
+            <li><strong>&ldquo;You might also like&rdquo;</strong> &mdash; up to 5 related articles sharing the same tags are suggested at the bottom of each article.</li>
           </ul>
         </div>
       </div>

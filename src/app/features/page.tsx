@@ -83,6 +83,27 @@ export default function FeaturesPage() {
             <li><strong>Scratchpad</strong> — persistent personal scratch space at <Link href="/scratchpad">/scratchpad</Link></li>
             <li><strong>Session reading trail</strong> — breadcrumb of your current session&apos;s navigation at the bottom of each article</li>
             <li><strong>Table of contents</strong> — auto-generated for articles with multiple headings</li>
+            <li><strong>Popularity leaderboard</strong> — <Link href="/popular">/popular</Link> ranks published articles by reads × 2 + reactions</li>
+            <li><strong>Article comparison</strong> — side-by-side view of two live articles at <code className="bg-surface-hover px-1 text-[12px]">/compare?a=slug1&amp;b=slug2</code></li>
+            <li><strong>&ldquo;You might also like&rdquo;</strong> — sidebar widget on article pages suggesting up to 5 articles sharing the same tags</li>
+            <li><strong>Contributor leaderboard</strong> — <Link href="/leaderboard">/leaderboard</Link> ranks users by total revision count</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Article Page */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Article Page</div>
+        <div className="wiki-portal-body text-[13px]">
+          <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Reading time estimator</strong> — &ldquo;~X min read&rdquo; computed at 200 wpm displayed in every article&apos;s metadata line</li>
+            <li><strong>Draft share links</strong> — admins generate a secret-token URL (<code className="bg-surface-hover px-1 text-[12px]">/share/[token]</code>) so non-admins can preview a draft without publishing</li>
+            <li><strong>Expiry warning banner</strong> — yellow inline banner when an article&apos;s <em>reviewDueAt</em> is within 30 days</li>
+            <li><strong>Mark as verified</strong> — admin button stamps <em>lastVerifiedAt</em>; date shown as a ✓ badge in the article byline</li>
+            <li><strong>Article series navigation</strong> — prev/next links between articles belonging to a series</li>
+            <li><strong>See also</strong> — curated links to related articles, managed by admins</li>
+            <li><strong>Changelog panel</strong> — collapsible list of the last 5 edits with authors and diff links</li>
+            <li><strong>Word goal progress</strong> — progress bar shown until the article reaches its target word count</li>
           </ul>
         </div>
       </div>

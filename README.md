@@ -2,7 +2,7 @@
 
 A configurable, self-hosted wiki application with a MediaWiki-inspired interface. Build your own personal encyclopedia for worldbuilding, knowledge management, or any topic.
 
-**Features:** Rich text editor with wiki links and syntax highlighting, footnotes/citations, revision history with inline diff, dark mode, sub-categories, nested tags, article templates, full-text search with filters, interactive map with layers, article graph visualization, multi-user auth with roles, RSS/Atom feeds, public REST API, webhooks, MediaWiki import, PDF/Markdown/HTML export, article status workflow, watchlist & notifications, disambiguation pages, plugin system.
+**Features:** Rich text editor with wiki links and syntax highlighting, footnotes/citations, revision history with inline diff, dark mode, sub-categories, nested tags, article templates, full-text search with filters, interactive map with layers, article graph visualization, multi-user auth with roles, RSS/Atom feeds, public REST API, webhooks, MediaWiki import, PDF/Markdown/HTML export, article status workflow, watchlist & notifications, disambiguation pages, plugin system, reading time estimator, draft share links, article comparison view, popularity & contributor leaderboards, expiry warning banners, "you might also like" recommendations, mark-as-verified workflow.
 
 ## Deploy to Vercel (Recommended)
 

@@ -56,6 +56,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Scratchpad** — persistent personal scratch space at `/scratchpad`
 - **Session reading trail** — breadcrumb of your current session's navigation at the bottom of each article
 - **Table of contents** — auto-generated for articles with multiple headings
+- **Popularity leaderboard** — `/popular` ranks published articles by reads × 2 + reactions
+- **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`
+- **"You might also like"** — sidebar widget on article pages suggesting up to 5 articles sharing the same tags
+- **Contributor leaderboard** — `/leaderboard` ranks users by total revision count
 
 ---
 
@@ -77,6 +81,19 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Reading progress** — mark articles as read; category pages show a completion ring
 - **Presentation mode** — any article opens as a full-screen slideshow at `/present/[slug]`; each H2/H3 is a slide
 - **Watchlist digest** — optional daily email summary of watched article changes at `/watchlist/digest`
+
+---
+
+## Article Page
+
+- **Reading time estimator** — "~X min read" computed at 200 wpm displayed in every article's metadata line
+- **Draft share links** — admins generate a secret-token URL (`/share/[token]`) so non-admins can preview a draft without publishing
+- **Expiry warning banner** — yellow inline banner when an article's *reviewDueAt* is within 30 days
+- **Mark as verified** — admin button stamps *lastVerifiedAt*; date shown as a ✓ badge in the article byline
+- **Article series navigation** — prev/next links between articles belonging to a series
+- **See also** — curated links to related articles, managed by admins
+- **Changelog panel** — collapsible list of the last 5 edits with authors and diff links
+- **Word goal progress** — progress bar shown until the article reaches its target word count
 
 ---
 

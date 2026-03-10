@@ -153,6 +153,19 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **TIL (Today I Learned)** — post short (280-char) notes at `/til`. Tag them for discovery.
 - **Explore mode** — guided walk through articles using semantic similarity at `/explore`.
 - **Session reading trail** — collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.
+- **Popularity leaderboard** — `/popular` ranks published articles by combined read and reaction activity.
+- **Article comparison** — view two articles side by side at `/compare?a=slug1&b=slug2`.
+- **Contributor leaderboard** — `/leaderboard` shows top editors ranked by revision count.
+
+---
+
+## Article Page Features
+
+- **Reading time** — every article shows "~X min read" in the byline, estimated at 200 words per minute.
+- **Draft share links** — admins generate a secret URL (`POST /api/articles/[id]/share-token`) so anyone with the link can preview a draft at `/share/[token]` without needing to log in.
+- **Expiry warning banner** — a yellow notice appears when an article's *Review due* date is within 30 days, prompting editors to verify its accuracy.
+- **Mark as verified** — admins see a "Mark as verified" button at the bottom of each article. Clicking it stamps the current date as *lastVerifiedAt*, shown as a "✓ Verified" badge in the byline.
+- **"You might also like"** — up to 5 related articles sharing the same tags are suggested at the bottom of each article.
 
 ---
 
