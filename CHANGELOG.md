@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.12.0] - 2026-03-10
+
+### Housekeeping
+
+- **Roadmap archived** — completed items (v1.0–v4.11) moved to `docs/archive/ROADMAP-v1-v4.md`
+- **Fresh roadmap** — `ROADMAP.md` reset to active planned items only, starting from v4.12
+
 ## [4.11.0] - 2026-03-10
 
 ### New Features
