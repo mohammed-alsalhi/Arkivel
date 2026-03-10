@@ -87,6 +87,11 @@ model Article {
   // v4.13 additions
   annotations      Annotation[]
 
+  // v4.14 additions
+  wordGoal         Int?
+  seriesMembers    ArticleSeriesMember[]
+  seeAlso          SeeAlso[]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -166,6 +171,7 @@ model Discussion {
   parentId  String?
   parent    Discussion?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Discussion[] @relation("Replies")
+  isPinned  Boolean      @default(false)
   createdAt DateTime     @default(now())
 
   @@index([articleId])
@@ -1016,6 +1022,46 @@ model Redirect {
   createdAt DateTime @default(now())
 
   @@index([fromSlug])
+}
+
+// ── v4.14: Article Series ──
+model ArticleSeries {
+  id          String              @id @default(cuid())
+  name        String              @unique
+  slug        String              @unique
+  description String?
+  authorId    String?
+  members     ArticleSeriesMember[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([slug])
+}
+
+model ArticleSeriesMember {
+  id        String        @id @default(cuid())
+  seriesId  String
+  series    ArticleSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  articleId String
+  article   Article       @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  position  Int           @default(0)
+
+  @@unique([seriesId, articleId])
+  @@index([seriesId])
+  @@index([articleId])
+}
+
+// ── v4.14: See Also Curated Links ──
+model SeeAlso {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  targetSlug String
+  label      String?
+  position   Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([articleId])
 }
 
 // ── v4.13: Inline Text Annotations ──

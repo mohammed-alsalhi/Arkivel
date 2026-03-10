@@ -32,8 +32,12 @@ import DyslexiaToggle from "@/components/DyslexiaToggle";
 import RTLToggle from "@/components/RTLToggle";
 import TranslateButton from "@/components/TranslateButton";
 import { htmlToSpeakableText } from "@/lib/tts";
-import { getSession } from "@/lib/auth";
+import { getSession, isAdmin } from "@/lib/auth";
 import AnnotationLayer from "@/components/AnnotationLayer";
+import ArticleSeriesNav from "@/components/ArticleSeriesNav";
+import SeeAlsoSection from "@/components/SeeAlsoSection";
+import ArticleChangelogPanel from "@/components/ArticleChangelogPanel";
+import WordGoalBadge from "@/components/WordGoalBadge";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -126,11 +130,33 @@ export default async function ArticlePage({ params }: Props) {
     }),
   ]);
 
-  const lastRevision = await prisma.articleRevision.findFirst({
-    where: { articleId: article.id },
-    orderBy: { createdAt: "desc" },
-    include: { user: { select: { username: true, displayName: true } } },
-  });
+  const [lastRevision, recentRevisions, adminFlag] = await Promise.all([
+    prisma.articleRevision.findFirst({
+      where: { articleId: article.id },
+      orderBy: { createdAt: "desc" },
+      include: { user: { select: { username: true, displayName: true } } },
+    }),
+    prisma.articleRevision.findMany({
+      where: { articleId: article.id },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: {
+        id: true,
+        editSummary: true,
+        createdAt: true,
+        user: { select: { username: true, displayName: true } },
+      },
+    }),
+    isAdmin(),
+  ]);
+
+  // word count for goal badge
+  const plainTextWords = article.content
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
 
   return (
     <div>
@@ -327,6 +353,23 @@ export default async function ArticlePage({ params }: Props) {
             Fork this article
           </Link>
         </div>
+
+        {/* Series navigation */}
+        <ArticleSeriesNav articleId={article.id} />
+
+        {/* Word goal progress */}
+        {article.wordGoal && (
+          <WordGoalBadge wordGoal={article.wordGoal} currentWords={plainTextWords} />
+        )}
+
+        {/* Changelog panel */}
+        <ArticleChangelogPanel slug={article.slug} revisions={recentRevisions.map(r => ({
+          ...r,
+          createdAt: r.createdAt.toISOString(),
+        }))} />
+
+        {/* See also */}
+        <SeeAlsoSection articleId={article.id} isAdmin={adminFlag} />
 
         {/* Related articles */}
         <RelatedArticles

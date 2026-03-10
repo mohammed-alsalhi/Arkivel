@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented here.
 
+## [4.15.0] - 2026-03-10
+
+### New Features
+
+- **Article series** — `ArticleSeries` + `ArticleSeriesMember` models; series index at `/series`; detail at `/series/[slug]`; `ArticleSeriesNav` prev/next component on article pages; admin CRUD at `/admin/series`; API at `/api/series` and `/api/series/[id]`
+- **Article duplication** — `POST /api/articles/[id]/duplicate` copies an article as a draft with a unique slug
+- **Article word goal** — `wordGoal` field on Article; `WordGoalBadge` progress bar shown on article pages
+- **Auto-tagging** — `POST /api/articles/[id]/suggest-tags` returns AI-suggested tags via Claude Haiku
+- **Content calendar** — `/admin/calendar` monthly grid of scheduled and published articles with month navigation
+- **Pinned discussion comments** — `isPinned` on Discussion model; `POST /api/discussions/[id]/pin` toggles pin (max 3 per article)
+- **"See also" curated links** — `SeeAlso` model; API at `/api/articles/[id]/see-also`; `SeeAlsoSection` server component on article pages
+- **Article changelog panel** — `ArticleChangelogPanel` collapsible component shows last 5 edits with diff links on every article page
+
+### Schema Changes
+
+- Added `ArticleSeries` model (name, slug, description, members)
+- Added `ArticleSeriesMember` model (seriesId, articleId, position)
+- Added `SeeAlso` model (articleId, targetSlug, label, position)
+- Added `isPinned` boolean to `Discussion` model
+- Added `wordGoal` integer and `seriesMembers`/`seeAlso` relations to `Article`
+
 ## [4.14.0] - 2026-03-10
 
 ### New Features
