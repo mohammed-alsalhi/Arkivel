@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented here.
 
+## [4.17.0] - 2026-03-10
+
+### New Features
+
+- **Discussion index** — `/discussions` page lists all top-level threads across every article; filterable by article slug and author; shows reply counts
+- **Tag synonyms** — `TagSynonym` model stores alternate aliases per tag; API at `/api/tags/[id]/synonyms` (GET/POST/DELETE); search and tag pages can match on aliases
+- **Named article snapshots** — `ArticleSnapshot` model; `POST /api/articles/[id]/snapshots` creates a labeled manual snapshot; `DELETE` removes one (admin only)
+- **Article co-authors** — `ArticleCoAuthor` model; `POST /api/articles/[id]/co-authors` links additional contributors; co-author names shown in the article byline
+- **Article flags** — `flags String[]` on Article; `PUT /api/articles/[id]/flags` replaces the array; `ArticleFlags` component renders orange badge chips near the title
+- **Floating table of contents** — `TableOfContentsFloat` client component uses `IntersectionObserver` to track the active section; visible as a fixed sidebar on `xl:` screens
+- **Article stats panel** — `ArticleStatsPanel` collapsible component shows reads, reactions, word count, article age, and quality score on every article page
+- **Revision history export** — `GET /api/articles/[id]/revisions/export` downloads full revision history as a CSV (admin only)
+
+### Schema Changes
+
+- Added `flags String[] @default([])` to `Article` model
+- Added `coAuthors ArticleCoAuthor[]` and `snapshots ArticleSnapshot[]` relations to `Article`
+- Added `coAuthoredArticles ArticleCoAuthor[]` and `articleSnapshots ArticleSnapshot[]` relations to `User`
+- Added `synonyms TagSynonym[]` relation to `Tag`
+- New models: `TagSynonym`, `ArticleSnapshot`, `ArticleCoAuthor`
+
 ## [4.16.0] - 2026-03-10
 
 ### New Features

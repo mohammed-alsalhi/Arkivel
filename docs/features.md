@@ -37,6 +37,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Custom metadata schemas** — define typed fields (text, number, date, boolean, select) per category at `/admin/metadata-schemas`
 - **Concept maps** — visual relationship graph per category at `/categories/[slug]/concept-map`
 - **Article graph** — D3 force-directed graph of all wiki-link connections at `/graph`
+- **Tag synonyms** — define alternate aliases per tag (e.g. "JS" → "JavaScript") via `/api/tags/[id]/synonyms`
 
 ---
 
@@ -60,6 +61,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`
 - **"You might also like"** — sidebar widget on article pages suggesting up to 5 articles sharing the same tags
 - **Contributor leaderboard** — `/leaderboard` ranks users by total revision count
+- **Discussion index** — `/discussions` lists all open threads across every article
 
 ---
 
@@ -94,6 +96,11 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **See also** — curated links to related articles, managed by admins
 - **Changelog panel** — collapsible list of the last 5 edits with authors and diff links
 - **Word goal progress** — progress bar shown until the article reaches its target word count
+- **Floating table of contents** — sticky sidebar TOC with active-section highlighting on wide screens (≥1280 px)
+- **Article stats panel** — collapsible panel showing reads, reactions, word count, quality score, and article age
+- **Article flags** — admin-assigned labels (e.g. "Needs images", "Outdated") displayed as orange badge chips near the title
+- **Article co-authors** — link additional contributors; co-author names appear in the byline
+- **Named snapshots** — manually save a labeled snapshot beyond automatic revisions
 
 ---
 

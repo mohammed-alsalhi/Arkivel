@@ -60,6 +60,7 @@ export default function FeaturesPage() {
             <li><strong>Custom metadata schemas</strong> — define typed fields (text, number, date, boolean, select) per category at <Link href="/admin/metadata-schemas">/admin/metadata-schemas</Link></li>
             <li><strong>Concept maps</strong> — visual relationship graph per category at <code className="bg-surface-hover px-1 text-[12px]">/categories/[slug]/concept-map</code></li>
             <li><strong>Article graph</strong> — D3 force-directed graph of all wiki-link connections at <Link href="/graph">/graph</Link></li>
+            <li><strong>Tag synonyms</strong> — define alternate aliases per tag (e.g. &ldquo;JS&rdquo; → &ldquo;JavaScript&rdquo;) at <code className="bg-surface-hover px-1 text-[12px]">/api/tags/[id]/synonyms</code></li>
           </ul>
         </div>
       </div>
@@ -87,6 +88,7 @@ export default function FeaturesPage() {
             <li><strong>Article comparison</strong> — side-by-side view of two live articles at <code className="bg-surface-hover px-1 text-[12px]">/compare?a=slug1&amp;b=slug2</code></li>
             <li><strong>&ldquo;You might also like&rdquo;</strong> — sidebar widget on article pages suggesting up to 5 articles sharing the same tags</li>
             <li><strong>Contributor leaderboard</strong> — <Link href="/leaderboard">/leaderboard</Link> ranks users by total revision count</li>
+            <li><strong>Discussion index</strong> — <Link href="/discussions">/discussions</Link> lists all open threads across every article</li>
           </ul>
         </div>
       </div>
@@ -104,6 +106,11 @@ export default function FeaturesPage() {
             <li><strong>See also</strong> — curated links to related articles, managed by admins</li>
             <li><strong>Changelog panel</strong> — collapsible list of the last 5 edits with authors and diff links</li>
             <li><strong>Word goal progress</strong> — progress bar shown until the article reaches its target word count</li>
+            <li><strong>Floating table of contents</strong> — sticky sidebar TOC with active-section highlighting on wide screens (&ge;1280 px)</li>
+            <li><strong>Article stats panel</strong> — collapsible panel showing reads, reactions, word count, quality score, and article age</li>
+            <li><strong>Article flags</strong> — admin-assigned labels (e.g. &ldquo;Needs images&rdquo;, &ldquo;Outdated&rdquo;) displayed as orange badge chips near the title</li>
+            <li><strong>Article co-authors</strong> — link additional contributors to an article; co-author names appear in the byline</li>
+            <li><strong>Named snapshots</strong> — manually save a labeled snapshot of any article beyond the automatic revisions</li>
           </ul>
         </div>
       </div>

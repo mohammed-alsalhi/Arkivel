@@ -96,6 +96,11 @@ model Article {
   shareToken       String?  @unique  // secret token for draft share links
   lastVerifiedAt   DateTime?         // when an admin last verified this article
 
+  // v4.17 additions
+  flags            String[] @default([])  // custom admin labels e.g. ["Needs images", "Outdated"]
+  coAuthors        ArticleCoAuthor[]
+  snapshots        ArticleSnapshot[]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -132,6 +137,7 @@ model Tag {
   parent   Tag?         @relation("TagTree", fields: [parentId], references: [id])
   children Tag[]        @relation("TagTree")
   articles ArticleTag[]
+  synonyms TagSynonym[]
 
   @@index([parentId])
 }
@@ -271,6 +277,10 @@ model User {
 
   // v4.9 additions
   scratchpad       Scratchpad?
+
+  // v4.17 additions
+  coAuthoredArticles ArticleCoAuthor[]
+  articleSnapshots   ArticleSnapshot[]
 
   // v4.13 additions
   annotations      Annotation[]
@@ -1082,6 +1092,48 @@ model Annotation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([articleId])
+  @@index([userId])
+}
+
+// ── v4.17: Tag synonyms ──
+model TagSynonym {
+  id        String   @id @default(cuid())
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  alias     String   @unique  // e.g. "JS" for tag "JavaScript"
+  createdAt DateTime @default(now())
+
+  @@index([tagId])
+}
+
+// ── v4.17: Named article snapshots ──
+model ArticleSnapshot {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  label      String              // e.g. "v1.0 – before major rewrite"
+  content    String   @db.Text
+  contentRaw String?  @db.Text
+  infobox    Json?
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+
+  @@index([articleId])
+  @@index([userId])
+}
+
+// ── v4.17: Article co-authors ──
+model ArticleCoAuthor {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  addedAt   DateTime @default(now())
+
+  @@unique([articleId, userId])
   @@index([articleId])
   @@index([userId])
 }

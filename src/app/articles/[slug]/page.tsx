@@ -40,6 +40,10 @@ import ArticleChangelogPanel from "@/components/ArticleChangelogPanel";
 import WordGoalBadge from "@/components/WordGoalBadge";
 import YouMightAlsoLike from "@/components/YouMightAlsoLike";
 import VerifyButton from "@/components/VerifyButton";
+import TableOfContentsFloat from "@/components/TableOfContentsFloat";
+import ArticleStatsPanel from "@/components/ArticleStatsPanel";
+import ArticleFlags from "@/components/ArticleFlags";
+import { computeQualityScore } from "@/app/api/articles/[id]/quality-score/route";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -132,7 +136,7 @@ export default async function ArticlePage({ params }: Props) {
     }),
   ]);
 
-  const [lastRevision, recentRevisions, adminFlag] = await Promise.all([
+  const [lastRevision, recentRevisions, adminFlag, coAuthors, readCount, reactionCount] = await Promise.all([
     prisma.articleRevision.findFirst({
       where: { articleId: article.id },
       orderBy: { createdAt: "desc" },
@@ -150,7 +154,16 @@ export default async function ArticlePage({ params }: Props) {
       },
     }),
     isAdmin(),
+    prisma.articleCoAuthor.findMany({
+      where: { articleId: article.id },
+      select: { user: { select: { username: true, displayName: true } } },
+      orderBy: { addedAt: "asc" },
+    }),
+    prisma.articleRead.count({ where: { articleId: article.id } }),
+    prisma.articleReaction.count({ where: { articleId: article.id } }),
   ]);
+
+  const quality = computeQualityScore({ content: article.content, excerpt: article.excerpt ?? null, updatedAt: article.updatedAt });
 
   // word count for goal badge + reading time
   const plainTextWords = article.content
@@ -165,6 +178,9 @@ export default async function ArticlePage({ params }: Props) {
   const now30 = new Date();
   now30.setDate(now30.getDate() + 30);
   const showExpiryWarning = article.reviewDueAt && article.reviewDueAt <= now30 && article.reviewDueAt > new Date();
+
+  // article age in days (computed server-side to avoid react-hooks/purity lint)
+  const articleAgeDays = Math.floor((now30.getTime() - 30 * 86400000 - article.createdAt.getTime()) / 86400000);
 
   return (
     <div>
@@ -271,6 +287,24 @@ export default async function ArticlePage({ params }: Props) {
             <TranslateButton articleId={article.id} />
           </div>
         </div>
+
+        {/* Co-authors */}
+        {coAuthors.length > 0 && (
+          <div className="text-[11px] text-muted-foreground mb-1">
+            Co-authored by{" "}
+            {coAuthors.map((ca, i) => (
+              <span key={i}>
+                {i > 0 && ", "}
+                <a href={`/users/${ca.user.username}`} className="text-wiki-link hover:underline">
+                  {ca.user.displayName || ca.user.username}
+                </a>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Article flags */}
+        <ArticleFlags flags={article.flags} />
 
         {/* Status badge */}
         {article.status !== "published" && (
@@ -385,6 +419,16 @@ export default async function ArticlePage({ params }: Props) {
           <WordGoalBadge wordGoal={article.wordGoal} currentWords={plainTextWords} />
         )}
 
+        {/* Article stats panel */}
+        <ArticleStatsPanel
+          reads={readCount}
+          reactions={reactionCount}
+          qualityScore={quality.score}
+          qualityLabel={quality.label}
+          ageDays={articleAgeDays}
+          wordCount={plainTextWords}
+        />
+
         {/* Changelog panel */}
         <ArticleChangelogPanel slug={article.slug} revisions={recentRevisions.map(r => ({
           ...r,
@@ -440,6 +484,9 @@ export default async function ArticlePage({ params }: Props) {
         <BackToTop />
         <ReadingProgress />
       </div>
+
+      {/* Floating TOC — rendered outside the padded box so it can be fixed */}
+      <TableOfContentsFloat html={resolvedContent} />
     </div>
   );
 }

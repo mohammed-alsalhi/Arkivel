@@ -117,7 +117,7 @@ src/
       types.ts                # Plugin interface definition
       registry.ts             # Plugin registry
 prisma/
-  schema.prisma               # Database schema (24 models)
+  schema.prisma               # Database schema (27 models)
   seed.mjs                    # Category and subcategory seeder
   migrations/                 # Versioned migration history
 scripts/
@@ -230,6 +230,11 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/api/articles/[id]/word-count` | GET | Word count and reading time |
 | `/api/articles/[id]/share-token` | POST, DELETE | Generate/revoke draft share token |
 | `/api/articles/[id]/verify` | POST | Stamp lastVerifiedAt on an article |
+| `/api/articles/[id]/snapshots` | GET, POST, DELETE | Named manual article snapshots |
+| `/api/articles/[id]/co-authors` | GET, POST, DELETE | Article co-author management |
+| `/api/articles/[id]/flags` | GET, PUT | Article flag labels |
+| `/api/articles/[id]/revisions/export` | GET | Download revision history as CSV |
+| `/api/tags/[id]/synonyms` | GET, POST, DELETE | Tag alias management |
 | `/api/articles/batch` | PUT, DELETE | Bulk operations |
 | `/api/articles/dead-links` | GET | Articles with broken wiki links |
 | `/api/articles/import` | POST | Import articles from files |

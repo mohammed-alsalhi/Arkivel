@@ -156,6 +156,7 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **Popularity leaderboard** — `/popular` ranks published articles by combined read and reaction activity.
 - **Article comparison** — view two articles side by side at `/compare?a=slug1&b=slug2`.
 - **Contributor leaderboard** — `/leaderboard` shows top editors ranked by revision count.
+- **Discussion index** — `/discussions` lists all open discussion threads across every article, filterable by article slug and author.
 
 ---
 
@@ -166,6 +167,11 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **Expiry warning banner** — a yellow notice appears when an article's *Review due* date is within 30 days, prompting editors to verify its accuracy.
 - **Mark as verified** — admins see a "Mark as verified" button at the bottom of each article. Clicking it stamps the current date as *lastVerifiedAt*, shown as a "✓ Verified" badge in the byline.
 - **"You might also like"** — up to 5 related articles sharing the same tags are suggested at the bottom of each article.
+- **Floating table of contents** — on wide screens (≥1280 px) a fixed sidebar TOC highlights the section currently in view.
+- **Article stats panel** — collapsible panel showing read count, reaction count, word count, quality score, and article age.
+- **Article flags** — admins assign short labels (e.g. "Needs images", "Outdated") that appear as orange badges near the article title.
+- **Article co-authors** — admins link additional contributors; their names appear in the byline after the primary author.
+- **Named snapshots** — save a labeled manual snapshot of the current article state via `POST /api/articles/[id]/snapshots`.
 
 ---
 

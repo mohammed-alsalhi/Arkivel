@@ -1,6 +1,6 @@
 # Roadmap
 
-Planned features and improvements for Wiki App, starting from v4.17.
+Planned features and improvements for Wiki App, starting from v4.18.
 
 Previous completed work:
 - [v1.0–v4.11 archive](docs/archive/ROADMAP-v1-v4.md)
@@ -9,6 +9,7 @@ Previous completed work:
 - [v4.14 archive](docs/archive/ROADMAP-v4.14.md)
 - [v4.15 archive](docs/archive/ROADMAP-v4.15.md)
 - [v4.16 archive](docs/archive/ROADMAP-v4.16.md)
+- [v4.17 archive](docs/archive/ROADMAP-v4.17.md)
 
 Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app/issues) to discuss it.
 
