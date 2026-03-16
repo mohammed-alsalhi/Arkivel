@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.19.0] - 2026-03-16
+
+### Enhancements
+
+- **Navigation overhaul** — restructured sidebar from 5 loose sections into 8 purposeful ones: Browse (core content), Discover (exploration + stats), Community (collab features, collapsed by default), Personal (user account), Tools (utilities + integrations, collapsed by default), Contribute (admin), Admin (admin, collapsed), Categories
+- Added previously unreachable pages to sidebar: `/popular`, `/series`, `/leaderboard`, `/stats`, `/discussions`, `/users`, `/mentions`, `/present`, `/features`
+- Moved Bookmarklet, Clipper extension, Whiteboards, Present, Help, and Features into Tools section where they logically belong
+- Change digest is now an indented sub-link under Watchlist
+- Community section (Change requests, Reviews, Bounties, Forks, Users) separated from Discover to clarify intent
+
 ## [4.18.1] - 2026-03-16
 
 ### Bug Fixes

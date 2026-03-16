@@ -99,8 +99,8 @@ export default function Sidebar({
           </Link>
         </div>
 
-        {/* Navigation */}
-        <SidebarSection title="Navigation">
+        {/* Browse — core content navigation */}
+        <SidebarSection title="Browse">
           <SidebarLink href="/" active={pathname === "/"} onClick={close}>
             Main Page
           </SidebarLink>
@@ -110,11 +110,17 @@ export default function Sidebar({
           <SidebarLink href="/recent-changes" active={pathname === "/recent-changes"} onClick={close}>
             Recent changes
           </SidebarLink>
+          <SidebarLink href="/timeline" active={pathname === "/timeline"} onClick={close}>
+            Timeline
+          </SidebarLink>
+          <SidebarLink href="/popular" active={pathname === "/popular"} onClick={close}>
+            Popular
+          </SidebarLink>
+          <SidebarLink href="/series" active={pathname === "/series" || pathname.startsWith("/series/")} onClick={close}>
+            Series
+          </SidebarLink>
           <SidebarLink href="/random" active={pathname === "/random"} onClick={close}>
             Random article
-          </SidebarLink>
-          <SidebarLink href="/search" active={pathname === "/search"} onClick={close}>
-            Search
           </SidebarLink>
           <SidebarLink href="/tags" active={pathname === "/tags" || pathname.startsWith("/tags/")} onClick={close}>
             Tags
@@ -122,29 +128,14 @@ export default function Sidebar({
           <SidebarLink href="/graph" active={pathname === "/graph"} onClick={close}>
             Article graph
           </SidebarLink>
-          <SidebarLink href="/timeline" active={pathname === "/timeline"} onClick={close}>
-            Timeline
-          </SidebarLink>
-          <SidebarLink href="/whiteboards" active={pathname === "/whiteboards" || pathname.startsWith("/whiteboards/")} onClick={close}>
-            Whiteboards
-          </SidebarLink>
-          <SidebarLink href="/bookmarklet" active={pathname === "/bookmarklet"} onClick={close}>
-            Bookmarklet
-          </SidebarLink>
-          <SidebarLink href="/clipper-extension" active={pathname === "/clipper-extension"} onClick={close}>
-            Clipper extension
-          </SidebarLink>
           {config.mapEnabled && (
             <SidebarLink href="/map" active={pathname === "/map" || pathname.startsWith("/map/")} onClick={close}>
               {config.mapLabel}
             </SidebarLink>
           )}
-          <SidebarLink href="/help" active={pathname === "/help"} onClick={close}>
-            Help
-          </SidebarLink>
         </SidebarSection>
 
-        {/* Discover */}
+        {/* Discover — exploration and stats */}
         <SidebarSection title="Discover">
           <SidebarLink href="/explore" active={pathname === "/explore"} onClick={close}>
             Explore
@@ -152,9 +143,25 @@ export default function Sidebar({
           <SidebarLink href="/activity" active={pathname === "/activity"} onClick={close}>
             Activity
           </SidebarLink>
+          <SidebarLink href="/stats" active={pathname === "/stats"} onClick={close}>
+            Stats
+          </SidebarLink>
+          <SidebarLink href="/leaderboard" active={pathname === "/leaderboard"} onClick={close}>
+            Leaderboard
+          </SidebarLink>
+          <SidebarLink href="/mentions" active={pathname === "/mentions"} onClick={close}>
+            Mentions
+          </SidebarLink>
+          <SidebarLink href="/discussions" active={pathname === "/discussions" || pathname.startsWith("/discussions/")} onClick={close}>
+            Discussions
+          </SidebarLink>
           <SidebarLink href="/collections" active={pathname.startsWith("/collections")} onClick={close}>
             Collections
           </SidebarLink>
+        </SidebarSection>
+
+        {/* Community — collaborative features */}
+        <SidebarSection title="Community" defaultOpen={false}>
           <SidebarLink href="/change-requests" active={pathname === "/change-requests"} onClick={close}>
             Change requests
           </SidebarLink>
@@ -167,9 +174,12 @@ export default function Sidebar({
           <SidebarLink href="/forks" active={pathname === "/forks"} onClick={close}>
             Forks
           </SidebarLink>
+          <SidebarLink href="/users" active={pathname === "/users" || pathname.startsWith("/users/")} onClick={close}>
+            Users
+          </SidebarLink>
         </SidebarSection>
 
-        {/* Personal */}
+        {/* Personal — user account features */}
         <SidebarSection title="Personal">
           <SidebarLink href="/dashboard" active={pathname === "/dashboard"} onClick={close}>
             My dashboard
@@ -183,7 +193,7 @@ export default function Sidebar({
           <SidebarLink href="/watchlist" active={pathname === "/watchlist"} onClick={close}>
             Watchlist
           </SidebarLink>
-          <SidebarLink href="/watchlist/digest" active={pathname === "/watchlist/digest"} onClick={close}>
+          <SidebarLink href="/watchlist/digest" active={pathname === "/watchlist/digest"} onClick={close} indent>
             Change digest
           </SidebarLink>
           <SidebarLink href="/flashcards" active={pathname === "/flashcards"} onClick={close}>
@@ -203,16 +213,34 @@ export default function Sidebar({
           </SidebarLink>
         </SidebarSection>
 
-        {/* Tools */}
-        <SidebarSection title="Tools">
+        {/* Tools — utilities and integrations */}
+        <SidebarSection title="Tools" defaultOpen={false}>
           <SidebarLink href="/export" active={pathname === "/export"} onClick={close}>
             Export
+          </SidebarLink>
+          <SidebarLink href="/whiteboards" active={pathname === "/whiteboards" || pathname.startsWith("/whiteboards/")} onClick={close}>
+            Whiteboards
+          </SidebarLink>
+          <SidebarLink href="/present" active={pathname === "/present"} onClick={close}>
+            Present
           </SidebarLink>
           <SidebarLink href="/api-docs" active={pathname === "/api-docs"} onClick={close}>
             API docs
           </SidebarLink>
           <SidebarLink href="/feed.xml" onClick={close}>
             RSS feed
+          </SidebarLink>
+          <SidebarLink href="/bookmarklet" active={pathname === "/bookmarklet"} onClick={close}>
+            Bookmarklet
+          </SidebarLink>
+          <SidebarLink href="/clipper-extension" active={pathname === "/clipper-extension"} onClick={close}>
+            Clipper extension
+          </SidebarLink>
+          <SidebarLink href="/help" active={pathname === "/help"} onClick={close}>
+            Help
+          </SidebarLink>
+          <SidebarLink href="/features" active={pathname === "/features"} onClick={close}>
+            Features
           </SidebarLink>
           {!isAdmin && (
             <SidebarLink href="/admin" active={pathname === "/admin"} onClick={close}>
@@ -239,7 +267,7 @@ export default function Sidebar({
           </SidebarSection>
         )}
 
-        {/* Admin (admin only) */}
+        {/* Admin (admin only, collapsed by default) */}
         {isAdmin && (
           <SidebarSection title="Admin" defaultOpen={false}>
             <SidebarLink href="/admin" active={pathname === "/admin"} onClick={close}>
