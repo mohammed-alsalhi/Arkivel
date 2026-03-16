@@ -145,14 +145,14 @@ function ScratchpadWidget() {
 }
 
 function StatsWidget() {
-  const { data, loading } = useApiData<{ articles: number; categories: number; users: number; revisions: number }>(
-    "/api/stats", { articles: 0, categories: 0, users: 0, revisions: 0 }
+  const { data, loading } = useApiData<{ totalArticles: number; totalCategories: number; totalUsers: number; totalRevisions: number }>(
+    "/api/stats", { totalArticles: 0, totalCategories: 0, totalUsers: 0, totalRevisions: 0 }
   );
   const stats = [
-    { label: "Articles", value: data.articles },
-    { label: "Categories", value: data.categories },
-    { label: "Users", value: data.users },
-    { label: "Revisions", value: data.revisions },
+    { label: "Articles", value: data.totalArticles ?? 0 },
+    { label: "Categories", value: data.totalCategories ?? 0 },
+    { label: "Users", value: data.totalUsers ?? 0 },
+    { label: "Revisions", value: data.totalRevisions ?? 0 },
   ];
   return (
     <div>
