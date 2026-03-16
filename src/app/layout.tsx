@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
 import SearchBar from "@/components/layout/SearchBar";
+import UserMenu from "@/components/layout/UserMenu";
 import { AdminProvider } from "@/components/AdminContext";
 import ThemeToggle from "@/components/ThemeToggle";
 import NotificationBell from "@/components/NotificationBell";
@@ -86,6 +87,7 @@ export default async function RootLayout({
                 <NotificationBell />
                 <ThemeToggle />
                 <SearchBar />
+                <UserMenu />
               </div>
             </div>
           </header>

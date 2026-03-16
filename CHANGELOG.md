@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.20.0] - 2026-03-17
+
+### Enhancements
+
+- **UserMenu** — profile icon button in the header with dropdown: shows Login / Sign up / Admin login for guests; shows username, dashboard, settings, admin panel, and logout for logged-in users; initials avatar when logged in
+- **AdminContext** — extended to expose `loggedIn` boolean alongside `admin`; added `useLoggedIn()` hook; `useAdmin()` unchanged
+- **Sidebar completeness** — added previously unreachable pages: `/compare` (Compare revisions) in Tools, `/categories` (All categories index) in Categories, and five missing admin sub-pages: Series manager, Redirects, Stubs, Content quality, Calendar
+- Login, Sign up, Admin login, and Settings links removed from sidebar — all now accessible via the header UserMenu
+
 ## [4.19.0] - 2026-03-16
 
 ### Enhancements

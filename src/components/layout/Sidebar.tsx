@@ -208,13 +208,13 @@ export default function Sidebar({
           <SidebarLink href="/scratchpad" active={pathname === "/scratchpad"} onClick={close}>
             Scratchpad
           </SidebarLink>
-          <SidebarLink href="/settings" active={pathname === "/settings"} onClick={close}>
-            Settings
-          </SidebarLink>
         </SidebarSection>
 
         {/* Tools — utilities and integrations */}
         <SidebarSection title="Tools" defaultOpen={false}>
+          <SidebarLink href="/compare" active={pathname === "/compare"} onClick={close}>
+            Compare revisions
+          </SidebarLink>
           <SidebarLink href="/export" active={pathname === "/export"} onClick={close}>
             Export
           </SidebarLink>
@@ -242,11 +242,6 @@ export default function Sidebar({
           <SidebarLink href="/features" active={pathname === "/features"} onClick={close}>
             Features
           </SidebarLink>
-          {!isAdmin && (
-            <SidebarLink href="/admin" active={pathname === "/admin"} onClick={close}>
-              Admin login
-            </SidebarLink>
-          )}
         </SidebarSection>
 
         {/* Contribute (admin only) */}
@@ -324,6 +319,21 @@ export default function Sidebar({
             <SidebarLink href="/admin/metadata-schemas" active={pathname === "/admin/metadata-schemas"} onClick={close}>
               Metadata schemas
             </SidebarLink>
+            <SidebarLink href="/admin/series" active={pathname === "/admin/series"} onClick={close}>
+              Series manager
+            </SidebarLink>
+            <SidebarLink href="/admin/redirects" active={pathname === "/admin/redirects"} onClick={close}>
+              Redirects
+            </SidebarLink>
+            <SidebarLink href="/admin/stubs" active={pathname === "/admin/stubs"} onClick={close}>
+              Stubs
+            </SidebarLink>
+            <SidebarLink href="/admin/quality" active={pathname === "/admin/quality"} onClick={close}>
+              Content quality
+            </SidebarLink>
+            <SidebarLink href="/admin/calendar" active={pathname === "/admin/calendar"} onClick={close}>
+              Calendar
+            </SidebarLink>
             <SidebarLink href="/admin/federated-peers" active={pathname === "/admin/federated-peers"} onClick={close}>
               Federated peers
             </SidebarLink>
@@ -335,6 +345,9 @@ export default function Sidebar({
 
         {/* Categories */}
         <SidebarSection title="Categories">
+          <SidebarLink href="/categories" active={pathname === "/categories"} onClick={close}>
+            All categories
+          </SidebarLink>
           {categories.map((cat) => (
             <SidebarCategoryItem
               key={cat.id}
