@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.18.1] - 2026-03-16
+
+### Bug Fixes
+
+- **CI e2e crash: duplicate dynamic segment** — `[revId]` and `[revisionId]` coexisted under `revisions/`, causing Next.js to throw "You cannot use different slug names for the same dynamic path" at startup; moved restore route into the existing `[revisionId]` subtree and updated all param references
+- **OnThisDay resilience** — added `.catch(() => [])` so a DB connection failure in the "On this day" sidebar widget doesn't crash the homepage
+
 ## [4.18.0] - 2026-03-16
 
 ### New Features

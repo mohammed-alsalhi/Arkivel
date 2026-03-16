@@ -10,7 +10,7 @@ export default async function OnThisDay() {
   const articles = await prisma.article.findMany({
     where: { published: true, status: "published" },
     select: { id: true, title: true, slug: true, createdAt: true },
-  });
+  }).catch(() => []);
 
   const matches = articles.filter((a) => {
     const d = new Date(a.createdAt);
