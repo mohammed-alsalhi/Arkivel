@@ -2,27 +2,14 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-const COOKIE_NAME = "admin_token";
 const SESSION_COOKIE = "session_token";
 
 export async function isAdmin(): Promise<boolean> {
   const secret = process.env.ADMIN_SECRET;
   if (!secret) return true; // No secret configured = no auth required (local dev)
 
-  const cookieStore = await cookies();
-
-  // Check legacy admin token first
-  if (cookieStore.get(COOKIE_NAME)?.value === secret) {
-    return true;
-  }
-
-  // Check session-based auth
   const session = await getSession();
-  if (session && session.role === "admin") {
-    return true;
-  }
-
-  return false;
+  return !!(session && session.role === "admin");
 }
 
 export function requireAdmin(isAuthed: boolean): NextResponse | null {

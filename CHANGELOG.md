@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.21.0] - 2026-03-17
+
+### Enhancements
+
+- **Unified auth** — removed legacy `ADMIN_SECRET` password-only login path; admin access now requires a User account with `role: "admin"`; `isAdmin()` only checks session-based auth; legacy `admin_token` cookie no longer issued or checked
+- **`/admin` page** — replaced inline password form with a "Log in" redirect prompt for unauthenticated users
+- **UserMenu** — removed "Admin login" link; guests now see only Log in and Sign up
+
 ## [4.20.0] - 2026-03-17
 
 ### Enhancements

@@ -135,11 +135,6 @@ export default function UserMenu() {
               <MenuItem href="/register" onClick={() => setOpen(false)}>
                 Sign up
               </MenuItem>
-              {/* Admin password login */}
-              <div className="border-t border-border my-1" />
-              <MenuItem href="/admin" onClick={() => setOpen(false)}>
-                Admin login
-              </MenuItem>
             </>
           )}
         </div>
