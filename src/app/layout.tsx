@@ -10,6 +10,7 @@ import NotificationBell from "@/components/NotificationBell";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import BackToTop from "@/components/BackToTop";
 import { ToastProvider } from "@/components/Toast";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
 import { Analytics } from "@vercel/analytics/next";
@@ -98,6 +99,7 @@ export default async function RootLayout({
 
             {/* Content area */}
             <div className="flex-1 min-w-0 bg-surface border-l border-border">
+              <AnnouncementBanner />
               <main id="main-content" className="max-w-6xl px-6 py-4">
                 {children}
               </main>

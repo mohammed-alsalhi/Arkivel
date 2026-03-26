@@ -8,7 +8,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 
 - **Rich text editor** — Tiptap-based WYSIWYG editor with toolbar, slash commands, and drag-and-drop block reordering
 - **Markdown mode** — toggle between rich text and raw Markdown at any time
-- **Slash commands** — type `/` for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more
+- **Slash commands** — type `/` for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more; includes user snippets via `/snippet`
+- **Editor snippets** — define reusable HTML blocks at `/settings/snippets`; insert via slash-command menu
+- **TOC generator** — toolbar button extracts all headings and inserts a linked table of contents at the cursor
 - **Mermaid diagrams** — flowcharts, sequence diagrams, Gantt charts, and more rendered inline
 - **Math (KaTeX)** — inline `$...$` and block `$$...$$` math expressions
 - **Excalidraw drawings** — embed interactive whiteboard sketches directly in articles
@@ -45,6 +47,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 
 - **Full-text search** — AND-logic multi-word search with relevance ranking; instant results as you type
 - **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
+- **30-day view sparkline** — article stats panel shows a mini bar chart of daily page views for the past 30 days
 - **Federated search** — fans out to peer wiki instances and merges results under "Results from other wikis"
 - **Explore mode** — guided walk through articles using semantic similarity at `/explore`
 - **Random article** — `/random` jumps to a random published article
@@ -220,6 +223,7 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Roles** — Viewer (read only), Editor (create/edit), Admin (full access)
 - **Multi-user accounts** — registration, profiles at `/users/[username]`, settings at `/settings`
 - **Admin dashboard** — `/admin`, review queue, statistics, embed tokens
+- **Announcement banner** — post a site-wide notice with optional expiry at `/admin/announcements`; dismissible per session
 - **Analytics** — scroll depth heatmap, navigation paths at `/admin/analytics`
 - **Performance metrics** — system metrics at `/admin/metrics`
 - **Health score** — A–F grade for link coverage, freshness, stub %, search gaps at `/admin/health`

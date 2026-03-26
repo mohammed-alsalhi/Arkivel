@@ -8,6 +8,7 @@ type Props = {
   onImageUpload: () => void;
   onDetectLinks: () => void;
   detectedLinkCount: number;
+  onInsertToc: () => void;
 };
 
 type ToolbarButton = {
@@ -18,7 +19,7 @@ type ToolbarButton = {
   hidden?: () => boolean;
 };
 
-export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, detectedLinkCount }: Props) {
+export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, detectedLinkCount, onInsertToc }: Props) {
   if (!editor) return null;
 
   const groups: ToolbarButton[][] = [
@@ -280,6 +281,14 @@ export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, de
         className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
       >
         Detect Links{detectedLinkCount > 0 && ` (${detectedLinkCount})`}
+      </button>
+      <button
+        type="button"
+        onClick={onInsertToc}
+        title="Insert table of contents from headings"
+        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
+      >
+        TOC
       </button>
       <button
         type="button"

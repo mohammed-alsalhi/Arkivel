@@ -62,7 +62,7 @@ export default function HelpPage() {
             <li><strong>Microphone</strong> &mdash; Voice dictation (browser speech recognition)</li>
           </ul>
           <p className="mb-2">
-            <strong>Slash commands:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">/</code> anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, and all heading/list types.
+            <strong>Slash commands:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">/</code> anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, heading/list types, and your saved snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code>.
           </p>
           <p className="mb-2">
             <strong>Markdown mode:</strong> Click the <code className="bg-surface-hover px-1 text-[12px]">Markdown</code> button to switch to raw markdown editing. Click <code className="bg-surface-hover px-1 text-[12px]">Rich Text</code> to switch back.
@@ -220,7 +220,7 @@ export default function HelpPage() {
             <li><strong>Mark as verified</strong> &mdash; admins see a &ldquo;Mark as verified&rdquo; button at the bottom of each article. Clicking it stamps the current date as <em>lastVerifiedAt</em>, shown as a &ldquo;✓ Verified&rdquo; badge in the byline.</li>
             <li><strong>&ldquo;You might also like&rdquo;</strong> &mdash; up to 5 related articles sharing the same tags are suggested at the bottom of each article.</li>
             <li><strong>Floating table of contents</strong> &mdash; on wide screens (&ge;1280 px) a fixed sidebar TOC highlights the section currently in view.</li>
-            <li><strong>Article stats panel</strong> &mdash; collapsible panel at the bottom of every article showing read count, reaction count, word count, quality score, and article age.</li>
+            <li><strong>Article stats panel</strong> &mdash; collapsible panel at the bottom of every article showing read count, reaction count, word count, quality score, article age, and a 30-day view sparkline.</li>
             <li><strong>Article flags</strong> &mdash; admins assign short labels (e.g. &ldquo;Needs images&rdquo;, &ldquo;Outdated&rdquo;) that appear as orange badges near the article title.</li>
             <li><strong>Article co-authors</strong> &mdash; admins link additional contributors to an article; their names appear in the byline after the primary author.</li>
             <li><strong>Named snapshots</strong> &mdash; admins can save a labeled snapshot of the current article state (e.g. &ldquo;v1.0 – before major rewrite&rdquo;) via <code className="bg-surface-hover px-1 text-[12px]">POST /api/articles/[id]/snapshots</code>.</li>

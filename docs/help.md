@@ -42,7 +42,11 @@ The rich text editor provides a toolbar with formatting options:
 | **Σ** | Insert a math expression (KaTeX) |
 | **Microphone** | Voice dictation (browser speech recognition) |
 
-**Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, and all heading/list types.
+**Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, all heading/list types, and your saved snippets via `/snippet`.
+
+**TOC generator:** Click the `TOC` toolbar button to extract all headings and insert a nested linked table of contents at the cursor position.
+
+**Editor snippets:** Create reusable HTML blocks at `/settings/snippets`. Insert them in any article via the slash-command menu (type `/snippet name`).
 
 **Markdown mode:** Click `Markdown` to switch to raw markdown editing. Click `Rich Text` to switch back.
 
@@ -172,7 +176,7 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **Mark as verified** — admins see a "Mark as verified" button at the bottom of each article. Clicking it stamps the current date as *lastVerifiedAt*, shown as a "✓ Verified" badge in the byline.
 - **"You might also like"** — up to 5 related articles sharing the same tags are suggested at the bottom of each article.
 - **Floating table of contents** — on wide screens (≥1280 px) a fixed sidebar TOC highlights the section currently in view.
-- **Article stats panel** — collapsible panel showing read count, reaction count, word count, quality score, and article age.
+- **Article stats panel** — collapsible panel showing read count, reaction count, word count, quality score, article age, and a 30-day view sparkline.
 - **Article flags** — admins assign short labels (e.g. "Needs images", "Outdated") that appear as orange badges near the article title.
 - **Article co-authors** — admins link additional contributors; their names appear in the byline after the primary author.
 - **Named snapshots** — save a labeled manual snapshot of the current article state via `POST /api/articles/[id]/snapshots`.

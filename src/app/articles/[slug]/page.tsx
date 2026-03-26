@@ -438,6 +438,7 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Article stats panel */}
         <ArticleStatsPanel
+          articleId={article.id}
           reads={readCount}
           reactions={reactionCount}
           qualityScore={quality.score}

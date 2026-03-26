@@ -117,7 +117,7 @@ src/
       types.ts                # Plugin interface definition
       registry.ts             # Plugin registry
 prisma/
-  schema.prisma               # Database schema (72 models)
+  schema.prisma               # Database schema (74 models)
   seed.mjs                    # Category and subcategory seeder
   migrations/                 # Versioned migration history
 scripts/
@@ -268,6 +268,12 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/api/export` | GET | Batch wiki export |
 | `/api/export/zip` | GET | Bulk ZIP export — all articles as Markdown files in category subfolders |
 | `/api/admin/search-analytics` | GET | Search query analytics (top queries, zero-result, daily volume) |
+| `/api/admin/announcements` | GET, POST | Site-wide announcement management |
+| `/api/admin/announcements/[id]` | PATCH, DELETE | Update/delete announcements |
+| `/api/announcements` | GET | Active non-expired announcements (public) |
+| `/api/snippets` | GET, POST | User editor snippets |
+| `/api/snippets/[id]` | PUT, DELETE | Update/delete snippets |
+| `/api/articles/[id]/views/sparkline` | GET | 30-day daily view series |
 | `/api/stats` | GET | Wiki statistics |
 | `/api/metrics` | GET, POST | Performance metrics |
 | `/api/health` | GET | Health check |

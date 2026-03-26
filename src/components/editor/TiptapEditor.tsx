@@ -13,7 +13,7 @@ import { DOMParser as ProseMirrorDOMParser, Slice } from "@tiptap/pm/model";
 import { WikiLink } from "./WikiLinkExtension";
 import { PotentialLink } from "./PotentialLinkExtension";
 import { FootnoteRef } from "./FootnoteExtension";
-import { SlashCommandExtension, type SlashCommandItem } from "./SlashCommandExtension";
+import { SlashCommandExtension, type SlashCommandItem, type SnippetItem, makeGetSuggestionItems } from "./SlashCommandExtension";
 import SlashCommandMenu, { type SlashCommandMenuRef } from "./SlashCommandMenu";
 import { CollapsibleBlock } from "./CollapsibleBlockExtension";
 import { InlineComment } from "./InlineCommentExtension";
@@ -74,6 +74,14 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     const [detectedCount, setDetectedCount] = useState(0);
     const [hasChanges, setHasChanges] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const snippetsRef = useRef<SnippetItem[]>([]);
+
+    useEffect(() => {
+      fetch("/api/snippets")
+        .then((r) => r.ok ? r.json() : [])
+        .then((data) => { if (Array.isArray(data)) snippetsRef.current = data; })
+        .catch(() => {});
+    }, []);
 
     const lowlight = createLowlight(common);
 
@@ -97,6 +105,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         InlineComment,
         SlashCommandExtension.configure({
           suggestion: {
+            items: (props) => makeGetSuggestionItems(snippetsRef.current)(props),
             render: () => {
               let component: ReactRenderer<SlashCommandMenuRef> | null = null;
 
@@ -369,6 +378,44 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       },
     }));
 
+    function handleInsertToc() {
+      if (!editor) return;
+
+      const headings: { level: number; text: string }[] = [];
+      editor.state.doc.descendants((node) => {
+        if (node.type.name === "heading") {
+          headings.push({ level: node.attrs.level as number, text: node.textContent });
+        }
+      });
+
+      if (headings.length === 0) {
+        window.alert("No headings found. Add some headings first.");
+        return;
+      }
+
+      // Build nested ordered-list HTML
+      const minLevel = Math.min(...headings.map((h) => h.level));
+      let html = "<ol>";
+      let currentLevel = minLevel;
+      for (const h of headings) {
+        if (h.level > currentLevel) {
+          html += "<ol>";
+          currentLevel = h.level;
+        } else if (h.level < currentLevel) {
+          html += "</ol>";
+          currentLevel = h.level;
+        }
+        const anchor = h.text.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+        html += `<li><a href="#${anchor}">${h.text}</a></li>`;
+      }
+      while (currentLevel >= minLevel) {
+        html += "</ol>";
+        currentLevel--;
+      }
+
+      editor.chain().focus().insertContent(html).run();
+    }
+
     async function handleImageUpload() {
       fileInputRef.current?.click();
     }
@@ -411,6 +458,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             onImageUpload={handleImageUpload}
             onDetectLinks={handleDetectLinks}
             detectedLinkCount={detectedCount}
+            onInsertToc={handleInsertToc}
           />
           <button
             type="button"

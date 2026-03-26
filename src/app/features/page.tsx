@@ -27,7 +27,9 @@ export default function FeaturesPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with toolbar, slash commands, and drag-and-drop block reordering</li>
             <li><strong>Markdown mode</strong> — toggle between rich text and raw Markdown at any time</li>
-            <li><strong>Slash commands</strong> — type <code className="bg-surface-hover px-1 text-[12px]">/</code> for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more</li>
+            <li><strong>Slash commands</strong> — type <code className="bg-surface-hover px-1 text-[12px]">/</code> for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more; includes user snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code></li>
+            <li><strong>Editor snippets</strong> — define reusable HTML blocks at <Link href="/settings/snippets">/settings/snippets</Link>; insert via the slash-command menu</li>
+            <li><strong>TOC generator</strong> — toolbar button extracts all headings and inserts a linked table of contents at the cursor</li>
             <li><strong>Mermaid diagrams</strong> — flowcharts, sequence diagrams, Gantt charts, and more rendered inline</li>
             <li><strong>Math (KaTeX)</strong> — inline <code className="bg-surface-hover px-1 text-[12px]">$...$</code> and block <code className="bg-surface-hover px-1 text-[12px]">$$...$$</code> math expressions</li>
             <li><strong>Excalidraw drawings</strong> — embed interactive whiteboard sketches directly in articles</li>
@@ -73,6 +75,7 @@ export default function FeaturesPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
             <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>
+            <li><strong>30-day view sparkline</strong> — article stats panel shows a mini bar chart of daily page views for the past 30 days</li>
             <li><strong>Federated search</strong> — fans out to peer wiki instances and merges results under &ldquo;Results from other wikis&rdquo;</li>
             <li><strong>Explore mode</strong> — guided walk through articles using semantic similarity at <Link href="/explore">/explore</Link></li>
             <li><strong>Random article</strong> — <Link href="/random">/random</Link> jumps to a random published article</li>
@@ -296,6 +299,7 @@ export default function FeaturesPage() {
             <li><strong>Roles</strong> — Viewer (read only), Editor (create/edit), Admin (full access)</li>
             <li><strong>Multi-user accounts</strong> — registration, profiles at <code className="bg-surface-hover px-1 text-[12px]">/users/[username]</code>, settings at <Link href="/settings">/settings</Link></li>
             <li><strong>Admin dashboard</strong> — review queue, statistics, embed tokens at <Link href="/admin">/admin</Link></li>
+            <li><strong>Announcement banner</strong> — post a site-wide notice (info/warning/success/error) with optional expiry at <Link href="/admin/announcements">/admin/announcements</Link>; users can dismiss per session</li>
             <li><strong>Analytics</strong> — scroll depth heatmap, navigation paths at <Link href="/admin/analytics">/admin/analytics</Link></li>
             <li><strong>Performance metrics</strong> — system metrics at <Link href="/admin/metrics">/admin/metrics</Link></li>
             <li><strong>Health score</strong> — A–F grade for link coverage, freshness, stub %, search gaps at <Link href="/admin/health">/admin/health</Link></li>

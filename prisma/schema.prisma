@@ -297,6 +297,9 @@ model User {
   // v4.18 additions
   articleLocks     ArticleLock[]
 
+  // v4.25 additions
+  snippets         Snippet[]
+
   createdAt    DateTime  @default(now())
 
   @@index([role])
@@ -1160,6 +1163,33 @@ model ArticleCoAuthor {
   @@unique([articleId, userId])
   @@index([articleId])
   @@index([userId])
+}
+
+// ── v4.25: Editor snippets ──
+model Snippet {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String   // trigger keyword shown in slash menu
+  content   String   @db.Text  // HTML to insert
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+// ── v4.25: Site-wide announcement banner ──
+model Announcement {
+  id        String    @id @default(cuid())
+  message   String    @db.Text
+  type      String    @default("info") // "info", "warning", "success", "error"
+  active    Boolean   @default(true)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([active])
 }
 
 // ── v4.18: Article editor lock ──

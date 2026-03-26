@@ -12,7 +12,12 @@ export type SlashCommandItem = {
 
 const slashCommandPluginKey = new PluginKey("slashCommand");
 
-export function getSuggestionItems({ query }: { query: string }): SlashCommandItem[] {
+export type SnippetItem = { id: string; name: string; content: string };
+
+export function getSuggestionItems(
+  { query }: { query: string },
+  snippets: SnippetItem[] = []
+): SlashCommandItem[] {
   const items: SlashCommandItem[] = [
     {
       title: "Heading 1",
@@ -145,6 +150,17 @@ export function getSuggestionItems({ query }: { query: string }): SlashCommandIt
     },
   ];
 
+  // Append user snippets as slash-command items
+  for (const s of snippets) {
+    items.push({
+      title: `Snippet: ${s.name}`,
+      description: s.content.replace(/<[^>]+>/g, " ").trim().slice(0, 60),
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertContent(s.content).run();
+      },
+    });
+  }
+
   if (!query) return items;
 
   const lower = query.toLowerCase();
@@ -153,6 +169,11 @@ export function getSuggestionItems({ query }: { query: string }): SlashCommandIt
       item.title.toLowerCase().includes(lower) ||
       item.description.toLowerCase().includes(lower)
   );
+}
+
+/** Factory: returns a getSuggestionItems function bound to the given snippets list. */
+export function makeGetSuggestionItems(snippets: SnippetItem[]) {
+  return (props: { query: string }) => getSuggestionItems(props, snippets);
 }
 
 export const SlashCommandExtension = Extension.create<{

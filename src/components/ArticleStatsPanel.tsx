@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import ViewSparkline from "@/components/ViewSparkline";
 
 type Props = {
+  articleId: string;
   reads: number;
   reactions: number;
   qualityScore: number | null;
@@ -12,6 +14,7 @@ type Props = {
 };
 
 export default function ArticleStatsPanel({
+  articleId,
   reads,
   reactions,
   qualityScore,
@@ -74,6 +77,10 @@ export default function ArticleStatsPanel({
               </div>
             </div>
           )}
+          <div className="col-span-2 sm:col-span-3 pt-1">
+            <span className="text-muted-foreground block mb-1">Views (30 days)</span>
+            <ViewSparkline articleId={articleId} />
+          </div>
         </div>
       )}
     </div>

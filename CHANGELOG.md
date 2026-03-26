@@ -4,6 +4,20 @@
 
 All notable changes to this project are documented here.
 
+## [4.25.0] - 2026-03-26
+
+### New Features
+
+- **Site-wide announcement banner** — admin page at `/admin/announcements` to create/manage banners; banners appear at the top of the content area for all users (dismissible per session); supports info/warning/success/error types and optional expiry
+- **Per-article 30-day view sparkline** — article stats panel now shows a mini bar chart of daily page views for the past 30 days, powered by `MetricLog` data; total shown as "X views/30d"
+- **TOC generator button in editor** — toolbar button "TOC" extracts all headings from the document and inserts a nested ordered-list table of contents at the cursor position
+- **Custom editor snippets** — users can create named reusable HTML content blocks at `/settings/snippets`; type `/snippet` in the editor to insert one via the slash-command menu
+
+### Schema Changes
+
+- Added `Announcement` model with `message`, `type`, `active`, `expiresAt`, `createdAt`, `updatedAt`
+- Added `Snippet` model with `userId`, `name`, `content`, unique on `[userId, name]`
+
 ## [4.24.0] - 2026-03-26
 
 ### New Features

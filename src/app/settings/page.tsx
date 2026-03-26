@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useToast } from "@/components/Toast";
 import { DEFAULT_PREFERENCES, type UserPreferences } from "@/lib/preferences";
 
@@ -270,6 +271,19 @@ export default function SettingsPage() {
                 ))}
               </select>
             </div>
+          </div>
+        </section>
+
+        {/* Editor Snippets link */}
+        <section className="border border-border bg-surface">
+          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
+            Editor Snippets
+          </div>
+          <div className="px-4 py-3 text-[13px]">
+            <p className="text-muted mb-2">Create reusable content blocks that can be inserted via the <code className="bg-surface-hover px-1">/snippet</code> slash command.</p>
+            <Link href="/settings/snippets" className="text-accent hover:underline text-[13px]">
+              Manage snippets →
+            </Link>
           </div>
         </section>
 

@@ -301,8 +301,14 @@ export default function Sidebar({
             <SidebarLink href="/admin/embeddings" active={pathname === "/admin/embeddings"} onClick={close}>
               Embeddings
             </SidebarLink>
+            <SidebarLink href="/admin/search-analytics" active={pathname === "/admin/search-analytics"} onClick={close}>
+              Search analytics
+            </SidebarLink>
             <SidebarLink href="/admin/search-gaps" active={pathname === "/admin/search-gaps"} onClick={close}>
               Search gaps
+            </SidebarLink>
+            <SidebarLink href="/admin/announcements" active={pathname === "/admin/announcements"} onClick={close}>
+              Announcements
             </SidebarLink>
             <SidebarLink href="/admin/staleness" active={pathname === "/admin/staleness"} onClick={close}>
               Staleness

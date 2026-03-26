@@ -25,10 +25,10 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 
 ## v4.25
 
-- [ ] Custom editor snippets — admin-defined reusable text blocks insertable via `/snippet` command
-- [ ] TOC generator in editor — toolbar button to insert/update a linked table of contents block
-- [ ] Per-article 30-day view sparkline — daily view trend chart in the article stats panel
-- [ ] Site-wide announcement banner — admin can pin a global notice to all pages
+- [x] Custom editor snippets — admin-defined reusable text blocks insertable via `/snippet` command
+- [x] TOC generator in editor — toolbar button to insert/update a linked table of contents block
+- [x] Per-article 30-day view sparkline — daily view trend chart in the article stats panel
+- [x] Site-wide announcement banner — admin can pin a global notice to all pages
 
 ## v4.26
 
