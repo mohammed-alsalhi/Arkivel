@@ -51,6 +51,18 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <div>
+      {/* Cover image banner */}
+      {category.coverImage && (
+        <div className="w-full h-36 mb-4 overflow-hidden rounded-sm border border-border">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={category.coverImage}
+            alt={`${category.name} banner`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
       {/* Breadcrumbs */}
       {parentChain.length > 0 && (
         <nav className="text-[12px] text-muted mb-2">

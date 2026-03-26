@@ -43,6 +43,7 @@ export default function EditArticlePage() {
   const [status, setStatus] = useState("published");
   const [isPinned, setIsPinned] = useState(false);
   const [coverImage, setCoverImage] = useState("");
+  const [accessPassword, setAccessPassword] = useState("");
   const [coverFocalX, setCoverFocalX] = useState(50);
   const [coverFocalY, setCoverFocalY] = useState(50);
   const [expiresAt, setExpiresAt] = useState("");
@@ -93,6 +94,7 @@ export default function EditArticlePage() {
               setCoverFocalY(articleData.coverFocalY ?? 50);
               setExpiresAt(articleData.expiresAt ? articleData.expiresAt.slice(0, 10) : "");
               setReviewDueAt(articleData.reviewDueAt ? articleData.reviewDueAt.slice(0, 10) : "");
+              setAccessPassword(articleData.accessPassword || "");
               setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
             }
           }
@@ -152,6 +154,7 @@ export default function EditArticlePage() {
         coverFocalY,
         expiresAt: expiresAt || null,
         reviewDueAt: reviewDueAt || null,
+        accessPassword: accessPassword.trim() || null,
       }),
     });
 
@@ -404,6 +407,18 @@ export default function EditArticlePage() {
                 />
               </div>
             )}
+          </div>
+
+          <div>
+            <label className="block text-[13px] font-bold text-heading mb-1">Access password (optional):</label>
+            <input
+              type="text"
+              value={accessPassword}
+              onChange={(e) => setAccessPassword(e.target.value)}
+              placeholder="Leave blank for no password"
+              className="w-full border border-border bg-surface px-3 py-1.5 text-[13px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
+            />
+            <p className="text-[11px] text-muted mt-0.5">Non-admin readers must enter this to view the article</p>
           </div>
 
           <div>

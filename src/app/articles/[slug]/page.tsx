@@ -44,6 +44,8 @@ import TableOfContentsFloat from "@/components/TableOfContentsFloat";
 import ArticleStatsPanel from "@/components/ArticleStatsPanel";
 import ArticleFlags from "@/components/ArticleFlags";
 import ReadingModeToggle from "@/components/ReadingModeToggle";
+import DuplicateArticleButton from "@/components/DuplicateArticleButton";
+import ArticlePasswordWrapper from "@/components/ArticlePasswordWrapper";
 import { computeQualityScore } from "@/app/api/articles/[id]/quality-score/route";
 
 // ISR: revalidate published articles every 5 minutes
@@ -287,6 +289,11 @@ export default async function ArticlePage({ params }: Props) {
             <RTLToggle defaultDir={article.dir ?? "ltr"} />
             <TranslateButton articleId={article.id} />
             <ReadingModeToggle />
+
+            <span className="w-px h-4 bg-border mx-0.5" />
+
+            {/* — Admin tools — */}
+            <DuplicateArticleButton articleId={article.id} />
           </div>
         </div>
 
@@ -342,6 +349,12 @@ export default async function ArticlePage({ params }: Props) {
             This is a <em>disambiguation page</em> listing articles with similar names.
           </div>
         )}
+
+        {/* Article body — password-gated for non-admins when accessPassword is set */}
+        <ArticlePasswordWrapper
+          articleId={article.id}
+          hasPassword={!!article.accessPassword && !adminFlag}
+        >
 
         {/* Infobox */}
         <InfoboxDisplay
@@ -480,6 +493,8 @@ export default async function ArticlePage({ params }: Props) {
             </ul>
           </div>
         )}
+
+        </ArticlePasswordWrapper>
 
         <SessionReadingTrail slug={article.slug} title={article.title} />
         <ScrollDepthTracker articleId={article.id} />

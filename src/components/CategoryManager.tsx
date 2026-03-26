@@ -9,6 +9,7 @@ type Category = {
   name: string;
   slug: string;
   description: string | null;
+  coverImage: string | null;
   parentId?: string | null;
   children?: Category[];
   _count?: { articles: number };
@@ -24,6 +25,7 @@ export default function CategoryManager() {
   // Form state
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [coverImage, setCoverImage] = useState("");
   const [parentId, setParentId] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -45,6 +47,7 @@ export default function CategoryManager() {
     setEditingId(cat.id);
     setName(cat.name);
     setDescription(cat.description || "");
+    setCoverImage(cat.coverImage || "");
     setParentId(cat.parentId || "");
     setError("");
     setSuccess("");
@@ -55,6 +58,7 @@ export default function CategoryManager() {
     setEditingId(null);
     setName("");
     setDescription("");
+    setCoverImage("");
     setParentId("");
     setError("");
     setSuccess("");
@@ -86,6 +90,7 @@ export default function CategoryManager() {
         body: JSON.stringify({
           name: name.trim(),
           description: description.trim() || null,
+          coverImage: coverImage.trim() || null,
           parentId: parentId || null,
         }),
       });
@@ -107,6 +112,7 @@ export default function CategoryManager() {
         body: JSON.stringify({
           name: name.trim(),
           description: description.trim() || null,
+          coverImage: coverImage.trim() || null,
           parentId: parentId || null,
         }),
       });
@@ -247,6 +253,16 @@ export default function CategoryManager() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] text-muted mb-0.5">Cover image URL (optional banner)</label>
+              <input
+                type="url"
+                value={coverImage}
+                onChange={(e) => setCoverImage(e.target.value)}
+                placeholder="https://…"
+                className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
               />
             </div>
             {error && (showCreate || editingId) && (

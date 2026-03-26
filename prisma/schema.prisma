@@ -106,6 +106,9 @@ model Article {
   coverFocalY      Float?   // focal point Y% (0–100) for cover image object-position
   locks            ArticleLock[]
 
+  // v4.23 additions
+  accessPassword   String?  // optional plain-text password to gate non-admin readers
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -121,6 +124,7 @@ model Category {
   name        String     @unique
   slug        String     @unique
   description String?
+  coverImage  String?    // optional banner image URL shown at the top of the category page
   sortOrder   Int        @default(0)
   parentId     String?
   parent       Category?   @relation("CategoryTree", fields: [parentId], references: [id])

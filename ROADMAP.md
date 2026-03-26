@@ -16,4 +16,30 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 
 ---
 
-*Nothing planned yet — all current roadmap items have been shipped. Check back soon!*
+## v4.24
+
+- [ ] Search query analytics — log queries, surface top searches and zero-result terms in admin
+- [ ] Image captions — Tiptap image node with optional caption rendered below
+- [ ] Bulk Markdown export — download entire wiki or a category as a `.zip` of `.md` files
+- [ ] Notification preferences UI — granular per-user control over in-app/email notifications
+
+## v4.25
+
+- [ ] Custom editor snippets — admin-defined reusable text blocks insertable via `/snippet` command
+- [ ] TOC generator in editor — toolbar button to insert/update a linked table of contents block
+- [ ] Per-article 30-day view sparkline — daily view trend chart in the article stats panel
+- [ ] Site-wide announcement banner — admin can pin a global notice to all pages
+
+## v4.26
+
+- [ ] Category watchlist — follow a category to be notified when new articles are added
+- [ ] Inline AI text rewrite — select text in the editor, get AI rewrite suggestions
+- [ ] Article freshness badge — colour-coded indicator showing how recently an article was edited
+- [ ] Reading streak tracker — consecutive reading days tracked and shown on the dashboard
+
+## v4.27
+
+- [ ] Category merge tool — admin tool to merge two categories, reassigning all articles
+- [ ] Word-count distribution chart — admin histogram of article lengths across the wiki
+- [ ] Keyboard shortcut customization — per-user reassignment of shortcuts in settings
+- [ ] Wiki creation timeline — visual page showing when each article was first created

@@ -4,6 +4,20 @@
 
 All notable changes to this project are documented here.
 
+## [4.23.0] - 2026-03-26
+
+### New Features
+
+- **Category cover image** — optional banner image on every category page; set the URL in the category manager; displayed as a 144px-tall banner above the breadcrumb
+- **Article duplicate** — "Duplicate" button in the article toolbar (admin only) clones the article as a new draft, preserving content, infobox, cover image, category, and tags; lands on the new article's edit page
+- **Password-protected articles** — set an `accessPassword` in the article edit form; non-admin readers see a password gate that unlocks for the session; admins always bypass; `POST /api/articles/[id]/check-password` validates
+- **Enhanced print stylesheet** — comprehensive `@media print` rules: hides all chrome (header, sidebar, tabs, buttons, reaction bars), expands content to full width, clean typography at 12pt, prints full URLs after external links, proper page-break rules, clean table borders
+
+### Schema Changes
+
+- Added `coverImage String?` to `Category` model
+- Added `accessPassword String?` to `Article` model
+
 ## [4.22.0] - 2026-03-17
 
 ### New Features

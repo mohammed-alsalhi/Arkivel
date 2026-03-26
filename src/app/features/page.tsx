@@ -51,11 +51,12 @@ export default function FeaturesPage() {
             <li><strong>Wiki links</strong> — <code className="bg-surface-hover px-1 text-[12px]">[[Article Name]]</code> syntax with autocomplete; broken links shown in red</li>
             <li><strong>Backlinks</strong> — every article shows which other articles link to it</li>
             <li><strong>Semantic relations</strong> — link articles with typed relations (is-part-of, related-to, etc.)</li>
-            <li><strong>Hierarchical categories</strong> — tree-structured categories in the sidebar; each article belongs to one</li>
+            <li><strong>Hierarchical categories</strong> — tree-structured categories in the sidebar; each article belongs to one; optional banner image per category</li>
             <li><strong>Hierarchical tags</strong> — many-to-many; browse all at <Link href="/tags">/tags</Link> with a size-scaled tag cloud</li>
             <li><strong>Redirects</strong> — set a &ldquo;Redirect to&rdquo; slug to forward old URLs automatically</li>
             <li><strong>Disambiguation</strong> — notice on articles with ambiguous titles</li>
             <li><strong>Article status</strong> — Draft, Review, Published; non-published articles hidden from non-admins</li>
+            <li><strong>Password-protected articles</strong> — set an optional access password; non-admin readers see a password gate that unlocks for the session</li>
             <li><strong>Pinned articles</strong> — pin important articles to the top of category pages</li>
             <li><strong>Custom metadata schemas</strong> — define typed fields (text, number, date, boolean, select) per category at <Link href="/admin/metadata-schemas">/admin/metadata-schemas</Link></li>
             <li><strong>Concept maps</strong> — visual relationship graph per category at <code className="bg-surface-hover px-1 text-[12px]">/categories/[slug]/concept-map</code></li>
@@ -116,6 +117,8 @@ export default function FeaturesPage() {
             <li><strong>Named snapshots</strong> — manually save a labeled snapshot of any article beyond the automatic revisions</li>
             <li><strong>Reading mode</strong> — distraction-free reading toggle; hides header and sidebar, widens content; press <kbd>R</kbd> or the toolbar button to toggle</li>
             <li><strong>Cover image focal point</strong> — click to set a focal point on the cover image so cropped displays always center on the subject</li>
+            <li><strong>Duplicate article</strong> — admin toolbar button clones any article as a new draft, preserving all content, tags, and category</li>
+            <li><strong>Print stylesheet</strong> — press <kbd>Ctrl+P</kbd> / <kbd>Cmd+P</kbd> for a clean print view: all chrome hidden, full-width content, external link URLs appended</li>
           </ul>
         </div>
       </div>
