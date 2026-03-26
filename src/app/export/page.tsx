@@ -12,7 +12,7 @@ export default function ExportPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [scope, setScope] = useState<"all" | "category">("all");
   const [categorySlug, setCategorySlug] = useState("");
-  const [format, setFormat] = useState<"markdown" | "html">("markdown");
+  const [format, setFormat] = useState<"markdown" | "html" | "zip">("markdown");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,9 +30,10 @@ export default function ExportPage() {
         params.set("category", categorySlug);
       }
 
-      const endpoint = format === "markdown"
-        ? "/api/export/markdown"
-        : "/api/export/html";
+      const endpoint =
+        format === "markdown" ? "/api/export/markdown" :
+        format === "zip"      ? "/api/export/zip" :
+                                "/api/export/html";
 
       const url = `${endpoint}?${params.toString()}`;
       const res = await fetch(url);
@@ -45,9 +46,10 @@ export default function ExportPage() {
       const downloadUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
-      a.download = format === "markdown"
-        ? (scope === "category" ? `wiki-export-${categorySlug}.md` : "wiki-export.md")
-        : (scope === "category" ? `wiki-export-${categorySlug}.html` : "wiki-export.html");
+      const base = scope === "category" ? `wiki-export-${categorySlug}` : "wiki-export";
+      a.download = format === "markdown" ? `${base}.md`
+                 : format === "zip"      ? `${base}.zip`
+                 :                         `${base}.html`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -148,6 +150,19 @@ export default function ExportPage() {
               HTML (.html)
               <span className="text-[11px] text-muted">
                 &mdash; styled, with table of contents
+              </span>
+            </label>
+            <label className="flex items-center gap-2 text-[13px] text-foreground cursor-pointer">
+              <input
+                type="radio"
+                name="format"
+                value="zip"
+                checked={format === "zip"}
+                onChange={() => setFormat("zip")}
+              />
+              ZIP archive (.zip)
+              <span className="text-[11px] text-muted">
+                &mdash; one Markdown file per article, organised by category
               </span>
             </label>
           </div>

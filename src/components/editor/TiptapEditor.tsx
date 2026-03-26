@@ -2,7 +2,7 @@
 
 import { useEditor, EditorContent, ReactRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
+import ImageCaption from "@/components/editor/ImageCaptionExtension";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { TableKit } from "@tiptap/extension-table";
@@ -82,7 +82,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       extensions: [
         StarterKit.configure({ codeBlock: false, link: false }),
         CodeBlockLowlight.configure({ lowlight }),
-        Image.configure({ inline: false }),
+        ImageCaption.configure({ inline: false }),
         Link.configure({ openOnClick: false }).extend({
           parseHTML() {
             return [{ tag: "a[href]:not([data-wiki-link])" }];
@@ -383,7 +383,8 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       const res = await fetch("/api/upload", { method: "POST", body: formData });
       if (res.ok) {
         const { url } = await res.json();
-        editor.chain().focus().setImage({ src: url }).run();
+        const caption = window.prompt("Image caption (optional — leave blank for none):", "") ?? "";
+        editor.chain().focus().setImage({ src: url, title: caption.trim() || undefined }).run();
       }
 
       e.target.value = "";

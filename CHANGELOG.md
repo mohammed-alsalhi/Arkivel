@@ -4,6 +4,18 @@
 
 All notable changes to this project are documented here.
 
+## [4.24.0] - 2026-03-26
+
+### New Features
+
+- **Search analytics** — every search query is logged (fire-and-forget) to a new `SearchQueryLog` table; new admin page at `/admin/search-analytics` shows daily volume bar chart, top queries with average result counts, and zero-result queries to surface content gaps
+- **Image captions** — images in the Tiptap editor now support an optional caption stored as the `title` attribute; at render time the image is wrapped in `<figure class="wiki-figure"><figcaption>` for styled captions; caption is prompted on upload
+- **Bulk export as ZIP** — new `GET /api/export/zip` endpoint produces a downloadable `.zip` with one Markdown file per article (YAML front-matter + raw markdown), organised in category-slug subfolders; added "ZIP archive" option to the export page
+
+### Schema Changes
+
+- Added `SearchQueryLog` model with `query`, `resultCount`, `userId?`, `createdAt` fields and indexes on `createdAt` and `query`
+
 ## [4.23.0] - 2026-03-26
 
 ### New Features

@@ -137,6 +137,10 @@ export async function GET(request: NextRequest) {
     prisma.metricLog.create({ data: { type: "search_no_results", path: query, duration: 0 } }).catch(() => {});
   }
 
+  // Log all queries for search analytics (fire-and-forget)
+  const totalCount = results.length + semanticResults.length;
+  prisma.searchQueryLog.create({ data: { query, resultCount: totalCount } }).catch(() => {});
+
   return NextResponse.json({ results, semanticResults, suggestions });
 }
 

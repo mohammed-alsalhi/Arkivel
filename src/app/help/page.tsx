@@ -303,6 +303,7 @@ export default function HelpPage() {
             <li><strong>ePub</strong> &mdash; downloads as a valid ePub 3 e-book</li>
             <li><strong>Word (.docx)</strong> &mdash; downloads as a Microsoft Word document</li>
             <li><strong>Category export:</strong> export an entire category as a multi-chapter ePub or zip from the admin area</li>
+            <li><strong>Bulk ZIP export:</strong> download the entire wiki (or one category) as a <code className="bg-surface-hover px-1 text-[12px]">.zip</code> of Markdown files from the <Link href="/export">Export</Link> page — one <code className="bg-surface-hover px-1 text-[12px]">.md</code> per article with YAML front-matter, organised in category subfolders</li>
           </ul>
           <p className="mt-2">All export formats are in the <strong>Export ▾</strong> dropdown on every article page.</p>
           <p className="mb-1 mt-3 font-bold text-heading">Confluence import</p>
@@ -362,6 +363,7 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Analytics dashboard</strong> &mdash; scroll depth heatmap, reader navigation paths, search gap tracking</li>
+            <li><strong>Search analytics</strong> &mdash; <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps</li>
             <li><strong>Search gaps</strong> &mdash; <Link href="/admin/search-gaps">/admin/search-gaps</Link> shows top zero-result queries</li>
             <li><strong>Stale articles</strong> &mdash; <Link href="/admin/staleness">/admin/staleness</Link> lists articles not updated in 180+ days</li>
             <li><strong>Wiki health score</strong> &mdash; <Link href="/admin/health">/admin/health</Link> gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %</li>

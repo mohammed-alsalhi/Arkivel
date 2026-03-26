@@ -117,7 +117,7 @@ src/
       types.ts                # Plugin interface definition
       registry.ts             # Plugin registry
 prisma/
-  schema.prisma               # Database schema (28 models)
+  schema.prisma               # Database schema (72 models)
   seed.mjs                    # Category and subcategory seeder
   migrations/                 # Versioned migration history
 scripts/
@@ -266,6 +266,8 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/api/users` | GET | User list |
 | `/api/upload` | POST | Upload images to Vercel Blob |
 | `/api/export` | GET | Batch wiki export |
+| `/api/export/zip` | GET | Bulk ZIP export — all articles as Markdown files in category subfolders |
+| `/api/admin/search-analytics` | GET | Search query analytics (top queries, zero-result, daily volume) |
 | `/api/stats` | GET | Wiki statistics |
 | `/api/metrics` | GET, POST | Performance metrics |
 | `/api/health` | GET | Health check |

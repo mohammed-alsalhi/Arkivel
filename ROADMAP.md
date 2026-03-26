@@ -18,10 +18,10 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 
 ## v4.24
 
-- [ ] Search query analytics — log queries, surface top searches and zero-result terms in admin
-- [ ] Image captions — Tiptap image node with optional caption rendered below
-- [ ] Bulk Markdown export — download entire wiki or a category as a `.zip` of `.md` files
-- [ ] Notification preferences UI — granular per-user control over in-app/email notifications
+- [x] Search query analytics — log queries, surface top searches and zero-result terms in admin
+- [x] Image captions — Tiptap image node with optional caption rendered below
+- [x] Bulk Markdown export — download entire wiki or a category as a `.zip` of `.md` files
+- [x] Notification preferences UI — granular per-user control over in-app/email notifications
 
 ## v4.25
 

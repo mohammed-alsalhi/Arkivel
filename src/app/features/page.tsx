@@ -37,7 +37,7 @@ export default function FeaturesPage() {
             <li><strong>Syntax highlighting</strong> — code blocks with language detection and theme-aware colours</li>
             <li><strong>Voice dictation</strong> — click the microphone button to insert speech at the cursor</li>
             <li><strong>Article templates</strong> — Person, Place, Event, Thing, Group templates with infobox scaffolding</li>
-            <li><strong>Image upload</strong> — drag-and-drop or toolbar insert; stored via Vercel Blob</li>
+            <li><strong>Image upload</strong> — drag-and-drop or toolbar insert; stored via Vercel Blob; optional caption displayed as styled <code className="bg-surface-hover px-1 text-[12px]">&lt;figcaption&gt;</code> below the image</li>
             <li><strong>Auto-revisions</strong> — every save snapshots the previous state automatically</li>
           </ul>
         </div>
@@ -72,6 +72,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
+            <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>
             <li><strong>Federated search</strong> — fans out to peer wiki instances and merges results under &ldquo;Results from other wikis&rdquo;</li>
             <li><strong>Explore mode</strong> — guided walk through articles using semantic similarity at <Link href="/explore">/explore</Link></li>
             <li><strong>Random article</strong> — <Link href="/random">/random</Link> jumps to a random published article</li>
@@ -233,6 +234,7 @@ export default function FeaturesPage() {
           <ul className="list-disc pl-5 space-y-0.5">
             <li>PDF (browser print), Markdown (<code className="bg-surface-hover px-1 text-[12px]">.md</code>), ePub 3, Word (.docx) — per article via the <strong>Export ▾</strong> menu</li>
             <li>Category export — entire category as multi-chapter ePub or zip from the admin area</li>
+            <li><strong>Bulk ZIP export</strong> — download the entire wiki (or a single category) as a <code className="bg-surface-hover px-1 text-[12px]">.zip</code> of Markdown files, one per article, organised in category subfolders with YAML front-matter</li>
           </ul>
         </div>
       </div>

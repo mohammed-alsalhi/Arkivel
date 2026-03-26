@@ -1221,3 +1221,24 @@ html[data-reading-mode="1"] [data-reading-mode-toggle] {
   right: 1rem;
   z-index: 100;
 }
+
+
+/* ── Image captions (wiki-figure) ── */
+figure.wiki-figure {
+  margin: 1rem 0;
+  display: inline-block;
+  max-width: 100%;
+}
+figure.wiki-figure img {
+  display: block;
+  max-width: 100%;
+}
+figure.wiki-figure figcaption {
+  font-size: 12px;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 4px 0 2px;
+  font-style: italic;
+  border-top: 1px solid var(--color-border-light, var(--color-border));
+  margin-top: 2px;
+}

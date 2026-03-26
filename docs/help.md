@@ -248,6 +248,7 @@ All formats are in the **Export ▾** dropdown on every article page.
 - **ePub** — downloads as a valid ePub 3 e-book
 - **Word (.docx)** — downloads as a Microsoft Word document
 - **Category export** — export an entire category as a multi-chapter ePub or zip from the admin area
+- **Bulk ZIP export** — download the entire wiki (or one category) as a `.zip` of Markdown files from the [Export](/export) page — one `.md` per article with YAML front-matter, organised in category subfolders
 
 ---
 
@@ -278,6 +279,7 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 ## Analytics & Wiki Health
 
 - **Analytics dashboard** — scroll depth heatmap, reader navigation paths, search gap tracking
+- **Search analytics** — `/admin/search-analytics` shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps
 - **Search gaps** — `/admin/search-gaps` shows top zero-result queries
 - **Stale articles** — `/admin/staleness` lists articles not updated in 180+ days
 - **Wiki health score** — `/admin/health` gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %

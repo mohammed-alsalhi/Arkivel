@@ -491,6 +491,18 @@ model SearchHistory {
   @@index([createdAt])
 }
 
+// ── v4.24: Global search query analytics ──
+model SearchQueryLog {
+  id          String   @id @default(cuid())
+  query       String
+  resultCount Int
+  userId      String?  // null for anonymous
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([query])
+}
+
 // ── v3.0: User Preferences ──
 model UserPreference {
   id     String @id @default(cuid())

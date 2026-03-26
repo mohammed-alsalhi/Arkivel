@@ -18,7 +18,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Syntax highlighting** — code blocks with language detection and theme-aware colours
 - **Voice dictation** — click the microphone button to insert speech at the cursor
 - **Article templates** — Person, Place, Event, Thing, Group templates with infobox scaffolding
-- **Image upload** — drag-and-drop or toolbar insert; stored via Vercel Blob
+- **Image upload** — drag-and-drop or toolbar insert; stored via Vercel Blob; optional caption displayed as styled `<figcaption>` below the image
 - **Auto-revisions** — every save snapshots the previous state automatically
 
 ---
@@ -44,6 +44,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 ## Discovery & Navigation
 
 - **Full-text search** — AND-logic multi-word search with relevance ranking; instant results as you type
+- **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
 - **Federated search** — fans out to peer wiki instances and merges results under "Results from other wikis"
 - **Explore mode** — guided walk through articles using semantic similarity at `/explore`
 - **Random article** — `/random` jumps to a random published article
@@ -174,6 +175,7 @@ Capture content from the web directly into the wiki without switching context.
 
 - PDF (browser print), Markdown (`.md`), ePub 3, Word (.docx) — per article via the **Export ▾** menu
 - Category export — entire category as multi-chapter ePub or zip from the admin area
+- **Bulk ZIP export** — download the entire wiki (or a single category) as a `.zip` of Markdown files, one per article, organised in category subfolders with YAML front-matter
 
 ---
 
