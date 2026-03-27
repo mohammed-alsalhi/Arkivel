@@ -80,6 +80,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 
 ## v4.33
 
-- [ ] Collaboration batch — inline suggestions, blame view, threaded discussion replies
-- [ ] Analytics batch — article heatmap, reader retention funnel, referrer tracking
-- [ ] AI grammar/style batch — dedicated grammar panel with inline issue highlighting
+- [x] Edit suggestion system — reader-facing form + admin review/accept/reject workflow
+- [x] Reader retention analytics — per-article scroll depth funnel at `/admin/retention`
+- [x] Referrer tracking — `document.referrer` logged per article per day; admin view at `/admin/referrers`
+
+## v4.34
+
+- [ ] Analytics batch — article heatmap overlay, satisfaction rating widget
+- [ ] AI grammar panel — inline grammar/style issue highlighting in editor
+- [ ] Collaboration — shared editing lock indicators, co-author invite flow

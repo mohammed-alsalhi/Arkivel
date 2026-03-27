@@ -71,6 +71,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Last-visit badge** — articles show "You read this X ago" on return visits
 - **Sticky article header** — slim floating bar with title, Edit and Top links appears after scrolling past the article heading
 - **Article Q&A** — collapsible panel at the bottom of each article; ask questions and get answers grounded in wiki content with cited sources
+- **Edit suggestions** — readers can propose corrections via a "Suggest edit" button; admin review at `/admin/suggestions`
+- **Reader retention analytics** — per-article scroll depth distribution funnel at `/admin/retention`
+- **Referrer tracking** — incoming traffic sources tracked per article per day; aggregated at `/admin/referrers`
 - **Table of contents** — auto-generated for articles with multiple headings
 - **Popularity leaderboard** — `/popular` ranks published articles by reads × 2 + reactions
 - **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`

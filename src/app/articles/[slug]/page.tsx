@@ -57,6 +57,8 @@ import HeadingPermalinks from "@/components/HeadingPermalinks";
 import StickyArticleHeader from "@/components/StickyArticleHeader";
 import ArticleViewHistory from "@/components/ArticleViewHistory";
 import ArticleQA from "@/components/ArticleQA";
+import SuggestEditButton from "@/components/SuggestEditButton";
+import ReferrerTracker from "@/components/ReferrerTracker";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -524,9 +526,13 @@ export default async function ArticlePage({ params }: Props) {
 
         </ArticlePasswordWrapper>
 
+        <div className="mt-2 text-right">
+          <SuggestEditButton articleId={article.id} />
+        </div>
         <ArticleQA articleSlug={article.slug} />
         <SessionReadingTrail slug={article.slug} title={article.title} />
         <ScrollDepthTracker articleId={article.id} />
+        <ReferrerTracker articleId={article.id} />
         <ReaderPathTracker currentSlug={article.slug} />
         <StreakTracker />
         <AnnotationLayer articleId={article.id} isLoggedIn={!!session} />

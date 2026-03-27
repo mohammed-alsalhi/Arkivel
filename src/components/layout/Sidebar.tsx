@@ -364,6 +364,12 @@ export default function Sidebar({
             <SidebarLink href="/admin/category-stats" active={pathname === "/admin/category-stats"} onClick={close}>
               Category stats
             </SidebarLink>
+            <SidebarLink href="/admin/suggestions" active={pathname === "/admin/suggestions"} onClick={close}>
+              Edit suggestions
+            </SidebarLink>
+            <SidebarLink href="/admin/retention" active={pathname === "/admin/retention"} onClick={close}>
+              Reader retention
+            </SidebarLink>
           </SidebarSection>
         )}
 

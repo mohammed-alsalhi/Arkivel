@@ -161,6 +161,7 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **Last-visit badge** — on return visits, articles show "You read this X ago" in the article header.
 - **Sticky article header** — a slim floating bar with the article title, Edit and Top links appears after scrolling past the article's heading.
 - **Article Q&A** — "Ask a question" panel at the bottom of every article; answers are grounded in wiki content and cite source articles.
+- **Suggest edit** — a "Suggest edit" link at the bottom of every article opens an inline form; admins review at `/admin/suggestions`.
 - **Popularity leaderboard** — `/popular` ranks published articles by combined read and reaction activity.
 - **Article comparison** — view two articles side by side at `/compare?a=slug1&b=slug2`.
 - **Contributor leaderboard** — `/leaderboard` shows top editors ranked by revision count.

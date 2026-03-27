@@ -4,6 +4,23 @@
 
 All notable changes to this project are documented here.
 
+## [4.33.0] - 2026-03-27
+
+### New Features
+
+- **Edit suggestions** — "Suggest edit" button on every article opens an inline form for readers to propose corrections; admin review page at `/admin/suggestions` with accept/reject/delete and optional admin notes
+- **Reader retention analytics** — admin page at `/admin/retention` shows per-article scroll depth distribution as a horizontal bar chart with milestone % cards (25/50/75/90/100% reached)
+- **Referrer tracking** — `ReferrerTracker` records `document.referrer` (hostname-normalised) per article per day; `GET /api/admin/referrers` aggregates top traffic sources over a configurable number of days
+
+### Technical
+
+- `EditSuggestion` Prisma model: `id, articleId, author, email?, suggestion, status, adminNote?, createdAt, updatedAt`
+- `ArticleReferrer` Prisma model: `id, articleId, referrer, date, count`; composite unique on `(articleId, referrer, date)` for upsert
+- `POST /api/suggestions` — public submit; `GET /api/suggestions?status=` — admin list; `PATCH /api/suggestions/[id]` — status update; `DELETE /api/suggestions/[id]`
+- `POST /api/analytics/referrer` — upserts `ArticleReferrer` row; `GET /api/admin/referrers?days=30` — aggregates by domain
+- `GET /api/admin/retention` — groups `ScrollDepthLog` by article and returns bucket distributions
+- `ReferrerTracker` renders null, fires single fetch on mount
+
 ## [4.32.0] - 2026-03-27
 
 ### New Features

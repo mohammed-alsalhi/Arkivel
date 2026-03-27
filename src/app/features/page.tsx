@@ -108,6 +108,9 @@ export default function FeaturesPage() {
             <li><strong>Wiki stats page</strong> — public <Link href="/stats">/stats</Link> shows total articles, words, categories, tags, contributors, revisions, and a top-contributors leaderboard</li>
             <li><strong>Mentions feed</strong> — <Link href="/mentions">/mentions</Link> lists all discussions that mention <code className="bg-surface-hover px-1 text-[12px]">@username</code> for the logged-in user</li>
             <li><strong>Article Q&amp;A</strong> — collapsible panel at the bottom of each article; ask any question and get an answer grounded in wiki content with cited sources</li>
+            <li><strong>Edit suggestions</strong> — readers can click &ldquo;Suggest edit&rdquo; on any article to propose a correction; admins review and accept/reject at <Link href="/admin/suggestions">/admin/suggestions</Link></li>
+            <li><strong>Reader retention analytics</strong> — scroll depth distribution per article at <Link href="/admin/retention">/admin/retention</Link></li>
+            <li><strong>Referrer tracking</strong> — incoming traffic sources tracked per article per day; aggregated view at <Link href="/admin/referrers">/admin/referrers</Link></li>
           </ul>
         </div>
       </div>

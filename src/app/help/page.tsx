@@ -207,6 +207,7 @@ export default function HelpPage() {
             <li><strong>Last-visit badge</strong> &mdash; on return visits, articles show &ldquo;You read this X ago&rdquo; in the article header.</li>
             <li><strong>Sticky article header</strong> &mdash; a slim floating bar with the article title, Edit and Top links appears after scrolling past the article&apos;s heading.</li>
             <li><strong>Article Q&amp;A</strong> &mdash; &ldquo;Ask a question&rdquo; panel at the bottom of every article; answers are grounded in wiki content and cite source articles.</li>
+            <li><strong>Suggest edit</strong> &mdash; a &ldquo;Suggest edit&rdquo; link at the bottom of every article opens an inline form where anyone can propose a correction; admins review suggestions at <Link href="/admin/suggestions">/admin/suggestions</Link>.</li>
             <li><strong>Popularity leaderboard</strong> &mdash; <Link href="/popular">/popular</Link> ranks published articles by read and reaction activity.</li>
             <li><strong>Article comparison</strong> &mdash; open two articles side by side at <code className="bg-surface-hover px-1 text-[12px]">/compare?a=slug1&amp;b=slug2</code>.</li>
             <li><strong>Contributor leaderboard</strong> &mdash; <Link href="/leaderboard">/leaderboard</Link> shows top editors ranked by revision count.</li>

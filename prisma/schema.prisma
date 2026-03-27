@@ -112,6 +112,10 @@ model Article {
   // v4.25 additions
   pageViews        ArticleView[]
 
+  // v4.33 additions
+  editSuggestions  EditSuggestion[]
+  referrers        ArticleReferrer[]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -1248,6 +1252,37 @@ model ArticleView {
   count     Int      @default(1)
 
   @@id([articleId, date])
+  @@index([articleId])
+  @@index([date])
+}
+
+// ── v4.33: Edit Suggestions ──
+model EditSuggestion {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  author      String   @default("Anonymous")
+  email       String?
+  suggestion  String   @db.Text
+  status      String   @default("pending")  // "pending" | "accepted" | "rejected"
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([status])
+}
+
+// ── v4.33: Referrer Tracking ──
+model ArticleReferrer {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  referrer    String   // the referrer URL or domain, or "" for direct
+  date        String   // "YYYY-MM-DD"
+  count       Int      @default(1)
+
+  @@unique([articleId, referrer, date])
   @@index([articleId])
   @@index([date])
 }
