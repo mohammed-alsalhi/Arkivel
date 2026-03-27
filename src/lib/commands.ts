@@ -71,6 +71,13 @@ export function getCommands(
       action: () => router.push("/tags"),
     },
     {
+      id: "nav-history",
+      label: "Reading History",
+      group: "Navigation",
+      keywords: ["history", "recently read", "viewed", "visited", "reading", "log"],
+      action: () => router.push("/history"),
+    },
+    {
       id: "nav-help",
       label: "Help",
       group: "Navigation",

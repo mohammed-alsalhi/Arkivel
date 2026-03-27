@@ -211,6 +211,9 @@ export default function Sidebar({
           <SidebarLink href="/scratchpad" active={pathname === "/scratchpad"} onClick={close}>
             Scratchpad
           </SidebarLink>
+          <SidebarLink href="/history" active={pathname === "/history"} onClick={close}>
+            Reading history
+          </SidebarLink>
         </SidebarSection>
 
         {/* Tools — utilities and integrations */}
