@@ -1243,6 +1243,38 @@ figure.wiki-figure figcaption {
   margin-top: 2px;
 }
 
+/* ── In Brief summary box ── */
+.wiki-in-brief {
+  border: 1px solid var(--color-border-light);
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-accent-soft);
+  padding: 0.55rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-foreground);
+  line-height: 1.5;
+}
+
+/* ── Heading permalink ¶ link ── */
+.heading-permalink {
+  display: none;
+  margin-left: 0.4rem;
+  font-size: 0.75em;
+  color: var(--color-muted);
+  text-decoration: none;
+  vertical-align: middle;
+  opacity: 0.6;
+}
+h1:hover .heading-permalink,
+h2:hover .heading-permalink,
+h3:hover .heading-permalink,
+h4:hover .heading-permalink,
+h5:hover .heading-permalink,
+h6:hover .heading-permalink {
+  display: inline;
+}
+.heading-permalink:hover { opacity: 1; color: var(--color-accent); }
+
 /* ── Glossary term underline ── */
 .glossary-term {
   border-bottom: 1px dotted var(--color-accent);

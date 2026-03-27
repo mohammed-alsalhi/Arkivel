@@ -361,6 +361,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/glossary" active={pathname === "/admin/glossary"} onClick={close}>
               Glossary
             </SidebarLink>
+            <SidebarLink href="/admin/category-stats" active={pathname === "/admin/category-stats"} onClick={close}>
+              Category stats
+            </SidebarLink>
           </SidebarSection>
         )}
 

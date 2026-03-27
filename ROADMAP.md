@@ -60,6 +60,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 
 ## v4.30
 
+- [x] Heading permalink links — ¶ anchor links on all article headings for deep-linking
+- [x] Category statistics admin page — sortable table of article count, word totals, last-edit per category
+- [x] In Brief summary box — `summaryShort` displayed as highlighted callout at top of article
+- [x] On This Day fix — corrected stale Prisma query field
+
+## v4.31
+
 - [ ] AI alt-text generation — automatically suggest alt text for uploaded images
 - [ ] Grammar/style check panel — writing quality suggestions in the editor sidebar
 - [ ] Outline builder — AI-generated article outline from a title/summary

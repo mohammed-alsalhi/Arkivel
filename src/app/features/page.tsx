@@ -129,6 +129,8 @@ export default function FeaturesPage() {
             <li><strong>Print stylesheet</strong> — press <kbd>Ctrl+P</kbd> / <kbd>Cmd+P</kbd> for a clean print view: all chrome hidden, full-width content, external link URLs appended</li>
             <li><strong>Reading level badge</strong> — Flesch Reading Ease score computed from article text and shown as a colour-coded badge (Very Easy → Very Complex)</li>
             <li><strong>Glossary hover cards</strong> — defined terms in article text are underlined with a dotted accent; hovering shows a floating definition card</li>
+            <li><strong>In Brief summary</strong> — when an article has a short summary, it is displayed as a highlighted callout at the top of the content</li>
+            <li><strong>Heading permalink links</strong> — hovering over any heading reveals a ¶ link that copies the anchor URL to the clipboard</li>
           </ul>
         </div>
       </div>

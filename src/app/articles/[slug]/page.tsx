@@ -53,6 +53,7 @@ import StreakTracker from "@/components/StreakTracker";
 import { computeQualityScore } from "@/app/api/articles/[id]/quality-score/route";
 import { resolveGlossaryTerms } from "@/lib/glossary";
 import GlossaryTooltipLayer from "@/components/GlossaryTooltipLayer";
+import HeadingPermalinks from "@/components/HeadingPermalinks";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -386,6 +387,13 @@ export default async function ArticlePage({ params }: Props) {
           articleText={htmlToSpeakableText(article.content).slice(0, 3000)}
         />
 
+        {/* In Brief summary box */}
+        {article.summaryShort && (
+          <div className="wiki-in-brief">
+            <strong>In brief:</strong> {article.summaryShort}
+          </div>
+        )}
+
         {/* Table of contents */}
         <TableOfContents html={resolvedContent} />
 
@@ -393,6 +401,7 @@ export default async function ArticlePage({ params }: Props) {
         <div id="article-content" dir={article.dir ?? "ltr"} className="relative">
           <SpecialBlocksRenderer html={addHeadingIds(appendFootnoteSection(resolveGlossaryTerms(resolvedContent, glossaryTerms)))} />
           <GlossaryTooltipLayer />
+          <HeadingPermalinks />
         </div>
 
         {/* Clear float from infobox */}

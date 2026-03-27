@@ -115,6 +115,8 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Reading mode** — distraction-free reading toggle (button or `R` key) that hides header and sidebar
 - **Reading level badge** — Flesch Reading Ease score shown as a colour-coded badge in the article header
 - **Glossary hover cards** — defined terms in article text are underlined; hovering shows a floating definition card
+- **In Brief summary** — when `summaryShort` is populated, shown as a highlighted callout at the top of article content
+- **Heading permalink links** — ¶ anchor appears on heading hover; clicking copies the section URL to clipboard
 - **Cover image focal point** — click/drag picker in the edit form sets `coverFocalX`/`coverFocalY`; applied as CSS `object-position` on cover images
 
 ---

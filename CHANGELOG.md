@@ -4,6 +4,22 @@
 
 All notable changes to this project are documented here.
 
+## [4.30.0] - 2026-03-27
+
+### New Features
+
+- **Heading permalink links** — hovering over any heading in an article reveals a ¶ link; clicking copies the anchor URL to the clipboard
+- **Category statistics** — admin page at `/admin/category-stats` shows article count, total words, average words, and last-edit date per category; sortable by any column
+- **In Brief summary box** — when an article has a `summaryShort` value, a highlighted callout box is shown at the top of the article content
+- **On This Day fix** — removed stale `published: true` field from `OnThisDay` query (field doesn't exist in schema)
+
+### Technical
+
+- `HeadingPermalinks` client component uses `useEffect` to inject ¶ anchors into heading DOM nodes after mount
+- Category stats API at `GET /api/admin/category-stats` returns word totals computed from HTML-stripped content
+- `.wiki-in-brief` CSS class: left-accent border with soft accent background
+- `.heading-permalink` CSS: hidden by default, shown on heading hover
+
 ## [4.29.0] - 2026-03-27
 
 ### New Features
