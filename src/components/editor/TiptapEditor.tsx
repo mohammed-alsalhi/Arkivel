@@ -24,6 +24,7 @@ import { DecisionTree } from "./DecisionTreeExtension";
 import { FindReplace } from "./FindReplaceExtension";
 import FindReplacePanel from "./FindReplacePanel";
 import { PullQuote } from "./PullQuoteExtension";
+import { SmartTypography } from "./SmartTypographyExtension";
 import EditorToolbar from "./EditorToolbar";
 import WikiLinkSuggester from "./WikiLinkSuggester";
 import LinkBubble from "./LinkBubble";
@@ -154,6 +155,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         DecisionTree,
         FindReplace,
         PullQuote,
+        SmartTypography,
       ],
       content,
       editorProps: {

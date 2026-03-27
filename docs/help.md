@@ -157,6 +157,9 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **TIL (Today I Learned)** — post short (280-char) notes at `/til`. Tag them for discovery.
 - **Explore mode** — guided walk through articles using semantic similarity at `/explore`.
 - **Session reading trail** — collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.
+- **Reading history** — browser-local list of the last 50 articles you visited, with relative timestamps, at `/history`. No server data stored.
+- **Last-visit badge** — on return visits, articles show "You read this X ago" in the article header.
+- **Sticky article header** — a slim floating bar with the article title, Edit and Top links appears after scrolling past the article's heading.
 - **Popularity leaderboard** — `/popular` ranks published articles by combined read and reaction activity.
 - **Article comparison** — view two articles side by side at `/compare?a=slug1&b=slug2`.
 - **Contributor leaderboard** — `/leaderboard` shows top editors ranked by revision count.

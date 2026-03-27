@@ -37,6 +37,7 @@ export default function FeaturesPage() {
             <li><strong>Data tables</strong> — paste CSV or JSON to create sortable, filterable tables with CSV download</li>
             <li><strong>Decision trees</strong> — define yes/no trees as JSON; renders as an interactive SVG</li>
             <li><strong>Pull quotes</strong> — large centred serif blockquote for emphasis; insert via <code className="bg-surface-hover px-1 text-[12px]">/pull quote</code> or <kbd>Mod+Shift+Q</kbd></li>
+            <li><strong>Smart typography</strong> — auto-converts <code className="bg-surface-hover px-1 text-[12px]">--</code> → em dash, <code className="bg-surface-hover px-1 text-[12px]">...</code> → ellipsis, and straight quotes to curly quotes as you type</li>
             <li><strong>Footnotes &amp; citations</strong> — inline footnote references auto-numbered via CSS counters</li>
             <li><strong>Syntax highlighting</strong> — code blocks with language detection and theme-aware colours</li>
             <li><strong>Voice dictation</strong> — click the microphone button to insert speech at the cursor</li>
@@ -92,6 +93,9 @@ export default function FeaturesPage() {
             <li><strong>TIL (Today I Learned)</strong> — post short (280-char) notes at <Link href="/til">/til</Link></li>
             <li><strong>Scratchpad</strong> — persistent personal scratch space at <Link href="/scratchpad">/scratchpad</Link></li>
             <li><strong>Session reading trail</strong> — breadcrumb of your current session&apos;s navigation at the bottom of each article</li>
+            <li><strong>Reading history</strong> — browser-local log of the last 50 articles you visited, with relative timestamps; accessible at <Link href="/history">/history</Link></li>
+            <li><strong>Last-visit badge</strong> — article header shows &ldquo;You read this X ago&rdquo; on return visits without any server call</li>
+            <li><strong>Sticky article header</strong> — slim floating bar with article title, Edit and Top links appears after scrolling past the article title</li>
             <li><strong>Table of contents</strong> — auto-generated for articles with multiple headings</li>
             <li><strong>Popularity leaderboard</strong> — <Link href="/popular">/popular</Link> ranks published articles by reads × 2 + reactions</li>
             <li><strong>Article comparison</strong> — side-by-side view of two live articles at <code className="bg-surface-hover px-1 text-[12px]">/compare?a=slug1&amp;b=slug2</code></li>

@@ -4,6 +4,22 @@
 
 All notable changes to this project are documented here.
 
+## [4.31.0] - 2026-03-27
+
+### New Features
+
+- **Reading history** — browser-local list of the last 50 articles you visited, accessible at `/history`; entries show relative timestamps; "Clear history" button wipes the list
+- **Article view history badge** — article header shows "· You read this X ago" on return visits, recorded in `localStorage` without any server round-trip
+- **Sticky article header** — a slim bar fixed to the top of the viewport slides in after scrolling past the article title; shows the article title and quick Edit / Top links
+- **Smart typography** — `SmartTypographyExtension` converts `--` → `—` (em dash), `...` → `…` (ellipsis), and straight `"` / `'` to context-aware curly quotes as you type
+
+### Technical
+
+- `ArticleViewHistory` client component: reads/writes `wiki_view_history` key in `localStorage`; max 50 entries (FIFO)
+- `StickyArticleHeader` uses `IntersectionObserver` on `#article-h1` to toggle visibility
+- History page at `src/app/history/page.tsx`; purely client-side, no Prisma calls
+- SmartTypography ProseMirror plugin uses `handleTextInput` prop to intercept keystrokes and dispatch replacement transactions
+
 ## [4.30.0] - 2026-03-27
 
 ### New Features

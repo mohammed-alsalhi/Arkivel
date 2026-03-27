@@ -67,6 +67,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 
 ## v4.31
 
+- [x] Smart typography — `--` → em dash, `...` → ellipsis, straight quotes → curly quotes as you type
+- [x] Browser-local reading history — last 50 articles visited, accessible at `/history`
+- [x] Last-visit badge — "You read this X ago" shown on return visits to an article
+- [x] Sticky article header — slim floating bar with title + Edit/Top links after scrolling past heading
+
+## v4.32
+
 - [ ] AI alt-text generation — automatically suggest alt text for uploaded images
 - [ ] Grammar/style check panel — writing quality suggestions in the editor sidebar
 - [ ] Outline builder — AI-generated article outline from a title/summary

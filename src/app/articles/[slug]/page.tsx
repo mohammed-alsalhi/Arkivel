@@ -54,6 +54,8 @@ import { computeQualityScore } from "@/app/api/articles/[id]/quality-score/route
 import { resolveGlossaryTerms } from "@/lib/glossary";
 import GlossaryTooltipLayer from "@/components/GlossaryTooltipLayer";
 import HeadingPermalinks from "@/components/HeadingPermalinks";
+import StickyArticleHeader from "@/components/StickyArticleHeader";
+import ArticleViewHistory from "@/components/ArticleViewHistory";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -231,9 +233,12 @@ export default async function ArticlePage({ params }: Props) {
           { label: article.title },
         ]} />
 
+        <StickyArticleHeader title={article.title} slug={article.slug} isAdmin={adminFlag} />
+
         {/* Article title */}
         <div className="flex items-start gap-2 border-b border-border pb-1 mb-0.5">
           <h1
+            id="article-h1"
             className="text-[1.7rem] font-normal text-heading flex-1"
             style={{ fontFamily: "var(--font-serif)" }}
           >
@@ -255,6 +260,7 @@ export default async function ArticlePage({ params }: Props) {
             <span className="ml-2"><WordCount html={article.content} /></span>
             <span className="ml-2">· ~{readingTimeMin} min read</span>
             <span className="ml-2"><ReadingLevelBadge text={article.content.replace(/<[^>]+>/g, " ")} /></span>
+            <ArticleViewHistory slug={article.slug} title={article.title} />
             {article.lastVerifiedAt && (
               <span className="ml-2 inline-flex items-center gap-1 text-green-600 dark:text-green-400">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>

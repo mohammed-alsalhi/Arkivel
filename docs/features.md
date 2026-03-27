@@ -64,6 +64,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **TIL (Today I Learned)** — post short (280-char) notes at `/til`
 - **Scratchpad** — persistent personal scratch space at `/scratchpad`
 - **Session reading trail** — breadcrumb of your current session's navigation at the bottom of each article
+- **Reading history** — browser-local log of the last 50 articles visited, with relative timestamps, at `/history`
+- **Last-visit badge** — articles show "You read this X ago" on return visits
+- **Sticky article header** — slim floating bar with title, Edit and Top links appears after scrolling past the article heading
 - **Table of contents** — auto-generated for articles with multiple headings
 - **Popularity leaderboard** — `/popular` ranks published articles by reads × 2 + reactions
 - **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`
