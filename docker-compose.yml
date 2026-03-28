@@ -28,8 +28,8 @@ services:
     environment:
       DATABASE_URL: "postgresql://wiki:wiki_password@db:5432/wiki"
       ADMIN_SECRET: "${ADMIN_SECRET:-}"
-      NEXT_PUBLIC_WIKI_NAME: "${NEXT_PUBLIC_WIKI_NAME:-My Wiki}"
-      NEXT_PUBLIC_WIKI_TAGLINE: "${NEXT_PUBLIC_WIKI_TAGLINE:-A personal wiki}"
+      NEXT_PUBLIC_ARKIVEL_NAME: "${NEXT_PUBLIC_ARKIVEL_NAME:-Arkivel}"
+      NEXT_PUBLIC_ARKIVEL_TAGLINE: "${NEXT_PUBLIC_ARKIVEL_TAGLINE:-The self-hosted knowledge platform}"
     depends_on:
       db:
         condition: service_healthy

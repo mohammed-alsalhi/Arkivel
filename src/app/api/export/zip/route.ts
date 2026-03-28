@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
   const zip = new JSZip();
 
   // Add README
-  const wikiName = process.env.NEXT_PUBLIC_WIKI_NAME || "Wiki";
+  const wikiName = process.env.NEXT_PUBLIC_ARKIVEL_NAME || process.env.NEXT_PUBLIC_WIKI_NAME || "Arkivel";
   zip.file(
     "README.md",
     [

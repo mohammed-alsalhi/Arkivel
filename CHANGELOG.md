@@ -4,6 +4,17 @@
 
 All notable changes to this project are documented here.
 
+## [4.42.1] - 2026-03-28
+
+### Rebrand
+
+- Renamed product from **Wiki App** to **Arkivel**
+- Updated `package.json` name to `arkivel`
+- Renamed env vars `NEXT_PUBLIC_WIKI_*` → `NEXT_PUBLIC_ARKIVEL_*`; old `NEXT_PUBLIC_WIKI_*` vars still work as fallbacks for backwards compatibility
+- Updated default values: name `Arkivel`, tagline `The self-hosted knowledge platform`, description and welcome text updated to match new positioning
+- Updated all docs (README, ARCHITECTURE, CONTRIBUTING, DESIGN, ROADMAP) to reflect new name
+- Updated Vercel deploy button, Docker image names, and clone URLs in README
+
 ## [4.42.0] - 2026-03-28
 
 ### New Features

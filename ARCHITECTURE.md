@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the technical architecture of Wiki App for contributors and maintainers.
+This document describes the technical architecture of Arkivel for contributors and maintainers.
 
 ## Stack
 

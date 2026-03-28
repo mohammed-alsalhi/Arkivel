@@ -1,6 +1,6 @@
 # Design Philosophy
 
-This document defines the visual and interaction principles for this wiki application. All UI decisions should trace back to one of these principles.
+This document defines the visual and interaction principles for Arkivel. All UI decisions should trace back to one of these principles.
 
 ---
 

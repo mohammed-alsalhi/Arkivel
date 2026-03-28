@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     include: { category: true, tags: { include: { tag: true } } },
   });
 
-  const wikiName = process.env.NEXT_PUBLIC_WIKI_NAME || "My Wiki";
+  const wikiName = process.env.NEXT_PUBLIC_ARKIVEL_NAME || process.env.NEXT_PUBLIC_WIKI_NAME || "Arkivel";
 
   // Build TOC
   const tocItems = articles

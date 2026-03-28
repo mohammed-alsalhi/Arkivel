@@ -1,13 +1,16 @@
 export const config = {
-  name: process.env.NEXT_PUBLIC_WIKI_NAME || "My Wiki",
-  tagline: process.env.NEXT_PUBLIC_WIKI_TAGLINE || "A personal wiki",
+  name: process.env.NEXT_PUBLIC_ARKIVEL_NAME || process.env.NEXT_PUBLIC_WIKI_NAME || "Arkivel",
+  tagline: process.env.NEXT_PUBLIC_ARKIVEL_TAGLINE || process.env.NEXT_PUBLIC_WIKI_TAGLINE || "The self-hosted knowledge platform",
   description:
+    process.env.NEXT_PUBLIC_ARKIVEL_DESCRIPTION ||
     process.env.NEXT_PUBLIC_WIKI_DESCRIPTION ||
-    "A personal knowledge base and encyclopedia",
+    "A powerful open-source knowledge platform for individuals and teams",
   welcomeText:
+    process.env.NEXT_PUBLIC_ARKIVEL_WELCOME_TEXT ||
     process.env.NEXT_PUBLIC_WIKI_WELCOME_TEXT ||
-    "Your personal knowledge base. Create articles, organize them into categories, and build your own encyclopedia.",
+    "Welcome to Arkivel. Create articles, organize knowledge, and build your own encyclopedia — on infrastructure you own.",
   footerText:
+    process.env.NEXT_PUBLIC_ARKIVEL_FOOTER_TEXT ||
     process.env.NEXT_PUBLIC_WIKI_FOOTER_TEXT ||
     "Content is available under Creative Commons Attribution.",
   mapEnabled: process.env.NEXT_PUBLIC_MAP_ENABLED === "true",

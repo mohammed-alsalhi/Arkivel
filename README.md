@@ -1,12 +1,12 @@
-# Wiki App
+# Arkivel
 
-A configurable, self-hosted wiki application with a MediaWiki-inspired interface. Build your own personal encyclopedia for worldbuilding, knowledge management, or any topic.
+The self-hosted knowledge platform. Build a personal knowledge base, team handbook, or worldbuilding encyclopedia — on infrastructure you own.
 
 **Features:** Rich text editor with wiki links and syntax highlighting, footnotes/citations, revision history with inline diff, dark mode, sub-categories, nested tags, article templates, full-text search with filters, interactive map with layers, article graph visualization, multi-user auth with roles, RSS/Atom feeds, public REST API, webhooks, MediaWiki import, PDF/Markdown/HTML/ZIP export, article status workflow, watchlist & notifications, disambiguation pages, plugin system, reading time estimator, draft share links, article comparison view, popularity & contributor leaderboards, expiry warning banners, "you might also like" recommendations, mark-as-verified workflow, tag synonyms, discussion index, named article snapshots, article co-authors, article flags, floating table of contents, article stats panel, revision history CSV export, distraction-free reading mode, activity contribution heat map, wiki stats dashboard, mentions feed, article editor lock, one-click revision restore, cover image focal point picker, categorized keyboard shortcuts overlay, search query analytics, image captions, password-protected articles, category cover images, site-wide announcement banner, per-article 30-day view sparkline, TOC generator in editor, custom editor snippets, article freshness badge, reading streak tracker, category watchlist, inline AI text rewrite, category merge tool, word-count distribution chart, keyboard shortcut customization, wiki creation timeline, glossary system with hover-card definitions, reading level badge, pull quote blocks, heading permalink links, category statistics dashboard, In Brief summary callout, smart typography (curly quotes, em dash, ellipsis), browser-local reading history, sticky article header, last-visit badge, AI outline builder, AI alt-text suggestions, article Q&A widget, edit suggestions with admin review, reader retention analytics, referrer tracking, superscript/subscript, text highlighting, accordion/FAQ blocks, two-column layout, YouTube/Vimeo embeds, GitHub Gist embeds, satisfaction star rating, hot articles trending widget, per-article todo checklist, tag rename/management admin, word-count range search filter, AI grammar/style check panel in editor, bulk tag add/remove on article list, scroll position memory, PWA manifest (installable), external link click tracking, prefetch on hover, font size preference, focus paragraph mode, saved search alerts, RSVP speed reader with ORP highlighting, article blame view (paragraph-level authorship), article polls with session-based voting, live reading ETA counter, night reading mode (warm sepia), browser-local search history, high-contrast accessibility mode, text-only reading mode, content warning tags (dismissible CW banners), content gap analysis admin dashboard, HSL accent theme customizer, article font preference (serif/sans/mono), per-article private quick notes (localStorage), maintenance mode with site-wide banner.
 
 ## Deploy to Vercel (Recommended)
 
-The fastest way to get your own wiki running. You can also deploy anywhere that runs Node.js — see [Run Locally](#run-locally) and [Deploy to a Custom Domain](#deploy-to-a-custom-domain) for other options.
+The fastest way to get Arkivel running. You can also deploy anywhere that runs Node.js — see [Run Locally](#run-locally) and [Deploy to a Custom Domain](#deploy-to-a-custom-domain) for other options.
 
 ### 1. Set up the database
 
@@ -16,7 +16,7 @@ Create a free PostgreSQL database on [Neon](https://neon.tech):
 
 ### 2. Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmohammed-alsalhi%2Fwiki-app&env=DATABASE_URL,ADMIN_SECRET&envDescription=DATABASE_URL%3A%20PostgreSQL%20connection%20string.%20ADMIN_SECRET%3A%20Password%20for%20admin%20access.&project-name=my-wiki)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmohammed-alsalhi%2Farkivel&env=DATABASE_URL,ADMIN_SECRET&envDescription=DATABASE_URL%3A%20PostgreSQL%20connection%20string.%20ADMIN_SECRET%3A%20Password%20for%20admin%20access.&project-name=arkivel)
 
 Or manually:
 1. Fork this repository
@@ -38,11 +38,11 @@ Only `DATABASE_URL` and `ADMIN_SECRET` are required — everything else has sens
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
 | `ADMIN_SECRET` | Yes | Password to access admin features |
-| `NEXT_PUBLIC_WIKI_NAME` | No | Wiki name shown in header and metadata (default: `My Wiki`) |
-| `NEXT_PUBLIC_WIKI_TAGLINE` | No | Short tagline in the top bar (default: `A personal wiki`) |
-| `NEXT_PUBLIC_WIKI_DESCRIPTION` | No | Meta description for SEO |
-| `NEXT_PUBLIC_WIKI_WELCOME_TEXT` | No | Welcome message on the home page |
-| `NEXT_PUBLIC_WIKI_FOOTER_TEXT` | No | Footer text after the wiki name |
+| `NEXT_PUBLIC_ARKIVEL_NAME` | No | Site name shown in header and metadata (default: `Arkivel`) |
+| `NEXT_PUBLIC_ARKIVEL_TAGLINE` | No | Short tagline in the top bar (default: `The self-hosted knowledge platform`) |
+| `NEXT_PUBLIC_ARKIVEL_DESCRIPTION` | No | Meta description for SEO |
+| `NEXT_PUBLIC_ARKIVEL_WELCOME_TEXT` | No | Welcome message on the home page |
+| `NEXT_PUBLIC_ARKIVEL_FOOTER_TEXT` | No | Footer text after the site name |
 | `NEXT_PUBLIC_MAP_ENABLED` | No | Set to `true` to enable the interactive map page |
 | `NEXT_PUBLIC_MAP_LABEL` | No | Label for the map in navigation (default: `Map`) |
 | `NEXT_PUBLIC_MAP_IMAGE` | No | Path or URL to the map background image |
@@ -63,7 +63,7 @@ Only `DATABASE_URL` and `ADMIN_SECRET` are required — everything else has sens
 - **MediaWiki Import:** Import `.xml` MediaWiki dumps alongside .md, .txt, .html, .json formats
 - **CI/CD:** GitHub Actions workflow included for linting, type-checking, and building
 
-> **Tip:** Variables starting with `NEXT_PUBLIC_` control the wiki's branding and are baked in at build time. If you change them, you'll need to redeploy/rebuild for the changes to take effect.
+> **Tip:** Variables starting with `NEXT_PUBLIC_` are baked in at build time. If you change them, you'll need to redeploy/rebuild for the changes to take effect.
 
 ### 4. Seed categories (optional)
 
@@ -79,8 +79,8 @@ After deploying, you can seed default categories by running the seed script, or 
 
 ```bash
 # Clone the repository
-git clone https://github.com/mohammed-alsalhi/wiki-app.git
-cd wiki-app
+git clone https://github.com/mohammed-alsalhi/arkivel.git
+cd arkivel
 
 # Install dependencies
 npm install
@@ -100,7 +100,7 @@ Set `DATABASE_URL` in `.env` to your connection string.
 
 ```bash
 # If using Docker:
-docker run --name wiki-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=wiki -p 5432:5432 -d postgres
+docker run --name arkivel-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=wiki -p 5432:5432 -d postgres
 
 # Set in .env:
 # DATABASE_URL="postgresql://postgres:postgres@localhost:5432/wiki"
@@ -175,8 +175,8 @@ A `Dockerfile` and `docker-compose.yml` are included in the repo:
 docker compose up -d
 
 # Or build and run manually:
-docker build -t wiki-app .
-docker run -p 3000:3000 --env-file .env wiki-app
+docker build -t arkivel .
+docker run -p 3000:3000 --env-file .env arkivel
 ```
 
 ## License

@@ -1,6 +1,6 @@
 # Roadmap
 
-Planned features and improvements for Wiki App, starting from v4.19.
+Planned features and improvements for Arkivel, starting from v4.19.
 
 Previous completed work:
 - [v1.0–v4.11 archive](docs/archive/ROADMAP-v1-v4.md)
@@ -12,7 +12,7 @@ Previous completed work:
 - [v4.17 archive](docs/archive/ROADMAP-v4.17.md)
 - [v4.18 archive](docs/archive/ROADMAP-v4.18.md)
 
-Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app/issues) to discuss it.
+Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/issues) to discuss it.
 
 ---
 

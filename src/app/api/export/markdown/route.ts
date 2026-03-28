@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   });
 
   const lines: string[] = [];
-  const wikiName = process.env.NEXT_PUBLIC_WIKI_NAME || "My Wiki";
+  const wikiName = process.env.NEXT_PUBLIC_ARKIVEL_NAME || process.env.NEXT_PUBLIC_WIKI_NAME || "Arkivel";
   lines.push(`# ${wikiName} Export`);
   lines.push("");
   lines.push(`Exported ${articles.length} article(s) on ${new Date().toISOString().split("T")[0]}`);

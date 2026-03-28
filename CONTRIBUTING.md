@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in contributing to Wiki App! This guide will help you get started.
+Thanks for your interest in contributing to Arkivel! This guide will help you get started.
 
 ## Getting Started
 
@@ -13,8 +13,8 @@ Thanks for your interest in contributing to Wiki App! This guide will help you g
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/YOUR_USERNAME/wiki-app.git
-cd wiki-app
+git clone https://github.com/YOUR_USERNAME/arkivel.git
+cd arkivel
 
 # Install dependencies
 npm install
@@ -96,7 +96,7 @@ Contributions of all kinds are welcome:
 
 ## Reporting Issues
 
-Use [GitHub Issues](https://github.com/mohammed-alsalhi/wiki-app/issues) to report bugs or request features. Include:
+Use [GitHub Issues](https://github.com/mohammed-alsalhi/arkivel/issues) to report bugs or request features. Include:
 
 - Steps to reproduce (for bugs)
 - Expected vs actual behavior

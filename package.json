@@ -1,6 +1,6 @@
 {
-  "name": "wiki-app",
-  "version": "4.42.0",
+  "name": "arkivel",
+  "version": "4.42.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
