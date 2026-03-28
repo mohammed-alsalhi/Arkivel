@@ -48,6 +48,7 @@ type Props = {
   content?: string;
   placeholder?: string;
   articleTitle?: string;
+  onUpdate?: () => void;
 };
 
 /**
@@ -78,7 +79,7 @@ function looksLikeMarkdown(text: string): boolean {
 }
 
 const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
-  function TiptapEditor({ content = "", placeholder = "Start writing...", articleTitle = "" }, ref) {
+  function TiptapEditor({ content = "", placeholder = "Start writing...", articleTitle = "", onUpdate }, ref) {
     const [markdownMode, setMarkdownMode] = useState(false);
     const [markdownText, setMarkdownText] = useState("");
     const [detectedCount, setDetectedCount] = useState(0);
@@ -288,10 +289,10 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
 
     useEffect(() => {
       if (!editor) return;
-      const handler = () => setHasChanges(true);
+      const handler = () => { setHasChanges(true); onUpdate?.(); };
       editor.on("update", handler);
       return () => { editor.off("update", handler); };
-    }, [editor]);
+    }, [editor, onUpdate]);
 
     // Ctrl+H / Cmd+H → open find & replace
     useEffect(() => {

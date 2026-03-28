@@ -110,6 +110,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **AI category suggestions** — "AI suggest" button on category picker; auto-selects best-fit category from article content
 - **AI title suggestions** — "AI suggest" next to the title field; returns 5 clickable alternative encyclopedic titles; click any to apply
 - **Featured article badge** — admins can mark articles as Featured; gold star badge shown in article title area
+- **Auto-save indicator** — edit form auto-saves draft to localStorage after 2 s inactivity; "Unsaved changes" / "Draft saved" status above editor
+- **Character count** — shown alongside word count in article byline; abbreviated for large articles
+- **Did-you-mean suggestions** — zero-result search suggests the closest matching article title as a clickable link
+- **Tag cloud** — `/tags/cloud`; tags sized proportionally by article count; linked from All Tags page
 - **Writing velocity** — `/admin/writing-velocity`; weekly bar chart of words added over last 12 weeks
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar

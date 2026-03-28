@@ -319,6 +319,10 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Session management** — `/settings/sessions`; view and revoke active sessions
 - **AI title suggestions** — "AI suggest" next to the title field in edit form; 5 clickable alternative titles; click any to apply
 - **Featured article badge** — admins mark articles as Featured; gold star badge in article title area
+- **Auto-save indicator** — draft saved to localStorage after 2 s inactivity; "Unsaved changes" / "Draft saved" above editor
+- **Character count** — shown alongside word count in article byline
+- **Did-you-mean suggestions** — zero-result search shows closest matching article title as suggestion
+- **Tag cloud** — `/tags/cloud`; tags sized by article count; linked from All Tags
 
 ---
 

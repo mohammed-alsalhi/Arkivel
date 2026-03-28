@@ -4,6 +4,20 @@
 
 All notable changes to this project are documented here.
 
+## [4.47.0] - 2026-03-28
+
+### New Features
+
+- **Auto-save indicator** — article edit form auto-saves content to localStorage after 2 s of inactivity; "Unsaved changes" / "Draft saved" status shown above the editor; draft cleared on successful save
+- **Character count** — displayed alongside word count in the article byline (e.g. "1.2k chars"); abbreviated for long articles
+- **Did-you-mean suggestions** — when a search returns 0 results, compares query words against all article titles and suggests the closest match as a clickable link
+- **Tag cloud page** — new `/tags/cloud` page shows all tags sized proportionally by article count; linked from the All Tags page
+
+### Technical
+
+- Added `onUpdate?: () => void` prop to TiptapEditor; fires on every editor content change
+- Tag cloud page uses `_count.articles` for sizing with logarithmic scaling between 0.8rem–2.4rem
+
 ## [4.46.0] - 2026-03-28
 
 ### New Features

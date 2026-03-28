@@ -36,6 +36,7 @@ function SearchContent() {
 
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [didYouMean, setDidYouMean] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [qaAnswer, setQaAnswer] = useState<{ answer: string; sources: { id: string; title: string; slug: string }[] } | null>(null);
   const [qaLoading, setQaLoading] = useState(false);
@@ -89,7 +90,29 @@ function SearchContent() {
       const data = await res.json();
       if (Array.isArray(data)) {
         setResults(data);
-        if (data.length > 0) recordSearch(q);
+        if (data.length > 0) {
+          recordSearch(q);
+          setDidYouMean(null);
+        } else {
+          // Did-you-mean: find a title whose words overlap with query words
+          const words = q.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+          if (words.length > 0) {
+            const titlesRes = await fetch("/api/articles/titles");
+            if (titlesRes.ok) {
+              const titles: { title: string; slug: string }[] = await titlesRes.json();
+              let best: { title: string; slug: string } | null = null;
+              let bestScore = 0;
+              for (const t of titles) {
+                const lower = t.title.toLowerCase();
+                const score = words.filter((w) => lower.includes(w)).length;
+                if (score > bestScore) { bestScore = score; best = t; }
+              }
+              setDidYouMean(bestScore > 0 ? best!.title : null);
+            }
+          } else {
+            setDidYouMean(null);
+          }
+        }
       }
     } catch {
       setResults([]);
@@ -350,6 +373,15 @@ function SearchContent() {
                 </>
               )}
               You can <Link href="/articles/new">create an article</Link> with this title.
+              {didYouMean && (
+                <p className="mt-1 text-[12px]">
+                  Did you mean:{" "}
+                  <Link href={`/search?q=${encodeURIComponent(didYouMean)}`} className="text-accent hover:underline font-medium">
+                    {didYouMean}
+                  </Link>
+                  ?
+                </p>
+              )}
             </div>
           ) : (
             <ul className="text-[13px] space-y-2">

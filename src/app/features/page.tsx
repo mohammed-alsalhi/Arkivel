@@ -383,6 +383,10 @@ export default function FeaturesPage() {
             <li><strong>AI category suggestions</strong> — &ldquo;AI suggest&rdquo; button on the category picker auto-selects the best-fit category based on article content</li>
             <li><strong>AI title suggestions</strong> — &ldquo;AI suggest&rdquo; button on the title field returns 5 clickable alternative encyclopedic titles</li>
             <li><strong>Featured article badge</strong> — admins can mark articles as Featured; a gold star badge appears in the article title area</li>
+            <li><strong>Auto-save indicator</strong> — article edit form auto-saves draft to localStorage after 2 s of inactivity; shows &ldquo;Unsaved changes&rdquo; / &ldquo;Draft saved&rdquo; status above the editor</li>
+            <li><strong>Character count</strong> — displayed alongside word count in the article byline; abbreviated for large articles</li>
+            <li><strong>Did-you-mean suggestions</strong> — zero-result searches suggest the closest matching article title as a clickable link</li>
+            <li><strong>Tag cloud</strong> — <Link href="/tags/cloud">/tags/cloud</Link> shows all tags sized proportionally by article count</li>
             <li><strong>Writing velocity</strong> — admin chart at <Link href="/admin/writing-velocity">/admin/writing-velocity</Link> shows words added per week over the last 12 weeks</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>

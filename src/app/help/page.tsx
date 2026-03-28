@@ -411,6 +411,10 @@ export default function HelpPage() {
             <li><strong>AI tag &amp; category suggestions</strong> &mdash; &ldquo;AI suggest&rdquo; buttons in article edit form suggest relevant tags and best-fit category from content</li>
             <li><strong>AI title suggestions</strong> &mdash; &ldquo;AI suggest&rdquo; next to the title field returns 5 alternative encyclopedic titles; click any to apply</li>
             <li><strong>Featured article badge</strong> &mdash; admins can mark articles as Featured; a gold star badge is displayed in the article header</li>
+            <li><strong>Auto-save indicator</strong> &mdash; article edit form auto-saves draft to localStorage after 2 s of inactivity; &ldquo;Unsaved changes&rdquo; / &ldquo;Draft saved&rdquo; shown above editor</li>
+            <li><strong>Character count</strong> &mdash; displayed alongside word count in article byline</li>
+            <li><strong>Did-you-mean suggestions</strong> &mdash; zero-result search shows the closest matching article title as a clickable suggestion</li>
+            <li><strong>Tag cloud</strong> &mdash; <Link href="/tags/cloud">/tags/cloud</Link> shows all tags sized proportionally by article count</li>
           </ul>
         </div>
       </div>

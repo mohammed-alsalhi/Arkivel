@@ -80,6 +80,7 @@ import CleanupTagsBanner from "@/components/CleanupTagsBanner";
 import ArticleAdoptionBanner from "@/components/ArticleAdoptionBanner";
 import CopyPlainTextButton from "@/components/CopyPlainTextButton";
 import FeaturedArticleBadge from "@/components/FeaturedArticleBadge";
+import CharacterCount from "@/components/CharacterCount";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -286,6 +287,7 @@ export default async function ArticlePage({ params }: Props) {
               <span> by <a href={`/users/${lastRevision.user.username}`} className="text-wiki-link">{lastRevision.user.displayName || lastRevision.user.username}</a></span>
             )}
             <span className="ml-2"><WordCount html={article.content} /></span>
+            <span className="ml-2">· <CharacterCount html={article.content} /></span>
             <span className="ml-2">· ~{readingTimeMin} min read</span>
             <span className="ml-2"><ArticleReadingETA wordCount={plainTextWords} /></span>
             <span className="ml-2"><ReadingLevelBadge text={article.content.replace(/<[^>]+>/g, " ")} /></span>

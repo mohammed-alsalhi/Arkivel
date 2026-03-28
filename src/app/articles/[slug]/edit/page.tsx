@@ -60,6 +60,8 @@ export default function EditArticlePage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [autoSaveStatus, setAutoSaveStatus] = useState<"clean" | "unsaved" | "saved">("clean");
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     fetch("/api/categories")
@@ -180,6 +182,7 @@ export default function EditArticlePage() {
 
     if (res.ok) {
       const updated = await res.json();
+      try { localStorage.removeItem(`wiki_draft_${article.id}`); } catch { /* noop */ }
       router.push(`/articles/${updated.slug}`);
     } else {
       const err = await res.json().catch(() => null);
@@ -246,6 +249,19 @@ export default function EditArticlePage() {
       }
     }
     setSuggestingTitle(false);
+  }
+
+  function handleEditorUpdate() {
+    setAutoSaveStatus("unsaved");
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    autoSaveTimer.current = setTimeout(() => {
+      if (!article || !editorRef.current) return;
+      try {
+        const draft = { title, content: editorRef.current.getHTML(), savedAt: Date.now() };
+        localStorage.setItem(`wiki_draft_${article.id}`, JSON.stringify(draft));
+        setAutoSaveStatus("saved");
+      } catch { /* storage may be unavailable */ }
+    }, 2000);
   }
 
   async function handleDelete() {
@@ -444,8 +460,16 @@ export default function EditArticlePage() {
           )}
 
           <div>
-            <label className="block text-[13px] font-bold text-heading mb-1">Content:</label>
-            <TiptapEditor ref={editorRef} content={article.content} articleTitle={title} />
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-[13px] font-bold text-heading">Content:</label>
+              {autoSaveStatus === "unsaved" && (
+                <span className="text-[11px] text-yellow-600 dark:text-yellow-400">Unsaved changes</span>
+              )}
+              {autoSaveStatus === "saved" && (
+                <span className="text-[11px] text-green-600 dark:text-green-400">Draft saved</span>
+              )}
+            </div>
+            <TiptapEditor ref={editorRef} content={article.content} articleTitle={title} onUpdate={handleEditorUpdate} />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">

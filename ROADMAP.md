@@ -121,6 +121,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
 
+## v4.47
+
+- [x] Auto-save indicator — edit form auto-saves draft to localStorage after 2 s of inactivity; shows "Unsaved changes" / "Draft saved" status
+- [x] Character count — shown alongside word count in article byline (abbreviated for large articles)
+- [x] Did-you-mean suggestions — zero-result searches suggest the closest matching article title
+- [x] Tag cloud page — `/tags/cloud` shows tags sized by article count; linked from All Tags
+
 ## v4.46
 
 - [x] Featured article badge — admins can mark articles as Featured; gold star badge on article page

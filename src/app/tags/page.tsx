@@ -18,12 +18,14 @@ export default async function TagsPage() {
 
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        All Tags
-      </h1>
+      <div className="flex items-center gap-3 border-b border-border pb-1 mb-3">
+        <h1 className="text-[1.7rem] font-normal text-heading flex-1" style={{ fontFamily: "var(--font-serif)" }}>
+          All Tags
+        </h1>
+        <Link href="/tags/cloud" className="text-[12px] text-accent hover:underline">
+          Tag cloud
+        </Link>
+      </div>
       <p className="text-[12px] text-muted mb-4">{tags.length} tags in the wiki</p>
 
       {tags.length === 0 ? (
