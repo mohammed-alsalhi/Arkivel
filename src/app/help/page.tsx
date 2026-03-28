@@ -126,6 +126,7 @@ export default function HelpPage() {
             <li><strong>Translate ▾</strong> &mdash; machine-translate to another language (requires API key)</li>
             <li><strong>S/M/L/XL</strong> &mdash; font size selector; persisted between sessions</li>
             <li><strong>Focus</strong> &mdash; dims non-hovered paragraphs for distraction-free reading; persisted</li>
+            <li><strong>Night mode</strong> &mdash; warm sepia-toned dark theme for late-night reading; moon/sun button; persisted</li>
             <li><strong>Speed read</strong> &mdash; RSVP speed-reading modal; choose 150/250/400/600 WPM; ORP pivot character highlighted; Start/Pause/Reset controls</li>
           </ul>
         </div>
@@ -163,6 +164,7 @@ export default function HelpPage() {
             <li>Results are ranked: exact title match &gt; starts with &gt; title contains &gt; content-only</li>
             <li><strong>Semantic search:</strong> set <code className="bg-surface-hover px-1 text-[12px]">OPENAI_API_KEY</code> to blend AI-ranked results based on meaning, not just keywords</li>
             <li><strong>Federated search:</strong> when peer wikis are configured, results from other wikis appear in a separate section on the search page automatically</li>
+            <li><strong>Search history:</strong> your last 20 successful searches are stored in browser memory and shown as clickable chips when the search page has no active query; use the Clear button to wipe the list</li>
           </ul>
         </div>
       </div>
@@ -231,6 +233,7 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Reading time</strong> &mdash; every article shows &ldquo;~X min read&rdquo; in the byline, estimated at 200 words per minute.</li>
+            <li><strong>Reading ETA</strong> &mdash; the byline also shows &ldquo;~X min left&rdquo; which updates live as you scroll through the article; disappears once you finish.</li>
             <li><strong>Reading mode</strong> &mdash; click &ldquo;Reading mode&rdquo; in the article toolbar (or press <kbd>R</kbd>) to enter a distraction-free view that hides the header and sidebar. Press again or <kbd>R</kbd> to exit.</li>
             <li><strong>Draft share links</strong> &mdash; admins can generate a secret URL (<code className="bg-surface-hover px-1 text-[12px]">POST /api/articles/[id]/share-token</code>) so anyone with the link can preview a draft at <code className="bg-surface-hover px-1 text-[12px]">/share/[token]</code> without needing to log in.</li>
             <li><strong>Expiry warning banner</strong> &mdash; a yellow notice appears when an article&apos;s <em>Review due</em> date is within 30 days, prompting editors to verify its accuracy.</li>

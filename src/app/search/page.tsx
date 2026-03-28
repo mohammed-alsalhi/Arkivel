@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import SearchHistory, { recordSearch } from "@/components/SearchHistory";
 
 type SearchResult = {
   id: string;
@@ -86,7 +87,10 @@ function SearchContent() {
     try {
       const res = await fetch(`/api/search?${params.toString()}`);
       const data = await res.json();
-      if (Array.isArray(data)) setResults(data);
+      if (Array.isArray(data)) {
+        setResults(data);
+        if (data.length > 0) recordSearch(q);
+      }
     } catch {
       setResults([]);
     } finally {
@@ -158,6 +162,7 @@ function SearchContent() {
         <p className="text-[13px] text-muted italic">
           Enter a search query (at least 2 characters) to search the encyclopedia.
         </p>
+        <SearchHistory currentQuery={q} />
       </div>
     );
   }

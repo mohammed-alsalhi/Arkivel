@@ -360,6 +360,9 @@ export default function FeaturesPage() {
             <li><strong>Speed reader (RSVP)</strong> — flashes one word at a time from the article; ORP pivot character highlighted in accent colour; 150/250/400/600 WPM modes; progress bar; Start/Pause/Resume controls in article toolbar</li>
             <li><strong>Article blame view</strong> — paragraph-level authorship at <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/blame</code>; each paragraph colour-coded by the revision that introduced it with editor name, date, and edit summary</li>
             <li><strong>Article polls</strong> — admins attach polls to articles; readers vote once per session; vote counts revealed after voting or when poll is closed; admins can close, reopen, or delete polls</li>
+            <li><strong>Reading ETA</strong> — live <code className="bg-surface-hover px-1 text-[12px]">~X min left</code> counter in the article byline that decreases as you scroll; disappears on completion</li>
+            <li><strong>Night reading mode</strong> — warm sepia-toned dark theme toggled via moon button in article toolbar; persisted to browser storage</li>
+            <li><strong>Search history</strong> — browser-local list of last 20 successful searches; shown as clickable chips on the search page when no query is entered; clearable</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

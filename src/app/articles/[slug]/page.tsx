@@ -68,6 +68,8 @@ import FontSizeControl from "@/components/FontSizeControl";
 import FocusModeToggle from "@/components/FocusModeToggle";
 import SpeedReader from "@/components/SpeedReader";
 import ArticlePollWidget from "@/components/ArticlePollWidget";
+import ArticleReadingETA from "@/components/ArticleReadingETA";
+import NightModeToggle from "@/components/NightModeToggle";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -274,6 +276,7 @@ export default async function ArticlePage({ params }: Props) {
             )}
             <span className="ml-2"><WordCount html={article.content} /></span>
             <span className="ml-2">· ~{readingTimeMin} min read</span>
+            <span className="ml-2"><ArticleReadingETA wordCount={plainTextWords} /></span>
             <span className="ml-2"><ReadingLevelBadge text={article.content.replace(/<[^>]+>/g, " ")} /></span>
             <ArticleViewHistory slug={article.slug} title={article.title} />
             {article.lastVerifiedAt && (
@@ -318,6 +321,7 @@ export default async function ArticlePage({ params }: Props) {
             {/* — Reading tools — */}
             <FontSizeControl />
             <FocusModeToggle />
+            <NightModeToggle />
             <SpeedReader articleId={article.id} />
             <DyslexiaToggle />
             <RTLToggle defaultDir={article.dir ?? "ltr"} />

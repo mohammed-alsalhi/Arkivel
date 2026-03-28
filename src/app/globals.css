@@ -1365,3 +1365,19 @@ html[data-theme="dark"] .find-highlight {
   font-size: 0.85rem;
   margin: 0.75rem 0;
 }
+
+/* ── Night reading mode (warm sepia) ── */
+html.night-reading {
+  --color-background: #1c1008;
+  --color-surface: #231508;
+  --color-surface-hover: #2e1e0c;
+  --color-foreground: #e8d5b0;
+  --color-muted: #a08060;
+  --color-heading: #f0dfc0;
+  --color-border: #4a3015;
+  --color-accent: #c87941;
+  filter: none;
+}
+html.night-reading #article-content {
+  background: #1c1008;
+}

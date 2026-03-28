@@ -94,6 +94,7 @@ The toolbar below the article title provides quick actions grouped into four sec
 | **Translate ▾** | Machine-translate to another language (requires API key) |
 | **S/M/L/XL** | Font size selector; persisted between sessions |
 | **Focus** | Dims non-hovered paragraphs for distraction-free reading; persisted |
+| **Night mode** | Warm sepia dark theme for late-night reading; persisted |
 | **Speed read** | RSVP modal; 150/250/400/600 WPM; ORP pivot character highlighted |
 
 ---
@@ -127,6 +128,7 @@ Press `Ctrl+Shift+L` (Cmd on Mac) to insert a wiki link.
 - Results are ranked: exact title match > starts with > title contains > content-only
 - **Semantic search:** set `OPENAI_API_KEY` to blend AI-ranked results based on meaning, not just keywords
 - **Federated search:** when peer wikis are configured, results from other wikis appear in a separate section on the search page automatically
+- **Search history:** your last 20 successful searches are stored in browser memory and shown as chips on the search page when idle; use Clear to wipe
 
 ---
 

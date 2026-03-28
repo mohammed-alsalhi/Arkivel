@@ -121,6 +121,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
 
+## v4.40
+
+- [x] Reading ETA — `~X min left` in article byline, updates dynamically while scrolling
+- [x] Night reading mode — warm sepia theme toggled from article toolbar, persisted to localStorage
+- [x] Search history — last 20 searches in localStorage; shown as chips when query is empty
+
 ## v4.39
 
 - [x] Speed reader (RSVP) — flashes one word at a time with ORP highlighting; 150/250/400/600 WPM; modal in article toolbar
