@@ -81,6 +81,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **AI grammar & style check** — collapsible panel below editor analyses for errors, warnings, style; Apply buttons fix inline; heuristic fallback when AI unavailable
 - **Scroll position memory** — article scroll saved to localStorage; restored on return visits; capped at 50 articles
 - **Bulk tag operations** — add or remove a tag from multiple articles at once via the article list batch bar
+- **PWA / installable app** — web app manifest enables installing the wiki on mobile and desktop home screens
+- **External link click tracking** — outbound link clicks logged per article; aggregated at `/admin/external-links`
+- **Prefetch on hover** — internal article links prefetched on mouseover for near-instant navigation
 - **Table of contents** — auto-generated for articles with multiple headings
 - **Popularity leaderboard** — `/popular` ranks published articles by reads × 2 + reactions
 - **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`

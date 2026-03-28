@@ -62,6 +62,8 @@ import ReferrerTracker from "@/components/ReferrerTracker";
 import ArticleRatingWidget from "@/components/ArticleRatingWidget";
 import ArticleTodoList from "@/components/ArticleTodoList";
 import ScrollPositionRestorer from "@/components/ScrollPositionRestorer";
+import ExternalLinkTracker from "@/components/ExternalLinkTracker";
+import PrefetchArticleLinks from "@/components/PrefetchArticleLinks";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -543,6 +545,8 @@ export default async function ArticlePage({ params }: Props) {
         <ReaderPathTracker currentSlug={article.slug} />
         <StreakTracker />
         <ScrollPositionRestorer slug={article.slug} />
+        <ExternalLinkTracker articleId={article.id} />
+        <PrefetchArticleLinks />
         <AnnotationLayer articleId={article.id} isLoggedIn={!!session} />
         <BackToTop />
         <ReadingProgress />

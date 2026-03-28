@@ -376,6 +376,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/tags" active={pathname === "/admin/tags"} onClick={close}>
               Tag management
             </SidebarLink>
+            <SidebarLink href="/admin/external-links" active={pathname === "/admin/external-links"} onClick={close}>
+              External link clicks
+            </SidebarLink>
           </SidebarSection>
         )}
 

@@ -351,6 +351,9 @@ export default function FeaturesPage() {
             <li><strong>Batch operations</strong> — bulk-assign category, publish/unpublish, or delete from <Link href="/articles">/articles</Link></li>
             <li><strong>Tag management</strong> — rename, recolor, and delete tags inline at <Link href="/admin/tags">/admin/tags</Link> with article count and filterable list</li>
             <li><strong>Bulk tag operations</strong> — apply or remove a tag from multiple selected articles at once via the article list batch action bar</li>
+            <li><strong>PWA / installable app</strong> — web app manifest enables the wiki to be installed on mobile and desktop home screens with a standalone display mode</li>
+            <li><strong>External link click tracking</strong> — outbound link clicks logged per article; admin view at <Link href="/admin/external-links">/admin/external-links</Link></li>
+            <li><strong>Prefetch on hover</strong> — internal article links are prefetched on mouse-over for near-instant navigation</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

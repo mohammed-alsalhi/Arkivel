@@ -107,3 +107,9 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 - [x] Bulk tag operations — "Add tag" and "Remove tag" in the article list batch action bar
 - [x] Scroll position memory — article scroll position saved to localStorage; restored on return visits
 - [x] Search advanced filter enhancements — word count already wired; grammar API endpoint at `/api/ai/grammar`
+
+## v4.37
+
+- [x] PWA manifest — `manifest.ts` makes the wiki installable as a home-screen app
+- [x] External link click tracking — outbound links logged via `sendBeacon`; admin page at `/admin/external-links`
+- [x] Prefetch on hover — `PrefetchArticleLinks` prefetches `/articles/*` pages on hover for instant navigation

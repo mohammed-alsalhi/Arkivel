@@ -4,6 +4,20 @@
 
 All notable changes to this project are documented here.
 
+## [4.37.0] - 2026-03-28
+
+### New Features
+
+- **PWA manifest** — `src/app/manifest.ts` generates a web app manifest at `/manifest.webmanifest`; makes the wiki installable on mobile and desktop home screens; uses `config.name` and `config.description` dynamically
+- **External link click tracking** — `ExternalLinkTracker` component uses `navigator.sendBeacon` to log outbound link clicks to `POST /api/analytics/external-link`; aggregated view at `/admin/external-links` showing top URLs by click count
+- **Prefetch on hover** — `PrefetchArticleLinks` component intercepts `mouseover` on internal article links and calls `router.prefetch(href)`; deduplicates prefetches; attached to all article pages
+
+### Technical
+
+- `POST /api/analytics/external-link`: normalises URL to `hostname + pathname`; stores as `MetricLog` with `type="external_link_click"` and `metadata.articleId`
+- `GET /api/admin/external-links`: groups MetricLog by path for external_link_click type; returns top 100 URLs
+- `ExternalLinkTracker`: event-delegation on `#article-content`; only fires for cross-origin anchors
+
 ## [4.36.0] - 2026-03-27
 
 ### New Features
