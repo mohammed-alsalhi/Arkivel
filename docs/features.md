@@ -94,6 +94,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Text-only mode** — hides images and media in article content; toolbar toggle; persisted
 - **Content warning tags** — CW labels (spoilers, violence, mature, etc.) on articles; dismissible amber banner; admin-configurable in edit form
 - **Content gap analysis** — `/admin/content-gaps` shows zero-result and low-result search queries grouped by frequency
+- **Theme customizer** — HSL hue slider in article toolbar for live accent color customization; persisted to localStorage
+- **Font preference** — article toolbar dropdown: Default / Serif / Sans / Mono; injects override CSS on `#article-content`; persisted
+- **Article quick notes** — collapsible private note per article; browser localStorage only; save and delete controls
+- **Maintenance mode** — admin toggle at `/admin/maintenance`; shows site-wide yellow banner when active
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar
 - **Article polls** — admins create polls on any article; session-based one-vote-per-user; vote counts revealed post-vote; admin close/reopen/delete controls

@@ -385,6 +385,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/content-gaps" active={pathname === "/admin/content-gaps"} onClick={close}>
               Content gap analysis
             </SidebarLink>
+            <SidebarLink href="/admin/maintenance" active={pathname === "/admin/maintenance"} onClick={close}>
+              Maintenance mode
+            </SidebarLink>
           </SidebarSection>
         )}
 

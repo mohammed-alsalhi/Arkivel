@@ -98,6 +98,9 @@ The toolbar below the article title provides quick actions grouped into four sec
 | **High contrast (A)** | Pure black/white/yellow theme for maximum readability; persisted |
 | **Text only (T)** | Hides images and media from article content; persisted |
 | **Speed read** | RSVP modal; 150/250/400/600 WPM; ORP pivot character highlighted |
+| **Font preference** | Dropdown to switch article body font (Default/Serif/Sans/Mono); persisted |
+| **Accent color** | HSL hue slider to customize the wiki accent color; persisted |
+| **Quick note** | Collapsible private note per article stored in browser localStorage |
 
 ---
 
@@ -306,6 +309,7 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Stale articles** — `/admin/staleness` lists articles not updated in 180+ days
 - **Wiki health score** — `/admin/health` gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %
 - **Embeddings coverage** — `/admin/embeddings` shows AI embedding status per article
+- **Maintenance mode** — `/admin/maintenance` toggle shows a site-wide yellow banner when the wiki is under maintenance
 
 ---
 

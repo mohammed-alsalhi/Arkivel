@@ -73,6 +73,9 @@ import NightModeToggle from "@/components/NightModeToggle";
 import HighContrastToggle from "@/components/HighContrastToggle";
 import TextOnlyToggle from "@/components/TextOnlyToggle";
 import ContentWarningBanner from "@/components/ContentWarningBanner";
+import ThemeCustomizer from "@/components/ThemeCustomizer";
+import FontPreference from "@/components/FontPreference";
+import ArticleQuickNote from "@/components/ArticleQuickNote";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -333,6 +336,8 @@ export default async function ArticlePage({ params }: Props) {
             <TranslateButton articleId={article.id} />
             <ReadingModeToggle />
             <CopyMarkdownButton markdown={article.contentRaw} title={article.title} />
+            <FontPreference />
+            <ThemeCustomizer />
 
             <span className="w-px h-4 bg-border mx-0.5" />
 
@@ -562,6 +567,7 @@ export default async function ArticlePage({ params }: Props) {
           <SuggestEditButton articleId={article.id} />
         </div>
         <ArticleTodoList articleId={article.id} isAdmin={adminFlag} />
+        <ArticleQuickNote articleId={article.id} />
         <ArticlePollWidget articleId={article.id} isAdmin={adminFlag} />
         <ArticleQA articleSlug={article.slug} />
         <SessionReadingTrail slug={article.slug} title={article.title} />

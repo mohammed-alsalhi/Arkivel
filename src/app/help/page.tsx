@@ -130,6 +130,9 @@ export default function HelpPage() {
             <li><strong>High contrast (A)</strong> &mdash; pure black/white/yellow theme for maximum readability; persisted</li>
             <li><strong>Text only (T)</strong> &mdash; hides images and media from the article for distraction-free reading; persisted</li>
             <li><strong>Speed read</strong> &mdash; RSVP speed-reading modal; choose 150/250/400/600 WPM; ORP pivot character highlighted; Start/Pause/Reset controls</li>
+            <li><strong>Font preference</strong> &mdash; dropdown to switch article body font between Default, Serif, Sans, or Mono; persisted</li>
+            <li><strong>Accent color</strong> &mdash; color-swatch button opens an HSL hue slider to customize the wiki accent color; persisted</li>
+            <li><strong>Quick note</strong> &mdash; collapsible private note panel per article; stored only in this browser; save and delete controls</li>
           </ul>
         </div>
       </div>
@@ -395,6 +398,7 @@ export default function HelpPage() {
             <li><strong>Stale articles</strong> &mdash; <Link href="/admin/staleness">/admin/staleness</Link> lists articles not updated in 180+ days</li>
             <li><strong>Wiki health score</strong> &mdash; <Link href="/admin/health">/admin/health</Link> gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %</li>
             <li><strong>Embeddings coverage</strong> &mdash; <Link href="/admin/embeddings">/admin/embeddings</Link> shows AI embedding status per article</li>
+            <li><strong>Maintenance mode</strong> &mdash; <Link href="/admin/maintenance">/admin/maintenance</Link> toggle displays a site-wide yellow banner while the wiki is under maintenance</li>
           </ul>
         </div>
       </div>

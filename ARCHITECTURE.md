@@ -289,6 +289,7 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/api/ai/rewrite` | POST | AI text rewrite via OpenAI |
 | `/api/admin/categories/merge` | POST | Merge source category into target, reassign articles |
 | `/api/admin/word-count` | GET | Word-count distribution across published articles |
+| `/api/admin/maintenance` | GET, POST | Get/set maintenance mode flag (stored in PluginState) |
 | `/api/stats` | GET | Wiki statistics |
 | `/api/metrics` | GET, POST | Performance metrics |
 | `/api/health` | GET | Health check |

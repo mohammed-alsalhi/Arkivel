@@ -121,6 +121,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
 
+## v4.42
+
+- [x] Theme customizer — HSL hue slider for accent color; live preview; persisted to localStorage
+- [x] Font preference — serif/sans/mono selector for article body; injects override CSS; persisted
+- [x] Article quick notes — private per-article notes stored in browser localStorage; save/delete controls
+- [x] Maintenance mode — admin toggle at `/admin/maintenance`; yellow site-wide banner when active
+
 ## v4.41
 
 - [x] High-contrast accessibility mode — pure black/white/yellow theme toggle in article toolbar; persisted

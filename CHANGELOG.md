@@ -4,6 +4,24 @@
 
 All notable changes to this project are documented here.
 
+## [4.42.0] - 2026-03-28
+
+### New Features
+
+- **Theme customizer** — floating color-swatch button in the article toolbar opens an HSL hue slider (0–359); sets `--accent-hue` CSS custom property live; saved to `localStorage`
+- **Font preference** — dropdown in article toolbar to choose article body font: Default, Serif (Georgia), Sans (Segoe UI), or Mono (Courier New); injects override style targeting `#article-content`; persisted to `localStorage`
+- **Article quick notes** — collapsible private note panel per article; saved only in browser `localStorage`; styled with accent when a note exists; Save/Delete controls
+- **Maintenance mode** — admin toggle at `/admin/maintenance`; displays a yellow site-wide banner when active; stored in `PluginState` table (no schema change)
+
+### Technical
+
+- `ThemeCustomizer`: click-away-to-close dropdown using `useRef`; rainbow gradient preview bar; resets to hue 220
+- `FontPreference`: four presets with CSS font stacks; injects/removes `<style id="wiki-font-pref-style">` on `#article-content`
+- `ArticleQuickNote`: per-article `wiki_quick_note_{id}` localStorage key; auto-loads on mount; button accent-styled when note exists
+- `MaintenanceBanner`: server component; rendered in `RootLayout` when `PluginState.id = "maintenance_mode"` is enabled
+- `/api/admin/maintenance` GET/POST: reads/upserts `PluginState` row; admin-only via `isAdmin()`
+- `/admin/maintenance` page: toggle switch with live feedback; linked in admin sidebar
+
 ## [4.41.0] - 2026-03-28
 
 ### New Features

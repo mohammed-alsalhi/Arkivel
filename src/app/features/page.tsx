@@ -367,6 +367,10 @@ export default function FeaturesPage() {
             <li><strong>Text-only mode</strong> — hides all images, figures, and media from article content for distraction-free reading; toolbar toggle; persisted</li>
             <li><strong>Content warning tags</strong> — admins add CW labels (spoilers, violence, mature, etc.) to articles; shown as a dismissible amber banner before article body</li>
             <li><strong>Content gap analysis</strong> — admin dashboard at <Link href="/admin/content-gaps">/admin/content-gaps</Link> shows zero-result and low-result search queries to highlight missing wiki topics</li>
+            <li><strong>Theme customizer</strong> — floating color-swatch button in article toolbar; HSL hue slider picks the accent color live; persisted to browser storage</li>
+            <li><strong>Font preference</strong> — dropdown in article toolbar to switch article body font between Default, Serif, Sans, or Mono; persisted to browser storage</li>
+            <li><strong>Article quick notes</strong> — collapsible private note panel on every article page; stored only in the browser; save and delete controls</li>
+            <li><strong>Maintenance mode</strong> — admin toggle at <Link href="/admin/maintenance">/admin/maintenance</Link> displays a site-wide yellow banner when the wiki is under maintenance</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>
