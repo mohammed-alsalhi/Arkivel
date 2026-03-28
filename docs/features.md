@@ -101,6 +101,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Cleanup tags** — admin flags (needs-images, needs-expansion, needs-citations, stub, outdated) on articles; orange notice banner on article page; set in edit form
 - **Article adoption** — mark article as abandoned in edit form; article page shows orange adoption banner; one-click adopt clears the flag
 - **Copy as plain text** — button in article toolbar strips HTML and copies article body to clipboard
+- **Scheduled announcements** — set a future go-live datetime on announcements; hidden until that time
+- **Read-only mode** — admin toggle; blue banner; blocks non-admin article edits when active
+- **Revision pruning** — admin tool at `/admin/prune-revisions`; dry-run preview then delete oldest revisions beyond threshold
+- **User activity log** — admin page at `/admin/user-activity`; select user to see full revision history
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar
 - **Article polls** — admins create polls on any article; session-based one-vote-per-user; vote counts revealed post-vote; admin close/reopen/delete controls

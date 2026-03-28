@@ -26,6 +26,7 @@ export default function AnnouncementsPage() {
   const [message, setMessage] = useState("");
   const [type, setType] = useState<(typeof TYPES)[number]>("info");
   const [expiresAt, setExpiresAt] = useState("");
+  const [scheduledAt, setScheduledAt] = useState("");
   const [saving, setSaving] = useState(false);
 
   async function load() {
@@ -43,11 +44,12 @@ export default function AnnouncementsPage() {
     const res = await fetch("/api/admin/announcements", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, type, expiresAt: expiresAt || null }),
+      body: JSON.stringify({ message, type, expiresAt: expiresAt || null, scheduledAt: scheduledAt || null }),
     });
     if (res.ok) {
       setMessage("");
       setExpiresAt("");
+      setScheduledAt("");
       setType("info");
       await load();
     }
@@ -111,6 +113,15 @@ export default function AnnouncementsPage() {
                 type="datetime-local"
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
+                className="border border-border bg-background px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-[12px] text-muted mb-1">Go live at (optional)</label>
+              <input
+                type="datetime-local"
+                value={scheduledAt}
+                onChange={(e) => setScheduledAt(e.target.value)}
                 className="border border-border bg-background px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
               />
             </div>

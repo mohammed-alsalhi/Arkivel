@@ -15,6 +15,24 @@ All notable changes to this project are documented here.
 - Updated all docs (README, ARCHITECTURE, CONTRIBUTING, DESIGN, ROADMAP) to reflect new name
 - Updated Vercel deploy button, Docker image names, and clone URLs in README
 
+## [4.44.0] - 2026-03-28
+
+### New Features
+
+- **Scheduled announcements** — admins set a future "Go live at" datetime on announcements; they are hidden from users until that time arrives
+- **Read-only mode** — admin toggle at `/admin/read-only`; shows a blue site-wide banner blocking edits for non-admin users when active
+- **Revision pruning** — admin tool at `/admin/prune-revisions`; preview (dry-run) then delete revisions older than the latest N per article; configurable threshold
+- **User activity log** — admin page at `/admin/user-activity`; select any user to see their revision history (article, summary, date); user list sorted by join date with edit counts
+
+### Technical
+
+- `scheduledAt DateTime?` added to Announcement model; `prisma db push` applied; `/api/announcements` filters by `scheduledAt IS NULL OR scheduledAt <= now()`
+- `ReadOnlyBanner`: server component with lock SVG icon; rendered in `RootLayout` when `PluginState.id = "read_only_mode"` is enabled
+- `/api/admin/read-only` GET/POST: reads/upserts `PluginState`; admin-only
+- `/api/admin/prune-revisions` GET preview + POST execute: keeps latest N revisions per article; deletes oldest
+- `/api/admin/user-activity` GET: list users with revision counts; `?userId=X` returns latest 100 revisions for that user
+- Sidebar links added for read-only mode, prune revisions, user activity log
+
 ## [4.43.0] - 2026-03-28
 
 ### New Features

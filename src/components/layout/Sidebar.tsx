@@ -388,6 +388,15 @@ export default function Sidebar({
             <SidebarLink href="/admin/maintenance" active={pathname === "/admin/maintenance"} onClick={close}>
               Maintenance mode
             </SidebarLink>
+            <SidebarLink href="/admin/read-only" active={pathname === "/admin/read-only"} onClick={close}>
+              Read-only mode
+            </SidebarLink>
+            <SidebarLink href="/admin/prune-revisions" active={pathname === "/admin/prune-revisions"} onClick={close}>
+              Prune revisions
+            </SidebarLink>
+            <SidebarLink href="/admin/user-activity" active={pathname === "/admin/user-activity"} onClick={close}>
+              User activity log
+            </SidebarLink>
           </SidebarSection>
         )}
 

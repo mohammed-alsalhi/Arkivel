@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   const denied = requireAdmin(await isAdmin());
   if (denied) return denied;
 
-  const { message, type, expiresAt } = await request.json();
+  const { message, type, expiresAt, scheduledAt } = await request.json();
   if (!message?.trim()) {
     return NextResponse.json({ error: "Message is required" }, { status: 400 });
   }
@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
       type: type ?? "info",
       active: true,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
+      scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
     },
   });
   return NextResponse.json(announcement, { status: 201 });

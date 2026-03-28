@@ -121,6 +121,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
 
+## v4.44
+
+- [x] Scheduled announcements — set future go-live datetime; hidden until that time
+- [x] Read-only mode — admin toggle; blue site-wide banner; blocks non-admin edits
+- [x] Revision pruning — admin tool; preview then delete oldest revisions beyond threshold
+- [x] User activity log — admin page; select user to see full revision history
+
 ## v4.43
 
 - [x] Cleanup tags — admin flags (needs-images, needs-expansion, etc.) on articles; orange notice banner on article page

@@ -311,6 +311,10 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Wiki health score** — `/admin/health` gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %
 - **Embeddings coverage** — `/admin/embeddings` shows AI embedding status per article
 - **Maintenance mode** — `/admin/maintenance` toggle shows a site-wide yellow banner when the wiki is under maintenance
+- **Read-only mode** — `/admin/read-only` toggle; shows blue banner and blocks non-admin edits
+- **Revision pruning** — `/admin/prune-revisions`; configure keep threshold, preview, then delete old revisions
+- **User activity log** — `/admin/user-activity`; view any user's full edit history
+- **Scheduled announcements** — set a go-live datetime on announcements; hidden until that time
 
 ---
 

@@ -9,6 +9,9 @@ export async function GET() {
     where: {
       active: true,
       OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+      AND: [
+        { OR: [{ scheduledAt: null }, { scheduledAt: { lte: now } }] },
+      ],
     },
     orderBy: { createdAt: "desc" },
     select: { id: true, message: true, type: true },

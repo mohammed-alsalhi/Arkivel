@@ -402,6 +402,10 @@ export default function HelpPage() {
             <li><strong>Maintenance mode</strong> &mdash; <Link href="/admin/maintenance">/admin/maintenance</Link> toggle displays a site-wide yellow banner while the wiki is under maintenance</li>
             <li><strong>Cleanup tags</strong> &mdash; flag articles with attention labels (Needs Images, Stub, Outdated, etc.); shown as orange banner on article page; set in article edit form</li>
             <li><strong>Article adoption</strong> &mdash; mark articles as abandoned in the edit form; adoption banner with one-click claim appears on the article page</li>
+            <li><strong>Scheduled announcements</strong> &mdash; set a &ldquo;Go live at&rdquo; time on banners; shown only once that time is reached</li>
+            <li><strong>Read-only mode</strong> &mdash; <Link href="/admin/read-only">/admin/read-only</Link> disables editing for non-admins; blue banner shown site-wide</li>
+            <li><strong>Revision pruning</strong> &mdash; <Link href="/admin/prune-revisions">/admin/prune-revisions</Link> deletes old revisions beyond a configurable keep threshold</li>
+            <li><strong>User activity log</strong> &mdash; <Link href="/admin/user-activity">/admin/user-activity</Link> shows any user&apos;s full revision history</li>
           </ul>
         </div>
       </div>

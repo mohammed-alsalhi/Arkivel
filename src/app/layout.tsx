@@ -13,6 +13,7 @@ import BackToTop from "@/components/BackToTop";
 import { ToastProvider } from "@/components/Toast";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
+import ReadOnlyBanner from "@/components/ReadOnlyBanner";
 import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
 import { Analytics } from "@vercel/analytics/next";
@@ -62,8 +63,12 @@ export default async function RootLayout({
 }>) {
   const categories = await getCategories();
   const articleCount = await prisma.article.count({ where: { published: true } }).catch(() => 0);
-  const maintenanceRecord = await prisma.pluginState.findUnique({ where: { id: "maintenance_mode" } }).catch(() => null);
+  const [maintenanceRecord, readOnlyRecord] = await Promise.all([
+    prisma.pluginState.findUnique({ where: { id: "maintenance_mode" } }).catch(() => null),
+    prisma.pluginState.findUnique({ where: { id: "read_only_mode" } }).catch(() => null),
+  ]);
   const maintenanceMode = maintenanceRecord?.enabled ?? false;
+  const readOnlyMode = readOnlyRecord?.enabled ?? false;
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -105,6 +110,7 @@ export default async function RootLayout({
             <div className="flex-1 min-w-0 bg-surface border-l border-border">
               <AnnouncementBanner />
               {maintenanceMode && <MaintenanceBanner />}
+              {readOnlyMode && <ReadOnlyBanner />}
               <main id="main-content" className="max-w-6xl px-6 py-4">
                 {children}
               </main>
