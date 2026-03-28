@@ -120,3 +120,9 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 - [x] Focus paragraph mode — dims non-hovered paragraphs in article content; toggle with persistence
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
+
+## v4.39
+
+- [x] Speed reader (RSVP) — flashes one word at a time with ORP highlighting; 150/250/400/600 WPM; modal in article toolbar
+- [x] Article blame view — paragraph-level authorship tab at `/articles/[slug]/blame`; colour-coded by revision
+- [x] Article polls — admins attach polls to articles; session-based voting; vote-to-reveal results; admin close/reopen/delete

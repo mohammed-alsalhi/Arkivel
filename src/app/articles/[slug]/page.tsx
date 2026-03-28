@@ -66,6 +66,8 @@ import ExternalLinkTracker from "@/components/ExternalLinkTracker";
 import PrefetchArticleLinks from "@/components/PrefetchArticleLinks";
 import FontSizeControl from "@/components/FontSizeControl";
 import FocusModeToggle from "@/components/FocusModeToggle";
+import SpeedReader from "@/components/SpeedReader";
+import ArticlePollWidget from "@/components/ArticlePollWidget";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -234,6 +236,9 @@ export default async function ArticlePage({ params }: Props) {
         <Link href={`/articles/${slug}/discussion`} className="wiki-tab">
           Discussion
         </Link>
+        <Link href={`/articles/${slug}/blame`} className="wiki-tab">
+          Blame
+        </Link>
       </div>
 
       {/* Article body in bordered content area */}
@@ -313,6 +318,7 @@ export default async function ArticlePage({ params }: Props) {
             {/* — Reading tools — */}
             <FontSizeControl />
             <FocusModeToggle />
+            <SpeedReader articleId={article.id} />
             <DyslexiaToggle />
             <RTLToggle defaultDir={article.dir ?? "ltr"} />
             <TranslateButton articleId={article.id} />
@@ -542,6 +548,7 @@ export default async function ArticlePage({ params }: Props) {
           <SuggestEditButton articleId={article.id} />
         </div>
         <ArticleTodoList articleId={article.id} isAdmin={adminFlag} />
+        <ArticlePollWidget articleId={article.id} isAdmin={adminFlag} />
         <ArticleQA articleSlug={article.slug} />
         <SessionReadingTrail slug={article.slug} title={article.title} />
         <ScrollDepthTracker articleId={article.id} />

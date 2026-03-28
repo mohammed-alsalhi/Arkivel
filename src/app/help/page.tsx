@@ -124,6 +124,9 @@ export default function HelpPage() {
             <li><strong>Aa</strong> &mdash; toggle dyslexia-friendly font and spacing</li>
             <li><strong>RTL</strong> &mdash; toggle right-to-left reading direction for the article</li>
             <li><strong>Translate ▾</strong> &mdash; machine-translate to another language (requires API key)</li>
+            <li><strong>S/M/L/XL</strong> &mdash; font size selector; persisted between sessions</li>
+            <li><strong>Focus</strong> &mdash; dims non-hovered paragraphs for distraction-free reading; persisted</li>
+            <li><strong>Speed read</strong> &mdash; RSVP speed-reading modal; choose 150/250/400/600 WPM; ORP pivot character highlighted; Start/Pause/Reset controls</li>
           </ul>
         </div>
       </div>
@@ -251,6 +254,8 @@ export default function HelpPage() {
             <li><strong>Article reactions</strong> &mdash; mark articles as Helpful, Insightful, Outdated, or Confusing via the reaction bar at the bottom.</li>
             <li><strong>Star rating</strong> &mdash; rate any article 1–5 stars using the rating widget below the reaction bar; your rating is saved per session, and the average and count are shown live.</li>
             <li><strong>Article checklist</strong> &mdash; per-article todo list below the article; readers can check off tasks; admins add and delete tasks via the inline form.</li>
+            <li><strong>Article polls</strong> &mdash; admins add polls to any article; readers vote once per session; vote counts and percentage bars are revealed after voting or when the poll is closed; admins can close, reopen, or delete polls from the poll widget.</li>
+            <li><strong>Blame view</strong> &mdash; visit the <em>Blame</em> tab on any article to see each paragraph colour-coded by the revision that first introduced it; sidebar shows editor name, date, and edit summary with a link to the full revision.</li>
             <li><strong>Article forks</strong> &mdash; propose a complete rewrite of any article. Admins review, merge, or reject forks at <Link href="/forks">/forks</Link>.</li>
             <li><strong>Knowledge bounties</strong> &mdash; request articles on specific topics at <Link href="/bounties">/bounties</Link>. Contributors can claim and fulfil them.</li>
             <li><strong>Expert badges</strong> &mdash; admins grant expert badges per category. Expert contributors are highlighted in revision history and bylines.</li>

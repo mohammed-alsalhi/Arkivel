@@ -87,6 +87,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Font size preference** — S/M/L/XL reading size selector on article pages; persisted to localStorage
 - **Focus paragraph mode** — dims non-hovered paragraphs for distraction-free reading; toggle persisted
 - **Saved search alerts** — per-search notification toggle; daily cron notifies users when new articles match saved queries; managed at `/settings/saved-searches`
+- **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
+- **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar
+- **Article polls** — admins create polls on any article; session-based one-vote-per-user; vote counts revealed post-vote; admin close/reopen/delete controls
 - **Table of contents** — auto-generated for articles with multiple headings
 - **Popularity leaderboard** — `/popular` ranks published articles by reads × 2 + reactions
 - **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`

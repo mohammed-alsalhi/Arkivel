@@ -119,6 +119,7 @@ model Article {
   // v4.35 additions
   ratings          ArticleRating[]
   todos            ArticleTodo[]
+  polls            ArticlePoll[]
 
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -1317,6 +1318,32 @@ model ArticleTodo {
   createdAt DateTime @default(now())
 
   @@index([articleId])
+}
+
+// ── v4.39: Polls ──
+model ArticlePoll {
+  id        String       @id @default(cuid())
+  articleId String
+  article   Article      @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  question  String
+  options   String[]     // poll option labels
+  closed    Boolean      @default(false)
+  votes     PollVote[]
+  createdAt DateTime     @default(now())
+
+  @@index([articleId])
+}
+
+model PollVote {
+  id         String      @id @default(cuid())
+  pollId     String
+  poll       ArticlePoll @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  optionIndex Int        // 0-based index into poll.options
+  sessionId  String
+  createdAt  DateTime    @default(now())
+
+  @@unique([pollId, sessionId])
+  @@index([pollId])
 }
 
 // ── v4.29: Glossary ──

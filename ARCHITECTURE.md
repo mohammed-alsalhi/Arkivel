@@ -117,7 +117,7 @@ src/
       types.ts                # Plugin interface definition
       registry.ts             # Plugin registry
 prisma/
-  schema.prisma               # Database schema (77 models — includes GlossaryTerm)
+  schema.prisma               # Database schema (79 models — includes GlossaryTerm, ArticlePoll, PollVote)
   seed.mjs                    # Category and subcategory seeder
   migrations/                 # Versioned migration history
 scripts/
@@ -156,6 +156,10 @@ docs/
 - **ApiKey** — Public API authentication keys, linked to User.
 - **Webhook** — Event webhook endpoints for article create/update/delete.
 - **WebhookDelivery** — Webhook delivery logging with status tracking.
+
+### Polls
+- **ArticlePoll** — Poll attached to an article with a question and string[] options. Can be closed to prevent further voting.
+- **PollVote** — One vote per session per poll (unique on `pollId + sessionId`). Stores `optionIndex`.
 
 ### User Features
 - **Watchlist** — User-article watch pairs for change notifications.

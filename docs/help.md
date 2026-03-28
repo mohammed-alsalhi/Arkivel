@@ -92,6 +92,9 @@ The toolbar below the article title provides quick actions grouped into four sec
 | **Aa** | Toggle dyslexia-friendly font and spacing |
 | **RTL** | Toggle right-to-left reading direction for the article |
 | **Translate ▾** | Machine-translate to another language (requires API key) |
+| **S/M/L/XL** | Font size selector; persisted between sessions |
+| **Focus** | Dims non-hovered paragraphs for distraction-free reading; persisted |
+| **Speed read** | RSVP modal; 150/250/400/600 WPM; ORP pivot character highlighted |
 
 ---
 
@@ -206,6 +209,8 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Article reactions** — mark articles as Helpful, Insightful, Outdated, or Confusing via the reaction bar at the bottom.
 - **Star rating** — rate any article 1–5 stars; your rating is saved per session and the average with count is shown live.
 - **Article checklist** — per-article todo list; readers check off tasks, admins add and delete tasks inline.
+- **Article polls** — admins create polls on any article; readers vote once per session; vote counts and bars revealed after voting or when closed; admins can close, reopen, or delete polls.
+- **Blame view** — the *Blame* tab on any article shows each paragraph colour-coded by the revision that introduced it; sidebar displays editor, date, and edit summary.
 - **Article forks** — propose a complete rewrite of any article. Admins review, merge, or reject forks at `/forks`.
 - **Knowledge bounties** — request articles on specific topics at `/bounties`. Contributors can claim and fulfil them.
 - **Expert badges** — admins grant expert badges per category. Expert contributors are highlighted in revision history and bylines.

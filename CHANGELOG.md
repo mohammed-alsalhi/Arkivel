@@ -4,6 +4,24 @@
 
 All notable changes to this project are documented here.
 
+## [4.39.0] - 2026-03-27
+
+### New Features
+
+- **Speed reader (RSVP)** — "Speed read" button in the article toolbar opens a modal that flashes one word at a time at 150/250/400/600 WPM; ORP (Optimal Recognition Point) highlights the pivot character in accent colour; progress bar; Start/Pause/Resume/Reset controls
+- **Article blame view** — `/articles/[slug]/blame` tab shows every paragraph colour-coded by the revision that first introduced it; sidebar per-paragraph displays editor name, date, edit summary, and a link to the revision
+- **Article polls** — admins can attach multiple polls to any article; readers vote on options (one vote per session, via session ID); vote counts and percentage bars revealed after voting or when poll is closed; admins can close/reopen/delete polls; polls persist to `ArticlePoll` and `PollVote` DB tables
+
+### Technical
+
+- `ArticlePoll` and `PollVote` Prisma models added; `prisma db push` applied; `prisma generate` run
+- `GET/POST /api/articles/[id]/polls` — list polls with vote counts; create poll (admin only)
+- `POST/DELETE/PATCH /api/articles/[id]/polls/[pollId]` — cast vote (session-based upsert), delete poll, close/reopen poll
+- `GET /api/articles/[id]/blame` — paragraph-level blame extraction from revision history (oldest-first, cap 200 revisions)
+- `SpeedReader` component: extracts plain text from `#article-content`; ORP at `floor(len/3)-1`; `setTimeout` loop; 4 WPM speeds
+- `ArticlePollWidget`: fetches polls; vote-to-reveal results pattern; localStorage vote memory; admin create-poll inline form
+- Blame tab link added to article tabs
+
 ## [4.38.0] - 2026-03-28
 
 ### New Features
