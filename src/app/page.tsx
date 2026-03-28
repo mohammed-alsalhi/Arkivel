@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/utils";
 import { config } from "@/lib/config";
 import OnThisDay from "@/components/OnThisDay";
 import ArticleCard from "@/components/articles/ArticleCard";
+import HotArticles from "@/components/HotArticles";
 
 async function getRecentArticles() {
   try {
@@ -161,6 +162,7 @@ export default async function Home() {
         {/* Sidebar */}
         <div className="md:col-span-2">
           <OnThisDay />
+          <HotArticles days={7} limit={5} />
         </div>
       </div>
     </div>

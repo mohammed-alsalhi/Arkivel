@@ -51,6 +51,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 ## Discovery & Navigation
 
 - **Full-text search** — AND-logic multi-word search with relevance ranking; instant results as you type
+- **Word-count search filter** — advanced search includes min/max word count range to find articles by length
 - **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
 - **30-day view sparkline** — article stats panel shows a mini bar chart of daily page views for the past 30 days
 - **Article freshness badge** — colour-coded badge (Fresh/Recent/Aging/Stale) next to the "Last edited" date on every article
@@ -74,6 +75,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Edit suggestions** — readers can propose corrections via a "Suggest edit" button; admin review at `/admin/suggestions`
 - **Reader retention analytics** — per-article scroll depth distribution funnel at `/admin/retention`
 - **Referrer tracking** — incoming traffic sources tracked per article per day; aggregated at `/admin/referrers`
+- **Satisfaction star rating** — 1–5 star widget on every article; per-session upsert; average and count shown in real time
+- **Hot articles widget** — "Trending this week" panel on the homepage sidebar showing top-5 most-viewed articles in last 7 days
+- **Article todo checklist** — per-article task list; readers check off items, admins add/delete tasks inline
 - **Table of contents** — auto-generated for articles with multiple headings
 - **Popularity leaderboard** — `/popular` ranks published articles by reads × 2 + reactions
 - **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`
@@ -263,4 +267,5 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Category merge** — merge two categories at `/admin/categories`; all articles reassigned to target, source deleted
 - **Word-count distribution** — histogram of article lengths at `/admin/word-count` with longest/shortest tables and average word count
 - **Batch operations** — bulk-assign category, publish/unpublish, or delete from `/articles`
+- **Tag management** — rename, recolor, and delete tags inline at `/admin/tags` with article count and filterable list
 - **Custom branding** — name, tagline, welcome text, footer via `NEXT_PUBLIC_*` environment variables

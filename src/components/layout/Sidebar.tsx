@@ -373,6 +373,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/retention" active={pathname === "/admin/retention"} onClick={close}>
               Reader retention
             </SidebarLink>
+            <SidebarLink href="/admin/tags" active={pathname === "/admin/tags"} onClick={close}>
+              Tag management
+            </SidebarLink>
           </SidebarSection>
         )}
 

@@ -4,6 +4,24 @@
 
 All notable changes to this project are documented here.
 
+## [4.35.0] - 2026-03-27
+
+### New Features
+
+- **Satisfaction rating widget** — 5-star rating on every article page; per-session upsert with avg + count display; interactive hover preview; your rating shown after voting
+- **Hot articles widget** — "Trending this week" panel on the homepage sidebar showing top-5 articles by view count in the last 7 days; backed by `GET /api/articles/hot`
+- **Article todo list** — per-article editor checklist panel; readers can check off tasks, admins can add/delete tasks; shows completion progress (N/M done)
+- **Tag management admin page** — inline rename + recolor + delete for all tags at `/admin/tags`; filterable list with article count; hover-reveal action buttons
+- **Word-count range filter in search** — min/max word count inputs in the Advanced search sidebar; filters results post-fetch based on stripped HTML word count
+
+### Technical
+
+- `ArticleRating` Prisma model (added in v4.35 schema prep): per-session upsert, avg/count aggregate via `GET /api/articles/[id]/rating`
+- `ArticleTodo` Prisma model: CRUD at `/api/articles/[id]/todos` (list/create) and `/api/articles/[id]/todos/[todoId]` (patch/delete)
+- `GET /api/articles/hot` — groups `ArticleView` by articleId for last N days, joins to published articles
+- `/admin/tags` page: client-side inline edit row, optimistic update, confirm-before-delete
+- Search API: `wordCountMin` / `wordCountMax` params applied as post-fetch filter on `content` field
+
 ## [4.34.0] - 2026-03-27
 
 ### New Features

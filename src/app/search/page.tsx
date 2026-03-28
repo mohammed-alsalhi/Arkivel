@@ -48,6 +48,8 @@ function SearchContent() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [wordCountMin, setWordCountMin] = useState("");
+  const [wordCountMax, setWordCountMax] = useState("");
 
   // Fetch categories and tags on mount
   useEffect(() => {
@@ -78,6 +80,8 @@ function SearchContent() {
     if (selectedTags.length > 0) params.set("tags", selectedTags.join(","));
     if (dateFrom) params.set("dateFrom", dateFrom);
     if (dateTo) params.set("dateTo", dateTo);
+    if (wordCountMin) params.set("wordCountMin", wordCountMin);
+    if (wordCountMax) params.set("wordCountMax", wordCountMax);
 
     try {
       const res = await fetch(`/api/search?${params.toString()}`);
@@ -88,7 +92,7 @@ function SearchContent() {
     } finally {
       setLoading(false);
     }
-  }, [q, selectedCategory, selectedTags, dateFrom, dateTo]);
+  }, [q, selectedCategory, selectedTags, dateFrom, dateTo, wordCountMin, wordCountMax]);
 
   // Search when query or filters change
   useEffect(() => {
@@ -136,9 +140,11 @@ function SearchContent() {
     setSelectedTags([]);
     setDateFrom("");
     setDateTo("");
+    setWordCountMin("");
+    setWordCountMax("");
   }
 
-  const hasFilters = selectedCategory || selectedTags.length > 0 || dateFrom || dateTo;
+  const hasFilters = selectedCategory || selectedTags.length > 0 || dateFrom || dateTo || wordCountMin || wordCountMax;
 
   if (!q || q.length < 2) {
     return (
@@ -281,6 +287,32 @@ function SearchContent() {
                       onChange={(e) => setDateTo(e.target.value)}
                       className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
                       placeholder="To"
+                    />
+                  </div>
+                </div>
+
+                {/* Word count range */}
+                <div>
+                  <label className="block text-[11px] text-muted font-bold mb-0.5">
+                    Word count
+                  </label>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      min="0"
+                      value={wordCountMin}
+                      onChange={(e) => setWordCountMin(e.target.value)}
+                      placeholder="Min"
+                      className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
+                    />
+                    <span className="text-muted text-[11px] shrink-0">–</span>
+                    <input
+                      type="number"
+                      min="0"
+                      value={wordCountMax}
+                      onChange={(e) => setWordCountMax(e.target.value)}
+                      placeholder="Max"
+                      className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
                     />
                   </div>
                 </div>

@@ -95,6 +95,8 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 
 ## v4.35
 
-- [ ] Analytics batch — satisfaction rating widget, article heatmap
-- [ ] AI grammar panel — inline highlighting in editor
-- [ ] Content org — article todo list, bulk tag ops, tag rename
+- [x] Satisfaction rating widget — 5-star per-session rating on article pages, avg + count display
+- [x] Hot articles widget — "Trending this week" panel on homepage from last-7-day view counts
+- [x] Article todo list — per-article editor checklist with check-off, add, delete; admin-only editing
+- [x] Tag management admin page — rename, recolor, delete tags with inline edit UI at `/admin/tags`
+- [x] Word-count range filter in search — min/max word count filter in advanced search sidebar

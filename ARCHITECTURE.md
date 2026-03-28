@@ -224,7 +224,10 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/api/articles/[id]/discussions` | GET, POST, DELETE | Article comments |
 | `/api/articles/[id]/export` | GET | Export article as Markdown/HTML |
 | `/api/articles/[id]/links` | GET, POST, DELETE | Semantic article links |
-| `/api/articles/[id]/rating` | GET, POST | Article ratings |
+| `/api/articles/[id]/rating` | GET, POST | Article star ratings (avg, count, own) |
+| `/api/articles/[id]/todos` | GET, POST | Article todo checklist items |
+| `/api/articles/[id]/todos/[todoId]` | PATCH, DELETE | Update/delete a single todo |
+| `/api/articles/hot` | GET | Hot articles by page views in last N days |
 | `/api/articles/[id]/related` | GET | Related articles by category/tags |
 | `/api/articles/[id]/revisions` | GET | Revision history |
 | `/api/articles/[id]/status` | PATCH | Update article status |

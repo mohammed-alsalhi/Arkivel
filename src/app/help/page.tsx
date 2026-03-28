@@ -62,7 +62,7 @@ export default function HelpPage() {
             <li><strong>Microphone</strong> &mdash; Voice dictation (browser speech recognition)</li>
           </ul>
           <p className="mb-2">
-            <strong>Slash commands:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">/</code> anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, heading/list types, and your saved snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code>.
+            <strong>Slash commands:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">/</code> anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo video embed, GitHub Gist embed, and your saved snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code>.
           </p>
           <p className="mb-2">
             <strong>Markdown mode:</strong> Click the <code className="bg-surface-hover px-1 text-[12px]">Markdown</code> button to switch to raw markdown editing. Click <code className="bg-surface-hover px-1 text-[12px]">Rich Text</code> to switch back.
@@ -246,6 +246,8 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Article reactions</strong> &mdash; mark articles as Helpful, Insightful, Outdated, or Confusing via the reaction bar at the bottom.</li>
+            <li><strong>Star rating</strong> &mdash; rate any article 1–5 stars using the rating widget below the reaction bar; your rating is saved per session, and the average and count are shown live.</li>
+            <li><strong>Article checklist</strong> &mdash; per-article todo list below the article; readers can check off tasks; admins add and delete tasks via the inline form.</li>
             <li><strong>Article forks</strong> &mdash; propose a complete rewrite of any article. Admins review, merge, or reject forks at <Link href="/forks">/forks</Link>.</li>
             <li><strong>Knowledge bounties</strong> &mdash; request articles on specific topics at <Link href="/bounties">/bounties</Link>. Contributors can claim and fulfil them.</li>
             <li><strong>Expert badges</strong> &mdash; admins grant expert badges per category. Expert contributors are highlighted in revision history and bylines.</li>

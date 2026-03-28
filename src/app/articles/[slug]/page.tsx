@@ -59,6 +59,8 @@ import ArticleViewHistory from "@/components/ArticleViewHistory";
 import ArticleQA from "@/components/ArticleQA";
 import SuggestEditButton from "@/components/SuggestEditButton";
 import ReferrerTracker from "@/components/ReferrerTracker";
+import ArticleRatingWidget from "@/components/ArticleRatingWidget";
+import ArticleTodoList from "@/components/ArticleTodoList";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -445,6 +447,9 @@ export default async function ArticlePage({ params }: Props) {
         {/* Reaction bar */}
         <ArticleReactionBar articleId={article.id} />
 
+        {/* Star rating */}
+        <ArticleRatingWidget articleId={article.id} />
+
         {/* Fork this article */}
         <div className="mt-3 text-right">
           <Link
@@ -529,6 +534,7 @@ export default async function ArticlePage({ params }: Props) {
         <div className="mt-2 text-right">
           <SuggestEditButton articleId={article.id} />
         </div>
+        <ArticleTodoList articleId={article.id} isAdmin={adminFlag} />
         <ArticleQA articleSlug={article.slug} />
         <SessionReadingTrail slug={article.slug} title={article.title} />
         <ScrollDepthTracker articleId={article.id} />

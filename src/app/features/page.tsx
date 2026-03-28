@@ -46,6 +46,7 @@ export default function FeaturesPage() {
             <li><strong>Two-column layout</strong> — responsive side-by-side grid block via <code className="bg-surface-hover px-1 text-[12px]">/two-column layout</code></li>
             <li><strong>YouTube / Vimeo embeds</strong> — paste a video URL via <code className="bg-surface-hover px-1 text-[12px]">/youtube</code>; auto-converts to a responsive 16:9 iframe</li>
             <li><strong>GitHub Gist embeds</strong> — embed a Gist link via <code className="bg-surface-hover px-1 text-[12px]">/github gist</code></li>
+            <li><strong>Article todo checklist</strong> — per-article task list; readers check off items, admins add and remove tasks; shows completion progress</li>
             <li><strong>Footnotes &amp; citations</strong> — inline footnote references auto-numbered via CSS counters</li>
             <li><strong>Syntax highlighting</strong> — code blocks with language detection and theme-aware colours</li>
             <li><strong>Voice dictation</strong> — click the microphone button to insert speech at the cursor</li>
@@ -85,6 +86,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
+            <li><strong>Word-count search filter</strong> — advanced search includes min/max word count range to find articles by length</li>
             <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>
             <li><strong>30-day view sparkline</strong> — article stats panel shows a mini bar chart of daily page views for the past 30 days</li>
             <li><strong>Article freshness badge</strong> — colour-coded badge (Fresh/Recent/Aging/Stale) next to the &ldquo;Last edited&rdquo; date on every article</li>
@@ -117,6 +119,8 @@ export default function FeaturesPage() {
             <li><strong>Edit suggestions</strong> — readers can click &ldquo;Suggest edit&rdquo; on any article to propose a correction; admins review and accept/reject at <Link href="/admin/suggestions">/admin/suggestions</Link></li>
             <li><strong>Reader retention analytics</strong> — scroll depth distribution per article at <Link href="/admin/retention">/admin/retention</Link></li>
             <li><strong>Referrer tracking</strong> — incoming traffic sources tracked per article per day; aggregated view at <Link href="/admin/referrers">/admin/referrers</Link></li>
+            <li><strong>Satisfaction star rating</strong> — 1–5 star widget on every article page; per-session upsert; average and count shown in real time</li>
+            <li><strong>Hot articles widget</strong> — &ldquo;Trending this week&rdquo; panel on the homepage sidebar showing the top-5 most-viewed articles in the last 7 days</li>
           </ul>
         </div>
       </div>
@@ -343,6 +347,7 @@ export default function FeaturesPage() {
             <li><strong>Category merge</strong> — merge two categories at <Link href="/admin/categories">/admin/categories</Link>; all articles and sub-categories from the source are reassigned to the target, then the source is deleted</li>
             <li><strong>Word-count distribution</strong> — histogram of article lengths at <Link href="/admin/word-count">/admin/word-count</Link> with longest/shortest tables and average word count</li>
             <li><strong>Batch operations</strong> — bulk-assign category, publish/unpublish, or delete from <Link href="/articles">/articles</Link></li>
+            <li><strong>Tag management</strong> — rename, recolor, and delete tags inline at <Link href="/admin/tags">/admin/tags</Link> with article count and filterable list</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

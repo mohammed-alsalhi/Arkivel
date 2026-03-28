@@ -42,7 +42,7 @@ The rich text editor provides a toolbar with formatting options:
 | **Σ** | Insert a math expression (KaTeX) |
 | **Microphone** | Voice dictation (browser speech recognition) |
 
-**Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, all heading/list types, and your saved snippets via `/snippet`.
+**Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, all heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo embed, GitHub Gist embed, and your saved snippets via `/snippet`.
 
 **TOC generator:** Click the `TOC` toolbar button to extract all headings and insert a nested linked table of contents at the cursor position.
 
@@ -202,6 +202,8 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 ## Collaboration
 
 - **Article reactions** — mark articles as Helpful, Insightful, Outdated, or Confusing via the reaction bar at the bottom.
+- **Star rating** — rate any article 1–5 stars; your rating is saved per session and the average with count is shown live.
+- **Article checklist** — per-article todo list; readers check off tasks, admins add and delete tasks inline.
 - **Article forks** — propose a complete rewrite of any article. Admins review, merge, or reject forks at `/forks`.
 - **Knowledge bounties** — request articles on specific topics at `/bounties`. Contributors can claim and fulfil them.
 - **Expert badges** — admins grant expert badges per category. Expert contributors are highlighted in revision history and bylines.

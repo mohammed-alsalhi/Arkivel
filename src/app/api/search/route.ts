@@ -14,6 +14,8 @@ export async function GET(request: NextRequest) {
   const dateTo = request.nextUrl.searchParams.get("dateTo") || null;
   const author = request.nextUrl.searchParams.get("author") || null;
   const status = request.nextUrl.searchParams.get("status") || null;
+  const wordCountMin = request.nextUrl.searchParams.get("wordCountMin") ? parseInt(request.nextUrl.searchParams.get("wordCountMin")!, 10) : null;
+  const wordCountMax = request.nextUrl.searchParams.get("wordCountMax") ? parseInt(request.nextUrl.searchParams.get("wordCountMax")!, 10) : null;
 
   if (!query || query.length < 2) {
     return NextResponse.json({ results: [], suggestions: [] });
@@ -74,6 +76,20 @@ export async function GET(request: NextRequest) {
   // Fall back to LIKE-based search if tsvector returned no results
   if (!usedTsvector || results.length === 0) {
     results = await likeBasedSearch(query, limit, categoryId, tagSlugs, dateFrom, dateTo, author, status);
+  }
+
+  // Apply word count filter (post-process: computed from content)
+  if (wordCountMin !== null || wordCountMax !== null) {
+    results = results.filter((r) => {
+      // content may not be present in tsvector results; skip filtering those
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const content = (r as any).content as string | undefined;
+      if (!content) return true;
+      const wc = content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length;
+      if (wordCountMin !== null && wc < wordCountMin) return false;
+      if (wordCountMax !== null && wc > wordCountMax) return false;
+      return true;
+    });
   }
 
   // Fuzzy fallback: when we have few results, suggest similar titles
