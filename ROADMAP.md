@@ -121,6 +121,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
 
+## v4.43
+
+- [x] Cleanup tags — admin flags (needs-images, needs-expansion, etc.) on articles; orange notice banner on article page
+- [x] Article adoption — mark article as abandoned; adoption banner + one-click claim for editors
+- [x] Copy as plain text — button in article toolbar strips HTML and copies to clipboard
+
 ## v4.42
 
 - [x] Theme customizer — HSL hue slider for accent color; live preview; persisted to localStorage

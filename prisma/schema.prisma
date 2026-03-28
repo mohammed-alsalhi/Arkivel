@@ -126,6 +126,9 @@ model Article {
   isAbandoned      Boolean  @default(false)  // article awaiting adoption
   adoptedBy        String?  // userId who claimed this article
 
+  // v4.43 additions
+  cleanupTags      String[] @default([])  // e.g. ["needs-images", "needs-expansion", "stub"]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

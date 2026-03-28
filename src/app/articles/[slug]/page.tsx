@@ -76,6 +76,9 @@ import ContentWarningBanner from "@/components/ContentWarningBanner";
 import ThemeCustomizer from "@/components/ThemeCustomizer";
 import FontPreference from "@/components/FontPreference";
 import ArticleQuickNote from "@/components/ArticleQuickNote";
+import CleanupTagsBanner from "@/components/CleanupTagsBanner";
+import ArticleAdoptionBanner from "@/components/ArticleAdoptionBanner";
+import CopyPlainTextButton from "@/components/CopyPlainTextButton";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -336,6 +339,7 @@ export default async function ArticlePage({ params }: Props) {
             <TranslateButton articleId={article.id} />
             <ReadingModeToggle />
             <CopyMarkdownButton markdown={article.contentRaw} title={article.title} />
+            <CopyPlainTextButton html={resolvedContent} />
             <FontPreference />
             <ThemeCustomizer />
 
@@ -434,6 +438,16 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Table of contents */}
         <TableOfContents html={resolvedContent} />
+
+        {/* Cleanup tags */}
+        {article.cleanupTags && article.cleanupTags.length > 0 && (
+          <CleanupTagsBanner tags={article.cleanupTags} />
+        )}
+
+        {/* Abandoned / adoption notice */}
+        {article.isAbandoned && (
+          <ArticleAdoptionBanner articleId={article.id} adoptedBy={article.adoptedBy ?? null} />
+        )}
 
         {/* Content warnings */}
         {article.contentWarnings && article.contentWarnings.length > 0 && (

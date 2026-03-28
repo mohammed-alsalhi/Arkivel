@@ -15,6 +15,22 @@ All notable changes to this project are documented here.
 - Updated all docs (README, ARCHITECTURE, CONTRIBUTING, DESIGN, ROADMAP) to reflect new name
 - Updated Vercel deploy button, Docker image names, and clone URLs in README
 
+## [4.43.0] - 2026-03-28
+
+### New Features
+
+- **Cleanup tags** — admins mark articles with attention flags (Needs Images, Needs Expansion, Needs Citations, Needs Review, Stub, Outdated); shown as an orange notice banner on the article page
+- **Article adoption** — admins mark an article as abandoned; article page shows a banner; logged-in admin can adopt (clears the flag via API)
+- **Copy as plain text** — button in article toolbar strips HTML and copies article text to clipboard
+
+### Technical
+
+- `CleanupTagsBanner`: server component; maps tag keys to human-readable labels; displays orange wiki-notice with shield icon
+- `ArticleAdoptionBanner`: client component; calls `PUT /api/articles/[id]` with `{ isAbandoned: false }` to adopt; hides on success
+- `CopyPlainTextButton`: client component; uses `div.innerHTML` + `innerText` to strip HTML; clipboard API
+- `cleanupTags String[]` added to Article Prisma model; `prisma db push` applied
+- `isAbandoned` and `cleanupTags` wired into edit form (checkboxes), PUT API handler, and article page display
+
 ## [4.42.0] - 2026-03-28
 
 ### New Features

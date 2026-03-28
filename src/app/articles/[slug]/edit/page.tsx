@@ -45,6 +45,8 @@ export default function EditArticlePage() {
   const [coverImage, setCoverImage] = useState("");
   const [accessPassword, setAccessPassword] = useState("");
   const [contentWarnings, setContentWarnings] = useState<string[]>([]);
+  const [cleanupTags, setCleanupTags] = useState<string[]>([]);
+  const [isAbandoned, setIsAbandoned] = useState(false);
   const [coverFocalX, setCoverFocalX] = useState(50);
   const [coverFocalY, setCoverFocalY] = useState(50);
   const [expiresAt, setExpiresAt] = useState("");
@@ -97,6 +99,8 @@ export default function EditArticlePage() {
               setReviewDueAt(articleData.reviewDueAt ? articleData.reviewDueAt.slice(0, 10) : "");
               setAccessPassword(articleData.accessPassword || "");
               setContentWarnings(articleData.contentWarnings || []);
+              setCleanupTags(articleData.cleanupTags || []);
+              setIsAbandoned(articleData.isAbandoned || false);
               setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
             }
           }
@@ -120,6 +124,9 @@ export default function EditArticlePage() {
         setCoverFocalY(articleData.coverFocalY ?? 50);
         setExpiresAt(articleData.expiresAt ? articleData.expiresAt.slice(0, 10) : "");
         setReviewDueAt(articleData.reviewDueAt ? articleData.reviewDueAt.slice(0, 10) : "");
+        setContentWarnings(articleData.contentWarnings || []);
+        setCleanupTags(articleData.cleanupTags || []);
+        setIsAbandoned(articleData.isAbandoned || false);
         setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
       }
       setLoading(false);
@@ -158,6 +165,8 @@ export default function EditArticlePage() {
         reviewDueAt: reviewDueAt || null,
         accessPassword: accessPassword.trim() || null,
         contentWarnings,
+        cleanupTags,
+        isAbandoned,
       }),
     });
 
@@ -439,6 +448,31 @@ export default function EditArticlePage() {
               ))}
             </div>
             <p className="text-[11px] text-muted mt-0.5">Selected warnings are shown as a dismissible banner before the article</p>
+          </div>
+
+          <div>
+            <label className="block text-[13px] font-bold text-heading mb-1">Cleanup tags:</label>
+            <div className="flex flex-wrap gap-2 text-[12px]">
+              {["needs-images", "needs-expansion", "needs-citations", "needs-review", "stub", "outdated"].map((t) => (
+                <label key={t} className="flex items-center gap-1 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={cleanupTags.includes(t)}
+                    onChange={(e) => setCleanupTags(e.target.checked ? [...cleanupTags, t] : cleanupTags.filter((x) => x !== t))}
+                  />
+                  <span className="text-foreground">{t.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-[11px] text-muted mt-0.5">Shown as an orange notice banner on the article page</p>
+          </div>
+
+          <div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={isAbandoned} onChange={(e) => setIsAbandoned(e.target.checked)} />
+              <span className="text-[13px] font-bold text-heading">Mark as abandoned</span>
+            </label>
+            <p className="text-[11px] text-muted mt-0.5">Signals that this article is unmaintained and available for adoption by another editor</p>
           </div>
 
           <div>

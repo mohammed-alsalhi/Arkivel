@@ -133,6 +133,7 @@ export default function HelpPage() {
             <li><strong>Font preference</strong> &mdash; dropdown to switch article body font between Default, Serif, Sans, or Mono; persisted</li>
             <li><strong>Accent color</strong> &mdash; color-swatch button opens an HSL hue slider to customize the wiki accent color; persisted</li>
             <li><strong>Quick note</strong> &mdash; collapsible private note panel per article; stored only in this browser; save and delete controls</li>
+            <li><strong>Copy plain text</strong> &mdash; button in article toolbar copies the article body as plain text (HTML stripped)</li>
           </ul>
         </div>
       </div>
@@ -399,6 +400,8 @@ export default function HelpPage() {
             <li><strong>Wiki health score</strong> &mdash; <Link href="/admin/health">/admin/health</Link> gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %</li>
             <li><strong>Embeddings coverage</strong> &mdash; <Link href="/admin/embeddings">/admin/embeddings</Link> shows AI embedding status per article</li>
             <li><strong>Maintenance mode</strong> &mdash; <Link href="/admin/maintenance">/admin/maintenance</Link> toggle displays a site-wide yellow banner while the wiki is under maintenance</li>
+            <li><strong>Cleanup tags</strong> &mdash; flag articles with attention labels (Needs Images, Stub, Outdated, etc.); shown as orange banner on article page; set in article edit form</li>
+            <li><strong>Article adoption</strong> &mdash; mark articles as abandoned in the edit form; adoption banner with one-click claim appears on the article page</li>
           </ul>
         </div>
       </div>

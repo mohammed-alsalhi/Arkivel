@@ -371,6 +371,9 @@ export default function FeaturesPage() {
             <li><strong>Font preference</strong> — dropdown in article toolbar to switch article body font between Default, Serif, Sans, or Mono; persisted to browser storage</li>
             <li><strong>Article quick notes</strong> — collapsible private note panel on every article page; stored only in the browser; save and delete controls</li>
             <li><strong>Maintenance mode</strong> — admin toggle at <Link href="/admin/maintenance">/admin/maintenance</Link> displays a site-wide yellow banner when the wiki is under maintenance</li>
+            <li><strong>Cleanup tags</strong> — admins mark articles with attention flags (Needs Images, Needs Expansion, Needs Citations, Needs Review, Stub, Outdated); shown as orange notice on article page</li>
+            <li><strong>Article adoption</strong> — admins can mark articles as abandoned; article page shows a banner with a one-click adopt button for editors</li>
+            <li><strong>Copy as plain text</strong> — toolbar button strips all HTML and copies the article body as plain text to the clipboard</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

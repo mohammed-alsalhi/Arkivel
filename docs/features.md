@@ -98,6 +98,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Font preference** — article toolbar dropdown: Default / Serif / Sans / Mono; injects override CSS on `#article-content`; persisted
 - **Article quick notes** — collapsible private note per article; browser localStorage only; save and delete controls
 - **Maintenance mode** — admin toggle at `/admin/maintenance`; shows site-wide yellow banner when active
+- **Cleanup tags** — admin flags (needs-images, needs-expansion, needs-citations, stub, outdated) on articles; orange notice banner on article page; set in edit form
+- **Article adoption** — mark article as abandoned in edit form; article page shows orange adoption banner; one-click adopt clears the flag
+- **Copy as plain text** — button in article toolbar strips HTML and copies article body to clipboard
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar
 - **Article polls** — admins create polls on any article; session-based one-vote-per-user; vote counts revealed post-vote; admin close/reopen/delete controls

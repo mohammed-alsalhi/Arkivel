@@ -101,6 +101,7 @@ The toolbar below the article title provides quick actions grouped into four sec
 | **Font preference** | Dropdown to switch article body font (Default/Serif/Sans/Mono); persisted |
 | **Accent color** | HSL hue slider to customize the wiki accent color; persisted |
 | **Quick note** | Collapsible private note per article stored in browser localStorage |
+| **Copy plain text** | Copies article body as plain text (HTML stripped) to clipboard |
 
 ---
 
