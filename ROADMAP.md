@@ -100,3 +100,10 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 - [x] Article todo list — per-article editor checklist with check-off, add, delete; admin-only editing
 - [x] Tag management admin page — rename, recolor, delete tags with inline edit UI at `/admin/tags`
 - [x] Word-count range filter in search — min/max word count filter in advanced search sidebar
+
+## v4.36
+
+- [x] AI grammar check panel — collapsible panel below editor; checks grammar/style via AI (or heuristic fallback); Apply buttons fix inline issues
+- [x] Bulk tag operations — "Add tag" and "Remove tag" in the article list batch action bar
+- [x] Scroll position memory — article scroll position saved to localStorage; restored on return visits
+- [x] Search advanced filter enhancements — word count already wired; grammar API endpoint at `/api/ai/grammar`

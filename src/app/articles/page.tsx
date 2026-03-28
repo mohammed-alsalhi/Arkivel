@@ -55,6 +55,7 @@ function ArticlesPageContent() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [batchAction, setBatchAction] = useState("");
   const [batchCategoryId, setBatchCategoryId] = useState("");
+  const [batchTagId, setBatchTagId] = useState("");
   const [batchWorking, setBatchWorking] = useState(false);
 
   const limit = 20;
@@ -172,6 +173,25 @@ function ArticlesPageContent() {
         setBatchAction("");
       } else {
         alert("Failed to update articles");
+      }
+      setBatchWorking(false);
+      return;
+    }
+
+    if (batchAction === "addTag" || batchAction === "removeTag") {
+      if (!batchTagId) return;
+      setBatchWorking(true);
+      const res = await fetch("/api/articles/batch", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids, action: batchAction, tagId: batchTagId }),
+      });
+      if (res.ok) {
+        await loadData();
+        setBatchAction("");
+        setBatchTagId("");
+      } else {
+        alert("Failed to update tags");
       }
       setBatchWorking(false);
       return;
@@ -312,6 +332,8 @@ function ArticlesPageContent() {
           >
             <option value="">Choose action...</option>
             <option value="setCategory">Set category</option>
+            <option value="addTag">Add tag</option>
+            <option value="removeTag">Remove tag</option>
             <option value="publish">Publish</option>
             <option value="unpublish">Unpublish</option>
             <option value="delete">Delete</option>
@@ -330,9 +352,23 @@ function ArticlesPageContent() {
               ))}
             </select>
           )}
+          {(batchAction === "addTag" || batchAction === "removeTag") && (
+            <select
+              value={batchTagId}
+              onChange={(e) => setBatchTagId(e.target.value)}
+              className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+            >
+              <option value="">Select tag…</option>
+              {tags.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          )}
           <button
             onClick={handleBatchAction}
-            disabled={!batchAction || batchWorking}
+            disabled={!batchAction || batchWorking || ((batchAction === "addTag" || batchAction === "removeTag") && !batchTagId)}
             className={`px-3 py-1 text-[13px] font-bold text-white disabled:opacity-50 ${
               batchAction === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-accent hover:bg-accent-hover"
             }`}

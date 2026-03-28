@@ -4,6 +4,20 @@
 
 All notable changes to this project are documented here.
 
+## [4.36.0] - 2026-03-27
+
+### New Features
+
+- **AI grammar check panel** — collapsible "Grammar & style" panel below the editor; sends text to `POST /api/ai/grammar` (GPT-4o-mini when `OPENAI_API_KEY` is set, heuristic fallback otherwise); shows issues by severity (error/warning/style) with inline Apply buttons; issue count shown in panel header
+- **Bulk tag operations** — "Add tag" and "Remove tag" actions added to the article list batch action bar; tags dropdown shown on selection; backed by new `addTag`/`removeTag` cases in `/api/articles/batch` (PUT)
+- **Scroll position memory** — `ScrollPositionRestorer` component saves article scroll position to `localStorage` every 500 ms; restores it on return visits after a brief render delay; capped at 50 entries
+
+### Technical
+
+- `GrammarCheckPanel` component: open/close toggle, Check now button, severity-coded issue cards, Apply suggestion directly into editor via `setTextSelection` + `insertContent`
+- `ScrollPositionRestorer`: throttled `scroll` listener + `setTimeout` restore; `wiki_scroll_positions` localStorage key
+- `POST /api/ai/grammar`: OpenAI GPT-4o-mini returns JSON array of `{offset, length, message, suggestion, severity}` issues; falls back to heuristic double-space and repeated-word checks
+
 ## [4.35.0] - 2026-03-27
 
 ### New Features

@@ -73,8 +73,11 @@ export default function HelpPage() {
           <p className="mb-2">
             <strong>Outline builder:</strong> A collapsible panel below the editor generates a structured list of section headings from the article title. Choose Encyclopedic, Tutorial, or Reference style. Click <strong>Insert into article</strong> to add the headings as editable H2/H3 nodes.
           </p>
-          <p>
+          <p className="mb-2">
             <strong>AI alt-text:</strong> When you upload an image, the caption prompt is pre-filled with a suggested description based on the filename (AI-enhanced when <code className="bg-surface-hover px-1 text-[12px]">AI_API_KEY</code> is configured).
+          </p>
+          <p>
+            <strong>Grammar &amp; style checker:</strong> A collapsible &ldquo;Grammar &amp; style&rdquo; panel below the editor checks your text for issues. Click <strong>Check now</strong> to analyse; each issue shows a severity (error / warning / style) with an <strong>Apply</strong> button to fix it inline.
           </p>
         </div>
       </div>

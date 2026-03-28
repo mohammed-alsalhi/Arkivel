@@ -44,6 +44,8 @@ The rich text editor provides a toolbar with formatting options:
 
 **Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, all heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo embed, GitHub Gist embed, and your saved snippets via `/snippet`.
 
+**Grammar & style checker:** A collapsible "Grammar & style" panel below the editor checks your text for errors, warnings, and style issues. Click "Check now" to analyse; each issue shows a severity badge and an Apply button to fix it inline.
+
 **TOC generator:** Click the `TOC` toolbar button to extract all headings and insert a nested linked table of contents at the cursor position.
 
 **Editor snippets:** Create reusable HTML blocks at `/settings/snippets`. Insert them in any article via the slash-command menu (type `/snippet name`).

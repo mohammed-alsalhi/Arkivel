@@ -29,6 +29,7 @@ import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Highlight from "@tiptap/extension-highlight";
 import OutlineBuilderPanel from "./OutlineBuilderPanel";
+import GrammarCheckPanel from "./GrammarCheckPanel";
 import EditorToolbar from "./EditorToolbar";
 import WikiLinkSuggester from "./WikiLinkSuggester";
 import LinkBubble from "./LinkBubble";
@@ -605,6 +606,11 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         {/* Outline Builder — AI-assisted section outline generation */}
         {!markdownMode && editor && (
           <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
+        )}
+
+        {/* Grammar & style checker */}
+        {!markdownMode && editor && (
+          <GrammarCheckPanel editor={editor} />
         )}
       </div>
     );

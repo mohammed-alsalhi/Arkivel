@@ -7,7 +7,7 @@ export async function PUT(request: NextRequest) {
   if (denied) return denied;
 
   const body = await request.json();
-  const { ids, action, categoryId } = body;
+  const { ids, action, categoryId, tagId } = body;
 
   if (!ids?.length) {
     return NextResponse.json({ error: "No articles selected" }, { status: 400 });
@@ -32,6 +32,22 @@ export async function PUT(request: NextRequest) {
         data: { published: false },
       });
       break;
+    case "addTag": {
+      if (!tagId) return NextResponse.json({ error: "tagId required" }, { status: 400 });
+      // createMany with skipDuplicates avoids errors on articles already tagged
+      await prisma.articleTag.createMany({
+        data: ids.map((id: string) => ({ articleId: id, tagId })),
+        skipDuplicates: true,
+      });
+      break;
+    }
+    case "removeTag": {
+      if (!tagId) return NextResponse.json({ error: "tagId required" }, { status: 400 });
+      await prisma.articleTag.deleteMany({
+        where: { tagId, articleId: { in: ids } },
+      });
+      break;
+    }
     default:
       return NextResponse.json({ error: "Unknown action" }, { status: 400 });
   }

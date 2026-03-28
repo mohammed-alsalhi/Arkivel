@@ -47,6 +47,7 @@ export default function FeaturesPage() {
             <li><strong>YouTube / Vimeo embeds</strong> — paste a video URL via <code className="bg-surface-hover px-1 text-[12px]">/youtube</code>; auto-converts to a responsive 16:9 iframe</li>
             <li><strong>GitHub Gist embeds</strong> — embed a Gist link via <code className="bg-surface-hover px-1 text-[12px]">/github gist</code></li>
             <li><strong>Article todo checklist</strong> — per-article task list; readers check off items, admins add and remove tasks; shows completion progress</li>
+            <li><strong>AI grammar &amp; style check</strong> — collapsible panel below editor analyses text for errors, warnings, and style suggestions; Apply buttons fix issues inline; falls back to heuristic checks when AI is not configured</li>
             <li><strong>Footnotes &amp; citations</strong> — inline footnote references auto-numbered via CSS counters</li>
             <li><strong>Syntax highlighting</strong> — code blocks with language detection and theme-aware colours</li>
             <li><strong>Voice dictation</strong> — click the microphone button to insert speech at the cursor</li>
@@ -121,6 +122,7 @@ export default function FeaturesPage() {
             <li><strong>Referrer tracking</strong> — incoming traffic sources tracked per article per day; aggregated view at <Link href="/admin/referrers">/admin/referrers</Link></li>
             <li><strong>Satisfaction star rating</strong> — 1–5 star widget on every article page; per-session upsert; average and count shown in real time</li>
             <li><strong>Hot articles widget</strong> — &ldquo;Trending this week&rdquo; panel on the homepage sidebar showing the top-5 most-viewed articles in the last 7 days</li>
+            <li><strong>Scroll position memory</strong> — article scroll position saved to browser storage; restored automatically on return visits</li>
           </ul>
         </div>
       </div>
@@ -348,6 +350,7 @@ export default function FeaturesPage() {
             <li><strong>Word-count distribution</strong> — histogram of article lengths at <Link href="/admin/word-count">/admin/word-count</Link> with longest/shortest tables and average word count</li>
             <li><strong>Batch operations</strong> — bulk-assign category, publish/unpublish, or delete from <Link href="/articles">/articles</Link></li>
             <li><strong>Tag management</strong> — rename, recolor, and delete tags inline at <Link href="/admin/tags">/admin/tags</Link> with article count and filterable list</li>
+            <li><strong>Bulk tag operations</strong> — apply or remove a tag from multiple selected articles at once via the article list batch action bar</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

@@ -78,6 +78,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Satisfaction star rating** — 1–5 star widget on every article; per-session upsert; average and count shown in real time
 - **Hot articles widget** — "Trending this week" panel on the homepage sidebar showing top-5 most-viewed articles in last 7 days
 - **Article todo checklist** — per-article task list; readers check off items, admins add/delete tasks inline
+- **AI grammar & style check** — collapsible panel below editor analyses for errors, warnings, style; Apply buttons fix inline; heuristic fallback when AI unavailable
+- **Scroll position memory** — article scroll saved to localStorage; restored on return visits; capped at 50 articles
+- **Bulk tag operations** — add or remove a tag from multiple articles at once via the article list batch bar
 - **Table of contents** — auto-generated for articles with multiple headings
 - **Popularity leaderboard** — `/popular` ranks published articles by reads × 2 + reactions
 - **Article comparison** — side-by-side view of two live articles at `/compare?a=slug1&b=slug2`
