@@ -121,6 +121,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/wiki-app
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
 
+## v4.41
+
+- [x] High-contrast accessibility mode — pure black/white/yellow theme toggle in article toolbar; persisted
+- [x] Text-only mode — hides images/media in article content; toolbar toggle; persisted
+- [x] Content warning tags — CW badges (spoilers, violence, mature, etc.) on articles; dismissible amber banner; editable in article form
+- [x] Content gap analysis — admin page showing zero/low-result searches to identify missing wiki topics
+
 ## v4.40
 
 - [x] Reading ETA — `~X min left` in article byline, updates dynamically while scrolling

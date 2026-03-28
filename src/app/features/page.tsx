@@ -363,6 +363,10 @@ export default function FeaturesPage() {
             <li><strong>Reading ETA</strong> — live <code className="bg-surface-hover px-1 text-[12px]">~X min left</code> counter in the article byline that decreases as you scroll; disappears on completion</li>
             <li><strong>Night reading mode</strong> — warm sepia-toned dark theme toggled via moon button in article toolbar; persisted to browser storage</li>
             <li><strong>Search history</strong> — browser-local list of last 20 successful searches; shown as clickable chips on the search page when no query is entered; clearable</li>
+            <li><strong>High-contrast mode</strong> — pure black background with white text and yellow accents for maximum readability; toggle in article toolbar; persisted</li>
+            <li><strong>Text-only mode</strong> — hides all images, figures, and media from article content for distraction-free reading; toolbar toggle; persisted</li>
+            <li><strong>Content warning tags</strong> — admins add CW labels (spoilers, violence, mature, etc.) to articles; shown as a dismissible amber banner before article body</li>
+            <li><strong>Content gap analysis</strong> — admin dashboard at <Link href="/admin/content-gaps">/admin/content-gaps</Link> shows zero-result and low-result search queries to highlight missing wiki topics</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

@@ -4,6 +4,24 @@
 
 All notable changes to this project are documented here.
 
+## [4.41.0] - 2026-03-28
+
+### New Features
+
+- **High-contrast accessibility mode** — toggle in article toolbar applies a pure black/white/yellow high-contrast theme for users with visual impairments; persisted to `localStorage`
+- **Text-only mode** — toggle in article toolbar hides all images, figures, videos, and iframes from the article content; persisted to `localStorage`
+- **Content warning tags** — admins can add CW tags (spoilers, violence, mature, sensitive-topics, strong-language, medical) to any article; shown as a dismissible amber banner before the article body
+- **Content gap analysis** — admin page at `/admin/content-gaps` shows zero-result and low-result (1–3) searches from `SearchQueryLog`, grouped and ranked by frequency; helps identify missing wiki topics
+
+### Technical
+
+- `HighContrastToggle`: CSS class toggle on `<html>` with pure black background and yellow accent; globals.css `html.high-contrast` block
+- `TextOnlyToggle`: dynamically injects/removes a `<style>` tag hiding media elements in `#article-content`
+- `ContentWarningBanner`: dismissible amber banner; labels map from key → human-readable string
+- `contentWarnings String[]` and `isAbandoned Boolean` added to Article Prisma model; `prisma db push` applied
+- `contentWarnings` wired into article edit form (checkboxes), PUT API handler, and article page display
+- `/admin/content-gaps` queries `SearchQueryLog.groupBy` for zero-result and low-result searches; linked in admin sidebar
+
 ## [4.40.0] - 2026-03-28
 
 ### New Features

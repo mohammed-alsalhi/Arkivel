@@ -1366,6 +1366,20 @@ html[data-theme="dark"] .find-highlight {
   margin: 0.75rem 0;
 }
 
+/* ── High-contrast accessibility mode ── */
+html.high-contrast {
+  --color-background: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-hover: #111111;
+  --color-foreground: #ffffff;
+  --color-muted: #cccccc;
+  --color-heading: #ffffff;
+  --color-border: #ffffff;
+  --color-accent: #ffff00;
+}
+html.high-contrast a { color: #ffff00 !important; }
+html.high-contrast a:visited { color: #ff88ff !important; }
+
 /* ── Night reading mode (warm sepia) ── */
 html.night-reading {
   --color-background: #1c1008;

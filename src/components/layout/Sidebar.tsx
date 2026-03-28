@@ -382,6 +382,9 @@ export default function Sidebar({
             <SidebarLink href="/admin/external-links" active={pathname === "/admin/external-links"} onClick={close}>
               External link clicks
             </SidebarLink>
+            <SidebarLink href="/admin/content-gaps" active={pathname === "/admin/content-gaps"} onClick={close}>
+              Content gap analysis
+            </SidebarLink>
           </SidebarSection>
         )}
 

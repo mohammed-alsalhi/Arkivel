@@ -117,7 +117,7 @@ src/
       types.ts                # Plugin interface definition
       registry.ts             # Plugin registry
 prisma/
-  schema.prisma               # Database schema (79 models — includes GlossaryTerm, ArticlePoll, PollVote)
+  schema.prisma               # Database schema (79 models — includes GlossaryTerm, ArticlePoll, PollVote; Article +contentWarnings/isAbandoned)
   seed.mjs                    # Category and subcategory seeder
   migrations/                 # Versioned migration history
 scripts/

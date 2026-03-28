@@ -121,6 +121,11 @@ model Article {
   todos            ArticleTodo[]
   polls            ArticlePoll[]
 
+  // v4.41 additions
+  contentWarnings  String[] @default([])  // e.g. ["spoilers", "violence", "mature"]
+  isAbandoned      Boolean  @default(false)  // article awaiting adoption
+  adoptedBy        String?  // userId who claimed this article
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

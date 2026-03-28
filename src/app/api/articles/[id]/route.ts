@@ -36,7 +36,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const { title, slug: newSlug, content, contentRaw, excerpt, coverImage, coverFocalX, coverFocalY, categoryId, tagIds, redirectTo, infobox, editSummary, status: articleStatus, isPinned, sortOrder, expiresAt, reviewDueAt, accessPassword } = body;
+  const { title, slug: newSlug, content, contentRaw, excerpt, coverImage, coverFocalX, coverFocalY, categoryId, tagIds, redirectTo, infobox, editSummary, status: articleStatus, isPinned, sortOrder, expiresAt, reviewDueAt, accessPassword, contentWarnings } = body;
 
   // Snapshot current content as a revision before updating
   const current = await prisma.article.findUnique({
@@ -113,6 +113,7 @@ export async function PUT(
       ...(expiresAt !== undefined && { expiresAt: expiresAt ? new Date(expiresAt) : null }),
       ...(reviewDueAt !== undefined && { reviewDueAt: reviewDueAt ? new Date(reviewDueAt) : null }),
       ...(accessPassword !== undefined && { accessPassword: accessPassword || null }),
+      ...(contentWarnings !== undefined && { contentWarnings }),
       ...(tagIds !== undefined && {
         tags: { create: tagIds.map((tagId: string) => ({ tagId })) },
       }),

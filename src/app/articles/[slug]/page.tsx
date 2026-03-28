@@ -70,6 +70,9 @@ import SpeedReader from "@/components/SpeedReader";
 import ArticlePollWidget from "@/components/ArticlePollWidget";
 import ArticleReadingETA from "@/components/ArticleReadingETA";
 import NightModeToggle from "@/components/NightModeToggle";
+import HighContrastToggle from "@/components/HighContrastToggle";
+import TextOnlyToggle from "@/components/TextOnlyToggle";
+import ContentWarningBanner from "@/components/ContentWarningBanner";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -322,6 +325,8 @@ export default async function ArticlePage({ params }: Props) {
             <FontSizeControl />
             <FocusModeToggle />
             <NightModeToggle />
+            <HighContrastToggle />
+            <TextOnlyToggle />
             <SpeedReader articleId={article.id} />
             <DyslexiaToggle />
             <RTLToggle defaultDir={article.dir ?? "ltr"} />
@@ -424,6 +429,11 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Table of contents */}
         <TableOfContents html={resolvedContent} />
+
+        {/* Content warnings */}
+        {article.contentWarnings && article.contentWarnings.length > 0 && (
+          <ContentWarningBanner warnings={article.contentWarnings} />
+        )}
 
         {/* Article content */}
         <div id="article-content" dir={article.dir ?? "ltr"} className="relative">

@@ -95,6 +95,8 @@ The toolbar below the article title provides quick actions grouped into four sec
 | **S/M/L/XL** | Font size selector; persisted between sessions |
 | **Focus** | Dims non-hovered paragraphs for distraction-free reading; persisted |
 | **Night mode** | Warm sepia dark theme for late-night reading; persisted |
+| **High contrast (A)** | Pure black/white/yellow theme for maximum readability; persisted |
+| **Text only (T)** | Hides images and media from article content; persisted |
 | **Speed read** | RSVP modal; 150/250/400/600 WPM; ORP pivot character highlighted |
 
 ---

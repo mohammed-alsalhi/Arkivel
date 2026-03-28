@@ -44,6 +44,7 @@ export default function EditArticlePage() {
   const [isPinned, setIsPinned] = useState(false);
   const [coverImage, setCoverImage] = useState("");
   const [accessPassword, setAccessPassword] = useState("");
+  const [contentWarnings, setContentWarnings] = useState<string[]>([]);
   const [coverFocalX, setCoverFocalX] = useState(50);
   const [coverFocalY, setCoverFocalY] = useState(50);
   const [expiresAt, setExpiresAt] = useState("");
@@ -95,6 +96,7 @@ export default function EditArticlePage() {
               setExpiresAt(articleData.expiresAt ? articleData.expiresAt.slice(0, 10) : "");
               setReviewDueAt(articleData.reviewDueAt ? articleData.reviewDueAt.slice(0, 10) : "");
               setAccessPassword(articleData.accessPassword || "");
+              setContentWarnings(articleData.contentWarnings || []);
               setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
             }
           }
@@ -155,6 +157,7 @@ export default function EditArticlePage() {
         expiresAt: expiresAt || null,
         reviewDueAt: reviewDueAt || null,
         accessPassword: accessPassword.trim() || null,
+        contentWarnings,
       }),
     });
 
@@ -419,6 +422,23 @@ export default function EditArticlePage() {
               className="w-full border border-border bg-surface px-3 py-1.5 text-[13px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
             />
             <p className="text-[11px] text-muted mt-0.5">Non-admin readers must enter this to view the article</p>
+          </div>
+
+          <div>
+            <label className="block text-[13px] font-bold text-heading mb-1">Content warnings:</label>
+            <div className="flex flex-wrap gap-2 text-[12px]">
+              {["spoilers", "violence", "mature", "sensitive-topics", "strong-language", "medical"].map((w) => (
+                <label key={w} className="flex items-center gap-1 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={contentWarnings.includes(w)}
+                    onChange={(e) => setContentWarnings(e.target.checked ? [...contentWarnings, w] : contentWarnings.filter((x) => x !== w))}
+                  />
+                  <span className="text-foreground capitalize">{w.replace("-", " ")}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-[11px] text-muted mt-0.5">Selected warnings are shown as a dismissible banner before the article</p>
           </div>
 
           <div>

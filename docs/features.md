@@ -90,6 +90,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Reading ETA** — live `~X min left` in the article byline; updates as you scroll; disappears on completion
 - **Night reading mode** — warm sepia dark theme toggled from the article toolbar; persisted to localStorage
 - **Search history** — last 20 successful searches in localStorage; clickable chips on the search page when idle; Clear button
+- **High-contrast mode** — pure black/white/yellow accessibility theme; toolbar toggle; persisted to localStorage
+- **Text-only mode** — hides images and media in article content; toolbar toggle; persisted
+- **Content warning tags** — CW labels (spoilers, violence, mature, etc.) on articles; dismissible amber banner; admin-configurable in edit form
+- **Content gap analysis** — `/admin/content-gaps` shows zero-result and low-result search queries grouped by frequency
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar
 - **Article polls** — admins create polls on any article; session-based one-vote-per-user; vote counts revealed post-vote; admin close/reopen/delete controls
