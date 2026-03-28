@@ -79,6 +79,7 @@ import ArticleQuickNote from "@/components/ArticleQuickNote";
 import CleanupTagsBanner from "@/components/CleanupTagsBanner";
 import ArticleAdoptionBanner from "@/components/ArticleAdoptionBanner";
 import CopyPlainTextButton from "@/components/CopyPlainTextButton";
+import FeaturedArticleBadge from "@/components/FeaturedArticleBadge";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -272,6 +273,7 @@ export default async function ArticlePage({ params }: Props) {
           </h1>
           <div className="flex items-center gap-2 mt-2 shrink-0">
             <CertifiedBadge certifiedAt={article.certifiedAt} />
+            {article.isFeatured && <FeaturedArticleBadge />}
           </div>
         </div>
 

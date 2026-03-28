@@ -132,7 +132,7 @@ docs/
 ## Database Models
 
 ### Core Content
-- **Article** — Central content model. Stores HTML from Tiptap, optional raw Markdown, excerpt, cover image, infobox data (JSON), status (draft/review/published), sortOrder, isPinned. Supports redirects and disambiguation pages.
+- **Article** — Central content model. Stores HTML from Tiptap, optional raw Markdown, excerpt, cover image, infobox data (JSON), status (draft/review/published), sortOrder, isPinned, isFeatured. Supports redirects and disambiguation pages.
 - **ArticleRevision** — Immutable snapshots created automatically on every edit. Stores content, title, and infobox state before changes. Powers history timeline and diff viewer. Tracks userId for attribution.
 - **Category** — Hierarchical with self-referencing `parentId`. Six root categories with subcategories. Drives infobox field schemas. Ordered by `sortOrder`.
 - **Tag** — Hierarchical with self-referencing `parentId`. Many-to-many with articles via `ArticleTag` join table.
@@ -298,6 +298,7 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/api/sessions/[id]` | DELETE | Revoke a session (own or admin) |
 | `/api/ai/suggest-tags` | POST | Suggest existing tags for an article (AI or keyword fallback) |
 | `/api/ai/suggest-category` | POST | Suggest best-fit category for an article (AI) |
+| `/api/ai/suggest-title` | POST | Suggest 5 alternative encyclopedic titles for an article (AI) |
 | `/api/stats` | GET | Wiki statistics |
 | `/api/metrics` | GET, POST | Performance metrics |
 | `/api/health` | GET | Health check |

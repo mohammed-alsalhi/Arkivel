@@ -317,6 +317,8 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Scheduled announcements** — set a go-live datetime on announcements; hidden until that time
 - **Writing velocity** — `/admin/writing-velocity`; weekly bar chart of words added (last 12 weeks)
 - **Session management** — `/settings/sessions`; view and revoke active sessions
+- **AI title suggestions** — "AI suggest" next to the title field in edit form; 5 clickable alternative titles; click any to apply
+- **Featured article badge** — admins mark articles as Featured; gold star badge in article title area
 
 ---
 

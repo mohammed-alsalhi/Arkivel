@@ -121,6 +121,11 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Saved search alerts — `alertEnabled` toggle on saved searches; daily cron at `/api/cron/search-alerts` sends in-app notifications for new matches
 - [x] Saved searches settings page — manage saved searches with alert toggle at `/settings/saved-searches`
 
+## v4.46
+
+- [x] Featured article badge — admins can mark articles as Featured; gold star badge on article page
+- [x] AI title suggestions — "AI suggest" in edit form returns 5 clickable alternative titles; click to apply
+
 ## v4.45
 
 - [x] Session management — view/revoke active sessions at `/settings/sessions`; device and IP info

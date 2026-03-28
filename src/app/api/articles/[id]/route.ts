@@ -36,7 +36,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const { title, slug: newSlug, content, contentRaw, excerpt, coverImage, coverFocalX, coverFocalY, categoryId, tagIds, redirectTo, infobox, editSummary, status: articleStatus, isPinned, sortOrder, expiresAt, reviewDueAt, accessPassword, contentWarnings, isAbandoned, cleanupTags } = body;
+  const { title, slug: newSlug, content, contentRaw, excerpt, coverImage, coverFocalX, coverFocalY, categoryId, tagIds, redirectTo, infobox, editSummary, status: articleStatus, isPinned, isFeatured, sortOrder, expiresAt, reviewDueAt, accessPassword, contentWarnings, isAbandoned, cleanupTags } = body;
 
   // Snapshot current content as a revision before updating
   const current = await prisma.article.findUnique({
@@ -109,6 +109,7 @@ export async function PUT(
       ...(infobox !== undefined && { infobox: infobox || null }),
       ...(articleStatus !== undefined && { status: articleStatus }),
       ...(isPinned !== undefined && { isPinned }),
+      ...(isFeatured !== undefined && { isFeatured }),
       ...(sortOrder !== undefined && { sortOrder }),
       ...(expiresAt !== undefined && { expiresAt: expiresAt ? new Date(expiresAt) : null }),
       ...(reviewDueAt !== undefined && { reviewDueAt: reviewDueAt ? new Date(reviewDueAt) : null }),

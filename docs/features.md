@@ -108,6 +108,8 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Session management** — `/settings/sessions` shows all active sessions with device/IP info; revoke individual or all other sessions
 - **AI tag suggestions** — "AI suggest" button in article edit form; suggests existing tags based on content; falls back to keyword match
 - **AI category suggestions** — "AI suggest" button on category picker; auto-selects best-fit category from article content
+- **AI title suggestions** — "AI suggest" next to the title field; returns 5 clickable alternative encyclopedic titles; click any to apply
+- **Featured article badge** — admins can mark articles as Featured; gold star badge shown in article title area
 - **Writing velocity** — `/admin/writing-velocity`; weekly bar chart of words added over last 12 weeks
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar

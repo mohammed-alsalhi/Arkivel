@@ -47,8 +47,11 @@ export default function EditArticlePage() {
   const [contentWarnings, setContentWarnings] = useState<string[]>([]);
   const [cleanupTags, setCleanupTags] = useState<string[]>([]);
   const [isAbandoned, setIsAbandoned] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
   const [suggestingTags, setSuggestingTags] = useState(false);
   const [suggestingCategory, setSuggestingCategory] = useState(false);
+  const [suggestingTitle, setSuggestingTitle] = useState(false);
+  const [titleSuggestions, setTitleSuggestions] = useState<string[]>([]);
   const [coverFocalX, setCoverFocalX] = useState(50);
   const [coverFocalY, setCoverFocalY] = useState(50);
   const [expiresAt, setExpiresAt] = useState("");
@@ -103,6 +106,7 @@ export default function EditArticlePage() {
               setContentWarnings(articleData.contentWarnings || []);
               setCleanupTags(articleData.cleanupTags || []);
               setIsAbandoned(articleData.isAbandoned || false);
+              setIsFeatured(articleData.isFeatured || false);
               setTagIds(articleData.tags.map((t: { tag: { id: string } }) => t.tag.id));
             }
           }
@@ -121,6 +125,7 @@ export default function EditArticlePage() {
         setInfobox(articleData.infobox || {});
         setStatus(articleData.status || "published");
         setIsPinned(articleData.isPinned || false);
+        setIsFeatured(articleData.isFeatured || false);
         setCoverImage(articleData.coverImage || "");
         setCoverFocalX(articleData.coverFocalX ?? 50);
         setCoverFocalY(articleData.coverFocalY ?? 50);
@@ -169,6 +174,7 @@ export default function EditArticlePage() {
         contentWarnings,
         cleanupTags,
         isAbandoned,
+        isFeatured,
       }),
     });
 
@@ -220,6 +226,26 @@ export default function EditArticlePage() {
       }
     }
     setSuggestingCategory(false);
+  }
+
+  async function handleSuggestTitle() {
+    if (!editorRef.current) return;
+    setSuggestingTitle(true);
+    setTitleSuggestions([]);
+    const res = await fetch("/api/ai/suggest-title", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ currentTitle: title, content: editorRef.current.getHTML() }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.suggestions) && data.suggestions.length > 0) {
+        setTitleSuggestions(data.suggestions);
+      } else {
+        alert("No title suggestions available.");
+      }
+    }
+    setSuggestingTitle(false);
   }
 
   async function handleDelete() {
@@ -280,14 +306,34 @@ export default function EditArticlePage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-[13px] font-bold text-heading mb-1">Title:</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-[13px] font-bold text-heading">Title:</label>
+              <button type="button" onClick={handleSuggestTitle} disabled={suggestingTitle} className="h-5 px-1.5 text-[10px] border border-border rounded text-muted hover:text-accent transition-colors">
+                {suggestingTitle ? "…" : "AI suggest"}
+              </button>
+            </div>
             <input
               type="text"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => { setTitle(e.target.value); setTitleSuggestions([]); }}
               required
               className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground focus:border-accent focus:outline-none"
             />
+            {titleSuggestions.length > 0 && (
+              <div className="mt-1 border border-border bg-surface">
+                <p className="px-2 pt-1.5 text-[10px] text-muted font-bold uppercase tracking-wide">Suggestions — click to apply</p>
+                {titleSuggestions.map((s, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => { setTitle(s); setTitleSuggestions([]); }}
+                    className="block w-full text-left px-3 py-1.5 text-[13px] text-foreground hover:bg-surface-hover border-t border-border"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
@@ -415,7 +461,7 @@ export default function EditArticlePage() {
                 <option value="published">Published</option>
               </select>
             </div>
-            <div className="flex items-end pb-1">
+            <div className="flex flex-col gap-2 justify-end pb-1">
               <label className="flex items-center gap-2 text-[13px]">
                 <input
                   type="checkbox"
@@ -423,6 +469,14 @@ export default function EditArticlePage() {
                   onChange={(e) => setIsPinned(e.target.checked)}
                 />
                 <span className="font-bold text-heading">Pin to category page</span>
+              </label>
+              <label className="flex items-center gap-2 text-[13px]">
+                <input
+                  type="checkbox"
+                  checked={isFeatured}
+                  onChange={(e) => setIsFeatured(e.target.checked)}
+                />
+                <span className="font-bold text-heading">Featured article</span>
               </label>
             </div>
           </div>

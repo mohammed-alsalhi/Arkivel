@@ -381,6 +381,8 @@ export default function FeaturesPage() {
             <li><strong>Session management</strong> — view all active sessions at <Link href="/settings/sessions">/settings/sessions</Link> with device and IP; revoke individual or all other sessions</li>
             <li><strong>AI tag suggestions</strong> — &ldquo;AI suggest&rdquo; button in article edit form automatically suggests and applies relevant existing tags</li>
             <li><strong>AI category suggestions</strong> — &ldquo;AI suggest&rdquo; button on the category picker auto-selects the best-fit category based on article content</li>
+            <li><strong>AI title suggestions</strong> — &ldquo;AI suggest&rdquo; button on the title field returns 5 clickable alternative encyclopedic titles</li>
+            <li><strong>Featured article badge</strong> — admins can mark articles as Featured; a gold star badge appears in the article title area</li>
             <li><strong>Writing velocity</strong> — admin chart at <Link href="/admin/writing-velocity">/admin/writing-velocity</Link> shows words added per week over the last 12 weeks</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>

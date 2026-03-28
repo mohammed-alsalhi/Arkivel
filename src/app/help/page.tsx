@@ -409,6 +409,8 @@ export default function HelpPage() {
             <li><strong>Writing velocity</strong> &mdash; <Link href="/admin/writing-velocity">/admin/writing-velocity</Link> bar chart of words added per week over the last 12 weeks</li>
             <li><strong>Session management</strong> &mdash; <Link href="/settings/sessions">/settings/sessions</Link> shows active sessions (device, IP, dates); revoke any session</li>
             <li><strong>AI tag &amp; category suggestions</strong> &mdash; &ldquo;AI suggest&rdquo; buttons in article edit form suggest relevant tags and best-fit category from content</li>
+            <li><strong>AI title suggestions</strong> &mdash; &ldquo;AI suggest&rdquo; next to the title field returns 5 alternative encyclopedic titles; click any to apply</li>
+            <li><strong>Featured article badge</strong> &mdash; admins can mark articles as Featured; a gold star badge is displayed in the article header</li>
           </ul>
         </div>
       </div>

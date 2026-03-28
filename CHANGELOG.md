@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.46.0] - 2026-03-28
+
+### New Features
+
+- **Featured article badge** — admins can mark any article as "Featured"; gold star badge shown in the article title area
+- **AI title suggestions** — "AI suggest" button on article edit form calls `/api/ai/suggest-title` and displays 5 clickable alternative titles; click any to apply
+- `isFeatured` field added to Article model; wired into edit form, PUT API, and article display
+
 ## [4.42.1] - 2026-03-28
 
 ### Rebrand
