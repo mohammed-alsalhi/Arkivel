@@ -126,6 +126,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Vertical timeline blocks** — `/timeline` slash command inserts a CSS-driven chronological timeline with date labels and accent-coloured dot connectors
 - **Twitter / X post embeds** — `/twitter` slash command inserts a styled card with a link to the post
 - **Bulk JSON article import** — admin import page (`/admin/import`) accepts a JSON array of articles (up to 500); auto-creates tags, resolves categories, skips existing slugs, creates revision snapshots
+- **Editor zen mode** — toggle above the editor content label hides sidebar/header/tabs and widens editor to full width; press Esc to exit
+- **Word frequency cloud** — client-side tag cloud at the bottom of every article showing top-40 most frequent non-stop words sized by frequency
+- **Dead-end article finder** — `/admin/dead-ends`; lists published articles with no outgoing wiki links so editors can add cross-references
+- **Duplicate content detector** — `/admin/duplicate-content`; Jaccard similarity across published articles; shows pairs ≥ 55% similar with edit links
 - **Writing velocity** — `/admin/writing-velocity`; weekly bar chart of words added over last 12 weeks
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar

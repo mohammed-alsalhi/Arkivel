@@ -355,6 +355,12 @@ export default function Sidebar({
             <SidebarLink href="/admin/stubs" active={pathname === "/admin/stubs"} onClick={close}>
               Stubs
             </SidebarLink>
+            <SidebarLink href="/admin/dead-ends" active={pathname === "/admin/dead-ends"} onClick={close}>
+              Dead-end articles
+            </SidebarLink>
+            <SidebarLink href="/admin/duplicate-content" active={pathname === "/admin/duplicate-content"} onClick={close}>
+              Duplicate content
+            </SidebarLink>
             <SidebarLink href="/admin/quality" active={pathname === "/admin/quality"} onClick={close}>
               Content quality
             </SidebarLink>

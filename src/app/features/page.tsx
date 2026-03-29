@@ -354,6 +354,8 @@ export default function FeaturesPage() {
             <li><strong>Batch operations</strong> — bulk-assign category, publish/unpublish, or delete from <Link href="/articles">/articles</Link></li>
             <li><strong>Tag management</strong> — rename, recolor, and delete tags inline at <Link href="/admin/tags">/admin/tags</Link> with article count and filterable list</li>
             <li><strong>Bulk tag operations</strong> — apply or remove a tag from multiple selected articles at once via the article list batch action bar</li>
+            <li><strong>Dead-end article finder</strong> — <Link href="/admin/dead-ends">/admin/dead-ends</Link> lists published articles with no outgoing wiki links</li>
+            <li><strong>Duplicate content detector</strong> — <Link href="/admin/duplicate-content">/admin/duplicate-content</Link> shows article pairs with ≥ 55% Jaccard word similarity</li>
             <li><strong>PWA / installable app</strong> — web app manifest enables the wiki to be installed on mobile and desktop home screens with a standalone display mode</li>
             <li><strong>External link click tracking</strong> — outbound link clicks logged per article; admin view at <Link href="/admin/external-links">/admin/external-links</Link></li>
             <li><strong>Prefetch on hover</strong> — internal article links are prefetched on mouse-over for near-instant navigation</li>
@@ -399,6 +401,8 @@ export default function FeaturesPage() {
             <li><strong>Per-article analytics</strong> — <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/analytics</code> shows 30-day view chart, reads, reactions, and revision count (admin only)</li>
             <li><strong>Series progress tracker</strong> — article series navigation shows &ldquo;X of N read&rdquo; based on your browser reading history</li>
             <li><strong>Writing velocity</strong> — admin chart at <Link href="/admin/writing-velocity">/admin/writing-velocity</Link> shows words added per week over the last 12 weeks</li>
+            <li><strong>Editor zen mode</strong> — toggle above the editor hides sidebar/header/tabs and widens the editing area; press Esc to exit</li>
+            <li><strong>Word frequency cloud</strong> — top-40 most frequent non-stop words in an article, sized proportionally by frequency, shown at the bottom of each article</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

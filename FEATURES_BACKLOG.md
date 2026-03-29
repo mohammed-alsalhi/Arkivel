@@ -8,10 +8,10 @@ Completed features are marked `[x]`. All others are `[ ]`.
 ## Editor
 
 - [x] Find & replace in editor
-- [ ] Editor focus / zen mode (hide all chrome, widen content)
+- [x] Editor focus / zen mode (hide all chrome, widen content)
 - [x] Auto-save indicator ("Saving…" / "Saved" / "Unsaved changes")
 - [x] Character count alongside word count
-- [ ] Word frequency cloud per article
+- [x] Word frequency cloud per article
 - [x] Paste Markdown → rich text (detect and convert on paste)
 - [ ] Smart URL paste → auto-link
 - [x] Copy article as Markdown button on article page
@@ -91,10 +91,10 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [ ] Broken redirect detector in admin lint
 - [ ] Category tree visualiser (interactive expandable tree)
 - [ ] Orphan article finder (enhanced — also suggests parent categories)
-- [ ] Dead-end article finder (no outgoing wiki-links)
+- [x] Dead-end article finder (no outgoing wiki-links)
 - [ ] Long-article splitter suggestions (flag articles > 5 000 words)
 - [ ] Short-article merger suggestions (flag stubs < 100 words)
-- [ ] Duplicate content detector (beyond title — content similarity)
+- [x] Duplicate content detector (beyond title — content similarity)
 - [x] Glossary management page
 - [x] Term hover-cards (preview definition inline on hover)
 - [x] Article todo list (per-article internal checklist for editors)

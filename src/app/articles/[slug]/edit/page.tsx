@@ -10,6 +10,7 @@ import InfoboxEditor from "@/components/InfoboxEditor";
 import { useAdmin } from "@/components/AdminContext";
 import ArticleLockGuard from "@/components/ArticleLockGuard";
 import FocalPointPicker from "@/components/FocalPointPicker";
+import ZenModeToggle from "@/components/editor/ZenModeToggle";
 
 type CategoryItem = { id: string; name: string; slug: string; parentId: string | null; children?: CategoryItem[] };
 
@@ -462,12 +463,15 @@ export default function EditArticlePage() {
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="text-[13px] font-bold text-heading">Content:</label>
-              {autoSaveStatus === "unsaved" && (
-                <span className="text-[11px] text-yellow-600 dark:text-yellow-400">Unsaved changes</span>
-              )}
-              {autoSaveStatus === "saved" && (
-                <span className="text-[11px] text-green-600 dark:text-green-400">Draft saved</span>
-              )}
+              <div className="flex items-center gap-2">
+                {autoSaveStatus === "unsaved" && (
+                  <span className="text-[11px] text-yellow-600 dark:text-yellow-400">Unsaved changes</span>
+                )}
+                {autoSaveStatus === "saved" && (
+                  <span className="text-[11px] text-green-600 dark:text-green-400">Draft saved</span>
+                )}
+                <ZenModeToggle />
+              </div>
             </div>
             <TiptapEditor ref={editorRef} content={article.content} articleTitle={title} onUpdate={handleEditorUpdate} />
           </div>

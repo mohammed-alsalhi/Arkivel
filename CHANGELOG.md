@@ -4,6 +4,21 @@
 
 All notable changes to this project are documented here.
 
+## [4.52.0] - 2026-03-28
+
+### New Features
+
+- **Editor zen mode** — new "Zen" toggle above the editor content label; hides sidebar, header, and tabs; widens the editor to full width; press Esc to exit; SVG icon changes between expand and compress states
+- **Word frequency cloud** — client-side component at the bottom of every article page; strips HTML, removes stop words, renders top-40 words sized and faded proportionally by frequency
+- **Dead-end article finder** — `/admin/dead-ends`; lists published articles with no outgoing `[[wiki links]]`; linked from admin sidebar
+- **Duplicate content detector** — `/admin/duplicate-content`; Jaccard word-set similarity for all published articles (first 300); shows pairs ≥ 55% similar with Edit links
+
+### Technical
+
+- `ZenModeToggle.tsx` injects/removes a `<style>` tag and toggles `body.editor-zen` class; works across any layout
+- `WordFrequencyCloud.tsx` is a pure client `useMemo` component with 150+ English stop words
+- Dead-ends and duplicate-content pages are server-only (`force-dynamic`), no new API routes needed
+
 ## [4.51.0] - 2026-03-28
 
 ### New Features

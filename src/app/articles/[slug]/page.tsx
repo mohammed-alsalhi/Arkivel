@@ -84,6 +84,7 @@ import CharacterCount from "@/components/CharacterCount";
 import ArticleWidthPreference from "@/components/ArticleWidthPreference";
 import ImageLightbox from "@/components/ImageLightbox";
 import SeriesTableOfContents from "@/components/SeriesTableOfContents";
+import WordFrequencyCloud from "@/components/WordFrequencyCloud";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -535,6 +536,9 @@ export default async function ArticlePage({ params }: Props) {
           ageDays={articleAgeDays}
           wordCount={plainTextWords}
         />
+
+        {/* Word frequency cloud */}
+        <WordFrequencyCloud html={article.content} />
 
         {/* Changelog panel */}
         <ArticleChangelogPanel slug={article.slug} revisions={recentRevisions.map(r => ({
