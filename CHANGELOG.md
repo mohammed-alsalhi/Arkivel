@@ -4,6 +4,20 @@
 
 All notable changes to this project are documented here.
 
+## [4.55.0] - 2026-03-28
+
+### New Features
+
+- **Top referrers dashboard** — `/admin/referrers`; shows top 30 referrer domains over 7/30/90-day windows with traffic bar and percentage; linked from admin sidebar
+- **Tag usage trends** — `/admin/tag-trends`; heat-map table showing new articles per tag per month over the last 12 months; top 30 tags by total count
+- **Analytics CSV export** — `/api/export/analytics`; admin-only download of all published articles with read counts, reaction counts, revision counts, category, and dates
+
+### Technical
+
+- `admin/referrers/page.tsx` — client component fetching `/api/admin/referrers` (existing endpoint); time-range buttons for 7/30/90d; accent-colored progress bars
+- `admin/tag-trends/page.tsx` — server component; monthly bucket calculation with inline opacity styling
+- `api/export/analytics/route.ts` — CSV builder using `ArticleRead` and `ArticleReaction` groupBy; proper RFC 4180 escaping; `Content-Disposition: attachment`
+
 ## [4.54.0] - 2026-03-28
 
 ### New Features

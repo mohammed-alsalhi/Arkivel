@@ -408,6 +408,9 @@ export default function FeaturesPage() {
             <li><strong>Long article suggestions</strong> — <Link href="/admin/long-articles">/admin/long-articles</Link> lists published articles exceeding a configurable word threshold (default 5,000) sorted by length; helps identify candidates for splitting</li>
             <li><strong>Random article</strong> — <Link href="/api/random">/api/random</Link> redirects to a random published article; optional category filter; accessible from sidebar and category pages</li>
             <li><strong>New articles feed</strong> — homepage sidebar widget showing the most recently created published articles, distinct from the &ldquo;recently updated&rdquo; list</li>
+            <li><strong>Top referrers dashboard</strong> — <Link href="/admin/referrers">/admin/referrers</Link> shows top 30 referring domains with traffic percentage bars; 7/30/90-day windows</li>
+            <li><strong>Tag usage trends</strong> — <Link href="/admin/tag-trends">/admin/tag-trends</Link> heat-map table showing new articles per tag per month over the last 12 months</li>
+            <li><strong>Analytics CSV export</strong> — <Link href="/api/export/analytics">/api/export/analytics</Link> downloads all published articles with read counts, reactions, revisions, and dates (admin only)</li>
             <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>

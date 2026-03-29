@@ -135,6 +135,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Long article suggestions** — `/admin/long-articles`; lists published articles over a configurable word threshold (default 5,000) for potential splitting
 - **Random article** — `/api/random` redirects to a random published article; optional `?category=slug` param; sidebar link; category-page button
 - **New articles feed widget** — homepage sidebar widget showing the most recently created published articles
+- **Top referrers dashboard** — `/admin/referrers`; top 30 referrer domains with percentage bars and 7/30/90d time windows
+- **Tag usage trends** — `/admin/tag-trends`; heat-map table of new articles per tag per month (last 12 months)
+- **Analytics CSV export** — `/api/export/analytics`; admin-only CSV download of all articles with read, reaction, revision counts
 - **Writing velocity** — `/admin/writing-velocity`; weekly bar chart of words added over last 12 weeks
 - **Speed reader (RSVP)** — modal speed-reading mode; 150/250/400/600 WPM; ORP pivot highlighting; progress bar; accessible from article toolbar
 - **Article blame view** — `/articles/[slug]/blame` shows each paragraph colour-coded by the revision that introduced it; editor, date, and edit summary in sidebar

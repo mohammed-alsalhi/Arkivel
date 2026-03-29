@@ -426,6 +426,9 @@ export default function HelpPage() {
             <li><strong>Long article suggestions</strong> &mdash; <Link href="/admin/long-articles">/admin/long-articles</Link> flags published articles over a word threshold (default 5,000); threshold adjustable via the form; linked from admin sidebar</li>
             <li><strong>Random article</strong> &mdash; click &ldquo;Random article&rdquo; in the sidebar Discover section or the &ldquo;Random&rdquo; button on any category page to jump to a random published article; category-filtered via <code className="bg-surface-hover px-1 text-[12px]">/api/random?category=slug</code></li>
             <li><strong>New articles feed</strong> &mdash; homepage sidebar widget listing recently <em>created</em> articles (sorted by creation date, not last edit)</li>
+            <li><strong>Top referrers dashboard</strong> &mdash; <Link href="/admin/referrers">/admin/referrers</Link> shows top 30 referring domains with bar charts; toggle 7/30/90-day windows; linked from admin sidebar</li>
+            <li><strong>Tag usage trends</strong> &mdash; <Link href="/admin/tag-trends">/admin/tag-trends</Link> heat-map table of new articles per tag per month (last 12 months); linked from admin sidebar</li>
+            <li><strong>Analytics CSV export</strong> &mdash; <Link href="/api/export/analytics">/api/export/analytics</Link> downloads a CSV of all published articles including read counts, reactions, revision counts, category, and dates (admin only)</li>
           </ul>
         </div>
       </div>

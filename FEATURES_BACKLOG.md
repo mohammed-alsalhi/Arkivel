@@ -193,7 +193,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [ ] Engagement score per article
 - [ ] Reader retention rate (% who read past halfway)
 - [ ] Bounce rate per article
-- [ ] Top referrers admin dashboard
+- [x] Top referrers admin dashboard
 - [ ] Geographic reader distribution
 - [ ] Device breakdown (mobile / desktop / tablet)
 - [ ] Reading time accuracy (actual vs. estimated)
@@ -204,13 +204,13 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [ ] Editor activity dashboard
 - [x] Content gap analysis (popular zero-result searches)
 - [ ] Knowledge coverage map
-- [ ] Writing velocity tracker (words added per week)
+- [x] Writing velocity tracker (words added per week)
 - [x] Category growth chart
-- [ ] Tag usage trends
+- [x] Tag usage trends
 - [ ] Article lifecycle analysis (draft → publish duration)
 - [ ] Comment sentiment analysis
 - [x] Reader satisfaction quick rating (1–5 after article)
-- [ ] Analytics export to CSV
+- [x] Analytics export to CSV
 - [ ] Analytics REST API endpoint
 - [ ] Custom event tracking
 - [x] Reading goals tracking

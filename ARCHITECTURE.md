@@ -310,6 +310,7 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/admin/orphans` | GET | Lists published articles with no incoming links from any other article |
 | `/admin/long-articles` | GET | Lists published articles exceeding a word threshold (default 5,000), sorted by length |
 | `/api/random` | GET | Redirects to a random published article; optional `?category=slug` filter |
+| `/api/export/analytics` | GET | Admin-only CSV download of all published articles with read/reaction/revision counts |
 | `/api/stats` | GET | Wiki statistics |
 | `/api/metrics` | GET, POST | Performance metrics |
 | `/api/health` | GET | Health check |

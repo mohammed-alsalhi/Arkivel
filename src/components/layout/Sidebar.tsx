@@ -421,6 +421,12 @@ export default function Sidebar({
             <SidebarLink href="/admin/category-growth" active={pathname === "/admin/category-growth"} onClick={close}>
               Category growth
             </SidebarLink>
+            <SidebarLink href="/admin/referrers" active={pathname === "/admin/referrers"} onClick={close}>
+              Top referrers
+            </SidebarLink>
+            <SidebarLink href="/admin/tag-trends" active={pathname === "/admin/tag-trends"} onClick={close}>
+              Tag usage trends
+            </SidebarLink>
           </SidebarSection>
         )}
 

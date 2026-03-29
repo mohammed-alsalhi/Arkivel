@@ -336,6 +336,9 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Long article suggestions** — `/admin/long-articles`; flags published articles over a word threshold (default 5,000); threshold adjustable; linked from admin sidebar
 - **Random article** — "Random article" in sidebar Discover section jumps to a random published article; category-filtered via `/api/random?category=slug`; "Random" button on category pages
 - **New articles feed** — homepage sidebar widget listing recently created published articles (by creation date, not last edit)
+- **Top referrers dashboard** — `/admin/referrers`; top 30 referring domains with percentage bars; 7/30/90-day windows
+- **Tag usage trends** — `/admin/tag-trends`; heat-map table of new articles per tag per month (last 12 months)
+- **Analytics CSV export** — `/api/export/analytics`; admin-only CSV download with read counts, reactions, revisions, and dates
 
 ---
 
