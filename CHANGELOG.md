@@ -4,6 +4,19 @@
 
 All notable changes to this project are documented here.
 
+## [4.56.0] - 2026-03-30
+
+### Enhancements
+
+- **Article byline redesign** — metadata and action bar restructured into three distinct sections: a metadata row (source, edit date, editor, freshness/verified badges), a stats chip row (word count, char count, reading time, reading level, view history), and a grouped action toolbar with labeled rows (Page / Read / Tools)
+- **Sticky article header** — changed from a full-width top bar to a compact floating pill anchored to the top-right corner on medium+ screens
+- **ArticleViewHistory** — accepts `className` prop for consistent chip styling; label changed to "Read X ago"
+
+### Technical
+
+- Removed `WordCount`, `CharacterCount`, `ArticleReadingETA` component imports; stats now computed inline as chips in the page component
+- `plainTextChars` computed alongside `plainTextWords` from the same stripped text pass
+
 ## [4.55.0] - 2026-03-28
 
 ### New Features
