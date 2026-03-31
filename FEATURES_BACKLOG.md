@@ -19,10 +19,10 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [x] Typewriter scrolling mode (cursor stays centred vertically)
 - [x] Editor outline panel (AI-assisted headings outline)
 - [x] Pull quote / callout blocks
-- [ ] Tabbed content blocks
+- [x] Tabbed content blocks
 - [x] Accordion / FAQ blocks
 - [x] Vertical timeline blocks
-- [ ] Gallery grid blocks
+- [x] Gallery grid blocks
 - [ ] Button / CTA blocks
 - [ ] Divider with label blocks
 - [x] Multi-column layout blocks (2-col)
@@ -476,7 +476,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 
 ## AI Features
 
-- [ ] AI article generation from an outline
+- [x] AI article generation from an outline
 - [x] AI image alt-text generation
 - [ ] AI content moderation (flag inappropriate content)
 - [x] AI grammar and style checker
@@ -496,7 +496,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [ ] Named entity extraction and auto-linking
 - [ ] Topic modelling across the whole wiki
 - [ ] Predictive article creation (suggest articles based on content gaps)
-- [ ] Conversational AI wiki assistant (chat sidebar)
+- [x] Conversational AI wiki assistant (chat sidebar)
 - [ ] AI meeting-notes to article conversion
 - [ ] AI PDF to article extraction
 - [ ] AI video transcript to article conversion

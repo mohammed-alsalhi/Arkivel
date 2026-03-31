@@ -190,6 +190,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Night reading mode — warm sepia theme toggled from article toolbar, persisted to localStorage
 - [x] Search history — last 20 searches in localStorage; shown as chips when query is empty
 
+## v4.58
+
+- [x] Tabbed content blocks — `/tabs` slash command, interactive tab panels
+- [x] Gallery grid blocks — `/gallery` slash command, responsive image grid
+- [x] Conversational AI wiki assistant — floating chat panel on article pages
+- [x] AI article generation from outline — "AI Generate" toolbar button fills headings with content
+
 ## v4.57
 
 - [x] Smart URL paste → auto-link in editor

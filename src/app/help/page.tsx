@@ -419,6 +419,14 @@ export default function HelpPage() {
             <li><strong>Category growth chart</strong> &mdash; <Link href="/admin/category-growth">/admin/category-growth</Link>; stacked bar chart of new articles per category per month (last 12 months)</li>
             <li><strong>Image lightbox</strong> &mdash; click any image in article content to view full-size; close with Esc or click outside</li>
             <li><strong>AI expand section</strong> &mdash; &ldquo;AI Expand&rdquo; in editor toolbar; select a paragraph, click to expand into more detail with AI</li>
+            <li><strong>Smart URL paste</strong> &mdash; pasting a plain HTTP/HTTPS URL in the editor auto-creates a hyperlink; if text is selected the URL becomes its href, otherwise it is inserted as linked text</li>
+            <li><strong>Typewriter scrolling mode</strong> &mdash; &ldquo;Typewriter&rdquo; toggle in the editor toolbar keeps the cursor vertically centred as you type; preference persisted to localStorage</li>
+            <li><strong>Short-article merger suggestions</strong> &mdash; <Link href="/admin/short-articles">/admin/short-articles</Link>; lists stub articles under 100 words and suggests up to 3 same-category merge targets</li>
+            <li><strong>Sidebar position</strong> &mdash; swap icon in the sidebar footer moves the sidebar to the right or left; preference persisted to localStorage</li>
+            <li><strong>Tabbed content blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/tabs</code> slash command inserts an interactive two-tab block; panels are editable inline</li>
+            <li><strong>Gallery grid blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/gallery</code> slash command inserts a responsive image grid with captions</li>
+            <li><strong>AI wiki assistant</strong> &mdash; floating chat button on every article page; ask questions about the current article or the whole wiki; context-aware conversation powered by AI</li>
+            <li><strong>AI article generation</strong> &mdash; &ldquo;AI Generate&rdquo; in editor toolbar; reads document headings and fills in encyclopedic paragraph content under each section</li>
             <li><strong>Bulk JSON export</strong> &mdash; <Link href="/api/export/json">/api/export/json</Link> downloads all articles as structured JSON (admin only)</li>
             <li><strong>Per-article analytics</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/analytics</code>; 30-day view chart + summary stats</li>
             <li><strong>Series progress tracker</strong> &mdash; series navigation shows &ldquo;X of N read&rdquo; from browser reading history</li>

@@ -302,6 +302,8 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/tags/cloud` | GET | Tag cloud — all tags sized by article count |
 | `/api/admin/category-growth` | GET | New articles grouped by category × month (last 12 months) |
 | `/api/ai/expand` | POST | Expand selected text into more detailed prose (AI) |
+| `/api/ai/chat` | POST | Conversational wiki assistant — multi-turn Q&A over article + related content |
+| `/api/ai/generate-article` | POST | Generate full article HTML body from a title + headings array |
 | `/api/export/json` | GET | Download all articles as JSON (admin only) |
 | `/articles/[slug]/analytics` | GET | Per-article analytics: 30-day views, reads, reactions, revisions (admin only) |
 | `/api/admin/import` | POST | Bulk import up to 500 articles from a JSON array; auto-creates tags, resolves categories |

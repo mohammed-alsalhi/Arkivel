@@ -12,6 +12,7 @@ type Props = {
   onInsertToc: () => void;
   onAiRewrite: () => void;
   onAiExpand: () => void;
+  onAiGenerate: () => void;
   onFindReplace: () => void;
   typewriterMode: boolean;
   onTypewriterToggle: () => void;
@@ -25,7 +26,7 @@ type ToolbarButton = {
   hidden?: () => boolean;
 };
 
-export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, detectedLinkCount, onInsertToc, onAiRewrite, onAiExpand, onFindReplace, typewriterMode, onTypewriterToggle }: Props) {
+export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, detectedLinkCount, onInsertToc, onAiRewrite, onAiExpand, onAiGenerate, onFindReplace, typewriterMode, onTypewriterToggle }: Props) {
   if (!editor) return null;
 
   const groups: ToolbarButton[][] = [
@@ -325,6 +326,14 @@ export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, de
         className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
       >
         AI Expand
+      </button>
+      <button
+        type="button"
+        onClick={onAiGenerate}
+        title="AI Generate: generates full article body from existing headings"
+        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
+      >
+        AI Generate
       </button>
       <button
         type="button"

@@ -119,6 +119,14 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Category growth chart** — `/admin/category-growth`; stacked bar chart of new articles per category per month (last 12 months)
 - **Image lightbox** — click any image in article content to open full-size overlay; close with Esc or click outside; caption from alt text
 - **AI expand section** — "AI Expand" in editor toolbar; select text, click to expand into more detailed prose via AI; replaces selection
+- **Smart URL paste** — pasting a plain URL auto-creates a hyperlink; selection gets URL as href, otherwise URL inserted as linked text
+- **Typewriter scrolling mode** — "Typewriter" toggle in editor toolbar; cursor stays vertically centred as you type; persisted to localStorage
+- **Short-article merger suggestions** — `/admin/short-articles` lists stubs under 100 words with up to 3 merge targets per article
+- **Sidebar position preference** — sidebar footer button swaps sidebar between left and right; persisted to localStorage
+- **Tabbed content blocks** — `/tabs` slash command; interactive two-tab block; panels are editable inline; stacked view in editor
+- **Gallery grid blocks** — `/gallery` slash command; responsive auto-fill image grid with captions and hover zoom
+- **AI wiki assistant** — floating chat button on every article page; multi-turn context-aware Q&A over article and related wiki content
+- **AI article generation from outline** — "AI Generate" in editor toolbar; reads headings and fills in encyclopedic paragraph content per section
 - **Bulk JSON export** — `/api/export/json`; downloads all articles as structured JSON (admin only)
 - **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + reads, reactions, revisions summary (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history

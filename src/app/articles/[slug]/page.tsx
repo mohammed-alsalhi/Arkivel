@@ -82,6 +82,8 @@ import ArticleWidthPreference from "@/components/ArticleWidthPreference";
 import ImageLightbox from "@/components/ImageLightbox";
 import SeriesTableOfContents from "@/components/SeriesTableOfContents";
 import WordFrequencyCloud from "@/components/WordFrequencyCloud";
+import TabsActivator from "@/components/article/TabsActivator";
+import WikiChatAssistant from "@/components/article/WikiChatAssistant";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -619,6 +621,8 @@ export default async function ArticlePage({ params }: Props) {
         <BackToTop />
         <ReadingProgress />
         <ImageLightbox />
+        <TabsActivator />
+        <WikiChatAssistant articleTitle={article.title} />
       </div>
 
       {/* Floating TOC — rendered outside the padded box so it can be fixed */}

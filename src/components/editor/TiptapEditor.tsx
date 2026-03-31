@@ -518,6 +518,37 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       }
     }
 
+    async function handleAiGenerate() {
+      if (!editor) return;
+      const headings: string[] = [];
+      editor.state.doc.descendants((node) => {
+        if (node.type.name === "heading") {
+          const prefix = "#".repeat(node.attrs.level as number);
+          headings.push(`${prefix} ${node.textContent}`);
+        }
+      });
+      if (headings.length === 0) {
+        window.alert("Add some headings first. AI Generate fills in content under each heading.");
+        return;
+      }
+      const title = articleTitle || "Article";
+      if (!window.confirm(`Generate content for ${headings.length} section(s)? This will replace text below each heading.`)) return;
+      const res = await fetch("/api/ai/generate-article", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, headings }),
+      });
+      if (!res.ok) {
+        window.alert("AI generation failed. Check that AI_API_KEY is configured.");
+        return;
+      }
+      const { html } = await res.json();
+      if (html) {
+        // Replace entire document content with generated HTML
+        editor.chain().focus().setContent(html).run();
+      }
+    }
+
     function handleInsertToc() {
       if (!editor) return;
 
@@ -614,6 +645,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             onInsertToc={handleInsertToc}
             onAiRewrite={handleAiRewrite}
             onAiExpand={handleAiExpand}
+            onAiGenerate={handleAiGenerate}
             onFindReplace={() => setFindReplaceOpen((o) => !o)}
             typewriterMode={typewriterMode}
             onTypewriterToggle={() => {

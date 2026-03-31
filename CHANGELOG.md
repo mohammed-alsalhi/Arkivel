@@ -4,6 +4,27 @@
 
 All notable changes to this project are documented here.
 
+## [4.58.0] - 2026-03-30
+
+### New Features
+
+- **Tabbed content blocks** — `/tabs` slash command inserts an interactive two-tab block; named via prompts; tab buttons switch panels; panels stack in the editor for easy editing; CSS in `globals.css`
+- **Gallery grid blocks** — `/gallery` slash command inserts a responsive image grid with three placeholder items; `auto-fill` CSS grid layout with hover zoom; each item has an editable caption
+- **Conversational AI wiki assistant** — floating chat button on every article page; opens a panel where readers can ask questions about the current article or the whole wiki; context-aware (searches related articles); conversation history preserved per session; powered by `/api/ai/chat`
+- **AI article generation from outline** — "AI Generate" toolbar button in editor; reads all headings in the document and calls `/api/ai/generate-article` to fill in encyclopedic paragraph content under each section; replaces document with generated content
+
+### Technical
+
+- `globals.css` — `.wiki-tabs`, `.wiki-tabs-nav`, `.wiki-tab-btn`, `.wiki-tab-panel`, `.wiki-gallery`, `.wiki-gallery-item`, `.wiki-gallery-caption` CSS blocks
+- `SlashCommandExtension.ts` — "Tabs" and "Gallery" slash commands added
+- `TabsActivator.tsx` (new) — client component that wires click handlers to `.wiki-tabs` after mount
+- `WikiChatAssistant.tsx` (new) — floating chat UI component with message history and source links
+- `api/ai/chat/route.ts` (new) — POST endpoint; finds context articles via keyword search; multi-turn with `history`
+- `api/ai/generate-article/route.ts` (new) — POST endpoint; takes title + headings array; returns full article HTML
+- `EditorToolbar.tsx` — `onAiGenerate` prop; "AI Generate" button
+- `TiptapEditor.tsx` — `handleAiGenerate` async function; extracts headings, calls endpoint, replaces content
+- `articles/[slug]/page.tsx` — imports and renders `TabsActivator` and `WikiChatAssistant`
+
 ## [4.57.0] - 2026-03-30
 
 ### New Features

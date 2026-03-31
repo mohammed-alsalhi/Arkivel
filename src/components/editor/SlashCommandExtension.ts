@@ -231,6 +231,30 @@ export function getSuggestionItems(
         ).run();
       },
     },
+    {
+      title: "Tabs",
+      description: "Tabbed content block with multiple panels",
+      command: ({ editor, range }) => {
+        const tab1 = typeof window !== "undefined"
+          ? (window.prompt("First tab label:", "Tab 1") ?? "Tab 1")
+          : "Tab 1";
+        const tab2 = typeof window !== "undefined"
+          ? (window.prompt("Second tab label:", "Tab 2") ?? "Tab 2")
+          : "Tab 2";
+        editor.chain().focus().deleteRange(range).insertContent(
+          `<div class="wiki-tabs" data-tabs="true"><div class="wiki-tabs-nav"><button class="wiki-tab-btn active" data-tab="0">${tab1 || "Tab 1"}</button><button class="wiki-tab-btn" data-tab="1">${tab2 || "Tab 2"}</button></div><div class="wiki-tab-panel active" data-panel="0"><p>Content for ${tab1 || "Tab 1"}…</p></div><div class="wiki-tab-panel" data-panel="1"><p>Content for ${tab2 || "Tab 2"}…</p></div></div><p></p>`
+        ).run();
+      },
+    },
+    {
+      title: "Gallery",
+      description: "Responsive image grid gallery",
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertContent(
+          `<div class="wiki-gallery"><div class="wiki-gallery-item"><img src="" alt="Image 1" /><div class="wiki-gallery-caption">Caption 1</div></div><div class="wiki-gallery-item"><img src="" alt="Image 2" /><div class="wiki-gallery-caption">Caption 2</div></div><div class="wiki-gallery-item"><img src="" alt="Image 3" /><div class="wiki-gallery-caption">Caption 3</div></div></div><p></p>`
+        ).run();
+      },
+    },
   ];
 
   // Append user snippets as slash-command items
