@@ -1538,3 +1538,63 @@ html.night-reading #article-content {
   text-align: center;
   padding: 0.2rem 0.25rem 0;
 }
+
+/* ── Button / CTA blocks ── */
+.wiki-cta {
+  margin: 0.75rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.wiki-cta-btn {
+  display: inline-block;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.wiki-cta-primary {
+  background: var(--color-accent);
+  color: #fff;
+  border: 1px solid var(--color-accent);
+}
+.wiki-cta-primary:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+.wiki-cta-secondary {
+  background: var(--color-surface);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
+}
+.wiki-cta-secondary:hover { background: var(--color-surface-hover); }
+.wiki-cta-outline {
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+.wiki-cta-outline:hover { background: var(--color-accent-soft); }
+
+/* ── Divider with label ── */
+.wiki-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.25rem 0;
+}
+.wiki-divider-labeled {
+  border-top: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 1.25rem 0;
+}
+.wiki-divider-labeled::before,
+.wiki-divider-labeled::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--color-border);
+}

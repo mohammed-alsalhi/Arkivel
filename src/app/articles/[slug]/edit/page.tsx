@@ -62,6 +62,7 @@ export default function EditArticlePage() {
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [autoSaveStatus, setAutoSaveStatus] = useState<"clean" | "unsaved" | "saved">("clean");
+  const [generatingSummary, setGeneratingSummary] = useState(false);
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -190,6 +191,27 @@ export default function EditArticlePage() {
       setSaving(false);
       alert(err?.error || "Failed to update article");
     }
+  }
+
+  async function handleAiSummary() {
+    if (!editorRef.current || !article) return;
+    setGeneratingSummary(true);
+    try {
+      const res = await fetch("/api/ai/revision-summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          oldContent: article.content,
+          newContent: editorRef.current.getHTML(),
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.summary) setEditSummary(data.summary);
+      }
+    } catch { /* noop */ }
+    setGeneratingSummary(false);
   }
 
   async function handleSuggestTags() {
@@ -610,7 +632,12 @@ export default function EditArticlePage() {
           </div>
 
           <div>
-            <label className="block text-[13px] font-bold text-heading mb-1">Edit summary:</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-[13px] font-bold text-heading">Edit summary:</label>
+              <button type="button" onClick={handleAiSummary} disabled={generatingSummary} className="h-5 px-1.5 text-[10px] border border-border rounded text-muted hover:text-accent transition-colors">
+                {generatingSummary ? "…" : "AI summarize"}
+              </button>
+            </div>
             <input
               type="text"
               value={editSummary}

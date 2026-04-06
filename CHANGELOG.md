@@ -4,6 +4,24 @@
 
 All notable changes to this project are documented here.
 
+## [4.59.0] - 2026-04-05
+
+### New Features
+
+- **Button / CTA blocks** — `/button` slash command inserts a call-to-action button with configurable label, URL, and style (primary / secondary / outline); styled via `.wiki-cta`, `.wiki-cta-btn`, `.wiki-cta-primary/secondary/outline` CSS classes
+- **Divider with label blocks** — `/divider` slash command inserts a horizontal rule; optionally prompts for a label, rendering it as a centered rule-with-text via `.wiki-divider-labeled` (flexbox `::before`/`::after` pseudo-elements)
+- **AI revision summary generation** — "AI summarize" button next to the edit summary field; compares old vs. new article content using AI and auto-fills a one-sentence edit summary; powered by `/api/ai/revision-summary`
+- **Article quiz mode** — "Quiz me" button in article tools bar; calls `/api/ai/quiz` to generate 5 multiple-choice questions from article content; full flashcard UI with answer reveal, score tracking, and result screen; quiz attempts recorded via `/api/quiz-attempts`
+
+### Technical
+
+- `globals.css` — `.wiki-cta`, `.wiki-cta-btn`, `.wiki-cta-primary`, `.wiki-cta-secondary`, `.wiki-cta-outline`, `.wiki-divider`, `.wiki-divider-labeled` CSS blocks
+- `SlashCommandExtension.ts` — "Button" and "Divider" slash commands added with prompt-driven configuration
+- `ArticleQuizMode.tsx` (new) — client component; floating modal with question/option/reveal/score flow; records attempt to DB on completion
+- `api/ai/revision-summary/route.ts` (new) — POST endpoint; strips HTML, sends old/new text to AI, returns concise edit summary sentence
+- `articles/[slug]/page.tsx` — imports `ArticleQuizMode`; adds "Quiz me" button to tools bar
+- `articles/[slug]/edit/page.tsx` — `handleAiSummary` function; `generatingSummary` state; "AI summarize" button in edit summary row
+
 ## [4.58.0] - 2026-03-30
 
 ### New Features

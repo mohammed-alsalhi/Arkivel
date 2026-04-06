@@ -23,8 +23,8 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [x] Accordion / FAQ blocks
 - [x] Vertical timeline blocks
 - [x] Gallery grid blocks
-- [ ] Button / CTA blocks
-- [ ] Divider with label blocks
+- [x] Button / CTA blocks
+- [x] Divider with label blocks
 - [x] Multi-column layout blocks (2-col)
 - [x] Math / LaTeX inline support (KaTeX)
 - [ ] Chemical formula support (mhchem)
@@ -118,7 +118,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [x] Hot articles widget (most viewed in last 7 days)
 - [x] New articles feed widget
 - [x] Random article with category/tag filter
-- [ ] Article quiz mode (flashcard-style review of article content)
+- [x] Article quiz mode (flashcard-style review of article content)
 - [ ] Spaced repetition reading scheduler
 - [ ] Knowledge graph exploration mode
 - [ ] Citation graph (article A references article B)
@@ -505,7 +505,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [ ] Custom AI model fine-tuning on wiki content
 - [ ] AI reading difficulty adjuster
 - [ ] AI content expansion for stub articles
-- [ ] AI revision summary generation
+- [x] AI revision summary generation
 
 ---
 

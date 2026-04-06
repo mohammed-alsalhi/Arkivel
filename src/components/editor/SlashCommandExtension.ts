@@ -255,6 +255,30 @@ export function getSuggestionItems(
         ).run();
       },
     },
+    {
+      title: "Button",
+      description: "Call-to-action button with link",
+      command: ({ editor, range }) => {
+        const label = window.prompt("Button label:", "Learn more") ?? "Learn more";
+        const href = window.prompt("Button URL:", "https://") ?? "https://";
+        const style = window.prompt("Style (primary / secondary / outline):", "primary") ?? "primary";
+        const cls = `wiki-cta-btn wiki-cta-${style.trim().toLowerCase() === "secondary" ? "secondary" : style.trim().toLowerCase() === "outline" ? "outline" : "primary"}`;
+        editor.chain().focus().deleteRange(range).insertContent(
+          `<div class="wiki-cta"><a class="${cls}" href="${href}">${label}</a></div><p></p>`
+        ).run();
+      },
+    },
+    {
+      title: "Divider",
+      description: "Horizontal divider, optionally with a label",
+      command: ({ editor, range }) => {
+        const label = window.prompt("Divider label (leave blank for plain line):", "") ?? "";
+        const html = label.trim()
+          ? `<div class="wiki-divider wiki-divider-labeled"><span>${label.trim()}</span></div><p></p>`
+          : `<div class="wiki-divider"></div><p></p>`;
+        editor.chain().focus().deleteRange(range).insertContent(html).run();
+      },
+    },
   ];
 
   // Append user snippets as slash-command items

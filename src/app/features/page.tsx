@@ -406,6 +406,10 @@ export default function FeaturesPage() {
             <li><strong>Gallery grid blocks</strong> — <code className="bg-surface-hover px-1 text-[12px]">/gallery</code> slash command; responsive auto-fill image grid with captions and hover zoom</li>
             <li><strong>AI wiki assistant</strong> — floating chat button on every article page; context-aware Q&amp;A over article and related wiki content; multi-turn conversation</li>
             <li><strong>AI article generation from outline</strong> — &ldquo;AI Generate&rdquo; in editor toolbar; extracts headings and fills in encyclopedic content for each section</li>
+            <li><strong>Button / CTA blocks</strong> — <code className="bg-surface-hover px-1 text-[12px]">/button</code> slash command inserts a styled call-to-action button with configurable label, URL, and style (primary / secondary / outline)</li>
+            <li><strong>Divider with label blocks</strong> — <code className="bg-surface-hover px-1 text-[12px]">/divider</code> slash command inserts a horizontal rule with an optional centered text label</li>
+            <li><strong>AI revision summary</strong> — &ldquo;AI summarize&rdquo; button in editor next to the edit summary field; compares old vs. new content and auto-generates a concise edit summary</li>
+            <li><strong>Article quiz mode</strong> — &ldquo;Quiz me&rdquo; in the article tools bar; AI generates 5 multiple-choice questions; full flashcard UI with answer reveal, score, and attempt recording</li>
             <li><strong>Bulk JSON export</strong> — <Link href="/api/export/json">/api/export/json</Link> downloads all articles as a structured JSON file (admin only)</li>
             <li><strong>Per-article analytics</strong> — <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/analytics</code> shows 30-day view chart, reads, reactions, and revision count (admin only)</li>
             <li><strong>Series progress tracker</strong> — article series navigation shows &ldquo;X of N read&rdquo; based on your browser reading history</li>

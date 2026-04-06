@@ -427,6 +427,10 @@ export default function HelpPage() {
             <li><strong>Gallery grid blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/gallery</code> slash command inserts a responsive image grid with captions</li>
             <li><strong>AI wiki assistant</strong> &mdash; floating chat button on every article page; ask questions about the current article or the whole wiki; context-aware conversation powered by AI</li>
             <li><strong>AI article generation</strong> &mdash; &ldquo;AI Generate&rdquo; in editor toolbar; reads document headings and fills in encyclopedic paragraph content under each section</li>
+            <li><strong>Button / CTA blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/button</code> slash command inserts a call-to-action button with configurable label, URL, and style (primary / secondary / outline)</li>
+            <li><strong>Divider with label blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/divider</code> slash command inserts a horizontal rule with an optional centered text label</li>
+            <li><strong>AI revision summary</strong> &mdash; &ldquo;AI summarize&rdquo; button next to the edit summary field auto-generates a concise one-sentence description of what changed</li>
+            <li><strong>Article quiz mode</strong> &mdash; &ldquo;Quiz me&rdquo; button in article tools bar; AI generates 5 multiple-choice questions from the article; shows score and records attempt</li>
             <li><strong>Bulk JSON export</strong> &mdash; <Link href="/api/export/json">/api/export/json</Link> downloads all articles as structured JSON (admin only)</li>
             <li><strong>Per-article analytics</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/analytics</code>; 30-day view chart + summary stats</li>
             <li><strong>Series progress tracker</strong> &mdash; series navigation shows &ldquo;X of N read&rdquo; from browser reading history</li>

@@ -337,6 +337,10 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Gallery grid blocks** — `/gallery` slash command; responsive image grid with captions
 - **AI wiki assistant** — floating chat button on article pages; context-aware Q&A over wiki content
 - **AI article generation** — "AI Generate" toolbar button fills in content under document headings
+- **Button / CTA blocks** — `/button` slash command inserts a call-to-action button with configurable label, URL, and style (primary / secondary / outline)
+- **Divider with label blocks** — `/divider` slash command inserts a horizontal rule with an optional centered text label
+- **AI revision summary** — "AI summarize" button next to the edit summary field auto-generates a concise description of what changed
+- **Article quiz mode** — "Quiz me" button in article tools bar; AI generates 5 multiple-choice questions; tracks score and records attempt
 - **Bulk JSON export** — `/api/export/json`; all articles as structured JSON (admin only)
 - **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + summary stats (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history

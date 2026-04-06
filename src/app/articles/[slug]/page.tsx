@@ -84,6 +84,7 @@ import SeriesTableOfContents from "@/components/SeriesTableOfContents";
 import WordFrequencyCloud from "@/components/WordFrequencyCloud";
 import TabsActivator from "@/components/article/TabsActivator";
 import WikiChatAssistant from "@/components/article/WikiChatAssistant";
+import ArticleQuizMode from "@/components/article/ArticleQuizMode";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -363,6 +364,7 @@ export default async function ArticlePage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-1">
               <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Tools</span>
               <SpeedReader articleId={article.id} />
+              <ArticleQuizMode articleId={article.id} articleTitle={article.title} />
               <TranslateButton articleId={article.id} />
               <CopyMarkdownButton markdown={article.contentRaw} title={article.title} />
               <CopyPlainTextButton html={resolvedContent} />

@@ -127,6 +127,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Gallery grid blocks** — `/gallery` slash command; responsive auto-fill image grid with captions and hover zoom
 - **AI wiki assistant** — floating chat button on every article page; multi-turn context-aware Q&A over article and related wiki content
 - **AI article generation from outline** — "AI Generate" in editor toolbar; reads headings and fills in encyclopedic paragraph content per section
+- **Button / CTA blocks** — `/button` slash command inserts a styled call-to-action button with configurable label, URL, and style (primary / secondary / outline)
+- **Divider with label blocks** — `/divider` slash command inserts a horizontal rule with an optional centered text label
+- **AI revision summary** — "AI summarize" button next to the edit summary field; compares old vs. new content and auto-generates a concise edit summary sentence
+- **Article quiz mode** — "Quiz me" in the article tools bar; AI generates 5 multiple-choice questions; full flashcard UI with answer reveal, score, and attempt recording
 - **Bulk JSON export** — `/api/export/json`; downloads all articles as structured JSON (admin only)
 - **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + reads, reactions, revisions summary (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history

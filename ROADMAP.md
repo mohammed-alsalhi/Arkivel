@@ -190,6 +190,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Night reading mode — warm sepia theme toggled from article toolbar, persisted to localStorage
 - [x] Search history — last 20 searches in localStorage; shown as chips when query is empty
 
+## v4.59
+
+- [x] Button / CTA blocks — `/button` slash command, configurable label/URL/style
+- [x] Divider with label blocks — `/divider` slash command, optional centered label
+- [x] AI revision summary generation — "AI summarize" button auto-fills edit summary
+- [x] Article quiz mode — "Quiz me" button generates 5 AI questions, full flashcard UI
+
 ## v4.58
 
 - [x] Tabbed content blocks — `/tabs` slash command, interactive tab panels
