@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import TiptapEditor, { type TiptapEditorHandle } from "@/components/editor/TiptapEditor";
+import CollaborativeEditor from "@/components/editor/CollaborativeEditor";
 import TagPicker from "@/components/TagPicker";
 import CategorySelect from "@/components/CategorySelect";
 import InfoboxEditor from "@/components/InfoboxEditor";
@@ -495,7 +496,13 @@ export default function EditArticlePage() {
                 <ZenModeToggle />
               </div>
             </div>
-            <TiptapEditor ref={editorRef} content={article.content} articleTitle={title} onUpdate={handleEditorUpdate} />
+            <CollaborativeEditor
+              articleId={article.id}
+              initialHtml={article.content}
+              articleTitle={title}
+              editorRef={editorRef}
+              onHtmlChange={() => handleEditorUpdate()}
+            />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">

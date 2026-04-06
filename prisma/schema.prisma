@@ -57,6 +57,7 @@ model Article {
   flashcards       Flashcard[]
   quizAttempts     QuizAttempt[]
   reads            ArticleRead[]
+  spacedRepetition SpacedRepetitionItem[]
 
   // v4.3 additions
   bookmarks        Bookmark[]
@@ -291,6 +292,7 @@ model User {
   flashcards       Flashcard[]
   quizAttempts     QuizAttempt[]
   articleReads     ArticleRead[]
+  spacedRepetition SpacedRepetitionItem[]
 
   // v4.3 additions
   smartCollections SmartCollection[]
@@ -1370,4 +1372,22 @@ model GlossaryTerm {
   updatedAt  DateTime @updatedAt
 
   @@index([term])
+}
+
+// ── v4.61: Spaced Repetition ──
+model SpacedRepetitionItem {
+  id           String    @id @default(cuid())
+  userId       String
+  articleId    String
+  ease         Float     @default(2.5)   // SM-2 ease factor
+  interval     Int       @default(1)     // days until next review
+  repetitions  Int       @default(0)     // number of successful reviews
+  nextReviewAt DateTime  @default(now())
+  lastReviewAt DateTime?
+  createdAt    DateTime  @default(now())
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article      Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([userId, nextReviewAt])
 }

@@ -128,6 +128,12 @@ export default function Sidebar({
           <SidebarLink href="/ask" active={pathname === "/ask"} onClick={close}>
             Ask my wiki
           </SidebarLink>
+          <SidebarLink href="/review" active={pathname === "/review"} onClick={close}>
+            Review queue
+          </SidebarLink>
+          <SidebarLink href="/coverage" active={pathname === "/coverage"} onClick={close}>
+            Coverage map
+          </SidebarLink>
           <SidebarLink href="/graph" active={pathname === "/graph"} onClick={close}>
             Article graph
           </SidebarLink>

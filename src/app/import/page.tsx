@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAdmin } from "@/components/AdminContext";
 
 type ImportResult = {
@@ -14,13 +15,22 @@ type ImportResult = {
 
 const ACCEPTED = ".md,.markdown,.txt,.text,.html,.htm,.json,.xml";
 
+type UrlImportResult = { title: string; html: string; sourceUrl: string };
+
 export default function ImportPage() {
   const isAdmin = useAdmin();
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [importing, setImporting] = useState(false);
   const [results, setResults] = useState<ImportResult[] | null>(null);
   const [dragOver, setDragOver] = useState(false);
+
+  // URL import state
+  const [urlInput, setUrlInput] = useState("");
+  const [urlImporting, setUrlImporting] = useState(false);
+  const [urlResult, setUrlResult] = useState<UrlImportResult | null>(null);
+  const [urlError, setUrlError] = useState("");
 
   if (!isAdmin) {
     return (
@@ -89,6 +99,38 @@ export default function ImportPage() {
     } finally {
       setImporting(false);
     }
+  }
+
+  async function handleUrlImport() {
+    if (!urlInput.trim()) return;
+    setUrlImporting(true);
+    setUrlError("");
+    setUrlResult(null);
+    try {
+      const res = await fetch("/api/import/url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: urlInput.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setUrlError(data.error || "Import failed"); return; }
+      setUrlResult(data);
+    } catch {
+      setUrlError("Network error");
+    } finally {
+      setUrlImporting(false);
+    }
+  }
+
+  function handleCreateFromUrl() {
+    if (!urlResult) return;
+    try {
+      sessionStorage.setItem("wiki_url_import_draft", JSON.stringify({
+        title: urlResult.title,
+        html: urlResult.html,
+      }));
+    } catch { /* noop */ }
+    router.push("/articles/new?from=url-import");
   }
 
   return (
@@ -239,6 +281,74 @@ export default function ImportPage() {
           </div>
         </div>
       )}
+
+      {/* URL Import */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Import from URL</div>
+        <div className="wiki-portal-body space-y-3">
+          <p className="text-[12px] text-muted">
+            Paste any public URL — article, Wikipedia page, documentation, blog post — and AI will extract and reformat the content as a wiki article draft.
+          </p>
+          <div className="flex gap-2">
+            <input
+              type="url"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleUrlImport()}
+              placeholder="https://en.wikipedia.org/wiki/..."
+              className="flex-1 border border-border bg-surface px-3 py-1.5 text-[13px] focus:border-accent focus:outline-none"
+            />
+            <button
+              onClick={handleUrlImport}
+              disabled={urlImporting || !urlInput.trim()}
+              className="px-4 py-1.5 text-[13px] bg-accent text-white hover:bg-accent-hover disabled:opacity-50 transition-colors"
+            >
+              {urlImporting ? "Fetching…" : "Import"}
+            </button>
+          </div>
+
+          {urlError && (
+            <div className="text-red-500 text-[13px] p-3 bg-red-50 border border-red-200 rounded">
+              {urlError}
+            </div>
+          )}
+
+          {urlResult && (
+            <div className="space-y-3">
+              <div className="border border-border rounded p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] text-muted uppercase tracking-wide font-medium mb-0.5">Generated title</p>
+                    <p className="text-[15px] font-semibold text-heading">{urlResult.title}</p>
+                  </div>
+                  <a href={urlResult.sourceUrl} target="_blank" rel="noopener noreferrer"
+                    className="text-[11px] text-muted hover:text-foreground underline">
+                    Source ↗
+                  </a>
+                </div>
+                <div
+                  className="prose prose-sm max-w-none border-t border-border pt-3 text-[13px] leading-relaxed max-h-64 overflow-y-auto"
+                  dangerouslySetInnerHTML={{ __html: urlResult.html }}
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleCreateFromUrl}
+                  className="bg-accent text-white px-4 py-1.5 text-[13px] font-medium hover:bg-accent-hover transition-colors"
+                >
+                  Open in editor
+                </button>
+                <button
+                  onClick={() => { setUrlResult(null); setUrlInput(""); }}
+                  className="px-4 py-1.5 text-[13px] border border-border hover:bg-surface-hover transition-colors"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Other import sources */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-4">

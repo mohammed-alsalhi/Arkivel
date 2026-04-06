@@ -4,6 +4,35 @@
 
 All notable changes to this project are documented here.
 
+## [4.61.0] - 2026-04-05
+
+### New Features
+
+- **Adaptive Reading Level** — Reading mode toggle on every article page rewrites content at Beginner, Technical, or ELI5 level using Claude; original content is preserved; a banner shows the active mode with one-click restore; powered by `POST /api/ai/reading-level`
+- **Spaced Repetition Review Queue** — SM-2 algorithm surfaces enrolled articles for re-reading at optimal intervals; "Review later" button on article pages; full review session UI at `/review` with flip-card interaction and quality rating (Blank / Hard / Good / Easy); enrolled articles list with next-review dates; linked from sidebar
+- **Import from URL** — Paste any public URL into the import page and AI fetches, cleans, and reformats the content as a structured wiki article draft; "Open in editor" pre-fills the new article page via sessionStorage; powered by `POST /api/import/url`
+- **Knowledge Coverage Map** — Visual dashboard at `/coverage` showing every category as a colour-coded card (Empty → Sparse → Growing → Solid → Rich) with coverage scores; grid/table views; filter by status; click any category to get AI-generated gap suggestions; broken wiki-link gaps listed below; linked from sidebar
+- **Structured Claims** — Editor toolbar buttons mark selected text as Certain / Probable / Disputed; claim marks render with colour-coded underlines and hover tooltips; a collapsible `ClaimsPanel` below each article lists all claims grouped by confidence; stored as `<span data-claim="...">` in HTML
+- **Real-time Collaborative Editing** — Live multi-user editing in the article edit page; "Enable live editing" toggle activates Yjs-backed sync via `POST /api/collab/[articleId]`; polling sync every 2 seconds merges remote changes; presence indicators show other editors as coloured avatars; last-synced timestamp displayed
+
+### Technical
+
+- `src/app/api/ai/reading-level/route.ts` (new) — POST; accepts `{ articleId, level }`; rewrites article HTML via Claude Haiku at requested reading level
+- `src/components/article/ArticleBodyWithReadingLevel.tsx` (new) — client wrapper replacing direct `SpecialBlocksRenderer` usage; hosts reading level button and adaptive banner
+- `src/components/article/ReadingLevelButton.tsx` (new) — dropdown with Standard/Beginner/Technical/ELI5 options; shows loading spinner and active state
+- `prisma/schema.prisma` — added `SpacedRepetitionItem` model with SM-2 fields (ease, interval, repetitions, nextReviewAt)
+- `src/app/api/spaced-repetition/route.ts` (new) — GET (due items / all items), POST (enroll / review / unenroll)
+- `src/app/review/page.tsx` (new) — full review session UI with progress bar, flip cards, quality rating buttons
+- `src/components/article/ReviewEnrollButton.tsx` (new) — per-article enroll/unenroll button
+- `src/app/api/import/url/route.ts` (new) — POST; fetches URL, strips boilerplate HTML, AI formats as wiki article
+- `src/app/api/coverage/route.ts` (new) — GET; computes coverage score for each category (article count, avg words, recency)
+- `src/app/coverage/page.tsx` (new) — Knowledge Coverage Map page
+- `src/components/editor/ClaimMarkExtension.ts` (new) — Tiptap Mark extension with `certain/probable/disputed` attribute
+- `src/components/article/ClaimsPanel.tsx` (new) — extracts `data-claim` spans from HTML and renders a collapsible claims list
+- `src/app/api/collab/[articleId]/route.ts` (new) — GET/POST/DELETE; Yjs state storage and merge via `CollaborationSession` table
+- `src/app/api/collab/[articleId]/presence/route.ts` (new) — POST/DELETE; in-memory presence tracking with 30s expiry
+- `src/components/editor/CollaborativeEditor.tsx` (new) — wraps TiptapEditor with sync loop, presence polling, and live indicator
+
 ## [4.60.0] - 2026-04-05
 
 ### New Features

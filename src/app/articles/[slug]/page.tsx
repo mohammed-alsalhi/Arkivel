@@ -16,7 +16,6 @@ import PrintButton from "@/components/PrintButton";
 import BackToTop from "@/components/BackToTop";
 import ReadingProgress from "@/components/ReadingProgress";
 import Breadcrumb from "@/components/Breadcrumb";
-import SpecialBlocksRenderer from "@/components/SpecialBlocksRenderer";
 import SessionReadingTrail from "@/components/SessionReadingTrail";
 import BookmarkButton from "@/components/BookmarkButton";
 import AddToReadingList from "@/components/AddToReadingList";
@@ -51,8 +50,6 @@ import ReadingLevelBadge from "@/components/ReadingLevelBadge";
 import StreakTracker from "@/components/StreakTracker";
 import { computeQualityScore } from "@/app/api/articles/[id]/quality-score/route";
 import { resolveGlossaryTerms } from "@/lib/glossary";
-import GlossaryTooltipLayer from "@/components/GlossaryTooltipLayer";
-import HeadingPermalinks from "@/components/HeadingPermalinks";
 import StickyArticleHeader from "@/components/StickyArticleHeader";
 import ArticleViewHistory from "@/components/ArticleViewHistory";
 import ArticleQA from "@/components/ArticleQA";
@@ -85,6 +82,9 @@ import WordFrequencyCloud from "@/components/WordFrequencyCloud";
 import TabsActivator from "@/components/article/TabsActivator";
 import WikiChatAssistant from "@/components/article/WikiChatAssistant";
 import ArticleQuizMode from "@/components/article/ArticleQuizMode";
+import ArticleBodyWithReadingLevel from "@/components/article/ArticleBodyWithReadingLevel";
+import ReviewEnrollButton from "@/components/article/ReviewEnrollButton";
+import ClaimsPanel from "@/components/article/ClaimsPanel";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -365,6 +365,7 @@ export default async function ArticlePage({ params }: Props) {
               <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Tools</span>
               <SpeedReader articleId={article.id} />
               <ArticleQuizMode articleId={article.id} articleTitle={article.title} />
+              <ReviewEnrollButton articleId={article.id} />
               <Link href={`/present/${article.slug}`} className="h-6 px-2 text-[11px] border border-border rounded text-foreground hover:bg-surface-hover hover:text-accent transition-colors">
                 Present
               </Link>
@@ -480,12 +481,15 @@ export default async function ArticlePage({ params }: Props) {
           <ContentWarningBanner warnings={article.contentWarnings} />
         )}
 
-        {/* Article content */}
-        <div id="article-content" dir={article.dir ?? "ltr"} className="relative">
-          <SpecialBlocksRenderer html={addHeadingIds(appendFootnoteSection(resolveGlossaryTerms(resolvedContent, glossaryTerms)))} />
-          <GlossaryTooltipLayer />
-          <HeadingPermalinks />
-        </div>
+        {/* Article content — wraps with adaptive reading level control */}
+        <ArticleBodyWithReadingLevel
+          articleId={article.id}
+          originalHtml={addHeadingIds(appendFootnoteSection(resolveGlossaryTerms(resolvedContent, glossaryTerms)))}
+          dir={article.dir ?? "ltr"}
+        />
+
+        {/* Claims summary panel */}
+        <ClaimsPanel html={resolvedContent} />
 
         {/* Clear float from infobox */}
         <div className="clear-both" />

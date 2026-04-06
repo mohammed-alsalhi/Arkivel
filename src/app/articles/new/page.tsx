@@ -33,8 +33,8 @@ type SimilarArticle = {
   isDisambiguation: boolean;
 };
 
-/** Reads ?from=synthesize and pre-fills the editor from sessionStorage. Must be wrapped in Suspense. */
-function SynthesizeDraftLoader({
+/** Reads ?from=synthesize or ?from=url-import and pre-fills the editor from sessionStorage. Must be wrapped in Suspense. */
+function DraftLoader({
   editorRef,
   setTitle,
 }: {
@@ -43,12 +43,17 @@ function SynthesizeDraftLoader({
 }) {
   const searchParams = useSearchParams();
   useEffect(() => {
-    if (searchParams.get("from") !== "synthesize") return;
+    const from = searchParams.get("from");
+    const key =
+      from === "synthesize" ? "wiki_synthesize_draft" :
+      from === "url-import" ? "wiki_url_import_draft" :
+      null;
+    if (!key) return;
     try {
-      const raw = sessionStorage.getItem("wiki_synthesize_draft");
+      const raw = sessionStorage.getItem(key);
       if (!raw) return;
       const draft = JSON.parse(raw) as { title: string; html: string };
-      sessionStorage.removeItem("wiki_synthesize_draft");
+      sessionStorage.removeItem(key);
       if (draft.title) setTitle(draft.title);
       if (draft.html) setTimeout(() => editorRef.current?.setContent(draft.html), 100);
     } catch { /* noop */ }
@@ -145,7 +150,7 @@ export default function NewArticlePage() {
   return (
     <div>
       <Suspense>
-        <SynthesizeDraftLoader editorRef={editorRef} setTitle={setTitle} />
+        <DraftLoader editorRef={editorRef} setTitle={setTitle} />
       </Suspense>
 
       {/* Tabs */}

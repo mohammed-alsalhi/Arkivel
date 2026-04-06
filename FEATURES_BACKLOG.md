@@ -119,7 +119,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [x] New articles feed widget
 - [x] Random article with category/tag filter
 - [x] Article quiz mode (flashcard-style review of article content)
-- [ ] Spaced repetition reading scheduler
+- [x] Spaced repetition reading scheduler
 - [x] Knowledge graph exploration mode
 - [ ] Citation graph (article A references article B)
 - [ ] Influence map (track intellectual lineage between articles)
@@ -152,7 +152,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 ## Collaboration
 
 - [x] Inline suggestions (suggest edits, accept/reject flow)
-- [ ] Real-time collaborative editing (Yjs — full production wiring)
+- [x] Real-time collaborative editing (Yjs — full production wiring)
 - [ ] Edit conflict resolution UI (merge conflicting saves)
 - [x] Change proposal workflow (editor proposes, admin approves)
 - [ ] Peer review queue
@@ -203,7 +203,7 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [ ] Article health trends over time charts
 - [ ] Editor activity dashboard
 - [x] Content gap analysis (popular zero-result searches)
-- [ ] Knowledge coverage map
+- [x] Knowledge coverage map
 - [x] Writing velocity tracker (words added per week)
 - [x] Category growth chart
 - [x] Tag usage trends
