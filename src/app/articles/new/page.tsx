@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, Suspense, type RefObject } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import TiptapEditor, { type TiptapEditorHandle } from "@/components/editor/TiptapEditor";
@@ -33,10 +33,33 @@ type SimilarArticle = {
   isDisambiguation: boolean;
 };
 
+/** Reads ?from=synthesize and pre-fills the editor from sessionStorage. Must be wrapped in Suspense. */
+function SynthesizeDraftLoader({
+  editorRef,
+  setTitle,
+}: {
+  editorRef: RefObject<TiptapEditorHandle | null>;
+  setTitle: (t: string) => void;
+}) {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("from") !== "synthesize") return;
+    try {
+      const raw = sessionStorage.getItem("wiki_synthesize_draft");
+      if (!raw) return;
+      const draft = JSON.parse(raw) as { title: string; html: string };
+      sessionStorage.removeItem("wiki_synthesize_draft");
+      if (draft.title) setTitle(draft.title);
+      if (draft.html) setTimeout(() => editorRef.current?.setContent(draft.html), 100);
+    } catch { /* noop */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+  return null;
+}
+
 export default function NewArticlePage() {
   const isAdmin = useAdmin();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const editorRef = useRef<TiptapEditorHandle>(null);
   const [title, setTitle] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -53,23 +76,6 @@ export default function NewArticlePage() {
       .then((r) => r.json())
       .then(setCategories);
   }, []);
-
-  // Pre-fill from synthesis draft
-  useEffect(() => {
-    if (searchParams.get("from") !== "synthesize") return;
-    try {
-      const raw = sessionStorage.getItem("wiki_synthesize_draft");
-      if (!raw) return;
-      const draft = JSON.parse(raw) as { title: string; html: string };
-      sessionStorage.removeItem("wiki_synthesize_draft");
-      if (draft.title) setTitle(draft.title);
-      if (draft.html && editorRef.current) {
-        // Wait a tick for the editor to initialise
-        setTimeout(() => editorRef.current?.setContent(draft.html), 100);
-      }
-    } catch { /* noop */ }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
 
   // Debounced similar title check
   const checkSimilar = useCallback(async (t: string) => {
@@ -138,6 +144,10 @@ export default function NewArticlePage() {
 
   return (
     <div>
+      <Suspense>
+        <SynthesizeDraftLoader editorRef={editorRef} setTitle={setTitle} />
+      </Suspense>
+
       {/* Tabs */}
       <div className="wiki-tabs">
         <span className="wiki-tab wiki-tab-active">Creating</span>
