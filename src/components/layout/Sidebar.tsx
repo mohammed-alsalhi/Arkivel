@@ -140,6 +140,9 @@ export default function Sidebar({
           <SidebarLink href="/timeline/historical" active={pathname === "/timeline/historical"} onClick={close}>
             Historical timeline
           </SidebarLink>
+          <SidebarLink href="/health" active={pathname === "/health"} onClick={close}>
+            Wiki health
+          </SidebarLink>
           <SidebarLink href="/graph" active={pathname === "/graph"} onClick={close}>
             Article graph
           </SidebarLink>

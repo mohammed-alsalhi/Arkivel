@@ -188,6 +188,10 @@ export default function HelpPage() {
             <li><strong>Duplicate detection</strong> &mdash; checks for semantically similar existing articles when creating a new one.</li>
             <li><strong>Category suggestions</strong> &mdash; Claude suggests topics missing from a category.</li>
             <li><strong>Quiz generation</strong> &mdash; Claude generates 5 multiple-choice questions from any article for self-testing.</li>
+            <li><strong>AI auto-fill</strong> &mdash; on the new article page, type a title and choose a template type (Person, Event, Place, Concept, Organization, Product); click <em>Auto-fill</em> to generate a full structured draft.</li>
+            <li><strong>Category overview generator</strong> &mdash; button on category pages; AI reads all published articles and writes a 2–4 paragraph encyclopedic introduction.</li>
+            <li><strong>AI fact-check</strong> &mdash; button at the bottom of any article; Claude analyzes 3–6 factual claims and rates each as Verified / Plausible / Uncertain / Questionable with a confidence bar.</li>
+            <li><strong>Smart editor suggestions</strong> &mdash; click <em>Suggestions</em> in the editor toolbar while writing; shows unlinked article mentions, related pages, and AI-generated ideas for missing sections.</li>
           </ul>
         </div>
       </div>
@@ -200,6 +204,10 @@ export default function HelpPage() {
             <li><strong>Learning Paths</strong> &mdash; curated sequences of articles. Browse at <Link href="/learning-paths">/learning-paths</Link> or create your own. Progress is tracked per path.</li>
             <li><strong>Flashcards</strong> &mdash; create flashcards from any article. Review due cards at <Link href="/flashcards">/flashcards</Link> using the SM-2 spaced repetition algorithm (grade 0–5 after each card).</li>
             <li><strong>Quizzes</strong> &mdash; AI-generated multiple choice questions per article. Results saved to your quiz history.</li>
+            <li><strong>AI Tutor Mode</strong> &mdash; <em>Tutor me</em> button on any article opens a Socratic AI chat that asks probing questions, tests comprehension, and gives feedback.</li>
+            <li><strong>Spaced repetition review queue</strong> &mdash; click <em>Review</em> on any article to enroll it; due cards appear at <Link href="/review">/review</Link> using SM-2 scheduling.</li>
+            <li><strong>Daily digest</strong> &mdash; personalised in-app briefing at <Link href="/digest">/digest</Link>; sections: Article of the Day, due reviews, watched updates, Did You Know, On This Day.</li>
+            <li><strong>Audio narration</strong> &mdash; <em>Listen</em> button on every article narrates the full text using browser TTS with pause/stop and a progress bar.</li>
             <li><strong>Reading progress</strong> &mdash; mark articles as read. Track completion by category via the progress ring on category pages.</li>
             <li><strong>Email digest</strong> &mdash; opt in under Settings → Digest to receive a scheduled summary email of watchlist changes.</li>
           </ul>
@@ -398,6 +406,7 @@ export default function HelpPage() {
             <li><strong>Search gaps</strong> &mdash; <Link href="/admin/search-gaps">/admin/search-gaps</Link> shows top zero-result queries</li>
             <li><strong>Stale articles</strong> &mdash; <Link href="/admin/staleness">/admin/staleness</Link> lists articles not updated in 180+ days</li>
             <li><strong>Wiki health score</strong> &mdash; <Link href="/admin/health">/admin/health</Link> gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %</li>
+            <li><strong>Wiki Health Dashboard</strong> &mdash; <Link href="/health">/health</Link> audits all articles for stubs, outdated content, missing excerpts, missing categories/tags, and broken wiki links; shows a 0–100 health score with per-article fix links</li>
             <li><strong>Embeddings coverage</strong> &mdash; <Link href="/admin/embeddings">/admin/embeddings</Link> shows AI embedding status per article</li>
             <li><strong>Maintenance mode</strong> &mdash; <Link href="/admin/maintenance">/admin/maintenance</Link> toggle displays a site-wide yellow banner while the wiki is under maintenance</li>
             <li><strong>Cleanup tags</strong> &mdash; flag articles with attention labels (Needs Images, Stub, Outdated, etc.); shown as orange banner on article page; set in article edit form</li>

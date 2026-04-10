@@ -11,6 +11,7 @@ import TemplatePicker from "@/components/TemplatePicker";
 import { useAdmin } from "@/components/AdminContext";
 import type { ArticleTemplate } from "@/lib/templates";
 import { getCategoryTemplate } from "@/lib/category-templates";
+import SmartSuggestions from "@/components/editor/SmartSuggestions";
 
 type CategoryItem = { id: string; name: string; slug: string; parentId: string | null; children?: CategoryItem[] };
 
@@ -75,6 +76,8 @@ export default function NewArticlePage() {
   const [infobox, setInfobox] = useState<Record<string, string>>({});
   const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [saving, setSaving] = useState(false);
+  const [autofillTemplate, setAutofillTemplate] = useState("concept");
+  const [autofillLoading, setAutofillLoading] = useState(false);
 
   useEffect(() => {
     fetch("/api/categories")
@@ -100,6 +103,23 @@ export default function NewArticlePage() {
     const timeout = setTimeout(() => checkSimilar(title), 500);
     return () => clearTimeout(timeout);
   }, [title, checkSimilar]);
+
+  async function handleAutofill() {
+    if (!title.trim() || autofillLoading) return;
+    setAutofillLoading(true);
+    try {
+      const res = await fetch("/api/ai/autofill", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: title.trim(), template: autofillTemplate }),
+      });
+      if (res.ok) {
+        const { html } = await res.json();
+        editorRef.current?.setContent(html);
+      }
+    } catch { /* ignore */ }
+    setAutofillLoading(false);
+  }
 
   function handleTemplateSelect(template: ArticleTemplate) {
     setTemplateId(template.id);
@@ -180,6 +200,46 @@ export default function NewArticlePage() {
             />
           </div>
 
+          {/* AI Auto-fill */}
+          {title.trim().length >= 3 && (
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[12px] text-muted">AI auto-fill as:</span>
+              <select
+                value={autofillTemplate}
+                onChange={(e) => setAutofillTemplate(e.target.value)}
+                className="border border-border bg-surface px-2 py-1 text-[12px] focus:border-accent focus:outline-none"
+              >
+                <option value="person">Person</option>
+                <option value="event">Event</option>
+                <option value="place">Place</option>
+                <option value="concept">Concept</option>
+                <option value="organization">Organization</option>
+                <option value="product">Product / Technology</option>
+              </select>
+              <button
+                type="button"
+                onClick={handleAutofill}
+                disabled={autofillLoading}
+                className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors disabled:opacity-50 flex items-center gap-1"
+              >
+                {autofillLoading ? (
+                  <>
+                    <span className="w-1.5 h-1.5 bg-accent rounded-full animate-bounce [animation-delay:0ms]" />
+                    <span className="w-1.5 h-1.5 bg-accent rounded-full animate-bounce [animation-delay:150ms]" />
+                    <span className="w-1.5 h-1.5 bg-accent rounded-full animate-bounce [animation-delay:300ms]" />
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                    </svg>
+                    Auto-fill
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
           {/* Similar articles warning */}
           {similarArticles.length > 0 && (
             <div className="wiki-disambiguation-notice">
@@ -243,7 +303,13 @@ export default function NewArticlePage() {
           </div>
 
           <div>
-            <label className="block text-[13px] font-bold text-heading mb-1">Content:</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-[13px] font-bold text-heading">Content:</label>
+              <SmartSuggestions
+                title={title}
+                getHtml={() => editorRef.current?.getHTML() ?? ""}
+              />
+            </div>
             <TiptapEditor
               ref={editorRef}
               placeholder="Begin writing your article... Use [[Article Name]] to create wiki links."

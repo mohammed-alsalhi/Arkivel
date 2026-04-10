@@ -12,6 +12,7 @@ import { useAdmin } from "@/components/AdminContext";
 import ArticleLockGuard from "@/components/ArticleLockGuard";
 import FocalPointPicker from "@/components/FocalPointPicker";
 import ZenModeToggle from "@/components/editor/ZenModeToggle";
+import SmartSuggestions from "@/components/editor/SmartSuggestions";
 
 type CategoryItem = { id: string; name: string; slug: string; parentId: string | null; children?: CategoryItem[] };
 
@@ -493,6 +494,10 @@ export default function EditArticlePage() {
                 {autoSaveStatus === "saved" && (
                   <span className="text-[11px] text-green-600 dark:text-green-400">Draft saved</span>
                 )}
+                <SmartSuggestions
+                  title={title}
+                  getHtml={() => editorRef.current?.getHTML() ?? ""}
+                />
                 <ZenModeToggle />
               </div>
             </div>

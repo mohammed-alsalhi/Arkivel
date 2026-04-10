@@ -86,6 +86,8 @@ import ArticleBodyWithReadingLevel from "@/components/article/ArticleBodyWithRea
 import ReviewEnrollButton from "@/components/article/ReviewEnrollButton";
 import ClaimsPanel from "@/components/article/ClaimsPanel";
 import TutorButton from "@/components/article/TutorButton";
+import AudioNarration from "@/components/article/AudioNarration";
+import FactCheckPanel from "@/components/article/FactCheckPanel";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -364,6 +366,7 @@ export default async function ArticlePage({ params }: Props) {
 
             <div className="flex flex-wrap items-center gap-1">
               <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Tools</span>
+              <AudioNarration html={resolvedContent} title={article.title} />
               <SpeedReader articleId={article.id} />
               <ArticleQuizMode articleId={article.id} articleTitle={article.title} />
               <TutorButton articleId={article.id} articleTitle={article.title} />
@@ -492,6 +495,9 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Claims summary panel */}
         <ClaimsPanel html={resolvedContent} />
+
+        {/* Fact-check panel */}
+        <FactCheckPanel html={resolvedContent} />
 
         {/* Clear float from infobox */}
         <div className="clear-both" />

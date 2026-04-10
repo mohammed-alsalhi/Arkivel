@@ -203,6 +203,33 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] AI revision summary generation — "AI summarize" button auto-fills edit summary
 - [x] Article quiz mode — "Quiz me" button generates 5 AI questions, full flashcard UI
 
+## v4.63
+
+- [x] Wiki Health Dashboard — `/health` page with health score, 7 issue dimensions, per-article fix links
+- [x] AI Auto-fill from Title — template-based full article generation in new article editor
+- [x] Category Overview Generator — AI-written intro prose button on all category pages
+- [x] Article Audio Narration — browser TTS player with pause/stop/progress on all articles
+- [x] AI Fact-Check — claim-by-claim verification with Verified/Plausible/Uncertain/Questionable verdicts
+- [x] Smart Editor Suggestions — live panel: unlinked mentions, related articles, AI-suggested missing sections
+
+## v4.62
+
+- [x] Daily Digest — personalised in-app briefing at `/digest`
+- [x] Image → Wiki Article — Claude Vision reads photo/screenshot and generates article
+- [x] YouTube → Wiki Article — transcript extraction → structured article
+- [x] Historical Timeline — `/timeline/historical` year-extraction timeline with decade scrubber
+- [x] Semantic Search Toggle — semantic mode on search page
+- [x] AI Tutor Mode — Socratic chat tutor on article pages
+
+## v4.61
+
+- [x] Adaptive Reading Level — Beginner / Technical / ELI5 on-the-fly AI rewrite
+- [x] Spaced Repetition Review Queue — SM-2 scheduling with flip-card UI at `/review`
+- [x] Import from URL — AI extracts and formats web page content into wiki article
+- [x] Knowledge Coverage Map — category health grid at `/coverage`
+- [x] Structured Claims — mark text as certain/probable/disputed with tooltip badges
+- [x] Real-time Collaborative Editing — Yjs-powered simultaneous editing with cursor presence
+
 ## v4.58
 
 - [x] Tabbed content blocks — `/tabs` slash command, interactive tab panels

@@ -183,6 +183,11 @@ export default function FeaturesPage() {
             <li><strong>Learning paths</strong> — curated ordered sequences of articles with per-path progress tracking at <Link href="/learning-paths">/learning-paths</Link></li>
             <li><strong>Flashcards</strong> — create decks from articles; SM-2 spaced repetition with 0–5 grading at <Link href="/flashcards">/flashcards</Link></li>
             <li><strong>AI quizzes</strong> — Claude generates 5 multiple-choice questions from any article for self-testing</li>
+            <li><strong>AI Tutor Mode</strong> — Socratic AI tutor chat on any article; asks probing questions and tests comprehension</li>
+            <li><strong>Spaced repetition review queue</strong> — enroll articles; SM-2 algorithm schedules daily reviews at <Link href="/review">/review</Link></li>
+            <li><strong>Daily digest</strong> — personalised in-app briefing at <Link href="/digest">/digest</Link>: due reviews, watched updates, AI facts, article of the day</li>
+            <li><strong>Adaptive reading level</strong> — switch any article to Beginner, Technical, or ELI5 view on the fly via AI</li>
+            <li><strong>Article audio narration</strong> — listen button on every article uses browser TTS to narrate the full text</li>
             <li><strong>Reading progress</strong> — mark articles as read; category pages show a completion ring</li>
             <li><strong>Presentation mode</strong> — any article opens as a full-screen slideshow at <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code>; each H2/H3 is a slide</li>
             <li><strong>Watchlist digest</strong> — optional daily email summary of watched article changes at <Link href="/watchlist/digest">/watchlist/digest</Link></li>
@@ -223,6 +228,12 @@ export default function FeaturesPage() {
             <li><strong>Category suggestions</strong> — Claude suggests topics missing from a category</li>
             <li><strong>Quiz generation</strong> — 5 multiple-choice questions generated per article by Claude</li>
             <li><strong>Translation</strong> — machine-translate articles via DeepL or Google Translate (requires API key)</li>
+            <li><strong>AI auto-fill</strong> — type a title on the new article page and pick a template type; AI generates a full structured draft</li>
+            <li><strong>Category overview generator</strong> — button on category pages generates AI-written introductory prose from all articles</li>
+            <li><strong>AI fact-check</strong> — analyzes 3–6 factual claims per article; rates each as Verified / Plausible / Uncertain / Questionable</li>
+            <li><strong>Smart editor suggestions</strong> — live sidebar detects unlinked wiki articles, related pages, and AI-suggested missing sections</li>
+            <li><strong>AI revision summary</strong> — automatically generates an edit summary when saving changes</li>
+            <li><strong>Import from URL / Image / YouTube</strong> — AI converts web pages, photos of notes, and video transcripts into wiki articles</li>
           </ul>
         </div>
       </div>

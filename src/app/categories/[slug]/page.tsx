@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/utils";
 import CategoryWatchButton from "@/components/CategoryWatchButton";
 import RandomArticleButton from "@/components/RandomArticleButton";
 import SynthesizeButton from "@/components/SynthesizeButton";
+import CategoryOverviewGenerator from "@/components/CategoryOverviewGenerator";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -95,6 +96,9 @@ export default async function CategoryPage({ params }: Props) {
       {category.description && (
         <p className="text-[13px] text-muted mb-3">{category.description}</p>
       )}
+      <div className="mb-3">
+        <CategoryOverviewGenerator categoryId={category.id} />
+      </div>
       <p className="text-[12px] text-muted mb-3">
         {articles.length} article{articles.length !== 1 ? "s" : ""} in this category
       </p>

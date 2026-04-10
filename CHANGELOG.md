@@ -4,6 +4,30 @@
 
 All notable changes to this project are documented here.
 
+## [4.63.0] - 2026-04-09
+
+### New Features
+
+- **Wiki Health Dashboard** — `/health` page audits all articles for quality issues: stubs (< 100 words), outdated (1+ year), missing excerpt, uncategorized, untagged, broken wiki links, very long articles (> 5000 words); shows overall health score 0–100 with colour coding; filter by issue type; direct "Fix" links to edit pages; sidebar link added
+- **AI Auto-fill from Title** — On the new article page, type a title and pick a template type (Person / Event / Place / Concept / Organization / Product); AI generates a complete encyclopedia-style HTML article with appropriate sections; auto-fill button appears as soon as title is 3+ characters
+- **Category Overview Generator** — "Generate overview" button on every category page; AI reads all published articles in the category and writes a 2–4 paragraph encyclopedic introduction covering scope, range, and article relationships; collapsible display with regenerate option
+- **Article Audio Narration** — "Listen" button on every article page uses the browser's Web Speech API to narrate the full article text; inline progress bar; pause/resume/stop controls; auto-removes footnotes and code blocks from narration; no API key required
+- **AI Fact-Check** — "Fact-check" button on article pages analyzes the 3–6 most significant factual claims using Claude AI; each claim shows a verdict (Verified / Plausible / Uncertain / Questionable), brief explanation, and confidence bar; disclaimer that results are based on AI training knowledge
+- **Smart Editor Suggestions** — "Suggestions" panel in the article editor (new and edit pages); detects articles mentioned in text that aren't wiki-linked, lists related articles by keyword overlap, and uses AI to suggest missing sections or underdeveloped areas; auto-refreshes every 30 seconds while open
+
+### Technical
+
+- `src/app/api/health/wiki/route.ts` (new) — GET; computes per-article issue list and overall health score weighted across 7 quality dimensions
+- `src/app/health/page.tsx` (new) — Health dashboard client page with score gauge, stat grid, issue filter tabs, and article list
+- `src/app/api/ai/autofill/route.ts` (new) — POST `{ title, template }`; 6 article templates; returns `{ html }` from Claude Haiku
+- `src/app/api/ai/category-overview/route.ts` (new) — POST `{ categoryId }`; returns `{ overview }` prose text
+- `src/components/CategoryOverviewGenerator.tsx` (new) — Client component with generate/show/hide toggle on category pages
+- `src/components/article/AudioNarration.tsx` (new) — Browser SpeechSynthesis-based narration player with chunked playback and progress tracking
+- `src/app/api/ai/factcheck/route.ts` (new) — POST `{ html }`; returns `{ results }` array with claim/verdict/explanation/confidence
+- `src/components/article/FactCheckPanel.tsx` (new) — Collapsible fact-check results panel with colour-coded verdict badges
+- `src/app/api/ai/editor-suggestions/route.ts` (new) — POST `{ title, html }`; returns wiki-link gaps, related articles, and AI-suggested missing sections
+- `src/components/editor/SmartSuggestions.tsx` (new) — Editor sidebar panel; auto-refreshes; shows link suggestions, related articles, and AI section ideas
+
 ## [4.62.0] - 2026-04-09
 
 ### New Features
