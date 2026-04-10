@@ -125,6 +125,9 @@ export default function Sidebar({
           <SidebarLink href="/tags" active={pathname === "/tags" || pathname.startsWith("/tags/")} onClick={close}>
             Tags
           </SidebarLink>
+          <SidebarLink href="/digest" active={pathname === "/digest"} onClick={close}>
+            Daily digest
+          </SidebarLink>
           <SidebarLink href="/ask" active={pathname === "/ask"} onClick={close}>
             Ask my wiki
           </SidebarLink>
@@ -133,6 +136,9 @@ export default function Sidebar({
           </SidebarLink>
           <SidebarLink href="/coverage" active={pathname === "/coverage"} onClick={close}>
             Coverage map
+          </SidebarLink>
+          <SidebarLink href="/timeline/historical" active={pathname === "/timeline/historical"} onClick={close}>
+            Historical timeline
           </SidebarLink>
           <SidebarLink href="/graph" active={pathname === "/graph"} onClick={close}>
             Article graph
