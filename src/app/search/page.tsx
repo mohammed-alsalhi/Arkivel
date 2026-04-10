@@ -38,6 +38,7 @@ function SearchContent() {
   const [loading, setLoading] = useState(false);
   const [didYouMean, setDidYouMean] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [semanticMode, setSemanticMode] = useState(false);
   const [qaAnswer, setQaAnswer] = useState<{ answer: string; sources: { id: string; title: string; slug: string }[] } | null>(null);
   const [qaLoading, setQaLoading] = useState(false);
   const [federatedResults, setFederatedResults] = useState<{ peerName: string; peerUrl: string; id: string; title: string; slug: string; excerpt: string | null; url: string }[]>([]);
@@ -84,6 +85,7 @@ function SearchContent() {
     if (dateTo) params.set("dateTo", dateTo);
     if (wordCountMin) params.set("wordCountMin", wordCountMin);
     if (wordCountMax) params.set("wordCountMax", wordCountMax);
+    if (semanticMode) params.set("semantic", "1");
 
     try {
       const res = await fetch(`/api/search?${params.toString()}`);
@@ -119,7 +121,7 @@ function SearchContent() {
     } finally {
       setLoading(false);
     }
-  }, [q, selectedCategory, selectedTags, dateFrom, dateTo, wordCountMin, wordCountMax]);
+  }, [q, selectedCategory, selectedTags, dateFrom, dateTo, wordCountMin, wordCountMax, semanticMode]);
 
   // Search when query or filters change
   useEffect(() => {
@@ -205,12 +207,28 @@ function SearchContent() {
             : `${results.length} result${results.length !== 1 ? "s" : ""} for \u201C${q}\u201D`}
           {hasFilters && " (filtered)"}
         </p>
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="text-[12px] text-accent hover:underline"
-        >
-          {showAdvanced ? "Hide" : "Advanced search"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSemanticMode((v) => !v)}
+            title="Semantic search uses AI vector embeddings to find conceptually related articles, not just keyword matches"
+            className={`h-6 px-2 text-[11px] border rounded transition-colors flex items-center gap-1 ${
+              semanticMode
+                ? "border-purple-500 text-purple-600 bg-purple-50 dark:bg-purple-900/20"
+                : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
+            }`}
+          >
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+            {semanticMode ? "Semantic on" : "Semantic"}
+          </button>
+          <button
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="text-[12px] text-accent hover:underline"
+          >
+            {showAdvanced ? "Hide filters" : "Filters"}
+          </button>
+        </div>
       </div>
 
       {/* Q&A answer panel */}

@@ -85,6 +85,7 @@ import ArticleQuizMode from "@/components/article/ArticleQuizMode";
 import ArticleBodyWithReadingLevel from "@/components/article/ArticleBodyWithReadingLevel";
 import ReviewEnrollButton from "@/components/article/ReviewEnrollButton";
 import ClaimsPanel from "@/components/article/ClaimsPanel";
+import TutorButton from "@/components/article/TutorButton";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -365,6 +366,7 @@ export default async function ArticlePage({ params }: Props) {
               <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Tools</span>
               <SpeedReader articleId={article.id} />
               <ArticleQuizMode articleId={article.id} articleTitle={article.title} />
+              <TutorButton articleId={article.id} articleTitle={article.title} />
               <ReviewEnrollButton articleId={article.id} />
               <Link href={`/present/${article.slug}`} className="h-6 px-2 text-[11px] border border-border rounded text-foreground hover:bg-surface-hover hover:text-accent transition-colors">
                 Present

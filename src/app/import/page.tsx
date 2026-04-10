@@ -32,6 +32,20 @@ export default function ImportPage() {
   const [urlResult, setUrlResult] = useState<UrlImportResult | null>(null);
   const [urlError, setUrlError] = useState("");
 
+  // Image import state
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageImporting, setImageImporting] = useState(false);
+  const [imageResult, setImageResult] = useState<UrlImportResult | null>(null);
+  const [imageError, setImageError] = useState("");
+  const [imageDragOver, setImageDragOver] = useState(false);
+
+  // YouTube import state
+  const [ytUrl, setYtUrl] = useState("");
+  const [ytImporting, setYtImporting] = useState(false);
+  const [ytResult, setYtResult] = useState<UrlImportResult | null>(null);
+  const [ytError, setYtError] = useState("");
+
   if (!isAdmin) {
     return (
       <div>
@@ -128,6 +142,65 @@ export default function ImportPage() {
       sessionStorage.setItem("wiki_url_import_draft", JSON.stringify({
         title: urlResult.title,
         html: urlResult.html,
+      }));
+    } catch { /* noop */ }
+    router.push("/articles/new?from=url-import");
+  }
+
+  async function handleYouTubeImport() {
+    if (!ytUrl.trim()) return;
+    setYtImporting(true);
+    setYtError("");
+    setYtResult(null);
+    try {
+      const res = await fetch("/api/import/youtube", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: ytUrl.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setYtError(data.error || "Import failed"); return; }
+      setYtResult(data);
+    } catch {
+      setYtError("Network error");
+    } finally {
+      setYtImporting(false);
+    }
+  }
+
+  function handleCreateFromYouTube() {
+    if (!ytResult) return;
+    try {
+      sessionStorage.setItem("wiki_url_import_draft", JSON.stringify({ title: ytResult.title, html: ytResult.html }));
+    } catch { /* noop */ }
+    router.push("/articles/new?from=url-import");
+  }
+
+  async function handleImageImport() {
+    if (!imageFile) return;
+    setImageImporting(true);
+    setImageError("");
+    setImageResult(null);
+    try {
+      const fd = new FormData();
+      fd.append("image", imageFile);
+      const res = await fetch("/api/import/image", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) { setImageError(data.error || "Import failed"); return; }
+      setImageResult(data);
+    } catch {
+      setImageError("Network error");
+    } finally {
+      setImageImporting(false);
+    }
+  }
+
+  function handleCreateFromImage() {
+    if (!imageResult) return;
+    try {
+      sessionStorage.setItem("wiki_url_import_draft", JSON.stringify({
+        title: imageResult.title,
+        html: imageResult.html,
       }));
     } catch { /* noop */ }
     router.push("/articles/new?from=url-import");
@@ -340,6 +413,179 @@ export default function ImportPage() {
                 </button>
                 <button
                   onClick={() => { setUrlResult(null); setUrlInput(""); }}
+                  className="px-4 py-1.5 text-[13px] border border-border hover:bg-surface-hover transition-colors"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* YouTube Import */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Import from YouTube</div>
+        <div className="wiki-portal-body space-y-3">
+          <p className="text-[12px] text-muted">
+            Paste a YouTube URL. AI fetches the video transcript and formats it as a structured wiki article.
+            Works with any video that has auto-generated or manual captions.
+          </p>
+          <div className="flex gap-2">
+            <input
+              type="url"
+              value={ytUrl}
+              onChange={(e) => setYtUrl(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleYouTubeImport()}
+              placeholder="https://www.youtube.com/watch?v=..."
+              className="flex-1 border border-border bg-surface px-3 py-1.5 text-[13px] focus:border-accent focus:outline-none"
+            />
+            <button
+              onClick={handleYouTubeImport}
+              disabled={ytImporting || !ytUrl.trim()}
+              className="px-4 py-1.5 text-[13px] bg-accent text-white hover:bg-accent-hover disabled:opacity-50 transition-colors flex items-center gap-1.5"
+            >
+              {ytImporting ? (
+                <>
+                  <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                  </svg>
+                  Fetching…
+                </>
+              ) : "Import"}
+            </button>
+          </div>
+
+          {ytError && (
+            <div className="text-red-500 text-[13px] p-3 bg-red-50 border border-red-200 rounded">{ytError}</div>
+          )}
+
+          {ytResult && (
+            <div className="space-y-3">
+              <div className="border border-border rounded p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] text-muted uppercase tracking-wide font-medium mb-0.5">Video title</p>
+                    <p className="text-[15px] font-semibold text-heading">{ytResult.title}</p>
+                  </div>
+                  <a href={ytUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] text-muted hover:text-foreground underline">
+                    Watch ↗
+                  </a>
+                </div>
+                <div
+                  className="prose prose-sm max-w-none border-t border-border pt-3 text-[13px] leading-relaxed max-h-48 overflow-y-auto"
+                  dangerouslySetInnerHTML={{ __html: ytResult.html }}
+                />
+              </div>
+              <div className="flex gap-2">
+                <button onClick={handleCreateFromYouTube} className="bg-accent text-white px-4 py-1.5 text-[13px] font-medium hover:bg-accent-hover transition-colors">
+                  Open in editor
+                </button>
+                <button onClick={() => { setYtResult(null); setYtUrl(""); }} className="px-4 py-1.5 text-[13px] border border-border hover:bg-surface-hover transition-colors">
+                  Clear
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Image Import */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Import from Image</div>
+        <div className="wiki-portal-body space-y-3">
+          <p className="text-[12px] text-muted">
+            Upload a photo of handwritten notes, a whiteboard, a book page, or a screenshot. Claude Vision will extract and structure the content as a wiki article.
+          </p>
+          <div
+            onDragOver={(e) => { e.preventDefault(); setImageDragOver(true); }}
+            onDragLeave={() => setImageDragOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setImageDragOver(false);
+              const f = e.dataTransfer.files[0];
+              if (f) { setImageFile(f); setImageResult(null); setImageError(""); }
+            }}
+            onClick={() => imageInputRef.current?.click()}
+            className={`border-2 border-dashed rounded p-6 text-center cursor-pointer transition-colors ${
+              imageDragOver ? "border-accent bg-accent/5" : "border-border hover:border-muted"
+            }`}
+          >
+            {imageFile ? (
+              <div className="flex items-center justify-center gap-3">
+                <svg className="w-8 h-8 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+                <div className="text-left">
+                  <p className="text-[13px] font-medium">{imageFile.name}</p>
+                  <p className="text-[11px] text-muted">{(imageFile.size / 1024).toFixed(1)} KB</p>
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setImageFile(null); setImageResult(null); }}
+                  className="text-[11px] text-muted hover:text-red-500 ml-2"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <>
+                <p className="text-[14px] text-foreground mb-1">Drop image here or click to browse</p>
+                <p className="text-[12px] text-muted">JPEG, PNG, WebP, GIF</p>
+              </>
+            )}
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) { setImageFile(f); setImageResult(null); setImageError(""); }
+                e.target.value = "";
+              }}
+            />
+          </div>
+
+          {imageFile && !imageResult && (
+            <button
+              onClick={handleImageImport}
+              disabled={imageImporting}
+              className="px-4 py-1.5 text-[13px] bg-accent text-white hover:bg-accent-hover disabled:opacity-50 transition-colors"
+            >
+              {imageImporting ? (
+                <span className="flex items-center gap-2">
+                  <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                  </svg>
+                  Analysing image…
+                </span>
+              ) : "Extract content"}
+            </button>
+          )}
+
+          {imageError && (
+            <div className="text-red-500 text-[13px] p-3 bg-red-50 border border-red-200 rounded">{imageError}</div>
+          )}
+
+          {imageResult && (
+            <div className="space-y-3">
+              <div className="border border-border rounded p-4 space-y-2">
+                <p className="text-[11px] text-muted uppercase tracking-wide font-medium">Generated title</p>
+                <p className="text-[15px] font-semibold text-heading">{imageResult.title}</p>
+                <div
+                  className="prose prose-sm max-w-none border-t border-border pt-3 text-[13px] leading-relaxed max-h-48 overflow-y-auto"
+                  dangerouslySetInnerHTML={{ __html: imageResult.html }}
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleCreateFromImage}
+                  className="bg-accent text-white px-4 py-1.5 text-[13px] font-medium hover:bg-accent-hover transition-colors"
+                >
+                  Open in editor
+                </button>
+                <button
+                  onClick={() => { setImageResult(null); setImageFile(null); }}
                   className="px-4 py-1.5 text-[13px] border border-border hover:bg-surface-hover transition-colors"
                 >
                   Clear

@@ -4,6 +4,29 @@
 
 All notable changes to this project are documented here.
 
+## [4.62.0] - 2026-04-09
+
+### New Features
+
+- **Daily Digest** — Personalised in-app briefing at `/digest`; sections: Article of the Day (unread pick), Review Queue (spaced repetition due today), Watched Category Updates (articles edited this week), Did You Know (3 AI-extracted facts from random articles), On This Day (articles created on today's date in past years), and a Thinking Prompt (AI-generated open-ended question); linked from sidebar
+- **Image → Wiki Article** — Upload a photo of handwritten notes, a whiteboard, a book page, or a screenshot on the import page; Claude Vision reads the image and formats the content as a structured HTML wiki article with inferred title; "Open in editor" pre-fills the new article page
+- **YouTube → Wiki Article** — Paste any YouTube URL on the import page; AI fetches the auto-generated transcript, strips conversational filler, restructures the content into sections, and generates a draft article; supports youtube.com and youtu.be URL formats
+- **Historical Timeline** — `/timeline/historical` page extracts years mentioned in article content and renders a vertical event timeline; decade scrubber for zoom navigation; filter by category or search by title; colour-coded category lanes; linked from sidebar
+- **Semantic Search Toggle** — Search page gains a "Semantic" toggle button that activates vector-embedding-based search (`?semantic=1`); finds conceptually related articles beyond keyword matches; filters and semantic mode stack correctly
+- **AI Tutor Mode** — "Tutor me" button on every article page opens a chat modal; Socratic AI tutor asks probing questions about the article content, gives feedback on answers, tests comprehension, and summarises mastery after ~5 exchanges; powered by Claude Haiku
+
+### Technical
+
+- `src/app/api/digest/daily/route.ts` (new) — GET; returns dueReviews, recentInWatched, dykFacts (AI), articleOfDay, writingPrompt (AI), onThisDay
+- `src/app/digest/page.tsx` (new) — client digest UI with section cards
+- `src/app/api/import/image/route.ts` (new) — POST multipart; Claude vision via AI SDK image content; returns `{ title, html }`
+- `src/app/api/import/youtube/route.ts` (new) — POST; extracts YouTube video ID, fetches caption XML via timedtext API, AI reformats as article
+- `src/app/api/timeline/historical/route.ts` (new) — GET; extracts years from article HTML via regex, groups by century/decade
+- `src/app/timeline/historical/page.tsx` (new) — interactive timeline with decade scrubber, category filter, and search
+- `src/app/api/tutor/route.ts` (new) — POST; Socratic tutor with article context, multi-turn message history
+- `src/components/article/TutorButton.tsx` (new) — floating chat modal with typing indicator and restart
+- `src/app/search/page.tsx` — added semantic mode toggle button, wired `?semantic=1` param
+
 ## [4.61.0] - 2026-04-05
 
 ### New Features
