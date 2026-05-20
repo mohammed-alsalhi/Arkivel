@@ -64,7 +64,7 @@ export default async function Home() {
               {config.welcomeText}
             </p>
             <p className="mb-2">Get started by setting up your wiki:</p>
-            <div className="flex gap-3 mt-3">
+            <div className="mt-3 flex flex-wrap gap-2">
               <Link
                 href="/categories"
                 className="ui-button"

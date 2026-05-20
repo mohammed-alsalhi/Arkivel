@@ -179,6 +179,7 @@ textarea:disabled {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   gap: 0.25rem;
   min-width: 0;
   height: 1.5rem;
@@ -234,6 +235,7 @@ textarea:disabled {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   width: 1.75rem;
   height: 1.75rem;
   border: 1px solid transparent;
@@ -301,6 +303,7 @@ textarea:disabled {
 }
 
 .ui-toolbar-label {
+  flex: 0 0 auto;
   margin-right: 0.25rem;
   color: var(--color-muted);
   font-size: 0.625rem;
@@ -309,6 +312,7 @@ textarea:disabled {
 }
 
 .ui-toolbar-divider {
+  flex: 0 0 auto;
   width: 1px;
   height: 1rem;
   margin: 0 0.125rem;
@@ -439,6 +443,33 @@ textarea:disabled {
   text-align: center;
   color: var(--color-muted);
   font-size: 0.8125rem;
+}
+
+.wiki-header-search {
+  width: min(11rem, calc(100vw - 10.5rem));
+  min-width: 7rem;
+}
+
+.wiki-search-dropdown {
+  width: 18rem;
+  max-width: calc(100vw - 1.5rem);
+}
+
+@media (max-width: 639px) {
+  .wiki-search-dropdown {
+    position: fixed;
+    top: 2.5rem;
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .wiki-header-search {
+    width: 14rem;
+  }
 }
 
 /* ── Global link styles ── */

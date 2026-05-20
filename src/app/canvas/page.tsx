@@ -18,8 +18,8 @@ export default async function CanvasPage() {
 
   return (
     <div className="max-w-4xl mx-auto py-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
           <h1 className="text-2xl font-bold text-heading">Canvas</h1>
           <p className="text-sm text-muted mt-1">
             Visually connect articles with an infinite canvas. Drag article cards, add text notes, and draw connections.

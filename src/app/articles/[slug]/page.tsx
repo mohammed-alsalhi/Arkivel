@@ -274,15 +274,15 @@ export default async function ArticlePage({ params }: Props) {
         <StickyArticleHeader title={article.title} slug={article.slug} isAdmin={adminFlag} />
 
         {/* Article title */}
-        <div className="flex items-start gap-2 border-b border-border pb-1 mb-0.5">
+        <div className="mb-0.5 flex flex-wrap items-start gap-2 border-b border-border pb-1">
           <h1
             id="article-h1"
-            className="flex-1 font-normal text-heading text-[1.7rem]"
+            className="min-w-0 flex-1 break-words font-normal text-heading text-[1.7rem]"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {article.title}
           </h1>
-          <div className="flex items-center gap-2 mt-2 shrink-0">
+          <div className="mt-2 flex shrink-0 flex-wrap items-center gap-2">
             <CertifiedBadge certifiedAt={article.certifiedAt} />
             {article.isFeatured && <FeaturedArticleBadge />}
           </div>

@@ -91,11 +91,11 @@ export default async function RootLayout({
         <ToastProvider>
           {/* Top banner bar */}
           <header className="bg-surface border-b border-border">
-            <div className="flex min-h-10 items-center justify-between gap-3 pl-12 pr-4 py-1.5 md:pl-4 md:pr-6">
-              <div className="min-w-0">
+            <div className="flex min-h-10 items-center justify-between gap-2 pl-12 pr-3 py-1.5 sm:gap-3 md:pl-4 md:pr-6">
+              <div className="hidden min-w-0 md:block">
                 <span className="block truncate text-[12px] text-muted">{config.tagline}</span>
               </div>
-              <div className="flex shrink-0 items-center gap-1.5">
+              <div className="ml-auto flex min-w-0 shrink items-center gap-1.5">
                 <NotificationBell />
                 <ThemeToggle />
                 <SearchBar />

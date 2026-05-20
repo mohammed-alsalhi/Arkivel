@@ -75,7 +75,7 @@ export default function Sidebar({
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
         aria-pressed={mobileOpen}
-        className="ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:hidden"
+        className="ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:!hidden"
       >
         {mobileOpen ? <CloseIcon /> : <MenuIcon />}
       </button>

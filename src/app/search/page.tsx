@@ -190,14 +190,14 @@ function SearchContent() {
   return (
     <div>
       <h1 className="ui-page-title mb-1">Search results</h1>
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-[12px] text-muted">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <p className="min-w-0 text-[12px] text-muted">
           {loading
             ? "Searching..."
             : `${results.length} result${results.length !== 1 ? "s" : ""} for \u201C${q}\u201D`}
           {hasFilters && " (filtered)"}
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setSemanticMode((v) => !v)}
             title="Semantic search uses AI vector embeddings to find conceptually related articles, not just keyword matches"

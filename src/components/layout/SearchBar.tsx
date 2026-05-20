@@ -67,7 +67,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative min-w-0">
       <form onSubmit={handleSubmit}>
         <div className="relative">
           <svg
@@ -84,13 +84,13 @@ export default function SearchBar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search articles"
-            className="ui-input w-44 pl-7 pr-2 sm:w-56"
+            className="ui-input wiki-header-search pl-7 pr-2"
           />
         </div>
       </form>
 
       {open && results.length > 0 && (
-        <div className="ui-dropdown w-72">
+        <div className="ui-dropdown wiki-search-dropdown">
           {results.map((result) => (
             <Link
               key={result.id}
