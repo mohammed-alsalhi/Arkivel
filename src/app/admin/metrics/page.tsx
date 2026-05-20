@@ -99,7 +99,7 @@ export default function MetricsPage() {
       {/* Top categories bar chart */}
       <div className="border border-border mb-6">
         <div className="bg-infobox-header px-3 py-1.5">
-          <h3 className="text-[12px] font-bold text-foreground uppercase tracking-wider">
+          <h3 className="text-[12px] font-bold text-foreground uppercaser">
             Top Categories by Article Count
           </h3>
         </div>
@@ -133,7 +133,7 @@ export default function MetricsPage() {
       {metrics.articlesByMonth.length > 0 && (
         <div className="border border-border mb-6">
           <div className="bg-infobox-header px-3 py-1.5">
-            <h3 className="text-[12px] font-bold text-foreground uppercase tracking-wider">
+            <h3 className="text-[12px] font-bold text-foreground uppercaser">
               Articles Created by Month
             </h3>
           </div>

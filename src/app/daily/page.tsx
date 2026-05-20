@@ -58,13 +58,13 @@ export default async function DailyPage() {
         content: defaultContent(title),
         status: "published",
         categoryId: category?.id ?? null,
-        userId: session?.userId ?? null,
+        userId: session?.id ?? null,
       },
     });
   }
 
   // Redirect to the article (edit if admin, view if not)
-  if (isAdmin(session)) {
+  if (await isAdmin()) {
     redirect(`/articles/${slug}/edit`);
   } else {
     redirect(`/articles/${slug}`);

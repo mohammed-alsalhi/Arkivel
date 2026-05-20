@@ -75,14 +75,14 @@ export default function Sidebar({
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
         aria-pressed={mobileOpen}
-        className="fixed top-1.5 left-2 z-50 flex items-center justify-center w-7 h-7 bg-surface border border-border text-foreground md:hidden"
+        className="ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:hidden"
       >
         {mobileOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
       <aside
         className={clsx(
-          "fixed left-0 top-[40px] z-40 h-[calc(100vh-40px)] w-[200px] overflow-y-auto bg-sidebar-bg border-r border-border transition-transform flex flex-col",
+          "wiki-sidebar fixed left-0 top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg border-r border-border transition-transform flex flex-col",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0"
         )}
@@ -585,7 +585,7 @@ function SidebarSection({
     <div className="border-b border-border">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full bg-infobox-header px-3 py-1 text-[11px] font-bold text-foreground uppercase tracking-wider hover:bg-surface-hover transition-colors"
+          className="flex items-center justify-between w-full bg-infobox-header px-3 py-1 text-[11px] font-bold text-foreground uppercase hover:bg-surface-hover transition-colors"
         aria-expanded={open}
       >
         <span>{title}</span>
@@ -614,9 +614,9 @@ function SidebarLink({
       href={href}
       onClick={onClick}
       className={clsx(
-        "block py-[3px] text-[13px] transition-colors",
+        "block py-[3px] text-[13px] transition-colors hover:no-underline",
         indent ? "px-4" : "px-2",
-        active ? "font-bold text-heading" : "text-wiki-link hover:underline"
+        active ? "bg-surface text-heading font-bold" : "text-wiki-link hover:bg-surface-hover"
       )}
     >
       {children}

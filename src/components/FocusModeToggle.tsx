@@ -46,11 +46,8 @@ export default function FocusModeToggle() {
     <button
       onClick={toggle}
       title={active ? "Disable focus mode" : "Enable focus mode (dim non-active paragraphs)"}
-      className={`flex items-center h-6 px-2 text-[11px] border rounded transition-colors ${
-        active
-          ? "border-accent text-accent bg-accent/10"
-          : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-      }`}
+      aria-pressed={active}
+      className="ui-button"
     >
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
         <circle cx="12" cy="12" r="3" />

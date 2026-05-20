@@ -33,11 +33,8 @@ export default function CategoryWatchButton({ categoryId }: { categoryId: string
   return (
     <button
       onClick={toggle}
-      className={`h-6 px-2 text-[11px] border rounded transition-colors ${
-        watching
-          ? "border-accent bg-accent/10 text-accent"
-          : "border-border text-muted hover:bg-surface-hover hover:text-foreground"
-      }`}
+      aria-pressed={watching}
+      className="ui-button"
       title={watching ? "Stop watching this category" : "Watch this category for new articles"}
     >
       {watching ? "Watching" : "Watch"}

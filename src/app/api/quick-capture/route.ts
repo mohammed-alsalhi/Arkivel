@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       content: content || "<p></p>",
       status: "draft",
       categoryId: category?.id ?? null,
-      userId: session?.userId ?? null,
+      userId: session?.id ?? null,
     },
     select: { id: true, slug: true },
   });

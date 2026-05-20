@@ -44,7 +44,8 @@ export default function ReadingModeToggle() {
     <button
       onClick={toggle}
       title={active ? "Exit reading mode (R)" : "Enter reading mode (R)"}
-      className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover transition-colors"
+      aria-pressed={active}
+      className="ui-button"
     >
       {active ? "Exit reading mode" : "Reading mode"}
     </button>

@@ -23,7 +23,7 @@ export default async function NewArticles({ limit = 6 }: { limit?: number }) {
   return (
     <div className="mb-4">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-[12px] font-bold text-heading uppercase tracking-wide">
+        <h2 className="text-[12px] font-bold text-heading uppercase">
           New articles
         </h2>
         <Link href="/articles" className="text-[11px] text-muted hover:text-foreground transition-colors">

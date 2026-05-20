@@ -98,7 +98,7 @@ export default function SmartSuggestions({ title, getHtml }: Props) {
       {open && (
         <div className="mt-2 border border-border bg-surface rounded p-3 space-y-3 text-[12px]">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-accent">Smart suggestions</p>
+            <p className="text-[10px] font-semibold uppercase text-accent">Smart suggestions</p>
             <div className="flex items-center gap-2">
               {data && <span className="text-[10px] text-muted">{data.wordCount} words</span>}
               <button

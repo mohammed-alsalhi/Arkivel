@@ -237,7 +237,7 @@ export default function CanvasEditor({
             >
               {node.type === "article" && (
                 <div className="p-3">
-                  <div className="text-[10px] text-muted uppercase tracking-wide mb-1">Article</div>
+                  <div className="text-[10px] text-muted uppercase mb-1">Article</div>
                   <Link
                     href={`/articles/${node.articleSlug}`}
                     className="text-sm font-semibold text-heading hover:underline block"
@@ -273,7 +273,7 @@ export default function CanvasEditor({
       {/* Article picker modal */}
       {pickerOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-black/40" onClick={() => setPickerOpen(false)}>
-          <div className="bg-surface border border-border rounded-xl shadow-2xl w-full max-w-md p-4" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-surface border border-border rounded shadow-2xl w-full max-w-md p-4" onClick={(e) => e.stopPropagation()}>
             <div className="text-sm font-semibold text-heading mb-3">Add article card</div>
             <input
               type="text"

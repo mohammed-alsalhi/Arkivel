@@ -15,7 +15,7 @@ export default async function CanvasDetailPage({
   if (!session) notFound();
 
   const canvas = await prisma.canvas.findFirst({
-    where: { id, userId: session.userId },
+    where: { id, userId: session.id },
   });
   if (!canvas) notFound();
 

@@ -91,7 +91,7 @@ export default function SplitViewClient() {
     <div className="flex flex-col h-[calc(100vh-100px)]">
       {/* Toolbar */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface flex-shrink-0">
-        <span className="text-[11px] font-semibold text-muted uppercase tracking-wide">Split View</span>
+        <span className="text-[11px] font-semibold text-muted uppercase">Split View</span>
         <span className="w-px h-4 bg-border mx-0.5" />
         <SlugPicker value={leftSlug} onChange={setLeftSlug} placeholder="Left article slug…" />
         <span className="w-px h-4 bg-border mx-0.5" />

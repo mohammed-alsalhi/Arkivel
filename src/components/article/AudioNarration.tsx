@@ -121,7 +121,7 @@ export default function AudioNarration({ html, title }: Props) {
       {!playing && !paused ? (
         <button
           onClick={play}
-          className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors flex items-center gap-1"
+          className="ui-button"
           title="Listen to this article"
         >
           <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
@@ -133,7 +133,7 @@ export default function AudioNarration({ html, title }: Props) {
         <div className="flex items-center gap-1.5">
           <button
             onClick={playing ? pause : play}
-            className="h-6 px-2 text-[11px] border border-accent rounded text-accent hover:bg-accent/10 transition-colors flex items-center gap-1"
+            className="ui-button ui-button-active"
             title={playing ? "Pause" : "Resume"}
           >
             {playing ? (
@@ -150,7 +150,7 @@ export default function AudioNarration({ html, title }: Props) {
           </button>
           <button
             onClick={stop}
-            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+            className="ui-button"
             title="Stop narration"
           >
             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">

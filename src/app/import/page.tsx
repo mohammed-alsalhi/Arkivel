@@ -391,7 +391,7 @@ export default function ImportPage() {
               <div className="border border-border rounded p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[11px] text-muted uppercase tracking-wide font-medium mb-0.5">Generated title</p>
+                    <p className="text-[11px] text-muted uppercase font-medium mb-0.5">Generated title</p>
                     <p className="text-[15px] font-semibold text-heading">{urlResult.title}</p>
                   </div>
                   <a href={urlResult.sourceUrl} target="_blank" rel="noopener noreferrer"
@@ -465,7 +465,7 @@ export default function ImportPage() {
               <div className="border border-border rounded p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[11px] text-muted uppercase tracking-wide font-medium mb-0.5">Video title</p>
+                    <p className="text-[11px] text-muted uppercase font-medium mb-0.5">Video title</p>
                     <p className="text-[15px] font-semibold text-heading">{ytResult.title}</p>
                   </div>
                   <a href={ytUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] text-muted hover:text-foreground underline">
@@ -570,7 +570,7 @@ export default function ImportPage() {
           {imageResult && (
             <div className="space-y-3">
               <div className="border border-border rounded p-4 space-y-2">
-                <p className="text-[11px] text-muted uppercase tracking-wide font-medium">Generated title</p>
+                <p className="text-[11px] text-muted uppercase font-medium">Generated title</p>
                 <p className="text-[15px] font-semibold text-heading">{imageResult.title}</p>
                 <div
                   className="prose prose-sm max-w-none border-t border-border pt-3 text-[13px] leading-relaxed max-h-48 overflow-y-auto"

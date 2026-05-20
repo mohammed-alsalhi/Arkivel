@@ -1,7 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
-import CanvasClient from "./CanvasClient";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +10,7 @@ export default async function CanvasPage() {
   // Load user's canvases server-side
   const canvases = session
     ? await prisma.canvas.findMany({
-        where: { userId: session.userId },
+        where: { userId: session.id },
         orderBy: { updatedAt: "desc" },
         select: { id: true, name: true, updatedAt: true },
       })
@@ -30,7 +29,7 @@ export default async function CanvasPage() {
           <form action="/api/canvas" method="post">
             <Link
               href="/canvas/new"
-              className="h-6 px-2 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent/90 inline-flex items-center"
+              className="ui-button ui-button-primary"
             >
               New canvas
             </Link>
@@ -39,20 +38,20 @@ export default async function CanvasPage() {
       </div>
 
       {!session && (
-        <div className="border border-border rounded-lg p-8 text-center text-muted">
+        <div className="ui-empty-state">
           <p>Sign in to create and save canvases.</p>
-          <Link href="/login" className="mt-3 inline-block h-6 px-2 text-[11px] border border-border rounded hover:bg-muted/30">
+          <Link href="/login" className="ui-button mt-3">
             Sign in
           </Link>
         </div>
       )}
 
       {session && canvases.length === 0 && (
-        <div className="border border-border rounded-lg p-8 text-center text-muted">
+        <div className="ui-empty-state">
           <p className="text-sm">No canvases yet.</p>
           <Link
             href="/canvas/new"
-            className="mt-3 inline-block h-6 px-2 text-[11px] border border-border rounded hover:bg-muted/30"
+            className="ui-button mt-3"
           >
             Create your first canvas
           </Link>

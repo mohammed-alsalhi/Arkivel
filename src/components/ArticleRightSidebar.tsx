@@ -67,9 +67,8 @@ export default function ArticleRightSidebar({
   const panelBtn = (p: Panel, label: string) => (
     <button
       onClick={() => setPanel(p)}
-      className={`text-[11px] px-2 py-0.5 rounded transition-colors ${
-        panel === p ? "bg-accent text-white" : "text-muted hover:text-foreground"
-      }`}
+      aria-pressed={panel === p}
+      className="ui-button"
     >
       {label}
     </button>
@@ -82,7 +81,7 @@ export default function ArticleRightSidebar({
         onClick={() => setOpen((o) => !o)}
         title={open ? "Close sidebar" : "Open article sidebar"}
         aria-label={open ? "Close sidebar" : "Open article sidebar"}
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-surface border border-border rounded-l-md px-1.5 py-3 text-muted hover:text-foreground shadow-sm"
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-surface border border-border px-1.5 py-3 text-muted hover:text-foreground shadow-sm"
         style={{ writingMode: "vertical-rl" }}
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -93,7 +92,7 @@ export default function ArticleRightSidebar({
 
       {/* Panel */}
       {open && (
-        <aside className="fixed right-0 top-[40px] z-20 h-[calc(100vh-40px)] w-56 bg-surface border-l border-border overflow-y-auto shadow-lg flex flex-col">
+        <aside className="wiki-right-sidebar fixed right-0 top-[40px] z-20 h-[calc(100vh-40px)] w-56 bg-surface border-l border-border overflow-y-auto shadow-lg flex flex-col">
           {/* Panel tabs */}
           <div className="flex items-center gap-1 px-3 py-2 border-b border-border flex-wrap">
             {panelBtn("outline", "Outline")}
@@ -125,7 +124,7 @@ export default function ArticleRightSidebar({
             {panel === "backlinks" && (
               <div className="space-y-3">
                 <div>
-                  <div className="text-[10px] font-semibold text-muted uppercase tracking-wide mb-1">
+                  <div className="text-[10px] font-semibold text-muted uppercase mb-1">
                     Backlinks ({backlinks.length})
                   </div>
                   <div className="space-y-0.5">
@@ -146,7 +145,7 @@ export default function ArticleRightSidebar({
 
                 {unlinkedMentions.length > 0 && (
                   <div>
-                    <div className="text-[10px] font-semibold text-muted uppercase tracking-wide mb-1">
+                    <div className="text-[10px] font-semibold text-muted uppercase mb-1">
                       Unlinked mentions ({unlinkedMentions.length})
                     </div>
                     <div className="space-y-0.5">

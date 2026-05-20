@@ -52,7 +52,7 @@ export default function TableOfContentsFloat({ html }: Props) {
   return (
     <aside className="hidden xl:block fixed top-24 right-4 w-56 max-h-[70vh] overflow-y-auto z-10">
       <div className="border border-border rounded-lg bg-surface px-3 py-2.5 text-[11px]">
-        <p className="font-medium text-muted-foreground mb-2 uppercase tracking-wide text-[10px]">Contents</p>
+        <p className="font-medium text-muted-foreground mb-2 uppercase text-[10px]">Contents</p>
         <nav>
           <ul className="space-y-0.5">
             {headings.map(({ id, text, level }) => (

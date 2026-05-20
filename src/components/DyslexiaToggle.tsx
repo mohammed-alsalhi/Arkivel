@@ -28,11 +28,7 @@ export default function DyslexiaToggle() {
       onClick={toggle}
       title={enabled ? "Disable dyslexia-friendly mode" : "Enable dyslexia-friendly mode"}
       aria-pressed={enabled}
-      className={`flex items-center h-6 px-2 text-[11px] border rounded transition-colors ${
-        enabled
-          ? "border-accent bg-accent/10 text-accent"
-          : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-      }`}
+      className="ui-button"
     >
       Aa
     </button>

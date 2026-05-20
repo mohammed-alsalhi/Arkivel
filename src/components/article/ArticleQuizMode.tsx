@@ -105,28 +105,31 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
         onClick={open ? handleClose : startQuiz}
         disabled={loading}
         title="Quiz mode: test your knowledge of this article"
-        className="h-6 px-2 text-[11px] border border-border rounded text-foreground hover:bg-surface-hover hover:text-accent transition-colors disabled:opacity-50"
+        className="ui-button disabled:opacity-50"
       >
         {loading ? "Generating…" : open ? "Close quiz" : "Quiz me"}
       </button>
 
       {error && (
-        <span className="text-[11px] text-red-500 ml-1">{error}</span>
+        <span className="text-[11px] text-danger ml-1">{error}</span>
       )}
 
       {open && !finished && q && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-surface border border-border rounded-lg shadow-xl w-full max-w-lg p-6">
+          <div className="bg-surface border border-border rounded shadow-xl w-full max-w-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[11px] text-muted font-medium uppercase tracking-wide">
-                {articleTitle} — Question {current + 1} / {questions.length}
+              <span className="text-[11px] text-muted font-medium uppercase">
+                {articleTitle} - Question {current + 1} / {questions.length}
               </span>
               <button
                 onClick={handleClose}
-                className="text-muted hover:text-foreground text-sm"
+                className="ui-icon-button"
                 title="Close quiz"
               >
-                ✕
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
               </button>
             </div>
 
@@ -142,9 +145,9 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
                       ? "border-accent bg-accent-soft text-accent"
                       : "border-border bg-surface hover:bg-surface-hover text-foreground";
                 } else if (i === q.answer) {
-                  cls += "border-green-500 bg-green-50 text-green-800";
+                  cls += "border-success-border bg-success-soft text-success";
                 } else if (selected === i) {
-                  cls += "border-red-400 bg-red-50 text-red-700";
+                  cls += "border-danger-border bg-danger-soft text-danger";
                 } else {
                   cls += "border-border bg-surface text-muted";
                 }
@@ -165,14 +168,14 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
                 <button
                   onClick={handleCheck}
                   disabled={selected === null}
-                  className="h-6 px-3 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent-hover disabled:opacity-40"
+                  className="ui-button ui-button-primary disabled:opacity-40"
                 >
                   Check answer
                 </button>
               ) : (
                 <button
                   onClick={handleNext}
-                  className="h-6 px-3 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent-hover"
+                  className="ui-button ui-button-primary"
                 >
                   {current + 1 >= questions.length ? "See results" : "Next question"}
                 </button>
@@ -184,7 +187,7 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
 
       {open && finished && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-surface border border-border rounded-lg shadow-xl w-full max-w-sm p-6 text-center">
+          <div className="bg-surface border border-border rounded shadow-xl w-full max-w-sm p-6 text-center">
             <p className="text-[28px] font-bold text-heading mb-1">
               {finalScore} / {questions.length}
             </p>
@@ -200,13 +203,13 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
             <div className="flex gap-2 justify-center">
               <button
                 onClick={startQuiz}
-                className="h-6 px-3 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent-hover"
+                className="ui-button ui-button-primary"
               >
                 Retry
               </button>
               <button
                 onClick={handleClose}
-                className="h-6 px-3 text-[11px] border border-border rounded hover:bg-surface-hover"
+                className="ui-button"
               >
                 Done
               </button>

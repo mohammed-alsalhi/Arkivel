@@ -12,7 +12,7 @@ export async function GET(
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const canvas = await prisma.canvas.findFirst({
-    where: { id, userId: session.userId },
+    where: { id, userId: session.id },
   });
   if (!canvas) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(canvas);
@@ -27,7 +27,7 @@ export async function PUT(
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { name, state } = await req.json();
   const canvas = await prisma.canvas.updateMany({
-    where: { id, userId: session.userId },
+    where: { id, userId: session.id },
     data: { ...(name !== undefined ? { name } : {}), ...(state !== undefined ? { state } : {}) },
   });
   return NextResponse.json({ ok: true, count: canvas.count });
@@ -40,6 +40,6 @@ export async function DELETE(
   const { id } = await params;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  await prisma.canvas.deleteMany({ where: { id, userId: session.userId } });
+  await prisma.canvas.deleteMany({ where: { id, userId: session.id } });
   return NextResponse.json({ ok: true });
 }

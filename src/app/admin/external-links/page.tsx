@@ -36,7 +36,7 @@ export default function ExternalLinksPage() {
       ) : (
         <table className="w-full text-[13px] border-collapse">
           <thead>
-            <tr className="border-b border-border text-left text-muted text-[11px] uppercase tracking-wide">
+            <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
               <th className="py-2 pr-4">URL</th>
               <th className="py-2 w-24 text-right">Clicks</th>
             </tr>

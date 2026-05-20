@@ -33,7 +33,7 @@ export default function DuplicateArticleButton({ articleId }: { articleId: strin
     <button
       onClick={handleDuplicate}
       disabled={loading}
-      className="flex items-center gap-1 h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors disabled:opacity-50"
+      className="ui-button disabled:opacity-50"
       title="Duplicate this article as a new draft"
     >
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

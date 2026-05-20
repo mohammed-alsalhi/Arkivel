@@ -47,11 +47,8 @@ export default function ReviewEnrollButton({ articleId }: Props) {
       onClick={toggle}
       disabled={loading}
       title={enrolled ? "Remove from review queue" : "Add to spaced repetition review queue"}
-      className={`h-6 px-2 text-[11px] border rounded transition-colors flex items-center gap-1 ${
-        enrolled
-          ? "border-accent text-accent bg-accent/10 hover:bg-accent/20"
-          : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-      }`}
+      aria-pressed={enrolled}
+      className="ui-button disabled:opacity-50"
     >
       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />

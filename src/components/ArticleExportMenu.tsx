@@ -73,11 +73,7 @@ export default function ArticleExportMenu({ articleId, articleSlug, articleTitle
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1 h-6 px-2 text-[11px] border rounded transition-colors ${
-          open
-            ? "border-border bg-surface-hover text-foreground"
-            : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-        }`}
+        className="ui-button"
         aria-haspopup="true"
         aria-expanded={open}
         title="Export article"
@@ -89,12 +85,12 @@ export default function ArticleExportMenu({ articleId, articleSlug, articleTitle
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-50 bg-surface border border-border rounded shadow-lg min-w-[130px]">
+        <div className="ui-dropdown min-w-[130px]">
           {items.map(({ label, action }) => (
             <button
               key={label}
               onClick={action}
-              className="block w-full text-left px-3 py-1.5 text-[12px] text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+              className="ui-dropdown-item"
             >
               {label}
             </button>

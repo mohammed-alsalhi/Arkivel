@@ -362,7 +362,7 @@ export default function EditArticlePage() {
             />
             {titleSuggestions.length > 0 && (
               <div className="mt-1 border border-border bg-surface">
-                <p className="px-2 pt-1.5 text-[10px] text-muted font-bold uppercase tracking-wide">Suggestions — click to apply</p>
+                <p className="px-2 pt-1.5 text-[10px] text-muted font-bold uppercase">Suggestions — click to apply</p>
                 {titleSuggestions.map((s, i) => (
                   <button
                     key={i}

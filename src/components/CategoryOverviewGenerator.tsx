@@ -31,7 +31,7 @@ export default function CategoryOverviewGenerator({ categoryId }: Props) {
       <button
         onClick={open ? () => setOpen(false) : overview ? () => setOpen(true) : generate}
         disabled={loading}
-        className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors flex items-center gap-1 disabled:opacity-50"
+        className="ui-button disabled:opacity-50"
         title="Generate an AI overview of this category"
       >
         {loading ? (
@@ -51,13 +51,13 @@ export default function CategoryOverviewGenerator({ categoryId }: Props) {
       </button>
 
       {open && overview && (
-        <div className="mt-3 p-3 bg-surface border border-border rounded text-[13px] text-foreground leading-relaxed whitespace-pre-wrap">
+        <div className="mt-3 p-3 bg-surface border border-border text-[13px] text-foreground leading-relaxed whitespace-pre-wrap">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-accent">AI-generated overview</p>
+            <p className="text-[10px] font-semibold uppercase text-accent">AI-generated overview</p>
             <button
               onClick={generate}
               disabled={loading}
-              className="text-[10px] text-muted hover:text-foreground disabled:opacity-50"
+              className="ui-button disabled:opacity-50"
             >
               Regenerate
             </button>

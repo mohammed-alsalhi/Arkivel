@@ -115,7 +115,7 @@ export default function PresentModePage() {
               <button
                 key={i}
                 onClick={() => goTo(i)}
-                className={`group text-left p-4 rounded-xl border transition-all ${
+                className={`group text-left p-4 rounded border transition-all ${
                   i === current
                     ? "border-blue-500 bg-blue-950/50 ring-1 ring-blue-500"
                     : "border-gray-700/50 bg-gray-900/60 hover:border-gray-500 hover:bg-gray-900"
@@ -182,7 +182,7 @@ export default function PresentModePage() {
         style={{ animation: "presentSlideIn 0.3s ease both" }}
       >
         {/* Slide number accent */}
-        <div className="text-[11px] font-mono text-blue-600/60 mb-4 tracking-widest uppercase">
+        <div className="text-[11px] font-mono text-blue-600/60 mb-4st uppercase">
           {isFirst ? articleTitle : `${articleTitle}  ›  slide ${current + 1}`}
         </div>
 

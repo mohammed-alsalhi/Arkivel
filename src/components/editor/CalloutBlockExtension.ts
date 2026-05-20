@@ -52,7 +52,7 @@ export const CalloutBlock = Node.create({
         contentElement: (node) => {
           const el = node as HTMLElement;
           const body = el.querySelector(".callout-body");
-          if (body) return body;
+          if (body) return body as HTMLElement;
           // Strip the title div so it's not parsed as content
           const clone = el.cloneNode(true) as HTMLElement;
           clone.querySelector(".callout-title")?.remove();
@@ -103,7 +103,7 @@ export const CalloutBlock = Node.create({
     return types.map((type) =>
       new InputRule({
         find: new RegExp(`^>\\s*\\[!${type.toUpperCase()}\\]\\s$`),
-        handler: ({ state, range, chain }) => {
+        handler: ({ range, chain }) => {
           chain()
             .deleteRange(range)
             .insertCallout(type)

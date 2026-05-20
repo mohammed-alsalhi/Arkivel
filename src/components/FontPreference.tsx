@@ -46,7 +46,7 @@ export default function FontPreference() {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       title="Article font preference"
-      className="h-6 px-1 text-[11px] border border-border rounded bg-surface text-foreground"
+      className="ui-select h-6 w-auto min-w-24 px-1 text-[11px]"
     >
       {fonts.map((f) => (
         <option key={f.value} value={f.value}>{f.label}</option>

@@ -31,7 +31,7 @@ export default function ScrollSpy({ headings }: { headings: Heading[] }) {
 
   return (
     <nav className="hidden xl:block fixed right-4 top-24 w-48 text-[12px] max-h-[70vh] overflow-y-auto">
-      <div className="font-bold text-heading mb-2 text-[11px] uppercase tracking-wider">On this page</div>
+      <div className="font-bold text-heading mb-2 text-[11px] uppercaser">On this page</div>
       <ul className="space-y-1 border-l border-border-light pl-3">
         {headings.map((h) => (
           <li key={h.id} style={{ paddingLeft: `${(h.level - 2) * 8}px` }}>

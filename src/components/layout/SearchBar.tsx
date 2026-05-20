@@ -83,20 +83,20 @@ export default function SearchBar() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search articles..."
-            className="w-56 border border-border bg-surface pl-7 pr-2 py-1 text-[12px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none "
+            placeholder="Search articles"
+            className="ui-input w-44 pl-7 pr-2 sm:w-56"
           />
         </div>
       </form>
 
       {open && results.length > 0 && (
-        <div className="absolute right-0 top-full z-50 mt-1 w-72 border border-border bg-surface shadow-md ">
+        <div className="ui-dropdown w-72">
           {results.map((result) => (
             <Link
               key={result.id}
               href={`/articles/${result.slug}`}
               onClick={() => { setOpen(false); setQuery(""); }}
-              className="flex flex-col border-b border-border-light px-3 py-1.5 last:border-0 hover:bg-surface-hover"
+              className="flex flex-col border-b border-border-light px-3 py-1.5 last:border-0 hover:bg-surface-hover hover:no-underline"
             >
               <span className="text-[13px] text-wiki-link">
                 {result.title}
@@ -111,9 +111,9 @@ export default function SearchBar() {
           <Link
             href={`/search?q=${encodeURIComponent(query.trim())}`}
             onClick={() => { setOpen(false); setQuery(""); }}
-            className="block border-t border-border px-3 py-1.5 text-center text-[11px] text-wiki-link hover:bg-surface-hover"
+            className="ui-dropdown-item border-t border-border text-center text-wiki-link"
           >
-            See all results &rarr;
+            See all results
           </Link>
         </div>
       )}

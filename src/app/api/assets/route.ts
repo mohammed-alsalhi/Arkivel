@@ -10,13 +10,14 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const session = await getSession();
   if (!session) return NextResponse.json([], { status: 401 });
+  const admin = await isAdmin();
   const url = new URL(req.url);
   const mimeFilter = url.searchParams.get("mime");
   const limit = Math.min(200, parseInt(url.searchParams.get("limit") ?? "50"));
 
   const assets = await prisma.asset.findMany({
     where: {
-      userId: isAdmin(session) ? undefined : session.userId,
+      userId: admin ? undefined : session.id,
       ...(mimeFilter ? { mimeType: { startsWith: mimeFilter } } : {}),
     },
     orderBy: { createdAt: "desc" },
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
       mimeType: file.type,
       url,
       size: buffer.length,
-      userId: session.userId,
+      userId: session.id,
     },
     select: { id: true, filename: true, mimeType: true, url: true, size: true, createdAt: true },
   });

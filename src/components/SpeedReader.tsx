@@ -68,7 +68,7 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+        className="ui-button"
         title="Speed read this article"
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
@@ -79,23 +79,27 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
 
       {open && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-surface border border-border rounded-lg w-full max-w-md p-6 shadow-xl">
+          <div className="bg-surface border border-border rounded w-full max-w-md p-6 shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[15px] font-semibold text-heading">Speed reader</h2>
               <button
                 onClick={() => { reset(); setOpen(false); }}
-                className="text-muted hover:text-foreground text-[20px] leading-none"
+                className="ui-icon-button"
+                title="Close speed reader"
               >
-                &times;
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
               </button>
             </div>
 
             {/* Word display */}
-            <div className="flex items-center justify-center h-20 bg-surface-hover rounded mb-4">
+            <div className="flex items-center justify-center h-20 bg-surface-hover border border-border mb-4">
               {words.length === 0 ? (
                 <p className="text-muted text-[13px] italic">No text found</p>
               ) : (
-                <p className="text-[28px] font-mono tracking-wide select-none">
+                <p className="text-[28px] font-mono select-none">
                   <span className="text-muted">{before}</span>
                   <span className="text-accent font-bold">{pivot}</span>
                   <span className="text-muted">{after}</span>
@@ -116,12 +120,12 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
 
             {/* Controls */}
             <div className="flex items-center justify-center gap-3 mb-4">
-              <button onClick={reset} className="h-8 px-3 text-[12px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors">
+              <button onClick={reset} className="ui-button">
                 Reset
               </button>
               <button
                 onClick={togglePlay}
-                className="h-8 px-5 text-[13px] font-bold bg-accent text-white rounded hover:bg-accent-hover transition-colors"
+                className="ui-button ui-button-primary"
               >
                 {playing ? "Pause" : index > 0 ? "Resume" : "Start"}
               </button>
@@ -134,9 +138,8 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
                 <button
                   key={w}
                   onClick={() => setWpm(w)}
-                  className={`px-2 py-0.5 rounded border transition-colors ${
-                    wpm === w ? "border-accent text-accent" : "border-border hover:text-foreground"
-                  }`}
+                  aria-pressed={wpm === w}
+                  className="ui-button"
                 >
                   {w}
                 </button>

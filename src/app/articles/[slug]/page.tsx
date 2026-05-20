@@ -277,7 +277,7 @@ export default async function ArticlePage({ params }: Props) {
         <div className="flex items-start gap-2 border-b border-border pb-1 mb-0.5">
           <h1
             id="article-h1"
-            className="text-[1.7rem] font-normal text-heading flex-1"
+            className="flex-1 font-normal text-heading text-[1.7rem]"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {article.title}
@@ -303,7 +303,7 @@ export default async function ArticlePage({ params }: Props) {
             )}
             <FreshnessBadge updatedAt={article.updatedAt} />
             {article.lastVerifiedAt && (
-              <span className="inline-flex items-center gap-1 rounded border border-green-300 bg-green-50 px-1.5 py-0.5 text-green-700 dark:border-green-700 dark:bg-green-900/20 dark:text-green-300">
+              <span className="ui-chip ui-chip-success">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                 Verified {new Date(article.lastVerifiedAt).toLocaleDateString()}
               </span>
@@ -311,35 +311,39 @@ export default async function ArticlePage({ params }: Props) {
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
-            <span className="inline-flex items-center rounded border border-border px-1.5 py-0.5 text-muted">
+            <span className="ui-chip">
               {plainTextWords.toLocaleString()} words
             </span>
-            <span className="inline-flex items-center rounded border border-border px-1.5 py-0.5 text-muted">
+            <span className="ui-chip">
               {plainTextChars.toLocaleString()} chars
             </span>
-            <span className="inline-flex items-center rounded border border-border px-1.5 py-0.5 text-muted">
+            <span className="ui-chip">
               ~{readingTimeMin} min read
             </span>
             <ReadingLevelBadge text={plainText} />
             <ArticleViewHistory
               slug={article.slug}
               title={article.title}
-              className="inline-flex items-center rounded border border-border px-1.5 py-0.5 text-muted"
+              className="ui-chip"
             />
           </div>
 
-          <div className="rounded border border-border bg-background/40 p-2 space-y-1.5">
-            <div className="flex flex-wrap items-center gap-1">
-              <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Page</span>
+          <div className="ui-panel bg-background/40 p-2 space-y-1.5">
+            <div className="ui-toolbar">
+              <span className="ui-toolbar-label">Navigate</span>
               <Link
                 href={`/present/${article.slug}`}
-                className="flex items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+                className="ui-button"
                 title="Present as slideshow"
               >
                 Present
               </Link>
+              <span className="ui-toolbar-divider" />
+              <span className="ui-toolbar-label">Collect</span>
               <BookmarkButton articleId={article.id} />
               <AddToReadingList articleId={article.id} />
+              <span className="ui-toolbar-divider" />
+              <span className="ui-toolbar-label">Share</span>
               <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/articles/${article.slug}`} label="Copy link" />
               <ShareButton title={article.title} />
               <PrintButton />
@@ -352,8 +356,8 @@ export default async function ArticlePage({ params }: Props) {
               />
             </div>
 
-            <div className="flex flex-wrap items-center gap-1">
-              <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Read</span>
+            <div className="ui-toolbar">
+              <span className="ui-toolbar-label">Read</span>
               <FontSizeControl />
               <FontPreference />
               <FocusModeToggle />
@@ -367,16 +371,13 @@ export default async function ArticlePage({ params }: Props) {
               <ThemeCustomizer />
             </div>
 
-            <div className="flex flex-wrap items-center gap-1">
-              <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-muted">Tools</span>
+            <div className="ui-toolbar">
+              <span className="ui-toolbar-label">Tools</span>
               <AudioNarration html={resolvedContent} title={article.title} />
               <SpeedReader articleId={article.id} />
               <ArticleQuizMode articleId={article.id} articleTitle={article.title} />
               <TutorButton articleId={article.id} articleTitle={article.title} />
               <ReviewEnrollButton articleId={article.id} />
-              <Link href={`/present/${article.slug}`} className="h-6 px-2 text-[11px] border border-border rounded text-foreground hover:bg-surface-hover hover:text-accent transition-colors">
-                Present
-              </Link>
               <TranslateButton articleId={article.id} />
               <CopyMarkdownButton markdown={article.contentRaw} title={article.title} />
               <CopyPlainTextButton html={resolvedContent} />
@@ -387,7 +388,7 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Co-authors */}
         {coAuthors.length > 0 && (
-          <div className="text-[11px] text-muted-foreground mb-1">
+          <div className="text-[11px] text-muted mb-1">
             Co-authored by{" "}
             {coAuthors.map((ca, i) => (
               <span key={i}>

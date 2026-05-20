@@ -91,11 +91,11 @@ export default async function RootLayout({
         <ToastProvider>
           {/* Top banner bar */}
           <header className="bg-surface border-b border-border">
-            <div className="flex items-center justify-between pl-4 pr-6 py-1.5">
-              <div className="flex items-center gap-4">
-                <span className="text-xs text-muted">{config.tagline}</span>
+            <div className="flex min-h-10 items-center justify-between gap-3 pl-12 pr-4 py-1.5 md:pl-4 md:pr-6">
+              <div className="min-w-0">
+                <span className="block truncate text-[12px] text-muted">{config.tagline}</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex shrink-0 items-center gap-1.5">
                 <NotificationBell />
                 <ThemeToggle />
                 <SearchBar />
@@ -113,7 +113,7 @@ export default async function RootLayout({
               <AnnouncementBanner />
               {maintenanceMode && <MaintenanceBanner />}
               {readOnlyMode && <ReadOnlyBanner />}
-              <main id="main-content" className="max-w-6xl px-6 py-4">
+              <main id="main-content" className="wiki-main-content max-w-6xl px-4 py-4 sm:px-6">
                 {children}
               </main>
               <footer className="border-t border-border px-6 py-3 text-center text-[11px] text-muted">

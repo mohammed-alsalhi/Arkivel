@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.64.0] - 2026-05-20
+
+### Changed
+
+- **UI restandardization** — Added shared UI primitives for page titles, compact buttons, icon buttons, inputs, selects, toolbars, panels, dropdowns, chips, tables, and empty states; refitted the app shell, sidebar, search, article action bars, article cards, article lists, category pages, auth forms, and key article tools to use the same compact wiki styling.
+- **Typography and chrome cleanup** — Removed letter-spacing utilities from app surfaces, tightened oversized radii, normalized dropdown/modal controls, and moved status treatment toward semantic CSS variables instead of one-off Tailwind color classes.
+- **Version bump** — Bumped app/package version from 4.63.0 to 4.64.0.
+
 ## [4.63.0] - 2026-04-09
 
 ### New Features

@@ -56,12 +56,7 @@ export default async function Home() {
   if (isEmpty) {
     return (
       <div>
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Welcome to {config.name}
-        </h1>
+        <h1 className="ui-page-title">Welcome to {config.name}</h1>
         <div className="wiki-portal mb-4">
           <div className="wiki-portal-header">Getting Started</div>
           <div className="wiki-portal-body">
@@ -72,13 +67,13 @@ export default async function Home() {
             <div className="flex gap-3 mt-3">
               <Link
                 href="/categories"
-                className="inline-block border border-border bg-surface-hover px-4 py-2 text-[13px] font-medium hover:bg-surface transition-colors"
+                className="ui-button"
               >
                 Set up categories
               </Link>
               <Link
                 href="/articles/new"
-                className="inline-block border border-border bg-surface-hover px-4 py-2 text-[13px] font-medium hover:bg-surface transition-colors"
+                className="ui-button ui-button-primary"
               >
                 Create your first article
               </Link>
@@ -86,7 +81,7 @@ export default async function Home() {
           </div>
         </div>
         <div className="wiki-notice">
-          <strong>Tip:</strong> You can customize this wiki&apos;s name, tagline, and more
+          <strong>Tip:</strong>{" "}You can customize this wiki&apos;s name, tagline, and more
           through environment variables. See the <code className="bg-surface-hover px-1 text-[12px]">.env.example</code> file for details.
         </div>
       </div>
@@ -98,17 +93,12 @@ export default async function Home() {
   return (
     <div>
       {/* Title */}
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-5"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        {config.name}
-      </h1>
+      <h1 className="ui-page-title mb-5">{config.name}</h1>
 
       {/* Featured article */}
       {featured && (
         <div className="mb-6 pb-5 border-b border-border">
-          <p className="text-[11px] uppercase tracking-wider text-muted mb-1.5">Featured</p>
+          <p className="text-[11px] uppercase text-muted mb-1.5">Featured</p>
           <Link
             href={`/articles/${featured.slug}`}
             className="block text-[1.35rem] font-normal leading-snug text-heading hover:text-accent transition-colors mb-1"
@@ -127,7 +117,7 @@ export default async function Home() {
                 : featured.excerpt}
               {" "}
               <Link href={`/articles/${featured.slug}`} className="text-accent hover:underline">
-                Read &rarr;
+                Read
               </Link>
             </p>
           )}
@@ -139,11 +129,11 @@ export default async function Home() {
         {/* Recently updated */}
         <div className="md:col-span-3">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-[12px] font-bold text-heading uppercase tracking-wide">
+            <h2 className="text-[12px] font-bold text-heading uppercase">
               Recently updated
             </h2>
             <Link href="/recent-changes" className="text-[11px] text-muted hover:text-foreground transition-colors">
-              View all &rarr;
+              View all
             </Link>
           </div>
           {recent.length === 0 ? (

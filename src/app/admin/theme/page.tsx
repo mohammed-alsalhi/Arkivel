@@ -343,7 +343,7 @@ export default function ThemeBuilderPage() {
             {/* Button variants */}
             <div className="space-y-2">
               <div
-                className="text-[12px] uppercase tracking-wider font-semibold"
+                className="text-[12px] uppercaser font-semibold"
                 style={{ color: variables["--color-muted"] }}
               >
                 Buttons
@@ -383,7 +383,7 @@ export default function ThemeBuilderPage() {
             {/* Badge */}
             <div className="space-y-2">
               <div
-                className="text-[12px] uppercase tracking-wider font-semibold"
+                className="text-[12px] uppercaser font-semibold"
                 style={{ color: variables["--color-muted"] }}
               >
                 Badges
@@ -423,7 +423,7 @@ export default function ThemeBuilderPage() {
             {/* Form input */}
             <div className="space-y-2">
               <div
-                className="text-[12px] uppercase tracking-wider font-semibold"
+                className="text-[12px] uppercaser font-semibold"
                 style={{ color: variables["--color-muted"] }}
               >
                 Form Input
@@ -452,7 +452,7 @@ export default function ThemeBuilderPage() {
             {/* Color swatches */}
             <div className="space-y-2">
               <div
-                className="text-[12px] uppercase tracking-wider font-semibold"
+                className="text-[12px] uppercaser font-semibold"
                 style={{ color: variables["--color-muted"] }}
               >
                 Color Palette

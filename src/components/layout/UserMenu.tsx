@@ -73,11 +73,7 @@ export default function UserMenu() {
         onClick={() => setOpen(!open)}
         aria-label="User menu"
         aria-expanded={open}
-        className={clsx(
-          "w-7 h-7 flex items-center justify-center rounded transition-colors",
-          "text-muted hover:text-foreground hover:bg-surface-hover",
-          open && "bg-surface-hover text-foreground"
-        )}
+        className={clsx("ui-icon-button", open && "bg-surface-hover text-foreground")}
       >
         {loaded && initials ? (
           <span className="flex items-center justify-center w-5 h-5 rounded-full bg-heading text-surface text-[9px] font-bold leading-none">
@@ -89,7 +85,7 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 w-44 bg-surface border border-border shadow-lg z-50 py-1">
+        <div className="ui-dropdown w-44 py-1">
           {user ? (
             <>
               {/* Logged-in user info */}
@@ -122,7 +118,7 @@ export default function UserMenu() {
               <div className="border-t border-border my-1" />
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-3 py-1.5 text-[13px] text-wiki-link hover:underline hover:bg-surface-hover transition-colors"
+                className="ui-dropdown-item text-wiki-link"
               >
                 Log out
               </button>
@@ -156,7 +152,7 @@ function MenuItem({
     <Link
       href={href}
       onClick={onClick}
-      className="block px-3 py-1.5 text-[13px] text-wiki-link hover:underline hover:bg-surface-hover transition-colors"
+      className="ui-dropdown-item text-wiki-link"
     >
       {children}
     </Link>

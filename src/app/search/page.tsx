@@ -178,12 +178,7 @@ function SearchContent() {
   if (!q || q.length < 2) {
     return (
       <div>
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Search
-        </h1>
+        <h1 className="ui-page-title">Search</h1>
         <p className="text-[13px] text-muted italic">
           Enter a search query (at least 2 characters) to search the encyclopedia.
         </p>
@@ -194,12 +189,7 @@ function SearchContent() {
 
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Search results
-      </h1>
+      <h1 className="ui-page-title mb-1">Search results</h1>
       <div className="flex items-center justify-between mb-3">
         <p className="text-[12px] text-muted">
           {loading
@@ -211,11 +201,8 @@ function SearchContent() {
           <button
             onClick={() => setSemanticMode((v) => !v)}
             title="Semantic search uses AI vector embeddings to find conceptually related articles, not just keyword matches"
-            className={`h-6 px-2 text-[11px] border rounded transition-colors flex items-center gap-1 ${
-              semanticMode
-                ? "border-purple-500 text-purple-600 bg-purple-50 dark:bg-purple-900/20"
-                : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-            }`}
+            aria-pressed={semanticMode}
+            className="ui-button"
           >
             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
@@ -224,7 +211,8 @@ function SearchContent() {
           </button>
           <button
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="text-[12px] text-accent hover:underline"
+            className="ui-button"
+            aria-pressed={showAdvanced}
           >
             {showAdvanced ? "Hide filters" : "Filters"}
           </button>
@@ -233,8 +221,8 @@ function SearchContent() {
 
       {/* Q&A answer panel */}
       {(qaLoading || qaAnswer) && (
-        <div className="mb-4 border border-accent/30 bg-accent/5 px-4 py-3">
-          <p className="text-[11px] font-bold text-accent uppercase tracking-wide mb-1">Direct answer</p>
+        <div className="mb-4 border border-info-border bg-info-soft px-4 py-3">
+          <p className="text-[11px] font-bold text-info uppercase mb-1">Direct answer</p>
           {qaLoading ? (
             <p className="text-[13px] text-muted italic">Searching for an answer...</p>
           ) : qaAnswer ? (
@@ -271,7 +259,7 @@ function SearchContent() {
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
+                    className="ui-select"
                   >
                     <option value="">All categories</option>
                     {categories.map((cat) => (
@@ -324,14 +312,14 @@ function SearchContent() {
                       type="date"
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
-                      className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
+                      className="ui-input"
                       placeholder="From"
                     />
                     <input
                       type="date"
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
-                      className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
+                      className="ui-input"
                       placeholder="To"
                     />
                   </div>
@@ -349,7 +337,7 @@ function SearchContent() {
                       value={wordCountMin}
                       onChange={(e) => setWordCountMin(e.target.value)}
                       placeholder="Min"
-                      className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
+                      className="ui-input"
                     />
                     <span className="text-muted text-[11px] shrink-0">–</span>
                     <input
@@ -358,7 +346,7 @@ function SearchContent() {
                       value={wordCountMax}
                       onChange={(e) => setWordCountMax(e.target.value)}
                       placeholder="Max"
-                      className="w-full border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
+                      className="ui-input"
                     />
                   </div>
                 </div>
@@ -366,7 +354,7 @@ function SearchContent() {
                 {hasFilters && (
                   <button
                     onClick={clearFilters}
-                    className="text-[11px] text-wiki-link-broken hover:underline"
+                    className="ui-button ui-button-danger"
                   >
                     Clear filters
                   </button>
@@ -408,7 +396,7 @@ function SearchContent() {
                   <div>
                     <Link
                       href={`/articles/${article.slug}`}
-                      className="font-bold text-[15px]"
+                      className="font-bold text-[15px] text-wiki-link"
                       style={{ fontFamily: "var(--font-serif)" }}
                     >
                       {article.title}
@@ -450,8 +438,7 @@ function SearchContent() {
       {(federatedLoading || federatedResults.length > 0) && (
         <div className="mt-6">
           <h2
-            className="text-base font-normal text-heading border-b border-border pb-0.5 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
+            className="ui-section-title"
           >
             Results from other wikis
           </h2>
