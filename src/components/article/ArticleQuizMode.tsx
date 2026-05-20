@@ -116,9 +116,9 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
 
       {open && !finished && q && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-surface border border-border rounded shadow-xl w-full max-w-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-[11px] text-muted font-medium uppercase">
+          <div className="bg-surface border border-border rounded shadow-xl w-full max-w-lg p-4 sm:p-6">
+            <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+              <span className="min-w-0 break-words text-[11px] text-muted font-medium uppercase">
                 {articleTitle} - Question {current + 1} / {questions.length}
               </span>
               <button
@@ -133,7 +133,7 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
               </button>
             </div>
 
-            <p className="text-[15px] font-semibold text-heading mb-4 leading-snug">{q.q}</p>
+            <p className="text-[15px] font-semibold text-heading mb-4 leading-snug break-words">{q.q}</p>
 
             <div className="flex flex-col gap-2 mb-5">
               {q.options.map((opt, i) => {
@@ -154,13 +154,13 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
                 return (
                   <button key={i} className={cls} onClick={() => handleSelect(i)}>
                     <span className="font-medium mr-2">{String.fromCharCode(65 + i)}.</span>
-                    {opt}
+                    <span className="break-words">{opt}</span>
                   </button>
                 );
               })}
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-[12px] text-muted">
                 Score: {score} / {questions.length}
               </span>
@@ -200,7 +200,7 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
                 ? "Good effort!"
                 : "Keep reading and try again!"}
             </p>
-            <div className="flex gap-2 justify-center">
+            <div className="flex flex-wrap gap-2 justify-center">
               <button
                 onClick={startQuiz}
                 className="ui-button ui-button-primary"

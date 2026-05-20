@@ -79,8 +79,8 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
 
       {open && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-surface border border-border rounded w-full max-w-md p-6 shadow-xl">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-surface border border-border rounded w-full max-w-md p-4 shadow-xl sm:p-6">
+            <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
               <h2 className="text-[15px] font-semibold text-heading">Speed reader</h2>
               <button
                 onClick={() => { reset(); setOpen(false); }}
@@ -99,7 +99,7 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
               {words.length === 0 ? (
                 <p className="text-muted text-[13px] italic">No text found</p>
               ) : (
-                <p className="text-[28px] font-mono select-none">
+                <p className="max-w-full break-words text-center text-2xl font-mono select-none sm:text-[28px]">
                   <span className="text-muted">{before}</span>
                   <span className="text-accent font-bold">{pivot}</span>
                   <span className="text-muted">{after}</span>
@@ -119,7 +119,7 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
             </p>
 
             {/* Controls */}
-            <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
               <button onClick={reset} className="ui-button">
                 Reset
               </button>
@@ -132,7 +132,7 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
             </div>
 
             {/* WPM selector */}
-            <div className="flex items-center justify-center gap-2 text-[11px] text-muted">
+            <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] text-muted">
               <span>Speed:</span>
               {WPM_OPTIONS.map((w) => (
                 <button

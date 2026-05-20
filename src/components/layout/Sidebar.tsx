@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
 import { config } from "@/lib/config";
 
@@ -67,24 +67,61 @@ export default function Sidebar({
   const [mobileOpen, setMobileOpen] = useState(false);
   const isAdmin = useAdmin();
   const close = () => setMobileOpen(false);
+  const showTopMobileToggle =
+    pathname === "/ask" ||
+    pathname === "/graph" ||
+    pathname === "/split" ||
+    pathname === "/map" ||
+    pathname.startsWith("/map/") ||
+    pathname.startsWith("/present");
+
+  useEffect(() => {
+    function handleMobileToggle() {
+      setMobileOpen((open) => !open);
+    }
+
+    function handleMobileClose() {
+      setMobileOpen(false);
+    }
+
+    window.addEventListener("toggle-mobile-sidebar", handleMobileToggle);
+    window.addEventListener("close-mobile-sidebar", handleMobileClose);
+    return () => {
+      window.removeEventListener("toggle-mobile-sidebar", handleMobileToggle);
+      window.removeEventListener("close-mobile-sidebar", handleMobileClose);
+    };
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setMobileOpen(false), 0);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("mobile-sidebar-state-change", { detail: mobileOpen }));
+  }, [mobileOpen]);
 
   return (
     <>
       {/* Mobile toggle */}
-      <button
-        onClick={() => setMobileOpen(!mobileOpen)}
-        aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
-        aria-pressed={mobileOpen}
-        className="ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:!hidden"
-      >
-        {mobileOpen ? <CloseIcon /> : <MenuIcon />}
-      </button>
+      {showTopMobileToggle && (
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+          aria-pressed={mobileOpen}
+          className="ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:!hidden"
+        >
+          {mobileOpen ? <CloseIcon /> : <MenuIcon />}
+        </button>
+      )}
 
       <aside
         className={clsx(
-          "wiki-sidebar fixed left-0 top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg border-r border-border transition-transform flex flex-col",
-          mobileOpen ? "translate-x-0" : "-translate-x-full",
-          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0"
+          "wiki-sidebar fixed left-0 top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg border-r border-border transition-[transform,opacity,visibility] flex flex-col",
+          mobileOpen
+            ? "translate-x-0 opacity-100 visible pointer-events-auto"
+            : "-translate-x-full max-md:opacity-0 max-md:invisible max-md:pointer-events-none",
+          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0 md:opacity-100 md:visible md:pointer-events-auto"
         )}
       >
         {/* Logo / Title */}

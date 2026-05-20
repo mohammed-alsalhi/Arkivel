@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 const navItems = [
   {
@@ -48,6 +48,12 @@ const navItems = [
 export default function MobileNavigation() {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const hideForFocusedWorkspace =
+    pathname === "/ask" ||
+    pathname === "/graph" ||
+    pathname === "/split" ||
+    pathname.startsWith("/map") ||
+    pathname.startsWith("/present");
 
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((prev) => !prev);
@@ -55,23 +61,39 @@ export default function MobileNavigation() {
     window.dispatchEvent(new CustomEvent("toggle-mobile-sidebar"));
   }, []);
 
+  useEffect(() => {
+    function handleSidebarState(e: Event) {
+      setSidebarOpen(Boolean((e as CustomEvent<boolean>).detail));
+    }
+
+    window.addEventListener("mobile-sidebar-state-change", handleSidebarState);
+    return () => window.removeEventListener("mobile-sidebar-state-change", handleSidebarState);
+  }, []);
+
+  if (hideForFocusedWorkspace) return null;
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface border-t border-border md:hidden">
-      <div className="flex items-center justify-around h-14">
+    <nav className="wiki-mobile-nav fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-surface md:hidden">
+      <div className="flex h-14 items-center justify-around">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-[10px] no-underline transition-colors ${
+              onClick={() => {
+                setSidebarOpen(false);
+                window.dispatchEvent(new CustomEvent("close-mobile-sidebar"));
+              }}
+              aria-current={isActive ? "page" : undefined}
+              className={`flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-0.5 text-[10px] no-underline transition-colors ${
                 isActive
                   ? "text-accent font-semibold"
                   : "text-muted hover:text-foreground"
               }`}
             >
               {item.icon}
-              <span>{item.label}</span>
+              <span className="max-w-full truncate">{item.label}</span>
             </Link>
           );
         })}
@@ -79,12 +101,13 @@ export default function MobileNavigation() {
         {/* Menu button to toggle sidebar */}
         <button
           onClick={toggleSidebar}
-          className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-[10px] transition-colors ${
+          className={`flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-0.5 text-[10px] transition-colors ${
             sidebarOpen
               ? "text-accent font-semibold"
               : "text-muted hover:text-foreground"
           }`}
           aria-label="Toggle menu"
+          aria-pressed={sidebarOpen}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
             {sidebarOpen ? (
@@ -93,7 +116,7 @@ export default function MobileNavigation() {
               <path d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
-          <span>Menu</span>
+          <span className="max-w-full truncate">Menu</span>
         </button>
       </div>
     </nav>

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
 import LayoutShell from "@/components/layout/LayoutShell";
+import MobileNavigation from "@/components/layout/MobileNavigation";
 import SearchBar from "@/components/layout/SearchBar";
 import UserMenu from "@/components/layout/UserMenu";
 import { AdminProvider } from "@/components/AdminContext";
@@ -116,15 +117,16 @@ export default async function RootLayout({
               <main id="main-content" className="wiki-main-content max-w-6xl px-4 py-4 sm:px-6">
                 {children}
               </main>
-              <footer className="border-t border-border px-6 py-3 text-center text-[11px] text-muted">
+              <footer className="wiki-footer border-t border-border px-6 py-3 text-center text-[11px] text-muted">
                 {config.name} &mdash; {config.footerText}
               </footer>
             </div>
           </LayoutShell>
-        <KeyboardShortcuts />
-        <CommandPalette />
-        <BackToTop />
-        <QuickCapture />
+          <MobileNavigation />
+          <KeyboardShortcuts />
+          <CommandPalette />
+          <BackToTop />
+          <QuickCapture />
         </ToastProvider>
         </AdminProvider>
         <Analytics />

@@ -63,7 +63,7 @@ export default function WikiChatAssistant({ articleTitle }: { articleTitle: stri
       <button
         onClick={() => setOpen((o) => !o)}
         title={open ? "Close wiki assistant" : "Ask the wiki assistant"}
-        className="fixed bottom-16 right-4 z-40 w-10 h-10 rounded-full bg-accent text-white shadow-lg flex items-center justify-center hover:opacity-90 transition-opacity"
+        className="fixed bottom-16 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-accent text-white shadow-lg transition-opacity hover:opacity-90"
         aria-label="Wiki chat assistant"
       >
         {open ? (
@@ -79,10 +79,10 @@ export default function WikiChatAssistant({ articleTitle }: { articleTitle: stri
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-28 right-4 z-40 w-80 max-h-[460px] flex flex-col rounded-lg border border-border bg-background shadow-xl overflow-hidden">
+        <div className="fixed bottom-28 left-3 right-3 z-40 flex max-h-[460px] flex-col overflow-hidden rounded-lg border border-border bg-background shadow-xl sm:left-auto sm:w-80">
           {/* Header */}
           <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-surface">
-            <span className="text-[12px] font-semibold text-foreground truncate">
+            <span className="min-w-0 truncate text-[12px] font-semibold text-foreground">
               Ask about: {articleTitle}
             </span>
             <button
@@ -136,7 +136,7 @@ export default function WikiChatAssistant({ articleTitle }: { articleTitle: stri
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
               placeholder="Ask a question…"
-              className="flex-1 text-[12px] bg-background border border-border rounded px-2 py-1 outline-none focus:border-accent"
+              className="min-w-0 flex-1 rounded border border-border bg-background px-2 py-1 text-[12px] outline-none focus:border-accent"
             />
             <button
               onClick={send}
