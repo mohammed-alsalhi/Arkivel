@@ -20,6 +20,73 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
   ).toBeLessThanOrEqual(2);
 }
 
+async function mockPresentArticle(page: import("@playwright/test").Page) {
+  await page.route(
+    (url) => url.pathname === "/api/articles" && url.searchParams.get("slug") === "present-qa",
+    async (route) => {
+      await route.fulfill({
+        json: {
+          articles: [{ id: "present-qa-id", slug: "present-qa", title: "Present QA" }],
+          total: 1,
+          page: 1,
+          limit: 20,
+        },
+      });
+    }
+  );
+
+  await page.route("**/api/articles/present-qa-id/present", async (route) => {
+    await route.fulfill({
+      json: {
+        title: "Present QA",
+        slides: [
+          {
+            title: "A deliberately long presentation title that should wrap cleanly without colliding with controls",
+            content: "<p>This intro slide has enough text to exercise wrapping. It should stay inside the slide stage instead of hiding behind the header or footer.</p>",
+          },
+          {
+            title: "Dense slide",
+            content: "<p>Long presentation content should scroll inside the reserved stage.</p><ul><li>First substantial point with a long phrase that needs wrapping on phone.</li><li>Second substantial point with more words.</li><li>Third substantial point with more words.</li><li>Fourth substantial point with more words.</li><li>Fifth substantial point with more words.</li><li>Sixth substantial point with more words.</li><li>Seventh substantial point with more words.</li><li>Eighth substantial point with more words.</li><li>Ninth substantial point with more words.</li></ul><pre><code>const veryLongIdentifierThatShouldNotForcePageOverflow = true;</code></pre>",
+          },
+          {
+            title: "Closing",
+            content: "<blockquote><p>Presentation chrome should never cover readable content.</p></blockquote>",
+          },
+        ],
+      },
+    });
+  });
+}
+
+async function expectPresentChromeSeparated(page: import("@playwright/test").Page) {
+  const metrics = await page.evaluate(() => {
+    const rect = (selector: string) => {
+      const node = document.querySelector(selector);
+      if (!node) return null;
+      const r = node.getBoundingClientRect();
+      return { top: r.top, right: r.right, bottom: r.bottom, left: r.left, width: r.width, height: r.height };
+    };
+
+    const topbar = rect(".present-topbar");
+    const stage = rect(".present-stage");
+    const controls = rect(".present-controls");
+    const controlsNode = document.querySelector(".present-controls");
+    const controlsCenterNode = controls
+      ? document.elementFromPoint(controls.left + controls.width / 2, controls.top + controls.height / 2)
+      : null;
+
+    return {
+      stageAfterTopbar: Boolean(stage && topbar && stage.top >= topbar.bottom - 1),
+      stageBeforeControls: Boolean(stage && controls && stage.bottom <= controls.top + 1),
+      controlsOwnCenter: Boolean(controlsNode && controlsCenterNode && controlsNode.contains(controlsCenterNode)),
+    };
+  });
+
+  expect(metrics.stageAfterTopbar).toBe(true);
+  expect(metrics.stageBeforeControls).toBe(true);
+  expect(metrics.controlsOwnCenter).toBe(true);
+}
+
 test.describe("Responsive shell", () => {
   for (const viewport of viewports) {
     test(`keeps core routes inside the viewport on ${viewport.name}`, async ({ page }) => {
@@ -36,16 +103,10 @@ test.describe("Responsive shell", () => {
   test("opens the command palette without viewport overflow", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
-    await page.evaluate(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          key: "k",
-          ctrlKey: true,
-          bubbles: true,
-          cancelable: true,
-        })
-      );
-    });
+    await page.getByRole("button", { name: "Open search" }).click();
+    await expect(page.getByPlaceholder("Search articles")).toBeFocused();
+    await page.keyboard.press("Escape");
+    await page.keyboard.press("Control+K");
 
     await expect(page.locator(".command-palette")).toBeVisible();
     await expectNoHorizontalOverflow(page);
@@ -92,5 +153,26 @@ test.describe("Responsive shell", () => {
     await expect(page.locator(".trails-command-panel")).toBeVisible();
     await expect(page.locator(".trails-card").first()).toBeVisible();
     await expectNoHorizontalOverflow(page);
+  });
+
+  test("renders presentation mode without overlapping chrome", async ({ page }) => {
+    await mockPresentArticle(page);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/present/present-qa");
+    await expect(page.locator(".present-shell")).toBeVisible();
+    await expect(page.locator(".present-slide")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+    await expectPresentChromeSeparated(page);
+
+    await page.getByRole("button", { name: "Overview (G)" }).click();
+    await expect(page.locator(".present-overview-grid")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+
+    await page.setViewportSize({ width: 1728, height: 1000 });
+    await page.goto("/present/present-qa");
+    await expect(page.locator(".present-shell")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+    await expectPresentChromeSeparated(page);
   });
 });

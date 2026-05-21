@@ -16,6 +16,15 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.71.1
+
+- [x] Presentation layout hardening - `/present/[slug]` now reserves separate progress, topbar, slide-stage, and footer regions so content cannot overlap deck controls
+- [x] Scrollable slide stage - long titles, tall body content, code, tables, images, and embeds stay contained inside the slide viewport
+- [x] Responsive controls - overview, slide count, dots, keyboard hint, and previous/next buttons wrap or stack cleanly on narrow screens
+- [x] Presentation regression QA - responsive shell tests now mock a long presentation and assert that slide content does not collide with top or bottom chrome
+- [x] CI shell alignment - homepage and command-palette e2e tests now match the compact search trigger, phone Browse drawer, and case-insensitive `Ctrl+K` / `Cmd+K` behavior
+- [x] Wiki-link alias regression - unit tests now mock alias lookups so broken-link coverage follows the alias-aware resolver path
+
 ## v4.71.0
 
 - [x] Canon Trails - `/trails` turns the wiki into guided reader routes through strongest canon, recent work, deep pages, and repair paths

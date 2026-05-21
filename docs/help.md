@@ -74,7 +74,7 @@ Beyond standard text, the editor supports specialized content blocks inserted vi
 
 ## Presentation Mode
 
-Click **Present** in the article action bar to open the article as a slideshow. Each H2 / H3 heading becomes a new slide. Use arrow keys or click to advance. Press Esc to exit.
+Click **Present** in the article action bar to open the article as a slideshow. Each H2 / H3 heading becomes a new slide. Use arrow keys or click to advance. Press Esc to exit. Long slides scroll inside the slide stage so the title, progress, overview, and navigation controls stay reachable.
 
 ---
 
@@ -358,7 +358,7 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Article quiz mode** — "Quiz me" button in article tools bar; AI generates 5 multiple-choice questions; tracks score and records attempt
 - **Ask my wiki** — full-page AI oracle at `/ask`; streaming answers grounded in wiki content via semantic search; source attribution; multi-turn conversation; linked from sidebar
 - **Knowledge synthesis** — "Synthesize" button on category pages; AI synthesises all articles into a comprehensive overview; preview modal; one-click to create as new article
-- **Presentation mode** — "Present" button on any article; `/present/[slug]` opens a cinematic full-screen slideshow; H2 sections become slides; keyboard navigation (← →), overview grid (G), fullscreen (F)
+- **Presentation mode** — "Present" button on any article; `/present/[slug]` opens a cinematic full-screen slideshow with a scrollable slide stage, keyboard navigation, overview grid (G), fullscreen (F), and responsive controls that avoid overlap
 - **Bulk JSON export** — `/api/export/json`; all articles as structured JSON (admin only)
 - **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + summary stats (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history
