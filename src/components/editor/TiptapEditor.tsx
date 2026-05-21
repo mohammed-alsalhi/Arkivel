@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor, EditorContent, ReactRenderer } from "@tiptap/react";
+import { useEditor, EditorContent, ReactRenderer, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ImageCaption from "@/components/editor/ImageCaptionExtension";
 import Link from "@tiptap/extension-link";
@@ -13,7 +13,7 @@ import { DOMParser as ProseMirrorDOMParser, Slice } from "@tiptap/pm/model";
 import { WikiLink } from "./WikiLinkExtension";
 import { PotentialLink } from "./PotentialLinkExtension";
 import { FootnoteRef } from "./FootnoteExtension";
-import { SlashCommandExtension, type SlashCommandItem, type SnippetItem, makeGetSuggestionItems } from "./SlashCommandExtension";
+import { SlashCommandExtension, type SnippetItem, makeGetSuggestionItems } from "./SlashCommandExtension";
 import SlashCommandMenu, { type SlashCommandMenuRef } from "./SlashCommandMenu";
 import { CollapsibleBlock } from "./CollapsibleBlockExtension";
 import { InlineComment } from "./InlineCommentExtension";
@@ -37,10 +37,9 @@ import EditorToolbar from "./EditorToolbar";
 import WikiLinkSuggester from "./WikiLinkSuggester";
 import LinkBubble from "./LinkBubble";
 import WritingCoachPanel from "./WritingCoachPanel";
-import VoiceDictationButton from "./VoiceDictationButton";
 import WritingSessionGoal from "./WritingSessionGoal";
 import { useWikiLinkSuggester } from "./useWikiLinkSuggester";
-import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef } from "react";
+import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef, type CSSProperties } from "react";
 
 export type TiptapEditorHandle = {
   getHTML: () => string;
@@ -94,6 +93,168 @@ function looksLikeMarkdown(text: string): boolean {
   return matchCount >= 2;
 }
 
+type EditorCheck = {
+  label: string;
+  detail: string;
+  status: "good" | "warn" | "info";
+};
+
+type EditorOutlineItem = {
+  level: number;
+  text: string;
+  pos: number;
+};
+
+type EditorTelemetry = {
+  words: number;
+  characters: number;
+  readMinutes: number;
+  headings: number;
+  links: number;
+  wikiLinks: number;
+  footnotes: number;
+  images: number;
+  tables: number;
+  richBlocks: number;
+  codeBlocks: number;
+  selectedWords: number;
+  selectedCharacters: number;
+  outline: EditorOutlineItem[];
+  checks: EditorCheck[];
+  score: number;
+};
+
+const emptyTelemetry: EditorTelemetry = {
+  words: 0,
+  characters: 0,
+  readMinutes: 1,
+  headings: 0,
+  links: 0,
+  wikiLinks: 0,
+  footnotes: 0,
+  images: 0,
+  tables: 0,
+  richBlocks: 0,
+  codeBlocks: 0,
+  selectedWords: 0,
+  selectedCharacters: 0,
+  outline: [],
+  checks: [],
+  score: 0,
+};
+
+function countWords(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function collectEditorTelemetry(editor: Editor | null): EditorTelemetry {
+  if (!editor) return emptyTelemetry;
+
+  const doc = editor.state.doc;
+  const text = doc.textContent;
+  const words = countWords(text);
+  const characters = text.length;
+  const outline: EditorOutlineItem[] = [];
+  let headings = 0;
+  let links = 0;
+  let wikiLinks = 0;
+  let footnotes = 0;
+  let images = 0;
+  let tables = 0;
+  let richBlocks = 0;
+  let codeBlocks = 0;
+  let longestParagraphWords = 0;
+
+  doc.descendants((node, pos) => {
+    if (node.type.name === "heading") {
+      headings += 1;
+      outline.push({
+        level: Number(node.attrs.level ?? 2),
+        text: node.textContent || "Untitled section",
+        pos,
+      });
+    }
+
+    if (node.type.name === "paragraph") {
+      longestParagraphWords = Math.max(longestParagraphWords, countWords(node.textContent));
+    }
+
+    if (node.type.name === "image") images += 1;
+    if (node.type.name === "table") tables += 1;
+    if (node.type.name === "codeBlock") codeBlocks += 1;
+    if (node.type.name === "footnoteRef") footnotes += 1;
+    if (["calloutBlock", "mermaidBlock", "dataTable", "decisionTree", "blockMath", "collapsibleBlock", "queryBlock"].includes(node.type.name)) {
+      richBlocks += 1;
+    }
+    if (node.type.name === "wikiLink") {
+      wikiLinks += 1;
+      links += 1;
+    }
+    if (node.isText) {
+      for (const mark of node.marks) {
+        if (mark.type.name === "link") links += 1;
+      }
+    }
+  });
+
+  const { from, to } = editor.state.selection;
+  const selectedText = from === to ? "" : doc.textBetween(from, to, " ");
+  const checks: EditorCheck[] = [
+    {
+      label: "Lead strength",
+      detail: words >= 80 ? "Opening has enough substance." : "Aim for at least 80 words before publishing.",
+      status: words >= 80 ? "good" : "warn",
+    },
+    {
+      label: "Section structure",
+      detail: headings > 0 ? `${headings} heading${headings === 1 ? "" : "s"} detected.` : "Add H2/H3 sections for scanability.",
+      status: headings > 0 ? "good" : "warn",
+    },
+    {
+      label: "Wiki mesh",
+      detail: wikiLinks > 0 ? `${wikiLinks} wiki link${wikiLinks === 1 ? "" : "s"} connected.` : "Add wiki links so the page joins the graph.",
+      status: wikiLinks > 0 ? "good" : "warn",
+    },
+    {
+      label: "Evidence",
+      detail: footnotes > 0 || links > 1 ? "External or footnote evidence is present." : "Add citations, footnotes, or source links.",
+      status: footnotes > 0 || links > 1 ? "good" : "info",
+    },
+    {
+      label: "Rich context",
+      detail: images + tables + richBlocks + codeBlocks > 0 ? "Structured media or rich blocks are present." : "Consider a table, callout, image, or diagram.",
+      status: images + tables + richBlocks + codeBlocks > 0 ? "good" : "info",
+    },
+    {
+      label: "Paragraph rhythm",
+      detail: longestParagraphWords <= 170 ? "Paragraphs are within a readable range." : "Break up the longest paragraph.",
+      status: longestParagraphWords <= 170 ? "good" : "warn",
+    },
+  ];
+
+  const positive = checks.filter((check) => check.status === "good").length;
+  const score = Math.round((positive / checks.length) * 100);
+
+  return {
+    words,
+    characters,
+    readMinutes: Math.max(1, Math.ceil(words / 225)),
+    headings,
+    links,
+    wikiLinks,
+    footnotes,
+    images,
+    tables,
+    richBlocks,
+    codeBlocks,
+    selectedWords: countWords(selectedText),
+    selectedCharacters: selectedText.length,
+    outline,
+    checks,
+    score,
+  };
+}
+
 const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
   function TiptapEditor({ content = "", placeholder = "Start writing...", articleTitle = "", onUpdate }, ref) {
     const [markdownMode, setMarkdownMode] = useState(false);
@@ -102,6 +263,8 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     const [hasChanges, setHasChanges] = useState(false);
     const [findReplaceOpen, setFindReplaceOpen] = useState(false);
     const [typewriterMode, setTypewriterMode] = useState(false);
+    const [showInspector, setShowInspector] = useState(true);
+    const [, setEditorPulse] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const snippetsRef = useRef<SnippetItem[]>([]);
     const typewriterRafRef = useRef<number>(0);
@@ -335,9 +498,19 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
 
     useEffect(() => {
       if (!editor) return;
-      const handler = () => { setHasChanges(true); onUpdate?.(); };
+      const bump = () => setEditorPulse((value) => (value + 1) % 100000);
+      const handler = () => {
+        setHasChanges(true);
+        bump();
+        onUpdate?.();
+      };
+      const selectionHandler = () => bump();
       editor.on("update", handler);
-      return () => { editor.off("update", handler); };
+      editor.on("selectionUpdate", selectionHandler);
+      return () => {
+        editor.off("update", handler);
+        editor.off("selectionUpdate", selectionHandler);
+      };
     }, [editor, onUpdate]);
 
     // Typewriter scrolling: keep cursor vertically centred when mode is active
@@ -377,6 +550,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     }, []);
 
     const suggester = useWikiLinkSuggester(editor);
+    const telemetry = collectEditorTelemetry(editor);
 
     const handleDetectLinks = useCallback(async () => {
       if (!editor) return;
@@ -593,6 +767,79 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       editor.chain().focus().insertContent(html).run();
     }
 
+    function handleSelectionLink() {
+      if (!editor) return;
+      const { from, to } = editor.state.selection;
+      if (from === to) return;
+      const url = window.prompt("URL for selected text:", "https://");
+      if (!url?.trim()) return;
+      editor.chain().focus().setLink({ href: url.trim() }).run();
+    }
+
+    function handleSelectionWikiLink() {
+      if (!editor) return;
+      const { from, to } = editor.state.selection;
+      const selectedText = editor.state.doc.textBetween(from, to);
+      if (!selectedText.trim()) return;
+      const title = window.prompt("Article title to link:", selectedText.trim());
+      if (!title?.trim()) return;
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent({
+          type: "wikiLink",
+          attrs: {
+            title: title.trim(),
+            label: selectedText.trim() !== title.trim() ? selectedText.trim() : null,
+          },
+        })
+        .run();
+    }
+
+    function handleSelectionFootnote() {
+      if (!editor) return;
+      const note = window.prompt("Footnote text:");
+      if (!note?.trim()) return;
+      const { to } = editor.state.selection;
+      editor.chain().focus().setTextSelection(to).insertContent({ type: "footnoteRef", attrs: { note: note.trim() } }).run();
+    }
+
+    function insertQuickBlock(kind: string) {
+      if (!editor) return;
+
+      if (kind === "note") editor.chain().focus().insertCallout("note").run();
+      if (kind === "tip") editor.chain().focus().insertCallout("tip").run();
+      if (kind === "warning") editor.chain().focus().insertCallout("warning").run();
+      if (kind === "table") editor.chain().focus().insertTable({ rows: 4, cols: 4, withHeaderRow: true }).run();
+      if (kind === "data") editor.chain().focus().insertDataTable().run();
+      if (kind === "mermaid") editor.chain().focus().insertMermaidBlock().run();
+      if (kind === "math") editor.chain().focus().insertBlockMath().run();
+      if (kind === "decision") editor.chain().focus().insertDecisionTree().run();
+      if (kind === "collapse") editor.chain().focus().insertCollapsibleBlock().run();
+      if (kind === "query") editor.chain().focus().insertQueryBlock().run();
+      if (kind === "scaffold") {
+        editor.chain().focus().insertContent(
+          `<h2>Overview</h2><p>Summarize the subject, scope, and why it matters.</p><h2>Background</h2><p>Add origins, context, and prerequisites.</p><h2>Key Details</h2><p>Describe the most important facts, mechanics, or relationships.</p><h2>See Also</h2><ul><li>[[Related article]]</li></ul>`
+        ).run();
+      }
+      if (kind === "timeline") {
+        editor.chain().focus().insertContent(
+          `<div class="wiki-timeline"><div class="wiki-timeline-entry"><div class="wiki-timeline-date">Date</div><div class="wiki-timeline-body"><p>Event description</p></div></div><div class="wiki-timeline-entry"><div class="wiki-timeline-date">Date</div><div class="wiki-timeline-body"><p>Event description</p></div></div></div><p></p>`
+        ).run();
+      }
+    }
+
+    function jumpToOutlineItem(item: EditorOutlineItem) {
+      if (!editor) return;
+      const target = Math.min(item.pos + 1, editor.state.doc.content.size);
+      editor.chain().focus().setTextSelection(target).run();
+      requestAnimationFrame(() => {
+        const selection = window.getSelection();
+        selection?.anchorNode?.parentElement?.scrollIntoView({ block: "center", behavior: "smooth" });
+      });
+    }
+
     async function handleImageUpload() {
       fileInputRef.current?.click();
     }
@@ -640,9 +887,55 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       setMarkdownMode(!markdownMode);
     }
 
+    const quickBlocks = [
+      { kind: "scaffold", label: "Scaffold", meta: "Sections" },
+      { kind: "note", label: "Note", meta: "Callout" },
+      { kind: "tip", label: "Tip", meta: "Callout" },
+      { kind: "warning", label: "Warning", meta: "Callout" },
+      { kind: "table", label: "Table", meta: "4 x 4" },
+      { kind: "data", label: "Data", meta: "CSV" },
+      { kind: "mermaid", label: "Diagram", meta: "Mermaid" },
+      { kind: "math", label: "Math", meta: "KaTeX" },
+      { kind: "decision", label: "Decision", meta: "Tree" },
+      { kind: "timeline", label: "Timeline", meta: "Events" },
+      { kind: "collapse", label: "Collapse", meta: "Details" },
+      { kind: "query", label: "Query", meta: "Live list" },
+    ];
+
+    const activeChecks = telemetry.checks.length > 0 ? telemetry.checks : emptyTelemetry.checks;
+
     return (
-      <div className="border border-border overflow-hidden relative">
-        <div className="flex items-center justify-between border-b border-border bg-surface-hover px-2 py-1">
+      <div className="editor-shell border border-border overflow-hidden relative">
+        <div className="editor-ribbon">
+          <div className="editor-ribbon-top">
+            <div className="editor-ribbon-brand">
+              <span className="editor-ribbon-mark" aria-hidden="true">A</span>
+              <span className="editor-ribbon-title">Arkivel Studio</span>
+              {!markdownMode && (
+                <span className="editor-ribbon-score">{telemetry.score}% readiness</span>
+              )}
+            </div>
+            <div className="editor-ribbon-actions">
+              {!markdownMode && (
+                <button
+                  type="button"
+                  onClick={() => setShowInspector((value) => !value)}
+                  aria-pressed={showInspector}
+                  className="editor-mode-button"
+                >
+                  {showInspector ? "Hide intel" : "Show intel"}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={toggleMarkdownMode}
+                className="editor-mode-button"
+                aria-pressed={markdownMode}
+              >
+                {markdownMode ? "Rich text" : "Markdown"}
+              </button>
+            </div>
+          </div>
           <EditorToolbar
             editor={editor}
             onImageUpload={handleImageUpload}
@@ -660,17 +953,6 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
               try { localStorage.setItem("wiki_typewriter_mode", next ? "1" : "0"); } catch {}
             }}
           />
-          <button
-            type="button"
-            onClick={toggleMarkdownMode}
-            className={`px-2 py-0.5 text-[11px] transition-colors ${
-              markdownMode
-                ? "bg-accent text-white font-bold"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            {markdownMode ? "Rich Text" : "Markdown"}
-          </button>
         </div>
 
         <FindReplacePanel
@@ -679,42 +961,142 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
           onClose={() => setFindReplaceOpen(false)}
         />
 
-        {markdownMode ? (
-          <textarea
-            value={markdownText}
-            onChange={(e) => setMarkdownText(e.target.value)}
-            className="min-h-[300px] w-full bg-surface p-4 font-mono text-[13px] text-foreground focus:outline-none"
-            placeholder="Write in markdown..."
-          />
-        ) : (
-          <EditorContent editor={editor} />
-        )}
-
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={onFileChange}
-          className="hidden"
-        />
-
-        {/* Editor status bar */}
-        {!markdownMode && editor && (
-          <div className="flex items-center justify-between border-t border-border bg-surface-hover px-3 py-1 text-[11px] text-muted">
-            <span>
-              {editor.storage.characterCount?.words?.() ??
-                (editor.state.doc.textContent.replace(/\s+/g, " ").trim().split(/\s+/).filter(Boolean).length)} words
-              {" \u00B7 "}
-              {editor.storage.characterCount?.characters?.() ??
-                editor.state.doc.textContent.length} characters
-            </span>
-            <WritingSessionGoal editor={editor} />
-            <span>{hasChanges ? "Unsaved changes" : "No changes"}</span>
-            <span>
-              {editor.state.doc.content.childCount} paragraphs
-            </span>
+        {!markdownMode && (
+          <div className="editor-command-deck" aria-label="Quick inserts">
+            {quickBlocks.map((block) => (
+              <button
+                key={block.kind}
+                type="button"
+                onClick={() => insertQuickBlock(block.kind)}
+                className="editor-command-tile"
+              >
+                <span>{block.label}</span>
+                <small>{block.meta}</small>
+              </button>
+            ))}
           </div>
         )}
+
+        <div className={markdownMode ? "editor-workspace editor-workspace-markdown" : "editor-workspace"}>
+          <div className="editor-main-panel">
+            {!markdownMode && telemetry.selectedCharacters > 0 && (
+              <div className="editor-selection-lab">
+                <div>
+                  <strong>Selection lab</strong>
+                  <span>{telemetry.selectedWords} words</span>
+                </div>
+                <div className="editor-selection-actions">
+                  <button type="button" onClick={handleAiRewrite}>Rewrite</button>
+                  <button type="button" onClick={handleAiExpand}>Expand</button>
+                  <button type="button" onClick={handleSelectionWikiLink}>Wiki link</button>
+                  <button type="button" onClick={handleSelectionLink}>URL</button>
+                  <button type="button" onClick={handleSelectionFootnote}>Footnote</button>
+                </div>
+              </div>
+            )}
+
+            {markdownMode ? (
+              <textarea
+                value={markdownText}
+                onChange={(e) => setMarkdownText(e.target.value)}
+                className="editor-markdown-plane"
+                placeholder="Write in markdown..."
+              />
+            ) : (
+              <div className="editor-canvas">
+                <EditorContent editor={editor} />
+              </div>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={onFileChange}
+              className="hidden"
+            />
+
+            {!markdownMode && editor && (
+              <div className="editor-statusbar">
+                <div className="editor-status-stats">
+                  <span>{telemetry.words} words</span>
+                  <span>{telemetry.characters} chars</span>
+                  <span>{telemetry.readMinutes} min read</span>
+                  <span>{telemetry.headings} headings</span>
+                </div>
+                <WritingSessionGoal editor={editor} />
+                <div className="editor-status-state">
+                  <span>{hasChanges ? "Unsaved changes" : "No changes"}</span>
+                  <span>{editor.state.doc.content.childCount} blocks</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {!markdownMode && editor && showInspector && (
+            <aside className="editor-inspector" aria-label="Editor intelligence">
+              <section className="editor-inspector-section editor-score-panel">
+                <div className="editor-score-ring" style={{ "--editor-score": `${telemetry.score}%` } as CSSProperties}>
+                  <span>{telemetry.score}</span>
+                </div>
+                <div>
+                  <h3>Readiness</h3>
+                  <p>{telemetry.words} words - {telemetry.readMinutes} min read</p>
+                </div>
+              </section>
+
+              <section className="editor-inspector-section">
+                <h3>Document signals</h3>
+                <div className="editor-signal-grid">
+                  <span><strong>{telemetry.wikiLinks}</strong> wiki links</span>
+                  <span><strong>{telemetry.links}</strong> links</span>
+                  <span><strong>{telemetry.footnotes}</strong> notes</span>
+                  <span><strong>{telemetry.tables}</strong> tables</span>
+                  <span><strong>{telemetry.images}</strong> images</span>
+                  <span><strong>{telemetry.richBlocks}</strong> rich blocks</span>
+                </div>
+              </section>
+
+              <section className="editor-inspector-section">
+                <div className="editor-inspector-heading">
+                  <h3>Outline</h3>
+                  <span>{telemetry.outline.length}</span>
+                </div>
+                {telemetry.outline.length > 0 ? (
+                  <div className="editor-outline-list">
+                    {telemetry.outline.slice(0, 12).map((item, index) => (
+                      <button
+                        key={`${item.pos}-${index}`}
+                        type="button"
+                        onClick={() => jumpToOutlineItem(item)}
+                        data-level={item.level}
+                      >
+                        {item.text}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="editor-empty-note">No headings yet.</p>
+                )}
+              </section>
+
+              <section className="editor-inspector-section">
+                <h3>Quality pass</h3>
+                <div className="editor-check-list">
+                  {activeChecks.map((check) => (
+                    <div key={check.label} className="editor-check-item" data-status={check.status}>
+                      <span />
+                      <div>
+                        <strong>{check.label}</strong>
+                        <p>{check.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </aside>
+          )}
+        </div>
 
         <WikiLinkSuggester
           active={suggester.active}
@@ -728,20 +1110,26 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
 
         {/* Writing Coach — collapsible analysis panel */}
         {!markdownMode && editor && (
-          <WritingCoachPanel
-            getHtml={() => editor.getHTML()}
-            hasExcerpt={false}
-          />
+          <div className="editor-aux-panels">
+            <WritingCoachPanel
+              getHtml={() => editor.getHTML()}
+              hasExcerpt={false}
+            />
+          </div>
         )}
 
         {/* Outline Builder — AI-assisted section outline generation */}
         {!markdownMode && editor && (
-          <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
+          <div className="editor-aux-panels">
+            <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
+          </div>
         )}
 
         {/* Grammar & style checker */}
         {!markdownMode && editor && (
-          <GrammarCheckPanel editor={editor} />
+          <div className="editor-aux-panels">
+            <GrammarCheckPanel editor={editor} />
+          </div>
         )}
       </div>
     );

@@ -198,7 +198,10 @@ export default function CollaborativeEditor({ articleId, initialHtml, articleTit
         content={initialHtml}
         placeholder="Begin writing your article…"
         articleTitle={articleTitle}
-        onUpdate={enabled ? () => { pendingUpdateRef.current = true; } : undefined}
+        onUpdate={() => {
+          pendingUpdateRef.current = enabled;
+          onHtmlChange?.(activeEditorRef.current?.getHTML() ?? "");
+        }}
       />
     </div>
   );

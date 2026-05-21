@@ -29,8 +29,12 @@ export default function FeaturesPage() {
         <div className="wiki-portal-header">Writing &amp; Editing</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with toolbar, slash commands, collapsed-border tables, and drag-and-drop block reordering</li>
+            <li><strong>Rich text editor cockpit</strong> — Tiptap-based WYSIWYG editor with ribbon toolbar, quick-insert deck, live readiness inspector, selection lab, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering</li>
             <li><strong>Markdown mode</strong> — toggle between rich text and raw Markdown at any time</li>
+            <li><strong>Editor readiness inspector</strong> — live word/read-time metrics, document signals, outline navigation, quality checks, and readiness scoring beside the editor</li>
+            <li><strong>Selection lab</strong> — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline</li>
+            <li><strong>Quick-insert deck</strong> — one-click scaffolds, callouts, tables, data tables, Mermaid diagrams, math, decision trees, timelines, collapsibles, and live query blocks</li>
+            <li><strong>Contextual table lab</strong> — row, column, merge, split, header, and delete-table controls appear only while editing a table</li>
             <li><strong>Slash commands</strong> — type <code className="bg-surface-hover px-1 text-[12px]">/</code> for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more; includes user snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code></li>
             <li><strong>Inline AI rewrite</strong> — select text and click &ldquo;AI Rewrite&rdquo; in the toolbar; optionally provide an instruction; requires <code className="bg-surface-hover px-1 text-[12px]">OPENAI_API_KEY</code></li>
             <li><strong>Editor snippets</strong> — define reusable HTML blocks at <Link href="/settings/snippets">/settings/snippets</Link>; insert via the slash-command menu</li>

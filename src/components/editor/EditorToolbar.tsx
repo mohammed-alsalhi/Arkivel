@@ -19,380 +19,281 @@ type Props = {
   onTypewriterToggle: () => void;
 };
 
-type ToolbarButton = {
+type ToolAction = {
   label: string;
   icon: string;
   action: () => void;
-  isActive?: () => boolean;
-  hidden?: () => boolean;
+  active?: boolean;
+  disabled?: boolean;
+  tone?: "default" | "accent" | "ai" | "danger";
 };
 
-export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, detectedLinkCount, onInsertToc, onAiRewrite, onAiExpand, onAiGenerate, onFindReplace, typewriterMode, onTypewriterToggle }: Props) {
-  if (!editor) return null;
+function ToolButton({ action }: { action: ToolAction }) {
+  return (
+    <button
+      type="button"
+      onClick={action.action}
+      disabled={action.disabled}
+      title={action.label}
+      aria-label={action.label}
+      aria-pressed={action.active || undefined}
+      data-tone={action.tone ?? "default"}
+      className="editor-tool-button"
+    >
+      <span aria-hidden="true">{action.icon}</span>
+    </button>
+  );
+}
 
-  const groups: ToolbarButton[][] = [
-    [
-      {
-        label: "Undo (Ctrl+Z)",
-        icon: "\u21A9",
-        action: () => editor.chain().focus().undo().run(),
-      },
-      {
-        label: "Redo (Ctrl+Y)",
-        icon: "\u21AA",
-        action: () => editor.chain().focus().redo().run(),
-      },
-    ],
-    [
-      {
-        label: "Bold",
-        icon: "B",
-        action: () => editor.chain().focus().toggleBold().run(),
-        isActive: () => editor.isActive("bold"),
-      },
-      {
-        label: "Italic",
-        icon: "I",
-        action: () => editor.chain().focus().toggleItalic().run(),
-        isActive: () => editor.isActive("italic"),
-      },
-      {
-        label: "Strike",
-        icon: "S",
-        action: () => editor.chain().focus().toggleStrike().run(),
-        isActive: () => editor.isActive("strike"),
-      },
-      {
-        label: "Superscript",
-        icon: "x²",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        action: () => (editor.chain().focus() as any).toggleSuperscript?.().run(),
-        isActive: () => editor.isActive("superscript"),
-      },
-      {
-        label: "Subscript",
-        icon: "x₂",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        action: () => (editor.chain().focus() as any).toggleSubscript?.().run(),
-        isActive: () => editor.isActive("subscript"),
-      },
-    ],
-    [
-      {
-        label: "H1",
-        icon: "H1",
-        action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-        isActive: () => editor.isActive("heading", { level: 1 }),
-      },
-      {
-        label: "H2",
-        icon: "H2",
-        action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-        isActive: () => editor.isActive("heading", { level: 2 }),
-      },
-      {
-        label: "H3",
-        icon: "H3",
-        action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-        isActive: () => editor.isActive("heading", { level: 3 }),
-      },
-    ],
-    [
-      {
-        label: "Bullet List",
-        icon: "\u2022",
-        action: () => editor.chain().focus().toggleBulletList().run(),
-        isActive: () => editor.isActive("bulletList"),
-      },
-      {
-        label: "Ordered List",
-        icon: "1.",
-        action: () => editor.chain().focus().toggleOrderedList().run(),
-        isActive: () => editor.isActive("orderedList"),
-      },
-      {
-        label: "Blockquote",
-        icon: "\u201C",
-        action: () => editor.chain().focus().toggleBlockquote().run(),
-        isActive: () => editor.isActive("blockquote"),
-      },
-      {
-        label: "Code Block",
-        icon: "<>",
-        action: () => {
-          if (editor.isActive("codeBlock")) {
-            editor.chain().focus().toggleCodeBlock().run();
-          } else {
-            const lang = window.prompt("Language (e.g. js, python, html):", "");
-            editor.chain().focus().toggleCodeBlock().run();
-            if (lang) {
-              editor.chain().focus().updateAttributes("codeBlock", { language: lang }).run();
-            }
-          }
-        },
-        isActive: () => editor.isActive("codeBlock"),
-      },
-    ],
-    [
-      {
-        label: "Rule",
-        icon: "\u2014",
-        action: () => editor.chain().focus().setHorizontalRule().run(),
-      },
-      {
-        label: "Link",
-        icon: "\u{1F517}",
-        action: () => {
-          const url = window.prompt("URL:");
-          if (url) {
-            editor.chain().focus().setLink({ href: url }).run();
-          }
-        },
-        isActive: () => editor.isActive("link"),
-      },
-      {
-        label: "Image",
-        icon: "\u{1F5BC}",
-        action: onImageUpload,
-      },
-      {
-        label: "Footnote (Ctrl+Shift+F)",
-        icon: "fn",
-        action: () => {
-          const note = window.prompt("Footnote text:");
-          if (note) {
-            editor.chain().focus().insertContent({
-              type: "footnoteRef",
-              attrs: { note },
-            }).run();
-          }
-        },
-      },
-      {
-        label: "Wiki Link",
-        icon: "[[]]",
-        action: () => {
-          const { from, to } = editor.state.selection;
-          const selectedText = editor.state.doc.textBetween(from, to);
-          const title = window.prompt("Article title to link:", selectedText || "");
-          if (title) {
-            const label = selectedText && selectedText !== title ? selectedText : null;
-            editor
-              .chain()
-              .focus()
-              .deleteRange({ from, to })
-              .insertContent({ type: "wikiLink", attrs: { title, label } })
-              .run();
-          }
-        },
-      },
-    ],
-    [
-      {
-        label: "Insert Table",
-        icon: "Table",
-        action: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
-      },
-      {
-        label: "Add Row",
-        icon: "+Row",
-        action: () => editor.chain().focus().addRowAfter().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Add Column",
-        icon: "+Col",
-        action: () => editor.chain().focus().addColumnAfter().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Delete Row",
-        icon: "-Row",
-        action: () => editor.chain().focus().deleteRow().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Delete Column",
-        icon: "-Col",
-        action: () => editor.chain().focus().deleteColumn().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Merge Cells",
-        icon: "Merge",
-        action: () => editor.chain().focus().mergeCells().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Split Cell",
-        icon: "Split",
-        action: () => editor.chain().focus().splitCell().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Toggle Header Row",
-        icon: "HRow",
-        action: () => editor.chain().focus().toggleHeaderRow().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Toggle Header Column",
-        icon: "HCol",
-        action: () => editor.chain().focus().toggleHeaderColumn().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-      {
-        label: "Delete Table",
-        icon: "xTable",
-        action: () => editor.chain().focus().deleteTable().run(),
-        hidden: () => !editor.isActive("table"),
-      },
-    ],
-    [
-      {
-        label: "Insert date",
-        icon: "Date",
-        action: () => {
-          const date = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-          editor.chain().focus().insertContent(date).run();
-        },
-      },
-    ],
-    [
-      {
-        label: "Insert math formula (KaTeX)",
-        icon: "Σ",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        action: () => (editor.chain().focus() as any).insertBlockMath().run(),
-      },
-    ],
+function ToolbarGroup({
+  label,
+  actions,
+}: {
+  label: string;
+  actions: ToolAction[];
+}) {
+  const visible = actions.filter((action) => !action.disabled || action.label === "Undo" || action.label === "Redo");
+  if (visible.length === 0) return null;
+
+  return (
+    <div className="editor-toolbar-group" aria-label={label}>
+      <span className="editor-toolbar-label">{label}</span>
+      <div className="editor-toolbar-buttons">
+        {visible.map((action) => (
+          <ToolButton key={action.label} action={action} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function getBlockValue(editor: Editor) {
+  if (editor.isActive("heading", { level: 1 })) return "h1";
+  if (editor.isActive("heading", { level: 2 })) return "h2";
+  if (editor.isActive("heading", { level: 3 })) return "h3";
+  if (editor.isActive("codeBlock")) return "code";
+  if (editor.isActive("blockquote")) return "quote";
+  return "paragraph";
+}
+
+export default function EditorToolbar({
+  editor,
+  onImageUpload,
+  onDetectLinks,
+  detectedLinkCount,
+  onInsertToc,
+  onAiRewrite,
+  onAiExpand,
+  onAiGenerate,
+  onFindReplace,
+  typewriterMode,
+  onTypewriterToggle,
+}: Props) {
+  if (!editor) return null;
+  const activeEditor = editor;
+
+  const isTableActive = activeEditor.isActive("table");
+  const blockValue = getBlockValue(activeEditor);
+
+  function setBlock(value: string) {
+    if (value === "paragraph") activeEditor.chain().focus().setParagraph().run();
+    if (value === "h1") activeEditor.chain().focus().toggleHeading({ level: 1 }).run();
+    if (value === "h2") activeEditor.chain().focus().toggleHeading({ level: 2 }).run();
+    if (value === "h3") activeEditor.chain().focus().toggleHeading({ level: 3 }).run();
+    if (value === "quote") activeEditor.chain().focus().toggleBlockquote().run();
+    if (value === "code") {
+      if (activeEditor.isActive("codeBlock")) {
+        activeEditor.chain().focus().toggleCodeBlock().run();
+      } else {
+        const lang = window.prompt("Language (js, python, html, css):", "");
+        activeEditor.chain().focus().toggleCodeBlock().run();
+        if (lang) activeEditor.chain().focus().updateAttributes("codeBlock", { language: lang }).run();
+      }
+    }
+  }
+
+  function insertLink() {
+    const previous = activeEditor.getAttributes("link").href as string | undefined;
+    const url = window.prompt("URL:", previous ?? "https://");
+    if (url === null) return;
+    if (url.trim() === "") {
+      activeEditor.chain().focus().unsetLink().run();
+      return;
+    }
+    activeEditor.chain().focus().setLink({ href: url.trim() }).run();
+  }
+
+  function insertWikiLink() {
+    const { from, to } = activeEditor.state.selection;
+    const selectedText = activeEditor.state.doc.textBetween(from, to);
+    const title = window.prompt("Article title to link:", selectedText || "");
+    if (!title) return;
+    const label = selectedText && selectedText !== title ? selectedText : null;
+    activeEditor
+      .chain()
+      .focus()
+      .deleteRange({ from, to })
+      .insertContent({ type: "wikiLink", attrs: { title, label } })
+      .run();
+  }
+
+  function insertFootnote() {
+    const note = window.prompt("Footnote text:");
+    if (!note) return;
+    activeEditor.chain().focus().insertContent({ type: "footnoteRef", attrs: { note } }).run();
+  }
+
+  const historyActions: ToolAction[] = [
+    {
+      label: "Undo",
+      icon: "UN",
+      action: () => activeEditor.chain().focus().undo().run(),
+      disabled: !activeEditor.can().undo(),
+    },
+    {
+      label: "Redo",
+      icon: "RE",
+      action: () => activeEditor.chain().focus().redo().run(),
+      disabled: !activeEditor.can().redo(),
+    },
+  ];
+
+  const textActions: ToolAction[] = [
+    { label: "Bold", icon: "B", action: () => activeEditor.chain().focus().toggleBold().run(), active: activeEditor.isActive("bold") },
+    { label: "Italic", icon: "I", action: () => activeEditor.chain().focus().toggleItalic().run(), active: activeEditor.isActive("italic") },
+    { label: "Strike", icon: "S", action: () => activeEditor.chain().focus().toggleStrike().run(), active: activeEditor.isActive("strike") },
+    { label: "Inline code", icon: "</>", action: () => activeEditor.chain().focus().toggleCode().run(), active: activeEditor.isActive("code") },
+    { label: "Superscript", icon: "x2", action: () => activeEditor.chain().focus().toggleSuperscript().run(), active: activeEditor.isActive("superscript") },
+    { label: "Subscript", icon: "x_2", action: () => activeEditor.chain().focus().toggleSubscript().run(), active: activeEditor.isActive("subscript") },
+  ];
+
+  const structureActions: ToolAction[] = [
+    { label: "Bullet list", icon: "UL", action: () => activeEditor.chain().focus().toggleBulletList().run(), active: activeEditor.isActive("bulletList") },
+    { label: "Numbered list", icon: "OL", action: () => activeEditor.chain().focus().toggleOrderedList().run(), active: activeEditor.isActive("orderedList") },
+    { label: "Pull quote", icon: "PQ", action: () => activeEditor.chain().focus().togglePullQuote().run(), active: activeEditor.isActive("pullQuote") },
+    { label: "Divider", icon: "--", action: () => activeEditor.chain().focus().setHorizontalRule().run() },
+  ];
+
+  const insertActions: ToolAction[] = [
+    { label: "Link", icon: "URL", action: insertLink, active: activeEditor.isActive("link") },
+    { label: "Wiki link", icon: "[[]]", action: insertWikiLink },
+    { label: "Image", icon: "IMG", action: onImageUpload },
+    { label: "Footnote", icon: "fn", action: insertFootnote },
+    { label: "Table", icon: "TBL", action: () => activeEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
+    { label: "Math block", icon: "SUM", action: () => activeEditor.chain().focus().insertBlockMath().run() },
+  ];
+
+  const knowledgeActions: ToolAction[] = [
+    {
+      label: "Detect wiki links",
+      icon: detectedLinkCount > 0 ? `LINK ${detectedLinkCount}` : "LINK",
+      action: onDetectLinks,
+      tone: detectedLinkCount > 0 ? "accent" : "default",
+    },
+    { label: "Insert table of contents", icon: "TOC", action: onInsertToc },
+    { label: "Find and replace", icon: "F/R", action: onFindReplace },
+    { label: "Typewriter mode", icon: "TYPE", action: onTypewriterToggle, active: typewriterMode },
+  ];
+
+  const aiActions: ToolAction[] = [
+    { label: "AI rewrite selection", icon: "AI-R", action: onAiRewrite, tone: "ai" },
+    { label: "AI expand selection", icon: "AI-X", action: onAiExpand, tone: "ai" },
+    { label: "AI generate article from headings", icon: "AI-G", action: onAiGenerate, tone: "ai" },
+  ];
+
+  const tableActions: ToolAction[] = [
+    { label: "Add row below", icon: "+R", action: () => activeEditor.chain().focus().addRowAfter().run() },
+    { label: "Add column after", icon: "+C", action: () => activeEditor.chain().focus().addColumnAfter().run() },
+    { label: "Delete row", icon: "-R", action: () => activeEditor.chain().focus().deleteRow().run() },
+    { label: "Delete column", icon: "-C", action: () => activeEditor.chain().focus().deleteColumn().run() },
+    { label: "Merge cells", icon: "MRG", action: () => activeEditor.chain().focus().mergeCells().run() },
+    { label: "Split cell", icon: "SPL", action: () => activeEditor.chain().focus().splitCell().run() },
+    { label: "Header row", icon: "H-R", action: () => activeEditor.chain().focus().toggleHeaderRow().run(), active: activeEditor.isActive("tableHeader") },
+    { label: "Header column", icon: "H-C", action: () => activeEditor.chain().focus().toggleHeaderColumn().run(), active: activeEditor.isActive("tableHeader") },
+    { label: "Delete table", icon: "DEL", action: () => activeEditor.chain().focus().deleteTable().run(), tone: "danger" },
+  ];
+
+  const claimLevels: { level: ClaimLevel; label: string }[] = [
+    { level: "certain", label: "Certain" },
+    { level: "probable", label: "Probable" },
+    { level: "disputed", label: "Disputed" },
   ];
 
   return (
-    <div className="flex flex-wrap items-center gap-0.5 py-0.5">
-      {groups.map((group, gi) => (
-        <div key={gi} className="flex gap-px">
-          {group.map((btn) => {
-            if (btn.hidden?.()) return null;
-            return (
-              <button
-                key={btn.label}
-                type="button"
-                onClick={btn.action}
-                title={btn.label}
-                className={`px-1.5 py-0.5 text-[11px] font-medium transition-colors ${
-                  btn.isActive?.()
-                    ? "bg-accent text-white"
-                    : "text-foreground hover:bg-surface hover:text-accent"
-                }`}
-              >
-                {btn.icon}
-              </button>
-            );
-          })}
-          {gi < groups.length - 1 && (
-            <div className="mx-1 w-px bg-border" />
-          )}
-        </div>
-      ))}
-      <div className="mx-1 w-px bg-border" />
-      <button
-        type="button"
-        onClick={onDetectLinks}
-        title="Detect potential wiki links in text"
-        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
-      >
-        Detect Links{detectedLinkCount > 0 && ` (${detectedLinkCount})`}
-      </button>
-      <button
-        type="button"
-        onClick={onInsertToc}
-        title="Insert table of contents from headings"
-        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
-      >
-        TOC
-      </button>
-      <button
-        type="button"
-        onClick={onAiRewrite}
-        title="AI rewrite: select text first, then click to rewrite it"
-        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
-      >
-        AI Rewrite
-      </button>
-      <button
-        type="button"
-        onClick={onAiExpand}
-        title="AI expand: select a paragraph first, then click to expand it"
-        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
-      >
-        AI Expand
-      </button>
-      <button
-        type="button"
-        onClick={onAiGenerate}
-        title="AI Generate: generates full article body from existing headings"
-        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
-      >
-        AI Generate
-      </button>
-      <button
-        type="button"
-        onClick={onFindReplace}
-        title="Find & replace (Ctrl+H)"
-        className="px-1.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-surface hover:text-accent transition-colors"
-      >
-        Find
-      </button>
-      <button
-        type="button"
-        onClick={onTypewriterToggle}
-        title="Typewriter mode — keeps cursor vertically centred"
-        className={`px-1.5 py-0.5 text-[11px] font-medium transition-colors ${typewriterMode ? "bg-accent text-white" : "text-foreground hover:bg-surface hover:text-accent"}`}
-      >
-        Typewriter
-      </button>
-      <button
-        type="button"
-        onClick={() => alert("Shortcuts:\n\nCtrl+B \u2014 Bold\nCtrl+I \u2014 Italic\nCtrl+Z \u2014 Undo\nCtrl+Y \u2014 Redo\nCtrl+Shift+L \u2014 Wiki Link\nCtrl+Shift+F \u2014 Footnote\n[[…]] \u2014 Auto wiki link")}
-        title="Editor keyboard shortcuts"
-        className="px-1.5 py-0.5 text-[11px] font-medium text-muted hover:bg-surface hover:text-accent transition-colors"
-      >
-        ?
-      </button>
-      <div className="mx-1 w-px bg-border" />
-      {/* Claim markers */}
-      {(["certain", "probable", "disputed"] as ClaimLevel[]).map((level) => {
-        const colors: Record<ClaimLevel, string> = {
-          certain: "text-green-600 hover:bg-green-50",
-          probable: "text-yellow-600 hover:bg-yellow-50",
-          disputed: "text-red-600 hover:bg-red-50",
-        };
-        const labels: Record<ClaimLevel, string> = {
-          certain: "Certain",
-          probable: "Probable",
-          disputed: "Disputed",
-        };
-        const isActive = editor.isActive("claimMark", { level });
-        return (
-          <button
-            key={level}
-            type="button"
-            onClick={() => (editor.chain().focus() as ReturnType<typeof editor.chain>).toggleClaim(level).run()}
-            title={`Mark selection as ${level} claim`}
-            className={`px-1.5 py-0.5 text-[10px] font-bold border rounded transition-colors ${
-              isActive
-                ? `border-current bg-current/10 ${colors[level]}`
-                : `border-transparent ${colors[level]}`
-            }`}
+    <div className="editor-toolbar-v2">
+      <div className="editor-toolbar-main">
+        <div className="editor-toolbar-block">
+          <span className="editor-toolbar-label">Block</span>
+          <select
+            value={blockValue}
+            onChange={(event) => setBlock(event.target.value)}
+            aria-label="Block style"
+            className="editor-block-select"
           >
-            {labels[level]}
-          </button>
-        );
-      })}
-      <div className="mx-1 w-px bg-border" />
-      <HighlightColorPicker editor={editor} />
-      <VoiceDictationButton editor={editor} />
+            <option value="paragraph">Paragraph</option>
+            <option value="h1">Heading 1</option>
+            <option value="h2">Heading 2</option>
+            <option value="h3">Heading 3</option>
+            <option value="quote">Quote</option>
+            <option value="code">Code block</option>
+          </select>
+        </div>
+
+        <ToolbarGroup label="History" actions={historyActions} />
+        <ToolbarGroup label="Text" actions={textActions} />
+        <ToolbarGroup label="Structure" actions={structureActions} />
+        <ToolbarGroup label="Insert" actions={insertActions} />
+        <ToolbarGroup label="Knowledge" actions={knowledgeActions} />
+        <ToolbarGroup label="AI" actions={aiActions} />
+
+        <div className="editor-toolbar-group editor-toolbar-claims" aria-label="Claim confidence">
+          <span className="editor-toolbar-label">Claims</span>
+          <div className="editor-toolbar-buttons">
+            {claimLevels.map(({ level, label }) => {
+              const active = activeEditor.isActive("claimMark", { level });
+              return (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => activeEditor.chain().focus().toggleClaim(level).run()}
+                  title={`Mark selection as ${label.toLowerCase()}`}
+                  aria-pressed={active || undefined}
+                  data-claim={level}
+                  className="editor-claim-button"
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="editor-toolbar-group editor-toolbar-finishing" aria-label="Finishing">
+          <span className="editor-toolbar-label">Color</span>
+          <div className="editor-toolbar-buttons">
+            <HighlightColorPicker editor={activeEditor} />
+            <VoiceDictationButton editor={activeEditor} />
+            <button
+              type="button"
+              onClick={() => alert("Editor shortcuts:\n\nCtrl+B - Bold\nCtrl+I - Italic\nCtrl+Z - Undo\nCtrl+Y - Redo\nCtrl+H - Find and replace\nCtrl+Shift+L - Wiki link\nCtrl+Shift+F - Footnote\n[[...]] - Wiki link search\n/ - Command menu")}
+              title="Editor keyboard shortcuts"
+              aria-label="Editor keyboard shortcuts"
+              className="editor-tool-button"
+            >
+              ?
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {isTableActive && (
+        <div className="editor-context-bar" aria-label="Table controls">
+          <span className="editor-context-label">Table lab</span>
+          {tableActions.map((action) => (
+            <ToolButton key={action.label} action={action} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

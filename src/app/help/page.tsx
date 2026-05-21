@@ -46,26 +46,28 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">The Editor</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-2">The rich text editor provides a toolbar with formatting options:</p>
+          <p className="mb-2">The rich text editor opens as a compact editor cockpit:</p>
           <ul className="list-disc pl-5 mb-2 space-y-0.5">
-            <li><strong>B / I / S</strong> &mdash; Bold, Italic, Strikethrough</li>
-            <li><strong>H1 / H2 / H3</strong> &mdash; Heading levels</li>
-            <li><strong>&bull; / 1.</strong> &mdash; Bullet and ordered lists</li>
-            <li><strong>&ldquo;</strong> &mdash; Blockquote</li>
-            <li><strong>&lt;&gt;</strong> &mdash; Code block with syntax highlighting</li>
-            <li><strong>&mdash;</strong> &mdash; Horizontal rule</li>
-            <li><strong>Link icon</strong> &mdash; Insert a URL link</li>
-            <li><strong>Image icon</strong> &mdash; Upload an image</li>
-            <li><strong>[[]]</strong> &mdash; Insert a wiki link</li>
-            <li><strong>Table</strong> &mdash; Insert a collapsed-border table</li>
-            <li><strong>Detect Links</strong> &mdash; Scan text for potential wiki links</li>
-            <li><strong>fn</strong> &mdash; Insert a footnote / citation</li>
-            <li><strong>Mermaid</strong> &mdash; Insert a diagram (via slash command <code className="bg-surface-hover px-1 text-[12px]">/mermaid</code>)</li>
-            <li><strong>&Sigma;</strong> &mdash; Insert a math expression (KaTeX)</li>
-            <li><strong>Microphone</strong> &mdash; Voice dictation (browser speech recognition)</li>
+            <li><strong>Block</strong> &mdash; paragraph, heading, quote, and code block styles</li>
+            <li><strong>Text</strong> &mdash; bold, italic, strikethrough, inline code, superscript, and subscript</li>
+            <li><strong>Structure</strong> &mdash; bullet lists, ordered lists, pull quotes, and dividers</li>
+            <li><strong>Insert</strong> &mdash; URL links, wiki links, images, footnotes, collapsed-border tables, and math blocks</li>
+            <li><strong>Knowledge</strong> &mdash; detected wiki links, TOC, find/replace, and typewriter mode</li>
+            <li><strong>AI</strong> &mdash; rewrite selected text, expand selected text, or generate article content from headings</li>
+            <li><strong>Claims</strong> &mdash; mark selected claims as Certain, Probable, or Disputed</li>
+            <li><strong>Table lab</strong> &mdash; row, column, merge, split, header, and delete controls while editing a table</li>
           </ul>
           <p className="mb-2">
             <strong>Slash commands:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">/</code> anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo video embed, Twitter/X post embed, vertical timeline, GitHub Gist embed, and your saved snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code>.
+          </p>
+          <p className="mb-2">
+            <strong>Quick-insert deck:</strong> The block deck below the ribbon inserts scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks.
+          </p>
+          <p className="mb-2">
+            <strong>Editor readiness inspector:</strong> The side inspector shows readiness score, word/read-time metrics, wiki links, links, notes, tables, images, rich blocks, outline navigation, and quality checks. On narrow screens it stacks below the editor.
+          </p>
+          <p className="mb-2">
+            <strong>Selection lab:</strong> Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
           </p>
           <p className="mb-2">
             <strong>Markdown mode:</strong> Click the <code className="bg-surface-hover px-1 text-[12px]">Markdown</code> button to switch to raw markdown editing. Click <code className="bg-surface-hover px-1 text-[12px]">Rich Text</code> to switch back.

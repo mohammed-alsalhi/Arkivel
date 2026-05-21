@@ -22,27 +22,26 @@ Each article has:
 
 ## The Editor
 
-The rich text editor provides a toolbar with formatting options:
+The rich text editor opens as a compact editor cockpit:
 
 | Button | Action |
 |--------|--------|
-| **B / I / S** | Bold, Italic, Strikethrough |
-| **H1 / H2 / H3** | Heading levels |
-| **• / 1.** | Bullet and ordered lists |
-| **"** | Blockquote |
-| **<>** | Code block with syntax highlighting |
-| **—** | Horizontal rule |
-| Link icon | Insert a URL link |
-| Image icon | Upload an image |
-| **[[]]** | Insert a wiki link |
-| **Table** | Insert a collapsed-border table |
-| **Detect Links** | Scan text for potential wiki links |
-| **fn** | Insert a footnote / citation |
-| **Mermaid** | Insert a diagram (via `/mermaid` slash command) |
-| **Σ** | Insert a math expression (KaTeX) |
-| **Microphone** | Voice dictation (browser speech recognition) |
+| **Block** | Switch paragraph, heading, quote, and code block styles |
+| **Text** | Bold, Italic, Strikethrough, inline code, superscript, and subscript |
+| **Structure** | Bullet lists, ordered lists, pull quotes, and dividers |
+| **Insert** | URL links, wiki links, images, footnotes, collapsed-border tables, and math blocks |
+| **Knowledge** | Detect potential wiki links, insert a TOC, find/replace, and toggle typewriter mode |
+| **AI** | Rewrite selected text, expand selected text, or generate article content from headings |
+| **Claims** | Mark selected claims as Certain, Probable, or Disputed |
+| **Table lab** | Row, column, merge, split, header, and delete controls while editing a table |
 
 **Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, all heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo embed, Twitter/X post embed, vertical timeline, GitHub Gist embed, and your saved snippets via `/snippet`.
+
+**Quick-insert deck:** The block deck below the ribbon inserts scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks.
+
+**Editor readiness inspector:** The side inspector shows readiness score, word/read-time metrics, wiki links, links, notes, tables, images, rich blocks, outline navigation, and quality checks. On narrow screens it stacks below the editor.
+
+**Selection lab:** Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
 
 **Zen mode:** Click the expand icon next to the "Content:" label to enter zen mode — hides sidebar, header, and tabs, widens the editor. Press Esc to exit.
 

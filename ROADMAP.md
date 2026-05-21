@@ -16,6 +16,15 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.72.0
+
+- [x] Tiptap editor cockpit - the editor now opens with a ribbon control layer, command deck, readiness score, document signals, outline navigation, and quality pass panel
+- [x] Selection lab - active text selections expose inline rewrite, expand, wiki-link, URL-link, and footnote actions without hunting through the full toolbar
+- [x] Quick-insert workflow - common blocks such as scaffolds, callouts, tables, data tables, Mermaid diagrams, math, decision trees, timelines, collapsibles, and query blocks are one click away
+- [x] Contextual table lab - table row, column, merge, split, header, and delete controls appear only when the cursor is inside a table
+- [x] Editor autosave repair - collaborative editor updates now also notify the outer article edit form, restoring draft autosave status for normal non-live editing
+- [x] Responsive editor QA - Playwright coverage now loads the scratchpad editor cockpit on desktop and phone widths and asserts no horizontal overflow
+
 ## v4.71.2
 
 - [x] Collapsed article tables - editor, article, and shared UI tables now use zero-spaced collapsed borders so adjacent cells read as one merged grid

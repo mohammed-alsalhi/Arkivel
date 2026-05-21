@@ -65,6 +65,16 @@ Related actions are grouped visually with a hairline divider:
 <span className="w-px h-4 bg-border mx-0.5" />
 ```
 
+### Editor cockpit standard
+
+The Tiptap editor uses a compact cockpit instead of a plain button strip:
+- Top ribbon: brand mark, readiness score, Markdown toggle, inspector toggle, and grouped editing controls.
+- Toolbar groups: Block, History, Text, Structure, Insert, Knowledge, AI, Claims, and Color. Each group is bordered, compact, and allowed to wrap without horizontal scroll.
+- Quick-insert deck: a dense grid of common blocks below the ribbon. Tiles stay at fixed minimum heights and use short labels plus a small metadata tag.
+- Context bars: table controls appear only while editing a table. Do not show row, column, merge, split, or delete-table controls globally.
+- Inspector: document signals, outline navigation, and quality checks live beside the editor on desktop and stack below on mobile.
+- Selection lab: appears only when text is selected and exposes selection-specific commands. It must not reserve empty space when inactive.
+
 Article action panel group order:
 1. **Navigate** — Present
 2. **Collect** — Bookmark, + List

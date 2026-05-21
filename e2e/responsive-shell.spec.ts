@@ -173,6 +173,22 @@ test.describe("Responsive shell", () => {
     await expectNoHorizontalOverflow(page);
   });
 
+  test("renders the upgraded editor cockpit without viewport overflow", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/scratchpad");
+
+    await expect(page.locator(".editor-shell")).toBeVisible();
+    await expect(page.locator(".editor-command-deck")).toBeVisible();
+    await expect(page.locator(".editor-inspector")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.reload();
+    await expect(page.locator(".editor-shell")).toBeVisible();
+    await expect(page.locator(".editor-toolbar-v2")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  });
+
   test("renders presentation mode without overlapping chrome", async ({ page }) => {
     await mockPresentArticle(page);
 
@@ -183,7 +199,7 @@ test.describe("Responsive shell", () => {
     await expectNoHorizontalOverflow(page);
     await expectPresentChromeSeparated(page);
 
-    await page.getByRole("button", { name: "Next" }).click();
+    await page.getByRole("button", { name: "Next", exact: true }).click();
     await expect(page.locator(".presentation-content table")).toBeVisible();
     await expectPresentationTablesCollapsed(page);
     await expectNoHorizontalOverflow(page);
