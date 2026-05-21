@@ -22,6 +22,18 @@ export async function resolveWikiLinks(html: string): Promise<string> {
 
   const existingSlugs = new Set(existingArticles.map((a) => a.slug));
 
+  // Also check aliases for any titles that didn't match a slug
+  const missingTitles = titles.filter((t) => !existingSlugs.has(generateSlug(t)));
+  if (missingTitles.length > 0) {
+    const aliasMatches = await prisma.alias.findMany({
+      where: { alias: { in: missingTitles } },
+      select: { alias: true, article: { select: { slug: true } } },
+    });
+    for (const a of aliasMatches) {
+      existingSlugs.add(generateSlug(a.alias)); // treat the alias as resolved
+    }
+  }
+
   // Mark broken links
   let resolved = html;
   for (const title of titles) {
@@ -89,6 +101,43 @@ export async function getBacklinks(slug: string): Promise<{ id: string; title: s
         if (generateSlug(m[1]) === slug) return true;
       }
       return false;
+    })
+    .map(({ id, title, slug }) => ({ id, title, slug }));
+}
+
+/**
+ * Find articles that mention this article's title in plain text but don't
+ * have an explicit wiki link to it. These are "unlinked mentions".
+ */
+export async function getUnlinkedMentions(
+  slug: string,
+  title: string
+): Promise<{ id: string; title: string; slug: string }[]> {
+  if (!title || title.length < 3) return [];
+
+  // Find articles whose content contains the title text
+  const candidates = await prisma.article.findMany({
+    where: {
+      slug: { not: slug },
+      content: { contains: title, mode: "insensitive" },
+      status: "published",
+    },
+    select: { id: true, title: true, slug: true, content: true },
+  });
+
+  // Exclude articles that already have an explicit wiki link to this slug
+  const backlinks = await getBacklinks(slug);
+  const backlinkSlugs = new Set(backlinks.map((b) => b.slug));
+
+  // Also exclude if title appears only inside a wiki-link anchor
+  return candidates
+    .filter((a) => {
+      if (backlinkSlugs.has(a.slug)) return false;
+      // Check that the title appears as plain text (outside wiki-link elements)
+      const stripped = a.content
+        .replace(/<a[^>]*data-wiki-link[^>]*>.*?<\/a>/gi, "")
+        .replace(/<[^>]+>/g, " ");
+      return stripped.toLowerCase().includes(title.toLowerCase());
     })
     .map(({ id, title, slug }) => ({ id, title, slug }));
 }

@@ -3,6 +3,7 @@
 import type { Editor } from "@tiptap/react";
 import VoiceDictationButton from "./VoiceDictationButton";
 import HighlightColorPicker from "./HighlightColorPicker";
+import type { ClaimLevel } from "./ClaimMarkExtension";
 
 type Props = {
   editor: Editor | null;
@@ -359,6 +360,36 @@ export default function EditorToolbar({ editor, onImageUpload, onDetectLinks, de
       >
         ?
       </button>
+      <div className="mx-1 w-px bg-border" />
+      {/* Claim markers */}
+      {(["certain", "probable", "disputed"] as ClaimLevel[]).map((level) => {
+        const colors: Record<ClaimLevel, string> = {
+          certain: "text-green-600 hover:bg-green-50",
+          probable: "text-yellow-600 hover:bg-yellow-50",
+          disputed: "text-red-600 hover:bg-red-50",
+        };
+        const labels: Record<ClaimLevel, string> = {
+          certain: "Certain",
+          probable: "Probable",
+          disputed: "Disputed",
+        };
+        const isActive = editor.isActive("claimMark", { level });
+        return (
+          <button
+            key={level}
+            type="button"
+            onClick={() => (editor.chain().focus() as ReturnType<typeof editor.chain>).toggleClaim(level).run()}
+            title={`Mark selection as ${level} claim`}
+            className={`px-1.5 py-0.5 text-[10px] font-bold border rounded transition-colors ${
+              isActive
+                ? `border-current bg-current/10 ${colors[level]}`
+                : `border-transparent ${colors[level]}`
+            }`}
+          >
+            {labels[level]}
+          </button>
+        );
+      })}
       <div className="mx-1 w-px bg-border" />
       <HighlightColorPicker editor={editor} />
       <VoiceDictationButton editor={editor} />

@@ -47,7 +47,7 @@ export default function TranslateButton({ articleId }: Props) {
       <button
         onClick={() => setOpen((o) => !o)}
         disabled={loading}
-        className="flex items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors disabled:opacity-50"
+        className="ui-button disabled:opacity-50"
         aria-haspopup="true"
         aria-expanded={open}
       >
@@ -62,12 +62,12 @@ export default function TranslateButton({ articleId }: Props) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-50 bg-surface border border-border rounded shadow-lg min-w-[140px]">
+        <div className="ui-dropdown min-w-[140px]">
           {LOCALES.map(({ code, label }) => (
             <button
               key={code}
               onClick={() => translate(code)}
-              className="block w-full text-left px-3 py-1.5 text-xs hover:bg-surface-hover"
+              className="ui-dropdown-item"
             >
               {label}
             </button>
@@ -76,10 +76,10 @@ export default function TranslateButton({ articleId }: Props) {
       )}
 
       {result?.id && (
-        <span className="ml-2 text-xs text-green-600">Translation created as draft</span>
+        <span className="ml-2 text-[11px] text-success">Translation created as draft</span>
       )}
       {result?.error && (
-        <span className="ml-2 text-xs text-red-500">{result.error}</span>
+        <span className="ml-2 text-[11px] text-danger">{result.error}</span>
       )}
     </div>
   );

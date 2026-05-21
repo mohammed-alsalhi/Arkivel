@@ -65,11 +65,47 @@ Related actions are grouped visually with a hairline divider:
 <span className="w-px h-4 bg-border mx-0.5" />
 ```
 
-Article action bar group order:
+Article action panel group order:
 1. **Navigate** — Present
 2. **Collect** — Bookmark, + List
 3. **Share / Export** — Copy link, Share, Print, Export ▾ (all formats in one dropdown)
-4. **Reading tools** — Aa (dyslexia), RTL, Translate ▾
+4. **Read** — font size, font preference, focus, night, contrast, text-only, dyslexia, RTL, reading mode, width, theme
+5. **Tools** — audio, speed reader, quiz, tutor, review, translate, copy, duplicate
+
+Article pages should use the dedicated article shell:
+- Hero header for title, category, excerpt, edit attribution, freshness, verification, reading metrics, and co-authors.
+- Compact article action rail for Navigate, Collect, and Share actions, with dense Read and Tools controls behind disclosure menus. The rail must avoid fixed tile rows, avoid empty panel space, and keep dropdown menus clamped at tablet and phone widths.
+- Dedicated article tabbar styles for Article, Edit, History, Discussion, and Blame; do not reuse `.wiki-tabs`, which is reserved for in-content tabbed blocks.
+- Notice stack for status, review due, pinned, disambiguation, and maintenance flags.
+- Taxonomy footer with wrapping category/tag chips, not pipe-separated text.
+- Backlinks and dense article adjuncts should wrap as compact chips or panels rather than long inline lists.
+
+### Page shell standard
+
+General app pages should use the shared page shell before introducing route-specific layout:
+
+- `.ui-page-header` wraps the title block and right-aligned actions; it must wrap on phone widths rather than compressing controls.
+- `.ui-page-kicker` names the surface category (Browse, Discovery, Reference, Personal, Main page).
+- `.ui-page-title` stays serif, normal weight, and wraps long names without forcing horizontal scroll.
+- `.ui-page-dek` carries the page explanation or live result summary; avoid separate floating intro cards for this copy.
+- `.ui-page-actions` contains only clear commands such as Create article, Search, Tags, or API docs.
+- `.wiki-portal` remains the standard bordered module for repeated page sections, with `.wiki-compact-list` for dense sidebar and dashboard lists.
+
+The home page is the canonical front-page implementation: live stats, featured article, browse directory, recent updates, and compact sidebar modules. It should feel like a working wiki index, not a marketing landing page.
+
+The Canon Atlas at `/atlas` is the standard for immersive wiki surfaces: it may use a strong map-like visual as the primary working surface, but the map must be built from live wiki data, direct links, and readable operational queues. Keep the visual framed by practical dossier, continuity, and action modules so the page remains a tool, not a poster.
+
+The Canon Trails page at `/trails` is the standard for reader-facing advanced experiences: it should feel like guided reading through the wiki, not another metrics dashboard. Trail stops need large readable article titles, direct article links, compact reasons, visible route order, and enough metadata to explain the path without turning the page into a control room.
+
+Presentation mode at `/present/[slug]` is a full-height reading workspace. It must reserve separate regions for progress, top navigation, the slide stage, and footer controls; slide content scrolls inside the stage instead of overlapping chrome. Controls, dot navigation, counters, and keyboard hints must wrap or stack before they collide, and rich article content such as tables, code blocks, images, videos, and embeds must be constrained inside the slide viewport.
+
+The Knowledge Command Center at `/intelligence` is the standard for operational dashboard pages: dense serif score treatment, compact summary cells, a real data cockpit, prioritized action rows, and flat bordered intelligence cards. High-impact dashboards may use purposeful visual systems like the article constellation, readiness radar, and impact simulator when the visuals are fed by live product data and remain navigable on phone, tablet, laptop, and wide desktop. Avoid decorative charts, nested cards, or marketing-style explanation blocks.
+
+### Brand and header controls
+
+- Sidebar and mobile header branding should use the configured compact logo mark, with the full square logo reserved for metadata, app icons, and larger brand surfaces.
+- The global header search should stay quiet by default: show a compact trigger in the top bar, then expand into the input only when search is active.
+- Phone navigation labels should describe the destination or mode. The sidebar trigger is Browse, not Menu, because it opens the wiki navigation spine.
 
 ### Dropdowns
 
@@ -79,6 +115,18 @@ Article action bar group order:
 - Each item: `text-left px-3 py-1.5 text-[12px] text-muted hover:text-foreground hover:bg-surface-hover transition-colors`.
 - Close on outside click via `mousedown` listener.
 - The trigger chevron rotates `rotate-180` when open.
+
+### Responsive layout and overlays
+
+- Desktop and tablet layouts keep the sidebar as the primary navigation spine; phone layouts use the bottom navigation for Home, Search, Create, Recent, and Browse.
+- Full-height workspace routes (`/ask`, `/graph`, `/split`, `/map`, `/present/*`) do not show the bottom navigation; they keep the compact top menu so composers, canvases, maps, and graph controls remain usable.
+- Fixed controls must not cover other interactive elements. If two controls compete for the same small-screen corner, remove one at that breakpoint or move it into the primary navigation.
+- Flex rows that can contain user content or translated labels must include `min-w-0`, wrapping, or truncation. Long words should not force page-level horizontal scroll.
+- Tables and dense data panels should keep their container width stable and scroll internally on narrow screens.
+- Dropdowns and popovers must clamp to the viewport on phones. Header dropdowns should become fixed, inset panels when absolute alignment would push them off-screen.
+- Modal headers, footers, and button rows must wrap before they overflow. Avoid fixed-width modal internals unless there is an internal scroll region.
+- Search and article-list discovery filters should use wrapping chips, stacked sidebars, or constrained internal scroll areas instead of pipe-separated text rows that become unreadable on narrow screens.
+- Responsive QA is not mobile-only: new or changed global UI should be checked at phone, tablet, laptop, and wide desktop widths for horizontal overflow, clipped controls, and covered interactive targets.
 
 ---
 
@@ -105,6 +153,7 @@ Dark mode is driven by `html[data-theme="dark"]` overrides — never use `dark:`
 
 - **Headings**: serif (`var(--font-serif)`, Georgia stack). `font-normal` — wiki headings are not bold.
 - **Body**: system sans-serif stack via Tailwind default.
+- **Article body**: serif by default (`var(--font-serif)`), with the article font preference control offering Serif, Sans, and Mono overrides.
 - **UI labels**: `text-[11px]` or `text-[12px]`. Do not use `text-xs` (14px) for compact UI chrome — it is too large.
 - **Code**: monospace, syntax-highlighted via lowlight.
 - **Readability cap**: wiki article content has a max-width of `65ch` in dyslexia mode; otherwise inherits the content column width.

@@ -1,182 +1,188 @@
-# Arkivel
+<p align="center">
+  <img src="public/brand/arkivel-logo.png" alt="Arkivel" width="132" />
+</p>
 
-The self-hosted knowledge platform. Build a personal knowledge base, team handbook, or worldbuilding encyclopedia — on infrastructure you own.
+<h1 align="center">Arkivel</h1>
 
-**Features:** Rich text editor with wiki links and syntax highlighting, footnotes/citations, revision history with inline diff, dark mode, sub-categories, nested tags, article templates, full-text search with filters, interactive map with layers, article graph visualization, multi-user auth with roles, RSS/Atom feeds, public REST API, webhooks, MediaWiki import, PDF/Markdown/HTML/ZIP export, article status workflow, watchlist & notifications, disambiguation pages, plugin system, reading time estimator, draft share links, article comparison view, popularity & contributor leaderboards, expiry warning banners, "you might also like" recommendations, mark-as-verified workflow, tag synonyms, discussion index, named article snapshots, article co-authors, article flags, floating table of contents, article stats panel, revision history CSV export, distraction-free reading mode, activity contribution heat map, wiki stats dashboard, mentions feed, article editor lock, one-click revision restore, cover image focal point picker, categorized keyboard shortcuts overlay, search query analytics, image captions, password-protected articles, category cover images, site-wide announcement banner, per-article 30-day view sparkline, TOC generator in editor, custom editor snippets, article freshness badge, reading streak tracker, category watchlist, inline AI text rewrite, category merge tool, word-count distribution chart, keyboard shortcut customization, wiki creation timeline, glossary system with hover-card definitions, reading level badge, pull quote blocks, heading permalink links, category statistics dashboard, In Brief summary callout, smart typography (curly quotes, em dash, ellipsis), browser-local reading history, sticky article header, last-visit badge, AI outline builder, AI alt-text suggestions, article Q&A widget, edit suggestions with admin review, reader retention analytics, referrer tracking, superscript/subscript, text highlighting, accordion/FAQ blocks, two-column layout, YouTube/Vimeo embeds, GitHub Gist embeds, satisfaction star rating, hot articles trending widget, per-article todo checklist, tag rename/management admin, word-count range search filter, AI grammar/style check panel in editor, bulk tag add/remove on article list, scroll position memory, PWA manifest (installable), external link click tracking, prefetch on hover, font size preference, focus paragraph mode, saved search alerts, RSVP speed reader with ORP highlighting, article blame view (paragraph-level authorship), article polls with session-based voting, live reading ETA counter, night reading mode (warm sepia), browser-local search history, high-contrast accessibility mode, text-only reading mode, content warning tags (dismissible CW banners), content gap analysis admin dashboard, HSL accent theme customizer, article font preference (serif/sans/mono), per-article private quick notes (localStorage), maintenance mode with site-wide banner, cleanup tags (needs-images/expansion/citations/review/stub/outdated) with orange notice banners, article adoption workflow, copy article as plain text, scheduled announcements (go-live datetime), read-only mode with site-wide banner, revision pruning admin tool, user activity log admin page, session management (view/revoke active sessions), AI tag and category suggestions in article editor, writing velocity weekly bar chart, featured article badge, AI title suggestions, auto-save indicator in editor, character count in article byline, did-you-mean search suggestions, tag cloud page, article width preference, local timezone timestamps, category growth chart, image lightbox, AI section expander in editor, bulk JSON export, per-article analytics tab, series progress tracker, vertical timeline blocks, Twitter/X embed blocks, series table of contents, bulk article JSON import, editor zen mode, word frequency cloud, dead-end article finder, duplicate content detector, orphan article finder, writing session goal with real-time progress bar, long article splitter suggestions, random article with category filter, new articles feed widget, top referrers dashboard, tag usage trends heat-map, analytics CSV export, smart URL paste auto-link, typewriter scrolling mode, short-article merger suggestions, sidebar position preference, tabbed content blocks, gallery grid blocks, conversational AI wiki assistant (floating chat panel), AI article generation from outline, button/CTA blocks, divider with label blocks, AI revision summary generation, article quiz mode, streaming AI wiki oracle (/ask), knowledge synthesis (AI-written category overviews), cinematic presentation mode.
+<p align="center">
+  <strong>Self-hosted wiki infrastructure for private knowledge, team handbooks, and worldbuilding canon.</strong>
+</p>
 
-## Deploy to Vercel (Recommended)
+<p align="center">
+  <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmohammed-alsalhi%2Farkivel&env=DATABASE_URL,ADMIN_SECRET&envDescription=DATABASE_URL%3A%20PostgreSQL%20connection%20string.%20ADMIN_SECRET%3A%20Password%20for%20admin%20access.&project-name=arkivel">
+    <img alt="Deploy with Vercel" src="https://vercel.com/button" />
+  </a>
+</p>
 
-The fastest way to get Arkivel running. You can also deploy anywhere that runs Node.js — see [Run Locally](#run-locally) and [Deploy to a Custom Domain](#deploy-to-a-custom-domain) for other options.
+<p align="center">
+  <a href="#run-locally"><img alt="Run locally" src="https://img.shields.io/badge/Run%20locally-Quickstart-14866d?style=for-the-badge" /></a>
+  <a href="#core-experiences"><img alt="Core experiences" src="https://img.shields.io/badge/Core%20experiences-Explore-3366cc?style=for-the-badge" /></a>
+  <a href="#api-and-integrations"><img alt="API docs" src="https://img.shields.io/badge/API%20and%20integrations-Docs-2f5fa8?style=for-the-badge" /></a>
+  <a href="#configuration"><img alt="Configuration" src="https://img.shields.io/badge/Configuration-Environment-6b5b95?style=for-the-badge" /></a>
+</p>
 
-### 1. Set up the database
+<p align="center">
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=nextdotjs" />
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=111" />
+  <img alt="Prisma 7" src="https://img.shields.io/badge/Prisma-7-2d3748?style=flat-square&logo=prisma" />
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-Neon-4169e1?style=flat-square&logo=postgresql&logoColor=white" />
+  <img alt="Tailwind CSS 4" src="https://img.shields.io/badge/Tailwind%20CSS-4-38bdf8?style=flat-square&logo=tailwindcss&logoColor=white" />
+  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-0b7285?style=flat-square" />
+</p>
 
-Create a free PostgreSQL database on [Neon](https://neon.tech):
-1. Sign up and create a new project
-2. Copy the connection string (looks like `postgresql://user:pass@host/dbname?sslmode=require`)
+## What Arkivel Is
 
-### 2. Deploy
+Arkivel is a wiki application for people who need a real knowledge base, not a notes folder. It combines article writing, revision history, wiki links, roles, search, maps, feeds, public APIs, and AI-assisted reading/editing in one self-hosted Next.js app.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmohammed-alsalhi%2Farkivel&env=DATABASE_URL,ADMIN_SECRET&envDescription=DATABASE_URL%3A%20PostgreSQL%20connection%20string.%20ADMIN_SECRET%3A%20Password%20for%20admin%20access.&project-name=arkivel)
+It is designed to feel like a working encyclopedia: dense, readable, serif-forward, and content-first. The newer flagship surfaces are still grounded in real wiki data, so they help readers move through the canon instead of becoming decorative dashboards.
 
-Or manually:
-1. Fork this repository
-2. Import it in [Vercel](https://vercel.com/new)
-3. Add environment variables (see below)
-4. Deploy
+## Core Experiences
 
-### 3. Configure environment variables
+| Experience | Route | What it does |
+|---|---:|---|
+| Article reader and editor | `/articles/[slug]` | Serif-first reading, wiki links, action rail, revisions, discussions, infoboxes, footnotes, tags, backlinks, and rich editing. |
+| Canon Trails | `/trails` | Builds guided reading routes from real article links, backlinks, categories, recency, depth, and engagement signals. |
+| Canon Atlas | `/atlas` | Projects the wiki into territories, story threads, dossiers, continuity pressure, and next atlas moves. |
+| Knowledge Cockpit | `/intelligence` | Runs 20 live quality, graph, canon, editorial, and audience engines with a constellation, radar, and impact simulator. |
+| Article graph | `/graph` | D3 force graph of wiki links and semantic relations, with focused subgraphs. |
+| Ask My Wiki | `/ask` | Streaming AI oracle grounded in wiki search and article sources. |
+| API docs | `/api-docs` | Public REST API, operational feeds, sitemap, RSS, Atom, and integration references. |
 
-A `.env.example` template is included in the repo with all available variables and descriptions. Copy it to `.env` and fill in your values:
+## Feature Map
 
-```bash
-cp .env.example .env
-```
+**Writing and editing**
 
-Only `DATABASE_URL` and `ADMIN_SECRET` are required — everything else has sensible defaults and is optional. Here's the full list:
+- Tiptap rich text editor with slash commands, Markdown mode, syntax highlighting, tables, footnotes, images, captions, pull quotes, two-column blocks, accordions, vertical timelines, and auto-save.
+- Wiki link autocomplete with `[[Article Name]]`, broken-link styling, backlinks, semantic relations, redirects, disambiguation pages, templates, custom metadata schemas, infoboxes, and automatic revision snapshots.
+- AI assistance for rewriting, title/category/tag suggestions, outline building, grammar and style checks, alt text, section expansion, article generation, category synthesis, and revision summaries.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `ADMIN_SECRET` | Yes | Password to access admin features |
-| `NEXT_PUBLIC_ARKIVEL_NAME` | No | Site name shown in header and metadata (default: `Arkivel`) |
-| `NEXT_PUBLIC_ARKIVEL_TAGLINE` | No | Short tagline in the top bar (default: `The self-hosted knowledge platform`) |
-| `NEXT_PUBLIC_ARKIVEL_DESCRIPTION` | No | Meta description for SEO |
-| `NEXT_PUBLIC_ARKIVEL_WELCOME_TEXT` | No | Welcome message on the home page |
-| `NEXT_PUBLIC_ARKIVEL_FOOTER_TEXT` | No | Footer text after the site name |
-| `NEXT_PUBLIC_MAP_ENABLED` | No | Set to `true` to enable the interactive map page |
-| `NEXT_PUBLIC_MAP_LABEL` | No | Label for the map in navigation (default: `Map`) |
-| `NEXT_PUBLIC_MAP_IMAGE` | No | Path or URL to the map background image |
-| `NEXT_PUBLIC_DEFAULT_LOCALE` | No | Default locale for the wiki (default: `en`) |
-| `NEXT_PUBLIC_ARTICLES_PER_PAGE` | No | Articles per page in listings (default: `20`) |
-| `NEXT_PUBLIC_MAX_UPLOAD_SIZE` | No | Max image upload size in bytes (default: `5242880` / 5 MB) |
-| `NEXT_PUBLIC_ENABLE_REGISTRATION` | No | Enable user registration (default: `true`) |
-| `NEXT_PUBLIC_ENABLE_DISCUSSIONS` | No | Enable article discussion threads (default: `true`) |
-| `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob token for image uploads |
+**Reading and discovery**
 
-### Additional Features
+- Full-text search with relevance ranking, command palette navigation, random article, recent changes, article graph, Canon Trails, Canon Atlas, Ask My Wiki, explore mode, saved searches, reading history, and sticky article headers.
+- Reader tools include serif/sans/mono font preference, size and width controls, reading mode, focus mode, night mode, high contrast, text-only mode, speed reader, article quizzes, tutor mode, audio narration, and presentation mode.
 
-- **RSS Feed:** Subscribe at `/feed.xml` (RSS 2.0) or `/feed/atom` (Atom)
-- **Public API:** REST API at `/api/v1/` with API key auth — see `/api-docs` for documentation
-- **Webhooks:** Configure webhook URLs for article create/update/delete events
-- **User Accounts:** Multi-user auth with viewer/editor/admin roles at `/register` and `/login`
-- **Article Graph:** Interactive D3 network visualization at `/graph`
-- **MediaWiki Import:** Import `.xml` MediaWiki dumps alongside .md, .txt, .html, .json formats
-- **CI/CD:** GitHub Actions workflow included for linting, type-checking, and building
+**Governance and collaboration**
 
-> **Tip:** Variables starting with `NEXT_PUBLIC_` are baked in at build time. If you change them, you'll need to redeploy/rebuild for the changes to take effect.
+- Multi-user auth with viewer/editor/admin roles, legacy admin secret support, status workflow, review due dates, verification stamps, edit suggestions, discussions, co-authors, locks, snapshots, restore, watchlists, notifications, and activity logs.
 
-### 4. Seed categories (optional)
+**Knowledge operations**
 
-After deploying, you can seed default categories by running the seed script, or just create categories manually through the admin interface.
+- Dashboards for wiki stats, health, content gaps, search analytics, category growth, writing velocity, referrers, retention, word counts, stubs, orphans, dead ends, duplicate content, long articles, cleanup tags, and maintenance/read-only mode.
+
+**Publishing and integrations**
+
+- RSS, Atom, public REST API, API keys, webhooks, sitemap, robots, MediaWiki import, Markdown/HTML/ZIP/JSON/CSV exports, Slack/Discord command hooks, embeds, PWA manifest, Vercel Blob uploads, and optional map layers.
 
 ## Run Locally
 
-### Prerequisites
-- Node.js 18+
-- PostgreSQL database (local or remote)
+**Prerequisites**
 
-### Setup
+- Node.js 18+
+- PostgreSQL database, local or remote
+- `DATABASE_URL` and `ADMIN_SECRET`
 
 ```bash
-# Clone the repository
 git clone https://github.com/mohammed-alsalhi/arkivel.git
 cd arkivel
-
-# Install dependencies
 npm install
-
-# Set up environment variables
 cp .env.example .env
-# Edit .env with your DATABASE_URL and ADMIN_SECRET
 ```
 
-### Start the database
-
-**Option A: Use a remote database (Neon, Supabase, etc.)**
-
-Set `DATABASE_URL` in `.env` to your connection string.
-
-**Option B: Use a local PostgreSQL**
+Edit `.env`, then prepare the database and start the app:
 
 ```bash
-# If using Docker:
-docker run --name arkivel-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=wiki -p 5432:5432 -d postgres
-
-# Set in .env:
-# DATABASE_URL="postgresql://postgres:postgres@localhost:5432/wiki"
-```
-
-### Run
-
-```bash
-# Push the schema to your database
 npx prisma db push
-
-# (Optional) Seed default categories
 node prisma/seed.mjs
-
-# Start the dev server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). If `ADMIN_SECRET` is empty in `.env`, you'll have admin access automatically.
+Open [http://localhost:3000](http://localhost:3000). If `ADMIN_SECRET` is empty in local development, admin access is granted automatically.
 
-## Deploy to a Custom Domain
+## Deploy
 
-### Option 1: Vercel (easiest)
+### Vercel
 
-After deploying to Vercel, go to your project settings > Domains and add your custom domain. Vercel handles SSL automatically.
+1. Create a PostgreSQL database on [Neon](https://neon.tech), Supabase, or another hosted Postgres provider.
+2. Click the Vercel button at the top of this README, or import the repository in Vercel.
+3. Add `DATABASE_URL` and `ADMIN_SECRET`.
+4. Deploy.
 
-### Option 2: Self-host with Node.js
+### Docker
 
 ```bash
-# Build the production bundle
-npm run build
+docker compose up -d
+```
 
-# Start the production server
+Or build and run manually:
+
+```bash
+docker build -t arkivel .
+docker run -p 3000:3000 --env-file .env arkivel
+```
+
+### Node.js
+
+```bash
+npm run build
 npm start
 ```
 
-The app runs on port 3000 by default. Put it behind a reverse proxy (Nginx, Caddy) for SSL and custom domain:
+Put the app behind Caddy, Nginx, or your platform's reverse proxy for TLS and custom domains.
 
-**Nginx example:**
-```nginx
-server {
-    listen 443 ssl;
-    server_name wiki.yourdomain.com;
+## Configuration
 
-    ssl_certificate /path/to/cert.pem;
-    ssl_certificate_key /path/to/key.pem;
+A full template lives in [.env.example](.env.example). Only two variables are required.
 
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
+| Variable | Required | Purpose |
+|---|---:|---|
+| `DATABASE_URL` | Yes | PostgreSQL connection string. |
+| `ADMIN_SECRET` | Yes | Legacy admin password and local bootstrap secret. |
+| `NEXT_PUBLIC_ARKIVEL_NAME` | No | Site name in shell, metadata, and manifest. |
+| `NEXT_PUBLIC_ARKIVEL_TAGLINE` | No | Short tagline in the app chrome. |
+| `NEXT_PUBLIC_ARKIVEL_DESCRIPTION` | No | SEO/social description. |
+| `NEXT_PUBLIC_ARKIVEL_LOGO` | No | Full square logo, default `/brand/arkivel-logo.png`. |
+| `NEXT_PUBLIC_ARKIVEL_LOGO_MARK` | No | Compact sidebar/mobile mark, default `/brand/arkivel-mark.png`. |
+| `NEXT_PUBLIC_ARKIVEL_APP_ICON` | No | Manifest/app icon, default `/brand/arkivel-icon-512.png`. |
+| `NEXT_PUBLIC_MAP_ENABLED` | No | Set `true` to enable the interactive map. |
+| `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob token for image uploads. |
 
-**Caddy example (auto SSL):**
-```
-wiki.yourdomain.com {
-    reverse_proxy localhost:3000
-}
-```
+`NEXT_PUBLIC_*` values are baked into the build. Rebuild or redeploy after changing them.
 
-### Option 3: Docker
+## API And Integrations
 
-A `Dockerfile` and `docker-compose.yml` are included in the repo:
+| Surface | Route | Notes |
+|---|---:|---|
+| Public API | `/api/v1/*` | API-key protected article, category, search, and tag endpoints. |
+| API documentation | `/api-docs` | In-app reference for endpoints, auth, and errors. |
+| Canon Trails feed | `/api/trails` | Guided route report for demos, readers, and automation. |
+| Canon Atlas feed | `/api/atlas` | Territory, dossier, thread, continuity, and move report. |
+| Knowledge feed | `/api/intelligence` | Cockpit score, engines, radar, graph, pressure model, and action queue. |
+| RSS | `/feed.xml` | RSS 2.0 feed. |
+| Atom | `/feed/atom` | Atom feed. |
+| Webhooks | `/api/webhooks` | Article create/update/delete callbacks. |
+
+## Architecture Snapshot
+
+- **Framework:** Next.js 16 App Router, React 19, TypeScript
+- **Data:** Prisma 7, PostgreSQL, `@prisma/adapter-pg`, Neon-compatible `pg` pool
+- **Editor:** Tiptap 3 with wiki links, footnotes, tables, code highlighting, and custom blocks
+- **Styling:** Tailwind CSS 4 with CSS variables in `src/app/globals.css`
+- **Auth:** Legacy admin cookie plus multi-user sessions with viewer/editor/admin roles
+- **Content model:** HTML article body, optional raw Markdown, revisions, categories, tags, translations, relations, discussions, watchlists, notifications, and operational metrics
+
+See [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), [ROADMAP.md](ROADMAP.md), [docs/features.md](docs/features.md), and [docs/help.md](docs/help.md) for the contributor-level references.
+
+## Commands
 
 ```bash
-# Using Docker Compose (includes PostgreSQL):
-docker compose up -d
-
-# Or build and run manually:
-docker build -t arkivel .
-docker run -p 3000:3000 --env-file .env arkivel
+npm run dev          # Start Next.js dev server
+npm run build        # prisma db push + next build
+npm run lint         # ESLint
+npm run test         # Vitest
+npm run test:e2e     # Playwright
+npx prisma generate  # Regenerate Prisma client
+npx prisma db push   # Push schema changes
+node prisma/seed.mjs # Seed default categories
 ```
 
 ## License

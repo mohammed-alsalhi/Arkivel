@@ -34,7 +34,7 @@ export default function CopyButton({ text, label = "Copy", className = "" }: Pro
   return (
     <button
       onClick={handleCopy}
-      className={`flex items-center gap-1 h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors ${className}`}
+      className={`ui-button ${className}`}
       title={copied ? "Copied!" : label}
     >
       {copied ? "Copied!" : label}

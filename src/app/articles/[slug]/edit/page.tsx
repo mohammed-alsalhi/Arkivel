@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import TiptapEditor, { type TiptapEditorHandle } from "@/components/editor/TiptapEditor";
+import CollaborativeEditor from "@/components/editor/CollaborativeEditor";
 import TagPicker from "@/components/TagPicker";
 import CategorySelect from "@/components/CategorySelect";
 import InfoboxEditor from "@/components/InfoboxEditor";
@@ -11,6 +12,8 @@ import { useAdmin } from "@/components/AdminContext";
 import ArticleLockGuard from "@/components/ArticleLockGuard";
 import FocalPointPicker from "@/components/FocalPointPicker";
 import ZenModeToggle from "@/components/editor/ZenModeToggle";
+import SmartSuggestions from "@/components/editor/SmartSuggestions";
+import { getSearchResults } from "@/lib/search-response";
 
 type CategoryItem = { id: string; name: string; slug: string; parentId: string | null; children?: CategoryItem[] };
 
@@ -88,7 +91,9 @@ export default function EditArticlePage() {
       if (!found) {
         const searchRes = await fetch(`/api/search?q=${params.slug}&limit=1`);
         if (searchRes.ok) {
-          const results = await searchRes.json();
+          const results = getSearchResults<{ id: string; title: string; slug: string }>(
+            await searchRes.json()
+          );
           if (results.length > 0) {
             const detailRes = await fetch(`/api/articles/${results[0].id}`);
             if (detailRes.ok) {
@@ -319,22 +324,21 @@ export default function EditArticlePage() {
 
   return (
     <div>
-      {/* Tabs */}
-      <div className="wiki-tabs">
-        <Link href={`/articles/${article.slug}`} className="wiki-tab">
+      <nav className="article-tabbar" aria-label="Article sections">
+        <Link href={`/articles/${article.slug}`} className="article-tab">
           Article
         </Link>
-        <span className="wiki-tab wiki-tab-active">Editing</span>
-        <Link href={`/articles/${article.slug}/history`} className="wiki-tab">
+        <span className="article-tab article-tab-active">Editing</span>
+        <Link href={`/articles/${article.slug}/history`} className="article-tab">
           History
         </Link>
-        <Link href={`/articles/${article.slug}/discussion`} className="wiki-tab">
+        <Link href={`/articles/${article.slug}/discussion`} className="article-tab">
           Discussion
         </Link>
-      </div>
+      </nav>
 
       {/* Edit form */}
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
+      <div className="border border-border bg-surface px-5 py-4">
         <ArticleLockGuard articleId={article.id} isAdmin={isAdmin} />
         <h1
           className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-3"
@@ -360,7 +364,7 @@ export default function EditArticlePage() {
             />
             {titleSuggestions.length > 0 && (
               <div className="mt-1 border border-border bg-surface">
-                <p className="px-2 pt-1.5 text-[10px] text-muted font-bold uppercase tracking-wide">Suggestions — click to apply</p>
+                <p className="px-2 pt-1.5 text-[10px] text-muted font-bold uppercase">Suggestions — click to apply</p>
                 {titleSuggestions.map((s, i) => (
                   <button
                     key={i}
@@ -492,10 +496,20 @@ export default function EditArticlePage() {
                 {autoSaveStatus === "saved" && (
                   <span className="text-[11px] text-green-600 dark:text-green-400">Draft saved</span>
                 )}
+                <SmartSuggestions
+                  title={title}
+                  getHtml={() => editorRef.current?.getHTML() ?? ""}
+                />
                 <ZenModeToggle />
               </div>
             </div>
-            <TiptapEditor ref={editorRef} content={article.content} articleTitle={title} onUpdate={handleEditorUpdate} />
+            <CollaborativeEditor
+              articleId={article.id}
+              initialHtml={article.content}
+              articleTitle={title}
+              editorRef={editorRef}
+              onHtmlChange={() => handleEditorUpdate()}
+            />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">

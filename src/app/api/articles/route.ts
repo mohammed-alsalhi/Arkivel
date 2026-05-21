@@ -19,21 +19,25 @@ export async function GET(request: NextRequest) {
   if (status) where.status = status;
   if (slug) where.slug = slug;
 
-  const [articles, total] = await Promise.all([
-    prisma.article.findMany({
-      where,
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: { updatedAt: "desc" },
-      include: {
-        category: true,
-        tags: { include: { tag: true } },
-      },
-    }),
-    prisma.article.count({ where }),
-  ]);
+  try {
+    const [articles, total] = await Promise.all([
+      prisma.article.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { updatedAt: "desc" },
+        include: {
+          category: true,
+          tags: { include: { tag: true } },
+        },
+      }),
+      prisma.article.count({ where }),
+    ]);
 
-  return NextResponse.json({ articles, total, page, limit });
+    return NextResponse.json({ articles, total, page, limit });
+  } catch {
+    return NextResponse.json({ articles: [], total: 0, page, limit });
+  }
 }
 
 export async function POST(request: NextRequest) {

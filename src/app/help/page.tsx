@@ -8,17 +8,20 @@ export const metadata: Metadata = {
 export default function HelpPage() {
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Help &amp; Features Guide
-      </h1>
-
-      <p className="text-[13px] text-muted mb-4">
-        This guide covers all features available in the wiki. Use the sections below to learn how to create, edit, organize, and get the most from your articles.
-        For a feature overview see <Link href="/features">Features</Link>.
-      </p>
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Reference</p>
+          <h1 className="ui-page-title">Help &amp; Features Guide</h1>
+          <p className="ui-page-dek">
+            This guide covers all features available in the wiki. Use the sections below to learn how to create, edit, organize, and get the most from your articles.
+            For a feature overview see <Link href="/features">Features</Link>.
+          </p>
+        </div>
+        <div className="ui-page-actions">
+          <Link href="/features" className="ui-button">Features</Link>
+          <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
+        </div>
+      </header>
 
       {/* Getting Started */}
       <div className="wiki-portal mb-4">
@@ -103,16 +106,16 @@ export default function HelpPage() {
         <div className="wiki-portal-header">Presentation Mode</div>
         <div className="wiki-portal-body text-[13px]">
           <p>
-            Click <strong>Present</strong> in the article action bar to open the article as a slideshow. Each H2 / H3 heading becomes a new slide. Use arrow keys or click to advance. Press <kbd>Esc</kbd> to exit.
+            Click <strong>Present</strong> in the article action bar to open the article as a slideshow. Each H2 / H3 heading becomes a new slide. Use arrow keys or click to advance. Press <kbd>Esc</kbd> to exit. Long slides scroll inside the slide stage so the title, progress, overview, and navigation controls stay reachable.
           </p>
         </div>
       </div>
 
-      {/* Article Action Bar */}
+      {/* Article Action Panel */}
       <div className="wiki-portal mb-4">
-        <div className="wiki-portal-header">Article Action Bar</div>
+        <div className="wiki-portal-header">Article Action Panel</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-2">The toolbar below the article title provides quick actions grouped into four sections:</p>
+          <p className="mb-2">The compact rail below the article header keeps Navigate, Collect, and Share actions visible. Read and Tools open as disclosure menus so dense reading controls stay available without taking over the page.</p>
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Present</strong> &mdash; open as a slideshow</li>
             <li><strong>Bookmark</strong> &mdash; save to your personal bookmarks with an optional note</li>
@@ -130,7 +133,7 @@ export default function HelpPage() {
             <li><strong>High contrast (A)</strong> &mdash; pure black/white/yellow theme for maximum readability; persisted</li>
             <li><strong>Text only (T)</strong> &mdash; hides images and media from the article for distraction-free reading; persisted</li>
             <li><strong>Speed read</strong> &mdash; RSVP speed-reading modal; choose 150/250/400/600 WPM; ORP pivot character highlighted; Start/Pause/Reset controls</li>
-            <li><strong>Font preference</strong> &mdash; dropdown to switch article body font between Default, Serif, Sans, or Mono; persisted</li>
+            <li><strong>Font preference</strong> &mdash; dropdown to switch article body font between Serif, Sans, or Mono; Serif is the default; persisted</li>
             <li><strong>Accent color</strong> &mdash; color-swatch button opens an HSL hue slider to customize the wiki accent color; persisted</li>
             <li><strong>Quick note</strong> &mdash; collapsible private note panel per article; stored only in this browser; save and delete controls</li>
             <li><strong>Copy plain text</strong> &mdash; button in article toolbar copies the article body as plain text (HTML stripped)</li>
@@ -166,6 +169,7 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li>The search bar provides instant results as you type; press <strong>Enter</strong> for the <Link href="/search">full search page</Link></li>
+            <li>Instant search, the full search page, command palette, wiki-link autocomplete, split view article pickers, and edit fallback all use the same search result contract</li>
             <li>Multi-word queries use <strong>AND</strong> logic — every word must appear somewhere in the article</li>
             <li>Results are ranked: exact title match &gt; starts with &gt; title contains &gt; content-only</li>
             <li><strong>Semantic search:</strong> set <code className="bg-surface-hover px-1 text-[12px]">OPENAI_API_KEY</code> to blend AI-ranked results based on meaning, not just keywords</li>
@@ -188,6 +192,10 @@ export default function HelpPage() {
             <li><strong>Duplicate detection</strong> &mdash; checks for semantically similar existing articles when creating a new one.</li>
             <li><strong>Category suggestions</strong> &mdash; Claude suggests topics missing from a category.</li>
             <li><strong>Quiz generation</strong> &mdash; Claude generates 5 multiple-choice questions from any article for self-testing.</li>
+            <li><strong>AI auto-fill</strong> &mdash; on the new article page, type a title and choose a template type (Person, Event, Place, Concept, Organization, Product); click <em>Auto-fill</em> to generate a full structured draft.</li>
+            <li><strong>Category overview generator</strong> &mdash; button on category pages; AI reads all published articles and writes a 2–4 paragraph encyclopedic introduction.</li>
+            <li><strong>AI fact-check</strong> &mdash; button at the bottom of any article; Claude analyzes 3–6 factual claims and rates each as Verified / Plausible / Uncertain / Questionable with a confidence bar.</li>
+            <li><strong>Smart editor suggestions</strong> &mdash; click <em>Suggestions</em> in the editor toolbar while writing; shows unlinked article mentions, related pages, and AI-generated ideas for missing sections.</li>
           </ul>
         </div>
       </div>
@@ -200,6 +208,10 @@ export default function HelpPage() {
             <li><strong>Learning Paths</strong> &mdash; curated sequences of articles. Browse at <Link href="/learning-paths">/learning-paths</Link> or create your own. Progress is tracked per path.</li>
             <li><strong>Flashcards</strong> &mdash; create flashcards from any article. Review due cards at <Link href="/flashcards">/flashcards</Link> using the SM-2 spaced repetition algorithm (grade 0–5 after each card).</li>
             <li><strong>Quizzes</strong> &mdash; AI-generated multiple choice questions per article. Results saved to your quiz history.</li>
+            <li><strong>AI Tutor Mode</strong> &mdash; <em>Tutor me</em> button on any article opens a Socratic AI chat that asks probing questions, tests comprehension, and gives feedback.</li>
+            <li><strong>Spaced repetition review queue</strong> &mdash; click <em>Review</em> on any article to enroll it; due cards appear at <Link href="/review">/review</Link> using SM-2 scheduling.</li>
+            <li><strong>Daily digest</strong> &mdash; personalised in-app briefing at <Link href="/digest">/digest</Link>; sections: Article of the Day, due reviews, watched updates, Did You Know, On This Day.</li>
+            <li><strong>Audio narration</strong> &mdash; <em>Listen</em> button on every article narrates the full text using browser TTS with pause/stop and a progress bar.</li>
             <li><strong>Reading progress</strong> &mdash; mark articles as read. Track completion by category via the progress ring on category pages.</li>
             <li><strong>Email digest</strong> &mdash; opt in under Settings → Digest to receive a scheduled summary email of watchlist changes.</li>
           </ul>
@@ -211,11 +223,15 @@ export default function HelpPage() {
         <div className="wiki-portal-header">Discovery &amp; Navigation</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Main Page</strong> &mdash; <Link href="/">/</Link> is the working wiki front page with live article/category/tag/revision stats, featured content, a browse directory, recently updated articles, and compact sidebar modules.</li>
+            <li><strong>Page headers</strong> &mdash; core browse and reference pages use a shared header with a short kicker, serif title, explanatory dek, and wrapping action buttons.</li>
+            <li><strong>Brand mark and compact search</strong> &mdash; the preliminary Arkivel mark appears in the sidebar/mobile header, and the header search expands only when opened.</li>
             <li><strong>Bookmarks</strong> &mdash; save articles with optional notes at <Link href="/bookmarks">/bookmarks</Link>.</li>
             <li><strong>Reading Lists</strong> &mdash; organize articles into ordered lists at <Link href="/reading-lists">/reading-lists</Link>. Lists can be made public and shared via a link.</li>
             <li><strong>Smart Collections</strong> &mdash; saved searches with filters (tags, category, author, date range) at <Link href="/collections">/collections</Link>.</li>
             <li><strong>TIL (Today I Learned)</strong> &mdash; post short (280-char) notes at <Link href="/til">/til</Link>. Tag them for discovery.</li>
             <li><strong>Explore mode</strong> &mdash; guided walk through articles using semantic similarity at <Link href="/explore">/explore</Link>.</li>
+            <li><strong>Canon Trails</strong> &mdash; <Link href="/trails">/trails</Link> builds guided reading routes from live wiki links, backlinks, categories, freshness, article depth, and engagement so readers get a path through the canon instead of another dashboard.</li>
             <li><strong>Session reading trail</strong> &mdash; collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.</li>
             <li><strong>Reading history</strong> &mdash; browser-local list of the last 50 articles you visited, with relative timestamps, at <Link href="/history">/history</Link>. No server data stored.</li>
             <li><strong>Last-visit badge</strong> &mdash; on return visits, articles show &ldquo;You read this X ago&rdquo; in the article header.</li>
@@ -238,6 +254,10 @@ export default function HelpPage() {
         <div className="wiki-portal-header">Article Page Features</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Article header</strong> &mdash; title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped at the top of the page.</li>
+            <li><strong>Action panel</strong> &mdash; article controls are grouped as Navigate, Collect, Share, Read, and Tools.</li>
+            <li><strong>Taxonomy footer</strong> &mdash; category and tag links appear as wrapping chips near the bottom of the article.</li>
+            <li><strong>Responsive layout</strong> &mdash; article tabs, infoboxes, table of contents, backlinks, and action groups are constrained for narrow screens.</li>
             <li><strong>Reading time</strong> &mdash; every article shows &ldquo;~X min read&rdquo; in the byline, estimated at 200 words per minute.</li>
             <li><strong>Reading ETA</strong> &mdash; the byline also shows &ldquo;~X min left&rdquo; which updates live as you scroll through the article; disappears once you finish.</li>
             <li><strong>Reading mode</strong> &mdash; click &ldquo;Reading mode&rdquo; in the article toolbar (or press <kbd>R</kbd>) to enter a distraction-free view that hides the header and sidebar. Press again or <kbd>R</kbd> to exit.</li>
@@ -394,10 +414,17 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Analytics dashboard</strong> &mdash; scroll depth heatmap, reader navigation paths, search gap tracking</li>
+            <li><strong>Canon Atlas</strong> &mdash; <Link href="/atlas">/atlas</Link> turns the wiki into a live map of territories, article signals, story threads, a flagship dossier, continuity pressure, and atlas moves</li>
+            <li><strong>Atlas API</strong> &mdash; <Link href="/api/atlas">/api/atlas</Link> returns the same territories, signals, threads, dossier, continuity pressure, and action queue as JSON</li>
+            <li><strong>Canon Trails</strong> &mdash; <Link href="/trails">/trails</Link> turns the wiki into guided reading routes through strongest canon, recent updates, deep pages, and repair paths</li>
+            <li><strong>Trails API</strong> &mdash; <Link href="/api/trails">/api/trails</Link> returns guided reading routes, stop reasons, estimates, word totals, and link totals as JSON</li>
+            <li><strong>Knowledge Command Center</strong> &mdash; <Link href="/intelligence">/intelligence</Link> combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines</li>
+            <li><strong>Intelligence API</strong> &mdash; <Link href="/api/intelligence">/api/intelligence</Link> returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON</li>
             <li><strong>Search analytics</strong> &mdash; <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps</li>
             <li><strong>Search gaps</strong> &mdash; <Link href="/admin/search-gaps">/admin/search-gaps</Link> shows top zero-result queries</li>
             <li><strong>Stale articles</strong> &mdash; <Link href="/admin/staleness">/admin/staleness</Link> lists articles not updated in 180+ days</li>
             <li><strong>Wiki health score</strong> &mdash; <Link href="/admin/health">/admin/health</Link> gives an A–F grade: link coverage, freshness, stub %, search gap %, certification %</li>
+            <li><strong>Wiki Health Dashboard</strong> &mdash; <Link href="/health">/health</Link> audits all articles for stubs, outdated content, missing excerpts, missing categories/tags, and broken wiki links; shows a 0–100 health score with per-article fix links</li>
             <li><strong>Embeddings coverage</strong> &mdash; <Link href="/admin/embeddings">/admin/embeddings</Link> shows AI embedding status per article</li>
             <li><strong>Maintenance mode</strong> &mdash; <Link href="/admin/maintenance">/admin/maintenance</Link> toggle displays a site-wide yellow banner while the wiki is under maintenance</li>
             <li><strong>Cleanup tags</strong> &mdash; flag articles with attention labels (Needs Images, Stub, Outdated, etc.); shown as orange banner on article page; set in article edit form</li>
@@ -433,7 +460,7 @@ export default function HelpPage() {
             <li><strong>Article quiz mode</strong> &mdash; &ldquo;Quiz me&rdquo; button in article tools bar; AI generates 5 multiple-choice questions from the article; shows score and records attempt</li>
             <li><strong>Ask my wiki</strong> &mdash; full-page AI oracle at <Link href="/ask">/ask</Link>; streaming answers grounded in your wiki content via semantic search; source article chips; multi-turn conversation; linked from sidebar</li>
             <li><strong>Knowledge synthesis</strong> &mdash; &ldquo;Synthesize&rdquo; button on category pages; AI reads all articles and writes a comprehensive overview; preview modal; one-click to create as a new article</li>
-            <li><strong>Presentation mode</strong> &mdash; &ldquo;Present&rdquo; button on any article; opens <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code>; cinematic full-screen slideshow; each H2 becomes a slide; keyboard navigation; slide overview grid (G); fullscreen (F)</li>
+            <li><strong>Presentation mode</strong> &mdash; &ldquo;Present&rdquo; button on any article; opens <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code>; cinematic full-screen slideshow with a scrollable slide stage, keyboard navigation, slide overview grid (G), fullscreen (F), and responsive controls that avoid overlap</li>
             <li><strong>Bulk JSON export</strong> &mdash; <Link href="/api/export/json">/api/export/json</Link> downloads all articles as structured JSON (admin only)</li>
             <li><strong>Per-article analytics</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/analytics</code>; 30-day view chart + summary stats</li>
             <li><strong>Series progress tracker</strong> &mdash; series navigation shows &ldquo;X of N read&rdquo; from browser reading history</li>
@@ -493,15 +520,16 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Navigation &amp; Organization</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-1">The sidebar is divided into collapsible sections — click any section header to collapse or expand it.</p>
+          <p className="mb-1">On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps Home, Search, Create, Recent, and Browse one tap away. Browse opens the same sidebar contents and closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so canvases and composers are not covered.</p>
+          <p className="mb-2">Use <kbd>Cmd+K</kbd> / <kbd>Ctrl+K</kbd> to open the command palette from anywhere. It groups destinations across navigation, discovery, personal, reference, and admin areas, then searches articles in the same panel when you type a query.</p>
           <p className="font-semibold mb-0.5">Navigation</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
             <li><Link href="/">Main Page</Link>, <Link href="/articles">All articles</Link>, <Link href="/recent-changes">Recent changes</Link>, <Link href="/random">Random article</Link></li>
-            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/graph">Article graph</Link></li>
+            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/atlas">Canon atlas</Link>, <Link href="/trails">Canon trails</Link>, <Link href="/graph">Article graph</Link></li>
           </ul>
           <p className="font-semibold mb-0.5">Discover</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
-            <li><Link href="/explore">Explore</Link> — curated entry points; <Link href="/activity">Activity</Link> — recent contribution feed</li>
+            <li><Link href="/explore">Explore</Link> — curated entry points; <Link href="/activity">Activity</Link> — recent contribution feed; <Link href="/intelligence">Command center</Link> — live wiki cockpit and intelligence engines</li>
             <li><Link href="/collections">Collections</Link>, <Link href="/change-requests">Change requests</Link>, <Link href="/reviews">Reviews</Link>, <Link href="/bounties">Bounties</Link>, <Link href="/forks">Forks</Link></li>
           </ul>
           <p className="font-semibold mb-0.5">Personal</p>

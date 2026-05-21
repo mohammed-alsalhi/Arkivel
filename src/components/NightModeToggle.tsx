@@ -29,11 +29,8 @@ export default function NightModeToggle() {
     <button
       onClick={toggle}
       title={active ? "Exit night mode" : "Night reading mode (warm)"}
-      className={`h-6 px-2 text-[11px] border rounded transition-colors ${
-        active
-          ? "border-amber-400 bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
-          : "border-border text-muted hover:text-foreground"
-      }`}
+      aria-pressed={active}
+      className="ui-button w-6 px-0"
     >
       {active ? (
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>

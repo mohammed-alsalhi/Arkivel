@@ -23,11 +23,11 @@ export default async function OnThisDay() {
     <div className="wiki-portal">
       <div className="wiki-portal-header">On this day</div>
       <div className="wiki-portal-body p-0">
-        <ul className="divide-y divide-border-light text-[13px]">
+        <ul className="wiki-compact-list">
           {matches.map((a) => (
-            <li key={a.id} className="px-3 py-1.5 hover:bg-surface-hover">
-              <Link href={`/articles/${a.slug}`}>{a.title}</Link>
-              <span className="text-[11px] text-muted ml-2">({formatDate(a.createdAt)})</span>
+            <li key={a.id} className="wiki-compact-list-item">
+              <Link href={`/articles/${a.slug}`} className="wiki-compact-list-title">{a.title}</Link>
+              <span className="wiki-compact-list-meta">{formatDate(a.createdAt)}</span>
             </li>
           ))}
         </ul>

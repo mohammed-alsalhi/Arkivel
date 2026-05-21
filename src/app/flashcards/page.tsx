@@ -95,13 +95,13 @@ export default function FlashcardsPage() {
         className="border border-border rounded-lg p-6 min-h-[160px] cursor-pointer bg-surface hover:bg-surface-hover transition-colors mb-4"
         onClick={() => setRevealed(true)}
       >
-        <div className="text-xs text-muted uppercase tracking-wide mb-3">Question</div>
+        <div className="text-xs text-muted uppercase mb-3">Question</div>
         <div className="text-base">{card.front}</div>
 
         {revealed && (
           <>
             <hr className="my-4 border-border" />
-            <div className="text-xs text-muted uppercase tracking-wide mb-3">Answer</div>
+            <div className="text-xs text-muted uppercase mb-3">Answer</div>
             <div className="text-base">{card.back}</div>
             {card.article && (
               <Link href={`/articles/${card.article.slug}`} className="text-xs text-accent hover:underline mt-3 block">

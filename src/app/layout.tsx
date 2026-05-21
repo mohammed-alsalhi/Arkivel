@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
 import LayoutShell from "@/components/layout/LayoutShell";
+import MobileNavigation from "@/components/layout/MobileNavigation";
 import SearchBar from "@/components/layout/SearchBar";
 import UserMenu from "@/components/layout/UserMenu";
 import { AdminProvider } from "@/components/AdminContext";
@@ -11,6 +14,7 @@ import NotificationBell from "@/components/NotificationBell";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import CommandPalette from "@/components/CommandPalette";
 import BackToTop from "@/components/BackToTop";
+import QuickCapture from "@/components/QuickCapture";
 import { ToastProvider } from "@/components/Toast";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
@@ -31,8 +35,21 @@ const geistMono = Geist_Mono({
 
 export function generateMetadata(): Metadata {
   return {
+    metadataBase: new URL(config.baseUrl),
     title: config.name,
     description: config.description,
+    icons: {
+      icon: [
+        { url: config.appIcon, sizes: "512x512", type: "image/png" },
+        { url: "/favicon.ico", sizes: "any" },
+      ],
+      apple: [{ url: config.appIcon, sizes: "512x512", type: "image/png" }],
+    },
+    openGraph: {
+      title: config.name,
+      description: config.description,
+      images: [{ url: config.logo, width: 1254, height: 1254, alt: `${config.name} logo` }],
+    },
   };
 }
 
@@ -76,11 +93,6 @@ export default async function RootLayout({
       <head>
         <link rel="alternate" type="application/rss+xml" title={`${config.name} RSS Feed`} href="/feed.xml" />
         <link rel="alternate" type="application/atom+xml" title={`${config.name} Atom Feed`} href="/feed/atom" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();`,
-          }}
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -90,11 +102,15 @@ export default async function RootLayout({
         <ToastProvider>
           {/* Top banner bar */}
           <header className="bg-surface border-b border-border">
-            <div className="flex items-center justify-between pl-4 pr-6 py-1.5">
-              <div className="flex items-center gap-4">
-                <span className="text-xs text-muted">{config.tagline}</span>
+            <div className="flex min-h-10 items-center justify-between gap-2 pl-12 pr-3 py-1.5 sm:gap-3 md:pl-4 md:pr-6">
+              <Link href="/" className="wiki-top-brand md:hidden" aria-label={`${config.name} home`}>
+                <Image src={config.logoMark} alt="" width={24} height={24} className="wiki-top-brand-mark" priority />
+                <span>{config.name}</span>
+              </Link>
+              <div className="hidden min-w-0 md:block">
+                <span className="block truncate text-[12px] text-muted">{config.tagline}</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="ml-auto flex min-w-0 shrink items-center gap-1.5">
                 <NotificationBell />
                 <ThemeToggle />
                 <SearchBar />
@@ -112,17 +128,19 @@ export default async function RootLayout({
               <AnnouncementBanner />
               {maintenanceMode && <MaintenanceBanner />}
               {readOnlyMode && <ReadOnlyBanner />}
-              <main id="main-content" className="max-w-6xl px-6 py-4">
+              <main id="main-content" className="wiki-main-content max-w-6xl px-4 py-4 sm:px-6">
                 {children}
               </main>
-              <footer className="border-t border-border px-6 py-3 text-center text-[11px] text-muted">
+              <footer className="wiki-footer border-t border-border px-6 py-3 text-center text-[11px] text-muted">
                 {config.name} &mdash; {config.footerText}
               </footer>
             </div>
           </LayoutShell>
-        <KeyboardShortcuts />
-        <CommandPalette />
-        <BackToTop />
+          <MobileNavigation />
+          <KeyboardShortcuts />
+          <CommandPalette />
+          <BackToTop />
+          <QuickCapture />
         </ToastProvider>
         </AdminProvider>
         <Analytics />

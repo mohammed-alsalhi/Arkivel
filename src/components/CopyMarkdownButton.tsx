@@ -35,7 +35,7 @@ export default function CopyMarkdownButton({ markdown, title }: Props) {
     <button
       onClick={handleCopy}
       title="Copy article as Markdown"
-      className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-foreground transition-colors"
+      className="ui-button"
     >
       {copied ? "Copied!" : "Copy MD"}
     </button>

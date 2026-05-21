@@ -58,7 +58,7 @@ export default function WordCountPage() {
           { label: "Shortest", value: data.stats.min.toLocaleString() },
         ].map(({ label, value }) => (
           <div key={label} className="border border-border bg-surface px-3 py-2">
-            <div className="text-[11px] text-muted uppercase tracking-wide">{label}</div>
+            <div className="text-[11px] text-muted uppercase">{label}</div>
             <div className="text-[18px] font-bold text-heading mt-0.5">{value}</div>
           </div>
         ))}

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/components/AdminContext";
 import { getCommands, type Command } from "@/lib/commands";
+import { getSearchResults } from "@/lib/search-response";
 
 type SearchResult = {
   id: string;
@@ -51,7 +52,7 @@ export default function CommandPalette() {
       (cmd) =>
         cmd.label.toLowerCase().includes(q) ||
         cmd.group.toLowerCase().includes(q) ||
-        cmd.keywords?.some((kw) => kw.includes(q))
+        cmd.keywords?.some((kw) => kw.toLowerCase().includes(q))
     );
   }, [allCommands, isAdminUser, query]);
 
@@ -84,7 +85,7 @@ export default function CommandPalette() {
         );
         if (res.ok) {
           const data = await res.json();
-          setArticleResults(data);
+          setArticleResults(getSearchResults<SearchResult>(data));
         }
       } catch {
         // Aborted or network error — ignore
@@ -107,7 +108,7 @@ export default function CommandPalette() {
   // Open/close on Ctrl+K / Cmd+K
   useEffect(() => {
     function handler(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setOpen((prev) => !prev);
       }
@@ -137,7 +138,7 @@ export default function CommandPalette() {
       if (item.type === "command") {
         (item.data as Command).action();
       } else {
-        router.push(`/wiki/${(item.data as SearchResult).slug}`);
+        router.push(`/articles/${(item.data as SearchResult).slug}`);
       }
     },
     [allItems, router]

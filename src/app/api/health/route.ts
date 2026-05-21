@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { config } from "@/lib/config";
 
 export async function GET() {
   const startTime = process.uptime();
@@ -17,7 +18,7 @@ export async function GET() {
     status: dbConnected ? "ok" : "degraded",
     uptime: Math.floor(startTime),
     dbConnected,
-    version: process.env.NEXT_PUBLIC_APP_VERSION || "unknown",
+    version: config.version,
     articleCount,
     timestamp: new Date().toISOString(),
   });

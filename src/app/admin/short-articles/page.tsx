@@ -97,7 +97,7 @@ export default async function AdminShortArticlesPage() {
 
               {stub.suggestions.length > 0 ? (
                 <div className="mt-3">
-                  <p className="text-[11px] text-muted-foreground mb-2 font-medium uppercase tracking-wide">
+                  <p className="text-[11px] text-muted-foreground mb-2 font-medium uppercase">
                     Suggested merge targets
                   </p>
                   <div className="flex flex-wrap gap-2">

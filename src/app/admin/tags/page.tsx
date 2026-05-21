@@ -102,7 +102,7 @@ export default function AdminTagsPage() {
       ) : (
         <table className="w-full text-[13px] border-collapse">
           <thead>
-            <tr className="border-b border-border text-left text-muted text-[11px] uppercase tracking-wide">
+            <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
               <th className="py-2 pr-3">Name</th>
               <th className="py-2 pr-3">Slug</th>
               <th className="py-2 pr-3">Color</th>

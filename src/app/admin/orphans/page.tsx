@@ -74,7 +74,7 @@ export default async function OrphansPage() {
         <div className="space-y-4">
           {grouped.size > 0 && Array.from(grouped.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([catName, arts]) => (
             <div key={catName}>
-              <h2 className="text-[13px] font-bold text-muted uppercase tracking-wide mb-1">{catName}</h2>
+              <h2 className="text-[13px] font-bold text-muted uppercase mb-1">{catName}</h2>
               <div className="border border-border divide-y divide-border">
                 {arts.map((a) => (
                   <div key={a.id} className="flex items-center justify-between px-3 py-2 hover:bg-surface-hover">
@@ -99,7 +99,7 @@ export default async function OrphansPage() {
 
           {uncategorized.length > 0 && (
             <div>
-              <h2 className="text-[13px] font-bold text-muted uppercase tracking-wide mb-1">Uncategorized</h2>
+              <h2 className="text-[13px] font-bold text-muted uppercase mb-1">Uncategorized</h2>
               <div className="border border-border divide-y divide-border">
                 {uncategorized.map((a) => (
                   <div key={a.id} className="flex items-center justify-between px-3 py-2 hover:bg-surface-hover">

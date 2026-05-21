@@ -34,7 +34,7 @@ export default function SessionReadingTrail({ slug, title }: { slug: string; tit
         onClick={() => setCollapsed((c) => !c)}
         className="w-full flex items-center justify-between px-3 py-1.5 bg-surface/50 text-muted hover:text-foreground transition-colors"
       >
-        <span className="font-medium uppercase tracking-wide">Reading trail</span>
+        <span className="font-medium uppercase">Reading trail</span>
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${collapsed ? "-rotate-90" : ""}`}>
           <polyline points="6 9 12 15 18 9" />
         </svg>

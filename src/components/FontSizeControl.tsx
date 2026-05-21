@@ -41,11 +41,8 @@ export default function FontSizeControl() {
           key={s.value}
           onClick={() => select(s.value)}
           title={s.title}
-          className={`h-6 w-6 text-[11px] border rounded transition-colors ${
-            current === s.value
-              ? "border-accent text-accent bg-accent/10"
-              : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-          }`}
+          aria-pressed={current === s.value}
+          className="ui-button w-6 px-0"
         >
           {s.label}
         </button>

@@ -85,13 +85,13 @@ export default function ArticleQA({ articleSlug: _slug }: Props) {
 
       {open && (
         <div className="px-3 pb-3 border-t border-border">
-          <div className="flex gap-2 mt-2">
+          <div className="flex flex-wrap gap-2 mt-2">
             <input
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") ask(); }}
               placeholder="Ask anything about this wiki…"
-              className="flex-1 h-7 px-2 text-[12px] border border-border rounded bg-surface focus:outline-none focus:border-accent"
+              className="h-7 min-w-0 flex-1 px-2 text-[12px] border border-border rounded bg-surface focus:outline-none focus:border-accent"
             />
             <button
               type="button"

@@ -67,7 +67,7 @@ export default function SavedSearchesPage() {
       ) : (
         <table className="w-full text-[13px] border-collapse">
           <thead>
-            <tr className="border-b border-border text-left text-muted text-[11px] uppercase tracking-wide">
+            <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
               <th className="py-2 pr-4">Name</th>
               <th className="py-2 pr-4">Query</th>
               <th className="py-2 pr-4 text-center">Alert</th>

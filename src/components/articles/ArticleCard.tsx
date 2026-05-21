@@ -18,7 +18,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
   return (
     <Link
       href={`/articles/${article.slug}`}
-      className="group flex flex-col border border-border bg-surface transition-colors hover:bg-surface-hover"
+      className="group flex min-h-36 flex-col border border-border bg-surface transition-colors hover:bg-surface-hover hover:no-underline"
     >
       {article.coverImage && (
         <div className="aspect-video w-full overflow-hidden">
@@ -29,19 +29,19 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           />
         </div>
       )}
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-3">
         <h3
-          className="font-semibold text-wiki-link group-hover:underline"
+          className="text-[15px] font-semibold leading-snug text-wiki-link group-hover:underline"
           style={{ fontFamily: "var(--font-serif)" }}
         >
           {article.title}
         </h3>
         {article.excerpt && (
-          <p className="mt-1.5 line-clamp-2 text-sm text-muted leading-relaxed">
+          <p className="mt-1.5 line-clamp-2 text-[12px] text-muted leading-relaxed">
             {article.excerpt}
           </p>
         )}
-        <div className="mt-auto pt-3 flex items-center justify-between text-[11px] text-muted">
+        <div className="mt-auto flex items-center justify-between gap-3 pt-3 text-[11px] text-muted">
           <span>
             {article.category && (
               <>{article.category.name}</>

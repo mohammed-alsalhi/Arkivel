@@ -42,11 +42,8 @@ export default function BookmarkButton({ articleId, initialBookmarked = false }:
       <button
         onClick={toggle}
         title={bookmarked ? "Remove bookmark" : "Bookmark this article"}
-        className={`flex items-center gap-1 h-6 px-2 text-[11px] border rounded transition-colors ${
-          bookmarked
-            ? "border-accent bg-accent/10 text-accent"
-            : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-        }`}
+        aria-pressed={bookmarked}
+        className="ui-button"
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill={bookmarked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -55,24 +52,24 @@ export default function BookmarkButton({ articleId, initialBookmarked = false }:
       </button>
 
       {showNote && (
-        <div className="absolute right-0 top-8 z-20 bg-surface border border-border rounded shadow-md p-3 w-64">
-          <p className="text-xs font-medium mb-1">Add a note (optional)</p>
+        <div className="ui-dropdown top-8 z-20 w-64 p-3">
+          <p className="text-[12px] font-medium mb-1">Add a note (optional)</p>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full text-xs border border-border rounded p-1.5 bg-transparent resize-none outline-none"
+            className="ui-textarea min-h-16"
             rows={3}
             placeholder="Why are you bookmarking this?"
             autoFocus
           />
           <div className="flex gap-2 mt-2 justify-end">
-            <button onClick={() => setShowNote(false)} className="text-xs text-muted hover:text-foreground">
+            <button onClick={() => setShowNote(false)} className="ui-button">
               Cancel
             </button>
             <button
               onClick={save}
               disabled={saving}
-              className="text-xs bg-accent text-white px-2 py-0.5 rounded disabled:opacity-50"
+              className="ui-button ui-button-primary disabled:opacity-50"
             >
               Save
             </button>
