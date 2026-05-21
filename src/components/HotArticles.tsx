@@ -26,26 +26,25 @@ export default function HotArticles({ days = 7, limit = 5 }: { days?: number; li
   if (articles.length === 0) return null;
 
   return (
-    <div className="mt-4">
-      <h3
-        className="text-sm font-semibold text-heading border-b border-border pb-1 mb-2"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Trending this week
-      </h3>
-      <ol className="space-y-1 text-[12px]">
-        {articles.map((a, i) => (
-          <li key={a.id} className="flex items-start gap-2">
-            <span className="text-muted opacity-60 w-4 shrink-0 text-right">{i + 1}.</span>
-            <div className="min-w-0">
-              <Link href={`/articles/${a.slug}`} className="text-wiki-link hover:underline line-clamp-1">
-                {a.title}
-              </Link>
-              <span className="text-muted opacity-60 ml-1">· {a.views.toLocaleString()} view{a.views !== 1 ? "s" : ""}</span>
-            </div>
-          </li>
-        ))}
-      </ol>
+    <div className="wiki-portal">
+      <div className="wiki-portal-header">Trending this week</div>
+      <div className="wiki-portal-body p-0">
+        <ol className="wiki-compact-list">
+          {articles.map((a, i) => (
+            <li key={a.id} className="wiki-compact-list-item wiki-compact-list-ranked">
+              <span className="wiki-compact-rank">{i + 1}</span>
+              <div className="min-w-0">
+                <Link href={`/articles/${a.slug}`} className="wiki-compact-list-title">
+                  {a.title}
+                </Link>
+                <span className="wiki-compact-list-meta">
+                  {a.views.toLocaleString()} view{a.views !== 1 ? "s" : ""}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
   }, []);
 
   return (
-    <div className={`flex min-h-[calc(100vh-40px)] ${reversed ? "flex-row-reverse" : ""}`}>
+    <div className={`wiki-layout flex min-h-[calc(100vh-40px)] ${reversed ? "flex-row-reverse" : ""}`}>
       {children}
     </div>
   );

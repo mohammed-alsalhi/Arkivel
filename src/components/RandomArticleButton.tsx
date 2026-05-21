@@ -12,7 +12,7 @@ export default function RandomArticleButton({ categorySlug, label = "Random arti
   return (
     <a
       href={href}
-      className={className ?? "h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover transition-colors flex items-center gap-1"}
+      className={className ?? "ui-button"}
     >
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <polyline points="16 3 21 3 21 8" />

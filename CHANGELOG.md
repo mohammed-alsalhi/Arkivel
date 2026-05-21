@@ -4,6 +4,219 @@
 
 All notable changes to this project are documented here.
 
+## [4.71.1] - 2026-05-21
+
+### Fixed
+
+- **Presentation mode layout** - Rebuilt `/present/[slug]` around fixed progress, topbar, scrollable slide stage, and footer control regions so slide titles, body content, hints, dots, and navigation buttons no longer overlap.
+- **Responsive deck controls** - Made the overview button, slide counter, dot rail, keyboard hint, and previous/next controls wrap or stack cleanly on phone, tablet, laptop, and wide desktop widths.
+- **Rich slide containment** - Added presentation-specific containment for long titles, tall content, code blocks, tables, images, videos, and embeds so article content scrolls inside the slide stage instead of pushing through the deck chrome.
+- **Command palette shortcut** - Made the `Ctrl+K` / `Cmd+K` listener case-insensitive and stabilized the e2e shortcut check against client hydration timing.
+- **CI regression coverage** - Updated homepage shell tests for the compact search trigger and phone Browse navigation, mocked alias lookups in wiki-link tests, and added a mocked `/present/[slug]` responsive test with explicit chrome-overlap assertions.
+
+## [4.71.0] - 2026-05-21
+
+### Added
+
+- **Canon Trails** - Added `/trails`, a reader-facing route system that builds guided paths through published wiki articles from live links, backlinks, categories, freshness, depth, and engagement signals.
+- **Trail route engine** - Added canon, fresh, deep, repair, and starter trails so the page can guide real reading paths while empty local databases still present a useful setup route.
+- **Trails JSON feed** - Added `/api/trails` for the same route model so demos, automations, and future clients can consume guided reading paths without scraping the UI.
+- **Reader-first navigation** - Wired Canon Trails into the primary sidebar, home page actions, browse directory, command palette, sitemap, docs, and responsive shell coverage.
+- **README documentation front page** - Reworked the README into a real product documentation entry with logo treatment, badge/button links, quickstart, deployment, configuration, core experiences, feature map, architecture, and API references.
+
+## [4.70.0] - 2026-05-21
+
+### Added
+
+- **Canon Atlas** - Added `/atlas`, a flagship wiki atlas that turns published content into territories, article signals, story threads, a featured dossier, continuity pressure, and next atlas moves.
+- **Atlas JSON feed** - Added `/api/atlas` so the same territory, dossier, thread, continuity, and action model can power integrations or external product demos.
+- **Starter atlas fallback** - Added starter territories and signal routes so fresh or database-empty local environments still render an impressive atlas without inventing published article data.
+- **Primary sidebar placement** - Moved the Knowledge Command Center into the main Browse section as “Knowledge cockpit” and added the Canon Atlas beside it so both are immediately visible.
+- **Atlas navigation and QA** - Wired the atlas into home actions, the browse directory, command palette destinations, sitemap, documentation, and responsive shell tests.
+
+## [4.69.0] - 2026-05-21
+
+### Added
+
+- **Knowledge cockpit upgrade** - Rebuilt `/intelligence` around a live cockpit surface with a real article constellation, readiness radar, and impact simulator instead of only static engine cards.
+- **Article constellation graph** - Added top connected article nodes and live wiki-link edges to the intelligence report, with selected-node readouts and direct article navigation.
+- **Readiness radar model** - Added readiness, graph, structure, freshness, trust, audience, and momentum axes to `/api/intelligence` and the command-center UI.
+- **Impact simulator** - Added interactive cleanup levers for stubs, orphans, broken links, stale pages, taxonomy debt, and verification debt so editors can see projected readiness gains before choosing work.
+- **Command-center prominence** - Promoted the command center into the home page action cluster and expanded responsive shell coverage for the new cockpit surface.
+
+## [4.68.0] - 2026-05-21
+
+### Added
+
+- **Knowledge Command Center** - Added `/intelligence`, a live operations surface with 20 intelligence engines spanning mission readiness, content velocity, editorial pressure, stale canon, graph health, broken links, stubs, longform candidates, taxonomy debt, tag constellations, featured canon, infobox coverage, translation surface, conversation heat, reader demand, verification debt, and cleanup flags.
+- **Next-best-work queue** - Added prioritized action rows that route editors toward the highest leverage fixes: expanding stubs, repairing wiki links, refreshing stale pages, organizing taxonomy gaps, and clearing review pressure.
+- **Intelligence JSON feed** - Added `/api/intelligence` so the same command-center report can power integrations, dashboards, automation, or external monitoring.
+- **Discovery integration** - Wired the command center into the sidebar, homepage browse directory, command palette destination registry, sitemap, and responsive shell test matrix.
+- **Responsive command-center shell** - Added compact serif-first score panels, summary grids, action rows, and intelligence cards that adapt across phone, tablet, laptop, and wide desktop widths.
+
+## [4.67.1] - 2026-05-21
+
+### Changed
+
+- **Preliminary logo integration** - Added the Arkivel logo artwork as public brand assets, wired the mark into the sidebar and mobile top bar, and exposed the app icon in metadata and the web app manifest.
+- **Header search simplification** - Replaced the always-visible header search field with a compact trigger that expands into a focused search form, reducing top-bar crowding on narrow layouts.
+- **Browse affordance polish** - Updated the mobile sidebar affordance from a generic menu icon to a Browse grid treatment so navigation reads as wiki discovery rather than another utility control.
+- **Local shell fallbacks** - Made public announcement, article, category, and tag list APIs return empty collections when the local database is unavailable so app-shell verification stays quiet in fresh development environments.
+- **Branding documentation sync** - Documented the logo, mark, and app-icon configuration alongside the patch version bump.
+
+## [4.67.0] - 2026-05-21
+
+### Changed
+
+- **Main page redesign** - Reworked the wiki home page into a dense front page with live article/category/tag/revision stats, a featured article lead, quick actions, a browse directory, recent updates, and compact sidebar modules.
+- **Shared page shell standard** - Added reusable page header, dek, action, compact list, category tree, and home layout CSS primitives so browse, search, dashboard, help, features, and downstream portal pages share the same compact wiki language.
+- **Core browse page refresh** - Updated Articles, Categories, Search, Dashboard, Help, and Features to use the new page header pattern with right-aligned actions and responsive wrapping.
+- **Home sidebar module polish** - Restyled New Articles, On This Day, and Trending panels into consistent portal/list modules without unicode arrows or oversized standalone headings.
+
+## [4.66.2] - 2026-05-21
+
+### Changed
+
+- **Article action rail rethink** - Reworked the article action panel into a slim primary action rail with Navigate, Collect, and Share visible by default while Read and Tools open as compact disclosure menus.
+- **Article tabs separation** - Moved article section navigation onto dedicated `article-tabbar` styles so it no longer inherits the in-content `.wiki-tabs` block styling or fights the article shell border.
+- **Reading typography default** - Made serif the default article body font and updated the font preference control to offer Serif, Sans, and Mono without a confusing non-serif Default option.
+- **Dek wrapping polish** - Let article excerpts use more of the header width with pretty wrapping so the dek no longer breaks halfway across wide article shells.
+
+## [4.66.1] - 2026-05-21
+
+### Fixed
+
+- **Article action panel polish** - Replaced the oversized tiled article action grid with a compact wrapping toolbar so short groups no longer create dead empty rows or heavy block geometry.
+- **Reading controls overflow** - Constrained select controls inside the Read group so font preferences no longer force the panel to clip or push past the article shell.
+- **Responsive action grouping** - Added tighter mobile stacking and divider rules for article action groups while keeping desktop, tablet, and wide layouts dense and scannable.
+
+## [4.66.0] - 2026-05-21
+
+### Changed
+
+- **Article page shell refresh** - Refactored the article display route around a dedicated hero header, grouped action panel, and taxonomy footer so title metadata, badges, controls, and category/tag context scan cleanly without overwhelming the reading surface.
+- **Article action redesign** - Replaced the stacked toolbar rows with a responsive grouped action panel for Navigate, Collect, Share, Read, and Tools actions while preserving the existing article workflows.
+- **Reading surface polish** - Restyled in-brief summaries, article flags, review/pinned notices, backlinks, fork actions, and taxonomy chips to use shared UI primitives and semantic theme tokens.
+- **Responsive article layout** - Added article-specific responsive rules for tabs, infoboxes, table of contents, action groups, link chips, and narrow-screen typography so article pages stay readable across phone, tablet, laptop, and wide desktop widths.
+
+## [4.65.0] - 2026-05-21
+
+### Changed
+
+- **Unified search response handling** — Added a shared client-safe search response normalizer and rewired the header search, full search page, command palette, wiki-link suggester, split-view article pickers, and article edit fallback so they all understand the current `/api/search` object response shape.
+- **Command and navigation consistency** — Added a central navigation registry for command destinations and focused-workspace route detection, expanded command palette destinations across discovery/personal/reference/admin surfaces, and fixed stale canonical article links from `/wiki/*` to `/articles/*`.
+- **Responsive discovery surfaces** — Reworked search and article-list discovery layouts so advanced filters, semantic results, article filter chips, batch bars, and tables wrap or scroll intentionally across phone, tablet, laptop, and wide desktop widths.
+- **Responsive QA guardrails** — Added Playwright coverage for core shell routes at phone, tablet, laptop, and wide desktop breakpoints, plus unit tests for the search response and navigation registries.
+
+## [4.64.3] - 2026-05-21
+
+### Documentation
+
+- **Responsive shell documentation sync** — Updated the architecture, design standards, README, roadmap, feature reference, help guide, and in-app help/features pages to describe the responsive app shell, mobile bottom navigation, focused-workspace navigation behavior, responsive overlay standards, and cross-breakpoint QA expectations.
+- **Version discipline** — Bumped app/package version from 4.64.2 to 4.64.3 so documentation-only product surface updates still carry an explicit release marker.
+
+## [4.64.2] - 2026-05-20
+
+### Changed
+
+- **Mobile bottom navigation** — Added a persistent phone navigation bar for Home, Search, Create, Recent, and Menu, with sidebar state synchronized through layout events and same-route close behavior.
+- **Focused workspace handling** — Hid the bottom navigation on dense workspace routes like `/ask`, `/graph`, `/split`, `/map`, and `/present/*`, keeping the compact top menu available where the primary canvas needs full height.
+- **Responsive overlay hardening** — Clamped dropdowns, tables, notifications, AI chat, synthesis, speed-reader, quiz, and article Q&A controls so long labels and narrow viewports wrap instead of overlapping.
+- **Map shell refinement** — Reworked the map page container to avoid mobile sideways bleed while preserving the full-height workspace feel.
+- **QA coverage** — Verified sampled mobile, tablet, and desktop routes for horizontal overflow, clipped controls, and covered interactive targets.
+
+## [4.64.1] - 2026-05-20
+
+### Fixed
+
+- **Responsive overlap pass** — Fixed post-restandardization overflow issues in the app shell, article pages, canvas, search, and home surfaces.
+- **Header and search fit** — Tightened header/search sizing and sidebar sizing so compact viewports no longer push controls into adjacent content.
+- **Mobile content breathing room** — Added responsive spacing and wrapping rules for key page chrome after the v4.64 UI standardization.
+
+## [4.64.0] - 2026-05-20
+
+### Changed
+
+- **UI restandardization** — Added shared UI primitives for page titles, compact buttons, icon buttons, inputs, selects, toolbars, panels, dropdowns, chips, tables, and empty states; refitted the app shell, sidebar, search, article action bars, article cards, article lists, category pages, auth forms, and key article tools to use the same compact wiki styling.
+- **Typography and chrome cleanup** — Removed letter-spacing utilities from app surfaces, tightened oversized radii, normalized dropdown/modal controls, and moved status treatment toward semantic CSS variables instead of one-off Tailwind color classes.
+- **Version bump** — Bumped app/package version from 4.63.0 to 4.64.0.
+
+## [4.63.0] - 2026-04-09
+
+### New Features
+
+- **Wiki Health Dashboard** — `/health` page audits all articles for quality issues: stubs (< 100 words), outdated (1+ year), missing excerpt, uncategorized, untagged, broken wiki links, very long articles (> 5000 words); shows overall health score 0–100 with colour coding; filter by issue type; direct "Fix" links to edit pages; sidebar link added
+- **AI Auto-fill from Title** — On the new article page, type a title and pick a template type (Person / Event / Place / Concept / Organization / Product); AI generates a complete encyclopedia-style HTML article with appropriate sections; auto-fill button appears as soon as title is 3+ characters
+- **Category Overview Generator** — "Generate overview" button on every category page; AI reads all published articles in the category and writes a 2–4 paragraph encyclopedic introduction covering scope, range, and article relationships; collapsible display with regenerate option
+- **Article Audio Narration** — "Listen" button on every article page uses the browser's Web Speech API to narrate the full article text; inline progress bar; pause/resume/stop controls; auto-removes footnotes and code blocks from narration; no API key required
+- **AI Fact-Check** — "Fact-check" button on article pages analyzes the 3–6 most significant factual claims using Claude AI; each claim shows a verdict (Verified / Plausible / Uncertain / Questionable), brief explanation, and confidence bar; disclaimer that results are based on AI training knowledge
+- **Smart Editor Suggestions** — "Suggestions" panel in the article editor (new and edit pages); detects articles mentioned in text that aren't wiki-linked, lists related articles by keyword overlap, and uses AI to suggest missing sections or underdeveloped areas; auto-refreshes every 30 seconds while open
+
+### Technical
+
+- `src/app/api/health/wiki/route.ts` (new) — GET; computes per-article issue list and overall health score weighted across 7 quality dimensions
+- `src/app/health/page.tsx` (new) — Health dashboard client page with score gauge, stat grid, issue filter tabs, and article list
+- `src/app/api/ai/autofill/route.ts` (new) — POST `{ title, template }`; 6 article templates; returns `{ html }` from Claude Haiku
+- `src/app/api/ai/category-overview/route.ts` (new) — POST `{ categoryId }`; returns `{ overview }` prose text
+- `src/components/CategoryOverviewGenerator.tsx` (new) — Client component with generate/show/hide toggle on category pages
+- `src/components/article/AudioNarration.tsx` (new) — Browser SpeechSynthesis-based narration player with chunked playback and progress tracking
+- `src/app/api/ai/factcheck/route.ts` (new) — POST `{ html }`; returns `{ results }` array with claim/verdict/explanation/confidence
+- `src/components/article/FactCheckPanel.tsx` (new) — Collapsible fact-check results panel with colour-coded verdict badges
+- `src/app/api/ai/editor-suggestions/route.ts` (new) — POST `{ title, html }`; returns wiki-link gaps, related articles, and AI-suggested missing sections
+- `src/components/editor/SmartSuggestions.tsx` (new) — Editor sidebar panel; auto-refreshes; shows link suggestions, related articles, and AI section ideas
+
+## [4.62.0] - 2026-04-09
+
+### New Features
+
+- **Daily Digest** — Personalised in-app briefing at `/digest`; sections: Article of the Day (unread pick), Review Queue (spaced repetition due today), Watched Category Updates (articles edited this week), Did You Know (3 AI-extracted facts from random articles), On This Day (articles created on today's date in past years), and a Thinking Prompt (AI-generated open-ended question); linked from sidebar
+- **Image → Wiki Article** — Upload a photo of handwritten notes, a whiteboard, a book page, or a screenshot on the import page; Claude Vision reads the image and formats the content as a structured HTML wiki article with inferred title; "Open in editor" pre-fills the new article page
+- **YouTube → Wiki Article** — Paste any YouTube URL on the import page; AI fetches the auto-generated transcript, strips conversational filler, restructures the content into sections, and generates a draft article; supports youtube.com and youtu.be URL formats
+- **Historical Timeline** — `/timeline/historical` page extracts years mentioned in article content and renders a vertical event timeline; decade scrubber for zoom navigation; filter by category or search by title; colour-coded category lanes; linked from sidebar
+- **Semantic Search Toggle** — Search page gains a "Semantic" toggle button that activates vector-embedding-based search (`?semantic=1`); finds conceptually related articles beyond keyword matches; filters and semantic mode stack correctly
+- **AI Tutor Mode** — "Tutor me" button on every article page opens a chat modal; Socratic AI tutor asks probing questions about the article content, gives feedback on answers, tests comprehension, and summarises mastery after ~5 exchanges; powered by Claude Haiku
+
+### Technical
+
+- `src/app/api/digest/daily/route.ts` (new) — GET; returns dueReviews, recentInWatched, dykFacts (AI), articleOfDay, writingPrompt (AI), onThisDay
+- `src/app/digest/page.tsx` (new) — client digest UI with section cards
+- `src/app/api/import/image/route.ts` (new) — POST multipart; Claude vision via AI SDK image content; returns `{ title, html }`
+- `src/app/api/import/youtube/route.ts` (new) — POST; extracts YouTube video ID, fetches caption XML via timedtext API, AI reformats as article
+- `src/app/api/timeline/historical/route.ts` (new) — GET; extracts years from article HTML via regex, groups by century/decade
+- `src/app/timeline/historical/page.tsx` (new) — interactive timeline with decade scrubber, category filter, and search
+- `src/app/api/tutor/route.ts` (new) — POST; Socratic tutor with article context, multi-turn message history
+- `src/components/article/TutorButton.tsx` (new) — floating chat modal with typing indicator and restart
+- `src/app/search/page.tsx` — added semantic mode toggle button, wired `?semantic=1` param
+
+## [4.61.0] - 2026-04-05
+
+### New Features
+
+- **Adaptive Reading Level** — Reading mode toggle on every article page rewrites content at Beginner, Technical, or ELI5 level using Claude; original content is preserved; a banner shows the active mode with one-click restore; powered by `POST /api/ai/reading-level`
+- **Spaced Repetition Review Queue** — SM-2 algorithm surfaces enrolled articles for re-reading at optimal intervals; "Review later" button on article pages; full review session UI at `/review` with flip-card interaction and quality rating (Blank / Hard / Good / Easy); enrolled articles list with next-review dates; linked from sidebar
+- **Import from URL** — Paste any public URL into the import page and AI fetches, cleans, and reformats the content as a structured wiki article draft; "Open in editor" pre-fills the new article page via sessionStorage; powered by `POST /api/import/url`
+- **Knowledge Coverage Map** — Visual dashboard at `/coverage` showing every category as a colour-coded card (Empty → Sparse → Growing → Solid → Rich) with coverage scores; grid/table views; filter by status; click any category to get AI-generated gap suggestions; broken wiki-link gaps listed below; linked from sidebar
+- **Structured Claims** — Editor toolbar buttons mark selected text as Certain / Probable / Disputed; claim marks render with colour-coded underlines and hover tooltips; a collapsible `ClaimsPanel` below each article lists all claims grouped by confidence; stored as `<span data-claim="...">` in HTML
+- **Real-time Collaborative Editing** — Live multi-user editing in the article edit page; "Enable live editing" toggle activates Yjs-backed sync via `POST /api/collab/[articleId]`; polling sync every 2 seconds merges remote changes; presence indicators show other editors as coloured avatars; last-synced timestamp displayed
+
+### Technical
+
+- `src/app/api/ai/reading-level/route.ts` (new) — POST; accepts `{ articleId, level }`; rewrites article HTML via Claude Haiku at requested reading level
+- `src/components/article/ArticleBodyWithReadingLevel.tsx` (new) — client wrapper replacing direct `SpecialBlocksRenderer` usage; hosts reading level button and adaptive banner
+- `src/components/article/ReadingLevelButton.tsx` (new) — dropdown with Standard/Beginner/Technical/ELI5 options; shows loading spinner and active state
+- `prisma/schema.prisma` — added `SpacedRepetitionItem` model with SM-2 fields (ease, interval, repetitions, nextReviewAt)
+- `src/app/api/spaced-repetition/route.ts` (new) — GET (due items / all items), POST (enroll / review / unenroll)
+- `src/app/review/page.tsx` (new) — full review session UI with progress bar, flip cards, quality rating buttons
+- `src/components/article/ReviewEnrollButton.tsx` (new) — per-article enroll/unenroll button
+- `src/app/api/import/url/route.ts` (new) — POST; fetches URL, strips boilerplate HTML, AI formats as wiki article
+- `src/app/api/coverage/route.ts` (new) — GET; computes coverage score for each category (article count, avg words, recency)
+- `src/app/coverage/page.tsx` (new) — Knowledge Coverage Map page
+- `src/components/editor/ClaimMarkExtension.ts` (new) — Tiptap Mark extension with `certain/probable/disputed` attribute
+- `src/components/article/ClaimsPanel.tsx` (new) — extracts `data-claim` spans from HTML and renders a collapsible claims list
+- `src/app/api/collab/[articleId]/route.ts` (new) — GET/POST/DELETE; Yjs state storage and merge via `CollaborationSession` table
+- `src/app/api/collab/[articleId]/presence/route.ts` (new) — POST/DELETE; in-memory presence tracking with 30s expiry
+- `src/components/editor/CollaborativeEditor.tsx` (new) — wraps TiptapEditor with sync loop, presence polling, and live indicator
+
 ## [4.60.0] - 2026-04-05
 
 ### New Features

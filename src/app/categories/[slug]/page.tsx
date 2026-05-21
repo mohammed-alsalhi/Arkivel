@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/utils";
 import CategoryWatchButton from "@/components/CategoryWatchButton";
 import RandomArticleButton from "@/components/RandomArticleButton";
 import SynthesizeButton from "@/components/SynthesizeButton";
+import CategoryOverviewGenerator from "@/components/CategoryOverviewGenerator";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -71,22 +72,19 @@ export default async function CategoryPage({ params }: Props) {
         <nav className="text-[12px] text-muted mb-2">
           {parentChain.map((p, i) => (
             <span key={p.id}>
-              {i > 0 && " \u203A "}
+              {i > 0 && " / "}
               <Link href={`/categories/${p.slug}`}>{p.name}</Link>
             </span>
           ))}
-          {" \u203A "}{category.name}
+          {" / "}{category.name}
         </nav>
       )}
 
-      <div className="flex items-center justify-between mb-1">
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
+      <div className="mb-1 flex flex-wrap items-start justify-between gap-2 border-b border-border pb-1">
+        <h1 className="font-serif text-[1.7rem] font-normal text-heading">
           Category: {category.name}
         </h1>
-        <div className="flex items-center gap-2">
+        <div className="ui-toolbar">
           <SynthesizeButton categoryId={category.id} categoryName={category.name} articleCount={articles.length} />
           <RandomArticleButton categorySlug={slug} label="Random" />
           <CategoryWatchButton categoryId={category.id} />
@@ -95,6 +93,9 @@ export default async function CategoryPage({ params }: Props) {
       {category.description && (
         <p className="text-[13px] text-muted mb-3">{category.description}</p>
       )}
+      <div className="mb-3">
+        <CategoryOverviewGenerator categoryId={category.id} />
+      </div>
       <p className="text-[12px] text-muted mb-3">
         {articles.length} article{articles.length !== 1 ? "s" : ""} in this category
       </p>
@@ -128,23 +129,20 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       ) : (
         <div>
-          <h2
-            className="text-base font-normal text-heading border-b border-border pb-0.5 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
+          <h2 className="ui-section-title">
             Articles in this category
           </h2>
-          <table className="w-full border-collapse border border-border bg-surface text-[13px]">
+          <table className="ui-table">
             <thead>
-              <tr className="bg-surface-hover">
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Last edited</th>
+              <tr>
+                <th>Article</th>
+                <th className="w-28">Last edited</th>
               </tr>
             </thead>
             <tbody>
               {articles.map((article) => (
-                <tr key={article.id} className="hover:bg-surface-hover">
-                  <td className="border border-border px-3 py-1.5">
+                <tr key={article.id}>
+                  <td>
                     {article.isPinned && (
                       <span title="Pinned" className="inline-block mr-1 align-middle text-muted">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -162,7 +160,7 @@ export default async function CategoryPage({ params }: Props) {
                       </span>
                     )}
                   </td>
-                  <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
+                  <td className="text-muted text-[12px]">
                     {formatDate(article.updatedAt)}
                   </td>
                 </tr>
@@ -173,7 +171,7 @@ export default async function CategoryPage({ params }: Props) {
       )}
 
       <p className="mt-4 text-[13px] flex items-center gap-4">
-        <Link href="/categories">&larr; All categories</Link>
+        <Link href="/categories">All categories</Link>
         <Link href={`/categories/${category.slug}/concept-map`} className="text-muted hover:text-foreground">
           Concept map
         </Link>

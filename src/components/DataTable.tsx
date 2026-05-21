@@ -71,11 +71,11 @@ export default function DataTable({ source, sourceType = "csv" }: Props) {
 
   return (
     <div className="my-4 border border-border rounded overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-2 bg-surface-hover border-b border-border">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-surface-hover border-b border-border">
         <input
           type="text" value={filter} onChange={(e) => setFilter(e.target.value)}
           placeholder="Filter…"
-          className="text-sm border border-border rounded px-2 py-0.5 bg-surface w-48"
+          className="min-w-0 flex-1 text-sm border border-border rounded px-2 py-0.5 bg-surface sm:flex-none sm:w-48"
         />
         <button onClick={downloadCSV} className="text-xs text-muted hover:text-foreground">↓ CSV</button>
       </div>

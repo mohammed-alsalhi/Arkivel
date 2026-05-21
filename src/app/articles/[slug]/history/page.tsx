@@ -32,19 +32,18 @@ export default async function HistoryPage({ params }: Props) {
 
   return (
     <div>
-      {/* Tabs */}
-      <div className="wiki-tabs">
-        <Link href={`/articles/${slug}`} className="wiki-tab">
+      <nav className="article-tabbar" aria-label="Article sections">
+        <Link href={`/articles/${slug}`} className="article-tab">
           Article
         </Link>
-        <AdminEditTab slug={slug} />
-        <span className="wiki-tab wiki-tab-active">History</span>
-        <Link href={`/articles/${slug}/discussion`} className="wiki-tab">
+        <AdminEditTab slug={slug} className="article-tab" />
+        <span className="article-tab article-tab-active">History</span>
+        <Link href={`/articles/${slug}/discussion`} className="article-tab">
           Discussion
         </Link>
-      </div>
+      </nav>
 
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
+      <div className="border border-border bg-surface px-5 py-4">
         <h1
           className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-3"
           style={{ fontFamily: "var(--font-serif)" }}

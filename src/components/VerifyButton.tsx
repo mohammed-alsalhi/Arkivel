@@ -29,7 +29,7 @@ export default function VerifyButton({ articleId, lastVerifiedAt: initial }: Pro
       <button
         onClick={handleVerify}
         disabled={loading}
-        className="h-6 px-2 text-[11px] border border-border rounded hover:bg-muted/50 disabled:opacity-50 flex items-center gap-1"
+        className="ui-button disabled:opacity-50"
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12" />
@@ -37,7 +37,7 @@ export default function VerifyButton({ articleId, lastVerifiedAt: initial }: Pro
         {loading ? "Verifying…" : "Mark as verified"}
       </button>
       {verifiedAt && (
-        <span className="text-green-600 dark:text-green-400">
+        <span className="text-success">
           Last verified: {new Date(verifiedAt).toLocaleDateString()}
         </span>
       )}

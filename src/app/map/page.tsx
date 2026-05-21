@@ -19,16 +19,16 @@ export default function MapPage() {
   const [editMode, setEditMode] = useState(false);
 
   return (
-    <div className="-mx-6 -my-4 flex h-[calc(100vh-40px)] flex-col">
-      <div className="flex items-center justify-between border-b border-border bg-surface px-4 py-2">
+    <div className="-my-4 flex h-[calc(100vh-40px)] min-w-0 flex-col overflow-hidden sm:-mx-6">
+      <div className="flex min-w-0 flex-col gap-2 border-b border-border bg-surface px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:px-4">
         <h1
-          className="text-lg font-normal text-heading"
+          className="min-w-0 text-lg font-normal text-heading"
           style={{ fontFamily: "var(--font-serif)" }}
         >
           {config.mapLabel}
         </h1>
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] text-muted italic">
+        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
+          <span className="min-w-0 text-[11px] text-muted italic">
             {editMode
               ? "Draw areas to link regions to articles"
               : "Hover over areas to explore locations"}
@@ -36,7 +36,7 @@ export default function MapPage() {
           {isAdmin && (
             <button
               onClick={() => setEditMode(!editMode)}
-              className={`px-3 py-1 text-[12px] transition-colors ${
+              className={`min-w-0 px-3 py-1 text-[12px] transition-colors ${
                 editMode
                   ? "bg-accent text-white"
                   : "border border-border bg-surface-hover text-foreground hover:bg-surface"

@@ -49,11 +49,13 @@ export default function ThemeCustomizer() {
       <button
         onClick={() => setOpen((v) => !v)}
         title="Customise accent colour"
-        className="h-6 w-6 rounded-full border-2 border-border hover:border-accent transition-colors"
+        className="ui-button w-6 rounded-full border-2 p-0"
         style={{ background: `hsl(${hue}, 65%, 50%)` }}
+        aria-haspopup="true"
+        aria-expanded={open}
       />
       {open && (
-        <div className="absolute right-0 top-8 z-50 bg-surface border border-border rounded shadow-lg p-3 w-52 space-y-2">
+        <div className="ui-dropdown top-8 w-52 space-y-2 p-3">
           <p className="text-[11px] text-muted font-medium">Accent colour</p>
           <input
             type="range"
@@ -70,7 +72,7 @@ export default function ThemeCustomizer() {
           />
           <button
             onClick={reset}
-            className="text-[10px] text-muted hover:text-foreground"
+            className="ui-button"
           >
             Reset to default
           </button>

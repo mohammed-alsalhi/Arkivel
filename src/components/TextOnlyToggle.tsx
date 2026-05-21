@@ -42,11 +42,8 @@ export default function TextOnlyToggle() {
     <button
       onClick={toggle}
       title={active ? "Show images" : "Text-only mode (hide images)"}
-      className={`h-6 px-2 text-[11px] border rounded transition-colors ${
-        active
-          ? "border-accent bg-accent/10 text-accent"
-          : "border-border text-muted hover:text-foreground"
-      }`}
+      aria-pressed={active}
+      className="ui-button w-6 px-0"
     >
       T
     </button>

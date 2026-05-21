@@ -57,7 +57,7 @@ export default async function ExplorePage({ searchParams }: Props) {
         <span className="wiki-tab wiki-tab-active">Explore</span>
       </div>
       <div className="border border-t-0 border-border bg-surface px-5 py-4 text-center py-16">
-        <p className="text-xs text-muted uppercase tracking-widest mb-6">Guided Explore</p>
+        <p className="text-xs text-muted uppercasest mb-6">Guided Explore</p>
         {article ? (
           <>
             <h1 className="text-2xl font-normal text-heading mb-2">{article.title}</h1>

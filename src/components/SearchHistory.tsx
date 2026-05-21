@@ -37,7 +37,7 @@ export default function SearchHistory({ currentQuery }: { currentQuery: string }
   return (
     <div className="mt-3">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-[11px] text-muted uppercase tracking-wide">Recent searches</span>
+        <span className="text-[11px] text-muted uppercase">Recent searches</span>
         <button
           onClick={() => { clearSearchHistory(); setHistory([]); }}
           className="text-[10px] text-muted hover:text-foreground"

@@ -45,7 +45,7 @@ export default function ActivityHeatmap() {
   return (
     <div className="mb-5 p-4 border border-border bg-surface rounded">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted">
+        <span className="text-[11px] font-semibold uppercase text-muted">
           Contribution Activity — last 52 weeks
         </span>
         <span className="text-[11px] text-muted">{totalEdits} edits</span>

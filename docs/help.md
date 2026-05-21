@@ -74,13 +74,13 @@ Beyond standard text, the editor supports specialized content blocks inserted vi
 
 ## Presentation Mode
 
-Click **Present** in the article action bar to open the article as a slideshow. Each H2 / H3 heading becomes a new slide. Use arrow keys or click to advance. Press Esc to exit.
+Click **Present** in the article action bar to open the article as a slideshow. Each H2 / H3 heading becomes a new slide. Use arrow keys or click to advance. Press Esc to exit. Long slides scroll inside the slide stage so the title, progress, overview, and navigation controls stay reachable.
 
 ---
 
-## Article Action Bar
+## Article Action Panel
 
-The toolbar below the article title provides quick actions grouped into four sections:
+The compact rail below the article header keeps Navigate, Collect, and Share actions visible. Read and Tools open as disclosure menus so dense reading controls stay available without taking over the page.
 
 | Action | Description |
 |--------|-------------|
@@ -100,7 +100,7 @@ The toolbar below the article title provides quick actions grouped into four sec
 | **High contrast (A)** | Pure black/white/yellow theme for maximum readability; persisted |
 | **Text only (T)** | Hides images and media from article content; persisted |
 | **Speed read** | RSVP modal; 150/250/400/600 WPM; ORP pivot character highlighted |
-| **Font preference** | Dropdown to switch article body font (Default/Serif/Sans/Mono); persisted |
+| **Font preference** | Dropdown to switch article body font (Serif/Sans/Mono); Serif is the default; persisted |
 | **Accent color** | HSL hue slider to customize the wiki accent color; persisted |
 | **Quick note** | Collapsible private note per article stored in browser localStorage |
 | **Copy plain text** | Copies article body as plain text (HTML stripped) to clipboard |
@@ -132,6 +132,7 @@ Press `Ctrl+Shift+L` (Cmd on Mac) to insert a wiki link.
 ## Search
 
 - The search bar provides instant results as you type; press **Enter** for the full search page
+- Instant search, the full search page, the command palette, wiki-link autocomplete, split view article pickers, and edit fallback all use the same search result contract
 - Multi-word queries use **AND** logic — every word must appear somewhere in the article
 - Results are ranked: exact title match > starts with > title contains > content-only
 - **Semantic search:** set `OPENAI_API_KEY` to blend AI-ranked results based on meaning, not just keywords
@@ -166,11 +167,15 @@ AI features are gated on environment variables and degrade gracefully when keys 
 
 ## Discovery & Navigation
 
+- **Main Page** — `/` is the working wiki front page with live article/category/tag/revision stats, featured content, a browse directory, recently updated articles, and compact sidebar modules.
+- **Page headers** — core browse and reference pages use a shared header with a short kicker, serif title, explanatory dek, and wrapping action buttons.
+- **Brand mark and compact search** — the preliminary Arkivel mark appears in the sidebar/mobile header, and the header search expands only when you open it.
 - **Bookmarks** — save articles with optional notes at `/bookmarks`.
 - **Reading Lists** — organize articles into ordered lists at `/reading-lists`. Lists can be made public and shared via a link.
 - **Smart Collections** — saved searches with filters (tags, category, author, date range) at `/collections`.
 - **TIL (Today I Learned)** — post short (280-char) notes at `/til`. Tag them for discovery.
 - **Explore mode** — guided walk through articles using semantic similarity at `/explore`.
+- **Canon Trails** — `/trails` builds guided reading routes from live wiki links, backlinks, categories, freshness, article depth, and engagement. Use it when you want a path through the canon instead of another dashboard.
 - **Session reading trail** — collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.
 - **Reading history** — browser-local list of the last 50 articles you visited, with relative timestamps, at `/history`. No server data stored.
 - **Last-visit badge** — on return visits, articles show "You read this X ago" in the article header.
@@ -189,6 +194,10 @@ AI features are gated on environment variables and degrade gracefully when keys 
 
 ## Article Page Features
 
+- **Article header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped at the top of the page.
+- **Action panel** — article controls are grouped as Navigate, Collect, Share, Read, and Tools.
+- **Taxonomy footer** — category and tag links appear as wrapping chips near the bottom of the article.
+- **Responsive layout** — article tabs, infoboxes, table of contents, backlinks, and action groups are constrained for narrow screens.
 - **Reading time** — every article shows "~X min read" in the byline, estimated at 200 words per minute.
 - **Reading mode** — click "Reading mode" in the toolbar or press `R` to enter a distraction-free view. Press again or `R` to exit.
 - **Draft share links** — admins generate a secret URL (`POST /api/articles/[id]/share-token`) so anyone with the link can preview a draft at `/share/[token]` without needing to log in.
@@ -307,6 +316,12 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 ## Analytics & Wiki Health
 
 - **Analytics dashboard** — scroll depth heatmap, reader navigation paths, search gap tracking
+- **Canon Atlas** — `/atlas` turns the wiki into a live map of territories, article signals, story threads, a flagship dossier, continuity pressure, and atlas moves
+- **Atlas API** — `/api/atlas` returns the same territories, signals, threads, dossier, continuity pressure, and action queue as JSON
+- **Canon Trails** — `/trails` turns the wiki into guided reading routes through strongest canon, recent updates, deep pages, and repair paths
+- **Trails API** — `/api/trails` returns guided reading routes, stop reasons, estimates, word totals, and link totals as JSON
+- **Knowledge Command Center** — `/intelligence` combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines
+- **Intelligence API** — `/api/intelligence` returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON
 - **Search analytics** — `/admin/search-analytics` shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps
 - **Search gaps** — `/admin/search-gaps` shows top zero-result queries
 - **Stale articles** — `/admin/staleness` lists articles not updated in 180+ days
@@ -343,7 +358,7 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Article quiz mode** — "Quiz me" button in article tools bar; AI generates 5 multiple-choice questions; tracks score and records attempt
 - **Ask my wiki** — full-page AI oracle at `/ask`; streaming answers grounded in wiki content via semantic search; source attribution; multi-turn conversation; linked from sidebar
 - **Knowledge synthesis** — "Synthesize" button on category pages; AI synthesises all articles into a comprehensive overview; preview modal; one-click to create as new article
-- **Presentation mode** — "Present" button on any article; `/present/[slug]` opens a cinematic full-screen slideshow; H2 sections become slides; keyboard navigation (← →), overview grid (G), fullscreen (F)
+- **Presentation mode** — "Present" button on any article; `/present/[slug]` opens a cinematic full-screen slideshow with a scrollable slide stage, keyboard navigation, overview grid (G), fullscreen (F), and responsive controls that avoid overlap
 - **Bulk JSON export** — `/api/export/json`; all articles as structured JSON (admin only)
 - **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + summary stats (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history
@@ -391,7 +406,9 @@ Optional feature, disabled by default. Enable with `NEXT_PUBLIC_MAP_ENABLED=true
 
 ## Navigation & Organization
 
-The sidebar is divided into collapsible sections — click any section header to collapse or expand it.
+On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps the most common destinations one tap away: Home, Search, Create, Recent, and Browse. The Browse item opens the same sidebar contents, then closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so their canvases and composers are not covered.
+
+Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups destinations across navigation, discovery, personal, reference, and admin areas, then searches articles in the same panel when you type a query.
 
 **Navigation section:**
 - **Main Page** — `/`, the wiki home
@@ -401,11 +418,14 @@ The sidebar is divided into collapsible sections — click any section header to
 - **Search** — `/search`, full-text search with relevance ranking
 - **Tags** — `/tags`, browse all tags and their articles
 - **Article graph** — `/graph`, D3 force-directed graph of wiki link connections
+- **Canon atlas** — `/atlas`, world-map style view of territories, story threads, dossiers, and continuity pressure
+- **Canon trails** — `/trails`, guided reading routes through canon, recent work, deep pages, and repair paths
 - **Help** — this page
 
 **Discover section:**
 - **Explore** — `/explore`, curated entry points into the wiki
 - **Activity** — `/activity`, a feed of recent contributions
+- **Command center** — `/intelligence`, a live wiki cockpit for readiness, graph health, canon quality, reader demand, impact simulation, and next-best work
 - **Collections** — `/collections`, curated article sets
 - **Change requests** — `/change-requests`, pending edits awaiting review
 - **Reviews** — `/reviews`, articles flagged for quality review

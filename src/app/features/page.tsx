@@ -9,16 +9,20 @@ export const metadata: Metadata = {
 export default function FeaturesPage() {
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Features
-      </h1>
-      <p className="text-[13px] text-muted mb-5">
-        A complete overview of everything the wiki can do. For step-by-step instructions see the{" "}
-        <Link href="/help">Help &amp; Features Guide</Link>.
-      </p>
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Reference</p>
+          <h1 className="ui-page-title">Features</h1>
+          <p className="ui-page-dek">
+            A complete overview of everything the wiki can do. For step-by-step instructions see the{" "}
+            <Link href="/help">Help &amp; Features Guide</Link>.
+          </p>
+        </div>
+        <div className="ui-page-actions">
+          <Link href="/help" className="ui-button">Help guide</Link>
+          <Link href="/api-docs" className="ui-button">API docs</Link>
+        </div>
+      </header>
 
       {/* Writing & Editing */}
       <div className="wiki-portal mb-4">
@@ -89,6 +93,15 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
+            <li><strong>Unified search surfaces</strong> — header search, the search page, command palette, wiki-link autocomplete, split view pickers, and edit fallback all consume the same search result contract</li>
+            <li><strong>Responsive app shell</strong> — desktop and tablet layouts keep the dense collapsible sidebar; phone layouts add a safe-area-aware bottom nav for Home, Search, Create, Recent, and Browse; focused workspace pages keep the compact top menu so canvases and composers are not covered</li>
+            <li><strong>Main page front page</strong> — <Link href="/">/</Link> combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point</li>
+            <li><strong>Shared page headers</strong> — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently</li>
+            <li><strong>Brand mark and compact search</strong> — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm</li>
+            <li><strong>Canon Atlas</strong> — <Link href="/atlas">/atlas</Link> turns the wiki into a live map with category territories, article signals, story threads, a flagship dossier, continuity pressure, atlas moves, and a JSON feed</li>
+            <li><strong>Canon Trails</strong> — <Link href="/trails">/trails</Link> turns live wiki links, backlinks, categories, freshness, depth, and engagement into guided reading routes for canon, recent work, deep pages, and repair paths</li>
+            <li><strong>Knowledge Command Center</strong> — <Link href="/intelligence">/intelligence</Link> runs 20 live engines for mission readiness, editorial pressure, graph health, broken links, stubs, taxonomy debt, featured canon, translation surface, reader demand, verification debt, and cleanup flags, then opens with a live article constellation, readiness radar, and impact simulator</li>
+            <li><strong>Command palette navigation</strong> — <code className="bg-surface-hover px-1 text-[12px]">Cmd+K</code> / <code className="bg-surface-hover px-1 text-[12px]">Ctrl+K</code> opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces</li>
             <li><strong>Word-count search filter</strong> — advanced search includes min/max word count range to find articles by length</li>
             <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>
             <li><strong>30-day view sparkline</strong> — article stats panel shows a mini bar chart of daily page views for the past 30 days</li>
@@ -134,6 +147,10 @@ export default function FeaturesPage() {
         <div className="wiki-portal-header">Article Page</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Article hero header</strong> — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header</li>
+            <li><strong>Grouped action panel</strong> — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus</li>
+            <li><strong>Taxonomy footer</strong> — category and tags render as wrapping chips at the end of the article rather than pipe-separated text</li>
+            <li><strong>Responsive article shell</strong> — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens</li>
             <li><strong>Reading time estimator</strong> — &ldquo;~X min read&rdquo; computed at 200 wpm displayed in every article&apos;s metadata line</li>
             <li><strong>Draft share links</strong> — admins generate a secret-token URL (<code className="bg-surface-hover px-1 text-[12px]">/share/[token]</code>) so non-admins can preview a draft without publishing</li>
             <li><strong>Expiry warning banner</strong> — yellow inline banner when an article&apos;s <em>reviewDueAt</em> is within 30 days</li>
@@ -183,8 +200,13 @@ export default function FeaturesPage() {
             <li><strong>Learning paths</strong> — curated ordered sequences of articles with per-path progress tracking at <Link href="/learning-paths">/learning-paths</Link></li>
             <li><strong>Flashcards</strong> — create decks from articles; SM-2 spaced repetition with 0–5 grading at <Link href="/flashcards">/flashcards</Link></li>
             <li><strong>AI quizzes</strong> — Claude generates 5 multiple-choice questions from any article for self-testing</li>
+            <li><strong>AI Tutor Mode</strong> — Socratic AI tutor chat on any article; asks probing questions and tests comprehension</li>
+            <li><strong>Spaced repetition review queue</strong> — enroll articles; SM-2 algorithm schedules daily reviews at <Link href="/review">/review</Link></li>
+            <li><strong>Daily digest</strong> — personalised in-app briefing at <Link href="/digest">/digest</Link>: due reviews, watched updates, AI facts, article of the day</li>
+            <li><strong>Adaptive reading level</strong> — switch any article to Beginner, Technical, or ELI5 view on the fly via AI</li>
+            <li><strong>Article audio narration</strong> — listen button on every article uses browser TTS to narrate the full text</li>
             <li><strong>Reading progress</strong> — mark articles as read; category pages show a completion ring</li>
-            <li><strong>Presentation mode</strong> — any article opens as a full-screen slideshow at <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code>; each H2/H3 is a slide</li>
+            <li><strong>Presentation mode</strong> — any article opens as a full-screen slideshow at <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code>; each H2/H3 is a slide, and long content scrolls within the slide stage rather than covering controls</li>
             <li><strong>Watchlist digest</strong> — optional daily email summary of watched article changes at <Link href="/watchlist/digest">/watchlist/digest</Link></li>
           </ul>
         </div>
@@ -223,6 +245,12 @@ export default function FeaturesPage() {
             <li><strong>Category suggestions</strong> — Claude suggests topics missing from a category</li>
             <li><strong>Quiz generation</strong> — 5 multiple-choice questions generated per article by Claude</li>
             <li><strong>Translation</strong> — machine-translate articles via DeepL or Google Translate (requires API key)</li>
+            <li><strong>AI auto-fill</strong> — type a title on the new article page and pick a template type; AI generates a full structured draft</li>
+            <li><strong>Category overview generator</strong> — button on category pages generates AI-written introductory prose from all articles</li>
+            <li><strong>AI fact-check</strong> — analyzes 3–6 factual claims per article; rates each as Verified / Plausible / Uncertain / Questionable</li>
+            <li><strong>Smart editor suggestions</strong> — live sidebar detects unlinked wiki articles, related pages, and AI-suggested missing sections</li>
+            <li><strong>AI revision summary</strong> — automatically generates an edit summary when saving changes</li>
+            <li><strong>Import from URL / Image / YouTube</strong> — AI converts web pages, photos of notes, and video transcripts into wiki articles</li>
           </ul>
         </div>
       </div>
@@ -337,6 +365,9 @@ export default function FeaturesPage() {
             <li><strong>Analytics</strong> — scroll depth heatmap, navigation paths at <Link href="/admin/analytics">/admin/analytics</Link></li>
             <li><strong>Performance metrics</strong> — system metrics at <Link href="/admin/metrics">/admin/metrics</Link></li>
             <li><strong>Health score</strong> — A–F grade for link coverage, freshness, stub %, search gaps at <Link href="/admin/health">/admin/health</Link></li>
+            <li><strong>Atlas JSON feed</strong> — <Link href="/api/atlas">/api/atlas</Link> exposes territories, article signals, story threads, the flagship dossier, continuity pressure, and recommended atlas moves</li>
+            <li><strong>Trails JSON feed</strong> — <Link href="/api/trails">/api/trails</Link> exposes guided reading routes, stop reasons, reading estimates, word totals, and link totals</li>
+            <li><strong>Intelligence JSON feed</strong> — <Link href="/api/intelligence">/api/intelligence</Link> exposes the command-center score, summary, graph constellation, radar axes, pressure model, 20 engines, and next-best-work queue for dashboards or automation</li>
             <li><strong>Content lint</strong> — broken links, missing excerpts, orphans at <Link href="/admin/lint">/admin/lint</Link></li>
             <li><strong>Stale articles</strong> — articles not updated in 180+ days at <Link href="/admin/staleness">/admin/staleness</Link></li>
             <li><strong>Embeddings coverage</strong> — semantic search index per article at <Link href="/admin/embeddings">/admin/embeddings</Link></li>
@@ -374,7 +405,7 @@ export default function FeaturesPage() {
             <li><strong>Content warning tags</strong> — admins add CW labels (spoilers, violence, mature, etc.) to articles; shown as a dismissible amber banner before article body</li>
             <li><strong>Content gap analysis</strong> — admin dashboard at <Link href="/admin/content-gaps">/admin/content-gaps</Link> shows zero-result and low-result search queries to highlight missing wiki topics</li>
             <li><strong>Theme customizer</strong> — floating color-swatch button in article toolbar; HSL hue slider picks the accent color live; persisted to browser storage</li>
-            <li><strong>Font preference</strong> — dropdown in article toolbar to switch article body font between Default, Serif, Sans, or Mono; persisted to browser storage</li>
+            <li><strong>Font preference</strong> — article body defaults to Serif, with a toolbar dropdown for Serif, Sans, or Mono; persisted to browser storage</li>
             <li><strong>Article quick notes</strong> — collapsible private note panel on every article page; stored only in the browser; save and delete controls</li>
             <li><strong>Maintenance mode</strong> — admin toggle at <Link href="/admin/maintenance">/admin/maintenance</Link> displays a site-wide yellow banner when the wiki is under maintenance</li>
             <li><strong>Cleanup tags</strong> — admins mark articles with attention flags (Needs Images, Needs Expansion, Needs Citations, Needs Review, Stub, Outdated); shown as orange notice on article page</li>
@@ -412,7 +443,7 @@ export default function FeaturesPage() {
             <li><strong>Article quiz mode</strong> — &ldquo;Quiz me&rdquo; in the article tools bar; AI generates 5 multiple-choice questions; full flashcard UI with answer reveal, score, and attempt recording</li>
             <li><strong>Ask my wiki — AI oracle</strong> — full-page conversational AI at <Link href="/ask">/ask</Link>; semantic search retrieves the most relevant articles per query; answers stream token-by-token; multi-turn conversation; source attribution</li>
             <li><strong>Knowledge synthesis</strong> — &ldquo;Synthesize&rdquo; on category pages; AI reads all articles and synthesises a comprehensive overview; preview modal; &ldquo;Create as new article&rdquo; one-click</li>
-            <li><strong>Presentation mode</strong> — every article has a &ldquo;Present&rdquo; button; <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code> is a cinematic slideshow; H2 sections become slides; animated transitions, slide overview, fullscreen, dot navigation</li>
+            <li><strong>Presentation mode</strong> — every article has a &ldquo;Present&rdquo; button; <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code> is a cinematic slideshow with reserved top/bottom chrome, a scrollable slide stage, animated transitions, slide overview, fullscreen, and dot navigation</li>
             <li><strong>Bulk JSON export</strong> — <Link href="/api/export/json">/api/export/json</Link> downloads all articles as a structured JSON file (admin only)</li>
             <li><strong>Per-article analytics</strong> — <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/analytics</code> shows 30-day view chart, reads, reactions, and revision count (admin only)</li>
             <li><strong>Series progress tracker</strong> — article series navigation shows &ldquo;X of N read&rdquo; based on your browser reading history</li>
@@ -426,7 +457,7 @@ export default function FeaturesPage() {
             <li><strong>Top referrers dashboard</strong> — <Link href="/admin/referrers">/admin/referrers</Link> shows top 30 referring domains with traffic percentage bars; 7/30/90-day windows</li>
             <li><strong>Tag usage trends</strong> — <Link href="/admin/tag-trends">/admin/tag-trends</Link> heat-map table showing new articles per tag per month over the last 12 months</li>
             <li><strong>Analytics CSV export</strong> — <Link href="/api/export/analytics">/api/export/analytics</Link> downloads all published articles with read counts, reactions, revisions, and dates (admin only)</li>
-            <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
+            <li><strong>Custom branding</strong> — name, tagline, welcome text, footer, logo, logo mark, and app icon via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>
       </div>

@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 
 const KEY = "wiki_font_pref";
 const fonts: { label: string; value: string; css: string }[] = [
-  { label: "Default", value: "default", css: "" },
-  { label: "Serif", value: "serif", css: "Georgia, 'Times New Roman', serif" },
+  { label: "Serif", value: "serif", css: "var(--font-serif)" },
   { label: "Sans", value: "sans", css: "'Segoe UI', Arial, sans-serif" },
   { label: "Mono", value: "mono", css: "'Courier New', Courier, monospace" },
 ];
@@ -16,18 +15,19 @@ function applyFont(css: string) {
   if (!css) return;
   const s = document.createElement("style");
   s.id = STYLE_ID;
-  s.textContent = `#article-content { font-family: ${css} !important; }`;
+  s.textContent = `#article-content, #article-content .wiki-content { font-family: ${css} !important; }`;
   document.head.appendChild(s);
 }
 
 export default function FontPreference() {
-  const [value, setValue] = useState("default");
+  const [value, setValue] = useState("serif");
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(KEY) || "default";
-      setValue(stored);
-      const font = fonts.find((f) => f.value === stored);
+      const stored = localStorage.getItem(KEY);
+      const next = !stored || stored === "default" ? "serif" : stored;
+      setValue(next);
+      const font = fonts.find((f) => f.value === next);
       if (font) applyFont(font.css);
     } catch {
       // ignore
@@ -46,7 +46,7 @@ export default function FontPreference() {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       title="Article font preference"
-      className="h-6 px-1 text-[11px] border border-border rounded bg-surface text-foreground"
+      className="ui-select h-6 w-auto min-w-24 px-1 text-[11px]"
     >
       {fonts.map((f) => (
         <option key={f.value} value={f.value}>{f.label}</option>

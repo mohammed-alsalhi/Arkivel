@@ -90,8 +90,10 @@ export default function NotificationBell() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative w-7 h-7 flex items-center justify-center rounded text-muted hover:text-foreground hover:bg-surface-hover"
+        className="ui-icon-button relative"
         title="Notifications"
+        aria-haspopup="true"
+        aria-expanded={open}
       >
         {/* Bell icon (SVG) */}
         <svg
@@ -115,13 +117,13 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-50 bg-surface border border-border shadow-md w-72">
-          <div className="flex items-center justify-between px-3 py-2 border-b border-border-light">
+        <div className="ui-dropdown wiki-notification-dropdown">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-b border-border-light">
             <span className="text-[12px] font-bold text-heading">Notifications</span>
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-[11px] text-accent hover:underline"
+                className="ui-button"
               >
                 Mark all read
               </button>
@@ -137,8 +139,8 @@ export default function NotificationBell() {
               notifications.slice(0, 20).map((n) => (
                 <div
                   key={n.id}
-                  className={`px-3 py-2 border-b border-border-light text-[12px] hover:bg-surface-hover ${
-                    !n.read ? "bg-accent-soft" : ""
+                className={`px-3 py-2 border-b border-border-light text-[12px] hover:bg-surface-hover ${
+                  !n.read ? "bg-accent-soft" : ""
                   }`}
                 >
                   {n.article ? (

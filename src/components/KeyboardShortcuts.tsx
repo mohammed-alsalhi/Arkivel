@@ -122,7 +122,7 @@ export default function KeyboardShortcuts() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {SHORTCUT_GROUPS.map(({ category, items }) => (
               <div key={category}>
-                <h3 className="text-[10px] font-semibold uppercase tracking-widest text-muted mb-2">
+                <h3 className="text-[10px] font-semibold uppercasest text-muted mb-2">
                   {category}
                 </h3>
                 <table className="w-full text-[12px]">

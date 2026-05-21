@@ -30,6 +30,9 @@ src/
         [id]/
       search/                 # Full-text search
       graph/                  # Knowledge graph (BFS subgraph support)
+      atlas/                  # Canon Atlas report
+      trails/                 # Canon Trails guided route report
+      intelligence/           # Knowledge Command Center cockpit report
       map-markers/            # Marker CRUD
         [id]/
       maps/                   # Multi-map management
@@ -51,10 +54,14 @@ src/
       new/                    # Create article page
     categories/               # Category listing and individual pages
     tags/                     # Tag-based article listing
+    atlas/                    # Canon Atlas world-map surface
+    trails/                   # Canon Trails reader routes
     graph/                    # Interactive D3 knowledge graph
+    intelligence/             # Cockpit-style Knowledge Command Center
     map/                      # Interactive map pages
       [mapId]/
     search/                   # Search results page
+    page.tsx                  # Main Page front page with stats, featured article, browse directory, and recent updates
     login/                    # Login page
     register/                 # Registration page
     admin/                    # Admin dashboard
@@ -82,8 +89,10 @@ src/
       FootnoteExtension.ts    # Footnote/citation support
       PotentialLinkExtension.ts # Detected link mark extension
       LinkBubble.tsx          # Floating edit/remove tooltip for links
-    layout/                   # Sidebar, search bar
+    layout/                   # App shell navigation and header controls
       Sidebar.tsx
+      MobileNavigation.tsx
+      LayoutShell.tsx
       SearchBar.tsx
     graph/                    # D3 force-directed graph
       ArticleGraph.tsx
@@ -96,11 +105,22 @@ src/
       MapSearch.tsx
     articles/                 # Article display components
       ArticleCard.tsx
+    article/
+      ArticleActionPanel.tsx   # Slim article action rail with Read/Tools disclosures
+      ArticlePageHeader.tsx    # Article hero metadata and badges
+      ArticleTaxonomyFooter.tsx # Category/tag chip footer
+    intelligence/
+      IntelligenceCockpit.tsx  # Client graph constellation, radar, and readiness simulator
     (37 root-level components)  # Badge, Breadcrumb, Toast, Pagination, ThemeToggle,
                                 # KeyboardShortcuts, NotificationBell, UserAvatar,
                                 # CategoryManager, TagManager, TagPicker, etc.
   lib/
     prisma.ts                 # Prisma client singleton (globalThis caching for dev)
+    navigation.ts             # Shared command destinations and focused workspace route detection
+    canon-atlas.ts            # Territory, dossier, story-thread, and continuity report
+    canon-trails.ts           # Reader-route engine for canon, fresh, deep, repair, and starter trails
+    intelligence.ts           # Command-center score, graph, radar, sections, and next-best-work report
+    search-response.ts        # Client-safe normalizer for internal search API response shapes
     auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
     api-auth.ts               # API key validation for public REST API
     config.ts                 # Environment-driven branding config
@@ -173,7 +193,7 @@ docs/
 ## Key Patterns
 
 ### Configuration
-All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables.
+All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables. Brand image paths are configurable through `NEXT_PUBLIC_ARKIVEL_LOGO`, `NEXT_PUBLIC_ARKIVEL_LOGO_MARK`, and `NEXT_PUBLIC_ARKIVEL_APP_ICON`; defaults live in `public/brand/`. Metadata resolves relative image paths against `NEXT_PUBLIC_BASE_URL`. The visible app version is read from `package.json` and exposed at build time through `next.config.ts` so sidebar and health-check version text follow release bumps.
 
 ### Authentication
 Dual auth system. **Legacy:** single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. **Multi-user:** bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns the current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
@@ -199,8 +219,17 @@ Each root category defines a field schema in `src/lib/infobox-schema.ts`. Subcat
 ### Theming
 CSS variables in `src/app/globals.css` under a `@theme` block. Dark mode applies overrides via `html[data-theme="dark"]`. Uses `@theme` (not `@theme inline`) so CSS variable overrides work correctly with Tailwind.
 
+### Responsive App Shell
+`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep the dense left/right sidebar as the main navigation spine. Phone layouts add a safe-area-aware bottom navigation for Home, Search, Create, Recent, and Browse; the Browse item dispatches sidebar events consumed by `Sidebar`.
+
+Focused workspace routes (`/ask`, `/graph`, `/split`, `/map`, and `/present/*`) hide the bottom navigation so full-height canvases and chat/workspace composers are not covered. Those routes keep the compact top mobile sidebar toggle. Closed mobile sidebars are translated, hidden, and pointer-inert so off-canvas links cannot be hit-tested or reported as covered controls.
+
+Responsive shell changes should be verified across phone, tablet, laptop, and wide desktop widths. At minimum, check for document horizontal overflow, clipped labels/controls, and fixed elements covering interactive targets.
+
 ### Search
 Relevance-ranked full-text search. Multi-word queries use AND logic. Results scored by: exact title match (100) > starts with (80) > title contains (60) > content only (0). Search covers titles, content, and excerpts.
+
+`/api/search` returns an object response containing `results`, optional `semanticResults`, and optional `suggestions`. Client surfaces must consume it through `src/lib/search-response.ts` so header instant search, the search page, command palette article lookup, wiki-link autocomplete, split view pickers, and edit fallbacks stay aligned if the API shape evolves. Semantic search results are displayed as a distinct group on the search page when enabled.
 
 ### Map
 Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet with `CRS.Simple` for pixel coordinates on a custom image. Dynamically imported to avoid SSR issues. Supports multiple maps, layers, and zoom-dependent detail levels.
@@ -210,6 +239,15 @@ Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet wit
 
 ### Graph
 D3 force-directed graph at `/graph`. API at `/api/graph` returns nodes/edges from wiki links and `ArticleLink` table. Supports BFS subgraph via `?center=slug&depth=N`.
+
+### Canon Atlas
+`src/lib/canon-atlas.ts` builds `/atlas` and `/api/atlas` from live article, category, tag, revision, engagement, excerpt, infobox, and wiki-link metadata. It projects categories into atlas territories, scores top articles as map signals, derives story threads from real wiki links, selects a flagship dossier, and exposes continuity pressure around stubs, uncategorized pages, missing tags, missing outgoing links, excerpts, and infoboxes. Empty local databases fall back to starter territories and starter signal routes so the page remains visually complete without pretending published article data exists.
+
+### Canon Trails
+`src/lib/canon-trails.ts` builds `/trails` and `/api/trails` as a reader-facing route engine rather than an operations dashboard. It scores published articles from outgoing wiki links, backlinks, categories, word depth, update recency, revision count, discussions, reads, page views, reactions, bookmarks, pinned state, and featured state. The report emits canon, fresh, deep, and repair routes with direct article links, reading estimates, stop reasons, and summary counts. Empty local databases fall back to a starter route that points users toward creating the first article, category, and wiki link.
+
+### Knowledge Command Center
+`src/lib/intelligence.ts` builds the `/intelligence` page and `/api/intelligence` feed from live article, category, tag, revision, read, view, discussion, translation, and cleanup metadata. It derives 20 operational engines covering readiness, velocity, editorial pressure, stale content, graph health, broken links, stubs, longform candidates, taxonomy gaps, featured canon, infobox coverage, translation reach, conversation, reader demand, verification debt, and cleanup flags. It also emits a top-article constellation from real wiki-link edges, a readiness radar across graph/structure/freshness/trust/audience/momentum axes, and pressure counts used by the client-side impact simulator. Database failures fall back to an empty report so local shell verification remains usable without a seeded database.
 
 ### Feeds & API
 RSS at `/feed.xml`, Atom at `/feed/atom`. Public REST API at `/api/v1/` with API key auth (`X-API-Key` header). Webhooks dispatched on article events. API docs at `/api-docs`.
@@ -261,6 +299,9 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 ### Other Resources
 | Route | Methods | Description |
 |-------|---------|-------------|
+| `/api/atlas` | GET | Canon Atlas territories, article signals, story threads, dossier, continuity pressure, and next moves |
+| `/api/trails` | GET | Canon Trails guided routes, stop reasons, reading estimates, word totals, and link totals |
+| `/api/intelligence` | GET | Knowledge Command Center score, graph constellation, radar axes, pressure model, 20 engines, and action queue |
 | `/api/auth/*` | POST | Login, logout, register, check |
 | `/api/categories` | GET, POST | List/create categories |
 | `/api/categories/[id]` | GET, PUT, DELETE | Category CRUD |

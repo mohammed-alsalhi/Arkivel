@@ -39,7 +39,10 @@ export default function AddToReadingList({ articleId }: Props) {
     <div className="relative">
       <button
         onClick={() => { setOpen((o) => !o); loadLists(); }}
-        className="flex items-center gap-1 h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+        className="ui-button"
+        aria-haspopup="true"
+        aria-expanded={open}
+        title="Add to reading list"
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
           <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
@@ -48,7 +51,7 @@ export default function AddToReadingList({ articleId }: Props) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-8 z-20 bg-surface border border-border rounded shadow-md p-2 w-52 text-[12px]">
+        <div className="ui-dropdown top-8 z-20 w-52 p-1">
           {loading ? (
             <p className="text-muted px-2 py-1">Loading…</p>
           ) : lists.length === 0 ? (
@@ -59,7 +62,7 @@ export default function AddToReadingList({ articleId }: Props) {
                 key={list.id}
                 onClick={() => addToList(list.id)}
                 disabled={added.includes(list.id)}
-                className={`w-full text-left px-2 py-1 rounded hover:bg-surface-hover transition-colors ${
+                className={`ui-dropdown-item ${
                   added.includes(list.id) ? "text-muted line-through" : "text-foreground"
                 }`}
               >

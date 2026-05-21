@@ -59,74 +59,69 @@ export default function RegisterPage() {
 
   return (
     <div>
-      <h1
-        className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Create account
-      </h1>
+      <h1 className="ui-page-title">Create account</h1>
 
       <div className="max-w-sm">
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-[12px] text-muted mb-0.5">Username *</label>
+            <label className="ui-label">Username *</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
               minLength={3}
-              className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
+              className="ui-input"
               placeholder="Choose a username"
             />
           </div>
 
           <div>
-            <label className="block text-[12px] text-muted mb-0.5">Email *</label>
+            <label className="ui-label">Email *</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
+              className="ui-input"
               placeholder="your@email.com"
             />
           </div>
 
           <div>
-            <label className="block text-[12px] text-muted mb-0.5">Password *</label>
+            <label className="ui-label">Password *</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
+              className="ui-input"
               placeholder="At least 6 characters"
             />
           </div>
 
           <div>
-            <label className="block text-[12px] text-muted mb-0.5">Confirm password *</label>
+            <label className="ui-label">Confirm password *</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
+              className="ui-input"
               placeholder="Re-enter password"
             />
           </div>
 
-          {error && <p className="text-[12px] text-wiki-link-broken">{error}</p>}
+          {error && <p className="text-[12px] text-danger">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="bg-accent px-4 py-1.5 text-[13px] font-bold text-white hover:bg-accent-hover disabled:opacity-50"
+            className="ui-button ui-button-primary disabled:opacity-50"
           >
-            {loading ? "Creating account..." : "Create account"}
+            {loading ? "Creating account…" : "Create account"}
           </button>
         </form>
 
