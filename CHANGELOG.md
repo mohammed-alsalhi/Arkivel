@@ -4,6 +4,31 @@
 
 All notable changes to this project are documented here.
 
+## [4.64.3] - 2026-05-21
+
+### Documentation
+
+- **Responsive shell documentation sync** — Updated the architecture, design standards, README, roadmap, feature reference, help guide, and in-app help/features pages to describe the responsive app shell, mobile bottom navigation, focused-workspace navigation behavior, responsive overlay standards, and cross-breakpoint QA expectations.
+- **Version discipline** — Bumped app/package version from 4.64.2 to 4.64.3 so documentation-only product surface updates still carry an explicit release marker.
+
+## [4.64.2] - 2026-05-20
+
+### Changed
+
+- **Mobile bottom navigation** — Added a persistent phone navigation bar for Home, Search, Create, Recent, and Menu, with sidebar state synchronized through layout events and same-route close behavior.
+- **Focused workspace handling** — Hid the bottom navigation on dense workspace routes like `/ask`, `/graph`, `/split`, `/map`, and `/present/*`, keeping the compact top menu available where the primary canvas needs full height.
+- **Responsive overlay hardening** — Clamped dropdowns, tables, notifications, AI chat, synthesis, speed-reader, quiz, and article Q&A controls so long labels and narrow viewports wrap instead of overlapping.
+- **Map shell refinement** — Reworked the map page container to avoid mobile sideways bleed while preserving the full-height workspace feel.
+- **QA coverage** — Verified sampled mobile, tablet, and desktop routes for horizontal overflow, clipped controls, and covered interactive targets.
+
+## [4.64.1] - 2026-05-20
+
+### Fixed
+
+- **Responsive overlap pass** — Fixed post-restandardization overflow issues in the app shell, article pages, canvas, search, and home surfaces.
+- **Header and search fit** — Tightened header/search sizing and sidebar sizing so compact viewports no longer push controls into adjacent content.
+- **Mobile content breathing room** — Added responsive spacing and wrapping rules for key page chrome after the v4.64 UI standardization.
+
 ## [4.64.0] - 2026-05-20
 
 ### Changed

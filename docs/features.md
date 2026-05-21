@@ -51,6 +51,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 ## Discovery & Navigation
 
 - **Full-text search** — AND-logic multi-word search with relevance ranking; instant results as you type
+- **Responsive app shell** — desktop/tablet users get the dense collapsible sidebar, while phone layouts get a safe-area-aware bottom nav for Home, Search, Create, Recent, and Menu; focused workspace pages keep their full-height canvas by using the compact top menu instead
 - **Word-count search filter** — advanced search includes min/max word count range to find articles by length
 - **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
 - **30-day view sparkline** — article stats panel shows a mini bar chart of daily page views for the past 30 days

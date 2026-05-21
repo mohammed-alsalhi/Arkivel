@@ -16,6 +16,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.64
+
+- [x] UI restandardization — shared compact wiki primitives for titles, buttons, icon buttons, inputs, selects, toolbars, panels, dropdowns, chips, tables, empty states, article cards, article tools, auth forms, and admin/listing surfaces
+- [x] Responsive app shell — desktop/tablet sidebar remains the dense navigation spine, while phone layouts get a safe-area-aware bottom navigation for Home, Search, Create, Recent, and Menu
+- [x] Focused workspace navigation — dense canvas routes such as `/ask`, `/graph`, `/split`, `/map`, and `/present/*` suppress the bottom nav and keep a compact top menu so the primary workspace keeps full height
+- [x] Overlay and modal hardening — dropdowns, notifications, AI chat, synthesis, speed reader, quiz mode, article Q&A, data tables, and map controls wrap or clamp instead of overlapping across mobile, tablet, and desktop widths
+- [x] Documentation/version discipline — changelog, roadmap, architecture/design docs, feature references, and in-app help/features pages updated alongside the package version bump
+
 ## v4.24
 
 - [x] Search query analytics — log queries, surface top searches and zero-result terms in admin

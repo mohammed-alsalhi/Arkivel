@@ -502,7 +502,7 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Navigation &amp; Organization</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-1">The sidebar is divided into collapsible sections — click any section header to collapse or expand it.</p>
+          <p className="mb-1">On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps Home, Search, Create, Recent, and Menu one tap away. Menu opens the same sidebar contents and closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so canvases and composers are not covered.</p>
           <p className="font-semibold mb-0.5">Navigation</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
             <li><Link href="/">Main Page</Link>, <Link href="/articles">All articles</Link>, <Link href="/recent-changes">Recent changes</Link>, <Link href="/random">Random article</Link></li>

@@ -391,7 +391,7 @@ Optional feature, disabled by default. Enable with `NEXT_PUBLIC_MAP_ENABLED=true
 
 ## Navigation & Organization
 
-The sidebar is divided into collapsible sections — click any section header to collapse or expand it.
+On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps the most common destinations one tap away: Home, Search, Create, Recent, and Menu. The Menu item opens the same sidebar contents, then closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so their canvases and composers are not covered.
 
 **Navigation section:**
 - **Main Page** — `/`, the wiki home

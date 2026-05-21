@@ -82,8 +82,10 @@ src/
       FootnoteExtension.ts    # Footnote/citation support
       PotentialLinkExtension.ts # Detected link mark extension
       LinkBubble.tsx          # Floating edit/remove tooltip for links
-    layout/                   # Sidebar, search bar
+    layout/                   # App shell navigation and header controls
       Sidebar.tsx
+      MobileNavigation.tsx
+      LayoutShell.tsx
       SearchBar.tsx
     graph/                    # D3 force-directed graph
       ArticleGraph.tsx
@@ -198,6 +200,13 @@ Each root category defines a field schema in `src/lib/infobox-schema.ts`. Subcat
 
 ### Theming
 CSS variables in `src/app/globals.css` under a `@theme` block. Dark mode applies overrides via `html[data-theme="dark"]`. Uses `@theme` (not `@theme inline`) so CSS variable overrides work correctly with Tailwind.
+
+### Responsive App Shell
+`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep the dense left/right sidebar as the main navigation spine. Phone layouts add a safe-area-aware bottom navigation for Home, Search, Create, Recent, and Menu; the Menu item dispatches sidebar events consumed by `Sidebar`.
+
+Focused workspace routes (`/ask`, `/graph`, `/split`, `/map`, and `/present/*`) hide the bottom navigation so full-height canvases and chat/workspace composers are not covered. Those routes keep the compact top mobile sidebar toggle. Closed mobile sidebars are translated, hidden, and pointer-inert so off-canvas links cannot be hit-tested or reported as covered controls.
+
+Responsive shell changes should be verified across phone, tablet, laptop, and wide desktop widths. At minimum, check for document horizontal overflow, clipped labels/controls, and fixed elements covering interactive targets.
 
 ### Search
 Relevance-ranked full-text search. Multi-word queries use AND logic. Results scored by: exact title match (100) > starts with (80) > title contains (60) > content only (0). Search covers titles, content, and excerpts.

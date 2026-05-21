@@ -80,6 +80,17 @@ Article action bar group order:
 - Close on outside click via `mousedown` listener.
 - The trigger chevron rotates `rotate-180` when open.
 
+### Responsive layout and overlays
+
+- Desktop and tablet layouts keep the sidebar as the primary navigation spine; phone layouts use the bottom navigation for Home, Search, Create, Recent, and Menu.
+- Full-height workspace routes (`/ask`, `/graph`, `/split`, `/map`, `/present/*`) do not show the bottom navigation; they keep the compact top menu so composers, canvases, maps, and graph controls remain usable.
+- Fixed controls must not cover other interactive elements. If two controls compete for the same small-screen corner, remove one at that breakpoint or move it into the primary navigation.
+- Flex rows that can contain user content or translated labels must include `min-w-0`, wrapping, or truncation. Long words should not force page-level horizontal scroll.
+- Tables and dense data panels should keep their container width stable and scroll internally on narrow screens.
+- Dropdowns and popovers must clamp to the viewport on phones. Header dropdowns should become fixed, inset panels when absolute alignment would push them off-screen.
+- Modal headers, footers, and button rows must wrap before they overflow. Avoid fixed-width modal internals unless there is an internal scroll region.
+- Responsive QA is not mobile-only: new or changed global UI should be checked at phone, tablet, laptop, and wide desktop widths for horizontal overflow, clipped controls, and covered interactive targets.
+
 ---
 
 ## Colour Usage
