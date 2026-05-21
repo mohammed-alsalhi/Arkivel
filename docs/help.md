@@ -80,7 +80,7 @@ Click **Present** in the article action bar to open the article as a slideshow. 
 
 ## Article Action Panel
 
-The compact panel below the article header groups quick actions into Navigate, Collect, Share, Read, and Tools sections. Groups wrap as needed so dense reading controls stay usable without empty tiled rows.
+The compact rail below the article header keeps Navigate, Collect, and Share actions visible. Read and Tools open as disclosure menus so dense reading controls stay available without taking over the page.
 
 | Action | Description |
 |--------|-------------|
@@ -100,7 +100,7 @@ The compact panel below the article header groups quick actions into Navigate, C
 | **High contrast (A)** | Pure black/white/yellow theme for maximum readability; persisted |
 | **Text only (T)** | Hides images and media from article content; persisted |
 | **Speed read** | RSVP modal; 150/250/400/600 WPM; ORP pivot character highlighted |
-| **Font preference** | Dropdown to switch article body font (Default/Serif/Sans/Mono); persisted |
+| **Font preference** | Dropdown to switch article body font (Serif/Sans/Mono); Serif is the default; persisted |
 | **Accent color** | HSL hue slider to customize the wiki accent color; persisted |
 | **Quick note** | Collapsible private note per article stored in browser localStorage |
 | **Copy plain text** | Copies article body as plain text (HTML stripped) to clipboard |

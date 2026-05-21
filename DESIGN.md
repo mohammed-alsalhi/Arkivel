@@ -74,7 +74,8 @@ Article action panel group order:
 
 Article pages should use the dedicated article shell:
 - Hero header for title, category, excerpt, edit attribution, freshness, verification, reading metrics, and co-authors.
-- Compact grouped action toolbar for Navigate, Collect, Share, Read, and Tools actions. It must wrap by group, avoid fixed tile rows, avoid empty panel space, and constrain selects inside their control group.
+- Compact article action rail for Navigate, Collect, and Share actions, with dense Read and Tools controls behind disclosure menus. The rail must avoid fixed tile rows, avoid empty panel space, and keep dropdown menus clamped at tablet and phone widths.
+- Dedicated article tabbar styles for Article, Edit, History, Discussion, and Blame; do not reuse `.wiki-tabs`, which is reserved for in-content tabbed blocks.
 - Notice stack for status, review due, pinned, disambiguation, and maintenance flags.
 - Taxonomy footer with wrapping category/tag chips, not pipe-separated text.
 - Backlinks and dense article adjuncts should wrap as compact chips or panels rather than long inline lists.
@@ -125,6 +126,7 @@ Dark mode is driven by `html[data-theme="dark"]` overrides — never use `dark:`
 
 - **Headings**: serif (`var(--font-serif)`, Georgia stack). `font-normal` — wiki headings are not bold.
 - **Body**: system sans-serif stack via Tailwind default.
+- **Article body**: serif by default (`var(--font-serif)`), with the article font preference control offering Serif, Sans, and Mono overrides.
 - **UI labels**: `text-[11px]` or `text-[12px]`. Do not use `text-xs` (14px) for compact UI chrome — it is too large.
 - **Code**: monospace, syntax-highlighted via lowlight.
 - **Readability cap**: wiki article content has a max-width of `65ch` in dyslexia mode; otherwise inherits the content column width.

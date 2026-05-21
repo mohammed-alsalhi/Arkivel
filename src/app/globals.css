@@ -768,21 +768,55 @@ p a:hover {
   min-width: 0;
 }
 
-.article-tabs {
+.article-tabbar {
+  display: flex;
+  min-width: 0;
   max-width: 100%;
-  overflow-x: auto;
-  scrollbar-width: thin;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.2rem;
+  border: 1px solid var(--color-border);
+  border-bottom: 0;
+  background: var(--color-background);
+  padding: 0.35rem 0.45rem 0;
 }
 
-.article-tabs .wiki-tab {
+.article-tab {
+  display: inline-flex;
+  min-width: 0;
+  min-height: 1.85rem;
   flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -1px;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid transparent;
+  border-bottom-color: var(--color-border);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
   white-space: nowrap;
+}
+
+.article-tab:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-foreground);
+  text-decoration: none;
+}
+
+.article-tab-active {
+  border-color: var(--color-border);
+  border-bottom-color: var(--color-surface);
+  background: var(--color-surface);
+  color: var(--color-heading);
 }
 
 .article-shell {
   min-width: 0;
   border: 1px solid var(--color-border);
-  border-top: 0;
   background: var(--color-surface);
   padding: 1rem 1.25rem 1.25rem;
 }
@@ -854,11 +888,13 @@ p a:hover {
 }
 
 .article-dek {
-  max-width: 72ch;
+  max-width: min(100%, 96ch);
   margin: 0.45rem 0 0;
   color: var(--color-foreground);
   font-size: 0.875rem;
   line-height: 1.55;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
 }
 
 .article-meta-line {
@@ -874,14 +910,19 @@ p a:hover {
 }
 
 .article-action-panel {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 0.5rem 0.75rem;
-  margin: 0.75rem 0 1rem;
+  position: relative;
+  margin: 0.6rem 0 0.85rem;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  padding: 0.55rem 0.65rem;
+  padding: 0.35rem 0.45rem;
+}
+
+.article-action-primary {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.45rem;
 }
 
 .article-action-group {
@@ -892,13 +933,9 @@ p a:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem;
-  padding-right: 0.75rem;
+  padding-right: 0.45rem;
   border-right: 1px solid var(--color-border);
   background: transparent;
-}
-
-.article-action-group:last-child {
-  border-right: 0;
 }
 
 .article-action-group-header {
@@ -921,10 +958,70 @@ p a:hover {
   gap: 0.25rem;
 }
 
+.article-action-menu {
+  position: relative;
+  min-width: 0;
+}
+
+.article-action-menu[open] {
+  width: 100%;
+  z-index: 30;
+}
+
+.article-action-menu-summary {
+  display: inline-flex;
+  height: 1.5rem;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-muted);
+  padding: 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.article-action-menu-summary::-webkit-details-marker {
+  display: none;
+}
+
+.article-action-menu-summary:hover,
+.article-action-menu[open] .article-action-menu-summary {
+  background: var(--color-surface-hover);
+  color: var(--color-foreground);
+}
+
+.article-action-menu-summary svg {
+  transition: transform 0.15s;
+}
+
+.article-action-menu[open] .article-action-menu-summary svg {
+  transform: rotate(180deg);
+}
+
+.article-action-menu-content {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0.35rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.5rem;
+}
+
 .article-action-controls .ui-select {
   width: auto;
-  min-width: 6rem;
-  max-width: 12rem;
+  min-width: 5.5rem;
+  max-width: 10rem;
+}
+
+#article-content .wiki-content {
+  font-family: var(--font-serif);
 }
 
 .article-notice-stack {
@@ -1105,22 +1202,29 @@ p a:hover {
     margin-top: 0.4rem;
   }
 
-  .article-action-panel {
-    display: grid;
-    grid-template-columns: 1fr;
+  .article-tabbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: thin;
+  }
+
+  .article-tab {
+    padding-inline: 0.7rem;
   }
 
   .article-action-group {
     border-right: 0;
-    border-bottom: 1px solid var(--color-border-light);
-    padding: 0 0 0.5rem;
+    padding-right: 0;
   }
+}
 
-  .article-action-group:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
+@media (max-width: 899px) {
+  .article-action-menu {
+    position: static;
   }
+}
 
+@media (max-width: 767px) {
   .article-in-brief,
   .article-taxonomy-group {
     grid-template-columns: 1fr;

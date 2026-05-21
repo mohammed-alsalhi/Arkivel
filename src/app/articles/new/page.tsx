@@ -173,13 +173,12 @@ export default function NewArticlePage() {
         <DraftLoader editorRef={editorRef} setTitle={setTitle} />
       </Suspense>
 
-      {/* Tabs */}
-      <div className="wiki-tabs">
-        <span className="wiki-tab wiki-tab-active">Creating</span>
-      </div>
+      <nav className="article-tabbar" aria-label="Article sections">
+        <span className="article-tab article-tab-active">Creating</span>
+      </nav>
 
       {/* Edit form in bordered area */}
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
+      <div className="border border-border bg-surface px-5 py-4">
         <h1
           className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-3"
           style={{ fontFamily: "var(--font-serif)" }}

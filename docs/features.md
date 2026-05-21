@@ -98,7 +98,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Content warning tags** — CW labels (spoilers, violence, mature, etc.) on articles; dismissible amber banner; admin-configurable in edit form
 - **Content gap analysis** — `/admin/content-gaps` shows zero-result and low-result search queries grouped by frequency
 - **Theme customizer** — HSL hue slider in article toolbar for live accent color customization; persisted to localStorage
-- **Font preference** — article toolbar dropdown: Default / Serif / Sans / Mono; injects override CSS on `#article-content`; persisted
+- **Font preference** — article body defaults to Serif, with a toolbar dropdown for Serif / Sans / Mono overrides; persisted
 - **Article quick notes** — collapsible private note per article; browser localStorage only; save and delete controls
 - **Maintenance mode** — admin toggle at `/admin/maintenance`; shows site-wide yellow banner when active
 - **Cleanup tags** — admin flags (needs-images, needs-expansion, needs-citations, stub, outdated) on articles; orange notice banner on article page; set in edit form
@@ -196,7 +196,7 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 ## Article Page
 
 - **Article hero header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header
-- **Grouped action panel** — Navigate, Collect, Share, Read, and Tools controls are arranged as a compact wrapping toolbar instead of stacked rows or empty tiled panels
+- **Grouped action panel** — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus
 - **Taxonomy footer** — category and tags render as wrapping chips at the end of the article rather than pipe-separated text
 - **Responsive article shell** — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens
 - **Reading time estimator** — "~X min read" computed at 200 wpm displayed in every article's metadata line

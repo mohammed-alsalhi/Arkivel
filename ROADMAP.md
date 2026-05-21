@@ -16,6 +16,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.66.2
+
+- [x] Article action rail rethink - primary Navigate, Collect, and Share actions stay visible while Read and Tools move into compact disclosure menus
+- [x] Article tabbar reset - article section tabs now use dedicated shell styles instead of sharing the in-content tab block CSS
+- [x] Serif reading default - article body text defaults to serif, and the font picker now offers Serif, Sans, and Mono
+- [x] Dek wrapping polish - article excerpts can use more of the header width with cleaner wrapping on wide shells
+
 ## v4.66.1
 
 - [x] Article action panel polish - the article controls now render as a compact wrapping toolbar instead of a tiled grid with empty rows

@@ -324,22 +324,21 @@ export default function EditArticlePage() {
 
   return (
     <div>
-      {/* Tabs */}
-      <div className="wiki-tabs">
-        <Link href={`/articles/${article.slug}`} className="wiki-tab">
+      <nav className="article-tabbar" aria-label="Article sections">
+        <Link href={`/articles/${article.slug}`} className="article-tab">
           Article
         </Link>
-        <span className="wiki-tab wiki-tab-active">Editing</span>
-        <Link href={`/articles/${article.slug}/history`} className="wiki-tab">
+        <span className="article-tab article-tab-active">Editing</span>
+        <Link href={`/articles/${article.slug}/history`} className="article-tab">
           History
         </Link>
-        <Link href={`/articles/${article.slug}/discussion`} className="wiki-tab">
+        <Link href={`/articles/${article.slug}/discussion`} className="article-tab">
           Discussion
         </Link>
-      </div>
+      </nav>
 
       {/* Edit form */}
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
+      <div className="border border-border bg-surface px-5 py-4">
         <ArticleLockGuard articleId={article.id} isAdmin={isAdmin} />
         <h1
           className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-3"

@@ -247,19 +247,19 @@ export default async function ArticlePage({ params }: Props) {
       />
 
       {/* Article tabs */}
-      <div className="wiki-tabs article-tabs" aria-label="Article sections">
-        <span className="wiki-tab wiki-tab-active">Article</span>
-        <AdminEditTab slug={slug} />
-        <Link href={`/articles/${slug}/history`} className="wiki-tab">
+      <nav className="article-tabbar" aria-label="Article sections">
+        <span className="article-tab article-tab-active">Article</span>
+        <AdminEditTab slug={slug} className="article-tab" />
+        <Link href={`/articles/${slug}/history`} className="article-tab">
           History
         </Link>
-        <Link href={`/articles/${slug}/discussion`} className="wiki-tab">
+        <Link href={`/articles/${slug}/discussion`} className="article-tab">
           Discussion
         </Link>
-        <Link href={`/articles/${slug}/blame`} className="wiki-tab">
+        <Link href={`/articles/${slug}/blame`} className="article-tab">
           Blame
         </Link>
-      </div>
+      </nav>
 
       <article className="article-shell" data-article-id={article.id}>
         <Breadcrumb items={[

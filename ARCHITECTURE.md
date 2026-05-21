@@ -99,7 +99,7 @@ src/
     articles/                 # Article display components
       ArticleCard.tsx
     article/
-      ArticleActionPanel.tsx   # Compact grouped article action toolbar
+      ArticleActionPanel.tsx   # Slim article action rail with Read/Tools disclosures
       ArticlePageHeader.tsx    # Article hero metadata and badges
       ArticleTaxonomyFooter.tsx # Category/tag chip footer
     (37 root-level components)  # Badge, Breadcrumb, Toast, Pagination, ThemeToggle,

@@ -47,13 +47,13 @@ export default function BlamePage() {
 
   return (
     <div>
-      <div className="wiki-tabs mb-0">
-        <Link href={`/articles/${params.slug}`} className="wiki-tab">Article</Link>
-        <Link href={`/articles/${params.slug}/history`} className="wiki-tab">History</Link>
-        <span className="wiki-tab wiki-tab-active">Blame</span>
-      </div>
+      <nav className="article-tabbar" aria-label="Article sections">
+        <Link href={`/articles/${params.slug}`} className="article-tab">Article</Link>
+        <Link href={`/articles/${params.slug}/history`} className="article-tab">History</Link>
+        <span className="article-tab article-tab-active">Blame</span>
+      </nav>
 
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
+      <div className="border border-border bg-surface px-5 py-4">
         <h1
           className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4"
           style={{ fontFamily: "var(--font-serif)" }}

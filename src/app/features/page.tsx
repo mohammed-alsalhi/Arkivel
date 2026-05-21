@@ -138,7 +138,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Article hero header</strong> — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header</li>
-            <li><strong>Grouped action panel</strong> — Navigate, Collect, Share, Read, and Tools controls are arranged as a compact wrapping toolbar instead of stacked rows or empty tiled panels</li>
+            <li><strong>Grouped action panel</strong> — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus</li>
             <li><strong>Taxonomy footer</strong> — category and tags render as wrapping chips at the end of the article rather than pipe-separated text</li>
             <li><strong>Responsive article shell</strong> — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens</li>
             <li><strong>Reading time estimator</strong> — &ldquo;~X min read&rdquo; computed at 200 wpm displayed in every article&apos;s metadata line</li>
@@ -392,7 +392,7 @@ export default function FeaturesPage() {
             <li><strong>Content warning tags</strong> — admins add CW labels (spoilers, violence, mature, etc.) to articles; shown as a dismissible amber banner before article body</li>
             <li><strong>Content gap analysis</strong> — admin dashboard at <Link href="/admin/content-gaps">/admin/content-gaps</Link> shows zero-result and low-result search queries to highlight missing wiki topics</li>
             <li><strong>Theme customizer</strong> — floating color-swatch button in article toolbar; HSL hue slider picks the accent color live; persisted to browser storage</li>
-            <li><strong>Font preference</strong> — dropdown in article toolbar to switch article body font between Default, Serif, Sans, or Mono; persisted to browser storage</li>
+            <li><strong>Font preference</strong> — article body defaults to Serif, with a toolbar dropdown for Serif, Sans, or Mono; persisted to browser storage</li>
             <li><strong>Article quick notes</strong> — collapsible private note panel on every article page; stored only in the browser; save and delete controls</li>
             <li><strong>Maintenance mode</strong> — admin toggle at <Link href="/admin/maintenance">/admin/maintenance</Link> displays a site-wide yellow banner when the wiki is under maintenance</li>
             <li><strong>Cleanup tags</strong> — admins mark articles with attention flags (Needs Images, Needs Expansion, Needs Citations, Needs Review, Stub, Outdated); shown as orange notice on article page</li>

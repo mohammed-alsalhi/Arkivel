@@ -4,6 +4,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.66.2] - 2026-05-21
+
+### Changed
+
+- **Article action rail rethink** - Reworked the article action panel into a slim primary action rail with Navigate, Collect, and Share visible by default while Read and Tools open as compact disclosure menus.
+- **Article tabs separation** - Moved article section navigation onto dedicated `article-tabbar` styles so it no longer inherits the in-content `.wiki-tabs` block styling or fights the article shell border.
+- **Reading typography default** - Made serif the default article body font and updated the font preference control to offer Serif, Sans, and Mono without a confusing non-serif Default option.
+- **Dek wrapping polish** - Let article excerpts use more of the header width with pretty wrapping so the dek no longer breaks halfway across wide article shells.
+
 ## [4.66.1] - 2026-05-21
 
 ### Fixed

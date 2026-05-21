@@ -112,7 +112,7 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Article Action Panel</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-2">The compact panel below the article header groups quick actions into Navigate, Collect, Share, Read, and Tools sections. Groups wrap as needed so dense reading controls stay usable without empty tiled rows.</p>
+          <p className="mb-2">The compact rail below the article header keeps Navigate, Collect, and Share actions visible. Read and Tools open as disclosure menus so dense reading controls stay available without taking over the page.</p>
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Present</strong> &mdash; open as a slideshow</li>
             <li><strong>Bookmark</strong> &mdash; save to your personal bookmarks with an optional note</li>
@@ -130,7 +130,7 @@ export default function HelpPage() {
             <li><strong>High contrast (A)</strong> &mdash; pure black/white/yellow theme for maximum readability; persisted</li>
             <li><strong>Text only (T)</strong> &mdash; hides images and media from the article for distraction-free reading; persisted</li>
             <li><strong>Speed read</strong> &mdash; RSVP speed-reading modal; choose 150/250/400/600 WPM; ORP pivot character highlighted; Start/Pause/Reset controls</li>
-            <li><strong>Font preference</strong> &mdash; dropdown to switch article body font between Default, Serif, Sans, or Mono; persisted</li>
+            <li><strong>Font preference</strong> &mdash; dropdown to switch article body font between Serif, Sans, or Mono; Serif is the default; persisted</li>
             <li><strong>Accent color</strong> &mdash; color-swatch button opens an HSL hue slider to customize the wiki accent color; persisted</li>
             <li><strong>Quick note</strong> &mdash; collapsible private note panel per article; stored only in this browser; save and delete controls</li>
             <li><strong>Copy plain text</strong> &mdash; button in article toolbar copies the article body as plain text (HTML stripped)</li>
