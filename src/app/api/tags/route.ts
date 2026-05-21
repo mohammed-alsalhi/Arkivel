@@ -4,26 +4,30 @@ import { generateSlug } from "@/lib/utils";
 import { isAdmin, requireAdmin } from "@/lib/auth";
 
 export async function GET() {
-  const tags = await prisma.tag.findMany({
-    orderBy: { name: "asc" },
-    include: {
-      _count: { select: { articles: true } },
-      parent: { select: { id: true, name: true, slug: true } },
-      children: {
-        orderBy: { name: "asc" },
-        include: {
-          _count: { select: { articles: true } },
-          children: {
-            orderBy: { name: "asc" },
-            include: { _count: { select: { articles: true } } },
+  try {
+    const tags = await prisma.tag.findMany({
+      orderBy: { name: "asc" },
+      include: {
+        _count: { select: { articles: true } },
+        parent: { select: { id: true, name: true, slug: true } },
+        children: {
+          orderBy: { name: "asc" },
+          include: {
+            _count: { select: { articles: true } },
+            children: {
+              orderBy: { name: "asc" },
+              include: { _count: { select: { articles: true } } },
+            },
           },
         },
       },
-    },
-  });
+    });
 
-  // Return flat list with hierarchy info — consumers can build trees from parentId
-  return NextResponse.json(tags);
+    // Return flat list with hierarchy info — consumers can build trees from parentId
+    return NextResponse.json(tags);
+  } catch {
+    return NextResponse.json([]);
+  }
 }
 
 export async function POST(request: NextRequest) {

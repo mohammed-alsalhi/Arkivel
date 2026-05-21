@@ -102,17 +102,22 @@ export default function MobileNavigation() {
               ? "text-accent font-semibold"
               : "text-muted hover:text-foreground"
           }`}
-          aria-label="Toggle menu"
+          aria-label="Toggle browse navigation"
           aria-pressed={sidebarOpen}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             {sidebarOpen ? (
               <path d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
+              <>
+                <path d="M4 5h7v6H4z" />
+                <path d="M13 5h7v6h-7z" />
+                <path d="M4 13h7v6H4z" />
+                <path d="M13 13h7v6h-7z" />
+              </>
             )}
           </svg>
-          <span className="max-w-full truncate">Menu</span>
+          <span className="max-w-full truncate">Browse</span>
         </button>
       </div>
     </nav>

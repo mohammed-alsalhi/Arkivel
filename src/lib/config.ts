@@ -3,6 +3,10 @@ import packageJson from "../../package.json";
 export const config = {
   name: process.env.NEXT_PUBLIC_ARKIVEL_NAME || process.env.NEXT_PUBLIC_WIKI_NAME || "Arkivel",
   version: packageJson.version,
+  logo: process.env.NEXT_PUBLIC_ARKIVEL_LOGO || "/brand/arkivel-logo.png",
+  logoMark: process.env.NEXT_PUBLIC_ARKIVEL_LOGO_MARK || "/brand/arkivel-mark.png",
+  appIcon: process.env.NEXT_PUBLIC_ARKIVEL_APP_ICON || "/brand/arkivel-icon-512.png",
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
   tagline: process.env.NEXT_PUBLIC_ARKIVEL_TAGLINE || process.env.NEXT_PUBLIC_WIKI_TAGLINE || "The self-hosted knowledge platform",
   description:
     process.env.NEXT_PUBLIC_ARKIVEL_DESCRIPTION ||

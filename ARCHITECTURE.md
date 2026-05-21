@@ -182,7 +182,7 @@ docs/
 ## Key Patterns
 
 ### Configuration
-All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables. The visible app version is read from `package.json` and exposed at build time through `next.config.ts` so sidebar and health-check version text follow release bumps.
+All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables. Brand image paths are configurable through `NEXT_PUBLIC_ARKIVEL_LOGO`, `NEXT_PUBLIC_ARKIVEL_LOGO_MARK`, and `NEXT_PUBLIC_ARKIVEL_APP_ICON`; defaults live in `public/brand/`. Metadata resolves relative image paths against `NEXT_PUBLIC_BASE_URL`. The visible app version is read from `package.json` and exposed at build time through `next.config.ts` so sidebar and health-check version text follow release bumps.
 
 ### Authentication
 Dual auth system. **Legacy:** single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. **Multi-user:** bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns the current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
@@ -209,7 +209,7 @@ Each root category defines a field schema in `src/lib/infobox-schema.ts`. Subcat
 CSS variables in `src/app/globals.css` under a `@theme` block. Dark mode applies overrides via `html[data-theme="dark"]`. Uses `@theme` (not `@theme inline`) so CSS variable overrides work correctly with Tailwind.
 
 ### Responsive App Shell
-`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep the dense left/right sidebar as the main navigation spine. Phone layouts add a safe-area-aware bottom navigation for Home, Search, Create, Recent, and Menu; the Menu item dispatches sidebar events consumed by `Sidebar`.
+`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep the dense left/right sidebar as the main navigation spine. Phone layouts add a safe-area-aware bottom navigation for Home, Search, Create, Recent, and Browse; the Browse item dispatches sidebar events consumed by `Sidebar`.
 
 Focused workspace routes (`/ask`, `/graph`, `/split`, `/map`, and `/present/*`) hide the bottom navigation so full-height canvases and chat/workspace composers are not covered. Those routes keep the compact top mobile sidebar toggle. Closed mobile sidebars are translated, hidden, and pointer-inert so off-canvas links cannot be hit-tested or reported as covered controls.
 

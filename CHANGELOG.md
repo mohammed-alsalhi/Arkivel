@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.67.1] - 2026-05-21
+
+### Changed
+
+- **Preliminary logo integration** - Added the Arkivel logo artwork as public brand assets, wired the mark into the sidebar and mobile top bar, and exposed the app icon in metadata and the web app manifest.
+- **Header search simplification** - Replaced the always-visible header search field with a compact trigger that expands into a focused search form, reducing top-bar crowding on narrow layouts.
+- **Browse affordance polish** - Updated the mobile sidebar affordance from a generic menu icon to a Browse grid treatment so navigation reads as wiki discovery rather than another utility control.
+- **Local shell fallbacks** - Made public announcement, article, category, and tag list APIs return empty collections when the local database is unavailable so app-shell verification stays quiet in fresh development environments.
+- **Branding documentation sync** - Documented the logo, mark, and app-icon configuration alongside the patch version bump.
+
 ## [4.67.0] - 2026-05-21
 
 ### Changed

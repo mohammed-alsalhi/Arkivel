@@ -50,4 +50,17 @@ test.describe("Responsive shell", () => {
     await expect(page.locator(".command-palette")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
+
+  test("keeps brand and compact search usable on phone", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+
+    await expect(page.locator(".wiki-top-brand-mark")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Toggle browse navigation" })).toBeVisible();
+    await expect(page.locator(".wiki-mobile-nav")).toContainText("Browse");
+
+    await page.getByRole("button", { name: "Open search" }).click();
+    await expect(page.getByPlaceholder("Search articles")).toBeFocused();
+    await expectNoHorizontalOverflow(page);
+  });
 });

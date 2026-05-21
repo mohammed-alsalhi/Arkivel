@@ -94,9 +94,10 @@ export default function FeaturesPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
             <li><strong>Unified search surfaces</strong> — header search, the search page, command palette, wiki-link autocomplete, split view pickers, and edit fallback all consume the same search result contract</li>
-            <li><strong>Responsive app shell</strong> — desktop and tablet layouts keep the dense collapsible sidebar; phone layouts add a safe-area-aware bottom nav for Home, Search, Create, Recent, and Menu; focused workspace pages keep the compact top menu so canvases and composers are not covered</li>
+            <li><strong>Responsive app shell</strong> — desktop and tablet layouts keep the dense collapsible sidebar; phone layouts add a safe-area-aware bottom nav for Home, Search, Create, Recent, and Browse; focused workspace pages keep the compact top menu so canvases and composers are not covered</li>
             <li><strong>Main page front page</strong> — <Link href="/">/</Link> combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point</li>
             <li><strong>Shared page headers</strong> — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently</li>
+            <li><strong>Brand mark and compact search</strong> — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm</li>
             <li><strong>Command palette navigation</strong> — <code className="bg-surface-hover px-1 text-[12px]">Cmd+K</code> / <code className="bg-surface-hover px-1 text-[12px]">Ctrl+K</code> opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces</li>
             <li><strong>Word-count search filter</strong> — advanced search includes min/max word count range to find articles by length</li>
             <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>
@@ -450,7 +451,7 @@ export default function FeaturesPage() {
             <li><strong>Top referrers dashboard</strong> — <Link href="/admin/referrers">/admin/referrers</Link> shows top 30 referring domains with traffic percentage bars; 7/30/90-day windows</li>
             <li><strong>Tag usage trends</strong> — <Link href="/admin/tag-trends">/admin/tag-trends</Link> heat-map table showing new articles per tag per month over the last 12 months</li>
             <li><strong>Analytics CSV export</strong> — <Link href="/api/export/analytics">/api/export/analytics</Link> downloads all published articles with read counts, reactions, revisions, and dates (admin only)</li>
-            <li><strong>Custom branding</strong> — name, tagline, welcome text, footer via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
+            <li><strong>Custom branding</strong> — name, tagline, welcome text, footer, logo, logo mark, and app icon via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
           </ul>
         </div>
       </div>

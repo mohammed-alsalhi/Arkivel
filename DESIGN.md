@@ -93,6 +93,12 @@ General app pages should use the shared page shell before introducing route-spec
 
 The home page is the canonical front-page implementation: live stats, featured article, browse directory, recent updates, and compact sidebar modules. It should feel like a working wiki index, not a marketing landing page.
 
+### Brand and header controls
+
+- Sidebar and mobile header branding should use the configured compact logo mark, with the full square logo reserved for metadata, app icons, and larger brand surfaces.
+- The global header search should stay quiet by default: show a compact trigger in the top bar, then expand into the input only when search is active.
+- Phone navigation labels should describe the destination or mode. The sidebar trigger is Browse, not Menu, because it opens the wiki navigation spine.
+
 ### Dropdowns
 
 - Appear `top-full mt-1` below their trigger.
@@ -104,7 +110,7 @@ The home page is the canonical front-page implementation: live stats, featured a
 
 ### Responsive layout and overlays
 
-- Desktop and tablet layouts keep the sidebar as the primary navigation spine; phone layouts use the bottom navigation for Home, Search, Create, Recent, and Menu.
+- Desktop and tablet layouts keep the sidebar as the primary navigation spine; phone layouts use the bottom navigation for Home, Search, Create, Recent, and Browse.
 - Full-height workspace routes (`/ask`, `/graph`, `/split`, `/map`, `/present/*`) do not show the bottom navigation; they keep the compact top menu so composers, canvases, maps, and graph controls remain usable.
 - Fixed controls must not cover other interactive elements. If two controls compete for the same small-screen corner, remove one at that breakpoint or move it into the primary navigation.
 - Flex rows that can contain user content or translated labels must include `min-w-0`, wrapping, or truncation. Long words should not force page-level horizontal scroll.

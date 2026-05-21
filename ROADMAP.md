@@ -16,6 +16,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.67.1
+
+- [x] Preliminary logo integration - public brand assets now provide the sidebar mark, mobile header mark, app icon, and metadata image
+- [x] Header search simplification - the top-bar search is now a compact trigger that expands only when the reader asks for it
+- [x] Browse affordance polish - the phone navigation opens the sidebar through a clearer Browse grid control instead of a generic menu icon
+- [x] Local shell fallbacks - public announcement, article, category, and tag lists resolve to empty collections when the local database is unavailable
+- [x] Branding documentation - README, architecture, design, feature, and help references describe the logo configuration and calmer search pattern
+
 ## v4.67.0
 
 - [x] Main page redesign - home now acts as a compact wiki front page with stats, quick actions, featured content, browse directory links, recent updates, and sidebar modules

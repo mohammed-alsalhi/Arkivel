@@ -43,6 +43,9 @@ Only `DATABASE_URL` and `ADMIN_SECRET` are required — everything else has sens
 | `NEXT_PUBLIC_ARKIVEL_DESCRIPTION` | No | Meta description for SEO |
 | `NEXT_PUBLIC_ARKIVEL_WELCOME_TEXT` | No | Welcome message on the home page |
 | `NEXT_PUBLIC_ARKIVEL_FOOTER_TEXT` | No | Footer text after the site name |
+| `NEXT_PUBLIC_ARKIVEL_LOGO` | No | Square brand/logo image used for social metadata (default: `/brand/arkivel-logo.png`) |
+| `NEXT_PUBLIC_ARKIVEL_LOGO_MARK` | No | Compact logo mark used in the sidebar and mobile header (default: `/brand/arkivel-mark.png`) |
+| `NEXT_PUBLIC_ARKIVEL_APP_ICON` | No | App/manifest icon image (default: `/brand/arkivel-icon-512.png`) |
 | `NEXT_PUBLIC_APP_VERSION` | No | Build-time value exposed from `package.json` by `next.config.ts` |
 | `NEXT_PUBLIC_MAP_ENABLED` | No | Set to `true` to enable the interactive map page |
 | `NEXT_PUBLIC_MAP_LABEL` | No | Label for the map in navigation (default: `Map`) |

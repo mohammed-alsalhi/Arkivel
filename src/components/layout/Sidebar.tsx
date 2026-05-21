@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
@@ -120,10 +121,13 @@ export default function Sidebar({
         )}
       >
         {/* Logo / Title */}
-        <div className="px-3 py-3 border-b border-border">
-          <Link href="/" className="block text-center hover:no-underline" onClick={close}>
+        <div className="border-b border-border px-3 py-3">
+          <Link href="/" className="wiki-sidebar-brand hover:no-underline" onClick={close}>
+            <span className="wiki-sidebar-brand-mark" aria-hidden="true">
+              <Image src={config.logoMark} alt="" width={36} height={36} priority />
+            </span>
             <h1
-              className="text-lg font-bold text-heading"
+              className="wiki-sidebar-brand-name"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               {config.name}

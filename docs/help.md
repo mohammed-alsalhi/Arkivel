@@ -169,6 +169,7 @@ AI features are gated on environment variables and degrade gracefully when keys 
 
 - **Main Page** — `/` is the working wiki front page with live article/category/tag/revision stats, featured content, a browse directory, recently updated articles, and compact sidebar modules.
 - **Page headers** — core browse and reference pages use a shared header with a short kicker, serif title, explanatory dek, and wrapping action buttons.
+- **Brand mark and compact search** — the preliminary Arkivel mark appears in the sidebar/mobile header, and the header search expands only when you open it.
 - **Bookmarks** — save articles with optional notes at `/bookmarks`.
 - **Reading Lists** — organize articles into ordered lists at `/reading-lists`. Lists can be made public and shared via a link.
 - **Smart Collections** — saved searches with filters (tags, category, author, date range) at `/collections`.
@@ -398,7 +399,7 @@ Optional feature, disabled by default. Enable with `NEXT_PUBLIC_MAP_ENABLED=true
 
 ## Navigation & Organization
 
-On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps the most common destinations one tap away: Home, Search, Create, Recent, and Menu. The Menu item opens the same sidebar contents, then closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so their canvases and composers are not covered.
+On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps the most common destinations one tap away: Home, Search, Create, Recent, and Browse. The Browse item opens the same sidebar contents, then closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so their canvases and composers are not covered.
 
 Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups destinations across navigation, discovery, personal, reference, and admin areas, then searches articles in the same panel when you type a query.
 

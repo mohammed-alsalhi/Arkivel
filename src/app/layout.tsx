@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
@@ -33,8 +35,21 @@ const geistMono = Geist_Mono({
 
 export function generateMetadata(): Metadata {
   return {
+    metadataBase: new URL(config.baseUrl),
     title: config.name,
     description: config.description,
+    icons: {
+      icon: [
+        { url: config.appIcon, sizes: "512x512", type: "image/png" },
+        { url: "/favicon.ico", sizes: "any" },
+      ],
+      apple: [{ url: config.appIcon, sizes: "512x512", type: "image/png" }],
+    },
+    openGraph: {
+      title: config.name,
+      description: config.description,
+      images: [{ url: config.logo, width: 1254, height: 1254, alt: `${config.name} logo` }],
+    },
   };
 }
 
@@ -88,6 +103,10 @@ export default async function RootLayout({
           {/* Top banner bar */}
           <header className="bg-surface border-b border-border">
             <div className="flex min-h-10 items-center justify-between gap-2 pl-12 pr-3 py-1.5 sm:gap-3 md:pl-4 md:pr-6">
+              <Link href="/" className="wiki-top-brand md:hidden" aria-label={`${config.name} home`}>
+                <Image src={config.logoMark} alt="" width={24} height={24} className="wiki-top-brand-mark" priority />
+                <span>{config.name}</span>
+              </Link>
               <div className="hidden min-w-0 md:block">
                 <span className="block truncate text-[12px] text-muted">{config.tagline}</span>
               </div>

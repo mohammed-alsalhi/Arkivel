@@ -52,9 +52,10 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 
 - **Full-text search** — AND-logic multi-word search with relevance ranking; instant results as you type
 - **Unified search surfaces** — the header search, search page, command palette, wiki-link autocomplete, split view, and edit fallback all use the same search response contract
-- **Responsive app shell** — desktop/tablet users get the dense collapsible sidebar, while phone layouts get a safe-area-aware bottom nav for Home, Search, Create, Recent, and Menu; focused workspace pages keep their full-height canvas by using the compact top menu instead
+- **Responsive app shell** — desktop/tablet users get the dense collapsible sidebar, while phone layouts get a safe-area-aware bottom nav for Home, Search, Create, Recent, and Browse; focused workspace pages keep their full-height canvas by using the compact top menu instead
 - **Main page front page** — `/` combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point
 - **Shared page headers** — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently
+- **Brand mark and compact search** — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm
 - **Command palette navigation** — `Cmd+K` / `Ctrl+K` opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces
 - **Word-count search filter** — advanced search includes min/max word count range to find articles by length
 - **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
@@ -356,4 +357,4 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Word-count distribution** — histogram of article lengths at `/admin/word-count` with longest/shortest tables and average word count
 - **Batch operations** — bulk-assign category, publish/unpublish, or delete from `/articles`
 - **Tag management** — rename, recolor, and delete tags inline at `/admin/tags` with article count and filterable list
-- **Custom branding** — name, tagline, welcome text, footer via `NEXT_PUBLIC_*` environment variables
+- **Custom branding** — name, tagline, welcome text, footer, logo, logo mark, and app icon via `NEXT_PUBLIC_*` environment variables
