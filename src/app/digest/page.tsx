@@ -124,7 +124,7 @@ export default function DigestPage() {
       {/* Article of the Day */}
       {data.articleOfDay && (
         <div className="border border-accent/30 rounded-lg p-5 bg-accent/5 space-y-2">
-          <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-accent">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase text-accent">
             <StarIcon />
             Article of the Day
           </div>

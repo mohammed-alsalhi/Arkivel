@@ -30,13 +30,10 @@ function fleschScore(text: string): number {
 
 type Level = { label: string; color: string };
 function scoreToLevel(score: number): Level {
-  if (score >= 90) return { label: "Very Easy", color: "bg-green-100 text-green-800 border-green-300" };
-  if (score >= 80) return { label: "Easy", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
-  if (score >= 70) return { label: "Fairly Easy", color: "bg-blue-100 text-blue-800 border-blue-300" };
-  if (score >= 60) return { label: "Standard", color: "bg-gray-100 text-gray-700 border-gray-300" };
-  if (score >= 50) return { label: "Fairly Difficult", color: "bg-yellow-100 text-yellow-800 border-yellow-300" };
-  if (score >= 30) return { label: "Difficult", color: "bg-orange-100 text-orange-800 border-orange-300" };
-  return { label: "Very Complex", color: "bg-red-100 text-red-800 border-red-300" };
+  if (score >= 80) return { label: score >= 90 ? "Very Easy" : "Easy", color: "ui-chip-success" };
+  if (score >= 60) return { label: score >= 70 ? "Fairly Easy" : "Standard", color: "ui-chip-info" };
+  if (score >= 30) return { label: score >= 50 ? "Fairly Difficult" : "Difficult", color: "ui-chip-warning" };
+  return { label: "Very Complex", color: "ui-chip-danger" };
 }
 
 interface Props {
@@ -52,7 +49,7 @@ export default function ReadingLevelBadge({ text }: Props) {
   return (
     <span
       title={`Flesch Reading Ease: ${Math.round(score)} — ${label}`}
-      className={`inline-flex items-center gap-1 text-[11px] px-1.5 py-0.5 border rounded font-medium ${color}`}
+      className={`ui-chip font-medium ${color}`}
     >
       {label}
     </span>

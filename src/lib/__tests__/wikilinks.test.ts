@@ -5,6 +5,9 @@ vi.mock("@/lib/prisma", () => ({
     article: {
       findMany: vi.fn(),
     },
+    alias: {
+      findMany: vi.fn(),
+    },
   },
 }));
 
@@ -12,10 +15,12 @@ import prisma from "@/lib/prisma";
 import { resolveWikiLinks, getBacklinks } from "../wikilinks";
 
 const mockFindMany = vi.mocked(prisma.article.findMany);
+const mockAliasFindMany = vi.mocked(prisma.alias.findMany);
 
 describe("resolveWikiLinks", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockAliasFindMany.mockResolvedValue([] as never);
   });
 
   it("returns HTML unchanged when no wiki links", async () => {

@@ -205,130 +205,144 @@ function ArticlesPageContent() {
 
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        All articles
-      </h1>
-      <p className="text-[12px] text-muted mb-3">
-        {total} article{total !== 1 ? "s" : ""} in the encyclopedia
-        {category && <> &mdash; filtered by category</>}
-        {tag && <> &mdash; filtered by tag</>}
-      </p>
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Browse</p>
+          <h1 className="ui-page-title">All articles</h1>
+          <p className="ui-page-dek">
+            {total} article{total !== 1 ? "s" : ""} in the encyclopedia
+            {category && <> - filtered by category</>}
+            {tag && <> - filtered by tag</>}
+          </p>
+        </div>
+        <div className="ui-page-actions">
+          <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
+          <Link href="/recent-changes" className="ui-button">Recent changes</Link>
+        </div>
+      </header>
 
       {/* Filters */}
-      <div className="wiki-notice mb-3">
-        <strong>Filter by category: </strong>
-        <Link href="/articles" className={!category && !tag ? "font-bold" : ""}>
-          All
-        </Link>
-        {categories.map((cat) => (
-          <span key={cat.id}>
-            {" | "}
-            <Link
-              href={`/articles?category=${cat.slug}`}
-              className={category === cat.slug ? "font-bold" : ""}
-            >
-              {cat.name}
-            </Link>
-          </span>
-        ))}
-        {tags.length > 0 && (
-          <>
-            <br />
-            <strong>Filter by tag: </strong>
-            {tags.map((t, i) => (
-              <span key={t.id}>
-                {i > 0 && " | "}
+      <div className="wiki-portal mb-3">
+        <div className="wiki-portal-header">Browse filters</div>
+        <div className="wiki-portal-body space-y-3">
+          <div>
+            <p className="ui-label">Category</p>
+            <div className="flex flex-wrap gap-1.5">
+              <Link
+                href="/articles"
+                className={`ui-chip hover:no-underline ${!category && !tag ? "ui-chip-info" : ""}`}
+              >
+                All
+              </Link>
+              {categories.map((cat) => (
                 <Link
-                  href={`/articles?tag=${t.slug}`}
-                  className={tag === t.slug ? "font-bold" : ""}
+                  key={cat.id}
+                  href={`/articles?category=${cat.slug}`}
+                  className={`ui-chip hover:no-underline ${category === cat.slug ? "ui-chip-info" : ""}`}
                 >
-                  {t.name}
+                  {cat.name}
                 </Link>
-              </span>
-            ))}
-          </>
-        )}
+              ))}
+            </div>
+          </div>
+
+          {tags.length > 0 && (
+            <div>
+              <p className="ui-label">Tag</p>
+              <div className="flex max-h-32 flex-wrap gap-1.5 overflow-y-auto pr-1">
+                {tags.map((t) => (
+                  <Link
+                    key={t.id}
+                    href={`/articles?tag=${t.slug}`}
+                    className={`ui-chip hover:no-underline ${tag === t.slug ? "ui-chip-info" : ""}`}
+                  >
+                    {t.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Article list */}
       {loading ? (
         <div className="py-8 text-center text-muted italic text-[13px]">Loading...</div>
       ) : articles.length === 0 ? (
-        <div className="border border-border bg-surface p-8 text-center text-muted italic">
+        <div className="ui-empty-state">
           No articles found. <Link href="/articles/new">Create one.</Link>
         </div>
       ) : (
-        <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-          <thead>
-            <tr className="bg-surface-hover">
-              {isAdmin && (
-                <th className="border border-border px-2 py-1.5 w-8 text-center">
-                  <input
-                    type="checkbox"
-                    checked={selected.size === articles.length && articles.length > 0}
-                    onChange={toggleSelectAll}
-                  />
-                </th>
-              )}
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-32">Category</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Last edited</th>
-            </tr>
-          </thead>
-          <tbody>
-            {articles.map((article) => (
-              <tr key={article.id} className="hover:bg-surface-hover">
+        <div className="overflow-x-auto">
+          <table className="ui-table">
+            <thead>
+              <tr>
                 {isAdmin && (
-                  <td className="border border-border px-2 py-1.5 text-center">
+                  <th className="w-8 text-center">
                     <input
                       type="checkbox"
-                      checked={selected.has(article.id)}
-                      onChange={() => toggleSelect(article.id)}
+                      checked={selected.size === articles.length && articles.length > 0}
+                      onChange={toggleSelectAll}
                     />
-                  </td>
+                  </th>
                 )}
-                <td className="border border-border px-3 py-1.5">
-                  <Link href={`/articles/${article.slug}`} className="font-medium">
-                    {article.title}
-                  </Link>
-                  {article.status !== "published" && (
-                    <span className="ml-2"><ArticleStatusBadge status={article.status} /></span>
-                  )}
-                  {article.excerpt && (
-                    <span className="text-muted text-[12px]">
-                      {" "}&ndash; {article.excerpt.substring(0, 100)}{article.excerpt.length > 100 ? "..." : ""}
-                    </span>
-                  )}
-                </td>
-                <td className="border border-border px-3 py-1.5 text-muted">
-                  {article.category ? (
-                    <Link href={`/categories/${article.category.slug}`}>
-                      {article.category.name}
-                    </Link>
-                  ) : (
-                    <span className="italic">None</span>
-                  )}
-                </td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                  {formatDate(article.updatedAt)}
-                </td>
+                <th>Article</th>
+                <th className="w-32">Category</th>
+                <th className="w-28">Last edited</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {articles.map((article) => (
+                <tr key={article.id}>
+                  {isAdmin && (
+                    <td className="text-center">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(article.id)}
+                        onChange={() => toggleSelect(article.id)}
+                      />
+                    </td>
+                  )}
+                  <td>
+                    <Link href={`/articles/${article.slug}`} className="font-medium">
+                      {article.title}
+                    </Link>
+                    {article.status !== "published" && (
+                      <span className="ml-2"><ArticleStatusBadge status={article.status} /></span>
+                    )}
+                    {article.excerpt && (
+                      <span className="text-muted text-[12px]">
+                        {" "}&ndash; {article.excerpt.substring(0, 100)}{article.excerpt.length > 100 ? "..." : ""}
+                      </span>
+                    )}
+                  </td>
+                  <td className="text-muted">
+                    {article.category ? (
+                      <Link href={`/categories/${article.category.slug}`}>
+                        {article.category.name}
+                      </Link>
+                    ) : (
+                      <span className="italic">None</span>
+                    )}
+                  </td>
+                  <td className="text-muted text-[12px]">
+                    {formatDate(article.updatedAt)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* Batch action bar */}
       {isAdmin && selected.size > 0 && (
-        <div className="mt-3 border border-border bg-surface-hover px-4 py-3 flex items-center gap-3 text-[13px]">
+        <div className="mt-3 border border-border bg-surface-hover px-3 py-2 flex flex-wrap items-center gap-2 text-[13px]">
           <span className="font-bold text-heading">{selected.size} selected</span>
           <select
             value={batchAction}
             onChange={(e) => setBatchAction(e.target.value)}
-            className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+            className="ui-select w-auto"
           >
             <option value="">Choose action...</option>
             <option value="setCategory">Set category</option>
@@ -342,7 +356,7 @@ function ArticlesPageContent() {
             <select
               value={batchCategoryId}
               onChange={(e) => setBatchCategoryId(e.target.value)}
-              className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              className="ui-select w-auto"
             >
               <option value="">None (remove category)</option>
               {categories.map((cat) => (
@@ -356,7 +370,7 @@ function ArticlesPageContent() {
             <select
               value={batchTagId}
               onChange={(e) => setBatchTagId(e.target.value)}
-              className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              className="ui-select w-auto"
             >
               <option value="">Select tag…</option>
               {tags.map((t) => (
@@ -369,8 +383,8 @@ function ArticlesPageContent() {
           <button
             onClick={handleBatchAction}
             disabled={!batchAction || batchWorking || ((batchAction === "addTag" || batchAction === "removeTag") && !batchTagId)}
-            className={`px-3 py-1 text-[13px] font-bold text-white disabled:opacity-50 ${
-              batchAction === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-accent hover:bg-accent-hover"
+            className={`ui-button disabled:opacity-50 ${
+              batchAction === "delete" ? "ui-button-danger" : "ui-button-primary"
             }`}
           >
             {batchWorking ? "Working..." : "Apply"}

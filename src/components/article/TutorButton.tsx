@@ -57,7 +57,7 @@ export default function TutorButton({ articleId, articleTitle }: Props) {
     <>
       <button
         onClick={() => { setOpen(true); if (!started) start(); }}
-        className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors flex items-center gap-1"
+        className="ui-button"
         title="Study this article with an AI tutor"
       >
         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -69,22 +69,22 @@ export default function TutorButton({ articleId, articleTitle }: Props) {
       {open && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />
-          <div className="relative z-10 w-full max-w-lg bg-background border border-border rounded-lg shadow-2xl flex flex-col" style={{ maxHeight: "80vh" }}>
+          <div className="relative z-10 w-full max-w-lg bg-background border border-border rounded shadow-2xl flex flex-col" style={{ maxHeight: "80vh" }}>
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface rounded-t-lg">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-accent">AI Tutor</p>
+                <p className="text-[11px] font-semibold uppercase text-accent">AI Tutor</p>
                 <p className="text-[13px] font-medium text-heading truncate">{articleTitle}</p>
               </div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => { setMessages([]); setStarted(false); start(); }}
-                  className="text-[11px] text-muted hover:text-foreground"
+                  className="ui-button"
                   title="Restart session"
                 >
                   Restart
                 </button>
-                <button onClick={() => setOpen(false)} className="text-muted hover:text-foreground">
+                <button onClick={() => setOpen(false)} className="ui-icon-button" title="Close tutor">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>

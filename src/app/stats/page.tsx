@@ -66,7 +66,7 @@ export default function StatsPage() {
 
           {stats.topContributors.length > 0 && (
             <div className="border border-border bg-surface rounded p-4">
-              <h2 className="text-[12px] font-semibold uppercase tracking-wide text-muted mb-3">
+              <h2 className="text-[12px] font-semibold uppercase text-muted mb-3">
                 Top Contributors (all time)
               </h2>
               <ol className="space-y-1.5">

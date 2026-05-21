@@ -4,24 +4,28 @@ import { isAdmin, requireAdmin } from "@/lib/auth";
 import { generateSlug } from "@/lib/utils";
 
 export async function GET() {
-  const categories = await prisma.category.findMany({
-    orderBy: { sortOrder: "asc" },
-    include: {
-      _count: { select: { articles: true } },
-      children: {
-        orderBy: { sortOrder: "asc" },
-        include: {
-          _count: { select: { articles: true } },
-          children: {
-            orderBy: { sortOrder: "asc" },
-            include: { _count: { select: { articles: true } } },
+  try {
+    const categories = await prisma.category.findMany({
+      orderBy: { sortOrder: "asc" },
+      include: {
+        _count: { select: { articles: true } },
+        children: {
+          orderBy: { sortOrder: "asc" },
+          include: {
+            _count: { select: { articles: true } },
+            children: {
+              orderBy: { sortOrder: "asc" },
+              include: { _count: { select: { articles: true } } },
+            },
           },
         },
+        parent: true,
       },
-      parent: true,
-    },
-  });
-  return NextResponse.json(categories);
+    });
+    return NextResponse.json(categories);
+  } catch {
+    return NextResponse.json([]);
+  }
 }
 
 export async function POST(request: NextRequest) {

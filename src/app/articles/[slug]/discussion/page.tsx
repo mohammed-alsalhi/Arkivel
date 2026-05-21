@@ -280,14 +280,14 @@ export default function DiscussionPage() {
 
   return (
     <div>
-      <div className="wiki-tabs">
-        <Link href={`/articles/${slug}`} className="wiki-tab">Article</Link>
-        {isAdmin && <Link href={`/articles/${slug}/edit`} className="wiki-tab">Edit</Link>}
-        <Link href={`/articles/${slug}/history`} className="wiki-tab">History</Link>
-        <span className="wiki-tab wiki-tab-active">Discussion</span>
-      </div>
+      <nav className="article-tabbar" aria-label="Article sections">
+        <Link href={`/articles/${slug}`} className="article-tab">Article</Link>
+        {isAdmin && <Link href={`/articles/${slug}/edit`} className="article-tab">Edit</Link>}
+        <Link href={`/articles/${slug}/history`} className="article-tab">History</Link>
+        <span className="article-tab article-tab-active">Discussion</span>
+      </nav>
 
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
+      <div className="border border-border bg-surface px-5 py-4">
         <h1
           className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-3"
           style={{ fontFamily: "var(--font-serif)" }}

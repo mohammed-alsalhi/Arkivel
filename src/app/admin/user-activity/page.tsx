@@ -49,7 +49,7 @@ export default function UserActivityPage() {
       <div className="flex gap-4 items-start">
         {/* User list */}
         <div className="w-60 flex-shrink-0 border border-border rounded overflow-hidden">
-          <div className="bg-surface-hover px-3 py-2 text-[11px] text-muted font-medium uppercase tracking-wide">Users</div>
+          <div className="bg-surface-hover px-3 py-2 text-[11px] text-muted font-medium uppercase">Users</div>
           <ul className="divide-y divide-border">
             {users.map((u) => (
               <li key={u.id}>

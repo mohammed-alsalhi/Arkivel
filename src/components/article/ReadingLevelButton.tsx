@@ -85,7 +85,7 @@ export default function ReadingLevelButton({ articleId, onLevelChange }: Props) 
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-7 z-50 bg-surface border border-border rounded shadow-lg w-52 py-1">
-            <div className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted border-b border-border mb-1">
+            <div className="px-3 py-1.5 text-[10px] font-semibold uppercase text-muted border-b border-border mb-1">
               Reading Level
             </div>
             {LEVELS.map((l) => (

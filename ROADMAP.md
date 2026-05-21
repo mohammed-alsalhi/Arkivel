@@ -16,6 +16,97 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.71.1
+
+- [x] Presentation layout hardening - `/present/[slug]` now reserves separate progress, topbar, slide-stage, and footer regions so content cannot overlap deck controls
+- [x] Scrollable slide stage - long titles, tall body content, code, tables, images, and embeds stay contained inside the slide viewport
+- [x] Responsive controls - overview, slide count, dots, keyboard hint, and previous/next buttons wrap or stack cleanly on narrow screens
+- [x] Presentation regression QA - responsive shell tests now mock a long presentation and assert that slide content does not collide with top or bottom chrome
+- [x] CI shell alignment - homepage and command-palette e2e tests now match the compact search trigger, phone Browse drawer, and case-insensitive `Ctrl+K` / `Cmd+K` behavior
+- [x] Wiki-link alias regression - unit tests now mock alias lookups so broken-link coverage follows the alias-aware resolver path
+
+## v4.71.0
+
+- [x] Canon Trails - `/trails` turns the wiki into guided reader routes through strongest canon, recent work, deep pages, and repair paths
+- [x] Route engine - trail stops are built from live wiki links, backlinks, categories, recency, word depth, revisions, discussions, reads, views, reactions, and bookmarks
+- [x] Trails JSON feed - `/api/trails` exposes the same route report for demos, automation, and future clients
+- [x] Reader-first positioning - Canon Trails is linked from the sidebar, home page, command palette, sitemap, feature docs, help docs, and API docs
+- [x] README documentation polish - the repository front page now reads like an actual documentation entry with logo, badges, button-style links, quickstart, deployment, configuration, core experiences, and API references
+
+## v4.70.0
+
+- [x] Canon Atlas - `/atlas` turns the wiki into a live world map with territories, article signals, story threads, and a flagship dossier
+- [x] Continuity pressure - atlas metrics surface stub, category, tag, thread, excerpt, and infobox gaps as direct work queues
+- [x] Atlas JSON feed - `/api/atlas` exposes the same territories, signals, threads, dossier, continuity, and next moves for demos or automation
+- [x] Sidebar visibility - Canon Atlas and Knowledge cockpit now sit in the primary Browse block instead of being buried lower in the navigation
+- [x] Responsive atlas QA - homepage, command palette, sitemap, docs, and responsive shell coverage include the new atlas surface
+
+## v4.69.0
+
+- [x] Knowledge cockpit - `/intelligence` now opens with a live article constellation, readiness radar, and impact simulator before the 20-engine grid
+- [x] Graph constellation - top connected articles are plotted from real wiki-link data with direct links and selected-node readouts
+- [x] Readiness radar - operational health is broken into readiness, graph, structure, freshness, trust, audience, and momentum axes
+- [x] Impact simulator - editors can model gains from resolving stubs, orphans, broken links, stale pages, taxonomy debt, and verification debt
+- [x] Product promotion - home actions, feature docs, help docs, architecture notes, and responsive tests now treat the command center as a flagship workspace
+
+## v4.68.0
+
+- [x] Knowledge Command Center - `/intelligence` turns the wiki into an operational cockpit with 20 live quality, graph, canon, audience, and editorial engines
+- [x] Mission readiness scoring - stubs, orphans, stale pages, taxonomy gaps, broken links, and featured canon roll into a single readiness percentage
+- [x] Next-best-work queue - prioritized actions point editors toward the most valuable fixes instead of leaving them to hunt through separate dashboards
+- [x] Intelligence API feed - `/api/intelligence` exposes the same 20-engine report for external dashboards and automation
+- [x] Product-surface integration - sidebar, homepage, command palette, sitemap, docs, versioning, and responsive QA now include the command center
+
+## v4.67.1
+
+- [x] Preliminary logo integration - public brand assets now provide the sidebar mark, mobile header mark, app icon, and metadata image
+- [x] Header search simplification - the top-bar search is now a compact trigger that expands only when the reader asks for it
+- [x] Browse affordance polish - the phone navigation opens the sidebar through a clearer Browse grid control instead of a generic menu icon
+- [x] Local shell fallbacks - public announcement, article, category, and tag lists resolve to empty collections when the local database is unavailable
+- [x] Branding documentation - README, architecture, design, feature, and help references describe the logo configuration and calmer search pattern
+
+## v4.67.0
+
+- [x] Main page redesign - home now acts as a compact wiki front page with stats, quick actions, featured content, browse directory links, recent updates, and sidebar modules
+- [x] Shared page shell standard - page headers, deks, action clusters, compact lists, and category trees have reusable CSS primitives
+- [x] Core browse route refresh - Articles, Categories, Search, Dashboard, Help, and Features use the same responsive page header structure
+- [x] Home module alignment - New Articles, On This Day, and Trending widgets now use the same portal/list treatment as the rest of the app
+
+## v4.66.2
+
+- [x] Article action rail rethink - primary Navigate, Collect, and Share actions stay visible while Read and Tools move into compact disclosure menus
+- [x] Article tabbar reset - article section tabs now use dedicated shell styles instead of sharing the in-content tab block CSS
+- [x] Serif reading default - article body text defaults to serif, and the font picker now offers Serif, Sans, and Mono
+- [x] Dek wrapping polish - article excerpts can use more of the header width with cleaner wrapping on wide shells
+
+## v4.66.1
+
+- [x] Article action panel polish - the article controls now render as a compact wrapping toolbar instead of a tiled grid with empty rows
+- [x] Read controls containment - font, width, theme, and reading-mode controls are constrained so they wrap without clipping the right edge
+- [x] Patch release documentation - version, changelog, roadmap, design guidance, feature docs, and help pages document the refined article action standard
+
+## v4.66
+
+- [x] Article page shell refresh - article display now uses a dedicated hero header, grouped action panel, taxonomy footer, and cleaner notice stack
+- [x] Article action redesign - Navigate, Collect, Share, Read, and Tools controls are grouped in a responsive action panel instead of stacked toolbar rows
+- [x] Reading surface polish - summary, flags, freshness, review notices, backlinks, fork actions, and category/tag context now use shared semantic UI primitives
+- [x] Responsive article layout - tabs, infoboxes, table of contents, action groups, link chips, and mobile typography are constrained for phone through wide desktop widths
+
+## v4.65
+
+- [x] Unified search response handling — header instant search, search page, command palette, wiki-link autocomplete, split-view pickers, and article edit fallback now consume the same `/api/search` response contract
+- [x] Command and navigation registry — command destinations and focused workspace route detection are centralized so global commands, sidebar toggles, and mobile navigation behavior stay aligned
+- [x] Responsive discovery surfaces — search filters, semantic search results, article filters, batch bars, and listing tables wrap or scroll intentionally across phone, tablet, laptop, and wide desktop widths
+- [x] Responsive QA guardrails — unit tests cover search/navigation helpers and Playwright checks core shell routes across phone, tablet, laptop, and wide desktop breakpoints
+
+## v4.64
+
+- [x] UI restandardization — shared compact wiki primitives for titles, buttons, icon buttons, inputs, selects, toolbars, panels, dropdowns, chips, tables, empty states, article cards, article tools, auth forms, and admin/listing surfaces
+- [x] Responsive app shell — desktop/tablet sidebar remains the dense navigation spine, while phone layouts get a safe-area-aware bottom navigation for Home, Search, Create, Recent, and Menu
+- [x] Focused workspace navigation — dense canvas routes such as `/ask`, `/graph`, `/split`, `/map`, and `/present/*` suppress the bottom nav and keep a compact top menu so the primary workspace keeps full height
+- [x] Overlay and modal hardening — dropdowns, notifications, AI chat, synthesis, speed reader, quiz mode, article Q&A, data tables, and map controls wrap or clamp instead of overlapping across mobile, tablet, and desktop widths
+- [x] Documentation/version discipline — changelog, roadmap, architecture/design docs, feature references, and in-app help/features pages updated alongside the package version bump
+
 ## v4.24
 
 - [x] Search query analytics — log queries, surface top searches and zero-result terms in admin

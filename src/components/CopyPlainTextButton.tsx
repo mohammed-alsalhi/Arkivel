@@ -19,7 +19,7 @@ export default function CopyPlainTextButton({ html }: { html: string }) {
     <button
       onClick={copy}
       title="Copy article as plain text"
-      className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground transition-colors"
+      className="ui-button"
     >
       {copied ? (
         "Copied!"

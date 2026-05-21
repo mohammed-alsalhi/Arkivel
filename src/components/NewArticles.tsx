@@ -21,29 +21,27 @@ export default async function NewArticles({ limit = 6 }: { limit?: number }) {
   if (articles.length === 0) return null;
 
   return (
-    <div className="mb-4">
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-[12px] font-bold text-heading uppercase tracking-wide">
-          New articles
-        </h2>
-        <Link href="/articles" className="text-[11px] text-muted hover:text-foreground transition-colors">
-          All &rarr;
-        </Link>
+    <div className="wiki-portal">
+      <div className="wiki-portal-header">
+        <span>New articles</span>
+        <Link href="/articles" className="wiki-portal-header-link">All</Link>
       </div>
-      <ul className="space-y-1.5">
-        {articles.map((a) => (
-          <li key={a.id} className="text-[13px]">
-            <Link href={`/articles/${a.slug}`} className="text-wiki-link hover:underline">
-              {a.title}
-            </Link>
-            {a.category && (
-              <span className="ml-1 text-[11px] text-muted">
-                — <Link href={`/categories/${a.category.slug}`} className="hover:underline">{a.category.name}</Link>
-              </span>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div className="wiki-portal-body p-0">
+        <ul className="wiki-compact-list">
+          {articles.map((a) => (
+            <li key={a.id} className="wiki-compact-list-item">
+              <Link href={`/articles/${a.slug}`} className="wiki-compact-list-title">
+                {a.title}
+              </Link>
+              {a.category && (
+                <Link href={`/categories/${a.category.slug}`} className="wiki-compact-list-meta">
+                  {a.category.name}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

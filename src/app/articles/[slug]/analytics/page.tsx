@@ -47,16 +47,15 @@ export default async function ArticleAnalyticsPage({ params }: Props) {
 
   return (
     <div>
-      {/* Tabs */}
-      <div className="wiki-tabs">
-        <Link href={`/articles/${slug}`} className="wiki-tab">Article</Link>
-        <Link href={`/articles/${slug}/edit`} className="wiki-tab">Edit</Link>
-        <Link href={`/articles/${slug}/history`} className="wiki-tab">History</Link>
-        <Link href={`/articles/${slug}/discussion`} className="wiki-tab">Discussion</Link>
-        <span className="wiki-tab wiki-tab-active">Analytics</span>
-      </div>
+      <nav className="article-tabbar" aria-label="Article sections">
+        <Link href={`/articles/${slug}`} className="article-tab">Article</Link>
+        <Link href={`/articles/${slug}/edit`} className="article-tab">Edit</Link>
+        <Link href={`/articles/${slug}/history`} className="article-tab">History</Link>
+        <Link href={`/articles/${slug}/discussion`} className="article-tab">Discussion</Link>
+        <span className="article-tab article-tab-active">Analytics</span>
+      </nav>
 
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
+      <div className="border border-border bg-surface px-5 py-4">
         <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4" style={{ fontFamily: "var(--font-serif)" }}>
           Analytics: {article.title}
         </h1>

@@ -161,7 +161,7 @@ export default function ReviewPage() {
                   const item = dueItems[current];
                   return (
                     <div className="border border-border rounded-lg p-6 space-y-4">
-                      <div className="text-[11px] text-muted uppercase tracking-wide">
+                      <div className="text-[11px] text-muted uppercase">
                         {item.article.category?.name ?? "Uncategorised"} · interval {item.interval}d · rep #{item.repetitions}
                       </div>
                       <h2 className="text-[1.4rem] font-semibold text-heading" style={{ fontFamily: "var(--font-serif)" }}>

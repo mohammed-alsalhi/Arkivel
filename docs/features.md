@@ -51,6 +51,15 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 ## Discovery & Navigation
 
 - **Full-text search** — AND-logic multi-word search with relevance ranking; instant results as you type
+- **Unified search surfaces** — the header search, search page, command palette, wiki-link autocomplete, split view, and edit fallback all use the same search response contract
+- **Responsive app shell** — desktop/tablet users get the dense collapsible sidebar, while phone layouts get a safe-area-aware bottom nav for Home, Search, Create, Recent, and Browse; focused workspace pages keep their full-height canvas by using the compact top menu instead
+- **Main page front page** — `/` combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point
+- **Shared page headers** — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently
+- **Brand mark and compact search** — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm
+- **Canon Atlas** — `/atlas` turns the wiki into a live map with category territories, article signals, story threads, a flagship dossier, continuity pressure, atlas moves, and a JSON feed
+- **Canon Trails** — `/trails` turns live wiki links, backlinks, categories, freshness, depth, and engagement into guided reading routes for canon, recent work, deep pages, and repair paths
+- **Knowledge Command Center** — `/intelligence` runs 20 live engines for mission readiness, editorial pressure, graph health, broken links, stubs, taxonomy debt, featured canon, translation surface, reader demand, verification debt, and cleanup flags, then opens with a live article constellation, readiness radar, and impact simulator
+- **Command palette navigation** — `Cmd+K` / `Ctrl+K` opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces
 - **Word-count search filter** — advanced search includes min/max word count range to find articles by length
 - **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
 - **30-day view sparkline** — article stats panel shows a mini bar chart of daily page views for the past 30 days
@@ -95,7 +104,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Content warning tags** — CW labels (spoilers, violence, mature, etc.) on articles; dismissible amber banner; admin-configurable in edit form
 - **Content gap analysis** — `/admin/content-gaps` shows zero-result and low-result search queries grouped by frequency
 - **Theme customizer** — HSL hue slider in article toolbar for live accent color customization; persisted to localStorage
-- **Font preference** — article toolbar dropdown: Default / Serif / Sans / Mono; injects override CSS on `#article-content`; persisted
+- **Font preference** — article body defaults to Serif, with a toolbar dropdown for Serif / Sans / Mono overrides; persisted
 - **Article quick notes** — collapsible private note per article; browser localStorage only; save and delete controls
 - **Maintenance mode** — admin toggle at `/admin/maintenance`; shows site-wide yellow banner when active
 - **Cleanup tags** — admin flags (needs-images, needs-expansion, needs-citations, stub, outdated) on articles; orange notice banner on article page; set in edit form
@@ -133,7 +142,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Article quiz mode** — "Quiz me" in the article tools bar; AI generates 5 multiple-choice questions; full flashcard UI with answer reveal, score, and attempt recording
 - **Ask my wiki — AI oracle** — full-page conversational AI at `/ask`; semantic search retrieves the most relevant articles per query; streaming token-by-token answers; multi-turn conversation; source attribution
 - **Knowledge synthesis** — "Synthesize" on category pages; AI reads all articles and synthesises a comprehensive overview; preview modal; "Create as new article" one-click
-- **Presentation mode** — every article has a "Present" button; `/present/[slug]` is a cinematic dark slideshow; H2 sections become slides; animated transitions, slide overview, fullscreen, dot navigation
+- **Presentation mode** — every article has a "Present" button; `/present/[slug]` is a cinematic dark slideshow with reserved top/bottom chrome, a scrollable slide stage, animated transitions, slide overview, fullscreen, and dot navigation
 - **Bulk JSON export** — `/api/export/json`; downloads all articles as structured JSON (admin only)
 - **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + reads, reactions, revisions summary (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history
@@ -185,13 +194,17 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Flashcards** — create decks from articles; SM-2 spaced repetition with 0–5 grading at `/flashcards`
 - **AI quizzes** — Claude generates 5 multiple-choice questions from any article for self-testing
 - **Reading progress** — mark articles as read; category pages show a completion ring
-- **Presentation mode** — any article opens as a full-screen slideshow at `/present/[slug]`; each H2/H3 is a slide
+- **Presentation mode** — any article opens as a full-screen slideshow at `/present/[slug]`; each H2/H3 is a slide, and long content scrolls within the slide stage rather than covering controls
 - **Watchlist digest** — optional daily email summary of watched article changes at `/watchlist/digest`
 
 ---
 
 ## Article Page
 
+- **Article hero header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header
+- **Grouped action panel** — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus
+- **Taxonomy footer** — category and tags render as wrapping chips at the end of the article rather than pipe-separated text
+- **Responsive article shell** — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens
 - **Reading time estimator** — "~X min read" computed at 200 wpm displayed in every article's metadata line
 - **Draft share links** — admins generate a secret-token URL (`/share/[token]`) so non-admins can preview a draft without publishing
 - **Expiry warning banner** — yellow inline banner when an article's *reviewDueAt* is within 30 days
@@ -329,6 +342,9 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Analytics** — scroll depth heatmap, navigation paths at `/admin/analytics`
 - **Performance metrics** — system metrics at `/admin/metrics`
 - **Health score** — A–F grade for link coverage, freshness, stub %, search gaps at `/admin/health`
+- **Atlas JSON feed** — `/api/atlas` exposes territories, article signals, story threads, the flagship dossier, continuity pressure, and recommended atlas moves
+- **Trails JSON feed** — `/api/trails` exposes guided reading routes, stop reasons, reading estimates, word totals, and link totals
+- **Intelligence JSON feed** — `/api/intelligence` exposes the command-center score, summary, graph constellation, radar axes, pressure model, 20 engines, and next-best-work queue for dashboards or automation
 - **Content lint** — broken links, missing excerpts, orphans at `/admin/lint`
 - **Stale articles** — articles not updated in 180+ days at `/admin/staleness`
 - **Embeddings coverage** — semantic search index per article at `/admin/embeddings`
@@ -347,4 +363,4 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Word-count distribution** — histogram of article lengths at `/admin/word-count` with longest/shortest tables and average word count
 - **Batch operations** — bulk-assign category, publish/unpublish, or delete from `/articles`
 - **Tag management** — rename, recolor, and delete tags inline at `/admin/tags` with article count and filterable list
-- **Custom branding** — name, tagline, welcome text, footer via `NEXT_PUBLIC_*` environment variables
+- **Custom branding** — name, tagline, welcome text, footer, logo, logo mark, and app icon via `NEXT_PUBLIC_*` environment variables

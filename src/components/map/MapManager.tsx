@@ -87,7 +87,7 @@ export default function MapManager({
   return (
     <div className="border border-border">
       <div className="bg-infobox-header px-3 py-1.5 flex items-center justify-between">
-        <h3 className="text-[12px] font-bold text-foreground uppercase tracking-wider">
+        <h3 className="text-[12px] font-bold text-foreground uppercaser">
           Map Configurations
         </h3>
         {!showForm && (

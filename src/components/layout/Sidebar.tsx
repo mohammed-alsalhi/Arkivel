@@ -1,11 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
 import { config } from "@/lib/config";
+import { isFocusedWorkspacePath } from "@/lib/navigation";
 
 type Category = {
   id: string;
@@ -67,31 +69,65 @@ export default function Sidebar({
   const [mobileOpen, setMobileOpen] = useState(false);
   const isAdmin = useAdmin();
   const close = () => setMobileOpen(false);
+  const showTopMobileToggle = isFocusedWorkspacePath(pathname);
+
+  useEffect(() => {
+    function handleMobileToggle() {
+      setMobileOpen((open) => !open);
+    }
+
+    function handleMobileClose() {
+      setMobileOpen(false);
+    }
+
+    window.addEventListener("toggle-mobile-sidebar", handleMobileToggle);
+    window.addEventListener("close-mobile-sidebar", handleMobileClose);
+    return () => {
+      window.removeEventListener("toggle-mobile-sidebar", handleMobileToggle);
+      window.removeEventListener("close-mobile-sidebar", handleMobileClose);
+    };
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setMobileOpen(false), 0);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("mobile-sidebar-state-change", { detail: mobileOpen }));
+  }, [mobileOpen]);
 
   return (
     <>
       {/* Mobile toggle */}
-      <button
-        onClick={() => setMobileOpen(!mobileOpen)}
-        aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
-        aria-pressed={mobileOpen}
-        className="fixed top-1.5 left-2 z-50 flex items-center justify-center w-7 h-7 bg-surface border border-border text-foreground md:hidden"
-      >
-        {mobileOpen ? <CloseIcon /> : <MenuIcon />}
-      </button>
+      {showTopMobileToggle && (
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+          aria-pressed={mobileOpen}
+          className="ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:!hidden"
+        >
+          {mobileOpen ? <CloseIcon /> : <MenuIcon />}
+        </button>
+      )}
 
       <aside
         className={clsx(
-          "fixed left-0 top-[40px] z-40 h-[calc(100vh-40px)] w-[200px] overflow-y-auto bg-sidebar-bg border-r border-border transition-transform flex flex-col",
-          mobileOpen ? "translate-x-0" : "-translate-x-full",
-          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0"
+          "wiki-sidebar fixed left-0 top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg border-r border-border transition-[transform,opacity,visibility] flex flex-col",
+          mobileOpen
+            ? "translate-x-0 opacity-100 visible pointer-events-auto"
+            : "-translate-x-full max-md:opacity-0 max-md:invisible max-md:pointer-events-none",
+          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0 md:opacity-100 md:visible md:pointer-events-auto"
         )}
       >
         {/* Logo / Title */}
-        <div className="px-3 py-3 border-b border-border">
-          <Link href="/" className="block text-center hover:no-underline" onClick={close}>
+        <div className="border-b border-border px-3 py-3">
+          <Link href="/" className="wiki-sidebar-brand hover:no-underline" onClick={close}>
+            <span className="wiki-sidebar-brand-mark" aria-hidden="true">
+              <Image src={config.logoMark} alt="" width={36} height={36} priority />
+            </span>
             <h1
-              className="text-lg font-bold text-heading"
+              className="wiki-sidebar-brand-name"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               {config.name}
@@ -103,6 +139,15 @@ export default function Sidebar({
         <SidebarSection title="Browse">
           <SidebarLink href="/" active={pathname === "/"} onClick={close}>
             Main Page
+          </SidebarLink>
+          <SidebarLink href="/atlas" active={pathname === "/atlas"} onClick={close}>
+            Canon atlas
+          </SidebarLink>
+          <SidebarLink href="/trails" active={pathname === "/trails"} onClick={close}>
+            Canon trails
+          </SidebarLink>
+          <SidebarLink href="/intelligence" active={pathname === "/intelligence"} onClick={close}>
+            Knowledge cockpit
           </SidebarLink>
           <SidebarLink href="/articles" active={pathname === "/articles"} onClick={close}>
             All articles{articleCount ? ` (${articleCount})` : ""}
@@ -160,9 +205,6 @@ export default function Sidebar({
         <SidebarSection title="Discover">
           <SidebarLink href="/explore" active={pathname === "/explore"} onClick={close}>
             Explore
-          </SidebarLink>
-          <SidebarLink href="/api/random" active={false} onClick={close}>
-            Random article
           </SidebarLink>
           <SidebarLink href="/activity" active={pathname === "/activity"} onClick={close}>
             Activity
@@ -229,8 +271,14 @@ export default function Sidebar({
           <SidebarLink href="/til" active={pathname === "/til"} onClick={close}>
             Today I Learned
           </SidebarLink>
+          <SidebarLink href="/daily" active={pathname === "/daily"} onClick={close}>
+            Daily note
+          </SidebarLink>
           <SidebarLink href="/scratchpad" active={pathname === "/scratchpad"} onClick={close}>
             Scratchpad
+          </SidebarLink>
+          <SidebarLink href="/canvas" active={pathname === "/canvas" || pathname.startsWith("/canvas/")} onClick={close}>
+            Canvas
           </SidebarLink>
           <SidebarLink href="/history" active={pathname === "/history"} onClick={close}>
             Reading history
@@ -253,6 +301,12 @@ export default function Sidebar({
           </SidebarLink>
           <SidebarLink href="/whiteboards" active={pathname === "/whiteboards" || pathname.startsWith("/whiteboards/")} onClick={close}>
             Whiteboards
+          </SidebarLink>
+          <SidebarLink href="/split" active={pathname === "/split"} onClick={close}>
+            Split view
+          </SidebarLink>
+          <SidebarLink href="/assets" active={pathname === "/assets"} onClick={close}>
+            Asset library
           </SidebarLink>
           <SidebarLink href="/present" active={pathname === "/present"} onClick={close}>
             Present
@@ -469,7 +523,7 @@ export default function Sidebar({
 
         {/* Footer */}
         <div className="mt-auto border-t border-border px-3 py-2 text-[10px] text-muted flex items-center justify-between">
-          <span>v{process.env.NEXT_PUBLIC_APP_VERSION}</span>
+          <span>v{config.version}</span>
           <button
             type="button"
             title="Toggle sidebar to right / left"
@@ -573,7 +627,7 @@ function SidebarSection({
     <div className="border-b border-border">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full bg-infobox-header px-3 py-1 text-[11px] font-bold text-foreground uppercase tracking-wider hover:bg-surface-hover transition-colors"
+          className="flex items-center justify-between w-full bg-infobox-header px-3 py-1 text-[11px] font-bold text-foreground uppercase hover:bg-surface-hover transition-colors"
         aria-expanded={open}
       >
         <span>{title}</span>
@@ -602,9 +656,9 @@ function SidebarLink({
       href={href}
       onClick={onClick}
       className={clsx(
-        "block py-[3px] text-[13px] transition-colors",
+        "block py-[3px] text-[13px] transition-colors hover:no-underline",
         indent ? "px-4" : "px-2",
-        active ? "font-bold text-heading" : "text-wiki-link hover:underline"
+        active ? "bg-surface text-heading font-bold" : "text-wiki-link hover:bg-surface-hover"
       )}
     >
       {children}

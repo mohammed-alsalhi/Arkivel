@@ -48,7 +48,9 @@ export default function ArticleWidthPreference() {
       <button
         onClick={() => setOpen((o) => !o)}
         title="Article width"
-        className="flex items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+        className="ui-button w-6 px-0"
+        aria-haspopup="true"
+        aria-expanded={open}
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <polyline points="15 3 21 3 21 9" />
@@ -58,12 +60,12 @@ export default function ArticleWidthPreference() {
         </svg>
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-50 border border-border bg-surface shadow-sm min-w-[100px]">
+        <div className="ui-dropdown min-w-[100px]">
           {WIDTHS.map((w) => (
             <button
               key={w.value}
               onClick={() => choose(w.value)}
-              className={`block w-full text-left px-3 py-1.5 text-[12px] hover:bg-surface-hover ${current === w.value ? "text-accent font-bold" : "text-foreground"}`}
+              className={`ui-dropdown-item ${current === w.value ? "text-accent font-bold" : ""}`}
             >
               {w.label}
             </button>

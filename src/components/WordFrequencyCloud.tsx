@@ -53,7 +53,7 @@ export default function WordFrequencyCloud({ html }: { html: string }) {
 
   return (
     <div className="mt-4 border-t border-border pt-3">
-      <h3 className="text-[11px] font-semibold text-muted uppercase tracking-wider mb-2">
+      <h3 className="text-[11px] font-semibold text-muted uppercaser mb-2">
         Word frequency
       </h3>
       <div className="flex flex-wrap gap-x-2 gap-y-1 leading-relaxed">

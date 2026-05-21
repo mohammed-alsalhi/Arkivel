@@ -138,7 +138,7 @@ export default function GrammarCheckPanel({ editor }: { editor: Editor }) {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className={`font-semibold text-[10px] uppercase tracking-wide ${SEVERITY_COLOR[issue.severity]}`}>
+                    <span className={`font-semibold text-[10px] uppercase ${SEVERITY_COLOR[issue.severity]}`}>
                       {issue.severity}
                     </span>
                     <p className="text-foreground mt-0.5 leading-snug">{issue.message}</p>

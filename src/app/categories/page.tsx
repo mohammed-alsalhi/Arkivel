@@ -3,43 +3,56 @@ import prisma from "@/lib/prisma";
 import CategoryManager from "@/components/CategoryManager";
 import TagManager from "@/components/TagManager";
 
-export default async function CategoriesPage() {
-  const categories = await prisma.category.findMany({
-    where: { parentId: null },
-    orderBy: { sortOrder: "asc" },
-    include: {
-      _count: { select: { articles: true } },
-      children: {
-        orderBy: { sortOrder: "asc" },
-        include: {
-          _count: { select: { articles: true } },
-          children: {
-            orderBy: { sortOrder: "asc" },
-            include: { _count: { select: { articles: true } } },
+async function getCategoryTree() {
+  try {
+    return await prisma.category.findMany({
+      where: { parentId: null },
+      orderBy: { sortOrder: "asc" },
+      include: {
+        _count: { select: { articles: true } },
+        children: {
+          orderBy: { sortOrder: "asc" },
+          include: {
+            _count: { select: { articles: true } },
+            children: {
+              orderBy: { sortOrder: "asc" },
+              include: { _count: { select: { articles: true } } },
+            },
           },
         },
       },
-    },
-  });
+    });
+  } catch {
+    return [];
+  }
+}
+
+export default async function CategoriesPage() {
+  const categories = await getCategoryTree();
+  const categoryCount = countCategoryNodes(categories);
+  const articleCount = countCategoryArticles(categories);
 
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Categories
-      </h1>
-
-      <p className="text-[13px] text-muted mb-4">
-        The following is a list of all categories in the encyclopedia.
-        Select a category to browse its articles.
-      </p>
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Browse</p>
+          <h1 className="ui-page-title">Categories</h1>
+          <p className="ui-page-dek">
+            {categoryCount.toLocaleString()} categor{categoryCount === 1 ? "y" : "ies"} organizing {articleCount.toLocaleString()} article{articleCount !== 1 ? "s" : ""}.
+            Select a category to browse its articles.
+          </p>
+        </div>
+        <div className="ui-page-actions">
+          <Link href="/articles" className="ui-button">Article index</Link>
+          <Link href="/tags" className="ui-button">Tags</Link>
+        </div>
+      </header>
 
       {categories.length === 0 ? (
         <div className="wiki-notice">No categories have been created yet.</div>
       ) : (
-        <div className="max-w-xl mb-6">
+        <div className="category-tree mb-6">
           {categories.map((cat) => (
             <CategoryTreeRow key={cat.id} category={cat} depth={0} />
           ))}
@@ -64,26 +77,34 @@ type TreeCategory = {
   children?: TreeCategory[];
 };
 
+function countCategoryNodes(categories: TreeCategory[]): number {
+  return categories.reduce((sum, category) => sum + 1 + countCategoryNodes(category.children ?? []), 0);
+}
+
+function countCategoryArticles(categories: TreeCategory[]): number {
+  return categories.reduce((sum, category) => sum + category._count.articles + countCategoryArticles(category.children ?? []), 0);
+}
+
 function CategoryTreeRow({ category, depth }: { category: TreeCategory; depth: number }) {
   return (
     <>
       <div
-        className="flex items-center gap-2 border-b border-border-light py-1.5 hover:bg-surface-hover"
-        style={{ paddingLeft: `${depth * 20 + 8}px` }}
+        className="category-tree-row"
+        style={{ paddingLeft: `${depth * 1.15 + 0.65}rem` }}
       >
-        {depth > 0 && <span className="text-muted text-[12px]">{"\u2514"}</span>}
+        {depth > 0 && <span className="category-tree-depth" aria-hidden="true" />}
         <Link
           href={`/categories/${category.slug}`}
-          className="text-[13px] font-medium"
+          className="category-tree-title"
         >
           {category.name}
         </Link>
-        <span className="text-[11px] text-muted">
+        <span className="category-tree-count">
           ({category._count.articles} article{category._count.articles !== 1 ? "s" : ""})
         </span>
         {category.description && (
-          <span className="text-[12px] text-muted hidden sm:inline">
-            &ndash; {category.description}
+          <span className="category-tree-description">
+            {category.description}
           </span>
         )}
       </div>

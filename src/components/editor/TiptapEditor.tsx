@@ -26,6 +26,8 @@ import FindReplacePanel from "./FindReplacePanel";
 import { PullQuote } from "./PullQuoteExtension";
 import { SmartTypography } from "./SmartTypographyExtension";
 import { ClaimMarkExtension } from "./ClaimMarkExtension";
+import { CalloutBlock } from "./CalloutBlockExtension";
+import { QueryBlock } from "./QueryBlockExtension";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Highlight from "@tiptap/extension-highlight";
@@ -184,6 +186,8 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         PullQuote,
         SmartTypography,
         ClaimMarkExtension,
+        CalloutBlock,
+        QueryBlock,
         Superscript,
         Subscript,
         Highlight.configure({ multicolor: true }),

@@ -203,7 +203,7 @@ export default function ActivityPage() {
         <div className="space-y-5">
           {grouped.map((group) => (
             <div key={group.date}>
-              <h2 className="text-[12px] font-bold text-muted uppercase tracking-wide mb-2">
+              <h2 className="text-[12px] font-bold text-muted uppercase mb-2">
                 {group.date}
               </h2>
               <ul className="space-y-1.5">

@@ -121,6 +121,48 @@ export function getSuggestionItems(
       },
     },
     {
+      title: "Query Block",
+      description: "Embed a live list of articles (FROM #tag SORT updatedAt LIMIT 10)",
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertQueryBlock().run();
+      },
+    },
+    {
+      title: "Callout Note",
+      description: "Highlighted note callout block [!NOTE]",
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertCallout("note").run();
+      },
+    },
+    {
+      title: "Callout Tip",
+      description: "Tip/hint callout block [!TIP]",
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertCallout("tip").run();
+      },
+    },
+    {
+      title: "Callout Warning",
+      description: "Warning callout block [!WARNING]",
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertCallout("warning").run();
+      },
+    },
+    {
+      title: "Callout Important",
+      description: "Important callout block [!IMPORTANT]",
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertCallout("important").run();
+      },
+    },
+    {
+      title: "Callout Quote",
+      description: "Quote callout block [!QUOTE]",
+      command: ({ editor, range }) => {
+        editor.chain().focus().deleteRange(range).insertCallout("quote").run();
+      },
+    },
+    {
       title: "Mermaid Diagram",
       description: "Flowchart, sequence diagram, or Gantt chart",
       command: ({ editor, range }) => {

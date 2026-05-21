@@ -29,11 +29,8 @@ export default function HighContrastToggle() {
     <button
       onClick={toggle}
       title={active ? "Exit high-contrast mode" : "High-contrast accessibility mode"}
-      className={`h-6 px-2 text-[11px] border rounded transition-colors font-bold ${
-        active
-          ? "border-foreground bg-background text-foreground"
-          : "border-border text-muted hover:text-foreground"
-      }`}
+      aria-pressed={active}
+      className="ui-button w-6 px-0 font-bold"
     >
       A
     </button>

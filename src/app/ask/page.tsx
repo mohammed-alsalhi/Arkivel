@@ -24,7 +24,7 @@ function MarkdownText({ text }: { text: string }) {
       {lines.map((line, i) => {
         if (line.startsWith("### "))
           return (
-            <p key={i} className="font-semibold text-heading text-[13px] uppercase tracking-wide mt-3 mb-0.5">
+            <p key={i} className="font-semibold text-heading text-[13px] uppercase mt-3 mb-0.5">
               {line.slice(4)}
             </p>
           );
@@ -240,7 +240,7 @@ export default function AskPage() {
             {messages.map((msg, i) => (
               <div key={i} className={msg.role === "user" ? "flex justify-end" : "flex justify-start"}>
                 {msg.role === "user" ? (
-                  <div className="max-w-[85%] bg-accent text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[14px]">
+                  <div className="max-w-[85%] bg-accent text-white px-4 py-2.5 rounded rounded-tr-sm text-[14px]">
                     {msg.content}
                   </div>
                 ) : (
@@ -264,7 +264,7 @@ export default function AskPage() {
                       </div>
                     )}
                     {/* Answer */}
-                    <div className="bg-surface border border-border rounded-2xl rounded-tl-sm px-4 py-3">
+                    <div className="bg-surface border border-border rounded rounded-tl-sm px-4 py-3">
                       {msg.content ? (
                         <MarkdownText text={msg.content} />
                       ) : (
@@ -298,7 +298,7 @@ export default function AskPage() {
             placeholder="Ask anything about your wiki…"
             rows={1}
             disabled={streaming}
-            className="flex-1 resize-none border border-border rounded-xl bg-background px-4 py-2.5 text-[14px] text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors disabled:opacity-50 leading-relaxed"
+            className="flex-1 resize-none border border-border rounded bg-background px-4 py-2.5 text-[14px] text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors disabled:opacity-50 leading-relaxed"
             style={{ minHeight: 42, maxHeight: 140 }}
             onInput={(e) => {
               const t = e.currentTarget;
@@ -309,7 +309,7 @@ export default function AskPage() {
           <button
             onClick={() => send()}
             disabled={!input.trim() || streaming}
-            className="h-[42px] w-[42px] rounded-xl bg-accent text-white flex items-center justify-center hover:bg-accent-hover disabled:opacity-40 transition-colors shrink-0"
+            className="h-[42px] w-[42px] rounded bg-accent text-white flex items-center justify-center hover:bg-accent-hover disabled:opacity-40 transition-colors shrink-0"
             title="Send (Enter)"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

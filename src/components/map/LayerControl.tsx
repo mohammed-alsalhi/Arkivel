@@ -23,7 +23,7 @@ export default function LayerControl({
   return (
     <div className="absolute bottom-4 left-4 z-[1000] w-56 border border-border bg-surface shadow-md">
       <div className="bg-infobox-header px-3 py-1">
-        <h4 className="text-[11px] font-bold text-foreground uppercase tracking-wider">
+        <h4 className="text-[11px] font-bold text-foreground uppercaser">
           Layers
         </h4>
       </div>

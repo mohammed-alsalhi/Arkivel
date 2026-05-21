@@ -133,6 +133,9 @@ model Article {
   // v4.46 additions
   isFeatured       Boolean  @default(false)  // good/featured article badge
 
+  // v4.64 additions
+  aliases          Alias[]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -329,6 +332,11 @@ model User {
   // v4.26 additions
   readingStreakLogs ReadingStreakLog[]
   categoryWatches   CategoryWatch[]
+
+  // v4.64 additions
+  canvases         Canvas[]
+  workspaces       Workspace[]
+  assets           Asset[]
 
   createdAt    DateTime  @default(now())
 
@@ -1372,6 +1380,58 @@ model GlossaryTerm {
   updatedAt  DateTime @updatedAt
 
   @@index([term])
+}
+
+// ── v4.64: Aliases ──
+model Alias {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  alias     String   @unique
+  createdAt DateTime @default(now())
+
+  @@index([articleId])
+}
+
+// ── v4.64: Canvas ──
+model Canvas {
+  id        String   @id @default(cuid())
+  name      String
+  state     Json     @default("{}")  // nodes/edges JSON
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ── v4.64: Workspace ──
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  state     Json     @default("{}")  // open panes, sidebar state, layout config
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ── v4.64: Asset Library ──
+model Asset {
+  id        String   @id @default(cuid())
+  filename  String
+  mimeType  String
+  url       String
+  size      Int      // bytes
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([mimeType])
 }
 
 // ── v4.61: Spaced Repetition ──

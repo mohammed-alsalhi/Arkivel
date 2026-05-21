@@ -96,7 +96,7 @@ export default function ArticlePollWidget({
   return (
     <div className="mt-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-[13px] font-semibold text-heading uppercase tracking-wide">Polls</h3>
+        <h3 className="text-[13px] font-semibold text-heading uppercase">Polls</h3>
         {isAdmin && (
           <button
             onClick={() => setShowNew((v) => !v)}

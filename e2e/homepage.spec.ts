@@ -9,16 +9,24 @@ test.describe("Homepage", () => {
     expect(content).toBeTruthy();
   });
 
-  test("sidebar navigation is visible on desktop", async ({ page }) => {
+  test("sidebar navigation matches the current viewport", async ({ page }) => {
     await page.goto("/");
     const sidebar = page.locator("aside");
+    const width = page.viewportSize()?.width ?? 0;
+
+    if (width < 768) {
+      await expect(sidebar).toBeHidden();
+      await page.getByRole("button", { name: "Toggle browse navigation" }).click();
+    }
+
     await expect(sidebar).toBeVisible();
   });
 
   test("search bar is accessible", async ({ page }) => {
     await page.goto("/");
-    const searchInput = page.locator('input[placeholder*="Search"]');
-    await expect(searchInput).toBeVisible();
+    await page.getByRole("button", { name: "Open search" }).click();
+
+    await expect(page.getByPlaceholder("Search articles")).toBeFocused();
   });
 });
 

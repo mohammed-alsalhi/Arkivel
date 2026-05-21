@@ -84,7 +84,7 @@ export default function FactCheckPanel({ html }: Props) {
 
       {open && results && results.length > 0 && (
         <div className="mt-3 border border-border rounded bg-surface p-3 space-y-2">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-accent mb-2">
+          <p className="text-[10px] font-semibold uppercase text-accent mb-2">
             AI Fact-Check — {results.length} claims analyzed
           </p>
           <p className="text-[10px] text-muted mb-3">
