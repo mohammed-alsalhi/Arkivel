@@ -203,6 +203,7 @@ Articles cross-reference using `[[Article Name]]` syntax. The custom Tiptap `Wik
 
 ### Content Storage
 Articles store `content` (HTML from Tiptap) and optionally `contentRaw` (Markdown for export). HTML is the canonical format displayed to users.
+Standard HTML tables remain native table markup from editor through display; global content styles collapse borders, zero spacing, and wrap cell content so article and presentation views preserve a single merged grid.
 
 ### Revision System
 Every PUT to an article endpoint first snapshots the current state into `ArticleRevision`, then applies the update. Revisions track the editing user for attribution.

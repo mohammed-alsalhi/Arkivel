@@ -156,6 +156,7 @@ Dark mode is driven by `html[data-theme="dark"]` overrides — never use `dark:`
 - **Article body**: serif by default (`var(--font-serif)`), with the article font preference control offering Serif, Sans, and Mono overrides.
 - **UI labels**: `text-[11px]` or `text-[12px]`. Do not use `text-xs` (14px) for compact UI chrome — it is too large.
 - **Code**: monospace, syntax-highlighted via lowlight.
+- **Tables**: article, editor, and presentation tables use `border-collapse: collapse`, zero border spacing, and wrapped cell content so adjacent cells read as one merged grid.
 - **Readability cap**: wiki article content has a max-width of `65ch` in dyslexia mode; otherwise inherits the content column width.
 
 ---

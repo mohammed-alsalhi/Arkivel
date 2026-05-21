@@ -46,7 +46,7 @@ async function mockPresentArticle(page: import("@playwright/test").Page) {
           },
           {
             title: "Dense slide",
-            content: "<p>Long presentation content should scroll inside the reserved stage.</p><ul><li>First substantial point with a long phrase that needs wrapping on phone.</li><li>Second substantial point with more words.</li><li>Third substantial point with more words.</li><li>Fourth substantial point with more words.</li><li>Fifth substantial point with more words.</li><li>Sixth substantial point with more words.</li><li>Seventh substantial point with more words.</li><li>Eighth substantial point with more words.</li><li>Ninth substantial point with more words.</li></ul><pre><code>const veryLongIdentifierThatShouldNotForcePageOverflow = true;</code></pre>",
+            content: "<p>Long presentation content should scroll inside the reserved stage.</p><ul><li>First substantial point with a long phrase that needs wrapping on phone.</li><li>Second substantial point with more words.</li><li>Third substantial point with more words.</li><li>Fourth substantial point with more words.</li><li>Fifth substantial point with more words.</li><li>Sixth substantial point with more words.</li><li>Seventh substantial point with more words.</li><li>Eighth substantial point with more words.</li><li>Ninth substantial point with more words.</li></ul><table><thead><tr><th>Layer</th><th>Status</th><th>Notes</th></tr></thead><tbody><tr><td>Article table</td><td>Merged borders</td><td>Cells should collapse into one continuous grid.</td></tr><tr><td>Presentation table</td><td>Contained</td><td>Long cell content wraps instead of forcing horizontal overflow.</td></tr></tbody></table><pre><code>const veryLongIdentifierThatShouldNotForcePageOverflow = true;</code></pre>",
           },
           {
             title: "Closing",
@@ -85,6 +85,24 @@ async function expectPresentChromeSeparated(page: import("@playwright/test").Pag
   expect(metrics.stageAfterTopbar).toBe(true);
   expect(metrics.stageBeforeControls).toBe(true);
   expect(metrics.controlsOwnCenter).toBe(true);
+}
+
+async function expectPresentationTablesCollapsed(page: import("@playwright/test").Page) {
+  const tableMetrics = await page.locator(".presentation-content table").evaluate((table) => {
+    const styles = window.getComputedStyle(table);
+    const rect = table.getBoundingClientRect();
+    const stage = document.querySelector(".present-stage")?.getBoundingClientRect();
+
+    return {
+      borderCollapse: styles.borderCollapse,
+      display: styles.display,
+      insideStage: Boolean(stage && rect.left >= stage.left - 1 && rect.right <= stage.right + 1),
+    };
+  });
+
+  expect(tableMetrics.borderCollapse).toBe("collapse");
+  expect(tableMetrics.display).toBe("table");
+  expect(tableMetrics.insideStage).toBe(true);
 }
 
 test.describe("Responsive shell", () => {
@@ -164,6 +182,11 @@ test.describe("Responsive shell", () => {
     await expect(page.locator(".present-slide")).toBeVisible();
     await expectNoHorizontalOverflow(page);
     await expectPresentChromeSeparated(page);
+
+    await page.getByRole("button", { name: "Next" }).click();
+    await expect(page.locator(".presentation-content table")).toBeVisible();
+    await expectPresentationTablesCollapsed(page);
+    await expectNoHorizontalOverflow(page);
 
     await page.getByRole("button", { name: "Overview (G)" }).click();
     await expect(page.locator(".present-overview-grid")).toBeVisible();

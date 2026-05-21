@@ -6,7 +6,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 
 ## Writing & Editing
 
-- **Rich text editor** — Tiptap-based WYSIWYG editor with toolbar, slash commands, and drag-and-drop block reordering
+- **Rich text editor** — Tiptap-based WYSIWYG editor with toolbar, slash commands, collapsed-border tables, and drag-and-drop block reordering
 - **Markdown mode** — toggle between rich text and raw Markdown at any time
 - **Slash commands** — type `/` for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more; includes user snippets via `/snippet`
 - **Inline AI rewrite** — select text and click "AI Rewrite" in the toolbar; optionally provide an instruction; requires `OPENAI_API_KEY`
@@ -194,7 +194,7 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Flashcards** — create decks from articles; SM-2 spaced repetition with 0–5 grading at `/flashcards`
 - **AI quizzes** — Claude generates 5 multiple-choice questions from any article for self-testing
 - **Reading progress** — mark articles as read; category pages show a completion ring
-- **Presentation mode** — any article opens as a full-screen slideshow at `/present/[slug]`; each H2/H3 is a slide, and long content scrolls within the slide stage rather than covering controls
+- **Presentation mode** — any article opens as a full-screen slideshow at `/present/[slug]`; each H2/H3 is a slide, and long content, code, and native collapsed tables stay within the slide stage rather than covering controls
 - **Watchlist digest** — optional daily email summary of watched article changes at `/watchlist/digest`
 
 ---
@@ -204,7 +204,7 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Article hero header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header
 - **Grouped action panel** — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus
 - **Taxonomy footer** — category and tags render as wrapping chips at the end of the article rather than pipe-separated text
-- **Responsive article shell** — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens
+- **Responsive article shell** — article tabs, infoboxes, collapsed article tables, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens
 - **Reading time estimator** — "~X min read" computed at 200 wpm displayed in every article's metadata line
 - **Draft share links** — admins generate a secret-token URL (`/share/[token]`) so non-admins can preview a draft without publishing
 - **Expiry warning banner** — yellow inline banner when an article's *reviewDueAt* is within 30 days

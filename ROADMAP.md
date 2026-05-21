@@ -16,6 +16,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.71.2
+
+- [x] Collapsed article tables - editor, article, and shared UI tables now use zero-spaced collapsed borders so adjacent cells read as one merged grid
+- [x] Presentation table hardening - `/present/[slug]` keeps article tables in native table layout with fixed columns, wrapped cell content, and no slide-stage overflow
+- [x] Table regression coverage - responsive presentation QA now includes a real HTML table and asserts collapsed borders stay inside the viewport
+
 ## v4.71.1
 
 - [x] Presentation layout hardening - `/present/[slug]` now reserves separate progress, topbar, slide-stage, and footer regions so content cannot overlap deck controls

@@ -35,7 +35,7 @@ The rich text editor provides a toolbar with formatting options:
 | Link icon | Insert a URL link |
 | Image icon | Upload an image |
 | **[[]]** | Insert a wiki link |
-| **Table** | Insert a table |
+| **Table** | Insert a collapsed-border table |
 | **Detect Links** | Scan text for potential wiki links |
 | **fn** | Insert a footnote / citation |
 | **Mermaid** | Insert a diagram (via `/mermaid` slash command) |
@@ -66,6 +66,7 @@ Beyond standard text, the editor supports specialized content blocks inserted vi
 - **Math (KaTeX)** — inline math with `$...$` and block math with `$$...$$`
 - **Excalidraw** — embed an interactive whiteboard drawing; stored as JSON and rendered read-only on the article page
 - **Data table** — paste CSV or JSON data to create a sortable, filterable table with a CSV download button
+- **Article table** — insert a standard table when you need cells to read as one merged grid with collapsed borders
 - **Decision tree** — define a yes/no tree as JSON; renders as an interactive SVG with expand/collapse
 
 **Voice dictation:** Click the microphone button in the toolbar to speak — your words are inserted at the cursor using the browser's speech recognition.
@@ -197,7 +198,7 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **Article header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped at the top of the page.
 - **Action panel** — article controls are grouped as Navigate, Collect, Share, Read, and Tools.
 - **Taxonomy footer** — category and tag links appear as wrapping chips near the bottom of the article.
-- **Responsive layout** — article tabs, infoboxes, table of contents, backlinks, and action groups are constrained for narrow screens.
+- **Responsive layout** — article tabs, infoboxes, collapsed article tables, table of contents, backlinks, and action groups are constrained for narrow screens.
 - **Reading time** — every article shows "~X min read" in the byline, estimated at 200 words per minute.
 - **Reading mode** — click "Reading mode" in the toolbar or press `R` to enter a distraction-free view. Press again or `R` to exit.
 - **Draft share links** — admins generate a secret URL (`POST /api/articles/[id]/share-token`) so anyone with the link can preview a draft at `/share/[token]` without needing to log in.

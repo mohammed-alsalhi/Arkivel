@@ -57,7 +57,7 @@ export default function HelpPage() {
             <li><strong>Link icon</strong> &mdash; Insert a URL link</li>
             <li><strong>Image icon</strong> &mdash; Upload an image</li>
             <li><strong>[[]]</strong> &mdash; Insert a wiki link</li>
-            <li><strong>Table</strong> &mdash; Insert a table</li>
+            <li><strong>Table</strong> &mdash; Insert a collapsed-border table</li>
             <li><strong>Detect Links</strong> &mdash; Scan text for potential wiki links</li>
             <li><strong>fn</strong> &mdash; Insert a footnote / citation</li>
             <li><strong>Mermaid</strong> &mdash; Insert a diagram (via slash command <code className="bg-surface-hover px-1 text-[12px]">/mermaid</code>)</li>
@@ -95,6 +95,7 @@ export default function HelpPage() {
             <li><strong>Math (KaTeX)</strong> &mdash; inline math with <code className="bg-surface-hover px-1 text-[12px]">$...$</code> and block math with <code className="bg-surface-hover px-1 text-[12px]">$$...$$</code></li>
             <li><strong>Excalidraw</strong> &mdash; embed an interactive whiteboard drawing; stored as JSON and rendered read-only on the article page</li>
             <li><strong>Data table</strong> &mdash; paste CSV or JSON data to create a sortable, filterable table with a CSV download button</li>
+            <li><strong>Article table</strong> &mdash; insert a standard table when cells should read as one merged grid with collapsed borders</li>
             <li><strong>Decision tree</strong> &mdash; define a yes/no tree as JSON; renders as an interactive SVG with expand/collapse</li>
           </ul>
           <p><strong>Voice dictation:</strong> Click the microphone button in the toolbar to speak &mdash; your words are inserted at the cursor using the browser&apos;s speech recognition.</p>
@@ -257,7 +258,7 @@ export default function HelpPage() {
             <li><strong>Article header</strong> &mdash; title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped at the top of the page.</li>
             <li><strong>Action panel</strong> &mdash; article controls are grouped as Navigate, Collect, Share, Read, and Tools.</li>
             <li><strong>Taxonomy footer</strong> &mdash; category and tag links appear as wrapping chips near the bottom of the article.</li>
-            <li><strong>Responsive layout</strong> &mdash; article tabs, infoboxes, table of contents, backlinks, and action groups are constrained for narrow screens.</li>
+            <li><strong>Responsive layout</strong> &mdash; article tabs, infoboxes, collapsed article tables, table of contents, backlinks, and action groups are constrained for narrow screens.</li>
             <li><strong>Reading time</strong> &mdash; every article shows &ldquo;~X min read&rdquo; in the byline, estimated at 200 words per minute.</li>
             <li><strong>Reading ETA</strong> &mdash; the byline also shows &ldquo;~X min left&rdquo; which updates live as you scroll through the article; disappears once you finish.</li>
             <li><strong>Reading mode</strong> &mdash; click &ldquo;Reading mode&rdquo; in the article toolbar (or press <kbd>R</kbd>) to enter a distraction-free view that hides the header and sidebar. Press again or <kbd>R</kbd> to exit.</li>

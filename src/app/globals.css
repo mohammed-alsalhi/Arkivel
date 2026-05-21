@@ -464,6 +464,7 @@ textarea:disabled {
   width: 100%;
   max-width: 100%;
   border-collapse: collapse;
+  border-spacing: 0;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   font-size: 0.8125rem;
@@ -1621,7 +1622,10 @@ p a:hover {
 /* ── Tables (editor + display) ── */
 .tiptap table, .wiki-content table {
   border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
   width: 100%;
+  max-width: 100%;
   margin: 0.5rem 0;
 }
 .tiptap th, .tiptap td,
@@ -1631,6 +1635,19 @@ p a:hover {
   text-align: left;
   font-size: 0.85rem;
   vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.tiptap th > :first-child,
+.tiptap td > :first-child,
+.wiki-content th > :first-child,
+.wiki-content td > :first-child {
+  margin-top: 0;
+}
+.tiptap th > :last-child,
+.tiptap td > :last-child,
+.wiki-content th > :last-child,
+.wiki-content td > :last-child {
+  margin-bottom: 0;
 }
 .tiptap th, .wiki-content th {
   background: var(--color-surface-hover);

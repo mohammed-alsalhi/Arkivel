@@ -422,14 +422,30 @@ function PresentStyles() {
         font-size: 0.9em;
       }
 
-      .presentation-content pre,
-      .presentation-content table {
+      .presentation-content pre {
         max-width: 100%;
         overflow: auto;
       }
 
       .presentation-content table {
-        display: block;
+        width: 100%;
+        max-width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        table-layout: fixed;
+      }
+
+      .presentation-content th,
+      .presentation-content td {
+        border: 1px solid rgba(148, 163, 184, 0.26);
+        padding: 0.4rem 0.55rem;
+        vertical-align: top;
+        overflow-wrap: anywhere;
+      }
+
+      .presentation-content th {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f8fafc;
       }
 
       .presentation-content img,

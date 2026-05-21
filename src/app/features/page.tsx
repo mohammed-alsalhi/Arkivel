@@ -29,7 +29,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-header">Writing &amp; Editing</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with toolbar, slash commands, and drag-and-drop block reordering</li>
+            <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with toolbar, slash commands, collapsed-border tables, and drag-and-drop block reordering</li>
             <li><strong>Markdown mode</strong> — toggle between rich text and raw Markdown at any time</li>
             <li><strong>Slash commands</strong> — type <code className="bg-surface-hover px-1 text-[12px]">/</code> for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more; includes user snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code></li>
             <li><strong>Inline AI rewrite</strong> — select text and click &ldquo;AI Rewrite&rdquo; in the toolbar; optionally provide an instruction; requires <code className="bg-surface-hover px-1 text-[12px]">OPENAI_API_KEY</code></li>
@@ -150,7 +150,7 @@ export default function FeaturesPage() {
             <li><strong>Article hero header</strong> — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header</li>
             <li><strong>Grouped action panel</strong> — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus</li>
             <li><strong>Taxonomy footer</strong> — category and tags render as wrapping chips at the end of the article rather than pipe-separated text</li>
-            <li><strong>Responsive article shell</strong> — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens</li>
+            <li><strong>Responsive article shell</strong> — article tabs, infoboxes, collapsed article tables, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens</li>
             <li><strong>Reading time estimator</strong> — &ldquo;~X min read&rdquo; computed at 200 wpm displayed in every article&apos;s metadata line</li>
             <li><strong>Draft share links</strong> — admins generate a secret-token URL (<code className="bg-surface-hover px-1 text-[12px]">/share/[token]</code>) so non-admins can preview a draft without publishing</li>
             <li><strong>Expiry warning banner</strong> — yellow inline banner when an article&apos;s <em>reviewDueAt</em> is within 30 days</li>
