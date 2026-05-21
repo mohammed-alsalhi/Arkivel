@@ -413,6 +413,8 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Analytics dashboard</strong> &mdash; scroll depth heatmap, reader navigation paths, search gap tracking</li>
+            <li><strong>Canon Atlas</strong> &mdash; <Link href="/atlas">/atlas</Link> turns the wiki into a live map of territories, article signals, story threads, a flagship dossier, continuity pressure, and atlas moves</li>
+            <li><strong>Atlas API</strong> &mdash; <Link href="/api/atlas">/api/atlas</Link> returns the same territories, signals, threads, dossier, continuity pressure, and action queue as JSON</li>
             <li><strong>Knowledge Command Center</strong> &mdash; <Link href="/intelligence">/intelligence</Link> combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines</li>
             <li><strong>Intelligence API</strong> &mdash; <Link href="/api/intelligence">/api/intelligence</Link> returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON</li>
             <li><strong>Search analytics</strong> &mdash; <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps</li>
@@ -520,7 +522,7 @@ export default function HelpPage() {
           <p className="font-semibold mb-0.5">Navigation</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
             <li><Link href="/">Main Page</Link>, <Link href="/articles">All articles</Link>, <Link href="/recent-changes">Recent changes</Link>, <Link href="/random">Random article</Link></li>
-            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/graph">Article graph</Link></li>
+            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/atlas">Canon atlas</Link>, <Link href="/graph">Article graph</Link></li>
           </ul>
           <p className="font-semibold mb-0.5">Discover</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">

@@ -315,6 +315,8 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 ## Analytics & Wiki Health
 
 - **Analytics dashboard** — scroll depth heatmap, reader navigation paths, search gap tracking
+- **Canon Atlas** — `/atlas` turns the wiki into a live map of territories, article signals, story threads, a flagship dossier, continuity pressure, and atlas moves
+- **Atlas API** — `/api/atlas` returns the same territories, signals, threads, dossier, continuity pressure, and action queue as JSON
 - **Knowledge Command Center** — `/intelligence` combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines
 - **Intelligence API** — `/api/intelligence` returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON
 - **Search analytics** — `/admin/search-analytics` shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps
@@ -413,6 +415,7 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 - **Search** — `/search`, full-text search with relevance ranking
 - **Tags** — `/tags`, browse all tags and their articles
 - **Article graph** — `/graph`, D3 force-directed graph of wiki link connections
+- **Canon atlas** — `/atlas`, world-map style view of territories, story threads, dossiers, and continuity pressure
 - **Help** — this page
 
 **Discover section:**

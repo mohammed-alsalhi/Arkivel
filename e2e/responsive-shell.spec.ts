@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const routes = ["/", "/search", "/articles", "/categories", "/features", "/help", "/dashboard", "/intelligence"];
+const routes = ["/", "/search", "/articles", "/categories", "/features", "/help", "/dashboard", "/atlas", "/intelligence"];
 const viewports = [
   { name: "phone", width: 390, height: 844 },
   { name: "tablet", width: 768, height: 1024 },
@@ -71,6 +71,16 @@ test.describe("Responsive shell", () => {
     await expect(page.locator(".intelligence-cockpit")).toBeVisible();
     await expect(page.locator(".intelligence-radar-panel")).toBeVisible();
     await expect(page.locator(".intelligence-simulator-panel")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  });
+
+  test("renders the canon atlas without viewport overflow", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/atlas");
+
+    await expect(page.locator(".atlas-map-panel")).toBeVisible();
+    await expect(page.locator(".atlas-dossier-panel")).toBeVisible();
+    await expect(page.locator(".atlas-continuity-panel")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 });

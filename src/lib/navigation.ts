@@ -74,6 +74,13 @@ export const COMMAND_DESTINATIONS: CommandDestination[] = [
     shortcut: "G G",
   },
   {
+    id: "nav-atlas",
+    label: "Canon Atlas",
+    href: "/atlas",
+    group: "Discovery",
+    keywords: ["atlas", "canon", "world", "map", "territories", "threads", "lore", "dossier", "wow"],
+  },
+  {
     id: "nav-intelligence",
     label: "Knowledge Command Center",
     href: "/intelligence",

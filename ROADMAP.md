@@ -16,6 +16,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.70.0
+
+- [x] Canon Atlas - `/atlas` turns the wiki into a live world map with territories, article signals, story threads, and a flagship dossier
+- [x] Continuity pressure - atlas metrics surface stub, category, tag, thread, excerpt, and infobox gaps as direct work queues
+- [x] Atlas JSON feed - `/api/atlas` exposes the same territories, signals, threads, dossier, continuity, and next moves for demos or automation
+- [x] Sidebar visibility - Canon Atlas and Knowledge cockpit now sit in the primary Browse block instead of being buried lower in the navigation
+- [x] Responsive atlas QA - homepage, command palette, sitemap, docs, and responsive shell coverage include the new atlas surface
+
 ## v4.69.0
 
 - [x] Knowledge cockpit - `/intelligence` now opens with a live article constellation, readiness radar, and impact simulator before the 20-engine grid

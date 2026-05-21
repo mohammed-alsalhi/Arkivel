@@ -140,6 +140,12 @@ export default function Sidebar({
           <SidebarLink href="/" active={pathname === "/"} onClick={close}>
             Main Page
           </SidebarLink>
+          <SidebarLink href="/atlas" active={pathname === "/atlas"} onClick={close}>
+            Canon atlas
+          </SidebarLink>
+          <SidebarLink href="/intelligence" active={pathname === "/intelligence"} onClick={close}>
+            Knowledge cockpit
+          </SidebarLink>
           <SidebarLink href="/articles" active={pathname === "/articles"} onClick={close}>
             All articles{articleCount ? ` (${articleCount})` : ""}
           </SidebarLink>
@@ -199,9 +205,6 @@ export default function Sidebar({
           </SidebarLink>
           <SidebarLink href="/activity" active={pathname === "/activity"} onClick={close}>
             Activity
-          </SidebarLink>
-          <SidebarLink href="/intelligence" active={pathname === "/intelligence"} onClick={close}>
-            Command center
           </SidebarLink>
           <SidebarLink href="/stats" active={pathname === "/stats"} onClick={close}>
             Stats

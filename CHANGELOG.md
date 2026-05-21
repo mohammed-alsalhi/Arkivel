@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.70.0] - 2026-05-21
+
+### Added
+
+- **Canon Atlas** - Added `/atlas`, a flagship wiki atlas that turns published content into territories, article signals, story threads, a featured dossier, continuity pressure, and next atlas moves.
+- **Atlas JSON feed** - Added `/api/atlas` so the same territory, dossier, thread, continuity, and action model can power integrations or external product demos.
+- **Starter atlas fallback** - Added starter territories and signal routes so fresh or database-empty local environments still render an impressive atlas without inventing published article data.
+- **Primary sidebar placement** - Moved the Knowledge Command Center into the main Browse section as “Knowledge cockpit” and added the Canon Atlas beside it so both are immediately visible.
+- **Atlas navigation and QA** - Wired the atlas into home actions, the browse directory, command palette destinations, sitemap, documentation, and responsive shell tests.
+
 ## [4.69.0] - 2026-05-21
 
 ### Added

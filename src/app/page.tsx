@@ -95,6 +95,12 @@ export default async function Home() {
       description: "See how wiki links connect articles into a larger map.",
     },
     {
+      href: "/atlas",
+      label: "Canon atlas",
+      meta: "World view",
+      description: "See territories, dossiers, story threads, and continuity pressure.",
+    },
+    {
       href: "/intelligence",
       label: "Command center",
       meta: "20 live engines",
@@ -160,6 +166,7 @@ export default async function Home() {
         </div>
         <div className="ui-page-actions">
           <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
+          <Link href="/atlas" className="ui-button">Canon atlas</Link>
           <Link href="/intelligence" className="ui-button">Command center</Link>
           <Link href="/search" className="ui-button">Search</Link>
           <Link href="/random" className="ui-button">Random</Link>

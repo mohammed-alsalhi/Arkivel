@@ -292,6 +292,27 @@ export default function ApiDocsPage() {
           </ul>
         </section>
 
+        {/* Operational feeds */}
+        <section>
+          <h2
+            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            Operational Feeds
+          </h2>
+          <p className="text-muted mb-2">
+            These app feeds are designed for dashboards, demos, and local automation.
+          </p>
+          <ul className="list-disc pl-6 space-y-1 text-muted">
+            <li>
+              <code className="bg-surface-hover px-1 text-[12px]">GET /api/atlas</code> — Canon Atlas territories, signals, threads, dossier, continuity pressure, and next moves
+            </li>
+            <li>
+              <code className="bg-surface-hover px-1 text-[12px]">GET /api/intelligence</code> — Knowledge cockpit score, radar, constellation, pressure model, engines, and action queue
+            </li>
+          </ul>
+        </section>
+
         {/* Errors */}
         <section>
           <h2
