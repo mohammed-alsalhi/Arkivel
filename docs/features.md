@@ -142,7 +142,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Article quiz mode** — "Quiz me" in the article tools bar; AI generates 5 multiple-choice questions; full flashcard UI with answer reveal, score, and attempt recording
 - **Ask my wiki — AI oracle** — full-page conversational AI at `/ask`; semantic search retrieves the most relevant articles per query; streaming token-by-token answers; multi-turn conversation; source attribution
 - **Knowledge synthesis** — "Synthesize" on category pages; AI reads all articles and synthesises a comprehensive overview; preview modal; "Create as new article" one-click
-- **Presentation mode** — every article has a "Present" button; `/present/[slug]` is a cinematic dark slideshow; H2 sections become slides; animated transitions, slide overview, fullscreen, dot navigation
+- **Presentation mode** — every article has a "Present" button; `/present/[slug]` is a cinematic dark slideshow with reserved top/bottom chrome, a scrollable slide stage, animated transitions, slide overview, fullscreen, and dot navigation
 - **Bulk JSON export** — `/api/export/json`; downloads all articles as structured JSON (admin only)
 - **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + reads, reactions, revisions summary (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history
@@ -194,7 +194,7 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Flashcards** — create decks from articles; SM-2 spaced repetition with 0–5 grading at `/flashcards`
 - **AI quizzes** — Claude generates 5 multiple-choice questions from any article for self-testing
 - **Reading progress** — mark articles as read; category pages show a completion ring
-- **Presentation mode** — any article opens as a full-screen slideshow at `/present/[slug]`; each H2/H3 is a slide
+- **Presentation mode** — any article opens as a full-screen slideshow at `/present/[slug]`; each H2/H3 is a slide, and long content scrolls within the slide stage rather than covering controls
 - **Watchlist digest** — optional daily email summary of watched article changes at `/watchlist/digest`
 
 ---

@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.71.1] - 2026-05-21
+
+### Fixed
+
+- **Presentation mode layout** - Rebuilt `/present/[slug]` around fixed progress, topbar, scrollable slide stage, and footer control regions so slide titles, body content, hints, dots, and navigation buttons no longer overlap.
+- **Responsive deck controls** - Made the overview button, slide counter, dot rail, keyboard hint, and previous/next controls wrap or stack cleanly on phone, tablet, laptop, and wide desktop widths.
+- **Rich slide containment** - Added presentation-specific containment for long titles, tall content, code blocks, tables, images, videos, and embeds so article content scrolls inside the slide stage instead of pushing through the deck chrome.
+- **Command palette shortcut** - Made the `Ctrl+K` / `Cmd+K` listener case-insensitive and stabilized the e2e shortcut check against client hydration timing.
+- **CI regression coverage** - Updated homepage shell tests for the compact search trigger and phone Browse navigation, mocked alias lookups in wiki-link tests, and added a mocked `/present/[slug]` responsive test with explicit chrome-overlap assertions.
+
 ## [4.71.0] - 2026-05-21
 
 ### Added

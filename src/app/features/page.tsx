@@ -206,7 +206,7 @@ export default function FeaturesPage() {
             <li><strong>Adaptive reading level</strong> — switch any article to Beginner, Technical, or ELI5 view on the fly via AI</li>
             <li><strong>Article audio narration</strong> — listen button on every article uses browser TTS to narrate the full text</li>
             <li><strong>Reading progress</strong> — mark articles as read; category pages show a completion ring</li>
-            <li><strong>Presentation mode</strong> — any article opens as a full-screen slideshow at <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code>; each H2/H3 is a slide</li>
+            <li><strong>Presentation mode</strong> — any article opens as a full-screen slideshow at <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code>; each H2/H3 is a slide, and long content scrolls within the slide stage rather than covering controls</li>
             <li><strong>Watchlist digest</strong> — optional daily email summary of watched article changes at <Link href="/watchlist/digest">/watchlist/digest</Link></li>
           </ul>
         </div>
@@ -443,7 +443,7 @@ export default function FeaturesPage() {
             <li><strong>Article quiz mode</strong> — &ldquo;Quiz me&rdquo; in the article tools bar; AI generates 5 multiple-choice questions; full flashcard UI with answer reveal, score, and attempt recording</li>
             <li><strong>Ask my wiki — AI oracle</strong> — full-page conversational AI at <Link href="/ask">/ask</Link>; semantic search retrieves the most relevant articles per query; answers stream token-by-token; multi-turn conversation; source attribution</li>
             <li><strong>Knowledge synthesis</strong> — &ldquo;Synthesize&rdquo; on category pages; AI reads all articles and synthesises a comprehensive overview; preview modal; &ldquo;Create as new article&rdquo; one-click</li>
-            <li><strong>Presentation mode</strong> — every article has a &ldquo;Present&rdquo; button; <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code> is a cinematic slideshow; H2 sections become slides; animated transitions, slide overview, fullscreen, dot navigation</li>
+            <li><strong>Presentation mode</strong> — every article has a &ldquo;Present&rdquo; button; <code className="bg-surface-hover px-1 text-[12px]">/present/[slug]</code> is a cinematic slideshow with reserved top/bottom chrome, a scrollable slide stage, animated transitions, slide overview, fullscreen, and dot navigation</li>
             <li><strong>Bulk JSON export</strong> — <Link href="/api/export/json">/api/export/json</Link> downloads all articles as a structured JSON file (admin only)</li>
             <li><strong>Per-article analytics</strong> — <code className="bg-surface-hover px-1 text-[12px]">/articles/[slug]/analytics</code> shows 30-day view chart, reads, reactions, and revision count (admin only)</li>
             <li><strong>Series progress tracker</strong> — article series navigation shows &ldquo;X of N read&rdquo; based on your browser reading history</li>

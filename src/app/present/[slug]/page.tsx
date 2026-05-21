@@ -6,6 +6,20 @@ import Link from "next/link";
 
 type Slide = { title: string; content: string };
 
+function previewText(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 140);
+}
+
+function titleClassName(title: string): string {
+  if (title.length > 80) return "present-title present-title-long";
+  if (title.length > 48) return "present-title present-title-medium";
+  return "present-title";
+}
+
 export default function PresentModePage() {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
@@ -17,26 +31,39 @@ export default function PresentModePage() {
   const [animDir, setAnimDir] = useState<"in" | "out">("in");
 
   useEffect(() => {
+    let active = true;
+
     async function load() {
       try {
         const res = await fetch(`/api/articles?slug=${encodeURIComponent(slug)}`);
         const data = await res.json();
         const articles = Array.isArray(data) ? data : (data.articles || []);
         const article = articles.find((a: { slug: string }) => a.slug === slug);
-        if (!article) { setLoading(false); return; }
+        if (!article) {
+          if (active) setLoading(false);
+          return;
+        }
 
         const detail = await fetch(`/api/articles/${article.id}/present`);
         if (detail.ok) {
-          const { slides: s, title } = await detail.json();
-          setSlides(s);
-          setArticleTitle(title);
+          const { slides: nextSlides, title } = await detail.json();
+          if (active) {
+            setSlides(Array.isArray(nextSlides) ? nextSlides : []);
+            setArticleTitle(title || article.title || "");
+            setCurrent(0);
+          }
         }
-        setLoading(false);
       } catch {
-        setLoading(false);
+        // Keep the failure state quiet; the empty-slide state below gives the reader a way out.
+      } finally {
+        if (active) setLoading(false);
       }
     }
+
     load();
+    return () => {
+      active = false;
+    };
   }, [slug]);
 
   const goTo = useCallback((i: number) => {
@@ -49,9 +76,11 @@ export default function PresentModePage() {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
-        e.preventDefault(); goTo(current + 1);
+        e.preventDefault();
+        goTo(current + 1);
       } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        e.preventDefault(); goTo(current - 1);
+        e.preventDefault();
+        goTo(current - 1);
       } else if (e.key === "Escape") {
         router.push(`/articles/${slug}`);
       } else if (e.key === "g" || e.key === "G") {
@@ -61,29 +90,32 @@ export default function PresentModePage() {
         else document.exitFullscreen().catch(() => {});
       }
     };
+
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [current, goTo, router, slug]);
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-[#0d0d14] flex items-center justify-center">
-        <div className="flex gap-1.5">
-          <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:0ms]" />
-          <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:150ms]" />
-          <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:300ms]" />
+      <div className="present-shell present-shell-loading">
+        <div className="present-loader" aria-label="Loading presentation">
+          <span />
+          <span />
+          <span />
         </div>
+        <PresentStyles />
       </div>
     );
   }
 
   if (slides.length === 0) {
     return (
-      <div className="fixed inset-0 bg-[#0d0d14] flex flex-col items-center justify-center text-white gap-4">
-        <p className="text-[16px] text-gray-300">No slides could be generated from this article.</p>
-        <Link href={`/articles/${slug}`} className="text-blue-400 hover:underline text-[14px]">
-          ← Back to article
+      <div className="present-shell present-empty">
+        <p>No slides could be generated from this article.</p>
+        <Link href={`/articles/${slug}`} className="present-text-link">
+          Back to article
         </Link>
+        <PresentStyles />
       </div>
     );
   }
@@ -93,208 +125,656 @@ export default function PresentModePage() {
   const isFirst = current === 0;
   const isLast = current === slides.length - 1;
 
-  // Overview mode
   if (showOverview) {
     return (
-      <div className="fixed inset-0 bg-[#0d0d14] overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-8 py-10">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-[20px] font-bold text-white">{articleTitle}</h2>
-              <p className="text-[13px] text-gray-500 mt-0.5">{slides.length} slides</p>
-            </div>
+      <div className="present-overview-shell">
+        <header className="present-overview-header">
+          <div>
+            <p>Presentation overview</p>
+            <h1>{articleTitle}</h1>
+            <span>{slides.length} slides</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowOverview(false)}
+            className="present-button"
+          >
+            Back to presentation
+          </button>
+        </header>
+
+        <main className="present-overview-grid" aria-label="Slide overview">
+          {slides.map((overviewSlide, i) => (
             <button
-              onClick={() => setShowOverview(false)}
-              className="text-[13px] text-gray-400 hover:text-white border border-gray-700 px-3 py-1 rounded transition-colors"
+              key={`${overviewSlide.title}-${i}`}
+              type="button"
+              onClick={() => goTo(i)}
+              className={i === current ? "present-overview-card present-overview-card-active" : "present-overview-card"}
             >
-              Back to presentation
+              <span>{String(i + 1).padStart(2, "0")}</span>
+              <strong>{overviewSlide.title}</strong>
+              {overviewSlide.content && <em>{previewText(overviewSlide.content)}</em>}
             </button>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {slides.map((s, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                className={`group text-left p-4 rounded border transition-all ${
-                  i === current
-                    ? "border-blue-500 bg-blue-950/50 ring-1 ring-blue-500"
-                    : "border-gray-700/50 bg-gray-900/60 hover:border-gray-500 hover:bg-gray-900"
-                }`}
-              >
-                <span className="text-[10px] font-mono text-gray-600 mb-2 block">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <p className="text-[13px] font-semibold text-gray-100 leading-snug line-clamp-2 mb-1.5">
-                  {s.title}
-                </p>
-                {s.content && (
-                  <p
-                    className="text-[11px] text-gray-500 line-clamp-2"
-                    dangerouslySetInnerHTML={{
-                      __html: s.content.replace(/<[^>]+>/g, " ").slice(0, 100),
-                    }}
-                  />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+          ))}
+        </main>
+        <PresentStyles />
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-[#0d0d14] text-white flex flex-col select-none overflow-hidden">
-      {/* Progress bar */}
-      <div className="h-[2px] bg-gray-800 shrink-0">
-        <div
-          className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-500"
-          style={{ width: `${progress}%` }}
-        />
+    <div className="present-shell" data-slide={current + 1}>
+      <div className="present-progress" aria-hidden="true">
+        <span style={{ width: `${progress}%` }} />
       </div>
 
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-8 py-3 shrink-0">
-        <Link
-          href={`/articles/${slug}`}
-          className="text-[12px] text-gray-600 hover:text-gray-300 transition-colors flex items-center gap-1.5"
-        >
-          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      <header className="present-topbar">
+        <Link href={`/articles/${slug}`} className="present-exit-link" aria-label="Exit presentation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
-          Exit
+          <span>Exit</span>
         </Link>
-        <span className="text-[11px] font-mono text-gray-600">
+
+        <div className="present-counter" aria-label={`Slide ${current + 1} of ${slides.length}`}>
           {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
-        </span>
+        </div>
+
         <button
+          type="button"
           onClick={() => setShowOverview(true)}
-          className="text-[12px] text-gray-600 hover:text-gray-300 transition-colors"
+          className="present-plain-button"
         >
           Overview (G)
         </button>
-      </div>
+      </header>
 
-      {/* Slide — centred, large */}
-      <div
-        key={`${current}-${animDir}`}
-        className="flex-1 flex flex-col justify-center px-[8%] max-w-[1200px] mx-auto w-full"
-        style={{ animation: "presentSlideIn 0.3s ease both" }}
-      >
-        {/* Slide number accent */}
-        <div className="text-[11px] font-mono text-blue-600/60 mb-4st uppercase">
-          {isFirst ? articleTitle : `${articleTitle}  ›  slide ${current + 1}`}
-        </div>
-
-        {/* Title */}
-        <h1
-          className="font-bold text-white mb-8 leading-tight"
-          style={{
-            fontSize: slide.title.length > 60 ? "2.2rem" : slide.title.length > 40 ? "2.8rem" : "3.5rem",
-            fontFamily: "'Georgia', 'Times New Roman', serif",
-            letterSpacing: "-0.01em",
-          }}
+      <main className="present-stage" aria-live="polite">
+        <section
+          key={`${current}-${animDir}`}
+          className="present-slide"
+          style={{ animation: "presentSlideIn 0.3s ease both" }}
         >
-          {slide.title}
-        </h1>
+          <p className="present-eyebrow">
+            {isFirst ? articleTitle : `${articleTitle} / slide ${current + 1}`}
+          </p>
+          <h1 className={titleClassName(slide.title)}>{slide.title}</h1>
+          {slide.content && (
+            <div
+              className="presentation-content"
+              dangerouslySetInnerHTML={{ __html: slide.content }}
+            />
+          )}
+        </section>
+      </main>
 
-        {/* Body */}
-        {slide.content && (
-          <div
-            className="text-[1.15rem] text-gray-300 leading-relaxed max-w-[72ch] space-y-3 presentation-content"
-            dangerouslySetInnerHTML={{ __html: slide.content }}
-          />
-        )}
-      </div>
-
-      {/* Bottom bar */}
-      <div className="shrink-0 flex items-center justify-between px-8 py-5 border-t border-gray-800/50">
-        {/* Dot nav */}
-        <div className="flex items-center gap-1.5 flex-1">
-          {slides.slice(0, 30).map((_, i) => (
+      <footer className="present-controls">
+        <nav className="present-dots" aria-label="Slide navigation">
+          {slides.slice(0, 30).map((dotSlide, i) => (
             <button
-              key={i}
+              key={`${dotSlide.title}-${i}`}
+              type="button"
               onClick={() => goTo(i)}
-              className={`rounded-full transition-all duration-200 ${
-                i === current
-                  ? "w-5 h-1.5 bg-blue-500"
-                  : i < current
-                  ? "w-1.5 h-1.5 bg-gray-600"
-                  : "w-1.5 h-1.5 bg-gray-800 hover:bg-gray-600"
-              }`}
-              title={slides[i].title}
+              className={i === current ? "present-dot present-dot-active" : i < current ? "present-dot present-dot-read" : "present-dot"}
+              title={dotSlide.title}
+              aria-label={`Go to slide ${i + 1}: ${dotSlide.title}`}
+              aria-current={i === current ? "step" : undefined}
             />
           ))}
-          {slides.length > 30 && (
-            <span className="text-[10px] text-gray-700 ml-1">+{slides.length - 30}</span>
-          )}
-        </div>
+          {slides.length > 30 && <span>+{slides.length - 30}</span>}
+        </nav>
 
-        {/* Arrow buttons */}
-        <div className="flex items-center gap-2">
+        <p className="present-hint">Arrow keys, Space, G overview, F fullscreen, Esc exit</p>
+
+        <div className="present-arrows" aria-label="Presentation controls">
           <button
+            type="button"
             onClick={() => goTo(current - 1)}
             disabled={isFirst}
-            className="group flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-gray-700/60 text-[12px] text-gray-400 hover:text-white hover:border-gray-500 disabled:opacity-20 transition-all"
+            className="present-button"
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 19.5-7.5-7.5 7.5-7.5" />
             </svg>
             Prev
           </button>
           <button
+            type="button"
             onClick={() => goTo(current + 1)}
             disabled={isLast}
-            className="group flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-gray-700/60 text-[12px] text-gray-400 hover:text-white hover:border-gray-500 disabled:opacity-20 transition-all"
+            className="present-button"
           >
             Next
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
           </button>
         </div>
-      </div>
+      </footer>
 
-      {/* Keyboard hint on first slide */}
-      {isFirst && (
-        <div className="absolute bottom-[72px] left-1/2 -translate-x-1/2 text-[11px] text-gray-700 pointer-events-none whitespace-nowrap">
-          ← → Space to navigate · Esc exit · G overview · F fullscreen
-        </div>
-      )}
-
-      <style>{`
-        @keyframes presentSlideIn {
-          from { opacity: 0; transform: translateY(12px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .presentation-content p { margin-bottom: 0.5rem; }
-        .presentation-content ul, .presentation-content ol {
-          padding-left: 1.25rem;
-          list-style: disc;
-          space-y: 0.25rem;
-        }
-        .presentation-content li { margin-bottom: 0.35rem; }
-        .presentation-content strong { color: white; }
-        .presentation-content h3, .presentation-content h4 {
-          color: #93c5fd;
-          font-weight: 600;
-          margin-top: 1rem;
-          margin-bottom: 0.25rem;
-        }
-        .presentation-content code {
-          background: rgba(255,255,255,0.08);
-          padding: 0.1em 0.35em;
-          border-radius: 3px;
-          font-size: 0.9em;
-        }
-        .presentation-content a { color: #93c5fd; text-decoration: underline; }
-        .presentation-content blockquote {
-          border-left: 3px solid #3b82f6;
-          padding-left: 1rem;
-          color: #9ca3af;
-          font-style: italic;
-        }
-      `}</style>
+      <PresentStyles />
     </div>
+  );
+}
+
+function PresentStyles() {
+  return (
+    <style>{`
+      @keyframes presentSlideIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .present-shell,
+      .present-overview-shell {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        min-width: 0;
+        background: #0d0d14;
+        color: #f8fafc;
+        overscroll-behavior: contain;
+      }
+
+      .present-shell {
+        display: grid;
+        grid-template-rows: 2px auto minmax(0, 1fr) auto;
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      .present-progress {
+        min-width: 0;
+        background: rgba(148, 163, 184, 0.18);
+      }
+
+      .present-progress span {
+        display: block;
+        height: 100%;
+        background: #60a5fa;
+        transition: width 0.35s ease;
+      }
+
+      .present-topbar,
+      .present-controls {
+        display: grid;
+        min-width: 0;
+        align-items: center;
+        gap: 0.75rem;
+        border-color: rgba(148, 163, 184, 0.18);
+        background: rgba(13, 13, 20, 0.96);
+      }
+
+      .present-topbar {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        padding: 0.75rem 2rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      }
+
+      .present-controls {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        padding: 0.85rem 2rem 1rem;
+        border-top: 1px solid rgba(148, 163, 184, 0.18);
+      }
+
+      .present-stage {
+        min-width: 0;
+        min-height: 0;
+        overflow: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .present-slide {
+        display: flex;
+        width: min(100%, 76rem);
+        min-height: 100%;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 auto;
+        padding: 2rem 4rem;
+      }
+
+      .present-eyebrow {
+        margin-bottom: 0.85rem;
+        color: rgba(96, 165, 250, 0.72);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+        text-transform: uppercase;
+      }
+
+      .present-title {
+        max-width: 18ch;
+        color: #fff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 3.25rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        line-height: 1.02;
+        overflow-wrap: anywhere;
+      }
+
+      .present-title-medium {
+        max-width: 24ch;
+        font-size: 2.65rem;
+      }
+
+      .present-title-long {
+        max-width: 30ch;
+        font-size: 2.15rem;
+        line-height: 1.08;
+      }
+
+      .presentation-content {
+        width: min(100%, 72ch);
+        min-width: 0;
+        margin-top: 1.65rem;
+        color: #d1d5db;
+        font-size: 1.08rem;
+        line-height: 1.65;
+        overflow-wrap: anywhere;
+        user-select: text;
+      }
+
+      .presentation-content > * + * {
+        margin-top: 0.8rem;
+      }
+
+      .presentation-content p:empty {
+        display: none;
+      }
+
+      .presentation-content ul,
+      .presentation-content ol {
+        padding-left: 1.35rem;
+      }
+
+      .presentation-content ul {
+        list-style: disc;
+      }
+
+      .presentation-content ol {
+        list-style: decimal;
+      }
+
+      .presentation-content li + li {
+        margin-top: 0.35rem;
+      }
+
+      .presentation-content strong {
+        color: white;
+      }
+
+      .presentation-content h3,
+      .presentation-content h4 {
+        color: #93c5fd;
+        font-weight: 700;
+        margin-top: 1rem;
+      }
+
+      .presentation-content code {
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.1em 0.35em;
+        font-size: 0.9em;
+      }
+
+      .presentation-content pre,
+      .presentation-content table {
+        max-width: 100%;
+        overflow: auto;
+      }
+
+      .presentation-content table {
+        display: block;
+      }
+
+      .presentation-content img,
+      .presentation-content video,
+      .presentation-content iframe {
+        max-width: 100%;
+        max-height: 46vh;
+        object-fit: contain;
+      }
+
+      .presentation-content a {
+        color: #93c5fd;
+        text-decoration: underline;
+      }
+
+      .presentation-content blockquote {
+        border-left: 3px solid #3b82f6;
+        padding-left: 1rem;
+        color: #9ca3af;
+        font-style: italic;
+      }
+
+      .present-exit-link,
+      .present-plain-button,
+      .present-text-link,
+      .present-button {
+        color: #9ca3af;
+        font-size: 0.75rem;
+        line-height: 1;
+        text-decoration: none;
+        transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      }
+
+      .present-exit-link,
+      .present-button {
+        display: inline-flex;
+        min-width: 0;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .present-exit-link:hover,
+      .present-plain-button:hover,
+      .present-text-link:hover,
+      .present-button:hover {
+        color: #fff;
+      }
+
+      .present-exit-link svg,
+      .present-button svg {
+        width: 0.9rem;
+        height: 0.9rem;
+        flex: 0 0 auto;
+      }
+
+      .present-counter,
+      .present-hint {
+        color: #6b7280;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.6875rem;
+        line-height: 1.25;
+        text-align: center;
+      }
+
+      .present-plain-button {
+        justify-self: end;
+      }
+
+      .present-dots {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 0.4rem;
+        overflow-x: auto;
+        padding: 0.25rem 0;
+      }
+
+      .present-dots span {
+        flex: 0 0 auto;
+        color: #4b5563;
+        font-size: 0.625rem;
+      }
+
+      .present-dot {
+        flex: 0 0 auto;
+        width: 0.45rem;
+        height: 0.45rem;
+        border: 0;
+        border-radius: 999px;
+        background: #374151;
+        transition: width 0.15s ease, background 0.15s ease;
+      }
+
+      .present-dot:hover {
+        background: #6b7280;
+      }
+
+      .present-dot-read {
+        background: #4b5563;
+      }
+
+      .present-dot-active {
+        width: 1.35rem;
+        background: #60a5fa;
+      }
+
+      .present-arrows {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+
+      .present-button {
+        min-height: 2rem;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 8px;
+        background: transparent;
+        padding: 0.5rem 0.75rem;
+      }
+
+      .present-button:hover {
+        border-color: rgba(226, 232, 240, 0.58);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .present-button:disabled {
+        opacity: 0.32;
+        pointer-events: none;
+      }
+
+      .present-overview-shell {
+        height: 100dvh;
+        overflow: auto;
+        padding: 2rem;
+      }
+
+      .present-overview-header {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        min-width: 0;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        width: min(100%, 72rem);
+        margin: 0 auto 1.25rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        background: rgba(13, 13, 20, 0.96);
+        padding-bottom: 1rem;
+      }
+
+      .present-overview-header p,
+      .present-overview-header span {
+        color: #6b7280;
+        font-size: 0.75rem;
+        line-height: 1.3;
+      }
+
+      .present-overview-header h1 {
+        margin-top: 0.2rem;
+        color: white;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.75rem;
+        font-weight: 400;
+        line-height: 1.1;
+        overflow-wrap: anywhere;
+      }
+
+      .present-overview-grid {
+        display: grid;
+        width: min(100%, 72rem);
+        min-width: 0;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        gap: 0.75rem;
+        margin: 0 auto;
+      }
+
+      .present-overview-card {
+        min-width: 0;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 8px;
+        background: rgba(17, 24, 39, 0.7);
+        padding: 0.9rem;
+        text-align: left;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+
+      .present-overview-card:hover,
+      .present-overview-card-active {
+        border-color: #60a5fa;
+        background: rgba(30, 64, 175, 0.34);
+      }
+
+      .present-overview-card span {
+        display: block;
+        color: #6b7280;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.625rem;
+        margin-bottom: 0.55rem;
+      }
+
+      .present-overview-card strong {
+        display: block;
+        color: #f8fafc;
+        font-size: 0.86rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      .present-overview-card em {
+        display: block;
+        margin-top: 0.45rem;
+        color: #9ca3af;
+        font-size: 0.75rem;
+        font-style: normal;
+        line-height: 1.4;
+      }
+
+      .present-shell-loading,
+      .present-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 2rem;
+        text-align: center;
+      }
+
+      .present-empty p {
+        color: #d1d5db;
+        font-size: 1rem;
+      }
+
+      .present-loader {
+        display: flex;
+        gap: 0.4rem;
+      }
+
+      .present-loader span {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 999px;
+        background: #60a5fa;
+        animation: presentPulse 0.8s infinite alternate;
+      }
+
+      .present-loader span:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+
+      .present-loader span:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes presentPulse {
+        from { opacity: 0.35; transform: translateY(0); }
+        to { opacity: 1; transform: translateY(-0.25rem); }
+      }
+
+      @media (max-width: 760px) {
+        .present-topbar {
+          grid-template-columns: minmax(0, 1fr) auto;
+          padding: 0.65rem 1rem;
+        }
+
+        .present-counter {
+          order: 3;
+          grid-column: 1 / -1;
+          text-align: left;
+        }
+
+        .present-slide {
+          justify-content: flex-start;
+          padding: 1.35rem 1rem 1.75rem;
+        }
+
+        .present-title {
+          max-width: 100%;
+          font-size: 2.1rem;
+          line-height: 1.08;
+        }
+
+        .present-title-medium,
+        .present-title-long {
+          font-size: 1.72rem;
+          line-height: 1.12;
+        }
+
+        .presentation-content {
+          margin-top: 1.1rem;
+          font-size: 0.98rem;
+          line-height: 1.55;
+        }
+
+        .present-controls {
+          grid-template-columns: 1fr;
+          padding: 0.65rem 1rem max(0.75rem, env(safe-area-inset-bottom));
+        }
+
+        .present-hint {
+          text-align: left;
+        }
+
+        .present-arrows {
+          justify-content: stretch;
+        }
+
+        .present-arrows .present-button {
+          flex: 1 1 0;
+          justify-content: center;
+        }
+
+        .present-overview-shell {
+          padding: 1rem;
+        }
+
+        .present-overview-header {
+          position: static;
+          flex-direction: column;
+        }
+      }
+
+      @media (max-height: 720px) {
+        .present-slide {
+          justify-content: flex-start;
+          padding-top: 1.25rem;
+          padding-bottom: 1.25rem;
+        }
+
+        .present-title {
+          font-size: 2.35rem;
+        }
+
+        .present-title-medium,
+        .present-title-long {
+          font-size: 1.9rem;
+        }
+
+        .presentation-content {
+          font-size: 0.98rem;
+          line-height: 1.5;
+        }
+      }
+    `}</style>
   );
 }

@@ -97,6 +97,8 @@ The Canon Atlas at `/atlas` is the standard for immersive wiki surfaces: it may 
 
 The Canon Trails page at `/trails` is the standard for reader-facing advanced experiences: it should feel like guided reading through the wiki, not another metrics dashboard. Trail stops need large readable article titles, direct article links, compact reasons, visible route order, and enough metadata to explain the path without turning the page into a control room.
 
+Presentation mode at `/present/[slug]` is a full-height reading workspace. It must reserve separate regions for progress, top navigation, the slide stage, and footer controls; slide content scrolls inside the stage instead of overlapping chrome. Controls, dot navigation, counters, and keyboard hints must wrap or stack before they collide, and rich article content such as tables, code blocks, images, videos, and embeds must be constrained inside the slide viewport.
+
 The Knowledge Command Center at `/intelligence` is the standard for operational dashboard pages: dense serif score treatment, compact summary cells, a real data cockpit, prioritized action rows, and flat bordered intelligence cards. High-impact dashboards may use purposeful visual systems like the article constellation, readiness radar, and impact simulator when the visuals are fed by live product data and remain navigable on phone, tablet, laptop, and wide desktop. Avoid decorative charts, nested cards, or marketing-style explanation blocks.
 
 ### Brand and header controls
