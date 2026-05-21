@@ -46,28 +46,25 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">The Editor</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-2">The rich text editor opens as a compact editor cockpit:</p>
+          <p className="mb-2">The rich text editor opens as a calm writing surface with advanced tools tucked into feature trays:</p>
           <ul className="list-disc pl-5 mb-2 space-y-0.5">
             <li><strong>Block</strong> &mdash; paragraph, heading, quote, and code block styles</li>
-            <li><strong>Text</strong> &mdash; bold, italic, strikethrough, inline code, superscript, and subscript</li>
-            <li><strong>Structure</strong> &mdash; bullet lists, ordered lists, pull quotes, and dividers</li>
-            <li><strong>Insert</strong> &mdash; URL links, wiki links, images, footnotes, collapsed-border tables, and math blocks</li>
-            <li><strong>Knowledge</strong> &mdash; detected wiki links, TOC, find/replace, and typewriter mode</li>
-            <li><strong>AI</strong> &mdash; rewrite selected text, expand selected text, or generate article content from headings</li>
-            <li><strong>Claims</strong> &mdash; mark selected claims as Certain, Probable, or Disputed</li>
+            <li><strong>Primary toolbar</strong> &mdash; undo/redo, bold, italic, URL links, wiki links, lists, quote, image, and collapsed-border tables</li>
+            <li><strong>More</strong> &mdash; strikethrough, inline code, superscript, subscript, footnotes, math, TOC, find/replace, typewriter mode, AI, claims, highlight, voice, and shortcuts</li>
+            <li><strong>Insert tray</strong> &mdash; scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks</li>
+            <li><strong>Review tray</strong> &mdash; readiness score, word/read-time metrics, document signals, quality checks, and grammar/style checker</li>
+            <li><strong>Outline tray</strong> &mdash; section navigation and the outline builder</li>
+            <li><strong>Coach tray</strong> &mdash; readability and writing-coach analysis</li>
             <li><strong>Table lab</strong> &mdash; row, column, merge, split, header, and delete controls while editing a table</li>
           </ul>
           <p className="mb-2">
             <strong>Slash commands:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">/</code> anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo video embed, Twitter/X post embed, vertical timeline, GitHub Gist embed, and your saved snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code>.
           </p>
           <p className="mb-2">
-            <strong>Quick-insert deck:</strong> The block deck below the ribbon inserts scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks.
+            <strong>Feature trays:</strong> Click <strong>Insert</strong>, <strong>Review</strong>, <strong>Outline</strong>, or <strong>Coach</strong> when you need advanced tools. The editor keeps those panels closed by default so the writing canvas stays clear.
           </p>
           <p className="mb-2">
-            <strong>Editor readiness inspector:</strong> The side inspector shows readiness score, word/read-time metrics, wiki links, links, notes, tables, images, rich blocks, outline navigation, and quality checks. On narrow screens it stacks below the editor.
-          </p>
-          <p className="mb-2">
-            <strong>Selection lab:</strong> Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
+            <strong>Selection actions:</strong> Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
           </p>
           <p className="mb-2">
             <strong>Markdown mode:</strong> Click the <code className="bg-surface-hover px-1 text-[12px]">Markdown</code> button to switch to raw markdown editing. Click <code className="bg-surface-hover px-1 text-[12px]">Rich Text</code> to switch back.
@@ -76,13 +73,13 @@ export default function HelpPage() {
             <strong>Templates:</strong> When creating a new article, choose from predefined templates (Person, Place, Event, Thing, Group) that provide a starting structure with an infobox and sections.
           </p>
           <p className="mb-2">
-            <strong>Outline builder:</strong> A collapsible panel below the editor generates a structured list of section headings from the article title. Choose Encyclopedic, Tutorial, or Reference style. Click <strong>Insert into article</strong> to add the headings as editable H2/H3 nodes.
+            <strong>Outline builder:</strong> Open the <strong>Outline</strong> tray to generate a structured list of section headings from the article title. Choose Encyclopedic, Tutorial, or Reference style. Click <strong>Insert into article</strong> to add the headings as editable H2/H3 nodes.
           </p>
           <p className="mb-2">
             <strong>AI alt-text:</strong> When you upload an image, the caption prompt is pre-filled with a suggested description based on the filename (AI-enhanced when <code className="bg-surface-hover px-1 text-[12px]">AI_API_KEY</code> is configured).
           </p>
           <p>
-            <strong>Grammar &amp; style checker:</strong> A collapsible &ldquo;Grammar &amp; style&rdquo; panel below the editor checks your text for issues. Click <strong>Check now</strong> to analyse; each issue shows a severity (error / warning / style) with an <strong>Apply</strong> button to fix it inline.
+            <strong>Grammar &amp; style checker:</strong> Open the <strong>Review</strong> tray and expand &ldquo;Grammar &amp; style&rdquo; to check your text for issues. Click <strong>Check now</strong> to analyse; each issue shows a severity (error / warning / style) with an <strong>Apply</strong> button to fix it inline.
           </p>
         </div>
       </div>

@@ -173,19 +173,25 @@ test.describe("Responsive shell", () => {
     await expectNoHorizontalOverflow(page);
   });
 
-  test("renders the upgraded editor cockpit without viewport overflow", async ({ page }) => {
+  test("renders the simplified editor with feature trays without viewport overflow", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/scratchpad");
 
-    await expect(page.locator(".editor-shell")).toBeVisible();
-    await expect(page.locator(".editor-command-deck")).toBeVisible();
-    await expect(page.locator(".editor-inspector")).toBeVisible();
+    await expect(page.getByTestId("editor-shell")).toBeVisible();
+    await expect(page.getByTestId("editor-toolbar")).toBeVisible();
+    const desktopTabs = page.getByTestId("editor-feature-tabs");
+    await desktopTabs.getByRole("button", { name: /Insert/ }).click();
+    await expect(page.getByTestId("editor-insert-tray")).toBeVisible();
+    await desktopTabs.getByRole("button", { name: /Review/ }).click();
+    await expect(page.getByTestId("editor-review-tray")).toBeVisible();
     await expectNoHorizontalOverflow(page);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
-    await expect(page.locator(".editor-shell")).toBeVisible();
-    await expect(page.locator(".editor-toolbar-v2")).toBeVisible();
+    await expect(page.getByTestId("editor-shell")).toBeVisible();
+    await expect(page.getByTestId("editor-toolbar")).toBeVisible();
+    await page.getByTestId("editor-feature-tabs").getByRole("button", { name: /Outline/ }).click();
+    await expect(page.getByTestId("editor-outline-tray")).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 

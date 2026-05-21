@@ -65,15 +65,16 @@ Related actions are grouped visually with a hairline divider:
 <span className="w-px h-4 bg-border mx-0.5" />
 ```
 
-### Editor cockpit standard
+### Editor tray standard
 
-The Tiptap editor uses a compact cockpit instead of a plain button strip:
-- Top ribbon: brand mark, readiness score, Markdown toggle, inspector toggle, and grouped editing controls.
-- Toolbar groups: Block, History, Text, Structure, Insert, Knowledge, AI, Claims, and Color. Each group is bordered, compact, and allowed to wrap without horizontal scroll.
-- Quick-insert deck: a dense grid of common blocks below the ribbon. Tiles stay at fixed minimum heights and use short labels plus a small metadata tag.
+The Tiptap editor should feel like a writing canvas first and a power tool second:
+- Header: short editor identity, word/read-time summary, readiness badge, feature tray toggles, and Markdown toggle.
+- Toolbar: keep common actions visible (block style, undo/redo, bold, italic, links, lists, quote, image, table). Move advanced text, knowledge, AI, claim, color, voice, and shortcut controls behind More.
+- Feature trays: Insert, Review, Outline, and Coach are progressive disclosures. They should be closed by default, full-width, and never force a side inspector onto the canvas.
+- Insert tray: rich blocks use concise two-line tiles with stable minimum sizes.
+- Review tray: readiness, document signals, quality checks, and grammar tools appear together only when requested.
 - Context bars: table controls appear only while editing a table. Do not show row, column, merge, split, or delete-table controls globally.
-- Inspector: document signals, outline navigation, and quality checks live beside the editor on desktop and stack below on mobile.
-- Selection lab: appears only when text is selected and exposes selection-specific commands. It must not reserve empty space when inactive.
+- Selection actions: appear only when text is selected and expose selection-specific commands. They must not reserve empty space when inactive.
 
 Article action panel group order:
 1. **Navigate** — Present

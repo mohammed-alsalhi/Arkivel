@@ -1,9 +1,11 @@
 "use client";
 
 import type { Editor } from "@tiptap/react";
+import { useState } from "react";
 import VoiceDictationButton from "./VoiceDictationButton";
 import HighlightColorPicker from "./HighlightColorPicker";
 import type { ClaimLevel } from "./ClaimMarkExtension";
+import styles from "./EditorToolbar.module.css";
 
 type Props = {
   editor: Editor | null;
@@ -28,6 +30,10 @@ type ToolAction = {
   tone?: "default" | "accent" | "ai" | "danger";
 };
 
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
+
 function ToolButton({ action }: { action: ToolAction }) {
   return (
     <button
@@ -38,9 +44,10 @@ function ToolButton({ action }: { action: ToolAction }) {
       aria-label={action.label}
       aria-pressed={action.active || undefined}
       data-tone={action.tone ?? "default"}
-      className="editor-tool-button"
+      className={styles.toolButton}
     >
-      <span aria-hidden="true">{action.icon}</span>
+      <span aria-hidden="true" className={styles.toolIcon}>{action.icon}</span>
+      <span className={styles.toolText}>{action.label}</span>
     </button>
   );
 }
@@ -56,9 +63,9 @@ function ToolbarGroup({
   if (visible.length === 0) return null;
 
   return (
-    <div className="editor-toolbar-group" aria-label={label}>
-      <span className="editor-toolbar-label">{label}</span>
-      <div className="editor-toolbar-buttons">
+    <div className={styles.group} aria-label={label}>
+      <span className={styles.groupLabel}>{label}</span>
+      <div className={styles.groupActions}>
         {visible.map((action) => (
           <ToolButton key={action.label} action={action} />
         ))}
@@ -89,6 +96,8 @@ export default function EditorToolbar({
   typewriterMode,
   onTypewriterToggle,
 }: Props) {
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+
   if (!editor) return null;
   const activeEditor = editor;
 
@@ -143,7 +152,7 @@ export default function EditorToolbar({
     activeEditor.chain().focus().insertContent({ type: "footnoteRef", attrs: { note } }).run();
   }
 
-  const historyActions: ToolAction[] = [
+  const primaryActions: ToolAction[] = [
     {
       label: "Undo",
       icon: "UN",
@@ -156,11 +165,18 @@ export default function EditorToolbar({
       action: () => activeEditor.chain().focus().redo().run(),
       disabled: !activeEditor.can().redo(),
     },
+    { label: "Bold", icon: "B", action: () => activeEditor.chain().focus().toggleBold().run(), active: activeEditor.isActive("bold") },
+    { label: "Italic", icon: "I", action: () => activeEditor.chain().focus().toggleItalic().run(), active: activeEditor.isActive("italic") },
+    { label: "Link", icon: "URL", action: insertLink, active: activeEditor.isActive("link") },
+    { label: "Wiki link", icon: "[[]]", action: insertWikiLink },
+    { label: "Bullets", icon: "UL", action: () => activeEditor.chain().focus().toggleBulletList().run(), active: activeEditor.isActive("bulletList") },
+    { label: "Numbers", icon: "1.", action: () => activeEditor.chain().focus().toggleOrderedList().run(), active: activeEditor.isActive("orderedList") },
+    { label: "Quote", icon: "QT", action: () => activeEditor.chain().focus().toggleBlockquote().run(), active: activeEditor.isActive("blockquote") },
+    { label: "Image", icon: "IMG", action: onImageUpload },
+    { label: "Table", icon: "TBL", action: () => activeEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
   ];
 
   const textActions: ToolAction[] = [
-    { label: "Bold", icon: "B", action: () => activeEditor.chain().focus().toggleBold().run(), active: activeEditor.isActive("bold") },
-    { label: "Italic", icon: "I", action: () => activeEditor.chain().focus().toggleItalic().run(), active: activeEditor.isActive("italic") },
     { label: "Strike", icon: "S", action: () => activeEditor.chain().focus().toggleStrike().run(), active: activeEditor.isActive("strike") },
     { label: "Inline code", icon: "</>", action: () => activeEditor.chain().focus().toggleCode().run(), active: activeEditor.isActive("code") },
     { label: "Superscript", icon: "x2", action: () => activeEditor.chain().focus().toggleSuperscript().run(), active: activeEditor.isActive("superscript") },
@@ -168,25 +184,16 @@ export default function EditorToolbar({
   ];
 
   const structureActions: ToolAction[] = [
-    { label: "Bullet list", icon: "UL", action: () => activeEditor.chain().focus().toggleBulletList().run(), active: activeEditor.isActive("bulletList") },
-    { label: "Numbered list", icon: "OL", action: () => activeEditor.chain().focus().toggleOrderedList().run(), active: activeEditor.isActive("orderedList") },
     { label: "Pull quote", icon: "PQ", action: () => activeEditor.chain().focus().togglePullQuote().run(), active: activeEditor.isActive("pullQuote") },
     { label: "Divider", icon: "--", action: () => activeEditor.chain().focus().setHorizontalRule().run() },
-  ];
-
-  const insertActions: ToolAction[] = [
-    { label: "Link", icon: "URL", action: insertLink, active: activeEditor.isActive("link") },
-    { label: "Wiki link", icon: "[[]]", action: insertWikiLink },
-    { label: "Image", icon: "IMG", action: onImageUpload },
     { label: "Footnote", icon: "fn", action: insertFootnote },
-    { label: "Table", icon: "TBL", action: () => activeEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
     { label: "Math block", icon: "SUM", action: () => activeEditor.chain().focus().insertBlockMath().run() },
   ];
 
   const knowledgeActions: ToolAction[] = [
     {
       label: "Detect wiki links",
-      icon: detectedLinkCount > 0 ? `LINK ${detectedLinkCount}` : "LINK",
+      icon: detectedLinkCount > 0 ? `${detectedLinkCount}` : "LINK",
       action: onDetectLinks,
       tone: detectedLinkCount > 0 ? "accent" : "default",
     },
@@ -196,9 +203,9 @@ export default function EditorToolbar({
   ];
 
   const aiActions: ToolAction[] = [
-    { label: "AI rewrite selection", icon: "AI-R", action: onAiRewrite, tone: "ai" },
-    { label: "AI expand selection", icon: "AI-X", action: onAiExpand, tone: "ai" },
-    { label: "AI generate article from headings", icon: "AI-G", action: onAiGenerate, tone: "ai" },
+    { label: "AI rewrite selection", icon: "Rewrite", action: onAiRewrite, tone: "ai" },
+    { label: "AI expand selection", icon: "Expand", action: onAiExpand, tone: "ai" },
+    { label: "AI generate article from headings", icon: "Draft", action: onAiGenerate, tone: "ai" },
   ];
 
   const tableActions: ToolAction[] = [
@@ -220,15 +227,15 @@ export default function EditorToolbar({
   ];
 
   return (
-    <div className="editor-toolbar-v2">
-      <div className="editor-toolbar-main">
-        <div className="editor-toolbar-block">
-          <span className="editor-toolbar-label">Block</span>
+    <div className={styles.toolbar} data-testid="editor-toolbar">
+      <div className={styles.main}>
+        <div className={styles.blockPicker}>
+          <span className={styles.groupLabel}>Block</span>
           <select
             value={blockValue}
             onChange={(event) => setBlock(event.target.value)}
             aria-label="Block style"
-            className="editor-block-select"
+            className={styles.blockSelect}
           >
             <option value="paragraph">Paragraph</option>
             <option value="h1">Heading 1</option>
@@ -239,56 +246,74 @@ export default function EditorToolbar({
           </select>
         </div>
 
-        <ToolbarGroup label="History" actions={historyActions} />
-        <ToolbarGroup label="Text" actions={textActions} />
-        <ToolbarGroup label="Structure" actions={structureActions} />
-        <ToolbarGroup label="Insert" actions={insertActions} />
-        <ToolbarGroup label="Knowledge" actions={knowledgeActions} />
-        <ToolbarGroup label="AI" actions={aiActions} />
-
-        <div className="editor-toolbar-group editor-toolbar-claims" aria-label="Claim confidence">
-          <span className="editor-toolbar-label">Claims</span>
-          <div className="editor-toolbar-buttons">
-            {claimLevels.map(({ level, label }) => {
-              const active = activeEditor.isActive("claimMark", { level });
-              return (
-                <button
-                  key={level}
-                  type="button"
-                  onClick={() => activeEditor.chain().focus().toggleClaim(level).run()}
-                  title={`Mark selection as ${label.toLowerCase()}`}
-                  aria-pressed={active || undefined}
-                  data-claim={level}
-                  className="editor-claim-button"
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
+        <div className={styles.primaryActions} aria-label="Primary editor actions">
+          {primaryActions.map((action) => (
+            <ToolButton key={action.label} action={action} />
+          ))}
         </div>
 
-        <div className="editor-toolbar-group editor-toolbar-finishing" aria-label="Finishing">
-          <span className="editor-toolbar-label">Color</span>
-          <div className="editor-toolbar-buttons">
-            <HighlightColorPicker editor={activeEditor} />
-            <VoiceDictationButton editor={activeEditor} />
-            <button
-              type="button"
-              onClick={() => alert("Editor shortcuts:\n\nCtrl+B - Bold\nCtrl+I - Italic\nCtrl+Z - Undo\nCtrl+Y - Redo\nCtrl+H - Find and replace\nCtrl+Shift+L - Wiki link\nCtrl+Shift+F - Footnote\n[[...]] - Wiki link search\n/ - Command menu")}
-              title="Editor keyboard shortcuts"
-              aria-label="Editor keyboard shortcuts"
-              className="editor-tool-button"
-            >
-              ?
-            </button>
-          </div>
-        </div>
+        <button
+          type="button"
+          onClick={() => setAdvancedOpen((open) => !open)}
+          aria-expanded={advancedOpen}
+          className={styles.moreButton}
+        >
+          More
+        </button>
       </div>
 
+      {advancedOpen && (
+        <div className={styles.advancedPanel}>
+          <ToolbarGroup label="Text" actions={textActions} />
+          <ToolbarGroup label="Structure" actions={structureActions} />
+          <ToolbarGroup label="Knowledge" actions={knowledgeActions} />
+          <ToolbarGroup label="AI" actions={aiActions} />
+
+          <div className={styles.group} aria-label="Claim confidence">
+            <span className={styles.groupLabel}>Claims</span>
+            <div className={styles.groupActions}>
+              {claimLevels.map(({ level, label }) => {
+                const active = activeEditor.isActive("claimMark", { level });
+                return (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => activeEditor.chain().focus().toggleClaim(level).run()}
+                    title={`Mark selection as ${label.toLowerCase()}`}
+                    aria-pressed={active || undefined}
+                    data-claim={level}
+                    className={styles.claimButton}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className={styles.group} aria-label="Finishing">
+            <span className={styles.groupLabel}>Finish</span>
+            <div className={cx(styles.groupActions, styles.finishActions)}>
+              <HighlightColorPicker editor={activeEditor} />
+              <VoiceDictationButton editor={activeEditor} />
+              <button
+                type="button"
+                onClick={() => alert("Editor shortcuts:\n\nCtrl+B - Bold\nCtrl+I - Italic\nCtrl+Z - Undo\nCtrl+Y - Redo\nCtrl+H - Find and replace\nCtrl+Shift+L - Wiki link\nCtrl+Shift+F - Footnote\n[[...]] - Wiki link search\n/ - Command menu")}
+                title="Editor keyboard shortcuts"
+                aria-label="Editor keyboard shortcuts"
+                className={styles.toolButton}
+              >
+                <span aria-hidden="true" className={styles.toolIcon}>?</span>
+                <span className={styles.toolText}>Shortcuts</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isTableActive && (
-        <div className="editor-context-bar" aria-label="Table controls">
-          <span className="editor-context-label">Table lab</span>
+        <div className={styles.contextBar} aria-label="Table controls">
+          <span className={styles.contextLabel}>Table</span>
           {tableActions.map((action) => (
             <ToolButton key={action.label} action={action} />
           ))}

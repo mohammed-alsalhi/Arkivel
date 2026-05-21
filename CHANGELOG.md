@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.72.2] - 2026-05-21
+
+### Changed
+
+- **Simplified editor surface** - Replaced the always-visible cockpit with a calmer writing-first editor, compact toolbar, and progressive Insert/Review/Outline/Coach trays.
+- **Progressive editor controls** - Kept everyday formatting visible while moving advanced text, knowledge, AI, claim, color, voice, and shortcut tools behind a single More disclosure.
+- **Editor responsive QA** - Updated scratchpad coverage to open feature trays on desktop and phone widths and assert no horizontal overflow.
+
 ## [4.71.1] - 2026-05-21
 
 ### Fixed

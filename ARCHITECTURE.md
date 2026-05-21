@@ -81,7 +81,7 @@ src/
     feed/atom/                # Atom feed
   components/
     editor/                   # Tiptap editor and extensions
-      TiptapEditor.tsx        # Main rich text editor cockpit, quick inserts, telemetry, and inspector
+      TiptapEditor.tsx        # Main rich text editor shell, feature trays, telemetry, and writing tools
       EditorToolbar.tsx       # Ribbon toolbar and contextual table lab
       WikiLinkExtension.ts    # [[Article Name]] node extension
       WikiLinkSuggester.tsx   # Autocomplete dropdown for wiki links
@@ -202,7 +202,7 @@ Dual auth system. **Legacy:** single admin password via `ADMIN_SECRET` env var w
 Articles cross-reference using `[[Article Name]]` syntax. The custom Tiptap `WikiLink` extension renders these as `<a data-wiki-link="Title">` in the editor. At display time, `resolveWikiLinks()` queries the database to verify targets exist and marks broken links with a CSS class. `getBacklinks()` finds articles that reference a given slug.
 
 ### Editor Experience
-`TiptapEditor` owns the ProseMirror extension stack, Markdown conversion, paste/drop handling, wiki-link suggestions, link bubble, quick-insert deck, selection lab, status bar, and live document telemetry. The inspector computes readiness, outline entries, wiki/link/media counts, and quality checks directly from the editor state. `EditorToolbar` is a grouped ribbon with contextual table controls that only render while the selection is inside a table. `CollaborativeEditor` wraps the same editor and forwards every update to the article edit form so local draft autosave and optional Yjs sync stay in step.
+`TiptapEditor` owns the ProseMirror extension stack, Markdown conversion, paste/drop handling, wiki-link suggestions, link bubble, feature trays, selection actions, status bar, and live document telemetry. Insert, Review, Outline, and Coach trays expose rich blocks, readiness signals, outline navigation, grammar checks, and writing analysis only when requested. `EditorToolbar` keeps common formatting visible, moves advanced text/knowledge/AI/claim tools behind a More disclosure, and renders contextual table controls only while the selection is inside a table. `CollaborativeEditor` wraps the same editor and forwards every update to the article edit form so local draft autosave and optional Yjs sync stay in step.
 
 ### Content Storage
 Articles store `content` (HTML from Tiptap) and optionally `contentRaw` (Markdown for export). HTML is the canonical format displayed to users.

@@ -22,30 +22,28 @@ Each article has:
 
 ## The Editor
 
-The rich text editor opens as a compact editor cockpit:
+The rich text editor opens as a calm writing surface with advanced tools tucked into feature trays:
 
 | Button | Action |
 |--------|--------|
 | **Block** | Switch paragraph, heading, quote, and code block styles |
-| **Text** | Bold, Italic, Strikethrough, inline code, superscript, and subscript |
-| **Structure** | Bullet lists, ordered lists, pull quotes, and dividers |
-| **Insert** | URL links, wiki links, images, footnotes, collapsed-border tables, and math blocks |
-| **Knowledge** | Detect potential wiki links, insert a TOC, find/replace, and toggle typewriter mode |
-| **AI** | Rewrite selected text, expand selected text, or generate article content from headings |
-| **Claims** | Mark selected claims as Certain, Probable, or Disputed |
+| **Primary toolbar** | Undo/redo, bold, italic, URL links, wiki links, lists, quote, image, and collapsed-border tables |
+| **More** | Strikethrough, inline code, superscript, subscript, footnotes, math, TOC, find/replace, typewriter mode, AI, claims, highlight, voice, and shortcuts |
+| **Insert tray** | Scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks |
+| **Review tray** | Readiness score, word/read-time metrics, document signals, quality checks, and grammar/style checker |
+| **Outline tray** | Section navigation and the outline builder |
+| **Coach tray** | Readability and writing-coach analysis |
 | **Table lab** | Row, column, merge, split, header, and delete controls while editing a table |
 
 **Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, all heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo embed, Twitter/X post embed, vertical timeline, GitHub Gist embed, and your saved snippets via `/snippet`.
 
-**Quick-insert deck:** The block deck below the ribbon inserts scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks.
+**Feature trays:** Click **Insert**, **Review**, **Outline**, or **Coach** when you need advanced tools. The editor keeps those panels closed by default so the writing canvas stays clear.
 
-**Editor readiness inspector:** The side inspector shows readiness score, word/read-time metrics, wiki links, links, notes, tables, images, rich blocks, outline navigation, and quality checks. On narrow screens it stacks below the editor.
-
-**Selection lab:** Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
+**Selection actions:** Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
 
 **Zen mode:** Click the expand icon next to the "Content:" label to enter zen mode — hides sidebar, header, and tabs, widens the editor. Press Esc to exit.
 
-**Grammar & style checker:** A collapsible "Grammar & style" panel below the editor checks your text for errors, warnings, and style issues. Click "Check now" to analyse; each issue shows a severity badge and an Apply button to fix it inline.
+**Grammar & style checker:** Open the **Review** tray and expand "Grammar & style" to check your text for errors, warnings, and style issues. Click "Check now" to analyse; each issue shows a severity badge and an Apply button to fix it inline.
 
 **TOC generator:** Click the `TOC` toolbar button to extract all headings and insert a nested linked table of contents at the cursor position.
 

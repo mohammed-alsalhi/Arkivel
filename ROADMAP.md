@@ -16,6 +16,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.72.2
+
+- [x] Simplified editor surface - the editor now opens as a calm writing canvas with a compact toolbar instead of an always-visible cockpit
+- [x] Feature trays - Insert, Review, Outline, and Coach keep advanced block, quality, structure, grammar, and writing-assistant tools one click away without crowding the page
+- [x] Progressive toolbar - everyday formatting stays visible while advanced text, knowledge, AI, claim, color, voice, and shortcut controls move behind a single More disclosure
+- [x] Editor-local styling - the new shell and toolbar use component CSS modules so unrelated global UI work can continue without editor style collisions
+- [x] Responsive editor QA - Playwright coverage now opens the editor trays on desktop and phone widths and asserts no horizontal overflow
+
 ## v4.72.0
 
 - [x] Tiptap editor cockpit - the editor now opens with a ribbon control layer, command deck, readiness score, document signals, outline navigation, and quality pass panel

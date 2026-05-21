@@ -6,11 +6,11 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 
 ## Writing & Editing
 
-- **Rich text editor cockpit** — Tiptap-based WYSIWYG editor with ribbon toolbar, quick-insert deck, live readiness inspector, selection lab, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering
+- **Rich text editor** — Tiptap-based WYSIWYG editor with a calm toolbar, progressive feature trays, selection actions, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering
 - **Markdown mode** — toggle between rich text and raw Markdown at any time
-- **Editor readiness inspector** — live word/read-time metrics, document signals, outline navigation, quality checks, and readiness scoring beside the editor
-- **Selection lab** — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline
-- **Quick-insert deck** — one-click scaffolds, callouts, tables, data tables, Mermaid diagrams, math, decision trees, timelines, collapsibles, and live query blocks
+- **Editor feature trays** — Insert, Review, Outline, and Coach reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed
+- **Selection actions** — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline
+- **Insert tray** — one-click scaffolds, callouts, tables, data tables, Mermaid diagrams, math, decision trees, timelines, collapsibles, and live query blocks
 - **Contextual table lab** — row, column, merge, split, header, and delete-table controls appear only while editing a table
 - **Slash commands** — type `/` for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more; includes user snippets via `/snippet`
 - **Inline AI rewrite** — select text and click "AI Rewrite" in the toolbar; optionally provide an instruction; requires `OPENAI_API_KEY`

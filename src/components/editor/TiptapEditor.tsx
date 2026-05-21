@@ -40,6 +40,7 @@ import WritingCoachPanel from "./WritingCoachPanel";
 import WritingSessionGoal from "./WritingSessionGoal";
 import { useWikiLinkSuggester } from "./useWikiLinkSuggester";
 import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef, type CSSProperties } from "react";
+import styles from "./TiptapEditor.module.css";
 
 export type TiptapEditorHandle = {
   getHTML: () => string;
@@ -123,6 +124,12 @@ type EditorTelemetry = {
   checks: EditorCheck[];
   score: number;
 };
+
+type EditorTray = "insert" | "review" | "outline" | "coach" | null;
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const emptyTelemetry: EditorTelemetry = {
   words: 0,
@@ -263,7 +270,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     const [hasChanges, setHasChanges] = useState(false);
     const [findReplaceOpen, setFindReplaceOpen] = useState(false);
     const [typewriterMode, setTypewriterMode] = useState(false);
-    const [showInspector, setShowInspector] = useState(true);
+    const [activeTray, setActiveTray] = useState<EditorTray>(null);
     const [, setEditorPulse] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const snippetsRef = useRef<SnippetItem[]>([]);
@@ -888,54 +895,221 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     }
 
     const quickBlocks = [
-      { kind: "scaffold", label: "Scaffold", meta: "Sections" },
-      { kind: "note", label: "Note", meta: "Callout" },
-      { kind: "tip", label: "Tip", meta: "Callout" },
-      { kind: "warning", label: "Warning", meta: "Callout" },
+      { kind: "scaffold", label: "Article scaffold", meta: "Sections" },
+      { kind: "note", label: "Note callout", meta: "Context" },
+      { kind: "tip", label: "Tip callout", meta: "Advice" },
+      { kind: "warning", label: "Warning callout", meta: "Risk" },
       { kind: "table", label: "Table", meta: "4 x 4" },
-      { kind: "data", label: "Data", meta: "CSV" },
+      { kind: "data", label: "Data table", meta: "CSV" },
       { kind: "mermaid", label: "Diagram", meta: "Mermaid" },
       { kind: "math", label: "Math", meta: "KaTeX" },
-      { kind: "decision", label: "Decision", meta: "Tree" },
+      { kind: "decision", label: "Decision tree", meta: "Branches" },
       { kind: "timeline", label: "Timeline", meta: "Events" },
-      { kind: "collapse", label: "Collapse", meta: "Details" },
-      { kind: "query", label: "Query", meta: "Live list" },
+      { kind: "collapse", label: "Collapsible", meta: "Details" },
+      { kind: "query", label: "Query block", meta: "Live list" },
     ];
 
     const activeChecks = telemetry.checks.length > 0 ? telemetry.checks : emptyTelemetry.checks;
+    const trayButtons: { key: Exclude<EditorTray, null>; label: string; detail: string }[] = [
+      { key: "insert", label: "Insert", detail: "Blocks" },
+      { key: "review", label: "Review", detail: `${telemetry.score}%` },
+      { key: "outline", label: "Outline", detail: `${telemetry.outline.length}` },
+      { key: "coach", label: "Coach", detail: "AI" },
+    ];
 
-    return (
-      <div className="editor-shell border border-border overflow-hidden relative">
-        <div className="editor-ribbon">
-          <div className="editor-ribbon-top">
-            <div className="editor-ribbon-brand">
-              <span className="editor-ribbon-mark" aria-hidden="true">A</span>
-              <span className="editor-ribbon-title">Arkivel Studio</span>
-              {!markdownMode && (
-                <span className="editor-ribbon-score">{telemetry.score}% readiness</span>
-              )}
+    function toggleTray(tray: Exclude<EditorTray, null>) {
+      setActiveTray((current) => (current === tray ? null : tray));
+    }
+
+    function renderActiveTray() {
+      if (!editor || markdownMode || activeTray === null) return null;
+
+      if (activeTray === "insert") {
+        return (
+          <section className={styles.tray} data-testid="editor-insert-tray" aria-label="Insert tools">
+            <div className={styles.trayHeader}>
+              <div>
+                <h3 className={styles.trayTitle}>Insert</h3>
+                <p className={styles.trayDescription}>Add rich wiki blocks without leaving the page.</p>
+              </div>
             </div>
-            <div className="editor-ribbon-actions">
-              {!markdownMode && (
+            <div className={styles.commandGrid}>
+              {quickBlocks.map((block) => (
                 <button
+                  key={block.kind}
                   type="button"
-                  onClick={() => setShowInspector((value) => !value)}
-                  aria-pressed={showInspector}
-                  className="editor-mode-button"
+                  onClick={() => insertQuickBlock(block.kind)}
+                  className={styles.commandTile}
                 >
-                  {showInspector ? "Hide intel" : "Show intel"}
+                  <span>{block.label}</span>
+                  <small>{block.meta}</small>
                 </button>
-              )}
-              <button
-                type="button"
-                onClick={toggleMarkdownMode}
-                className="editor-mode-button"
-                aria-pressed={markdownMode}
-              >
-                {markdownMode ? "Rich text" : "Markdown"}
-              </button>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      if (activeTray === "review") {
+        return (
+          <section className={styles.tray} data-testid="editor-review-tray" aria-label="Review tools">
+            <div className={styles.trayHeader}>
+              <div>
+                <h3 className={styles.trayTitle}>Review</h3>
+                <p className={styles.trayDescription}>Check structure, links, sources, readability, and grammar.</p>
+              </div>
+            </div>
+            <div className={styles.traySplit}>
+              <div className={cx(styles.trayPanel, styles.scorePanel)}>
+                <div className={styles.scoreRing} style={{ "--editor-score": `${telemetry.score}%` } as CSSProperties}>
+                  <span>{telemetry.score}</span>
+                </div>
+                <div className={styles.scoreCopy}>
+                  <strong>Readiness</strong>
+                  <span>{telemetry.words} words - {telemetry.readMinutes} min read</span>
+                </div>
+              </div>
+
+              <div className={styles.trayPanel}>
+                <h4>Signals</h4>
+                <div className={styles.signalGrid}>
+                  <span><strong>{telemetry.wikiLinks}</strong> wiki links</span>
+                  <span><strong>{telemetry.links}</strong> links</span>
+                  <span><strong>{telemetry.footnotes}</strong> notes</span>
+                  <span><strong>{telemetry.tables}</strong> tables</span>
+                  <span><strong>{telemetry.images}</strong> images</span>
+                  <span><strong>{telemetry.richBlocks}</strong> rich blocks</span>
+                </div>
+              </div>
+
+              <div className={styles.trayPanel}>
+                <h4>Quality</h4>
+                <div className={styles.checkList}>
+                  {activeChecks.map((check) => (
+                    <div key={check.label} className={styles.checkItem} data-status={check.status}>
+                      <span />
+                      <div>
+                        <strong>{check.label}</strong>
+                        <p>{check.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className={styles.auxPanel}>
+              <GrammarCheckPanel editor={editor} />
+            </div>
+          </section>
+        );
+      }
+
+      if (activeTray === "outline") {
+        return (
+          <section className={styles.tray} data-testid="editor-outline-tray" aria-label="Outline tools">
+            <div className={styles.trayHeader}>
+              <div>
+                <h3 className={styles.trayTitle}>Outline</h3>
+                <p className={styles.trayDescription}>Jump between sections or generate a stronger structure.</p>
+              </div>
+            </div>
+            <div className={styles.traySplit}>
+              <div className={styles.trayPanel}>
+                <h4>Current sections</h4>
+                {telemetry.outline.length > 0 ? (
+                  <div className={styles.outlineList}>
+                    {telemetry.outline.slice(0, 16).map((item, index) => (
+                      <button
+                        key={`${item.pos}-${index}`}
+                        type="button"
+                        onClick={() => jumpToOutlineItem(item)}
+                        data-level={item.level}
+                      >
+                        {item.text}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={styles.emptyNote}>No headings yet.</p>
+                )}
+              </div>
+              <div className={styles.trayPanel}>
+                <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      return (
+        <section className={styles.tray} data-testid="editor-coach-tray" aria-label="Writing coach">
+          <div className={styles.trayHeader}>
+            <div>
+              <h3 className={styles.trayTitle}>Coach</h3>
+              <p className={styles.trayDescription}>Run readability and writing suggestions when you want another pass.</p>
             </div>
           </div>
+          <div className={styles.auxPanel}>
+            <WritingCoachPanel
+              getHtml={() => editor.getHTML()}
+              hasExcerpt={false}
+            />
+          </div>
+        </section>
+      );
+    }
+
+    return (
+      <div className={styles.shell} data-testid="editor-shell">
+        <header className={styles.header}>
+          <div className={styles.identity}>
+            <span className={styles.mark} aria-hidden="true">A</span>
+            <div className={styles.titleBlock}>
+              <strong className={styles.title}>Editor</strong>
+              <span className={styles.subtitle}>
+                {markdownMode ? "Markdown mode" : `${telemetry.words} words - ${telemetry.readMinutes} min read`}
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.headerActions} data-testid="editor-feature-tabs">
+            {!markdownMode && (
+              <>
+                <span className={styles.scoreBadge}>{telemetry.score}% ready</span>
+                {trayButtons.map((button) => (
+                  <button
+                    key={button.key}
+                    type="button"
+                    onClick={() => toggleTray(button.key)}
+                    aria-pressed={activeTray === button.key}
+                    className={styles.trayToggle}
+                  >
+                    <span>{button.label}</span>
+                    <small>{button.detail}</small>
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setActiveTray(null)}
+                  className={styles.trayToggle}
+                  disabled={activeTray === null}
+                >
+                  Close
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={toggleMarkdownMode}
+              className={styles.trayToggle}
+              aria-pressed={markdownMode}
+            >
+              {markdownMode ? "Rich text" : "Markdown"}
+            </button>
+          </div>
+        </header>
+
+        {!markdownMode && (
           <EditorToolbar
             editor={editor}
             onImageUpload={handleImageUpload}
@@ -953,7 +1127,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
               try { localStorage.setItem("wiki_typewriter_mode", next ? "1" : "0"); } catch {}
             }}
           />
-        </div>
+        )}
 
         <FindReplacePanel
           editor={editor}
@@ -961,31 +1135,17 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
           onClose={() => setFindReplaceOpen(false)}
         />
 
-        {!markdownMode && (
-          <div className="editor-command-deck" aria-label="Quick inserts">
-            {quickBlocks.map((block) => (
-              <button
-                key={block.kind}
-                type="button"
-                onClick={() => insertQuickBlock(block.kind)}
-                className="editor-command-tile"
-              >
-                <span>{block.label}</span>
-                <small>{block.meta}</small>
-              </button>
-            ))}
-          </div>
-        )}
+        {renderActiveTray()}
 
-        <div className={markdownMode ? "editor-workspace editor-workspace-markdown" : "editor-workspace"}>
-          <div className="editor-main-panel">
+        <div className={cx(styles.workspace, markdownMode && styles.markdownWorkspace)}>
+          <div className={styles.mainPanel}>
             {!markdownMode && telemetry.selectedCharacters > 0 && (
-              <div className="editor-selection-lab">
-                <div>
-                  <strong>Selection lab</strong>
+              <div className={styles.selectionBar}>
+                <div className={styles.selectionSummary}>
+                  <strong>Selection</strong>
                   <span>{telemetry.selectedWords} words</span>
                 </div>
-                <div className="editor-selection-actions">
+                <div className={styles.selectionActions}>
                   <button type="button" onClick={handleAiRewrite}>Rewrite</button>
                   <button type="button" onClick={handleAiExpand}>Expand</button>
                   <button type="button" onClick={handleSelectionWikiLink}>Wiki link</button>
@@ -999,11 +1159,11 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
               <textarea
                 value={markdownText}
                 onChange={(e) => setMarkdownText(e.target.value)}
-                className="editor-markdown-plane"
+                className={styles.markdownPlane}
                 placeholder="Write in markdown..."
               />
             ) : (
-              <div className="editor-canvas">
+              <div className={styles.canvas}>
                 <EditorContent editor={editor} />
               </div>
             )}
@@ -1017,85 +1177,21 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             />
 
             {!markdownMode && editor && (
-              <div className="editor-statusbar">
-                <div className="editor-status-stats">
+              <div className={styles.statusbar}>
+                <div className={styles.statusStats}>
                   <span>{telemetry.words} words</span>
                   <span>{telemetry.characters} chars</span>
                   <span>{telemetry.readMinutes} min read</span>
                   <span>{telemetry.headings} headings</span>
                 </div>
                 <WritingSessionGoal editor={editor} />
-                <div className="editor-status-state">
+                <div className={styles.statusState}>
                   <span>{hasChanges ? "Unsaved changes" : "No changes"}</span>
                   <span>{editor.state.doc.content.childCount} blocks</span>
                 </div>
               </div>
             )}
           </div>
-
-          {!markdownMode && editor && showInspector && (
-            <aside className="editor-inspector" aria-label="Editor intelligence">
-              <section className="editor-inspector-section editor-score-panel">
-                <div className="editor-score-ring" style={{ "--editor-score": `${telemetry.score}%` } as CSSProperties}>
-                  <span>{telemetry.score}</span>
-                </div>
-                <div>
-                  <h3>Readiness</h3>
-                  <p>{telemetry.words} words - {telemetry.readMinutes} min read</p>
-                </div>
-              </section>
-
-              <section className="editor-inspector-section">
-                <h3>Document signals</h3>
-                <div className="editor-signal-grid">
-                  <span><strong>{telemetry.wikiLinks}</strong> wiki links</span>
-                  <span><strong>{telemetry.links}</strong> links</span>
-                  <span><strong>{telemetry.footnotes}</strong> notes</span>
-                  <span><strong>{telemetry.tables}</strong> tables</span>
-                  <span><strong>{telemetry.images}</strong> images</span>
-                  <span><strong>{telemetry.richBlocks}</strong> rich blocks</span>
-                </div>
-              </section>
-
-              <section className="editor-inspector-section">
-                <div className="editor-inspector-heading">
-                  <h3>Outline</h3>
-                  <span>{telemetry.outline.length}</span>
-                </div>
-                {telemetry.outline.length > 0 ? (
-                  <div className="editor-outline-list">
-                    {telemetry.outline.slice(0, 12).map((item, index) => (
-                      <button
-                        key={`${item.pos}-${index}`}
-                        type="button"
-                        onClick={() => jumpToOutlineItem(item)}
-                        data-level={item.level}
-                      >
-                        {item.text}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="editor-empty-note">No headings yet.</p>
-                )}
-              </section>
-
-              <section className="editor-inspector-section">
-                <h3>Quality pass</h3>
-                <div className="editor-check-list">
-                  {activeChecks.map((check) => (
-                    <div key={check.label} className="editor-check-item" data-status={check.status}>
-                      <span />
-                      <div>
-                        <strong>{check.label}</strong>
-                        <p>{check.detail}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </aside>
-          )}
         </div>
 
         <WikiLinkSuggester
@@ -1108,29 +1204,6 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
 
         {!markdownMode && <LinkBubble editor={editor} />}
 
-        {/* Writing Coach — collapsible analysis panel */}
-        {!markdownMode && editor && (
-          <div className="editor-aux-panels">
-            <WritingCoachPanel
-              getHtml={() => editor.getHTML()}
-              hasExcerpt={false}
-            />
-          </div>
-        )}
-
-        {/* Outline Builder — AI-assisted section outline generation */}
-        {!markdownMode && editor && (
-          <div className="editor-aux-panels">
-            <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
-          </div>
-        )}
-
-        {/* Grammar & style checker */}
-        {!markdownMode && editor && (
-          <div className="editor-aux-panels">
-            <GrammarCheckPanel editor={editor} />
-          </div>
-        )}
       </div>
     );
   }
