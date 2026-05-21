@@ -93,6 +93,8 @@ General app pages should use the shared page shell before introducing route-spec
 
 The home page is the canonical front-page implementation: live stats, featured article, browse directory, recent updates, and compact sidebar modules. It should feel like a working wiki index, not a marketing landing page.
 
+The Knowledge Command Center at `/intelligence` is the standard for operational dashboard pages: dense serif score treatment, compact summary cells, prioritized action rows, and flat bordered intelligence cards. It should surface live signals and next actions without decorative charts, nested cards, or marketing-style explanation blocks.
+
 ### Brand and header controls
 
 - Sidebar and mobile header branding should use the configured compact logo mark, with the full square logo reserved for metadata, app icons, and larger brand surfaces.

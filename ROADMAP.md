@@ -16,6 +16,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.68.0
+
+- [x] Knowledge Command Center - `/intelligence` turns the wiki into an operational cockpit with 20 live quality, graph, canon, audience, and editorial engines
+- [x] Mission readiness scoring - stubs, orphans, stale pages, taxonomy gaps, broken links, and featured canon roll into a single readiness percentage
+- [x] Next-best-work queue - prioritized actions point editors toward the most valuable fixes instead of leaving them to hunt through separate dashboards
+- [x] Intelligence API feed - `/api/intelligence` exposes the same 20-engine report for external dashboards and automation
+- [x] Product-surface integration - sidebar, homepage, command palette, sitemap, docs, versioning, and responsive QA now include the command center
+
 ## v4.67.1
 
 - [x] Preliminary logo integration - public brand assets now provide the sidebar mark, mobile header mark, app icon, and metadata image

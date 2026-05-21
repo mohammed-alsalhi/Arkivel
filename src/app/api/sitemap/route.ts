@@ -21,6 +21,8 @@ export async function GET() {
   <url><loc>${baseUrl}/categories</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>${baseUrl}/search</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>`;
 
+  xml += `\n  <url><loc>${baseUrl}/intelligence</loc><changefreq>daily</changefreq><priority>0.6</priority></url>`;
+
   for (const article of articles) {
     const lastmod = article.updatedAt.toISOString().split("T")[0];
     xml += `\n  <url><loc>${baseUrl}/articles/${article.slug}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>`;

@@ -74,6 +74,13 @@ export const COMMAND_DESTINATIONS: CommandDestination[] = [
     shortcut: "G G",
   },
   {
+    id: "nav-intelligence",
+    label: "Knowledge Command Center",
+    href: "/intelligence",
+    group: "Discovery",
+    keywords: ["intelligence", "command", "ops", "signals", "quality", "canon", "usp"],
+  },
+  {
     id: "nav-ask",
     label: "Ask My Wiki",
     href: "/ask",

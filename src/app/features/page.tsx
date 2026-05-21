@@ -98,6 +98,7 @@ export default function FeaturesPage() {
             <li><strong>Main page front page</strong> — <Link href="/">/</Link> combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point</li>
             <li><strong>Shared page headers</strong> — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently</li>
             <li><strong>Brand mark and compact search</strong> — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm</li>
+            <li><strong>Knowledge Command Center</strong> — <Link href="/intelligence">/intelligence</Link> runs 20 live engines for mission readiness, editorial pressure, graph health, broken links, stubs, taxonomy debt, featured canon, translation surface, reader demand, verification debt, and cleanup flags</li>
             <li><strong>Command palette navigation</strong> — <code className="bg-surface-hover px-1 text-[12px]">Cmd+K</code> / <code className="bg-surface-hover px-1 text-[12px]">Ctrl+K</code> opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces</li>
             <li><strong>Word-count search filter</strong> — advanced search includes min/max word count range to find articles by length</li>
             <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>
@@ -362,6 +363,7 @@ export default function FeaturesPage() {
             <li><strong>Analytics</strong> — scroll depth heatmap, navigation paths at <Link href="/admin/analytics">/admin/analytics</Link></li>
             <li><strong>Performance metrics</strong> — system metrics at <Link href="/admin/metrics">/admin/metrics</Link></li>
             <li><strong>Health score</strong> — A–F grade for link coverage, freshness, stub %, search gaps at <Link href="/admin/health">/admin/health</Link></li>
+            <li><strong>Intelligence JSON feed</strong> — <Link href="/api/intelligence">/api/intelligence</Link> exposes the command-center score, summary, 20 engines, and next-best-work queue for dashboards or automation</li>
             <li><strong>Content lint</strong> — broken links, missing excerpts, orphans at <Link href="/admin/lint">/admin/lint</Link></li>
             <li><strong>Stale articles</strong> — articles not updated in 180+ days at <Link href="/admin/staleness">/admin/staleness</Link></li>
             <li><strong>Embeddings coverage</strong> — semantic search index per article at <Link href="/admin/embeddings">/admin/embeddings</Link></li>

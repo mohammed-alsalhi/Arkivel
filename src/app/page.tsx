@@ -95,6 +95,12 @@ export default async function Home() {
       description: "See how wiki links connect articles into a larger map.",
     },
     {
+      href: "/intelligence",
+      label: "Command center",
+      meta: "20 live engines",
+      description: "Turn wiki data into quality, graph, canon, and audience signals.",
+    },
+    {
       href: "/recent-changes",
       label: "Recent changes",
       meta: "Live activity",

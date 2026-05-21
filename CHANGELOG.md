@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.68.0] - 2026-05-21
+
+### Added
+
+- **Knowledge Command Center** - Added `/intelligence`, a live operations surface with 20 intelligence engines spanning mission readiness, content velocity, editorial pressure, stale canon, graph health, broken links, stubs, longform candidates, taxonomy debt, tag constellations, featured canon, infobox coverage, translation surface, conversation heat, reader demand, verification debt, and cleanup flags.
+- **Next-best-work queue** - Added prioritized action rows that route editors toward the highest leverage fixes: expanding stubs, repairing wiki links, refreshing stale pages, organizing taxonomy gaps, and clearing review pressure.
+- **Intelligence JSON feed** - Added `/api/intelligence` so the same command-center report can power integrations, dashboards, automation, or external monitoring.
+- **Discovery integration** - Wired the command center into the sidebar, homepage browse directory, command palette destination registry, sitemap, and responsive shell test matrix.
+- **Responsive command-center shell** - Added compact serif-first score panels, summary grids, action rows, and intelligence cards that adapt across phone, tablet, laptop, and wide desktop widths.
+
 ## [4.67.1] - 2026-05-21
 
 ### Changed

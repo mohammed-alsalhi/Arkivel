@@ -200,6 +200,9 @@ export default function Sidebar({
           <SidebarLink href="/activity" active={pathname === "/activity"} onClick={close}>
             Activity
           </SidebarLink>
+          <SidebarLink href="/intelligence" active={pathname === "/intelligence"} onClick={close}>
+            Command center
+          </SidebarLink>
           <SidebarLink href="/stats" active={pathname === "/stats"} onClick={close}>
             Stats
           </SidebarLink>

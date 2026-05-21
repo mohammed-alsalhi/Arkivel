@@ -30,6 +30,7 @@ src/
         [id]/
       search/                 # Full-text search
       graph/                  # Knowledge graph (BFS subgraph support)
+      intelligence/           # Knowledge Command Center report
       map-markers/            # Marker CRUD
         [id]/
       maps/                   # Multi-map management
@@ -52,6 +53,7 @@ src/
     categories/               # Category listing and individual pages
     tags/                     # Tag-based article listing
     graph/                    # Interactive D3 knowledge graph
+    intelligence/             # 20-engine Knowledge Command Center
     map/                      # Interactive map pages
       [mapId]/
     search/                   # Search results page
@@ -109,6 +111,7 @@ src/
   lib/
     prisma.ts                 # Prisma client singleton (globalThis caching for dev)
     navigation.ts             # Shared command destinations and focused workspace route detection
+    intelligence.ts           # Command-center score, sections, and next-best-work report
     search-response.ts        # Client-safe normalizer for internal search API response shapes
     auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
     api-auth.ts               # API key validation for public REST API
@@ -229,6 +232,9 @@ Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet wit
 ### Graph
 D3 force-directed graph at `/graph`. API at `/api/graph` returns nodes/edges from wiki links and `ArticleLink` table. Supports BFS subgraph via `?center=slug&depth=N`.
 
+### Knowledge Command Center
+`src/lib/intelligence.ts` builds the `/intelligence` page and `/api/intelligence` feed from live article, category, tag, revision, read, view, discussion, translation, and cleanup metadata. It derives 20 operational engines covering readiness, velocity, editorial pressure, stale content, graph health, broken links, stubs, longform candidates, taxonomy gaps, featured canon, infobox coverage, translation reach, conversation, reader demand, verification debt, and cleanup flags. Database failures fall back to an empty report so local shell verification remains usable without a seeded database.
+
 ### Feeds & API
 RSS at `/feed.xml`, Atom at `/feed/atom`. Public REST API at `/api/v1/` with API key auth (`X-API-Key` header). Webhooks dispatched on article events. API docs at `/api-docs`.
 
@@ -279,6 +285,7 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 ### Other Resources
 | Route | Methods | Description |
 |-------|---------|-------------|
+| `/api/intelligence` | GET | Knowledge Command Center score, summary, 20 engines, and action queue |
 | `/api/auth/*` | POST | Login, logout, register, check |
 | `/api/categories` | GET, POST | List/create categories |
 | `/api/categories/[id]` | GET, PUT, DELETE | Category CRUD |
