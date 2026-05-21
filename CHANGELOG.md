@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.71.0] - 2026-05-21
+
+### Added
+
+- **Canon Trails** - Added `/trails`, a reader-facing route system that builds guided paths through published wiki articles from live links, backlinks, categories, freshness, depth, and engagement signals.
+- **Trail route engine** - Added canon, fresh, deep, repair, and starter trails so the page can guide real reading paths while empty local databases still present a useful setup route.
+- **Trails JSON feed** - Added `/api/trails` for the same route model so demos, automations, and future clients can consume guided reading paths without scraping the UI.
+- **Reader-first navigation** - Wired Canon Trails into the primary sidebar, home page actions, browse directory, command palette, sitemap, docs, and responsive shell coverage.
+- **README documentation front page** - Reworked the README into a real product documentation entry with logo treatment, badge/button links, quickstart, deployment, configuration, core experiences, feature map, architecture, and API references.
+
 ## [4.70.0] - 2026-05-21
 
 ### Added

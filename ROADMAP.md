@@ -16,6 +16,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.71.0
+
+- [x] Canon Trails - `/trails` turns the wiki into guided reader routes through strongest canon, recent work, deep pages, and repair paths
+- [x] Route engine - trail stops are built from live wiki links, backlinks, categories, recency, word depth, revisions, discussions, reads, views, reactions, and bookmarks
+- [x] Trails JSON feed - `/api/trails` exposes the same route report for demos, automation, and future clients
+- [x] Reader-first positioning - Canon Trails is linked from the sidebar, home page, command palette, sitemap, feature docs, help docs, and API docs
+- [x] README documentation polish - the repository front page now reads like an actual documentation entry with logo, badges, button-style links, quickstart, deployment, configuration, core experiences, and API references
+
 ## v4.70.0
 
 - [x] Canon Atlas - `/atlas` turns the wiki into a live world map with territories, article signals, story threads, and a flagship dossier

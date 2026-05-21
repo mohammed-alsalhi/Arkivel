@@ -101,6 +101,12 @@ export default async function Home() {
       description: "See territories, dossiers, story threads, and continuity pressure.",
     },
     {
+      href: "/trails",
+      label: "Canon trails",
+      meta: "Guided routes",
+      description: "Follow playable reading paths through canon, recent work, and deep pages.",
+    },
+    {
       href: "/intelligence",
       label: "Command center",
       meta: "20 live engines",
@@ -167,6 +173,7 @@ export default async function Home() {
         <div className="ui-page-actions">
           <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
           <Link href="/atlas" className="ui-button">Canon atlas</Link>
+          <Link href="/trails" className="ui-button">Canon trails</Link>
           <Link href="/intelligence" className="ui-button">Command center</Link>
           <Link href="/search" className="ui-button">Search</Link>
           <Link href="/random" className="ui-button">Random</Link>

@@ -81,6 +81,13 @@ export const COMMAND_DESTINATIONS: CommandDestination[] = [
     keywords: ["atlas", "canon", "world", "map", "territories", "threads", "lore", "dossier", "wow"],
   },
   {
+    id: "nav-trails",
+    label: "Canon Trails",
+    href: "/trails",
+    group: "Discovery",
+    keywords: ["trails", "routes", "reading", "path", "canon", "journey", "reader", "guided"],
+  },
+  {
     id: "nav-intelligence",
     label: "Knowledge Command Center",
     href: "/intelligence",

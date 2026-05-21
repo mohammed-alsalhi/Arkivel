@@ -22,6 +22,7 @@ export async function GET() {
   <url><loc>${baseUrl}/search</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>`;
 
   xml += `\n  <url><loc>${baseUrl}/atlas</loc><changefreq>daily</changefreq><priority>0.6</priority></url>`;
+  xml += `\n  <url><loc>${baseUrl}/trails</loc><changefreq>daily</changefreq><priority>0.6</priority></url>`;
   xml += `\n  <url><loc>${baseUrl}/intelligence</loc><changefreq>daily</changefreq><priority>0.6</priority></url>`;
 
   for (const article of articles) {

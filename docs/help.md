@@ -175,6 +175,7 @@ AI features are gated on environment variables and degrade gracefully when keys 
 - **Smart Collections** — saved searches with filters (tags, category, author, date range) at `/collections`.
 - **TIL (Today I Learned)** — post short (280-char) notes at `/til`. Tag them for discovery.
 - **Explore mode** — guided walk through articles using semantic similarity at `/explore`.
+- **Canon Trails** — `/trails` builds guided reading routes from live wiki links, backlinks, categories, freshness, article depth, and engagement. Use it when you want a path through the canon instead of another dashboard.
 - **Session reading trail** — collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.
 - **Reading history** — browser-local list of the last 50 articles you visited, with relative timestamps, at `/history`. No server data stored.
 - **Last-visit badge** — on return visits, articles show "You read this X ago" in the article header.
@@ -317,6 +318,8 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 - **Analytics dashboard** — scroll depth heatmap, reader navigation paths, search gap tracking
 - **Canon Atlas** — `/atlas` turns the wiki into a live map of territories, article signals, story threads, a flagship dossier, continuity pressure, and atlas moves
 - **Atlas API** — `/api/atlas` returns the same territories, signals, threads, dossier, continuity pressure, and action queue as JSON
+- **Canon Trails** — `/trails` turns the wiki into guided reading routes through strongest canon, recent updates, deep pages, and repair paths
+- **Trails API** — `/api/trails` returns guided reading routes, stop reasons, estimates, word totals, and link totals as JSON
 - **Knowledge Command Center** — `/intelligence` combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines
 - **Intelligence API** — `/api/intelligence` returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON
 - **Search analytics** — `/admin/search-analytics` shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps
@@ -416,6 +419,7 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 - **Tags** — `/tags`, browse all tags and their articles
 - **Article graph** — `/graph`, D3 force-directed graph of wiki link connections
 - **Canon atlas** — `/atlas`, world-map style view of territories, story threads, dossiers, and continuity pressure
+- **Canon trails** — `/trails`, guided reading routes through canon, recent work, deep pages, and repair paths
 - **Help** — this page
 
 **Discover section:**

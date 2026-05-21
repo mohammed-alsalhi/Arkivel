@@ -2022,6 +2022,366 @@ p a:hover {
   text-decoration: underline;
 }
 
+/* ── Canon Trails ── */
+.trails-page {
+  min-width: 0;
+}
+
+.trails-header {
+  margin-bottom: 0.85rem;
+}
+
+.trails-hero {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1.12fr) minmax(20rem, 0.88fr);
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.trails-reader-panel,
+.trails-command-panel,
+.trails-card {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.trails-panel-heading {
+  display: flex;
+  min-width: 0;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.65rem 0.75rem;
+}
+
+.trails-panel-heading span {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.trails-panel-heading h2 {
+  margin-top: 0.2rem;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 400;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.trails-panel-heading strong {
+  flex: 0 0 auto;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.trails-path {
+  display: grid;
+  min-width: 0;
+  padding: 0.35rem 0.75rem 0.75rem;
+}
+
+.trails-stop {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  gap: 0.65rem;
+  padding-top: 0.75rem;
+}
+
+.trails-stop-marker {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.trails-stop-marker::after {
+  content: "";
+  position: absolute;
+  top: 1.75rem;
+  bottom: -0.75rem;
+  left: 50%;
+  border-left: 1px solid var(--color-border);
+}
+
+.trails-stop:last-child .trails-stop-marker::after {
+  display: none;
+}
+
+.trails-stop-marker span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 1.7rem;
+  height: 1.7rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.trails-stop-body {
+  min-width: 0;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-bottom: 0.75rem;
+}
+
+.trails-stop:last-child .trails-stop-body {
+  border-bottom: 0;
+}
+
+.trails-stop-title {
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.trails-stop-title:hover {
+  color: var(--color-accent);
+}
+
+.trails-stop-meta {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+}
+
+.trails-stop-meta span {
+  border: 1px solid var(--color-border);
+  padding: 0.16rem 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.trails-stop-body p {
+  margin-top: 0.45rem;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.trails-stop-body em {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--color-heading);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.trails-command-panel {
+  align-self: start;
+}
+
+.trails-summary-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trails-summary-grid div {
+  min-width: 0;
+  border-right: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.7rem 0.75rem;
+}
+
+.trails-summary-grid div:nth-child(2n) {
+  border-right: 0;
+}
+
+.trails-summary-grid div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.trails-summary-grid strong {
+  display: block;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.trails-summary-grid span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.trails-guide-copy {
+  padding: 0.75rem;
+}
+
+.trails-guide-copy p {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.trails-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.trails-card {
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+  padding: 0.75rem;
+}
+
+.trails-card[data-tone="canon"] {
+  border-top: 2px solid var(--color-accent);
+}
+
+.trails-card[data-tone="fresh"] {
+  border-top: 2px solid var(--color-success);
+}
+
+.trails-card[data-tone="repair"] {
+  border-top: 2px solid var(--color-warning);
+}
+
+.trails-card[data-tone="deep"] {
+  border-top: 2px solid var(--color-info);
+}
+
+.trails-card-top {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.65rem;
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.trails-card-top strong {
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.trails-card h2 {
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.trails-card p {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.trails-mini-route {
+  display: flex;
+  min-width: 0;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.trails-mini-route a {
+  display: grid;
+  width: 1.45rem;
+  height: 1.45rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 0.8125rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.trails-mini-route a:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-accent);
+}
+
+.trails-card-link {
+  margin-top: 0.25rem;
+  color: var(--color-wiki-link);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.trails-card-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1180px) {
+  .trails-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 899px) {
+  .trails-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 639px) {
+  .trails-panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .trails-stop {
+    grid-template-columns: 1.9rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .trails-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Canon Atlas ── */
 .atlas-page {
   min-width: 0;

@@ -231,6 +231,7 @@ export default function HelpPage() {
             <li><strong>Smart Collections</strong> &mdash; saved searches with filters (tags, category, author, date range) at <Link href="/collections">/collections</Link>.</li>
             <li><strong>TIL (Today I Learned)</strong> &mdash; post short (280-char) notes at <Link href="/til">/til</Link>. Tag them for discovery.</li>
             <li><strong>Explore mode</strong> &mdash; guided walk through articles using semantic similarity at <Link href="/explore">/explore</Link>.</li>
+            <li><strong>Canon Trails</strong> &mdash; <Link href="/trails">/trails</Link> builds guided reading routes from live wiki links, backlinks, categories, freshness, article depth, and engagement so readers get a path through the canon instead of another dashboard.</li>
             <li><strong>Session reading trail</strong> &mdash; collapsible breadcrumb at the bottom of each article showing your navigation history for the current session.</li>
             <li><strong>Reading history</strong> &mdash; browser-local list of the last 50 articles you visited, with relative timestamps, at <Link href="/history">/history</Link>. No server data stored.</li>
             <li><strong>Last-visit badge</strong> &mdash; on return visits, articles show &ldquo;You read this X ago&rdquo; in the article header.</li>
@@ -415,6 +416,8 @@ export default function HelpPage() {
             <li><strong>Analytics dashboard</strong> &mdash; scroll depth heatmap, reader navigation paths, search gap tracking</li>
             <li><strong>Canon Atlas</strong> &mdash; <Link href="/atlas">/atlas</Link> turns the wiki into a live map of territories, article signals, story threads, a flagship dossier, continuity pressure, and atlas moves</li>
             <li><strong>Atlas API</strong> &mdash; <Link href="/api/atlas">/api/atlas</Link> returns the same territories, signals, threads, dossier, continuity pressure, and action queue as JSON</li>
+            <li><strong>Canon Trails</strong> &mdash; <Link href="/trails">/trails</Link> turns the wiki into guided reading routes through strongest canon, recent updates, deep pages, and repair paths</li>
+            <li><strong>Trails API</strong> &mdash; <Link href="/api/trails">/api/trails</Link> returns guided reading routes, stop reasons, estimates, word totals, and link totals as JSON</li>
             <li><strong>Knowledge Command Center</strong> &mdash; <Link href="/intelligence">/intelligence</Link> combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines</li>
             <li><strong>Intelligence API</strong> &mdash; <Link href="/api/intelligence">/api/intelligence</Link> returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON</li>
             <li><strong>Search analytics</strong> &mdash; <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps</li>
@@ -522,7 +525,7 @@ export default function HelpPage() {
           <p className="font-semibold mb-0.5">Navigation</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
             <li><Link href="/">Main Page</Link>, <Link href="/articles">All articles</Link>, <Link href="/recent-changes">Recent changes</Link>, <Link href="/random">Random article</Link></li>
-            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/atlas">Canon atlas</Link>, <Link href="/graph">Article graph</Link></li>
+            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/atlas">Canon atlas</Link>, <Link href="/trails">Canon trails</Link>, <Link href="/graph">Article graph</Link></li>
           </ul>
           <p className="font-semibold mb-0.5">Discover</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">

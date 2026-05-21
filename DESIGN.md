@@ -95,6 +95,8 @@ The home page is the canonical front-page implementation: live stats, featured a
 
 The Canon Atlas at `/atlas` is the standard for immersive wiki surfaces: it may use a strong map-like visual as the primary working surface, but the map must be built from live wiki data, direct links, and readable operational queues. Keep the visual framed by practical dossier, continuity, and action modules so the page remains a tool, not a poster.
 
+The Canon Trails page at `/trails` is the standard for reader-facing advanced experiences: it should feel like guided reading through the wiki, not another metrics dashboard. Trail stops need large readable article titles, direct article links, compact reasons, visible route order, and enough metadata to explain the path without turning the page into a control room.
+
 The Knowledge Command Center at `/intelligence` is the standard for operational dashboard pages: dense serif score treatment, compact summary cells, a real data cockpit, prioritized action rows, and flat bordered intelligence cards. High-impact dashboards may use purposeful visual systems like the article constellation, readiness radar, and impact simulator when the visuals are fed by live product data and remain navigable on phone, tablet, laptop, and wide desktop. Avoid decorative charts, nested cards, or marketing-style explanation blocks.
 
 ### Brand and header controls

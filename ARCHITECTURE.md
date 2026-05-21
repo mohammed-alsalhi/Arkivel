@@ -31,6 +31,7 @@ src/
       search/                 # Full-text search
       graph/                  # Knowledge graph (BFS subgraph support)
       atlas/                  # Canon Atlas report
+      trails/                 # Canon Trails guided route report
       intelligence/           # Knowledge Command Center cockpit report
       map-markers/            # Marker CRUD
         [id]/
@@ -54,6 +55,7 @@ src/
     categories/               # Category listing and individual pages
     tags/                     # Tag-based article listing
     atlas/                    # Canon Atlas world-map surface
+    trails/                   # Canon Trails reader routes
     graph/                    # Interactive D3 knowledge graph
     intelligence/             # Cockpit-style Knowledge Command Center
     map/                      # Interactive map pages
@@ -116,6 +118,7 @@ src/
     prisma.ts                 # Prisma client singleton (globalThis caching for dev)
     navigation.ts             # Shared command destinations and focused workspace route detection
     canon-atlas.ts            # Territory, dossier, story-thread, and continuity report
+    canon-trails.ts           # Reader-route engine for canon, fresh, deep, repair, and starter trails
     intelligence.ts           # Command-center score, graph, radar, sections, and next-best-work report
     search-response.ts        # Client-safe normalizer for internal search API response shapes
     auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
@@ -240,6 +243,9 @@ D3 force-directed graph at `/graph`. API at `/api/graph` returns nodes/edges fro
 ### Canon Atlas
 `src/lib/canon-atlas.ts` builds `/atlas` and `/api/atlas` from live article, category, tag, revision, engagement, excerpt, infobox, and wiki-link metadata. It projects categories into atlas territories, scores top articles as map signals, derives story threads from real wiki links, selects a flagship dossier, and exposes continuity pressure around stubs, uncategorized pages, missing tags, missing outgoing links, excerpts, and infoboxes. Empty local databases fall back to starter territories and starter signal routes so the page remains visually complete without pretending published article data exists.
 
+### Canon Trails
+`src/lib/canon-trails.ts` builds `/trails` and `/api/trails` as a reader-facing route engine rather than an operations dashboard. It scores published articles from outgoing wiki links, backlinks, categories, word depth, update recency, revision count, discussions, reads, page views, reactions, bookmarks, pinned state, and featured state. The report emits canon, fresh, deep, and repair routes with direct article links, reading estimates, stop reasons, and summary counts. Empty local databases fall back to a starter route that points users toward creating the first article, category, and wiki link.
+
 ### Knowledge Command Center
 `src/lib/intelligence.ts` builds the `/intelligence` page and `/api/intelligence` feed from live article, category, tag, revision, read, view, discussion, translation, and cleanup metadata. It derives 20 operational engines covering readiness, velocity, editorial pressure, stale content, graph health, broken links, stubs, longform candidates, taxonomy gaps, featured canon, infobox coverage, translation reach, conversation, reader demand, verification debt, and cleanup flags. It also emits a top-article constellation from real wiki-link edges, a readiness radar across graph/structure/freshness/trust/audience/momentum axes, and pressure counts used by the client-side impact simulator. Database failures fall back to an empty report so local shell verification remains usable without a seeded database.
 
@@ -294,6 +300,7 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | Route | Methods | Description |
 |-------|---------|-------------|
 | `/api/atlas` | GET | Canon Atlas territories, article signals, story threads, dossier, continuity pressure, and next moves |
+| `/api/trails` | GET | Canon Trails guided routes, stop reasons, reading estimates, word totals, and link totals |
 | `/api/intelligence` | GET | Knowledge Command Center score, graph constellation, radar axes, pressure model, 20 engines, and action queue |
 | `/api/auth/*` | POST | Login, logout, register, check |
 | `/api/categories` | GET, POST | List/create categories |

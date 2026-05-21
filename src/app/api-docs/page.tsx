@@ -308,6 +308,9 @@ export default function ApiDocsPage() {
               <code className="bg-surface-hover px-1 text-[12px]">GET /api/atlas</code> — Canon Atlas territories, signals, threads, dossier, continuity pressure, and next moves
             </li>
             <li>
+              <code className="bg-surface-hover px-1 text-[12px]">GET /api/trails</code> — Canon Trails guided routes, stop reasons, reading estimates, word totals, and link totals
+            </li>
+            <li>
               <code className="bg-surface-hover px-1 text-[12px]">GET /api/intelligence</code> — Knowledge cockpit score, radar, constellation, pressure model, engines, and action queue
             </li>
           </ul>

@@ -143,6 +143,9 @@ export default function Sidebar({
           <SidebarLink href="/atlas" active={pathname === "/atlas"} onClick={close}>
             Canon atlas
           </SidebarLink>
+          <SidebarLink href="/trails" active={pathname === "/trails"} onClick={close}>
+            Canon trails
+          </SidebarLink>
           <SidebarLink href="/intelligence" active={pathname === "/intelligence"} onClick={close}>
             Knowledge cockpit
           </SidebarLink>

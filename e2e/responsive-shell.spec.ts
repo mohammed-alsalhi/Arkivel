@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const routes = ["/", "/search", "/articles", "/categories", "/features", "/help", "/dashboard", "/atlas", "/intelligence"];
+const routes = ["/", "/search", "/articles", "/categories", "/features", "/help", "/dashboard", "/atlas", "/trails", "/intelligence"];
 const viewports = [
   { name: "phone", width: 390, height: 844 },
   { name: "tablet", width: 768, height: 1024 },
@@ -81,6 +81,16 @@ test.describe("Responsive shell", () => {
     await expect(page.locator(".atlas-map-panel")).toBeVisible();
     await expect(page.locator(".atlas-dossier-panel")).toBeVisible();
     await expect(page.locator(".atlas-continuity-panel")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  });
+
+  test("renders canon trails without viewport overflow", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/trails");
+
+    await expect(page.locator(".trails-reader-panel")).toBeVisible();
+    await expect(page.locator(".trails-command-panel")).toBeVisible();
+    await expect(page.locator(".trails-card").first()).toBeVisible();
     await expectNoHorizontalOverflow(page);
   });
 });
