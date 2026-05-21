@@ -4,6 +4,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.66.0] - 2026-05-21
+
+### Changed
+
+- **Article page shell refresh** - Refactored the article display route around a dedicated hero header, grouped action panel, and taxonomy footer so title metadata, badges, controls, and category/tag context scan cleanly without overwhelming the reading surface.
+- **Article action redesign** - Replaced the stacked toolbar rows with a responsive grouped action panel for Navigate, Collect, Share, Read, and Tools actions while preserving the existing article workflows.
+- **Reading surface polish** - Restyled in-brief summaries, article flags, review/pinned notices, backlinks, fork actions, and taxonomy chips to use shared UI primitives and semantic theme tokens.
+- **Responsive article layout** - Added article-specific responsive rules for tabs, infoboxes, table of contents, action groups, link chips, and narrow-screen typography so article pages stay readable across phone, tablet, laptop, and wide desktop widths.
+
 ## [4.65.0] - 2026-05-21
 
 ### Changed

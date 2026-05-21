@@ -18,22 +18,22 @@ export default function FreshnessBadge({ updatedAt }: Props) {
 
   if (ageDays <= 30) {
     label = "Fresh";
-    cls = "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300";
+    cls = "ui-chip-success";
   } else if (ageDays <= 90) {
     label = "Recent";
-    cls = "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300";
+    cls = "ui-chip-info";
   } else if (ageDays <= 180) {
     label = "Aging";
-    cls = "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300";
+    cls = "ui-chip-warning";
   } else {
     label = "Stale";
-    cls = "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300";
+    cls = "ui-chip-danger";
   }
 
   return (
     <span
       title={`Last updated ${ageDays} day${ageDays === 1 ? "" : "s"} ago`}
-      className={`inline-block px-1.5 py-px text-[10px] font-medium rounded ${cls}`}
+      className={`ui-chip font-medium ${cls}`}
     >
       {label}
     </span>

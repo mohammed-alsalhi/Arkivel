@@ -78,9 +78,9 @@ Click **Present** in the article action bar to open the article as a slideshow. 
 
 ---
 
-## Article Action Bar
+## Article Action Panel
 
-The toolbar below the article title provides quick actions grouped into four sections:
+The panel below the article header groups quick actions into five sections:
 
 | Action | Description |
 |--------|-------------|
@@ -190,6 +190,10 @@ AI features are gated on environment variables and degrade gracefully when keys 
 
 ## Article Page Features
 
+- **Article header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped at the top of the page.
+- **Action panel** — article controls are grouped as Navigate, Collect, Share, Read, and Tools.
+- **Taxonomy footer** — category and tag links appear as wrapping chips near the bottom of the article.
+- **Responsive layout** — article tabs, infoboxes, table of contents, backlinks, and action groups are constrained for narrow screens.
 - **Reading time** — every article shows "~X min read" in the byline, estimated at 200 words per minute.
 - **Reading mode** — click "Reading mode" in the toolbar or press `R` to enter a distraction-free view. Press again or `R` to exit.
 - **Draft share links** — admins generate a secret URL (`POST /api/articles/[id]/share-token`) so anyone with the link can preview a draft at `/share/[token]` without needing to log in.

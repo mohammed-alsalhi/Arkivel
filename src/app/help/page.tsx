@@ -108,11 +108,11 @@ export default function HelpPage() {
         </div>
       </div>
 
-      {/* Article Action Bar */}
+      {/* Article Action Panel */}
       <div className="wiki-portal mb-4">
-        <div className="wiki-portal-header">Article Action Bar</div>
+        <div className="wiki-portal-header">Article Action Panel</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-2">The toolbar below the article title provides quick actions grouped into four sections:</p>
+          <p className="mb-2">The panel below the article header groups quick actions into five sections:</p>
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Present</strong> &mdash; open as a slideshow</li>
             <li><strong>Bookmark</strong> &mdash; save to your personal bookmarks with an optional note</li>
@@ -247,6 +247,10 @@ export default function HelpPage() {
         <div className="wiki-portal-header">Article Page Features</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Article header</strong> &mdash; title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped at the top of the page.</li>
+            <li><strong>Action panel</strong> &mdash; article controls are grouped as Navigate, Collect, Share, Read, and Tools.</li>
+            <li><strong>Taxonomy footer</strong> &mdash; category and tag links appear as wrapping chips near the bottom of the article.</li>
+            <li><strong>Responsive layout</strong> &mdash; article tabs, infoboxes, table of contents, backlinks, and action groups are constrained for narrow screens.</li>
             <li><strong>Reading time</strong> &mdash; every article shows &ldquo;~X min read&rdquo; in the byline, estimated at 200 words per minute.</li>
             <li><strong>Reading ETA</strong> &mdash; the byline also shows &ldquo;~X min left&rdquo; which updates live as you scroll through the article; disappears once you finish.</li>
             <li><strong>Reading mode</strong> &mdash; click &ldquo;Reading mode&rdquo; in the article toolbar (or press <kbd>R</kbd>) to enter a distraction-free view that hides the header and sidebar. Press again or <kbd>R</kbd> to exit.</li>

@@ -98,6 +98,10 @@ src/
       MapSearch.tsx
     articles/                 # Article display components
       ArticleCard.tsx
+    article/
+      ArticleActionPanel.tsx   # Grouped article actions
+      ArticlePageHeader.tsx    # Article hero metadata and badges
+      ArticleTaxonomyFooter.tsx # Category/tag chip footer
     (37 root-level components)  # Badge, Breadcrumb, Toast, Pagination, ThemeToggle,
                                 # KeyboardShortcuts, NotificationBell, UserAvatar,
                                 # CategoryManager, TagManager, TagPicker, etc.

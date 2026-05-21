@@ -16,6 +16,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.66
+
+- [x] Article page shell refresh - article display now uses a dedicated hero header, grouped action panel, taxonomy footer, and cleaner notice stack
+- [x] Article action redesign - Navigate, Collect, Share, Read, and Tools controls are grouped in a responsive action panel instead of stacked toolbar rows
+- [x] Reading surface polish - summary, flags, freshness, review notices, backlinks, fork actions, and category/tag context now use shared semantic UI primitives
+- [x] Responsive article layout - tabs, infoboxes, table of contents, action groups, link chips, and mobile typography are constrained for phone through wide desktop widths
+
 ## v4.65
 
 - [x] Unified search response handling — header instant search, search page, command palette, wiki-link autocomplete, split-view pickers, and article edit fallback now consume the same `/api/search` response contract

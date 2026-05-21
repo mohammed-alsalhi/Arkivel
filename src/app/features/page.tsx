@@ -137,6 +137,10 @@ export default function FeaturesPage() {
         <div className="wiki-portal-header">Article Page</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Article hero header</strong> — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header</li>
+            <li><strong>Grouped action panel</strong> — Navigate, Collect, Share, Read, and Tools controls are arranged in a responsive panel instead of stacked toolbar rows</li>
+            <li><strong>Taxonomy footer</strong> — category and tags render as wrapping chips at the end of the article rather than pipe-separated text</li>
+            <li><strong>Responsive article shell</strong> — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens</li>
             <li><strong>Reading time estimator</strong> — &ldquo;~X min read&rdquo; computed at 200 wpm displayed in every article&apos;s metadata line</li>
             <li><strong>Draft share links</strong> — admins generate a secret-token URL (<code className="bg-surface-hover px-1 text-[12px]">/share/[token]</code>) so non-admins can preview a draft without publishing</li>
             <li><strong>Expiry warning banner</strong> — yellow inline banner when an article&apos;s <em>reviewDueAt</em> is within 30 days</li>

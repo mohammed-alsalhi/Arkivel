@@ -65,11 +65,19 @@ Related actions are grouped visually with a hairline divider:
 <span className="w-px h-4 bg-border mx-0.5" />
 ```
 
-Article action bar group order:
+Article action panel group order:
 1. **Navigate** — Present
 2. **Collect** — Bookmark, + List
 3. **Share / Export** — Copy link, Share, Print, Export ▾ (all formats in one dropdown)
-4. **Reading tools** — Aa (dyslexia), RTL, Translate ▾
+4. **Read** — font size, font preference, focus, night, contrast, text-only, dyslexia, RTL, reading mode, width, theme
+5. **Tools** — audio, speed reader, quiz, tutor, review, translate, copy, duplicate
+
+Article pages should use the dedicated article shell:
+- Hero header for title, category, excerpt, edit attribution, freshness, verification, reading metrics, and co-authors.
+- Grouped action panel for Navigate, Collect, Share, Read, and Tools actions.
+- Notice stack for status, review due, pinned, disambiguation, and maintenance flags.
+- Taxonomy footer with wrapping category/tag chips, not pipe-separated text.
+- Backlinks and dense article adjuncts should wrap as compact chips or panels rather than long inline lists.
 
 ### Dropdowns
 

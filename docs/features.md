@@ -195,6 +195,10 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 
 ## Article Page
 
+- **Article hero header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header
+- **Grouped action panel** — Navigate, Collect, Share, Read, and Tools controls are arranged in a responsive panel instead of stacked toolbar rows
+- **Taxonomy footer** — category and tags render as wrapping chips at the end of the article rather than pipe-separated text
+- **Responsive article shell** — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens
 - **Reading time estimator** — "~X min read" computed at 200 wpm displayed in every article's metadata line
 - **Draft share links** — admins generate a secret-token URL (`/share/[token]`) so non-admins can preview a draft without publishing
 - **Expiry warning banner** — yellow inline banner when an article's *reviewDueAt* is within 30 days
