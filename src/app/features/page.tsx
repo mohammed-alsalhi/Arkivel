@@ -89,7 +89,9 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
+            <li><strong>Unified search surfaces</strong> — header search, the search page, command palette, wiki-link autocomplete, split view pickers, and edit fallback all consume the same search result contract</li>
             <li><strong>Responsive app shell</strong> — desktop and tablet layouts keep the dense collapsible sidebar; phone layouts add a safe-area-aware bottom nav for Home, Search, Create, Recent, and Menu; focused workspace pages keep the compact top menu so canvases and composers are not covered</li>
+            <li><strong>Command palette navigation</strong> — <code className="bg-surface-hover px-1 text-[12px]">Cmd+K</code> / <code className="bg-surface-hover px-1 text-[12px]">Ctrl+K</code> opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces</li>
             <li><strong>Word-count search filter</strong> — advanced search includes min/max word count range to find articles by length</li>
             <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>
             <li><strong>30-day view sparkline</strong> — article stats panel shows a mini bar chart of daily page views for the past 30 days</li>

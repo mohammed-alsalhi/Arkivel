@@ -166,6 +166,7 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li>The search bar provides instant results as you type; press <strong>Enter</strong> for the <Link href="/search">full search page</Link></li>
+            <li>Instant search, the full search page, command palette, wiki-link autocomplete, split view article pickers, and edit fallback all use the same search result contract</li>
             <li>Multi-word queries use <strong>AND</strong> logic — every word must appear somewhere in the article</li>
             <li>Results are ranked: exact title match &gt; starts with &gt; title contains &gt; content-only</li>
             <li><strong>Semantic search:</strong> set <code className="bg-surface-hover px-1 text-[12px]">OPENAI_API_KEY</code> to blend AI-ranked results based on meaning, not just keywords</li>
@@ -503,6 +504,7 @@ export default function HelpPage() {
         <div className="wiki-portal-header">Navigation &amp; Organization</div>
         <div className="wiki-portal-body text-[13px]">
           <p className="mb-1">On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps Home, Search, Create, Recent, and Menu one tap away. Menu opens the same sidebar contents and closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so canvases and composers are not covered.</p>
+          <p className="mb-2">Use <kbd>Cmd+K</kbd> / <kbd>Ctrl+K</kbd> to open the command palette from anywhere. It groups destinations across navigation, discovery, personal, reference, and admin areas, then searches articles in the same panel when you type a query.</p>
           <p className="font-semibold mb-0.5">Navigation</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
             <li><Link href="/">Main Page</Link>, <Link href="/articles">All articles</Link>, <Link href="/recent-changes">Recent changes</Link>, <Link href="/random">Random article</Link></li>

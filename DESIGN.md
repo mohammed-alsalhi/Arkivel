@@ -89,6 +89,7 @@ Article action bar group order:
 - Tables and dense data panels should keep their container width stable and scroll internally on narrow screens.
 - Dropdowns and popovers must clamp to the viewport on phones. Header dropdowns should become fixed, inset panels when absolute alignment would push them off-screen.
 - Modal headers, footers, and button rows must wrap before they overflow. Avoid fixed-width modal internals unless there is an internal scroll region.
+- Search and article-list discovery filters should use wrapping chips, stacked sidebars, or constrained internal scroll areas instead of pipe-separated text rows that become unreadable on narrow screens.
 - Responsive QA is not mobile-only: new or changed global UI should be checked at phone, tablet, laptop, and wide desktop widths for horizontal overflow, clipped controls, and covered interactive targets.
 
 ---

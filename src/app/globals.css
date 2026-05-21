@@ -1421,13 +1421,13 @@ kbd {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 15vh;
+  padding: 15vh 0.75rem 0;
   animation: fade-in 0.15s ease-out;
 }
 .command-palette {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  width: 90%;
+  width: min(90vw, 520px);
   max-width: 520px;
   max-height: 60vh;
   display: flex;
@@ -1492,7 +1492,11 @@ kbd {
 .command-palette-item-active {
   background: var(--color-surface-hover);
 }
-.command-palette-item-label { flex: 1; }
+.command-palette-item-label {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .command-palette-item-shortcut {
   display: flex;
   align-items: center;
@@ -1512,6 +1516,27 @@ kbd {
   text-align: center;
   font-size: 0.8rem;
   color: var(--color-muted);
+}
+
+@media (max-width: 639px) {
+  .command-palette-overlay {
+    padding: 0.75rem;
+  }
+
+  .command-palette {
+    width: 100%;
+    max-height: calc(100dvh - 1.5rem);
+  }
+
+  .command-palette-item {
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .command-palette-item-shortcut,
+  .command-palette-item-category {
+    white-space: nowrap;
+  }
 }
 
 /* ── #37: Wiki Link Preview Card ── */

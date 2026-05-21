@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
+import { isFocusedWorkspacePath } from "@/lib/navigation";
 
 const navItems = [
   {
@@ -48,12 +49,7 @@ const navItems = [
 export default function MobileNavigation() {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const hideForFocusedWorkspace =
-    pathname === "/ask" ||
-    pathname === "/graph" ||
-    pathname === "/split" ||
-    pathname.startsWith("/map") ||
-    pathname.startsWith("/present");
+  const hideForFocusedWorkspace = isFocusedWorkspacePath(pathname);
 
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((prev) => !prev);

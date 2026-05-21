@@ -213,39 +213,47 @@ function ArticlesPageContent() {
       </p>
 
       {/* Filters */}
-      <div className="wiki-notice mb-3">
-        <strong>Filter by category: </strong>
-        <Link href="/articles" className={!category && !tag ? "font-bold" : ""}>
-          All
-        </Link>
-        {categories.map((cat) => (
-          <span key={cat.id}>
-            {" | "}
-            <Link
-              href={`/articles?category=${cat.slug}`}
-              className={category === cat.slug ? "font-bold" : ""}
-            >
-              {cat.name}
-            </Link>
-          </span>
-        ))}
-        {tags.length > 0 && (
-          <>
-            <br />
-            <strong>Filter by tag: </strong>
-            {tags.map((t, i) => (
-              <span key={t.id}>
-                {i > 0 && " | "}
+      <div className="wiki-portal mb-3">
+        <div className="wiki-portal-header">Browse filters</div>
+        <div className="wiki-portal-body space-y-3">
+          <div>
+            <p className="ui-label">Category</p>
+            <div className="flex flex-wrap gap-1.5">
+              <Link
+                href="/articles"
+                className={`ui-chip hover:no-underline ${!category && !tag ? "ui-chip-info" : ""}`}
+              >
+                All
+              </Link>
+              {categories.map((cat) => (
                 <Link
-                  href={`/articles?tag=${t.slug}`}
-                  className={tag === t.slug ? "font-bold" : ""}
+                  key={cat.id}
+                  href={`/articles?category=${cat.slug}`}
+                  className={`ui-chip hover:no-underline ${category === cat.slug ? "ui-chip-info" : ""}`}
                 >
-                  {t.name}
+                  {cat.name}
                 </Link>
-              </span>
-            ))}
-          </>
-        )}
+              ))}
+            </div>
+          </div>
+
+          {tags.length > 0 && (
+            <div>
+              <p className="ui-label">Tag</p>
+              <div className="flex max-h-32 flex-wrap gap-1.5 overflow-y-auto pr-1">
+                {tags.map((t) => (
+                  <Link
+                    key={t.id}
+                    href={`/articles?tag=${t.slug}`}
+                    className={`ui-chip hover:no-underline ${tag === t.slug ? "ui-chip-info" : ""}`}
+                  >
+                    {t.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Article list */}
@@ -256,64 +264,66 @@ function ArticlesPageContent() {
           No articles found. <Link href="/articles/new">Create one.</Link>
         </div>
       ) : (
-        <table className="ui-table">
-          <thead>
-            <tr>
-              {isAdmin && (
-                <th className="w-8 text-center">
-                  <input
-                    type="checkbox"
-                    checked={selected.size === articles.length && articles.length > 0}
-                    onChange={toggleSelectAll}
-                  />
-                </th>
-              )}
-              <th>Article</th>
-              <th className="w-32">Category</th>
-              <th className="w-28">Last edited</th>
-            </tr>
-          </thead>
-          <tbody>
-            {articles.map((article) => (
-              <tr key={article.id}>
+        <div className="overflow-x-auto">
+          <table className="ui-table">
+            <thead>
+              <tr>
                 {isAdmin && (
-                  <td className="text-center">
+                  <th className="w-8 text-center">
                     <input
                       type="checkbox"
-                      checked={selected.has(article.id)}
-                      onChange={() => toggleSelect(article.id)}
+                      checked={selected.size === articles.length && articles.length > 0}
+                      onChange={toggleSelectAll}
                     />
-                  </td>
+                  </th>
                 )}
-                <td>
-                  <Link href={`/articles/${article.slug}`} className="font-medium">
-                    {article.title}
-                  </Link>
-                  {article.status !== "published" && (
-                    <span className="ml-2"><ArticleStatusBadge status={article.status} /></span>
-                  )}
-                  {article.excerpt && (
-                    <span className="text-muted text-[12px]">
-                      {" "}&ndash; {article.excerpt.substring(0, 100)}{article.excerpt.length > 100 ? "..." : ""}
-                    </span>
-                  )}
-                </td>
-                <td className="text-muted">
-                  {article.category ? (
-                    <Link href={`/categories/${article.category.slug}`}>
-                      {article.category.name}
-                    </Link>
-                  ) : (
-                    <span className="italic">None</span>
-                  )}
-                </td>
-                <td className="text-muted text-[12px]">
-                  {formatDate(article.updatedAt)}
-                </td>
+                <th>Article</th>
+                <th className="w-32">Category</th>
+                <th className="w-28">Last edited</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {articles.map((article) => (
+                <tr key={article.id}>
+                  {isAdmin && (
+                    <td className="text-center">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(article.id)}
+                        onChange={() => toggleSelect(article.id)}
+                      />
+                    </td>
+                  )}
+                  <td>
+                    <Link href={`/articles/${article.slug}`} className="font-medium">
+                      {article.title}
+                    </Link>
+                    {article.status !== "published" && (
+                      <span className="ml-2"><ArticleStatusBadge status={article.status} /></span>
+                    )}
+                    {article.excerpt && (
+                      <span className="text-muted text-[12px]">
+                        {" "}&ndash; {article.excerpt.substring(0, 100)}{article.excerpt.length > 100 ? "..." : ""}
+                      </span>
+                    )}
+                  </td>
+                  <td className="text-muted">
+                    {article.category ? (
+                      <Link href={`/categories/${article.category.slug}`}>
+                        {article.category.name}
+                      </Link>
+                    ) : (
+                      <span className="italic">None</span>
+                    )}
+                  </td>
+                  <td className="text-muted text-[12px]">
+                    {formatDate(article.updatedAt)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* Batch action bar */}

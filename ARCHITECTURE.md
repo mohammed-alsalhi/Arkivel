@@ -103,6 +103,8 @@ src/
                                 # CategoryManager, TagManager, TagPicker, etc.
   lib/
     prisma.ts                 # Prisma client singleton (globalThis caching for dev)
+    navigation.ts             # Shared command destinations and focused workspace route detection
+    search-response.ts        # Client-safe normalizer for internal search API response shapes
     auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
     api-auth.ts               # API key validation for public REST API
     config.ts                 # Environment-driven branding config
@@ -210,6 +212,8 @@ Responsive shell changes should be verified across phone, tablet, laptop, and wi
 
 ### Search
 Relevance-ranked full-text search. Multi-word queries use AND logic. Results scored by: exact title match (100) > starts with (80) > title contains (60) > content only (0). Search covers titles, content, and excerpts.
+
+`/api/search` returns an object response containing `results`, optional `semanticResults`, and optional `suggestions`. Client surfaces must consume it through `src/lib/search-response.ts` so header instant search, the search page, command palette article lookup, wiki-link autocomplete, split view pickers, and edit fallbacks stay aligned if the API shape evolves. Semantic search results are displayed as a distinct group on the search page when enabled.
 
 ### Map
 Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet with `CRS.Simple` for pixel coordinates on a custom image. Dynamically imported to avoid SSR issues. Supports multiple maps, layers, and zoom-dependent detail levels.

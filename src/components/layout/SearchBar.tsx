@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { getSearchResults } from "@/lib/search-response";
 
 type SearchResult = {
   id: string;
@@ -38,8 +39,9 @@ export default function SearchBar() {
       const res = await fetch(`/api/search?q=${encodeURIComponent(trimmed)}&limit=5`);
       if (res.ok) {
         const data = await res.json();
-        setResults(data);
-        setOpen(true);
+        const nextResults = getSearchResults<SearchResult>(data);
+        setResults(nextResults);
+        setOpen(nextResults.length > 0);
       }
     }, 300);
 

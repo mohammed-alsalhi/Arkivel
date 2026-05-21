@@ -6,6 +6,7 @@ import { clsx } from "clsx";
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
 import { config } from "@/lib/config";
+import { isFocusedWorkspacePath } from "@/lib/navigation";
 
 type Category = {
   id: string;
@@ -67,13 +68,7 @@ export default function Sidebar({
   const [mobileOpen, setMobileOpen] = useState(false);
   const isAdmin = useAdmin();
   const close = () => setMobileOpen(false);
-  const showTopMobileToggle =
-    pathname === "/ask" ||
-    pathname === "/graph" ||
-    pathname === "/split" ||
-    pathname === "/map" ||
-    pathname.startsWith("/map/") ||
-    pathname.startsWith("/present");
+  const showTopMobileToggle = isFocusedWorkspacePath(pathname);
 
   useEffect(() => {
     function handleMobileToggle() {
@@ -197,9 +192,6 @@ export default function Sidebar({
         <SidebarSection title="Discover">
           <SidebarLink href="/explore" active={pathname === "/explore"} onClick={close}>
             Explore
-          </SidebarLink>
-          <SidebarLink href="/api/random" active={false} onClick={close}>
-            Random article
           </SidebarLink>
           <SidebarLink href="/activity" active={pathname === "/activity"} onClick={close}>
             Activity

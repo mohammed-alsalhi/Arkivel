@@ -132,6 +132,7 @@ Press `Ctrl+Shift+L` (Cmd on Mac) to insert a wiki link.
 ## Search
 
 - The search bar provides instant results as you type; press **Enter** for the full search page
+- Instant search, the full search page, the command palette, wiki-link autocomplete, split view article pickers, and edit fallback all use the same search result contract
 - Multi-word queries use **AND** logic — every word must appear somewhere in the article
 - Results are ranked: exact title match > starts with > title contains > content-only
 - **Semantic search:** set `OPENAI_API_KEY` to blend AI-ranked results based on meaning, not just keywords
@@ -392,6 +393,8 @@ Optional feature, disabled by default. Enable with `NEXT_PUBLIC_MAP_ENABLED=true
 ## Navigation & Organization
 
 On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps the most common destinations one tap away: Home, Search, Create, Recent, and Menu. The Menu item opens the same sidebar contents, then closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so their canvases and composers are not covered.
+
+Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups destinations across navigation, discovery, personal, reference, and admin areas, then searches articles in the same panel when you type a query.
 
 **Navigation section:**
 - **Main Page** — `/`, the wiki home

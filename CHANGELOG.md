@@ -4,6 +4,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.65.0] - 2026-05-21
+
+### Changed
+
+- **Unified search response handling** — Added a shared client-safe search response normalizer and rewired the header search, full search page, command palette, wiki-link suggester, split-view article pickers, and article edit fallback so they all understand the current `/api/search` object response shape.
+- **Command and navigation consistency** — Added a central navigation registry for command destinations and focused-workspace route detection, expanded command palette destinations across discovery/personal/reference/admin surfaces, and fixed stale canonical article links from `/wiki/*` to `/articles/*`.
+- **Responsive discovery surfaces** — Reworked search and article-list discovery layouts so advanced filters, semantic results, article filter chips, batch bars, and tables wrap or scroll intentionally across phone, tablet, laptop, and wide desktop widths.
+- **Responsive QA guardrails** — Added Playwright coverage for core shell routes at phone, tablet, laptop, and wide desktop breakpoints, plus unit tests for the search response and navigation registries.
+
 ## [4.64.3] - 2026-05-21
 
 ### Documentation

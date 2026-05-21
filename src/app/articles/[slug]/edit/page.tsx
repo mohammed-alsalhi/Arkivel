@@ -13,6 +13,7 @@ import ArticleLockGuard from "@/components/ArticleLockGuard";
 import FocalPointPicker from "@/components/FocalPointPicker";
 import ZenModeToggle from "@/components/editor/ZenModeToggle";
 import SmartSuggestions from "@/components/editor/SmartSuggestions";
+import { getSearchResults } from "@/lib/search-response";
 
 type CategoryItem = { id: string; name: string; slug: string; parentId: string | null; children?: CategoryItem[] };
 
@@ -90,7 +91,9 @@ export default function EditArticlePage() {
       if (!found) {
         const searchRes = await fetch(`/api/search?q=${params.slug}&limit=1`);
         if (searchRes.ok) {
-          const results = await searchRes.json();
+          const results = getSearchResults<{ id: string; title: string; slug: string }>(
+            await searchRes.json()
+          );
           if (results.length > 0) {
             const detailRes = await fetch(`/api/articles/${results[0].id}`);
             if (detailRes.ok) {

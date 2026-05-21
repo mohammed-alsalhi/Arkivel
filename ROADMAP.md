@@ -16,6 +16,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.65
+
+- [x] Unified search response handling — header instant search, search page, command palette, wiki-link autocomplete, split-view pickers, and article edit fallback now consume the same `/api/search` response contract
+- [x] Command and navigation registry — command destinations and focused workspace route detection are centralized so global commands, sidebar toggles, and mobile navigation behavior stay aligned
+- [x] Responsive discovery surfaces — search filters, semantic search results, article filters, batch bars, and listing tables wrap or scroll intentionally across phone, tablet, laptop, and wide desktop widths
+- [x] Responsive QA guardrails — unit tests cover search/navigation helpers and Playwright checks core shell routes across phone, tablet, laptop, and wide desktop breakpoints
+
 ## v4.64
 
 - [x] UI restandardization — shared compact wiki primitives for titles, buttons, icon buttons, inputs, selects, toolbars, panels, dropdowns, chips, tables, empty states, article cards, article tools, auth forms, and admin/listing surfaces

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { getSearchResults } from "@/lib/search-response";
 
 type SearchResult = {
   id: string;
@@ -53,7 +54,7 @@ export default function WikiLinkSuggester({
         );
         if (res.ok) {
           const data = await res.json();
-          setResults(data);
+          setResults(getSearchResults<SearchResult>(data));
           setSelectedIndex(0);
         }
       } finally {

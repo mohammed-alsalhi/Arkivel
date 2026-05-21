@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { getSearchResults } from "@/lib/search-response";
 
 function ArticleFrame({ slug }: { slug: string }) {
   return (
@@ -28,7 +29,11 @@ function SlugPicker({ value, onChange, placeholder }: { value: string; onChange:
     timer.current = setTimeout(() => {
       fetch(`/api/search?q=${encodeURIComponent(v)}&limit=8`)
         .then((r) => r.ok ? r.json() : [])
-        .then((data) => { setResults(Array.isArray(data) ? data : []); setOpen(true); })
+        .then((data) => {
+          const nextResults = getSearchResults<{ id: string; title: string; slug: string }>(data);
+          setResults(nextResults);
+          setOpen(nextResults.length > 0);
+        })
         .catch(() => {});
     }, 250);
   }

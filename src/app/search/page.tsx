@@ -4,6 +4,11 @@ import Link from "next/link";
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import SearchHistory, { recordSearch } from "@/components/SearchHistory";
+import {
+  getSearchResults,
+  getSearchSuggestions,
+  getSemanticSearchResults,
+} from "@/lib/search-response";
 
 type SearchResult = {
   id: string;
@@ -35,6 +40,7 @@ function SearchContent() {
   const q = searchParams.get("q")?.trim() || "";
 
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [semanticResults, setSemanticResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [didYouMean, setDidYouMean] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -74,6 +80,7 @@ function SearchContent() {
   const doSearch = useCallback(async () => {
     if (!q || q.length < 2) {
       setResults([]);
+      setSemanticResults([]);
       return;
     }
 
@@ -90,34 +97,42 @@ function SearchContent() {
     try {
       const res = await fetch(`/api/search?${params.toString()}`);
       const data = await res.json();
-      if (Array.isArray(data)) {
-        setResults(data);
-        if (data.length > 0) {
-          recordSearch(q);
-          setDidYouMean(null);
-        } else {
-          // Did-you-mean: find a title whose words overlap with query words
-          const words = q.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
-          if (words.length > 0) {
-            const titlesRes = await fetch("/api/articles/titles");
-            if (titlesRes.ok) {
-              const titles: { title: string; slug: string }[] = await titlesRes.json();
-              let best: { title: string; slug: string } | null = null;
-              let bestScore = 0;
-              for (const t of titles) {
-                const lower = t.title.toLowerCase();
-                const score = words.filter((w) => lower.includes(w)).length;
-                if (score > bestScore) { bestScore = score; best = t; }
-              }
-              setDidYouMean(bestScore > 0 ? best!.title : null);
+      const nextResults = getSearchResults<SearchResult>(data);
+      const nextSemanticResults = getSemanticSearchResults<SearchResult>(data);
+      const suggestions = getSearchSuggestions(data);
+      const totalResults = nextResults.length + nextSemanticResults.length;
+
+      setResults(nextResults);
+      setSemanticResults(nextSemanticResults);
+
+      if (totalResults > 0) {
+        recordSearch(q);
+        setDidYouMean(null);
+      } else if (suggestions.length > 0) {
+        setDidYouMean(suggestions[0]);
+      } else {
+        // Did-you-mean: find a title whose words overlap with query words
+        const words = q.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+        if (words.length > 0) {
+          const titlesRes = await fetch("/api/articles/titles");
+          if (titlesRes.ok) {
+            const titles: { title: string; slug: string }[] = await titlesRes.json();
+            let best: { title: string; slug: string } | null = null;
+            let bestScore = 0;
+            for (const t of titles) {
+              const lower = t.title.toLowerCase();
+              const score = words.filter((w) => lower.includes(w)).length;
+              if (score > bestScore) { bestScore = score; best = t; }
             }
-          } else {
-            setDidYouMean(null);
+            setDidYouMean(bestScore > 0 ? best!.title : null);
           }
+        } else {
+          setDidYouMean(null);
         }
       }
     } catch {
       setResults([]);
+      setSemanticResults([]);
     } finally {
       setLoading(false);
     }
@@ -174,6 +189,7 @@ function SearchContent() {
   }
 
   const hasFilters = selectedCategory || selectedTags.length > 0 || dateFrom || dateTo || wordCountMin || wordCountMax;
+  const resultCount = results.length + semanticResults.length;
 
   if (!q || q.length < 2) {
     return (
@@ -194,7 +210,7 @@ function SearchContent() {
         <p className="min-w-0 text-[12px] text-muted">
           {loading
             ? "Searching..."
-            : `${results.length} result${results.length !== 1 ? "s" : ""} for \u201C${q}\u201D`}
+            : `${resultCount} result${resultCount !== 1 ? "s" : ""} for \u201C${q}\u201D`}
           {hasFilters && " (filtered)"}
         </p>
         <div className="flex flex-wrap items-center gap-2">
@@ -244,10 +260,10 @@ function SearchContent() {
         </div>
       )}
 
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row">
         {/* Filter sidebar */}
         {showAdvanced && (
-          <aside className="w-56 flex-shrink-0">
+          <aside className="w-full flex-shrink-0 lg:w-56">
             <div className="wiki-portal">
               <div className="wiki-portal-header">Filters</div>
               <div className="wiki-portal-body space-y-3">
@@ -366,7 +382,7 @@ function SearchContent() {
 
         {/* Results */}
         <div className="flex-1 min-w-0">
-          {results.length === 0 && !loading ? (
+          {results.length === 0 && semanticResults.length === 0 && !loading ? (
             <div className="wiki-notice">
               There were no results matching the query.{" "}
               {hasFilters && (
@@ -430,6 +446,40 @@ function SearchContent() {
                 </li>
               ))}
             </ul>
+          )}
+
+          {semanticResults.length > 0 && (
+            <div className="mt-5">
+              <h2 className="ui-section-title">Semantic matches</h2>
+              <ul className="space-y-2 text-[13px]">
+                {semanticResults.map((article) => (
+                  <li key={article.id} className="border-b border-border pb-2">
+                    <div>
+                      <Link
+                        href={`/articles/${article.slug}`}
+                        className="font-bold text-[15px] text-wiki-link"
+                        style={{ fontFamily: "var(--font-serif)" }}
+                      >
+                        {article.title}
+                      </Link>
+                      {article.category && (
+                        <span className="ml-2 text-[12px] text-muted">
+                          ({article.category.name})
+                        </span>
+                      )}
+                    </div>
+                    {(article.highlightedExcerpt || article.excerpt) && (
+                      <p
+                        className="mt-0.5 text-muted leading-relaxed"
+                        dangerouslySetInnerHTML={{
+                          __html: article.highlightedExcerpt || article.excerpt || "",
+                        }}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </div>

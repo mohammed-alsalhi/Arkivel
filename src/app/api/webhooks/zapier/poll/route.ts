@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
         slug: "sample-article-title",
         excerpt: "This is a sample article excerpt for Zapier field mapping.",
         status: "published",
-        url: `${process.env.NEXT_PUBLIC_APP_URL || ""}/wiki/sample-article-title`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL || ""}/articles/sample-article-title`,
         category: null,
         tags: [],
         createdAt: new Date().toISOString(),
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
     slug: a.slug,
     excerpt: a.excerpt,
     status: a.status,
-    url: `${baseUrl}/wiki/${a.slug}`,
+    url: `${baseUrl}/articles/${a.slug}`,
     category: a.category
       ? { id: a.category.id, name: a.category.name, slug: a.category.slug }
       : null,
