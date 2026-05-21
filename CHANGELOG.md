@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.69.0] - 2026-05-21
+
+### Added
+
+- **Knowledge cockpit upgrade** - Rebuilt `/intelligence` around a live cockpit surface with a real article constellation, readiness radar, and impact simulator instead of only static engine cards.
+- **Article constellation graph** - Added top connected article nodes and live wiki-link edges to the intelligence report, with selected-node readouts and direct article navigation.
+- **Readiness radar model** - Added readiness, graph, structure, freshness, trust, audience, and momentum axes to `/api/intelligence` and the command-center UI.
+- **Impact simulator** - Added interactive cleanup levers for stubs, orphans, broken links, stale pages, taxonomy debt, and verification debt so editors can see projected readiness gains before choosing work.
+- **Command-center prominence** - Promoted the command center into the home page action cluster and expanded responsive shell coverage for the new cockpit surface.
+
 ## [4.68.0] - 2026-05-21
 
 ### Added

@@ -63,4 +63,14 @@ test.describe("Responsive shell", () => {
     await expect(page.getByPlaceholder("Search articles")).toBeFocused();
     await expectNoHorizontalOverflow(page);
   });
+
+  test("renders the intelligence cockpit without viewport overflow", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/intelligence");
+
+    await expect(page.locator(".intelligence-cockpit")).toBeVisible();
+    await expect(page.locator(".intelligence-radar-panel")).toBeVisible();
+    await expect(page.locator(".intelligence-simulator-panel")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  });
 });

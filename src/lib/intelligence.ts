@@ -28,6 +28,45 @@ export type IntelligenceAction = {
   priority: "High" | "Medium" | "Low";
 };
 
+export type IntelligenceRadarMetric = {
+  label: string;
+  value: number;
+  detail: string;
+};
+
+export type IntelligenceConstellationNode = {
+  id: string;
+  title: string;
+  href: string;
+  label: string;
+  value: number;
+  x: number;
+  y: number;
+  radius: number;
+  tone: IntelligenceTone;
+};
+
+export type IntelligenceConstellationLink = {
+  source: string;
+  target: string;
+};
+
+export type IntelligenceConstellation = {
+  nodes: IntelligenceConstellationNode[];
+  links: IntelligenceConstellationLink[];
+};
+
+export type IntelligencePressure = {
+  stubs: number;
+  orphans: number;
+  brokenLinks: number;
+  stale: number;
+  taxonomyDebt: number;
+  reviewDue: number;
+  unverified: number;
+  cleanupTagged: number;
+};
+
 export type IntelligenceReport = {
   generatedAt: string;
   readinessScore: number;
@@ -42,6 +81,9 @@ export type IntelligenceReport = {
     words: number;
     links: number;
   };
+  radar: IntelligenceRadarMetric[];
+  constellation: IntelligenceConstellation;
+  pressures: IntelligencePressure;
   sections: IntelligenceSection[];
   actions: IntelligenceAction[];
 };
@@ -131,6 +173,17 @@ function topArticleLink(articles: IntelligenceArticle[], predicate: (article: In
   return article ? `/articles/${article.slug}` : "/articles";
 }
 
+function scoreTone(score: number): IntelligenceTone {
+  if (score >= 75) return "good";
+  if (score >= 45) return "warn";
+  return "danger";
+}
+
+function coverageScore(part: number, whole: number): number {
+  if (whole <= 0) return 0;
+  return Math.max(0, Math.min(100, percent(part, whole)));
+}
+
 function buildReport(
   articles: IntelligenceArticle[],
   categories: IntelligenceCategory[],
@@ -197,6 +250,8 @@ function buildReport(
   const totalReads = published.reduce((sum, article) => sum + article._count.reads + article._count.pageViews, 0);
   const activeThisWeek = countBy(articles, (article) => now - new Date(article.updatedAt).getTime() <= 7 * DAY_MS);
   const staleRatio = percent(stale, published.length);
+  const taxonomyDebt = uncategorized.length + untagged.length;
+  const unverified = published.length - verified.length;
   const readinessScore = Math.max(
     0,
     Math.min(
@@ -205,13 +260,92 @@ function buildReport(
         100
           - percent(stubs.length, Math.max(1, published.length)) * 0.16
           - percent(orphans.length, Math.max(1, published.length)) * 0.16
-          - percent(uncategorized.length + untagged.length, Math.max(1, published.length * 2)) * 0.18
+          - percent(taxonomyDebt, Math.max(1, published.length * 2)) * 0.18
           - Math.min(20, brokenLinks)
           - staleRatio * 0.12
           + Math.min(10, percent(featured.length, Math.max(1, published.length)))
       )
     )
   );
+  const linkDensity = published.length ? totalWikiLinks / published.length : 0;
+  const graphScore = Math.min(100, Math.round((linkDensity / 3) * 100));
+  const structureScore = published.length
+    ? Math.round(
+        (
+          coverageScore(published.length - uncategorized.length, published.length)
+          + coverageScore(published.length - untagged.length, published.length)
+          + coverageScore(withInfobox.length, published.length)
+        ) / 3
+      )
+    : 0;
+  const freshnessScore = published.length ? Math.max(0, 100 - staleRatio) : 0;
+  const trustScore = published.length
+    ? Math.round((coverageScore(verified.length, published.length) + coverageScore(featured.length, published.length)) / 2)
+    : 0;
+  const audienceScore = published.length ? Math.min(100, Math.round((totalReads / Math.max(1, published.length * 12)) * 100)) : 0;
+  const momentumScore = articles.length ? Math.min(100, Math.round((activeThisWeek / Math.max(1, articles.length)) * 200)) : 0;
+  const radar: IntelligenceRadarMetric[] = [
+    { label: "Readiness", value: readinessScore, detail: "Overall mission health" },
+    { label: "Graph", value: graphScore, detail: `${linkDensity.toFixed(1)} links per page` },
+    { label: "Structure", value: structureScore, detail: `${formatNumber(taxonomyDebt)} taxonomy gaps` },
+    { label: "Freshness", value: freshnessScore, detail: `${formatNumber(stale)} stale pages` },
+    { label: "Trust", value: trustScore, detail: `${formatNumber(unverified)} unverified pages` },
+    { label: "Audience", value: audienceScore, detail: `${formatNumber(totalReads)} reads and views` },
+    { label: "Momentum", value: momentumScore, detail: `${formatNumber(activeThisWeek)} updates this week` },
+  ];
+
+  const articleScores = published
+    .map((article) => {
+      const inbound = inboundCounts.get(article.id) ?? 0;
+      const outbound = linkCounts.get(article.id)?.length ?? 0;
+      const views = article._count.reads + article._count.pageViews;
+      const revisions = article._count.revisions;
+      return {
+        article,
+        inbound,
+        outbound,
+        views,
+        score: inbound * 4 + outbound * 3 + revisions * 1.4 + views * 0.35 + (article.isPinned || article.isFeatured ? 8 : 0),
+      };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 14);
+  const constellationNodes: IntelligenceConstellationNode[] = articleScores.map((item, index) => {
+    const count = Math.max(1, articleScores.length - 1);
+    const angle = -Math.PI / 2 + ((Math.max(0, index - 1) / count) * Math.PI * 2);
+    const orbit = index === 0 ? 0 : index <= 5 ? 30 : 42;
+    const graphValue = item.inbound + item.outbound;
+    const x = index === 0 ? 50 : Math.round((50 + Math.cos(angle) * orbit) * 10) / 10;
+    const y = index === 0 ? 50 : Math.round((50 + Math.sin(angle) * orbit) * 10) / 10;
+
+    return {
+      id: item.article.id,
+      title: item.article.title,
+      href: `/articles/${item.article.slug}`,
+      label: item.article.category?.name ?? `${formatNumber(graphValue)} wiki links`,
+      value: graphValue,
+      x,
+      y,
+      radius: Math.max(3.8, Math.min(8.5, 4 + item.score / 16)),
+      tone: scoreTone(Math.min(100, item.score * 4)),
+    };
+  });
+  const constellationNodeIds = new Set(constellationNodes.map((node) => node.id));
+  const constellationEdgeKeys = new Set<string>();
+  const constellationLinks: IntelligenceConstellationLink[] = [];
+
+  for (const item of articleScores) {
+    const links = linkCounts.get(item.article.id) ?? [];
+    for (const link of links) {
+      const targetId = idByTarget.get(normalizeTarget(link));
+      if (!targetId || targetId === item.article.id || !constellationNodeIds.has(targetId)) continue;
+
+      const edgeKey = `${item.article.id}:${targetId}`;
+      if (constellationEdgeKeys.has(edgeKey)) continue;
+      constellationEdgeKeys.add(edgeKey);
+      constellationLinks.push({ source: item.article.id, target: targetId });
+    }
+  }
 
   const actions: IntelligenceAction[] = [
     {
@@ -242,7 +376,7 @@ function buildReport(
       title: uncategorized.length || untagged.length ? "Pay down taxonomy debt" : "Grow a signature taxonomy",
       description: `${formatNumber(uncategorized.length)} uncategorized and ${formatNumber(untagged.length)} untagged published pages.`,
       href: "/categories",
-      priority: uncategorized.length + untagged.length > 10 ? "High" : "Medium",
+      priority: taxonomyDebt > 10 ? "High" : "Medium",
     },
     {
       title: reviewCount || reviewDue ? "Clear the editorial queue" : "Create a review ritual",
@@ -366,12 +500,12 @@ function buildReport(
     {
       id: "taxonomy-debt",
       title: "Taxonomy debt scanner",
-      value: formatNumber(uncategorized.length + untagged.length),
+      value: formatNumber(taxonomyDebt),
       label: "category/tag gaps",
       description: "Combines uncategorized and untagged pages into one cleanup target.",
       href: "/categories",
       cta: "Organize pages",
-      tone: uncategorized.length + untagged.length > 0 ? "warn" : "good",
+      tone: taxonomyDebt > 0 ? "warn" : "good",
     },
     {
       id: "tag-constellations",
@@ -436,12 +570,12 @@ function buildReport(
     {
       id: "verification-debt",
       title: "Verification debt ledger",
-      value: formatNumber(published.length - verified.length),
+      value: formatNumber(unverified),
       label: "unverified pages",
       description: "Tracks articles without an explicit verification timestamp.",
       href: "/admin/quality",
       cta: "Verify facts",
-      tone: published.length - verified.length > 0 ? "warn" : "good",
+      tone: unverified > 0 ? "warn" : "good",
     },
     {
       id: "cleanup-tags",
@@ -495,6 +629,21 @@ function buildReport(
       revisions: revisionCount,
       words: totalWords,
       links: totalWikiLinks,
+    },
+    radar,
+    constellation: {
+      nodes: constellationNodes,
+      links: constellationLinks,
+    },
+    pressures: {
+      stubs: stubs.length,
+      orphans: orphans.length,
+      brokenLinks,
+      stale,
+      taxonomyDebt,
+      reviewDue,
+      unverified,
+      cleanupTagged: cleanupTagged.length,
     },
     sections,
     actions,

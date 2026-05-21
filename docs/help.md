@@ -315,8 +315,8 @@ Create standalone Excalidraw canvases at `/whiteboards` — separate from the Ex
 ## Analytics & Wiki Health
 
 - **Analytics dashboard** — scroll depth heatmap, reader navigation paths, search gap tracking
-- **Knowledge Command Center** — `/intelligence` combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one operational page
-- **Intelligence API** — `/api/intelligence` returns the same score, summary, 20 engines, and action queue as JSON
+- **Knowledge Command Center** — `/intelligence` combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines
+- **Intelligence API** — `/api/intelligence` returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON
 - **Search analytics** — `/admin/search-analytics` shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps
 - **Search gaps** — `/admin/search-gaps` shows top zero-result queries
 - **Stale articles** — `/admin/staleness` lists articles not updated in 180+ days
@@ -418,7 +418,7 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 **Discover section:**
 - **Explore** — `/explore`, curated entry points into the wiki
 - **Activity** — `/activity`, a feed of recent contributions
-- **Command center** — `/intelligence`, 20 live engines for wiki readiness, graph health, canon quality, reader demand, and next-best work
+- **Command center** — `/intelligence`, a live wiki cockpit for readiness, graph health, canon quality, reader demand, impact simulation, and next-best work
 - **Collections** — `/collections`, curated article sets
 - **Change requests** — `/change-requests`, pending edits awaiting review
 - **Reviews** — `/reviews`, articles flagged for quality review

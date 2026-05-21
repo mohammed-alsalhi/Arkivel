@@ -1,10 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import IntelligenceCockpit from "@/components/intelligence/IntelligenceCockpit";
 import { getIntelligenceReport } from "@/lib/intelligence";
 
 export const metadata: Metadata = {
   title: "Knowledge Command Center",
-  description: "Twenty live intelligence engines for wiki quality, graph health, canon readiness, and audience demand.",
+  description: "A live wiki cockpit with article constellation, readiness radar, impact simulator, and twenty operational intelligence engines.",
 };
 
 export const dynamic = "force-dynamic";
@@ -35,8 +36,8 @@ export default async function IntelligencePage() {
           <p className="ui-page-kicker">Intelligence</p>
           <h1 className="ui-page-title">Knowledge Command Center</h1>
           <p className="ui-page-dek">
-            Twenty live engines that turn the wiki into an operational system:
-            quality, graph health, editorial pressure, canon readiness, audience demand,
+            A live operational cockpit for the whole wiki: graph constellation,
+            readiness radar, impact simulation, quality engines, audience demand,
             and the next best work to do.
           </p>
         </div>
@@ -61,6 +62,8 @@ export default async function IntelligencePage() {
           ))}
         </div>
       </section>
+
+      <IntelligenceCockpit report={report} />
 
       <section className="wiki-portal intelligence-actions">
         <div className="wiki-portal-header">

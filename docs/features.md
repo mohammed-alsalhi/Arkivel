@@ -56,7 +56,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Main page front page** — `/` combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point
 - **Shared page headers** — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently
 - **Brand mark and compact search** — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm
-- **Knowledge Command Center** — `/intelligence` runs 20 live engines for mission readiness, editorial pressure, graph health, broken links, stubs, taxonomy debt, featured canon, translation surface, reader demand, verification debt, and cleanup flags
+- **Knowledge Command Center** — `/intelligence` runs 20 live engines for mission readiness, editorial pressure, graph health, broken links, stubs, taxonomy debt, featured canon, translation surface, reader demand, verification debt, and cleanup flags, then opens with a live article constellation, readiness radar, and impact simulator
 - **Command palette navigation** — `Cmd+K` / `Ctrl+K` opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces
 - **Word-count search filter** — advanced search includes min/max word count range to find articles by length
 - **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
@@ -340,7 +340,7 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Analytics** — scroll depth heatmap, navigation paths at `/admin/analytics`
 - **Performance metrics** — system metrics at `/admin/metrics`
 - **Health score** — A–F grade for link coverage, freshness, stub %, search gaps at `/admin/health`
-- **Intelligence JSON feed** — `/api/intelligence` exposes the command-center score, summary, 20 engines, and next-best-work queue for dashboards or automation
+- **Intelligence JSON feed** — `/api/intelligence` exposes the command-center score, summary, graph constellation, radar axes, pressure model, 20 engines, and next-best-work queue for dashboards or automation
 - **Content lint** — broken links, missing excerpts, orphans at `/admin/lint`
 - **Stale articles** — articles not updated in 180+ days at `/admin/staleness`
 - **Embeddings coverage** — semantic search index per article at `/admin/embeddings`

@@ -78,7 +78,7 @@ export const COMMAND_DESTINATIONS: CommandDestination[] = [
     label: "Knowledge Command Center",
     href: "/intelligence",
     group: "Discovery",
-    keywords: ["intelligence", "command", "ops", "signals", "quality", "canon", "usp"],
+    keywords: ["intelligence", "command", "ops", "signals", "quality", "canon", "cockpit", "radar", "constellation", "simulator", "usp"],
   },
   {
     id: "nav-ask",

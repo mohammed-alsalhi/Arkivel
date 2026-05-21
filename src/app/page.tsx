@@ -160,6 +160,7 @@ export default async function Home() {
         </div>
         <div className="ui-page-actions">
           <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
+          <Link href="/intelligence" className="ui-button">Command center</Link>
           <Link href="/search" className="ui-button">Search</Link>
           <Link href="/random" className="ui-button">Random</Link>
         </div>

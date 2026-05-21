@@ -413,8 +413,8 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Analytics dashboard</strong> &mdash; scroll depth heatmap, reader navigation paths, search gap tracking</li>
-            <li><strong>Knowledge Command Center</strong> &mdash; <Link href="/intelligence">/intelligence</Link> combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one operational page</li>
-            <li><strong>Intelligence API</strong> &mdash; <Link href="/api/intelligence">/api/intelligence</Link> returns the same score, summary, 20 engines, and action queue as JSON</li>
+            <li><strong>Knowledge Command Center</strong> &mdash; <Link href="/intelligence">/intelligence</Link> combines mission readiness, editorial queue pressure, graph gaps, stale content, taxonomy debt, reader demand, and cleanup flags into one cockpit with an article constellation, readiness radar, impact simulator, and 20 operational engines</li>
+            <li><strong>Intelligence API</strong> &mdash; <Link href="/api/intelligence">/api/intelligence</Link> returns the same score, summary, graph constellation, radar axes, pressure model, 20 engines, and action queue as JSON</li>
             <li><strong>Search analytics</strong> &mdash; <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily search volume, top queries with average result counts, and zero-result queries to surface content gaps</li>
             <li><strong>Search gaps</strong> &mdash; <Link href="/admin/search-gaps">/admin/search-gaps</Link> shows top zero-result queries</li>
             <li><strong>Stale articles</strong> &mdash; <Link href="/admin/staleness">/admin/staleness</Link> lists articles not updated in 180+ days</li>
@@ -524,7 +524,7 @@ export default function HelpPage() {
           </ul>
           <p className="font-semibold mb-0.5">Discover</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
-            <li><Link href="/explore">Explore</Link> — curated entry points; <Link href="/activity">Activity</Link> — recent contribution feed; <Link href="/intelligence">Command center</Link> — 20 live wiki intelligence engines</li>
+            <li><Link href="/explore">Explore</Link> — curated entry points; <Link href="/activity">Activity</Link> — recent contribution feed; <Link href="/intelligence">Command center</Link> — live wiki cockpit and intelligence engines</li>
             <li><Link href="/collections">Collections</Link>, <Link href="/change-requests">Change requests</Link>, <Link href="/reviews">Reviews</Link>, <Link href="/bounties">Bounties</Link>, <Link href="/forks">Forks</Link></li>
           </ul>
           <p className="font-semibold mb-0.5">Personal</p>

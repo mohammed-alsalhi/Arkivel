@@ -16,6 +16,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.69.0
+
+- [x] Knowledge cockpit - `/intelligence` now opens with a live article constellation, readiness radar, and impact simulator before the 20-engine grid
+- [x] Graph constellation - top connected articles are plotted from real wiki-link data with direct links and selected-node readouts
+- [x] Readiness radar - operational health is broken into readiness, graph, structure, freshness, trust, audience, and momentum axes
+- [x] Impact simulator - editors can model gains from resolving stubs, orphans, broken links, stale pages, taxonomy debt, and verification debt
+- [x] Product promotion - home actions, feature docs, help docs, architecture notes, and responsive tests now treat the command center as a flagship workspace
+
 ## v4.68.0
 
 - [x] Knowledge Command Center - `/intelligence` turns the wiki into an operational cockpit with 20 live quality, graph, canon, audience, and editorial engines

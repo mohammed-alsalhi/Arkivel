@@ -2106,6 +2106,370 @@ p a:hover {
   text-transform: uppercase;
 }
 
+.intelligence-cockpit {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1.18fr) minmax(20rem, 0.82fr);
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.intelligence-atlas-panel,
+.intelligence-radar-panel,
+.intelligence-simulator-panel {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.intelligence-cockpit-side {
+  display: grid;
+  min-width: 0;
+  gap: 0.85rem;
+}
+
+.intelligence-cockpit-heading {
+  display: flex;
+  min-width: 0;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.65rem 0.75rem;
+}
+
+.intelligence-cockpit-heading span {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.intelligence-cockpit-heading h2 {
+  margin-top: 0.2rem;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.intelligence-cockpit-heading strong {
+  flex: 0 0 auto;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.intelligence-atlas-stage {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.32fr);
+  min-height: 27rem;
+}
+
+.intelligence-atlas {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 27rem;
+  background:
+    linear-gradient(var(--color-border-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border-light) 1px, transparent 1px),
+    var(--color-background);
+  background-size: 2rem 2rem;
+}
+
+.intelligence-atlas-ring {
+  fill: transparent;
+  stroke: var(--color-border);
+  stroke-dasharray: 1.2 1.2;
+  stroke-width: 0.35;
+}
+
+.intelligence-atlas-ring-inner {
+  stroke: var(--color-border-light);
+}
+
+.intelligence-atlas-pulse {
+  fill: var(--color-accent-soft);
+  stroke: var(--color-accent);
+  stroke-width: 0.35;
+  transform-origin: 50% 50%;
+  animation: intelligencePulse 3.8s ease-in-out infinite;
+}
+
+.intelligence-atlas-link {
+  stroke: var(--color-border);
+  stroke-linecap: round;
+  stroke-width: 0.45;
+  opacity: 0.78;
+}
+
+.intelligence-atlas-node {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.intelligence-atlas-node circle:first-child {
+  fill: currentColor;
+  opacity: 0.15;
+}
+
+.intelligence-atlas-node circle:nth-child(2) {
+  fill: var(--color-surface);
+  stroke: currentColor;
+  stroke-width: 0.65;
+}
+
+.intelligence-atlas-node text {
+  fill: var(--color-heading);
+  font-family: var(--font-sans);
+  font-size: 2.2px;
+  font-weight: 800;
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+.intelligence-atlas-node[data-tone="good"] {
+  color: var(--color-success);
+}
+
+.intelligence-atlas-node[data-tone="warn"] {
+  color: var(--color-warning);
+}
+
+.intelligence-atlas-node[data-tone="danger"] {
+  color: var(--color-danger);
+}
+
+.intelligence-atlas-node[data-selected="true"] circle:first-child,
+.intelligence-atlas-node:hover circle:first-child,
+.intelligence-atlas-node:focus circle:first-child {
+  opacity: 0.28;
+}
+
+.intelligence-atlas-node[data-selected="true"] circle:nth-child(2),
+.intelligence-atlas-node:hover circle:nth-child(2),
+.intelligence-atlas-node:focus circle:nth-child(2) {
+  fill: var(--color-background);
+  stroke-width: 1;
+}
+
+.intelligence-atlas-readout {
+  display: grid;
+  min-width: 0;
+  align-content: end;
+  border-left: 1px solid var(--color-border);
+  padding: 0.75rem;
+}
+
+.intelligence-atlas-readout span {
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.intelligence-atlas-readout a {
+  margin-top: 0.35rem;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.intelligence-atlas-readout a:hover {
+  color: var(--color-accent);
+}
+
+.intelligence-atlas-readout p {
+  margin-top: 0.45rem;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.intelligence-empty-cockpit {
+  display: grid;
+  min-height: 18rem;
+  align-content: center;
+  justify-items: start;
+  gap: 0.55rem;
+  padding: 1rem;
+}
+
+.intelligence-empty-cockpit strong {
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.intelligence-empty-cockpit p {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.intelligence-radar-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(11rem, 0.8fr) minmax(0, 1fr);
+}
+
+.intelligence-radar {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  padding: 0.65rem;
+}
+
+.intelligence-radar polygon {
+  fill: transparent;
+  stroke: var(--color-border-light);
+  stroke-width: 0.5;
+}
+
+.intelligence-radar line {
+  stroke: var(--color-border-light);
+  stroke-width: 0.45;
+}
+
+.intelligence-radar .intelligence-radar-fill {
+  fill: var(--color-accent-soft);
+  stroke: var(--color-accent);
+  stroke-width: 0.9;
+}
+
+.intelligence-radar-dot {
+  fill: var(--color-accent);
+}
+
+.intelligence-radar-list {
+  min-width: 0;
+  border-left: 1px solid var(--color-border-light);
+}
+
+.intelligence-radar-row {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.15rem 0.5rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.5rem 0.65rem;
+}
+
+.intelligence-radar-row:last-child {
+  border-bottom: 0;
+}
+
+.intelligence-radar-row span {
+  color: var(--color-heading);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.intelligence-radar-row strong {
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.intelligence-radar-row em {
+  grid-column: 1 / -1;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-style: normal;
+  line-height: 1.25;
+}
+
+.intelligence-simulator-panel {
+  align-self: start;
+}
+
+.intelligence-score-delta {
+  display: flex;
+  min-width: 0;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.55rem 0.75rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.intelligence-lever-list {
+  display: grid;
+  min-width: 0;
+}
+
+.intelligence-lever {
+  display: grid;
+  min-width: 0;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.6rem 0.75rem;
+}
+
+.intelligence-lever:last-child {
+  border-bottom: 0;
+}
+
+.intelligence-lever span {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.intelligence-lever a {
+  min-width: 0;
+  color: var(--color-heading);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.intelligence-lever a:hover {
+  color: var(--color-accent);
+}
+
+.intelligence-lever strong {
+  flex: 0 0 auto;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.intelligence-lever input {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--color-accent);
+}
+
+.intelligence-lever input:disabled {
+  opacity: 0.42;
+}
+
 .intelligence-actions {
   margin-bottom: 0.85rem;
 }
@@ -2314,6 +2678,18 @@ p a:hover {
     border-right: 0;
     border-bottom: 1px solid var(--color-border);
   }
+
+  .intelligence-cockpit {
+    grid-template-columns: 1fr;
+  }
+
+  .intelligence-atlas-stage {
+    min-height: 24rem;
+  }
+
+  .intelligence-atlas {
+    min-height: 24rem;
+  }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
@@ -2360,6 +2736,63 @@ p a:hover {
 
   .intelligence-card-grid {
     grid-template-columns: 1fr;
+  }
+
+  .intelligence-atlas-stage,
+  .intelligence-radar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .intelligence-atlas-stage {
+    min-height: 0;
+  }
+
+  .intelligence-atlas {
+    min-height: 18rem;
+  }
+
+  .intelligence-atlas-readout,
+  .intelligence-radar-list {
+    border-top: 1px solid var(--color-border);
+    border-left: 0;
+  }
+
+  .intelligence-cockpit-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .intelligence-score-delta,
+  .intelligence-lever span {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 459px) {
+  .intelligence-atlas-node text {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intelligence-atlas-pulse {
+    animation: none;
+  }
+}
+
+@keyframes intelligencePulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.86);
+  }
+
+  50% {
+    opacity: 0.78;
+    transform: scale(1.18);
   }
 }
 
