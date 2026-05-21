@@ -112,7 +112,7 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Article Action Panel</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-2">The panel below the article header groups quick actions into five sections:</p>
+          <p className="mb-2">The compact panel below the article header groups quick actions into Navigate, Collect, Share, Read, and Tools sections. Groups wrap as needed so dense reading controls stay usable without empty tiled rows.</p>
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Present</strong> &mdash; open as a slideshow</li>
             <li><strong>Bookmark</strong> &mdash; save to your personal bookmarks with an optional note</li>

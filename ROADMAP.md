@@ -16,6 +16,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.66.1
+
+- [x] Article action panel polish - the article controls now render as a compact wrapping toolbar instead of a tiled grid with empty rows
+- [x] Read controls containment - font, width, theme, and reading-mode controls are constrained so they wrap without clipping the right edge
+- [x] Patch release documentation - version, changelog, roadmap, design guidance, feature docs, and help pages document the refined article action standard
+
 ## v4.66
 
 - [x] Article page shell refresh - article display now uses a dedicated hero header, grouped action panel, taxonomy footer, and cleaner notice stack

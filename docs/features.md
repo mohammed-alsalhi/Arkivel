@@ -196,7 +196,7 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 ## Article Page
 
 - **Article hero header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header
-- **Grouped action panel** — Navigate, Collect, Share, Read, and Tools controls are arranged in a responsive panel instead of stacked toolbar rows
+- **Grouped action panel** — Navigate, Collect, Share, Read, and Tools controls are arranged as a compact wrapping toolbar instead of stacked rows or empty tiled panels
 - **Taxonomy footer** — category and tags render as wrapping chips at the end of the article rather than pipe-separated text
 - **Responsive article shell** — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens
 - **Reading time estimator** — "~X min read" computed at 200 wpm displayed in every article's metadata line

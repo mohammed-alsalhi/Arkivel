@@ -138,7 +138,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Article hero header</strong> — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header</li>
-            <li><strong>Grouped action panel</strong> — Navigate, Collect, Share, Read, and Tools controls are arranged in a responsive panel instead of stacked toolbar rows</li>
+            <li><strong>Grouped action panel</strong> — Navigate, Collect, Share, Read, and Tools controls are arranged as a compact wrapping toolbar instead of stacked rows or empty tiled panels</li>
             <li><strong>Taxonomy footer</strong> — category and tags render as wrapping chips at the end of the article rather than pipe-separated text</li>
             <li><strong>Responsive article shell</strong> — article tabs, infoboxes, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens</li>
             <li><strong>Reading time estimator</strong> — &ldquo;~X min read&rdquo; computed at 200 wpm displayed in every article&apos;s metadata line</li>

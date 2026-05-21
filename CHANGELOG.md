@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.66.1] - 2026-05-21
+
+### Fixed
+
+- **Article action panel polish** - Replaced the oversized tiled article action grid with a compact wrapping toolbar so short groups no longer create dead empty rows or heavy block geometry.
+- **Reading controls overflow** - Constrained select controls inside the Read group so font preferences no longer force the panel to clip or push past the article shell.
+- **Responsive action grouping** - Added tighter mobile stacking and divider rules for article action groups while keeping desktop, tablet, and wide layouts dense and scannable.
+
 ## [4.66.0] - 2026-05-21
 
 ### Changed

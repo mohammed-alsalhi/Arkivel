@@ -80,7 +80,7 @@ Click **Present** in the article action bar to open the article as a slideshow. 
 
 ## Article Action Panel
 
-The panel below the article header groups quick actions into five sections:
+The compact panel below the article header groups quick actions into Navigate, Collect, Share, Read, and Tools sections. Groups wrap as needed so dense reading controls stay usable without empty tiled rows.
 
 | Action | Description |
 |--------|-------------|

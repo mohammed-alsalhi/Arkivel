@@ -74,7 +74,7 @@ Article action panel group order:
 
 Article pages should use the dedicated article shell:
 - Hero header for title, category, excerpt, edit attribution, freshness, verification, reading metrics, and co-authors.
-- Grouped action panel for Navigate, Collect, Share, Read, and Tools actions.
+- Compact grouped action toolbar for Navigate, Collect, Share, Read, and Tools actions. It must wrap by group, avoid fixed tile rows, avoid empty panel space, and constrain selects inside their control group.
 - Notice stack for status, review due, pinned, disambiguation, and maintenance flags.
 - Taxonomy footer with wrapping category/tag chips, not pipe-separated text.
 - Backlinks and dense article adjuncts should wrap as compact chips or panels rather than long inline lists.
