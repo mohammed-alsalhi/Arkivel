@@ -4,6 +4,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.67.0] - 2026-05-21
+
+### Changed
+
+- **Main page redesign** - Reworked the wiki home page into a dense front page with live article/category/tag/revision stats, a featured article lead, quick actions, a browse directory, recent updates, and compact sidebar modules.
+- **Shared page shell standard** - Added reusable page header, dek, action, compact list, category tree, and home layout CSS primitives so browse, search, dashboard, help, features, and downstream portal pages share the same compact wiki language.
+- **Core browse page refresh** - Updated Articles, Categories, Search, Dashboard, Help, and Features to use the new page header pattern with right-aligned actions and responsive wrapping.
+- **Home sidebar module polish** - Restyled New Articles, On This Day, and Trending panels into consistent portal/list modules without unicode arrows or oversized standalone headings.
+
 ## [4.66.2] - 2026-05-21
 
 ### Changed

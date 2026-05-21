@@ -1,5 +1,8 @@
+import packageJson from "../../package.json";
+
 export const config = {
   name: process.env.NEXT_PUBLIC_ARKIVEL_NAME || process.env.NEXT_PUBLIC_WIKI_NAME || "Arkivel",
+  version: packageJson.version,
   tagline: process.env.NEXT_PUBLIC_ARKIVEL_TAGLINE || process.env.NEXT_PUBLIC_WIKI_TAGLINE || "The self-hosted knowledge platform",
   description:
     process.env.NEXT_PUBLIC_ARKIVEL_DESCRIPTION ||

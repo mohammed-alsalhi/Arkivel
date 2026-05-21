@@ -80,6 +80,19 @@ Article pages should use the dedicated article shell:
 - Taxonomy footer with wrapping category/tag chips, not pipe-separated text.
 - Backlinks and dense article adjuncts should wrap as compact chips or panels rather than long inline lists.
 
+### Page shell standard
+
+General app pages should use the shared page shell before introducing route-specific layout:
+
+- `.ui-page-header` wraps the title block and right-aligned actions; it must wrap on phone widths rather than compressing controls.
+- `.ui-page-kicker` names the surface category (Browse, Discovery, Reference, Personal, Main page).
+- `.ui-page-title` stays serif, normal weight, and wraps long names without forcing horizontal scroll.
+- `.ui-page-dek` carries the page explanation or live result summary; avoid separate floating intro cards for this copy.
+- `.ui-page-actions` contains only clear commands such as Create article, Search, Tags, or API docs.
+- `.wiki-portal` remains the standard bordered module for repeated page sections, with `.wiki-compact-list` for dense sidebar and dashboard lists.
+
+The home page is the canonical front-page implementation: live stats, featured article, browse directory, recent updates, and compact sidebar modules. It should feel like a working wiki index, not a marketing landing page.
+
 ### Dropdowns
 
 - Appear `top-full mt-1` below their trigger.

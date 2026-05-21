@@ -143,6 +143,7 @@ textarea:disabled {
 
 /* ── Standard UI primitives ── */
 .ui-page-title {
+  min-width: 0;
   font-family: var(--font-serif);
   font-size: 1.7rem;
   font-weight: 400;
@@ -150,6 +151,52 @@ textarea:disabled {
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 0.25rem;
   margin-bottom: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.ui-page-header {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.ui-page-header .ui-page-title {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.ui-page-kicker {
+  margin-bottom: 0.2rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.ui-page-dek {
+  max-width: min(100%, 78ch);
+  margin-top: 0.3rem;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+.ui-page-actions {
+  display: flex;
+  min-width: 0;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
 }
 
 .ui-section-title {
@@ -468,10 +515,67 @@ textarea:disabled {
 }
 
 @media (max-width: 639px) {
+  .ui-page-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .ui-page-actions {
+    justify-content: flex-start;
+  }
+
   .ui-table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .home-stat-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-stat:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .home-stat:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .home-directory-grid,
+  .home-sidebar-links {
+    grid-template-columns: 1fr;
+  }
+
+  .home-directory-link,
+  .home-directory-link:nth-child(2n),
+  .home-directory-link:nth-last-child(-n + 2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .home-directory-link:last-child {
+    border-bottom: 0;
+  }
+
+  .home-recent-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .home-recent-meta {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .category-tree-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .category-tree-description {
+    flex-basis: 100%;
   }
 
   .wiki-notification-dropdown {
@@ -494,6 +598,10 @@ textarea:disabled {
 }
 
 @media (max-width: 767px) {
+  .home-layout {
+    grid-template-columns: 1fr;
+  }
+
   .wiki-main-content {
     padding-bottom: max(5rem, calc(4rem + env(safe-area-inset-bottom, 0))) !important;
   }
@@ -531,6 +639,22 @@ p a {
 .wiki-portal-body a:hover,
 .wiki-content p a:hover,
 p a:hover {
+  text-decoration: underline;
+}
+
+.wiki-portal-body .home-directory-link,
+.wiki-portal-body .home-directory-link:hover,
+.wiki-portal-body .wiki-compact-list-title,
+.wiki-portal-body .wiki-compact-list-meta,
+.wiki-portal-body .home-sidebar-links a,
+.wiki-portal-body .home-recent-title {
+  text-decoration: none;
+}
+
+.wiki-portal-body .wiki-compact-list-title:hover,
+.wiki-portal-body .wiki-compact-list-meta:hover,
+.wiki-portal-body .home-sidebar-links a:hover,
+.wiki-portal-body .home-recent-title:hover {
   text-decoration: underline;
 }
 
@@ -1390,13 +1514,22 @@ p a:hover {
   background: var(--color-accent-soft);
 }
 
-/* ── Wiki portal boxes on main page ── */
+/* ── Wiki portal boxes ── */
 .wiki-portal {
+  min-width: 0;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   margin-bottom: 0.75rem;
+  overflow: hidden;
 }
+
 .wiki-portal-header {
+  display: flex;
+  min-width: 0;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   background: var(--color-infobox-header);
   color: var(--color-infobox-header-text);
   padding: 0.4rem 0.75rem;
@@ -1404,10 +1537,382 @@ p a:hover {
   font-weight: 700;
   font-size: 0.9rem;
   border-bottom: 1px solid var(--color-border);
+  overflow-wrap: anywhere;
 }
+
+.wiki-portal-header-link {
+  flex: 0 0 auto;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.wiki-portal-header-link:hover {
+  color: var(--color-foreground);
+  text-decoration: underline;
+}
+
 .wiki-portal-body {
+  min-width: 0;
   padding: 0.6rem 0.75rem;
   font-size: 0.85rem;
+}
+
+.wiki-compact-list {
+  display: grid;
+  min-width: 0;
+}
+
+.wiki-compact-list-item {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.55rem 0.75rem;
+}
+
+.wiki-compact-list-item:last-child {
+  border-bottom: 0;
+}
+
+.wiki-compact-list-item:hover {
+  background: var(--color-surface-hover);
+}
+
+.wiki-compact-list-ranked {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.55rem;
+}
+
+.wiki-compact-rank {
+  width: 1.2rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.wiki-compact-list-title {
+  min-width: 0;
+  color: var(--color-wiki-link);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.wiki-compact-list-title:hover {
+  text-decoration: underline;
+}
+
+.wiki-compact-list-meta {
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.wiki-compact-list-meta:hover {
+  color: var(--color-foreground);
+  text-decoration: underline;
+}
+
+/* ── Home front page ── */
+.home-page {
+  min-width: 0;
+}
+
+.home-header {
+  margin-bottom: 0.75rem;
+}
+
+.home-stat-rail {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 0.85rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.home-stat {
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  border-right: 1px solid var(--color-border);
+}
+
+.home-stat:last-child {
+  border-right: 0;
+}
+
+.home-stat strong {
+  display: block;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.home-stat span {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.home-layout {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.36fr);
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.home-primary,
+.home-sidebar {
+  min-width: 0;
+}
+
+.home-featured {
+  min-width: 0;
+  margin-bottom: 0.85rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.85rem 0.9rem;
+}
+
+.home-featured-title {
+  display: block;
+  max-width: 100%;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: clamp(1.45rem, 2vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.08;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.home-featured-title:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.home-featured-meta {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.home-featured-excerpt {
+  max-width: min(100%, 86ch);
+  margin-top: 0.65rem;
+  color: var(--color-foreground);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.home-featured-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+}
+
+.home-directory-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.home-directory-link {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+  border-right: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.7rem 0.75rem;
+  text-decoration: none;
+}
+
+.home-directory-link:nth-child(2n) {
+  border-right: 0;
+}
+
+.home-directory-link:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.home-directory-link:hover {
+  background: var(--color-surface-hover);
+  text-decoration: none;
+}
+
+.home-directory-title {
+  color: var(--color-wiki-link);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.home-directory-meta {
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.home-directory-description {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.home-recent-list {
+  display: grid;
+  min-width: 0;
+}
+
+.home-recent-row {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(7.5rem, auto);
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.65rem 0.75rem;
+}
+
+.home-recent-row:last-child {
+  border-bottom: 0;
+}
+
+.home-recent-row:hover {
+  background: var(--color-surface-hover);
+}
+
+.home-recent-title {
+  color: var(--color-wiki-link);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.25;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.home-recent-title:hover {
+  text-decoration: underline;
+}
+
+.home-recent-excerpt {
+  margin-top: 0.15rem;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.home-recent-meta {
+  display: grid;
+  justify-items: end;
+  gap: 0.1rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  text-align: right;
+}
+
+.home-sidebar-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.home-sidebar-links a {
+  min-width: 0;
+  border: 1px solid var(--color-border-light);
+  padding: 0.35rem 0.45rem;
+  color: var(--color-wiki-link);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.home-sidebar-links a:hover {
+  background: var(--color-surface-hover);
+  text-decoration: underline;
+}
+
+/* ── Category browse tree ── */
+.category-tree {
+  max-width: 54rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.category-tree-row {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.45rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-top: 0.45rem;
+  padding-right: 0.65rem;
+  padding-bottom: 0.45rem;
+}
+
+.category-tree-row:last-child {
+  border-bottom: 0;
+}
+
+.category-tree-row:hover {
+  background: var(--color-surface-hover);
+}
+
+.category-tree-depth {
+  flex: 0 0 auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-left: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.category-tree-title {
+  min-width: 0;
+  color: var(--color-wiki-link);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.category-tree-count {
+  flex: 0 0 auto;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+}
+
+.category-tree-description {
+  min-width: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
 /* ── Wiki notice/message box ── */

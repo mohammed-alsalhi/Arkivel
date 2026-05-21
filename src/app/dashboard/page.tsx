@@ -284,23 +284,22 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between border-b border-border pb-1 mb-4">
-        <h1
-          className="text-[1.7rem] font-normal text-heading"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          My dashboard
-        </h1>
-        <div className="flex items-center gap-2">
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Personal</p>
+          <h1 className="ui-page-title">My dashboard</h1>
+          <p className="ui-page-dek">Your configurable reading, review, and contribution workspace.</p>
+        </div>
+        <div className="ui-page-actions">
           {saving && <span className="text-[11px] text-muted">Saving…</span>}
           <button
             onClick={() => setEditMode(!editMode)}
-            className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
+            className="ui-button"
           >
             {editMode ? "Done" : "Customize"}
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Widget picker in edit mode */}
       {editMode && (

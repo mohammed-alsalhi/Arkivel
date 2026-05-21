@@ -55,6 +55,7 @@ src/
     map/                      # Interactive map pages
       [mapId]/
     search/                   # Search results page
+    page.tsx                  # Main Page front page with stats, featured article, browse directory, and recent updates
     login/                    # Login page
     register/                 # Registration page
     admin/                    # Admin dashboard
@@ -181,7 +182,7 @@ docs/
 ## Key Patterns
 
 ### Configuration
-All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables.
+All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables. The visible app version is read from `package.json` and exposed at build time through `next.config.ts` so sidebar and health-check version text follow release bumps.
 
 ### Authentication
 Dual auth system. **Legacy:** single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. **Multi-user:** bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns the current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.

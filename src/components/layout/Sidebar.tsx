@@ -510,7 +510,7 @@ export default function Sidebar({
 
         {/* Footer */}
         <div className="mt-auto border-t border-border px-3 py-2 text-[10px] text-muted flex items-center justify-between">
-          <span>v{process.env.NEXT_PUBLIC_APP_VERSION}</span>
+          <span>v{config.version}</span>
           <button
             type="button"
             title="Toggle sidebar to right / left"

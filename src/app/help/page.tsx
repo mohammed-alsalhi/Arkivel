@@ -8,17 +8,20 @@ export const metadata: Metadata = {
 export default function HelpPage() {
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Help &amp; Features Guide
-      </h1>
-
-      <p className="text-[13px] text-muted mb-4">
-        This guide covers all features available in the wiki. Use the sections below to learn how to create, edit, organize, and get the most from your articles.
-        For a feature overview see <Link href="/features">Features</Link>.
-      </p>
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Reference</p>
+          <h1 className="ui-page-title">Help &amp; Features Guide</h1>
+          <p className="ui-page-dek">
+            This guide covers all features available in the wiki. Use the sections below to learn how to create, edit, organize, and get the most from your articles.
+            For a feature overview see <Link href="/features">Features</Link>.
+          </p>
+        </div>
+        <div className="ui-page-actions">
+          <Link href="/features" className="ui-button">Features</Link>
+          <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
+        </div>
+      </header>
 
       {/* Getting Started */}
       <div className="wiki-portal mb-4">
@@ -220,6 +223,8 @@ export default function HelpPage() {
         <div className="wiki-portal-header">Discovery &amp; Navigation</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
+            <li><strong>Main Page</strong> &mdash; <Link href="/">/</Link> is the working wiki front page with live article/category/tag/revision stats, featured content, a browse directory, recently updated articles, and compact sidebar modules.</li>
+            <li><strong>Page headers</strong> &mdash; core browse and reference pages use a shared header with a short kicker, serif title, explanatory dek, and wrapping action buttons.</li>
             <li><strong>Bookmarks</strong> &mdash; save articles with optional notes at <Link href="/bookmarks">/bookmarks</Link>.</li>
             <li><strong>Reading Lists</strong> &mdash; organize articles into ordered lists at <Link href="/reading-lists">/reading-lists</Link>. Lists can be made public and shared via a link.</li>
             <li><strong>Smart Collections</strong> &mdash; saved searches with filters (tags, category, author, date range) at <Link href="/collections">/collections</Link>.</li>

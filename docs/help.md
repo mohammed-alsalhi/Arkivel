@@ -167,6 +167,8 @@ AI features are gated on environment variables and degrade gracefully when keys 
 
 ## Discovery & Navigation
 
+- **Main Page** — `/` is the working wiki front page with live article/category/tag/revision stats, featured content, a browse directory, recently updated articles, and compact sidebar modules.
+- **Page headers** — core browse and reference pages use a shared header with a short kicker, serif title, explanatory dek, and wrapping action buttons.
 - **Bookmarks** — save articles with optional notes at `/bookmarks`.
 - **Reading Lists** — organize articles into ordered lists at `/reading-lists`. Lists can be made public and shared via a link.
 - **Smart Collections** — saved searches with filters (tags, category, author, date range) at `/collections`.

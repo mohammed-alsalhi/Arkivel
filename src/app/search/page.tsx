@@ -194,10 +194,19 @@ function SearchContent() {
   if (!q || q.length < 2) {
     return (
       <div>
-        <h1 className="ui-page-title">Search</h1>
-        <p className="text-[13px] text-muted italic">
-          Enter a search query (at least 2 characters) to search the encyclopedia.
-        </p>
+        <header className="ui-page-header">
+          <div>
+            <p className="ui-page-kicker">Discovery</p>
+            <h1 className="ui-page-title">Search</h1>
+            <p className="ui-page-dek">
+              Enter at least 2 characters to search titles, excerpts, article bodies, and semantic matches.
+            </p>
+          </div>
+          <div className="ui-page-actions">
+            <Link href="/articles" className="ui-button">Article index</Link>
+            <Link href="/tags" className="ui-button">Tags</Link>
+          </div>
+        </header>
         <SearchHistory currentQuery={q} />
       </div>
     );
@@ -205,15 +214,18 @@ function SearchContent() {
 
   return (
     <div>
-      <h1 className="ui-page-title mb-1">Search results</h1>
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <p className="min-w-0 text-[12px] text-muted">
-          {loading
-            ? "Searching..."
-            : `${resultCount} result${resultCount !== 1 ? "s" : ""} for \u201C${q}\u201D`}
-          {hasFilters && " (filtered)"}
-        </p>
-        <div className="flex flex-wrap items-center gap-2">
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Discovery</p>
+          <h1 className="ui-page-title">Search results</h1>
+          <p className="ui-page-dek">
+            {loading
+              ? "Searching..."
+              : `${resultCount} result${resultCount !== 1 ? "s" : ""} for "${q}"`}
+            {hasFilters && " (filtered)"}
+          </p>
+        </div>
+        <div className="ui-page-actions">
           <button
             onClick={() => setSemanticMode((v) => !v)}
             title="Semantic search uses AI vector embeddings to find conceptually related articles, not just keyword matches"
@@ -233,7 +245,7 @@ function SearchContent() {
             {showAdvanced ? "Hide filters" : "Filters"}
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Q&A answer panel */}
       {(qaLoading || qaAnswer) && (

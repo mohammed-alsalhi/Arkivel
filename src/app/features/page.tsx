@@ -9,16 +9,20 @@ export const metadata: Metadata = {
 export default function FeaturesPage() {
   return (
     <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Features
-      </h1>
-      <p className="text-[13px] text-muted mb-5">
-        A complete overview of everything the wiki can do. For step-by-step instructions see the{" "}
-        <Link href="/help">Help &amp; Features Guide</Link>.
-      </p>
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Reference</p>
+          <h1 className="ui-page-title">Features</h1>
+          <p className="ui-page-dek">
+            A complete overview of everything the wiki can do. For step-by-step instructions see the{" "}
+            <Link href="/help">Help &amp; Features Guide</Link>.
+          </p>
+        </div>
+        <div className="ui-page-actions">
+          <Link href="/help" className="ui-button">Help guide</Link>
+          <Link href="/api-docs" className="ui-button">API docs</Link>
+        </div>
+      </header>
 
       {/* Writing & Editing */}
       <div className="wiki-portal mb-4">
@@ -91,6 +95,8 @@ export default function FeaturesPage() {
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
             <li><strong>Unified search surfaces</strong> — header search, the search page, command palette, wiki-link autocomplete, split view pickers, and edit fallback all consume the same search result contract</li>
             <li><strong>Responsive app shell</strong> — desktop and tablet layouts keep the dense collapsible sidebar; phone layouts add a safe-area-aware bottom nav for Home, Search, Create, Recent, and Menu; focused workspace pages keep the compact top menu so canvases and composers are not covered</li>
+            <li><strong>Main page front page</strong> — <Link href="/">/</Link> combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point</li>
+            <li><strong>Shared page headers</strong> — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently</li>
             <li><strong>Command palette navigation</strong> — <code className="bg-surface-hover px-1 text-[12px]">Cmd+K</code> / <code className="bg-surface-hover px-1 text-[12px]">Ctrl+K</code> opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces</li>
             <li><strong>Word-count search filter</strong> — advanced search includes min/max word count range to find articles by length</li>
             <li><strong>Search analytics</strong> — every query is logged; admin page at <Link href="/admin/search-analytics">/admin/search-analytics</Link> shows daily volume, top queries, and zero-result queries to find content gaps</li>

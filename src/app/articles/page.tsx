@@ -205,12 +205,21 @@ function ArticlesPageContent() {
 
   return (
     <div>
-      <h1 className="ui-page-title mb-1">All articles</h1>
-      <p className="text-[12px] text-muted mb-3">
-        {total} article{total !== 1 ? "s" : ""} in the encyclopedia
-        {category && <> &mdash; filtered by category</>}
-        {tag && <> &mdash; filtered by tag</>}
-      </p>
+      <header className="ui-page-header">
+        <div>
+          <p className="ui-page-kicker">Browse</p>
+          <h1 className="ui-page-title">All articles</h1>
+          <p className="ui-page-dek">
+            {total} article{total !== 1 ? "s" : ""} in the encyclopedia
+            {category && <> - filtered by category</>}
+            {tag && <> - filtered by tag</>}
+          </p>
+        </div>
+        <div className="ui-page-actions">
+          <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
+          <Link href="/recent-changes" className="ui-button">Recent changes</Link>
+        </div>
+      </header>
 
       {/* Filters */}
       <div className="wiki-portal mb-3">

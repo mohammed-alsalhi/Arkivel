@@ -16,6 +16,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.67.0
+
+- [x] Main page redesign - home now acts as a compact wiki front page with stats, quick actions, featured content, browse directory links, recent updates, and sidebar modules
+- [x] Shared page shell standard - page headers, deks, action clusters, compact lists, and category trees have reusable CSS primitives
+- [x] Core browse route refresh - Articles, Categories, Search, Dashboard, Help, and Features use the same responsive page header structure
+- [x] Home module alignment - New Articles, On This Day, and Trending widgets now use the same portal/list treatment as the rest of the app
+
 ## v4.66.2
 
 - [x] Article action rail rethink - primary Navigate, Collect, and Share actions stay visible while Read and Tools move into compact disclosure menus
