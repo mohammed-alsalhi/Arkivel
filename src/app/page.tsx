@@ -71,6 +71,12 @@ export default async function Home() {
 
   const directoryLinks = [
     {
+      href: "/studio",
+      label: "Arkivel Studio",
+      meta: "Live board",
+      description: "Turn articles, links, bases, review queues, and JSON Canvas export into one workspace.",
+    },
+    {
       href: "/articles",
       label: "Article index",
       meta: `${stats.articles.toLocaleString()} published`,
@@ -172,6 +178,7 @@ export default async function Home() {
         </div>
         <div className="ui-page-actions">
           <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
+          <Link href="/studio" className="ui-button">Studio</Link>
           <Link href="/atlas" className="ui-button">Canon atlas</Link>
           <Link href="/trails" className="ui-button">Canon trails</Link>
           <Link href="/intelligence" className="ui-button">Command center</Link>

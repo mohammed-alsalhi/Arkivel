@@ -98,10 +98,11 @@ export default function FeaturesPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Full-text search</strong> — AND-logic multi-word search with relevance ranking; instant results as you type</li>
             <li><strong>Unified search surfaces</strong> — header search, the search page, command palette, wiki-link autocomplete, split view pickers, and edit fallback all consume the same search result contract</li>
-            <li><strong>Responsive app shell</strong> — desktop and tablet layouts keep the dense collapsible sidebar; phone layouts add a safe-area-aware bottom nav for Home, Search, Create, Recent, and Browse; focused workspace pages keep the compact top menu so canvases and composers are not covered</li>
+            <li><strong>Responsive app shell</strong> — desktop and tablet layouts keep the simplified dockable sidebar; phone layouts use a top-left three-line main menu plus a safe-area-aware bottom nav for Home, Search, Create, and Recent; focused workspace pages still protect full-height canvases and composers from bottom chrome</li>
             <li><strong>Main page front page</strong> — <Link href="/">/</Link> combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point</li>
             <li><strong>Shared page headers</strong> — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently</li>
             <li><strong>Brand mark and compact search</strong> — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm</li>
+            <li><strong>Arkivel Studio</strong> — <Link href="/studio">/studio</Link> turns articles, links, review pressure, base-style lanes, and JSON Canvas export into a live workspace for visual knowledge work</li>
             <li><strong>Canon Atlas</strong> — <Link href="/atlas">/atlas</Link> turns the wiki into a live map with category territories, article signals, story threads, a flagship dossier, continuity pressure, atlas moves, and a JSON feed</li>
             <li><strong>Canon Trails</strong> — <Link href="/trails">/trails</Link> turns live wiki links, backlinks, categories, freshness, depth, and engagement into guided reading routes for canon, recent work, deep pages, and repair paths</li>
             <li><strong>Knowledge Command Center</strong> — <Link href="/intelligence">/intelligence</Link> runs 20 live engines for mission readiness, editorial pressure, graph health, broken links, stubs, taxonomy debt, featured canon, translation surface, reader demand, verification debt, and cleanup flags, then opens with a live article constellation, readiness radar, and impact simulator</li>
@@ -370,6 +371,7 @@ export default function FeaturesPage() {
             <li><strong>Analytics</strong> — scroll depth heatmap, navigation paths at <Link href="/admin/analytics">/admin/analytics</Link></li>
             <li><strong>Performance metrics</strong> — system metrics at <Link href="/admin/metrics">/admin/metrics</Link></li>
             <li><strong>Health score</strong> — A–F grade for link coverage, freshness, stub %, search gaps at <Link href="/admin/health">/admin/health</Link></li>
+            <li><strong>Studio feeds</strong> — <Link href="/api/studio">/api/studio</Link> exposes the generated Studio board, base views, graph links, and action queue, while <Link href="/api/studio/canvas">/api/studio/canvas</Link> exports the board as JSON Canvas</li>
             <li><strong>Atlas JSON feed</strong> — <Link href="/api/atlas">/api/atlas</Link> exposes territories, article signals, story threads, the flagship dossier, continuity pressure, and recommended atlas moves</li>
             <li><strong>Trails JSON feed</strong> — <Link href="/api/trails">/api/trails</Link> exposes guided reading routes, stop reasons, reading estimates, word totals, and link totals</li>
             <li><strong>Intelligence JSON feed</strong> — <Link href="/api/intelligence">/api/intelligence</Link> exposes the command-center score, summary, graph constellation, radar axes, pressure model, 20 engines, and next-best-work queue for dashboards or automation</li>
@@ -437,7 +439,7 @@ export default function FeaturesPage() {
             <li><strong>Smart URL paste</strong> — pasting a plain URL in the editor auto-creates a hyperlink; selection gets the URL as its href; otherwise URL is inserted as linked text</li>
             <li><strong>Typewriter scrolling mode</strong> — &ldquo;Typewriter&rdquo; toggle in editor toolbar; keeps cursor vertically centred while typing; persisted to localStorage</li>
             <li><strong>Short-article merger suggestions</strong> — <Link href="/admin/short-articles">/admin/short-articles</Link> lists stubs under 100 words with suggested merge targets</li>
-            <li><strong>Sidebar position preference</strong> — sidebar footer button swaps sidebar between left and right; persisted to localStorage</li>
+            <li><strong>Sidebar position preference</strong> — labeled Dock left/right button in the sidebar footer swaps the desktop sidebar side, fixes matching borders, and persists to localStorage</li>
             <li><strong>Tabbed content blocks</strong> — <code className="bg-surface-hover px-1 text-[12px]">/tabs</code> slash command; interactive tab panels in articles; stacked for editing</li>
             <li><strong>Gallery grid blocks</strong> — <code className="bg-surface-hover px-1 text-[12px]">/gallery</code> slash command; responsive auto-fill image grid with captions and hover zoom</li>
             <li><strong>AI wiki assistant</strong> — floating chat button on every article page; context-aware Q&amp;A over article and related wiki content; multi-turn conversation</li>

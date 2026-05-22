@@ -4,6 +4,24 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.1] - 2026-05-22
+
+### Changed
+
+- **Simplified main menu** - Reworked the sidebar into Main, Discover, Work, More, Admin, and Categories sections so primary routes are visible without the older long menu stack.
+- **Mobile hamburger menu** - Made the top-left three-line button the consistent mobile main-menu trigger and removed the bottom Browse tab from the mobile nav.
+- **Sidebar docking polish** - Replaced the tiny swap affordance with a labeled Dock left/right control and fixed borders/layout when the sidebar is moved to the right side.
+- **Slug hardening** - Normalized accented Latin characters in generated slugs and encoded category sidebar links from a safe path segment.
+
+## [4.74.0] - 2026-05-22
+
+### Added
+
+- **Arkivel Studio** - Added `/studio`, a live workspace that turns published articles, wiki links, semantic relations, review pressure, taxonomy gaps, freshness, and engagement into a generated command board.
+- **Base-style operating lanes** - Added Studio views for review pressure, stubs, orphaned pages, taxonomy gaps, and stale work so the wiki feels closer to a visual knowledge operating system.
+- **Studio feeds and JSON Canvas export** - Added `/api/studio` plus `/api/studio/canvas` for portable board data and `.canvas`-compatible visual knowledge workflows.
+- **Studio navigation and docs** - Wired Studio into the sidebar, main page, command palette, sitemap, API docs, help/features pages, README, architecture notes, and responsive shell coverage.
+
 ## [4.73.1] - 2026-05-22
 
 ### Changed

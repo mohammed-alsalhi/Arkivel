@@ -224,7 +224,9 @@ export default function HelpPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Main Page</strong> &mdash; <Link href="/">/</Link> is the working wiki front page with live article/category/tag/revision stats, featured content, a browse directory, recently updated articles, and compact sidebar modules.</li>
             <li><strong>Page headers</strong> &mdash; core browse and reference pages use a shared header with a short kicker, serif title, explanatory dek, and wrapping action buttons.</li>
+            <li><strong>Main menu</strong> &mdash; the three-line button in the top-left opens the simplified sidebar on phones, while desktop and tablet layouts keep the sidebar docked.</li>
             <li><strong>Brand mark and compact search</strong> &mdash; the preliminary Arkivel mark appears in the sidebar/mobile header, and the header search expands only when opened.</li>
+            <li><strong>Arkivel Studio</strong> &mdash; <Link href="/studio">/studio</Link> combines a generated article board, base-style queues, graph links, review pressure, and JSON Canvas export in one workspace.</li>
             <li><strong>Bookmarks</strong> &mdash; save articles with optional notes at <Link href="/bookmarks">/bookmarks</Link>.</li>
             <li><strong>Reading Lists</strong> &mdash; organize articles into ordered lists at <Link href="/reading-lists">/reading-lists</Link>. Lists can be made public and shared via a link.</li>
             <li><strong>Smart Collections</strong> &mdash; saved searches with filters (tags, category, author, date range) at <Link href="/collections">/collections</Link>.</li>
@@ -415,6 +417,8 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-0.5">
             <li><strong>Analytics dashboard</strong> &mdash; scroll depth heatmap, reader navigation paths, search gap tracking</li>
+            <li><strong>Arkivel Studio</strong> &mdash; <Link href="/studio">/studio</Link> turns live wiki data into a portable visual workspace with base views and next moves</li>
+            <li><strong>Studio API</strong> &mdash; <Link href="/api/studio">/api/studio</Link> returns the generated board, bases, links, and action queue; <Link href="/api/studio/canvas">/api/studio/canvas</Link> downloads the board as JSON Canvas</li>
             <li><strong>Canon Atlas</strong> &mdash; <Link href="/atlas">/atlas</Link> turns the wiki into a live map of territories, article signals, story threads, a flagship dossier, continuity pressure, and atlas moves</li>
             <li><strong>Atlas API</strong> &mdash; <Link href="/api/atlas">/api/atlas</Link> returns the same territories, signals, threads, dossier, continuity pressure, and action queue as JSON</li>
             <li><strong>Canon Trails</strong> &mdash; <Link href="/trails">/trails</Link> turns the wiki into guided reading routes through strongest canon, recent updates, deep pages, and repair paths</li>
@@ -450,7 +454,7 @@ export default function HelpPage() {
             <li><strong>Smart URL paste</strong> &mdash; pasting a plain HTTP/HTTPS URL in the editor auto-creates a hyperlink; if text is selected the URL becomes its href, otherwise it is inserted as linked text</li>
             <li><strong>Typewriter scrolling mode</strong> &mdash; &ldquo;Typewriter&rdquo; toggle in the editor toolbar keeps the cursor vertically centred as you type; preference persisted to localStorage</li>
             <li><strong>Short-article merger suggestions</strong> &mdash; <Link href="/admin/short-articles">/admin/short-articles</Link>; lists stub articles under 100 words and suggests up to 3 same-category merge targets</li>
-            <li><strong>Sidebar position</strong> &mdash; swap icon in the sidebar footer moves the sidebar to the right or left; preference persisted to localStorage</li>
+            <li><strong>Sidebar position</strong> &mdash; the Dock left/right button in the sidebar footer moves the desktop sidebar to either side with matching borders; preference persisted to localStorage</li>
             <li><strong>Tabbed content blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/tabs</code> slash command inserts an interactive two-tab block; panels are editable inline</li>
             <li><strong>Gallery grid blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/gallery</code> slash command inserts a responsive image grid with captions</li>
             <li><strong>AI wiki assistant</strong> &mdash; floating chat button on every article page; ask questions about the current article or the whole wiki; context-aware conversation powered by AI</li>
@@ -521,12 +525,12 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Navigation &amp; Organization</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-1">On desktop and tablet, the sidebar is divided into collapsible sections — click any section header to collapse or expand it. On phones, the bottom navigation keeps Home, Search, Create, Recent, and Browse one tap away. Browse opens the same sidebar contents and closes when you choose a destination. Full-height workspace pages such as Ask, Graph, Split, Map, and Present use the compact top menu instead so canvases and composers are not covered.</p>
+          <p className="mb-1">On desktop and tablet, the sidebar is divided into simplified collapsible sections — click any section header to collapse or expand it, and use Dock left/right in the footer to choose the sidebar side. On phones, the top-left three-line button opens the same menu, while the bottom navigation keeps Home, Search, Create, and Recent one tap away.</p>
           <p className="mb-2">Use <kbd>Cmd+K</kbd> / <kbd>Ctrl+K</kbd> to open the command palette from anywhere. It groups destinations across navigation, discovery, personal, reference, and admin areas, then searches articles in the same panel when you type a query.</p>
           <p className="font-semibold mb-0.5">Navigation</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
             <li><Link href="/">Main Page</Link>, <Link href="/articles">All articles</Link>, <Link href="/recent-changes">Recent changes</Link>, <Link href="/random">Random article</Link></li>
-            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/atlas">Canon atlas</Link>, <Link href="/trails">Canon trails</Link>, <Link href="/graph">Article graph</Link></li>
+            <li><Link href="/search">Search</Link>, <Link href="/tags">Tags</Link>, <Link href="/studio">Arkivel Studio</Link>, <Link href="/atlas">Canon atlas</Link>, <Link href="/trails">Canon trails</Link>, <Link href="/graph">Article graph</Link></li>
           </ul>
           <p className="font-semibold mb-0.5">Discover</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">

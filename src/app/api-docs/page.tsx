@@ -305,6 +305,12 @@ export default function ApiDocsPage() {
           </p>
           <ul className="list-disc pl-6 space-y-1 text-muted">
             <li>
+              <code className="bg-surface-hover px-1 text-[12px]">GET /api/studio</code> — Arkivel Studio summary, generated board nodes, graph edges, base views, and action queue
+            </li>
+            <li>
+              <code className="bg-surface-hover px-1 text-[12px]">GET /api/studio/canvas</code> — JSON Canvas export of the generated Studio board
+            </li>
+            <li>
               <code className="bg-surface-hover px-1 text-[12px]">GET /api/atlas</code> — Canon Atlas territories, signals, threads, dossier, continuity pressure, and next moves
             </li>
             <li>

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const routes = ["/", "/search", "/articles", "/categories", "/features", "/help", "/dashboard", "/atlas", "/trails", "/intelligence"];
+const routes = ["/", "/search", "/articles", "/categories", "/features", "/help", "/dashboard", "/studio", "/atlas", "/trails", "/intelligence"];
 const viewports = [
   { name: "phone", width: 390, height: 844 },
   { name: "tablet", width: 768, height: 1024 },
@@ -135,8 +135,8 @@ test.describe("Responsive shell", () => {
     await page.goto("/");
 
     await expect(page.locator(".wiki-top-brand-mark")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Toggle browse navigation" })).toBeVisible();
-    await expect(page.locator(".wiki-mobile-nav")).toContainText("Browse");
+    await expect(page.getByRole("button", { name: "Toggle main menu" })).toBeVisible();
+    await expect(page.locator(".wiki-mobile-nav")).not.toContainText("Browse");
 
     await page.getByRole("button", { name: "Open search" }).click();
     await expect(page.getByPlaceholder("Search articles")).toBeFocused();

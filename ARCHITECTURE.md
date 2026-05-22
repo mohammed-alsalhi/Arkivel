@@ -30,6 +30,7 @@ src/
         [id]/
       search/                 # Full-text search
       graph/                  # Knowledge graph (BFS subgraph support)
+      studio/                 # Arkivel Studio command board report and JSON Canvas export
       atlas/                  # Canon Atlas report
       trails/                 # Canon Trails guided route report
       intelligence/           # Knowledge Command Center cockpit report
@@ -56,6 +57,7 @@ src/
       new/                    # Create article page
     categories/               # Category listing and individual pages
     tags/                     # Tag-based article listing
+    studio/                   # Arkivel Studio live board, base views, and Studio moves
     atlas/                    # Canon Atlas world-map surface
     trails/                   # Canon Trails reader routes
     graph/                    # Interactive D3 knowledge graph
@@ -125,6 +127,7 @@ src/
     canon-atlas.ts            # Territory, dossier, story-thread, and continuity report
     canon-trails.ts           # Reader-route engine for canon, fresh, deep, repair, and starter trails
     intelligence.ts           # Command-center score, graph, radar, sections, and next-best-work report
+    studio.ts                 # Studio board, database-style lanes, action queue, and JSON Canvas export
     search-response.ts        # Client-safe normalizer for internal search API response shapes
     auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
     api-auth.ts               # API key validation for public REST API
@@ -239,9 +242,9 @@ Each root category defines a field schema in `src/lib/infobox-schema.ts`. Subcat
 CSS variables in `src/app/globals.css` under a `@theme` block. Dark mode applies overrides via `html[data-theme="dark"]`. Uses `@theme` (not `@theme inline`) so CSS variable overrides work correctly with Tailwind.
 
 ### Responsive App Shell
-`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep the dense left/right sidebar as the main navigation spine. Phone layouts add a safe-area-aware bottom navigation for Home, Search, Create, Recent, and Browse; the Browse item dispatches sidebar events consumed by `Sidebar`.
+`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep the simplified dockable sidebar as the main navigation spine, with `LayoutShell` applying the persisted left/right side preference and matching content borders. Phone layouts use a persistent top-left three-line main-menu button to open the sidebar and a safe-area-aware bottom navigation for Home, Search, Create, and Recent.
 
-Focused workspace routes (`/ask`, `/graph`, `/split`, `/map`, and `/present/*`) hide the bottom navigation so full-height canvases and chat/workspace composers are not covered. Those routes keep the compact top mobile sidebar toggle. Closed mobile sidebars are translated, hidden, and pointer-inert so off-canvas links cannot be hit-tested or reported as covered controls.
+Focused workspace routes (`/ask`, `/graph`, `/split`, `/map`, and `/present/*`) hide the bottom navigation so full-height canvases and chat/workspace composers are not covered. They keep the same top-left mobile menu button. Closed mobile sidebars are translated, hidden, and pointer-inert so off-canvas links cannot be hit-tested or reported as covered controls.
 
 Responsive shell changes should be verified across phone, tablet, laptop, and wide desktop widths. At minimum, check for document horizontal overflow, clipped labels/controls, and fixed elements covering interactive targets.
 
@@ -258,6 +261,9 @@ Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet wit
 
 ### Graph
 D3 force-directed graph at `/graph`. API at `/api/graph` returns nodes/edges from wiki links and `ArticleLink` table. Supports BFS subgraph via `?center=slug&depth=N`.
+
+### Arkivel Studio
+`src/lib/studio.ts` builds `/studio`, `/api/studio`, and `/api/studio/canvas` from live article content, wiki links, semantic relations, revision counts, review pressure, taxonomy coverage, engagement signals, and freshness. It emits a fixed-coordinate command board, database-style lanes for review/stubs/orphans/taxonomy/stale work, next Studio moves, and a JSON Canvas export compatible with visual knowledge workflows. Empty or unavailable local databases fall back to a starter board that points users toward creating articles, categories, links, and canvases.
 
 ### Canon Atlas
 `src/lib/canon-atlas.ts` builds `/atlas` and `/api/atlas` from live article, category, tag, revision, engagement, excerpt, infobox, and wiki-link metadata. It projects categories into atlas territories, scores top articles as map signals, derives story threads from real wiki links, selects a flagship dossier, and exposes continuity pressure around stubs, uncategorized pages, missing tags, missing outgoing links, excerpts, and infoboxes. Empty local databases fall back to starter territories and starter signal routes so the page remains visually complete without pretending published article data exists.
@@ -318,6 +324,8 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 ### Other Resources
 | Route | Methods | Description |
 |-------|---------|-------------|
+| `/api/studio` | GET | Arkivel Studio summary, board nodes, graph edges, base views, and action queue |
+| `/api/studio/canvas` | GET | JSON Canvas export of the generated Studio board |
 | `/api/atlas` | GET | Canon Atlas territories, article signals, story threads, dossier, continuity pressure, and next moves |
 | `/api/trails` | GET | Canon Trails guided routes, stop reasons, reading estimates, word totals, and link totals |
 | `/api/intelligence` | GET | Knowledge Command Center score, graph constellation, radar axes, pressure model, 20 engines, and action queue |

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
 import BrandMark from "@/components/brand/BrandMark";
 import { config } from "@/lib/config";
-import { isFocusedWorkspacePath } from "@/lib/navigation";
+import { generateSlug } from "@/lib/utils";
 
 type Category = {
   id: string;
@@ -16,6 +16,47 @@ type Category = {
   _count: { articles: number };
   children?: Category[];
 };
+
+type MenuItem = {
+  href: string;
+  label: string;
+  active?: (pathname: string) => boolean;
+  indent?: boolean;
+};
+
+type SidebarSide = "left" | "right";
+
+function getStoredSidebarSide(): SidebarSide {
+  try {
+    return localStorage.getItem("wiki_sidebar_position") === "right" ? "right" : "left";
+  } catch {
+    return "left";
+  }
+}
+
+function safePathSegment(value: string | null | undefined, fallback: string, id: string): string {
+  const raw = (value?.trim() || generateSlug(fallback) || id).replace(/^\/+|\/+$/g, "");
+  return encodeURIComponent(raw);
+}
+
+function categoryPath(category: Category): string {
+  return `/categories/${safePathSegment(category.slug, category.name, category.id)}`;
+}
+
+function isPathActive(pathname: string, href: string): boolean {
+  if (pathname === href) return true;
+
+  try {
+    return decodeURIComponent(pathname) === decodeURIComponent(href);
+  } catch {
+    return false;
+  }
+}
+
+function defaultActive(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 // ── SVG primitives ────────────────────────────────────────────────────────────
 
@@ -67,9 +108,97 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarSide, setSidebarSide] = useState<SidebarSide>(getStoredSidebarSide);
   const isAdmin = useAdmin();
   const close = () => setMobileOpen(false);
-  const showTopMobileToggle = isFocusedWorkspacePath(pathname);
+
+  const mainItems: MenuItem[] = [
+    { href: "/", label: "Main Page", active: (path) => path === "/" },
+    { href: "/studio", label: "Arkivel Studio" },
+    {
+      href: "/articles",
+      label: `Articles${articleCount ? ` (${articleCount})` : ""}`,
+      active: (path) => path === "/articles" || path.startsWith("/articles/"),
+    },
+    { href: "/articles/new", label: "New article", active: (path) => path === "/articles/new" },
+    { href: "/recent-changes", label: "Recent changes" },
+    { href: "/search", label: "Search" },
+  ];
+
+  const discoverItems: MenuItem[] = [
+    { href: "/atlas", label: "Canon atlas" },
+    { href: "/trails", label: "Canon trails" },
+    { href: "/intelligence", label: "Knowledge cockpit" },
+    { href: "/graph", label: "Article graph" },
+    { href: "/ask", label: "Ask my wiki" },
+    { href: "/categories", label: "Categories", active: (path) => path === "/categories" || path.startsWith("/categories/") },
+    { href: "/tags", label: "Tags", active: (path) => path === "/tags" || path.startsWith("/tags/") },
+    { href: "/random", label: "Random article" },
+    ...(config.mapEnabled ? [{ href: "/map", label: config.mapLabel, active: (path: string) => path === "/map" || path.startsWith("/map/") }] : []),
+  ];
+
+  const workItems: MenuItem[] = [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/review", label: "Review queue" },
+    { href: "/canvas", label: "Canvas", active: (path) => path === "/canvas" || path.startsWith("/canvas/") },
+    { href: "/scratchpad", label: "Scratchpad" },
+    { href: "/bookmarks", label: "Bookmarks" },
+    { href: "/reading-lists", label: "Reading lists", active: (path) => path.startsWith("/reading-lists") },
+    { href: "/watchlist", label: "Watchlist", active: (path) => path === "/watchlist" },
+    { href: "/daily", label: "Daily note" },
+  ];
+
+  const moreItems: MenuItem[] = [
+    { href: "/timeline", label: "Timeline" },
+    { href: "/timeline/historical", label: "Historical timeline" },
+    { href: "/popular", label: "Popular" },
+    { href: "/series", label: "Series", active: (path) => path === "/series" || path.startsWith("/series/") },
+    { href: "/digest", label: "Daily digest" },
+    { href: "/coverage", label: "Coverage map" },
+    { href: "/health", label: "Wiki health" },
+    { href: "/glossary", label: "Glossary" },
+    { href: "/explore", label: "Explore" },
+    { href: "/activity", label: "Activity" },
+    { href: "/discussions", label: "Discussions", active: (path) => path === "/discussions" || path.startsWith("/discussions/") },
+    { href: "/compare", label: "Compare revisions" },
+    { href: "/export", label: "Export" },
+    { href: "/split", label: "Split view" },
+    { href: "/present", label: "Present" },
+    { href: "/assets", label: "Asset library" },
+    { href: "/api-docs", label: "API docs" },
+    { href: "/help", label: "Help" },
+    { href: "/features", label: "Features" },
+  ];
+
+  const adminItems: MenuItem[] = [
+    { href: "/admin", label: "Dashboard", active: (path) => path === "/admin" },
+    { href: "/import", label: "Import articles" },
+    { href: "/import/obsidian", label: "From Obsidian", indent: true },
+    { href: "/import/notion", label: "From Notion", indent: true },
+    { href: "/admin/users", label: "Users" },
+    { href: "/admin/analytics", label: "Analytics" },
+    { href: "/admin/metrics", label: "Metrics" },
+    { href: "/admin/health", label: "Health" },
+    { href: "/admin/lint", label: "Content lint" },
+    { href: "/admin/quality", label: "Content quality" },
+    { href: "/admin/knowledge-gaps", label: "Knowledge gaps" },
+    { href: "/admin/embeddings", label: "Embeddings" },
+    { href: "/admin/search-analytics", label: "Search analytics" },
+    { href: "/admin/search-gaps", label: "Search gaps" },
+    { href: "/admin/plugins", label: "Plugins" },
+    { href: "/admin/webhooks", label: "Webhooks" },
+    { href: "/admin/templates", label: "Templates" },
+    { href: "/admin/theme", label: "Theme" },
+    { href: "/admin/announcements", label: "Announcements" },
+    { href: "/admin/categories", label: "Category merge" },
+    { href: "/admin/tags", label: "Tag management" },
+    { href: "/admin/redirects", label: "Redirects" },
+    { href: "/admin/kanban", label: "Article pipeline" },
+    { href: "/admin/content-schedule", label: "Content schedule" },
+    { href: "/admin/audit-log", label: "Audit log" },
+    { href: "/admin/maintenance", label: "Maintenance mode" },
+    { href: "/admin/read-only", label: "Read-only mode" },
+  ];
 
   useEffect(() => {
     function handleMobileToggle() {
@@ -97,34 +226,29 @@ export default function Sidebar({
     window.dispatchEvent(new CustomEvent("mobile-sidebar-state-change", { detail: mobileOpen }));
   }, [mobileOpen]);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    if (showTopMobileToggle) {
-      root.setAttribute("data-mobile-sidebar-toggle", "true");
-    } else {
-      root.removeAttribute("data-mobile-sidebar-toggle");
-    }
-
-    return () => root.removeAttribute("data-mobile-sidebar-toggle");
-  }, [showTopMobileToggle]);
+  function setSidebarPosition(next: SidebarSide) {
+    setSidebarSide(next);
+    try {
+      localStorage.setItem("wiki_sidebar_position", next);
+      window.dispatchEvent(new CustomEvent("sidebar-position-change", { detail: next }));
+    } catch {}
+  }
 
   return (
     <>
-      {/* Mobile toggle */}
-      {showTopMobileToggle && (
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
-          aria-pressed={mobileOpen}
-          className="ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:!hidden"
-        >
-          {mobileOpen ? <CloseIcon /> : <MenuIcon />}
-        </button>
-      )}
+      <button
+        onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label="Toggle main menu"
+        aria-pressed={mobileOpen}
+        className="wiki-main-menu-button ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:!hidden"
+      >
+        {mobileOpen ? <CloseIcon /> : <MenuIcon />}
+      </button>
 
       <aside
+        data-side={sidebarSide}
         className={clsx(
-          "wiki-sidebar fixed left-0 top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg border-r border-border transition-[transform,opacity,visibility] flex flex-col",
+          "wiki-sidebar fixed top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg transition-[transform,opacity,visibility] flex flex-col",
           mobileOpen
             ? "translate-x-0 opacity-100 visible pointer-events-auto"
             : "-translate-x-full max-md:opacity-0 max-md:invisible max-md:pointer-events-none",
@@ -144,378 +268,17 @@ export default function Sidebar({
           </Link>
         </div>
 
-        {/* Browse — core content navigation */}
-        <SidebarSection title="Browse">
-          <SidebarLink href="/" active={pathname === "/"} onClick={close}>
-            Main Page
-          </SidebarLink>
-          <SidebarLink href="/atlas" active={pathname === "/atlas"} onClick={close}>
-            Canon atlas
-          </SidebarLink>
-          <SidebarLink href="/trails" active={pathname === "/trails"} onClick={close}>
-            Canon trails
-          </SidebarLink>
-          <SidebarLink href="/intelligence" active={pathname === "/intelligence"} onClick={close}>
-            Knowledge cockpit
-          </SidebarLink>
-          <SidebarLink href="/articles" active={pathname === "/articles"} onClick={close}>
-            All articles{articleCount ? ` (${articleCount})` : ""}
-          </SidebarLink>
-          <SidebarLink href="/recent-changes" active={pathname === "/recent-changes"} onClick={close}>
-            Recent changes
-          </SidebarLink>
-          <SidebarLink href="/timeline" active={pathname === "/timeline"} onClick={close}>
-            Timeline
-          </SidebarLink>
-          <SidebarLink href="/popular" active={pathname === "/popular"} onClick={close}>
-            Popular
-          </SidebarLink>
-          <SidebarLink href="/series" active={pathname === "/series" || pathname.startsWith("/series/")} onClick={close}>
-            Series
-          </SidebarLink>
-          <SidebarLink href="/random" active={pathname === "/random"} onClick={close}>
-            Random article
-          </SidebarLink>
-          <SidebarLink href="/tags" active={pathname === "/tags" || pathname.startsWith("/tags/")} onClick={close}>
-            Tags
-          </SidebarLink>
-          <SidebarLink href="/digest" active={pathname === "/digest"} onClick={close}>
-            Daily digest
-          </SidebarLink>
-          <SidebarLink href="/ask" active={pathname === "/ask"} onClick={close}>
-            Ask my wiki
-          </SidebarLink>
-          <SidebarLink href="/review" active={pathname === "/review"} onClick={close}>
-            Review queue
-          </SidebarLink>
-          <SidebarLink href="/coverage" active={pathname === "/coverage"} onClick={close}>
-            Coverage map
-          </SidebarLink>
-          <SidebarLink href="/timeline/historical" active={pathname === "/timeline/historical"} onClick={close}>
-            Historical timeline
-          </SidebarLink>
-          <SidebarLink href="/health" active={pathname === "/health"} onClick={close}>
-            Wiki health
-          </SidebarLink>
-          <SidebarLink href="/graph" active={pathname === "/graph"} onClick={close}>
-            Article graph
-          </SidebarLink>
-          <SidebarLink href="/glossary" active={pathname === "/glossary"} onClick={close}>
-            Glossary
-          </SidebarLink>
-          {config.mapEnabled && (
-            <SidebarLink href="/map" active={pathname === "/map" || pathname.startsWith("/map/")} onClick={close}>
-              {config.mapLabel}
-            </SidebarLink>
-          )}
-        </SidebarSection>
+        <MenuSection title="Main" items={mainItems} pathname={pathname} onNavigate={close} />
+        <MenuSection title="Discover" items={discoverItems} pathname={pathname} onNavigate={close} />
+        <MenuSection title="Work" items={workItems} pathname={pathname} onNavigate={close} />
+        <MenuSection title="More" items={moreItems} pathname={pathname} onNavigate={close} defaultOpen={false} />
 
-        {/* Discover — exploration and stats */}
-        <SidebarSection title="Discover">
-          <SidebarLink href="/explore" active={pathname === "/explore"} onClick={close}>
-            Explore
-          </SidebarLink>
-          <SidebarLink href="/activity" active={pathname === "/activity"} onClick={close}>
-            Activity
-          </SidebarLink>
-          <SidebarLink href="/stats" active={pathname === "/stats"} onClick={close}>
-            Stats
-          </SidebarLink>
-          <SidebarLink href="/leaderboard" active={pathname === "/leaderboard"} onClick={close}>
-            Leaderboard
-          </SidebarLink>
-          <SidebarLink href="/mentions" active={pathname === "/mentions"} onClick={close}>
-            Mentions
-          </SidebarLink>
-          <SidebarLink href="/discussions" active={pathname === "/discussions" || pathname.startsWith("/discussions/")} onClick={close}>
-            Discussions
-          </SidebarLink>
-          <SidebarLink href="/collections" active={pathname.startsWith("/collections")} onClick={close}>
-            Collections
-          </SidebarLink>
-        </SidebarSection>
-
-        {/* Community — collaborative features */}
-        <SidebarSection title="Community" defaultOpen={false}>
-          <SidebarLink href="/change-requests" active={pathname === "/change-requests"} onClick={close}>
-            Change requests
-          </SidebarLink>
-          <SidebarLink href="/reviews" active={pathname === "/reviews" || pathname.startsWith("/reviews/")} onClick={close}>
-            Reviews
-          </SidebarLink>
-          <SidebarLink href="/bounties" active={pathname === "/bounties"} onClick={close}>
-            Bounties
-          </SidebarLink>
-          <SidebarLink href="/forks" active={pathname === "/forks"} onClick={close}>
-            Forks
-          </SidebarLink>
-          <SidebarLink href="/users" active={pathname === "/users" || pathname.startsWith("/users/")} onClick={close}>
-            Users
-          </SidebarLink>
-        </SidebarSection>
-
-        {/* Personal — user account features */}
-        <SidebarSection title="Personal">
-          <SidebarLink href="/dashboard" active={pathname === "/dashboard"} onClick={close}>
-            My dashboard
-          </SidebarLink>
-          <SidebarLink href="/reading-lists" active={pathname.startsWith("/reading-lists")} onClick={close}>
-            Reading lists
-          </SidebarLink>
-          <SidebarLink href="/bookmarks" active={pathname === "/bookmarks"} onClick={close}>
-            Bookmarks
-          </SidebarLink>
-          <SidebarLink href="/watchlist" active={pathname === "/watchlist"} onClick={close}>
-            Watchlist
-          </SidebarLink>
-          <SidebarLink href="/watchlist/digest" active={pathname === "/watchlist/digest"} onClick={close} indent>
-            Change digest
-          </SidebarLink>
-          <SidebarLink href="/flashcards" active={pathname === "/flashcards"} onClick={close}>
-            Flashcards
-          </SidebarLink>
-          <SidebarLink href="/learning-paths" active={pathname.startsWith("/learning-paths")} onClick={close}>
-            Learning paths
-          </SidebarLink>
-          <SidebarLink href="/til" active={pathname === "/til"} onClick={close}>
-            Today I Learned
-          </SidebarLink>
-          <SidebarLink href="/daily" active={pathname === "/daily"} onClick={close}>
-            Daily note
-          </SidebarLink>
-          <SidebarLink href="/scratchpad" active={pathname === "/scratchpad"} onClick={close}>
-            Scratchpad
-          </SidebarLink>
-          <SidebarLink href="/canvas" active={pathname === "/canvas" || pathname.startsWith("/canvas/")} onClick={close}>
-            Canvas
-          </SidebarLink>
-          <SidebarLink href="/history" active={pathname === "/history"} onClick={close}>
-            Reading history
-          </SidebarLink>
-          <SidebarLink href="/settings/saved-searches" active={pathname === "/settings/saved-searches"} onClick={close}>
-            Saved searches
-          </SidebarLink>
-          <SidebarLink href="/settings/sessions" active={pathname === "/settings/sessions"} onClick={close}>
-            Active sessions
-          </SidebarLink>
-        </SidebarSection>
-
-        {/* Tools — utilities and integrations */}
-        <SidebarSection title="Tools" defaultOpen={false}>
-          <SidebarLink href="/compare" active={pathname === "/compare"} onClick={close}>
-            Compare revisions
-          </SidebarLink>
-          <SidebarLink href="/export" active={pathname === "/export"} onClick={close}>
-            Export
-          </SidebarLink>
-          <SidebarLink href="/whiteboards" active={pathname === "/whiteboards" || pathname.startsWith("/whiteboards/")} onClick={close}>
-            Whiteboards
-          </SidebarLink>
-          <SidebarLink href="/split" active={pathname === "/split"} onClick={close}>
-            Split view
-          </SidebarLink>
-          <SidebarLink href="/assets" active={pathname === "/assets"} onClick={close}>
-            Asset library
-          </SidebarLink>
-          <SidebarLink href="/present" active={pathname === "/present"} onClick={close}>
-            Present
-          </SidebarLink>
-          <SidebarLink href="/api-docs" active={pathname === "/api-docs"} onClick={close}>
-            API docs
-          </SidebarLink>
-          <SidebarLink href="/feed.xml" onClick={close}>
-            RSS feed
-          </SidebarLink>
-          <SidebarLink href="/bookmarklet" active={pathname === "/bookmarklet"} onClick={close}>
-            Bookmarklet
-          </SidebarLink>
-          <SidebarLink href="/clipper-extension" active={pathname === "/clipper-extension"} onClick={close}>
-            Clipper extension
-          </SidebarLink>
-          <SidebarLink href="/help" active={pathname === "/help"} onClick={close}>
-            Help
-          </SidebarLink>
-          <SidebarLink href="/features" active={pathname === "/features"} onClick={close}>
-            Features
-          </SidebarLink>
-        </SidebarSection>
-
-        {/* Contribute (admin only) */}
         {isAdmin && (
-          <SidebarSection title="Contribute">
-            <SidebarLink href="/articles/new" onClick={close}>
-              New article
-            </SidebarLink>
-            <SidebarLink href="/import" active={pathname === "/import"} onClick={close}>
-              Import articles
-            </SidebarLink>
-            <SidebarLink href="/import/obsidian" active={pathname === "/import/obsidian"} onClick={close} indent>
-              From Obsidian
-            </SidebarLink>
-            <SidebarLink href="/import/notion" active={pathname === "/import/notion"} onClick={close} indent>
-              From Notion
-            </SidebarLink>
-          </SidebarSection>
-        )}
-
-        {/* Admin (admin only, collapsed by default) */}
-        {isAdmin && (
-          <SidebarSection title="Admin" defaultOpen={false}>
-            <SidebarLink href="/admin" active={pathname === "/admin"} onClick={close}>
-              Dashboard
-            </SidebarLink>
-            <SidebarLink href="/admin/users" active={pathname === "/admin/users"} onClick={close}>
-              Users
-            </SidebarLink>
-            <SidebarLink href="/admin/analytics" active={pathname === "/admin/analytics"} onClick={close}>
-              Analytics
-            </SidebarLink>
-            <SidebarLink href="/admin/metrics" active={pathname === "/admin/metrics"} onClick={close}>
-              Metrics
-            </SidebarLink>
-            <SidebarLink href="/admin/health" active={pathname === "/admin/health"} onClick={close}>
-              Health
-            </SidebarLink>
-            <SidebarLink href="/admin/plugins" active={pathname === "/admin/plugins"} onClick={close}>
-              Plugins
-            </SidebarLink>
-            <SidebarLink href="/admin/webhooks" active={pathname === "/admin/webhooks"} onClick={close}>
-              Webhooks
-            </SidebarLink>
-            <SidebarLink href="/admin/templates" active={pathname === "/admin/templates"} onClick={close}>
-              Templates
-            </SidebarLink>
-            <SidebarLink href="/admin/theme" active={pathname === "/admin/theme"} onClick={close}>
-              Theme
-            </SidebarLink>
-            <SidebarLink href="/admin/lint" active={pathname === "/admin/lint"} onClick={close}>
-              Content lint
-            </SidebarLink>
-            <SidebarLink href="/admin/knowledge-gaps" active={pathname === "/admin/knowledge-gaps"} onClick={close}>
-              Knowledge gaps
-            </SidebarLink>
-            <SidebarLink href="/admin/embeddings" active={pathname === "/admin/embeddings"} onClick={close}>
-              Embeddings
-            </SidebarLink>
-            <SidebarLink href="/admin/search-analytics" active={pathname === "/admin/search-analytics"} onClick={close}>
-              Search analytics
-            </SidebarLink>
-            <SidebarLink href="/admin/search-gaps" active={pathname === "/admin/search-gaps"} onClick={close}>
-              Search gaps
-            </SidebarLink>
-            <SidebarLink href="/admin/announcements" active={pathname === "/admin/announcements"} onClick={close}>
-              Announcements
-            </SidebarLink>
-            <SidebarLink href="/admin/categories" active={pathname === "/admin/categories"} onClick={close}>
-              Category merge
-            </SidebarLink>
-            <SidebarLink href="/admin/word-count" active={pathname === "/admin/word-count"} onClick={close}>
-              Word count
-            </SidebarLink>
-            <SidebarLink href="/admin/staleness" active={pathname === "/admin/staleness"} onClick={close}>
-              Staleness
-            </SidebarLink>
-            <SidebarLink href="/admin/kanban" active={pathname === "/admin/kanban"} onClick={close}>
-              Article pipeline
-            </SidebarLink>
-            <SidebarLink href="/admin/content-schedule" active={pathname === "/admin/content-schedule"} onClick={close}>
-              Content schedule
-            </SidebarLink>
-            <SidebarLink href="/admin/audit-log" active={pathname === "/admin/audit-log"} onClick={close}>
-              Audit log
-            </SidebarLink>
-            <SidebarLink href="/admin/macros" active={pathname === "/admin/macros"} onClick={close}>
-              Macros
-            </SidebarLink>
-            <SidebarLink href="/admin/metadata-schemas" active={pathname === "/admin/metadata-schemas"} onClick={close}>
-              Metadata schemas
-            </SidebarLink>
-            <SidebarLink href="/admin/series" active={pathname === "/admin/series"} onClick={close}>
-              Series manager
-            </SidebarLink>
-            <SidebarLink href="/admin/redirects" active={pathname === "/admin/redirects"} onClick={close}>
-              Redirects
-            </SidebarLink>
-            <SidebarLink href="/admin/stubs" active={pathname === "/admin/stubs"} onClick={close}>
-              Stubs
-            </SidebarLink>
-            <SidebarLink href="/admin/dead-ends" active={pathname === "/admin/dead-ends"} onClick={close}>
-              Dead-end articles
-            </SidebarLink>
-            <SidebarLink href="/admin/duplicate-content" active={pathname === "/admin/duplicate-content"} onClick={close}>
-              Duplicate content
-            </SidebarLink>
-            <SidebarLink href="/admin/orphans" active={pathname === "/admin/orphans"} onClick={close}>
-              Orphan articles
-            </SidebarLink>
-            <SidebarLink href="/admin/long-articles" active={pathname === "/admin/long-articles"} onClick={close}>
-              Long articles
-            </SidebarLink>
-            <SidebarLink href="/admin/short-articles" active={pathname === "/admin/short-articles"} onClick={close}>
-              Short article merges
-            </SidebarLink>
-            <SidebarLink href="/admin/quality" active={pathname === "/admin/quality"} onClick={close}>
-              Content quality
-            </SidebarLink>
-            <SidebarLink href="/admin/calendar" active={pathname === "/admin/calendar"} onClick={close}>
-              Calendar
-            </SidebarLink>
-            <SidebarLink href="/admin/federated-peers" active={pathname === "/admin/federated-peers"} onClick={close}>
-              Federated peers
-            </SidebarLink>
-            <SidebarLink href="/admin/import" active={pathname === "/admin/import"} onClick={close}>
-              Import
-            </SidebarLink>
-            <SidebarLink href="/admin/glossary" active={pathname === "/admin/glossary"} onClick={close}>
-              Glossary
-            </SidebarLink>
-            <SidebarLink href="/admin/category-stats" active={pathname === "/admin/category-stats"} onClick={close}>
-              Category stats
-            </SidebarLink>
-            <SidebarLink href="/admin/suggestions" active={pathname === "/admin/suggestions"} onClick={close}>
-              Edit suggestions
-            </SidebarLink>
-            <SidebarLink href="/admin/retention" active={pathname === "/admin/retention"} onClick={close}>
-              Reader retention
-            </SidebarLink>
-            <SidebarLink href="/admin/tags" active={pathname === "/admin/tags"} onClick={close}>
-              Tag management
-            </SidebarLink>
-            <SidebarLink href="/admin/external-links" active={pathname === "/admin/external-links"} onClick={close}>
-              External link clicks
-            </SidebarLink>
-            <SidebarLink href="/admin/content-gaps" active={pathname === "/admin/content-gaps"} onClick={close}>
-              Content gap analysis
-            </SidebarLink>
-            <SidebarLink href="/admin/maintenance" active={pathname === "/admin/maintenance"} onClick={close}>
-              Maintenance mode
-            </SidebarLink>
-            <SidebarLink href="/admin/read-only" active={pathname === "/admin/read-only"} onClick={close}>
-              Read-only mode
-            </SidebarLink>
-            <SidebarLink href="/admin/prune-revisions" active={pathname === "/admin/prune-revisions"} onClick={close}>
-              Prune revisions
-            </SidebarLink>
-            <SidebarLink href="/admin/user-activity" active={pathname === "/admin/user-activity"} onClick={close}>
-              User activity log
-            </SidebarLink>
-            <SidebarLink href="/admin/writing-velocity" active={pathname === "/admin/writing-velocity"} onClick={close}>
-              Writing velocity
-            </SidebarLink>
-            <SidebarLink href="/admin/category-growth" active={pathname === "/admin/category-growth"} onClick={close}>
-              Category growth
-            </SidebarLink>
-            <SidebarLink href="/admin/referrers" active={pathname === "/admin/referrers"} onClick={close}>
-              Top referrers
-            </SidebarLink>
-            <SidebarLink href="/admin/tag-trends" active={pathname === "/admin/tag-trends"} onClick={close}>
-              Tag usage trends
-            </SidebarLink>
-          </SidebarSection>
+          <MenuSection title="Admin" items={adminItems} pathname={pathname} onNavigate={close} defaultOpen={false} />
         )}
 
         {/* Categories */}
-        <SidebarSection title="Categories">
+        <SidebarSection title="Categories" defaultOpen={false}>
           <SidebarLink href="/categories" active={pathname === "/categories"} onClick={close}>
             All categories
           </SidebarLink>
@@ -531,28 +294,31 @@ export default function Sidebar({
         </SidebarSection>
 
         {/* Footer */}
-        <div className="mt-auto border-t border-border px-3 py-2 text-[10px] text-muted flex items-center justify-between">
+        <div className="wiki-sidebar-footer mt-auto border-t border-border px-3 py-2 text-[10px] text-muted">
           <span>v{config.version}</span>
           <button
             type="button"
-            title="Toggle sidebar to right / left"
-            onClick={() => {
-              try {
-                const current = localStorage.getItem("wiki_sidebar_position") ?? "left";
-                const next = current === "right" ? "left" : "right";
-                localStorage.setItem("wiki_sidebar_position", next);
-                window.dispatchEvent(new CustomEvent("sidebar-position-change", { detail: next }));
-              } catch {}
-            }}
-            className="hover:text-foreground transition-colors"
-            aria-label="Toggle sidebar position"
+            title={sidebarSide === "right" ? "Dock sidebar on the left" : "Dock sidebar on the right"}
+            onClick={() => setSidebarPosition(sidebarSide === "right" ? "left" : "right")}
+            className="wiki-sidebar-dock-button"
+            aria-label={sidebarSide === "right" ? "Dock sidebar on the left" : "Dock sidebar on the right"}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="17 1 21 5 17 9" />
-              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-              <polyline points="7 23 3 19 7 15" />
-              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+              {sidebarSide === "right" ? (
+                <>
+                  <rect x="3" y="4" width="18" height="16" rx="1" />
+                  <path d="M9 4v16" />
+                  <path d="M6 8h.01M6 12h.01M6 16h.01" />
+                </>
+              ) : (
+                <>
+                  <rect x="3" y="4" width="18" height="16" rx="1" />
+                  <path d="M15 4v16" />
+                  <path d="M18 8h.01M18 12h.01M18 16h.01" />
+                </>
+              )}
             </svg>
+            <span>{sidebarSide === "right" ? "Dock left" : "Dock right"}</span>
           </button>
         </div>
       </aside>
@@ -575,6 +341,7 @@ function SidebarCategoryItem({
 }) {
   const [expanded, setExpanded] = useState(false);
   const hasChildren = category.children && category.children.length > 0;
+  const href = categoryPath(category);
 
   return (
     <div>
@@ -591,8 +358,8 @@ function SidebarCategoryItem({
           <span className="w-4 flex-shrink-0" />
         )}
         <SidebarLink
-          href={`/categories/${category.slug}`}
-          active={pathname === `/categories/${category.slug}`}
+          href={href}
+          active={isPathActive(pathname, href)}
           onClick={onNavigate}
         >
           <span className="flex items-center justify-between w-full">
@@ -619,6 +386,36 @@ function SidebarCategoryItem({
         </div>
       )}
     </div>
+  );
+}
+
+function MenuSection({
+  title,
+  items,
+  pathname,
+  onNavigate,
+  defaultOpen = true,
+}: {
+  title: string;
+  items: MenuItem[];
+  pathname: string;
+  onNavigate: () => void;
+  defaultOpen?: boolean;
+}) {
+  return (
+    <SidebarSection title={title} defaultOpen={defaultOpen}>
+      {items.map((item) => (
+        <SidebarLink
+          key={`${title}-${item.href}-${item.label}`}
+          href={item.href}
+          active={item.active ? item.active(pathname) : defaultActive(pathname, item.href)}
+          onClick={onNavigate}
+          indent={item.indent}
+        >
+          {item.label}
+        </SidebarLink>
+      ))}
+    </SidebarSection>
   );
 }
 

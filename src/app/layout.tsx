@@ -124,7 +124,7 @@ export default async function RootLayout({
             <Sidebar categories={categories} articleCount={articleCount} />
 
             {/* Content area */}
-            <div className="flex-1 min-w-0 bg-surface border-l border-border">
+            <div className="wiki-content-shell flex-1 min-w-0 bg-surface border-l border-border">
               <AnnouncementBanner />
               {maintenanceMode && <MaintenanceBanner />}
               {readOnlyMode && <ReadOnlyBanner />}

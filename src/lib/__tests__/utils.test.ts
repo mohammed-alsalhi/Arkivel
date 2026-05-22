@@ -32,6 +32,9 @@ describe("generateSlug", () => {
   it("collapses multiple separators", () => {
     expect(generateSlug("a   b   c")).toBe("a-b-c");
   });
+  it("normalizes accented latin characters", () => {
+    expect(generateSlug("Café déjà vu")).toBe("cafe-deja-vu");
+  });
 });
 
 describe("formatDate", () => {

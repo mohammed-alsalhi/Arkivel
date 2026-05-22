@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useCallback, useEffect } from "react";
 import { isFocusedWorkspacePath } from "@/lib/navigation";
 
 const navItems = [
@@ -48,23 +47,7 @@ const navItems = [
 
 export default function MobileNavigation() {
   const pathname = usePathname();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const hideForFocusedWorkspace = isFocusedWorkspacePath(pathname);
-
-  const toggleSidebar = useCallback(() => {
-    setSidebarOpen((prev) => !prev);
-    // Toggle the existing sidebar by dispatching a custom event
-    window.dispatchEvent(new CustomEvent("toggle-mobile-sidebar"));
-  }, []);
-
-  useEffect(() => {
-    function handleSidebarState(e: Event) {
-      setSidebarOpen(Boolean((e as CustomEvent<boolean>).detail));
-    }
-
-    window.addEventListener("mobile-sidebar-state-change", handleSidebarState);
-    return () => window.removeEventListener("mobile-sidebar-state-change", handleSidebarState);
-  }, []);
 
   if (hideForFocusedWorkspace) return null;
 
@@ -77,10 +60,7 @@ export default function MobileNavigation() {
             <Link
               key={item.href}
               href={item.href}
-              onClick={() => {
-                setSidebarOpen(false);
-                window.dispatchEvent(new CustomEvent("close-mobile-sidebar"));
-              }}
+              onClick={() => window.dispatchEvent(new CustomEvent("close-mobile-sidebar"))}
               aria-current={isActive ? "page" : undefined}
               className={`flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-0.5 text-[10px] no-underline transition-colors ${
                 isActive
@@ -93,32 +73,6 @@ export default function MobileNavigation() {
             </Link>
           );
         })}
-
-        {/* Menu button to toggle sidebar */}
-        <button
-          onClick={toggleSidebar}
-          className={`flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-0.5 text-[10px] transition-colors ${
-            sidebarOpen
-              ? "text-accent font-semibold"
-              : "text-muted hover:text-foreground"
-          }`}
-          aria-label="Toggle browse navigation"
-          aria-pressed={sidebarOpen}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {sidebarOpen ? (
-              <path d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <>
-                <path d="M4 5h7v6H4z" />
-                <path d="M13 5h7v6h-7z" />
-                <path d="M4 13h7v6H4z" />
-                <path d="M13 13h7v6h-7z" />
-              </>
-            )}
-          </svg>
-          <span className="max-w-full truncate">Browse</span>
-        </button>
       </div>
     </nav>
   );

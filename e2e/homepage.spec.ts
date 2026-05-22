@@ -16,7 +16,7 @@ test.describe("Homepage", () => {
 
     if (width < 768) {
       await expect(sidebar).toBeHidden();
-      await page.getByRole("button", { name: "Toggle browse navigation" }).click();
+      await page.getByRole("button", { name: "Toggle main menu" }).click();
     }
 
     await expect(sidebar).toBeVisible();

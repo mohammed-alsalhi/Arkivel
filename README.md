@@ -41,6 +41,7 @@ It is designed to feel like a working encyclopedia: dense, readable, serif-forwa
 | Experience | Route | What it does |
 |---|---:|---|
 | Article reader and editor | `/articles/[slug]` | Serif-first reading, wiki links, action rail, revisions, discussions, infoboxes, footnotes, tags, backlinks, and rich editing. |
+| Arkivel Studio | `/studio` | Combines a live article canvas, database-style lanes, graph links, review pressure, and JSON Canvas export in one workspace. |
 | Canon Trails | `/trails` | Builds guided reading routes from real article links, backlinks, categories, recency, depth, and engagement signals. |
 | Canon Atlas | `/atlas` | Projects the wiki into territories, story threads, dossiers, continuity pressure, and next atlas moves. |
 | Knowledge Cockpit | `/intelligence` | Runs 20 live quality, graph, canon, editorial, and audience engines with a constellation, radar, and impact simulator. |
@@ -58,7 +59,7 @@ It is designed to feel like a working encyclopedia: dense, readable, serif-forwa
 
 **Reading and discovery**
 
-- Full-text search with relevance ranking, command palette navigation, random article, recent changes, article graph, Canon Trails, Canon Atlas, Ask My Wiki, explore mode, saved searches, reading history, and sticky article headers.
+- Full-text search with relevance ranking, command palette navigation, random article, recent changes, Arkivel Studio, article graph, Canon Trails, Canon Atlas, Ask My Wiki, explore mode, saved searches, reading history, and sticky article headers.
 - Reader tools include serif/sans/mono font preference, size and width controls, reading mode, focus mode, night mode, high contrast, text-only mode, speed reader, article quizzes, tutor mode, audio narration, and presentation mode.
 
 **Governance and collaboration**
@@ -154,6 +155,8 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 |---|---:|---|
 | Public API | `/api/v1/*` | API-key protected article, category, search, and tag endpoints. |
 | API documentation | `/api-docs` | In-app reference for endpoints, auth, and errors. |
+| Studio feed | `/api/studio` | Generated command board, base views, graph links, and action queue. |
+| Studio canvas export | `/api/studio/canvas` | JSON Canvas export for portable visual knowledge work. |
 | Canon Trails feed | `/api/trails` | Guided route report for demos, readers, and automation. |
 | Canon Atlas feed | `/api/atlas` | Territory, dossier, thread, continuity, and move report. |
 | Knowledge feed | `/api/intelligence` | Cockpit score, engines, radar, graph, pressure model, and action queue. |

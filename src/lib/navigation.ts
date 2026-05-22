@@ -8,7 +8,7 @@ export type CommandDestination = {
   adminOnly?: boolean;
 };
 
-const FOCUSED_EXACT_PATHS = new Set(["/ask", "/graph", "/split", "/map"]);
+const FOCUSED_EXACT_PATHS = new Set(["/ask", "/graph", "/split", "/map", "/studio"]);
 const FOCUSED_PREFIXES = ["/map/", "/present"];
 
 export function isFocusedWorkspacePath(pathname: string): boolean {
@@ -93,6 +93,13 @@ export const COMMAND_DESTINATIONS: CommandDestination[] = [
     href: "/intelligence",
     group: "Discovery",
     keywords: ["intelligence", "command", "ops", "signals", "quality", "canon", "cockpit", "radar", "constellation", "simulator", "usp"],
+  },
+  {
+    id: "nav-studio",
+    label: "Arkivel Studio",
+    href: "/studio",
+    group: "Discovery",
+    keywords: ["studio", "canvas", "bases", "board", "obsidian", "workspace", "json canvas", "publish", "operating system"],
   },
   {
     id: "nav-ask",
