@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import BrandMark from "@/components/brand/BrandMark";
 import Sidebar from "@/components/layout/Sidebar";
 import LayoutShell from "@/components/layout/LayoutShell";
 import MobileNavigation from "@/components/layout/MobileNavigation";
@@ -102,9 +102,9 @@ export default async function RootLayout({
         <ToastProvider>
           {/* Top banner bar */}
           <header className="bg-surface border-b border-border">
-            <div className="flex min-h-10 items-center justify-between gap-2 pl-12 pr-3 py-1.5 sm:gap-3 md:pl-4 md:pr-6">
+            <div className="wiki-topbar-inner flex min-h-10 items-center justify-between gap-2 sm:gap-3">
               <Link href="/" className="wiki-top-brand md:hidden" aria-label={`${config.name} home`}>
-                <Image src={config.logoMark} alt="" width={24} height={24} className="wiki-top-brand-mark" priority />
+                <BrandMark className="wiki-top-brand-mark" imageSize={24} priority />
                 <span>{config.name}</span>
               </Link>
               <div className="hidden min-w-0 md:block">

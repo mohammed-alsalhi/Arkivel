@@ -4,6 +4,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.73.1] - 2026-05-22
+
+### Changed
+
+- **Theme-aware Arkivel mark** - Replaced fixed-image shell branding with an inline SVG mark that inherits theme colors while preserving custom logo-mark image overrides.
+- **Icon-only header treatment** - Removed the badge-style logo block so the Arkivel mark reads as a clean icon in the sidebar and mobile top bar.
+- **Responsive top-bar alignment** - Made mobile header spacing reserve room for the sidebar toggle only on focused workspace routes where that toggle is present.
+- **Branding documentation sync** - Bumped the app/package version to 4.73.1 and updated the changelog, environment example, README, and architecture notes for the SVG logo default.
+
 ## [4.73.0] - 2026-05-21
 
 ### Added

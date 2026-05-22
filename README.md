@@ -141,7 +141,7 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 | `NEXT_PUBLIC_ARKIVEL_TAGLINE` | No | Short tagline in the app chrome. |
 | `NEXT_PUBLIC_ARKIVEL_DESCRIPTION` | No | SEO/social description. |
 | `NEXT_PUBLIC_ARKIVEL_LOGO` | No | Full square logo, default `/brand/arkivel-logo.png`. |
-| `NEXT_PUBLIC_ARKIVEL_LOGO_MARK` | No | Compact sidebar/mobile mark, default `/brand/arkivel-mark.png`. |
+| `NEXT_PUBLIC_ARKIVEL_LOGO_MARK` | No | Compact sidebar/mobile mark, default `/brand/arkivel-logo.svg`. |
 | `NEXT_PUBLIC_ARKIVEL_APP_ICON` | No | Manifest/app icon, default `/brand/arkivel-icon-512.png`. |
 | `NEXT_PUBLIC_MAP_ENABLED` | No | Set `true` to enable the interactive map. |
 | `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob token for image uploads. |

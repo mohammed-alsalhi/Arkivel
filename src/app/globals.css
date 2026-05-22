@@ -17,6 +17,7 @@
   --color-muted-foreground: #54595d;
   --color-heading: #000;
   --color-popover: #ffffff;
+  --color-brand-mark: #111827;
 
   /* Semantic state colours */
   --color-success: #14866d;
@@ -77,6 +78,7 @@ html[data-theme="dark"] {
   --color-muted-foreground: #9aa3a8;
   --color-heading: #f0f3f4;
   --color-popover: #202224;
+  --color-brand-mark: #8ab4f8;
   --color-success: #7fd7bd;
   --color-success-soft: rgba(127, 215, 189, 0.12);
   --color-success-border: #3e7f71;
@@ -677,6 +679,25 @@ textarea:disabled {
   color: var(--color-heading);
 }
 
+.wiki-topbar-inner {
+  padding: 0.375rem 0.75rem 0.375rem 1rem;
+}
+
+html[data-mobile-sidebar-toggle="true"] .wiki-topbar-inner {
+  padding-left: 3rem;
+}
+
+@media (min-width: 48rem) {
+  .wiki-topbar-inner {
+    padding-left: 1rem;
+    padding-right: 1.5rem;
+  }
+
+  html[data-mobile-sidebar-toggle="true"] .wiki-topbar-inner {
+    padding-left: 1rem;
+  }
+}
+
 .wiki-top-brand {
   gap: 0.45rem;
   font-size: 0.8125rem;
@@ -694,10 +715,29 @@ textarea:disabled {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  border: 1px solid var(--color-border-light);
-  border-radius: 0.35rem;
-  background: #fff;
+  overflow: visible;
+  color: var(--color-brand-mark);
+  line-height: 0;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.wiki-top-brand:hover .wiki-brand-mark,
+.wiki-sidebar-brand:hover .wiki-brand-mark {
+  color: var(--color-accent);
+  transform: translateY(-0.5px);
+}
+
+.wiki-brand-mark-glyph {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wiki-brand-mark-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .wiki-top-brand-mark {
@@ -5310,6 +5350,7 @@ html.high-contrast {
   --color-heading: #ffffff;
   --color-border: #ffffff;
   --color-accent: #ffff00;
+  --color-brand-mark: #ffff00;
 }
 html.high-contrast a { color: #ffff00 !important; }
 html.high-contrast a:visited { color: #ff88ff !important; }
@@ -5324,6 +5365,7 @@ html.night-reading {
   --color-heading: #f0dfc0;
   --color-border: #4a3015;
   --color-accent: #c87941;
+  --color-brand-mark: #f0dfc0;
   filter: none;
 }
 html.night-reading #article-content {

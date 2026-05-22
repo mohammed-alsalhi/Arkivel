@@ -202,7 +202,7 @@ docs/
 ## Key Patterns
 
 ### Configuration
-All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables. Brand image paths are configurable through `NEXT_PUBLIC_ARKIVEL_LOGO`, `NEXT_PUBLIC_ARKIVEL_LOGO_MARK`, and `NEXT_PUBLIC_ARKIVEL_APP_ICON`; defaults live in `public/brand/`. Metadata resolves relative image paths against `NEXT_PUBLIC_BASE_URL`. The visible app version is read from `package.json` and exposed at build time through `next.config.ts` so sidebar and health-check version text follow release bumps.
+All branding is driven by `NEXT_PUBLIC_*` environment variables read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via environment variables. Brand image paths are configurable through `NEXT_PUBLIC_ARKIVEL_LOGO`, `NEXT_PUBLIC_ARKIVEL_LOGO_MARK`, and `NEXT_PUBLIC_ARKIVEL_APP_ICON`; defaults live in `public/brand/`. The default SVG mark is rendered inline by `BrandMark` so theme variables can recolor it, while custom `NEXT_PUBLIC_ARKIVEL_LOGO_MARK` paths still render as image assets. Metadata resolves relative image paths against `NEXT_PUBLIC_BASE_URL`. The visible app version is read from `package.json` and exposed at build time through `next.config.ts` so sidebar and health-check version text follow release bumps.
 
 ### Authentication
 Dual auth system. **Legacy:** single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. **Multi-user:** bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns the current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
