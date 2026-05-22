@@ -231,7 +231,7 @@ export default function Sidebar({
           <SidebarLink href="/change-requests" active={pathname === "/change-requests"} onClick={close}>
             Change requests
           </SidebarLink>
-          <SidebarLink href="/reviews" active={pathname === "/reviews"} onClick={close}>
+          <SidebarLink href="/reviews" active={pathname === "/reviews" || pathname.startsWith("/reviews/")} onClick={close}>
             Reviews
           </SidebarLink>
           <SidebarLink href="/bounties" active={pathname === "/bounties"} onClick={close}>

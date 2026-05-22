@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useAdmin } from "@/components/AdminContext";
+import ReviewStatusBadge from "@/components/ReviewStatusBadge";
+import { TabButton, Tabs } from "@/components/ui";
 
 type ReviewUser = {
   id: string;
@@ -30,34 +31,6 @@ type ReviewRequest = {
 
 type TabKey = "pending" | "assigned" | "mine";
 
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    pending: "bg-yellow-100 text-yellow-800 border border-yellow-300",
-    in_review: "bg-blue-100 text-blue-800 border border-blue-300",
-    approved: "bg-green-100 text-green-800 border border-green-300",
-    changes_requested: "bg-red-100 text-red-800 border border-red-300",
-    rejected: "bg-gray-100 text-gray-600 border border-gray-300",
-  };
-
-  const labels: Record<string, string> = {
-    pending: "Pending",
-    in_review: "In Review",
-    approved: "Approved",
-    changes_requested: "Changes Requested",
-    rejected: "Rejected",
-  };
-
-  const cls =
-    styles[status] ?? "bg-gray-100 text-gray-600 border border-gray-300";
-  const label = labels[status] ?? status;
-
-  return (
-    <span className={`px-2 py-0.5 text-[11px] font-medium rounded ${cls}`}>
-      {label}
-    </span>
-  );
-}
-
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-US", {
     year: "numeric",
@@ -73,7 +46,6 @@ type CurrentUser = {
 } | null;
 
 export default function ReviewsPage() {
-  const isAdmin = useAdmin();
   const [activeTab, setActiveTab] = useState<TabKey>("pending");
   const [reviews, setReviews] = useState<ReviewRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -83,10 +55,10 @@ export default function ReviewsPage() {
 
   // Fetch current user info for "Assigned to Me" and "My Requests" filtering
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("/api/auth/check")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (data && data.id) setCurrentUser(data);
+        if (data?.user?.id) setCurrentUser(data.user);
       })
       .catch(() => {});
   }, []);
@@ -96,6 +68,11 @@ export default function ReviewsPage() {
       setLoading(true);
       setError(null);
       try {
+        if ((tab === "assigned" || tab === "mine") && !currentUser) {
+          setReviews([]);
+          return;
+        }
+
         const params = new URLSearchParams();
 
         if (tab === "pending") {
@@ -107,7 +84,10 @@ export default function ReviewsPage() {
         }
 
         const res = await fetch(`/api/reviews?${params.toString()}`);
-        if (!res.ok) throw new Error("Failed to load reviews");
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          throw new Error(data?.error || "Failed to load reviews");
+        }
         const data = await res.json();
         setReviews(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -156,7 +136,8 @@ export default function ReviewsPage() {
     { key: "mine", label: "My Requests" },
   ];
 
-  const canAssign = isAdmin;
+  const canAssign =
+    currentUser?.role === "admin" || currentUser?.role === "editor";
 
   return (
     <div>
@@ -167,22 +148,17 @@ export default function ReviewsPage() {
         Review Dashboard
       </h1>
 
-      {/* Tabs */}
-      <div className="flex gap-1 mb-4 border-b border-border">
+      <Tabs label="Review views" className="mb-4">
         {tabs.map((tab) => (
-          <button
+          <TabButton
             key={tab.key}
+            active={activeTab === tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-3 py-1.5 text-[12px] border-b-2 transition-colors ${
-              activeTab === tab.key
-                ? "border-accent text-accent font-bold"
-                : "border-transparent text-muted hover:text-foreground"
-            }`}
           >
             {tab.label}
-          </button>
+          </TabButton>
         ))}
-      </div>
+      </Tabs>
 
       {/* Content */}
       {loading ? (
@@ -206,13 +182,13 @@ export default function ReviewsPage() {
                     {/* Article title */}
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <Link
-                        href={`/articles/${review.article.slug}`}
+                        href={`/reviews/${review.id}`}
                         className="text-[14px] font-semibold text-accent hover:underline"
                         style={{ fontFamily: "var(--font-serif)" }}
                       >
                         {review.article.title}
                       </Link>
-                      <StatusBadge status={review.status} />
+                      <ReviewStatusBadge status={review.status} />
                     </div>
 
                     {/* Meta row */}
@@ -252,10 +228,17 @@ export default function ReviewsPage() {
                   {/* Actions */}
                   <div className="flex flex-col gap-1.5 flex-shrink-0 items-end">
                     <Link
+                      href={`/reviews/${review.id}`}
+                      className="px-2 py-0.5 text-[11px] border border-border bg-surface hover:bg-surface-hover text-foreground transition-colors"
+                    >
+                      Open Review
+                    </Link>
+
+                    <Link
                       href={`/articles/${review.article.slug}`}
                       className="px-2 py-0.5 text-[11px] border border-border bg-surface hover:bg-surface-hover text-foreground transition-colors"
                     >
-                      View Article
+                      Article
                     </Link>
 
                     {/* Assign to me: available for editors/admins on pending reviews not yet assigned */}

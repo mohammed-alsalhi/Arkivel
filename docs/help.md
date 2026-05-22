@@ -228,6 +228,8 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Article polls** — admins create polls on any article; readers vote once per session; vote counts and bars revealed after voting or when closed; admins can close, reopen, or delete polls.
 - **Blame view** — the *Blame* tab on any article shows each paragraph colour-coded by the revision that introduced it; sidebar displays editor, date, and edit summary.
 - **Article forks** — propose a complete rewrite of any article. Admins review, merge, or reject forks at `/forks`.
+- **Review requests** — editors can request review from an article action, assign or self-assign a reviewer, discuss the draft at `/reviews`, approve to publish, request changes, reject, or resubmit after fixes.
+- **Claim Review Mode** — claims marked in the editor appear in the article claims panel. Editors can approve, request a source, dispute, reject, or leave reviewer notes for each claim.
 - **Knowledge bounties** — request articles on specific topics at `/bounties`. Contributors can claim and fulfil them.
 - **Expert badges** — admins grant expert badges per category. Expert contributors are highlighted in revision history and bylines.
 - **Article certification** — admins can certify articles reviewed by at least two experts. Certified articles show a "Verified by experts" badge.
@@ -425,7 +427,7 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 - **Command center** — `/intelligence`, a live wiki cockpit for readiness, graph health, canon quality, reader demand, impact simulation, and next-best work
 - **Collections** — `/collections`, curated article sets
 - **Change requests** — `/change-requests`, pending edits awaiting review
-- **Reviews** — `/reviews`, articles flagged for quality review
+- **Review requests** — `/reviews`, draft review queue with assignment, comments, approval, change-request, rejection, and resubmission states
 - **Bounties** — `/bounties`, open writing/improvement tasks
 - **Forks** — `/forks`, divergent article versions
 

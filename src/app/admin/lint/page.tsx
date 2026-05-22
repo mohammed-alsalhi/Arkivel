@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAdmin } from "@/components/AdminContext";
+import { Button, TabButton, Tabs } from "@/components/ui";
 
 type LintResult = {
   level: "error" | "warning" | "info";
@@ -139,27 +140,24 @@ export default function LintPage() {
           </div>
 
           {/* Filter buttons */}
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-[12px] font-semibold text-muted">Filter:</span>
-            {(["all", "error", "warning", "info"] as FilterLevel[]).map((level) => (
-              <button
-                key={level}
-                onClick={() => setFilter(level)}
-                className={`px-3 py-1 text-[12px] border transition-colors ${
-                  filter === level
-                    ? "border-accent bg-accent text-white"
-                    : "border-border bg-surface-hover text-foreground hover:bg-surface"
-                }`}
-              >
-                {level === "all" ? "All" : level.charAt(0).toUpperCase() + level.slice(1)}
-              </button>
-            ))}
-            <button
+          <div className="flex items-start gap-2 mb-4">
+            <Tabs label="Lint result filters">
+              {(["all", "error", "warning", "info"] as FilterLevel[]).map((level) => (
+                <TabButton
+                  key={level}
+                  active={filter === level}
+                  onClick={() => setFilter(level)}
+                >
+                  {level === "all" ? "All" : level.charAt(0).toUpperCase() + level.slice(1)}
+                </TabButton>
+              ))}
+            </Tabs>
+            <Button
               onClick={fetchLintResults}
-              className="ml-auto px-3 py-1 text-[12px] border border-border bg-surface-hover text-foreground hover:bg-surface transition-colors"
+              className="ml-auto"
             >
               Re-scan
-            </button>
+            </Button>
           </div>
 
           {/* Results */}

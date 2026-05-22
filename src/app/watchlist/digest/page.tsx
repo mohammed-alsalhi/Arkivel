@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Button, DataTable, EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 type DigestEntry = {
   articleId: string;
@@ -42,59 +43,57 @@ export default function WatchlistDigestPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Watchlist digest
-      </h1>
-      <p className="text-[12px] text-muted mb-4">
-        Changes to your watched articles in the past 7 days.
-      </p>
+    <Page>
+      <PageHeader
+        title="Watchlist digest"
+        description="Changes to your watched articles in the past 7 days."
+        actions={
+          <>
+            <Button
+              onClick={runDigest}
+              disabled={running}
+            >
+              {running ? "Running..." : "Generate digest now"}
+            </Button>
+            <LinkButton href="/watchlist">Watchlist</LinkButton>
+          </>
+        }
+      />
 
-      <div className="flex items-center gap-3 mb-4">
-        <button
-          onClick={runDigest}
-          disabled={running}
-          className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover disabled:opacity-50"
-        >
-          {running ? "Running…" : "Generate digest now"}
-        </button>
-        {runResult && <span className="text-[12px] text-muted">{runResult}</span>}
-      </div>
+      {runResult && <div className="wiki-notice">{runResult}</div>}
 
       {loading ? (
-        <p className="text-[13px] text-muted italic">Loading…</p>
+        <p className="text-[13px] text-muted italic">Loading...</p>
       ) : entries.length === 0 ? (
-        <div className="wiki-notice">
-          No changes to your watched articles in the past 7 days.{" "}
-          <Link href="/watchlist">View your watchlist.</Link>
-        </div>
+        <EmptyState
+          title="No digest activity"
+          description="No changes to your watched articles in the past 7 days."
+          actions={<LinkButton href="/watchlist" variant="primary">View your watchlist</LinkButton>}
+        />
       ) : (
-        <table className="w-full border-collapse border border-border bg-surface text-[13px]">
+        <DataTable>
           <thead>
-            <tr className="bg-surface-hover">
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-16">Edits</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Editors</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Last edit</th>
+            <tr>
+              <th>Article</th>
+              <th className="w-16">Edits</th>
+              <th>Editors</th>
+              <th className="w-28">Last edit</th>
             </tr>
           </thead>
           <tbody>
             {entries.map((e) => (
-              <tr key={e.articleId} className="hover:bg-surface-hover">
-                <td className="border border-border px-3 py-1.5">
+              <tr key={e.articleId}>
+                <td>
                   <Link href={`/articles/${e.articleSlug}`} className="font-medium">
                     {e.articleTitle}
                   </Link>
                 </td>
-                <td className="border border-border px-3 py-1.5 text-center">{e.editCount}</td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
+                <td className="text-center">{e.editCount}</td>
+                <td className="text-muted text-[12px]">
                   {e.editors.slice(0, 3).join(", ")}
                   {e.editors.length > 3 && ` +${e.editors.length - 3} more`}
                 </td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
+                <td className="text-muted text-[12px]">
                   {new Date(e.lastEdit).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -103,13 +102,9 @@ export default function WatchlistDigestPage() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </DataTable>
       )}
-
-      <p className="mt-4 text-[13px]">
-        <Link href="/watchlist">&larr; Watchlist</Link>
-      </p>
-    </div>
+    </Page>
   );
 }
 

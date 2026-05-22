@@ -1,6 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
+import { EmptyState, LinkButton, Page, PageHeader, Section } from "@/components/ui";
 
 export default async function RecentChangesPage() {
   // Get recent revisions (edits)
@@ -76,70 +77,65 @@ export default async function RecentChangesPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Recent changes
-      </h1>
-
-      <p className="text-[13px] text-muted mb-4">
-        Track the most recent edits and new articles across the wiki.
-      </p>
-
+    <Page>
+      <PageHeader
+        title="Recent changes"
+        description="Track the most recent edits and new articles across the wiki."
+        actions={
+          <>
+            <LinkButton href="/articles">Browse articles</LinkButton>
+            <LinkButton href="/activity">Activity</LinkButton>
+          </>
+        }
+      />
       {timeline.length === 0 ? (
-        <div className="wiki-notice">No recent changes to display.</div>
+        <EmptyState title="No recent changes" description="Edits and newly created articles will appear here." />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {Object.entries(grouped).map(([date, changes]) => (
-            <div key={date}>
-              <h2
-                className="text-[15px] font-bold text-heading mb-1"
-                style={{ fontFamily: "var(--font-serif)" }}
-              >
-                {date}
-              </h2>
-              <ul className="space-y-1 text-[13px]">
+            <Section key={date} title={date}>
+              <ul className="wiki-compact-list text-[13px]">
                 {changes.map((entry) => (
-                  <li key={entry.id} className="flex items-start gap-2">
-                    <span
-                      className={`inline-block px-1.5 py-0 text-[11px] font-bold rounded ${
-                        entry.type === "create"
-                          ? "bg-accent-soft text-accent"
-                          : "bg-surface-hover text-muted"
-                      }`}
-                    >
-                      {entry.type === "create" ? "N" : "E"}
-                    </span>
-                    <div>
-                      <Link href={`/articles/${entry.articleSlug}`} className="font-medium">
-                        {entry.articleTitle}
-                      </Link>
-                      {entry.category && (
-                        <span className="text-muted text-[11px] ml-1">
-                          (<Link href={`/categories/${entry.category.slug}`}>
-                            {entry.category.name}
-                          </Link>)
-                        </span>
-                      )}
-                      {entry.summary && (
-                        <span className="text-muted italic ml-1">
-                          &mdash; {entry.summary}
-                        </span>
-                      )}
-                      {entry.type === "create" && (
-                        <span className="text-muted italic ml-1">&mdash; Created</span>
-                      )}
+                  <li key={entry.id} className="wiki-compact-list-item">
+                    <div className="flex min-w-0 items-start gap-2">
+                      <span
+                        className={`ui-chip flex-shrink-0 ${
+                          entry.type === "create"
+                            ? "ui-chip-info"
+                            : ""
+                        }`}
+                      >
+                        {entry.type === "create" ? "New" : "Edit"}
+                      </span>
+                      <div className="min-w-0">
+                        <Link href={`/articles/${entry.articleSlug}`} className="font-medium">
+                          {entry.articleTitle}
+                        </Link>
+                        {entry.category && (
+                          <span className="text-muted text-[11px] ml-1">
+                            (<Link href={`/categories/${entry.category.slug}`}>
+                              {entry.category.name}
+                            </Link>)
+                          </span>
+                        )}
+                        {entry.summary && (
+                          <span className="text-muted italic ml-1">
+                            - {entry.summary}
+                          </span>
+                        )}
+                        {entry.type === "create" && (
+                          <span className="text-muted italic ml-1">- Created</span>
+                        )}
+                      </div>
                     </div>
                   </li>
                 ))}
               </ul>
-            </div>
+            </Section>
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }
 

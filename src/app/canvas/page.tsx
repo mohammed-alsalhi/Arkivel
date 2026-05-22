@@ -1,6 +1,6 @@
-import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { CardGrid, CardLink, EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -17,63 +17,40 @@ export default async function CanvasPage() {
     : [];
 
   return (
-    <div className="max-w-4xl mx-auto py-6">
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-heading">Canvas</h1>
-          <p className="text-sm text-muted mt-1">
-            Visually connect articles with an infinite canvas. Drag article cards, add text notes, and draw connections.
-          </p>
-        </div>
-        {session && (
-          <form action="/api/canvas" method="post">
-            <Link
-              href="/canvas/new"
-              className="ui-button ui-button-primary"
-            >
-              New canvas
-            </Link>
-          </form>
-        )}
-      </div>
-
+    <Page width="wide">
+      <PageHeader
+        title="Canvas"
+        description="Visually connect articles with an infinite canvas. Drag article cards, add text notes, and draw connections."
+        actions={session && <LinkButton href="/canvas/new" variant="primary">New canvas</LinkButton>}
+      />
       {!session && (
-        <div className="ui-empty-state">
-          <p>Sign in to create and save canvases.</p>
-          <Link href="/login" className="ui-button mt-3">
-            Sign in
-          </Link>
-        </div>
+        <EmptyState
+          title="Sign in required"
+          description="Sign in to create and save canvases."
+          actions={<LinkButton href="/login" variant="primary">Sign in</LinkButton>}
+        />
       )}
 
       {session && canvases.length === 0 && (
-        <div className="ui-empty-state">
-          <p className="text-sm">No canvases yet.</p>
-          <Link
-            href="/canvas/new"
-            className="ui-button mt-3"
-          >
-            Create your first canvas
-          </Link>
-        </div>
+        <EmptyState
+          title="No canvases yet"
+          description="Create a canvas to map article clusters and idea paths visually."
+          actions={<LinkButton href="/canvas/new" variant="primary">Create your first canvas</LinkButton>}
+        />
       )}
 
       {canvases.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <CardGrid>
           {canvases.map((c) => (
-            <Link
+            <CardLink
               key={c.id}
               href={`/canvas/${c.id}`}
-              className="border border-border rounded-lg p-4 hover:bg-muted/20 transition-colors"
-            >
-              <div className="font-medium text-heading text-sm">{c.name}</div>
-              <div className="text-[11px] text-muted mt-1">
-                Updated {new Date(c.updatedAt).toLocaleDateString()}
-              </div>
-            </Link>
+              title={c.name}
+              meta={`Updated ${new Date(c.updatedAt).toLocaleDateString()}`}
+            />
           ))}
-        </div>
+        </CardGrid>
       )}
-    </div>
+    </Page>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { TabButton, Tabs } from "@/components/ui";
 
 type ArticleIssue = {
   slug: string;
@@ -153,21 +154,17 @@ export default function WikiHealthPage() {
       </div>
 
       {/* Filter */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
+      <Tabs label="Health issue filters" className="mb-4">
         {FILTERS.map((f) => (
-          <button
+          <TabButton
             key={f.value}
+            active={filter === f.value}
             onClick={() => setFilter(f.value)}
-            className={`h-6 px-2.5 text-[11px] border rounded transition-colors ${
-              filter === f.value
-                ? "bg-accent text-white border-accent"
-                : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-            }`}
           >
             {f.label}
-          </button>
+          </TabButton>
         ))}
-      </div>
+      </Tabs>
 
       {/* Article list */}
       {filtered.length === 0 ? (

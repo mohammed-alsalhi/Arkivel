@@ -29,7 +29,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-header">Writing &amp; Editing</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with a calm icon-first toolbar, progressive feature trays, selection actions, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering</li>
+            <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with a calm icon-first toolbar, progressive feature trays, selection actions, claim marking, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering</li>
             <li><strong>Markdown mode</strong> — toggle between rich text and raw Markdown at any time</li>
             <li><strong>Editor feature trays</strong> — Insert, Review, and Outline reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed</li>
             <li><strong>Selection actions</strong> — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline</li>
@@ -152,7 +152,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Article hero header</strong> — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header</li>
-            <li><strong>Grouped action panel</strong> — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus</li>
+            <li><strong>Grouped action panel</strong> — Navigate, Workflow, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus</li>
             <li><strong>Taxonomy footer</strong> — category and tags render as wrapping chips at the end of the article rather than pipe-separated text</li>
             <li><strong>Responsive article shell</strong> — article tabs, infoboxes, collapsed article tables, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens</li>
             <li><strong>Reading time estimator</strong> — &ldquo;~X min read&rdquo; computed at 200 wpm displayed in every article&apos;s metadata line</li>
@@ -226,7 +226,8 @@ export default function FeaturesPage() {
             <li><strong>Article reactions</strong> — Helpful, Insightful, Outdated, Confusing via the reaction bar</li>
             <li><strong>Change requests</strong> — propose edits without direct write access at <Link href="/change-requests">/change-requests</Link></li>
             <li><strong>Article forks</strong> — propose a full rewrite; admins review/merge/reject at <Link href="/forks">/forks</Link></li>
-            <li><strong>Review workflow</strong> — assign reviewers and track inline feedback at <Link href="/reviews">/reviews</Link></li>
+            <li><strong>Review requests</strong> — request review from an article, assign or self-assign reviewers, discuss the draft in <Link href="/reviews">/reviews</Link>, approve to publish, request changes, reject, or resubmit</li>
+            <li><strong>Claim Review Mode</strong> — marked claims keep persistent review states on the article page. Editors can approve, request a source, dispute, reject, or leave notes for each claim</li>
             <li><strong>Knowledge bounties</strong> — request new articles; contributors claim and fulfil them at <Link href="/bounties">/bounties</Link></li>
             <li><strong>Expert badges</strong> — admin-granted per category; highlighted in revision history and bylines</li>
             <li><strong>Article certification</strong> — &ldquo;Verified by experts&rdquo; badge after review by 2+ experts</li>

@@ -78,18 +78,20 @@ The Tiptap editor should feel like a writing canvas first and a power tool secon
 
 Article action panel group order:
 1. **Navigate** — Present
-2. **Collect** — Bookmark, + List
-3. **Share / Export** — Copy link, Share, Print, Export ▾ (all formats in one dropdown)
-4. **Read** — font size, font preference, focus, night, contrast, text-only, dyslexia, RTL, reading mode, width, theme
-5. **Tools** — audio, speed reader, quiz, tutor, review, translate, copy, duplicate
+2. **Workflow** — Request review / active review link
+3. **Collect** — Bookmark, + List
+4. **Share / Export** — Copy link, Share, Print, Export ▾ (all formats in one dropdown)
+5. **Read** — font size, font preference, focus, night, contrast, text-only, dyslexia, RTL, reading mode, width, theme
+6. **Tools** — audio, speed reader, quiz, tutor, spaced-repetition review, translate, copy, duplicate
 
 Article pages should use the dedicated article shell:
 - Hero header for title, category, excerpt, edit attribution, freshness, verification, reading metrics, and co-authors.
-- Compact article action rail for Navigate, Collect, and Share actions, with dense Read and Tools controls behind disclosure menus. The rail must avoid fixed tile rows, avoid empty panel space, and keep dropdown menus clamped at tablet and phone widths.
+- Compact article action rail for Navigate, Workflow, Collect, and Share actions, with dense Read and Tools controls behind disclosure menus. The rail must avoid fixed tile rows, avoid empty panel space, and keep dropdown menus clamped at tablet and phone widths.
 - Dedicated article tabbar styles for Article, Edit, History, Discussion, and Blame; do not reuse `.wiki-tabs`, which is reserved for in-content tabbed blocks.
 - Notice stack for status, review due, pinned, disambiguation, and maintenance flags.
 - Taxonomy footer with wrapping category/tag chips, not pipe-separated text.
 - Backlinks and dense article adjuncts should wrap as compact chips or panels rather than long inline lists.
+- Claim Review Mode should live inside the existing claims panel. Keep claim confidence, review status, reviewer attribution, note editing, and decision buttons compact so the article body remains the primary reading surface.
 
 ### Page shell standard
 

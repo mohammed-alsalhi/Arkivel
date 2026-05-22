@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Button, EmptyState, LinkButton, Page, PageHeader, Section } from "@/components/ui";
 
 type WatchlistEntry = {
   userId: string;
@@ -56,44 +57,51 @@ export default function WatchlistPage() {
 
   if (loading) {
     return (
-      <div className="py-8 text-center text-muted italic text-[13px]">Loading...</div>
+      <Page>
+        <PageHeader title="Watchlist" description="Loading your watched articles." />
+        <p className="py-4 text-center text-muted italic text-[13px]">Loading...</p>
+      </Page>
     );
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Watchlist
-      </h1>
-
+    <Page>
+      <PageHeader
+        title="Watchlist"
+        description={
+          error
+            ? "Sign in to track article updates."
+            : `You are watching ${entries.length} article${entries.length !== 1 ? "s" : ""}.`
+        }
+        actions={
+          <>
+            <LinkButton href="/watchlist/digest">Digest</LinkButton>
+            <LinkButton href="/articles">Browse</LinkButton>
+          </>
+        }
+      />
       {error ? (
-        <div className="wiki-notice">
-          {error}{" "}
-          <Link href="/login" className="text-accent hover:underline">
-            Log in
-          </Link>
-        </div>
+        <EmptyState
+          title="Sign in required"
+          description={error}
+          actions={<LinkButton href="/login" variant="primary">Log in</LinkButton>}
+        />
       ) : entries.length === 0 ? (
-        <div className="wiki-notice">
-          Your watchlist is empty. Visit an article and add it to your watchlist to track changes.
-        </div>
+        <EmptyState
+          title="Your watchlist is empty"
+          description="Visit an article and add it to your watchlist to track changes."
+          actions={<LinkButton href="/articles" variant="primary">Browse articles</LinkButton>}
+        />
       ) : (
-        <>
-          <p className="text-[12px] text-muted mb-3">
-            You are watching {entries.length} article{entries.length !== 1 ? "s" : ""}.
-          </p>
-          <ul className="text-[13px] space-y-2">
+        <Section title="Watched articles">
+          <ul className="wiki-compact-list text-[13px]">
             {entries.map((entry) => (
-              <li key={entry.articleId} className="border-b border-border pb-2">
-                <div className="flex items-start justify-between">
-                  <div>
+              <li key={entry.articleId} className="wiki-compact-list-item">
+                <div className="flex min-w-0 items-start justify-between gap-3">
+                  <div className="min-w-0">
                     <Link
                       href={`/articles/${entry.article.slug}`}
-                      className="font-bold text-[15px]"
-                      style={{ fontFamily: "var(--font-serif)" }}
+                      className="font-serif text-[15px] font-bold"
                     >
                       {entry.article.title}
                     </Link>
@@ -103,12 +111,13 @@ export default function WatchlistPage() {
                       </span>
                     )}
                   </div>
-                  <button
+                  <Button
                     onClick={() => handleRemove(entry.articleId)}
-                    className="text-[11px] text-wiki-link-broken hover:underline flex-shrink-0 ml-2"
+                    className="flex-shrink-0"
+                    variant="danger"
                   >
                     Unwatch
-                  </button>
+                  </Button>
                 </div>
                 {entry.article.excerpt && (
                   <p className="text-muted mt-0.5 leading-relaxed text-[12px]">
@@ -126,8 +135,8 @@ export default function WatchlistPage() {
               </li>
             ))}
           </ul>
-        </>
+        </Section>
       )}
-    </div>
+    </Page>
   );
 }

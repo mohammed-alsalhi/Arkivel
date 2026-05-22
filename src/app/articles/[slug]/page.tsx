@@ -81,12 +81,14 @@ import WikiChatAssistant from "@/components/article/WikiChatAssistant";
 import ArticleQuizMode from "@/components/article/ArticleQuizMode";
 import ArticleBodyWithReadingLevel from "@/components/article/ArticleBodyWithReadingLevel";
 import ReviewEnrollButton from "@/components/article/ReviewEnrollButton";
+import ReviewRequestButton from "@/components/article/ReviewRequestButton";
 import ClaimsPanel from "@/components/article/ClaimsPanel";
 import TutorButton from "@/components/article/TutorButton";
 import AudioNarration from "@/components/article/AudioNarration";
 import FactCheckPanel from "@/components/article/FactCheckPanel";
 import ArticleRightSidebar from "@/components/ArticleRightSidebar";
 import { resolveQueryBlocks } from "@/lib/queryblocks";
+import { ACTIVE_REVIEW_STATUSES } from "@/lib/reviews";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -181,7 +183,7 @@ export default async function ArticlePage({ params }: Props) {
     }),
   ]);
 
-  const [lastRevision, recentRevisions, adminFlag, coAuthors, readCount, reactionCount] = await Promise.all([
+  const [lastRevision, recentRevisions, adminFlag, coAuthors, readCount, reactionCount, activeReview] = await Promise.all([
     prisma.articleRevision.findFirst({
       where: { articleId: article.id },
       orderBy: { createdAt: "desc" },
@@ -206,6 +208,20 @@ export default async function ArticlePage({ params }: Props) {
     }),
     prisma.articleRead.count({ where: { articleId: article.id } }),
     prisma.articleReaction.count({ where: { articleId: article.id } }),
+    prisma.reviewRequest.findFirst({
+      where: {
+        articleId: article.id,
+        status: { in: ACTIVE_REVIEW_STATUSES },
+      },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        status: true,
+        reviewer: {
+          select: { username: true, displayName: true },
+        },
+      },
+    }),
   ]);
 
   const quality = computeQualityScore({ content: article.content, excerpt: article.excerpt ?? null, updatedAt: article.updatedAt });
@@ -218,6 +234,7 @@ export default async function ArticlePage({ params }: Props) {
   const plainTextWords = plainText ? plainText.split(/\s+/).filter(Boolean).length : 0;
   const plainTextChars = plainText.length;
   const readingTimeMin = Math.max(1, Math.round(plainTextWords / 200));
+  const canRequestReview = session?.role === "admin" || session?.role === "editor";
 
   // expiry warning: reviewDueAt within 30 days
   const now30 = new Date();
@@ -299,6 +316,20 @@ export default async function ArticlePage({ params }: Props) {
                 </Link>
               ),
             },
+            ...(canRequestReview
+              ? [
+                  {
+                    label: "Workflow",
+                    children: (
+                      <ReviewRequestButton
+                        articleId={article.id}
+                        articleTitle={article.title}
+                        activeReview={activeReview}
+                      />
+                    ),
+                  },
+                ]
+              : []),
             {
               label: "Collect",
               children: (
@@ -467,7 +498,7 @@ export default async function ArticlePage({ params }: Props) {
         />
 
         {/* Claims summary panel */}
-        <ClaimsPanel html={resolvedContent} />
+        <ClaimsPanel articleId={article.id} html={resolvedContent} />
 
         {/* Fact-check panel */}
         <FactCheckPanel html={resolvedContent} />

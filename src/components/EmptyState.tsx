@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EmptyState as UiEmptyState, LinkButton } from "@/components/ui";
 
 type Props = {
   icon?: string;
@@ -8,17 +8,19 @@ type Props = {
   actionHref?: string;
 };
 
-export default function EmptyState({ icon = "O", title, description, actionLabel, actionHref }: Props) {
+export default function EmptyState({ icon, title, description, actionLabel, actionHref }: Props) {
   return (
-    <div className="empty-state">
-      <div className="empty-state-icon">{icon}</div>
-      <div className="empty-state-title">{title}</div>
-      {description && <div className="empty-state-description">{description}</div>}
-      {actionLabel && actionHref && (
-        <Link href={actionHref} className="home-action-btn home-action-btn-primary">
-          {actionLabel}
-        </Link>
-      )}
-    </div>
+    <UiEmptyState
+      icon={icon}
+      title={title}
+      description={description}
+      actions={
+        actionLabel && actionHref ? (
+          <LinkButton href={actionHref} variant="primary">
+            {actionLabel}
+          </LinkButton>
+        ) : null
+      }
+    />
   );
 }

@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.73.0] - 2026-05-21
+
+### Added
+
+- **Claim Review Mode** - Added persistent review records for editor-marked claims so each claim can be approved, marked as needing a source, disputed, or rejected directly from the article claims panel.
+- **Claim review API and audit trail** - Added `/api/articles/[id]/claim-reviews`, the `ClaimReview` Prisma model, reviewer attribution, author notifications, and activity events for claim-level decisions.
+- **Documentation/version discipline** - Bumped the app/package version to 4.73.0 and documented Claim Review Mode across roadmap, feature references, help guides, architecture, design guidance, README, backlog, and in-app product pages.
+
 ## [4.72.3] - 2026-05-21
 
 ### Changed
@@ -19,6 +27,14 @@ All notable changes to this project are documented here.
 - **Simplified editor surface** - Replaced the always-visible cockpit with a calmer writing-first editor, compact toolbar, and progressive Insert/Review/Outline/Coach trays.
 - **Progressive editor controls** - Kept everyday formatting visible while moving advanced text, knowledge, AI, claim, color, voice, and shortcut tools behind a single More disclosure.
 - **Editor responsive QA** - Updated scratchpad coverage to open feature trays on desktop and phone widths and assert no horizontal overflow.
+
+## [4.72.1] - 2026-05-21
+
+### Added
+
+- **Review Requests workflow** - Completed the article-level review request path with a Request review action, reviewer picker, active-review linking, and a dedicated `/reviews/[id]` workspace for draft preview, comments, assignment, approvals, change requests, rejection, and resubmission.
+- **Review governance API hardening** - Added reviewer lookup, editor/admin reviewer validation, duplicate active-review protection, decision permissions, notification fan-out, activity logging, and automatic article status transitions from draft to review to published or back to draft.
+- **Documentation/version discipline** - Bumped the app/package version to 4.72.1 and documented the completed workflow across roadmap, feature references, help guides, architecture, design guidance, and product surfaces.
 
 ## [4.71.1] - 2026-05-21
 

@@ -6,7 +6,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 
 ## Writing & Editing
 
-- **Rich text editor** — Tiptap-based WYSIWYG editor with a calm icon-first toolbar, progressive feature trays, selection actions, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering
+- **Rich text editor** — Tiptap-based WYSIWYG editor with a calm icon-first toolbar, progressive feature trays, selection actions, claim marking, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering
 - **Markdown mode** — toggle between rich text and raw Markdown at any time
 - **Editor feature trays** — Insert, Review, and Outline reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed
 - **Selection actions** — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline
@@ -206,7 +206,7 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 ## Article Page
 
 - **Article hero header** — title, category, excerpt, freshness, verification, reading metrics, return-visit badge, and co-authors are grouped into a single scannable header
-- **Grouped action panel** — Navigate, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus
+- **Grouped action panel** — Navigate, Workflow, Collect, and Share stay in a slim action rail, while dense Read and Tools controls open from disclosure menus
 - **Taxonomy footer** — category and tags render as wrapping chips at the end of the article rather than pipe-separated text
 - **Responsive article shell** — article tabs, infoboxes, collapsed article tables, table of contents, backlinks, and action groups wrap or scroll intentionally on narrow screens
 - **Reading time estimator** — "~X min read" computed at 200 wpm displayed in every article's metadata line
@@ -238,7 +238,8 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 - **Article reactions** — Helpful, Insightful, Outdated, Confusing via the reaction bar
 - **Change requests** — propose edits without direct write access at `/change-requests`
 - **Article forks** — propose a full rewrite; admins review/merge/reject at `/forks`
-- **Review workflow** — assign reviewers and track inline feedback at `/reviews`
+- **Review requests** — request review from an article, assign or self-assign reviewers, discuss the draft at `/reviews`, approve to publish, request changes, reject, or resubmit
+- **Claim Review Mode** — editor-marked claims keep persistent review states on the article page: approved, needs source, disputed, rejected, or unreviewed, with reviewer notes and attribution
 - **Knowledge bounties** — request new articles; contributors claim and fulfil them at `/bounties`
 - **Expert badges** — admin-granted per category; highlighted in revision history and bylines
 - **Article lock** — editor acquires a 10-min lock; others see "Being edited by X" warning; admins can force-unlock

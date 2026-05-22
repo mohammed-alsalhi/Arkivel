@@ -22,7 +22,7 @@ src/
   app/                        # Next.js App Router pages and API routes
     api/
       articles/               # CRUD, batch, import, reorder, titles, similar, recent, orphans, dead-links
-        [id]/                  # Single article + backlinks, discussions, export, links, rating, related, revisions, status, translations, views, word-count
+        [id]/                  # Single article + backlinks, claim reviews, discussions, export, links, rating, related, revisions, status, translations, views, word-count
       auth/                   # Login, logout, register, check
       categories/             # Category CRUD + tree view
         [id]/
@@ -45,6 +45,8 @@ src/
       metrics/                # Performance metrics
       health/                 # Health check
       notifications/          # User notifications
+      reviewers/              # Editor/admin reviewer lookup
+      reviews/                # Review request queue, detail, decisions, and comments
       watchlist/              # Article watch subscriptions
       webhooks/               # Webhook management
       plugins/                # Plugin management
@@ -61,6 +63,7 @@ src/
     map/                      # Interactive map pages
       [mapId]/
     search/                   # Search results page
+    reviews/                  # Review dashboard and request detail workspace
     page.tsx                  # Main Page front page with stats, featured article, browse directory, and recent updates
     login/                    # Login page
     register/                 # Registration page
@@ -109,6 +112,8 @@ src/
       ArticleActionPanel.tsx   # Slim article action rail with Read/Tools disclosures
       ArticlePageHeader.tsx    # Article hero metadata and badges
       ArticleTaxonomyFooter.tsx # Category/tag chip footer
+      ClaimsPanel.tsx          # Claim confidence summary and persistent claim review controls
+      ReviewRequestButton.tsx  # Article-level review request modal and active-review link
     intelligence/
       IntelligenceCockpit.tsx  # Client graph constellation, radar, and readiness simulator
     (37 root-level components)  # Badge, Breadcrumb, Toast, Pagination, ThemeToggle,
@@ -124,6 +129,7 @@ src/
     auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
     api-auth.ts               # API key validation for public REST API
     config.ts                 # Environment-driven branding config
+    claims.ts                 # Claim extraction, hashing, and review status helpers
     wikilinks.ts              # Wiki link resolution and backlink queries
     infobox-schema.ts         # Category-specific infobox field definitions
     templates.ts              # Article starter templates
@@ -137,7 +143,7 @@ src/
       types.ts                # Plugin interface definition
       registry.ts             # Plugin registry
 prisma/
-  schema.prisma               # Database schema (79 models — includes GlossaryTerm, ArticlePoll, PollVote; Article +contentWarnings/isAbandoned/cleanupTags)
+  schema.prisma               # Database schema (90 models — includes GlossaryTerm, ArticlePoll, PollVote, ClaimReview; Article +contentWarnings/isAbandoned/cleanupTags)
   seed.mjs                    # Category and subcategory seeder
   migrations/                 # Versioned migration history
 scripts/
@@ -184,6 +190,9 @@ docs/
 ### User Features
 - **Watchlist** — User-article watch pairs for change notifications.
 - **Notification** — Edit/reply/mention notifications per user.
+- **ReviewRequest** — Article review workflow record with author, optional reviewer, status (`pending`, `in_review`, `approved`, `changes_requested`, `rejected`), request message, and comments.
+- **ReviewComment** — Comment thread on a review request, with optional selector data for future inline review anchors.
+- **ClaimReview** — Persistent review decision for an editor-marked claim, keyed by article and claim hash. Stores claim text, status (`unreviewed`, `approved`, `needs_source`, `disputed`, `rejected`), reviewer note, and reviewer attribution.
 
 ### System
 - **PluginState** — Plugin enable/disable configuration.
@@ -197,6 +206,12 @@ All branding is driven by `NEXT_PUBLIC_*` environment variables read through `sr
 
 ### Authentication
 Dual auth system. **Legacy:** single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. **Multi-user:** bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns the current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
+
+### Review Requests
+Editors can request review from the article action rail. The request can be left in the shared queue or assigned to an editor/admin reviewer. Active requests are deduplicated per article, drafts move into `review`, approvals publish the article, and change requests or rejections return reviewed articles to `draft`. `/reviews` lists queues, `/reviews/[id]` hosts the draft preview, comments, assignment, approval, change-request, rejection, and resubmission actions. Review API mutations create notifications for reviewers/authors and activity events for auditability.
+
+### Claim Review Mode
+Claims marked in the editor as `certain`, `probable`, or `disputed` are extracted from article HTML by `extractClaims()` in `src/lib/claims.ts`. The shared helper normalizes text and creates a deterministic claim hash so the article claims panel and `/api/articles/[id]/claim-reviews` address the same claim without embedding database IDs in article HTML. Editors and admins can approve, mark as needing a source, dispute, reject, or annotate each claim. Mutations upsert `ClaimReview`, attribute the reviewer, notify the article author, log `claim_reviewed` activity, and revalidate the article page.
 
 ### Wiki Links
 Articles cross-reference using `[[Article Name]]` syntax. The custom Tiptap `WikiLink` extension renders these as `<a data-wiki-link="Title">` in the editor. At display time, `resolveWikiLinks()` queries the database to verify targets exist and marks broken links with a CSS class. `getBacklinks()` finds articles that reference a given slug.
@@ -319,6 +334,11 @@ Lightweight plugin system. Interface in `src/lib/plugins/types.ts`, registry in 
 | `/api/map-markers/[id]` | PUT, DELETE | Update/delete markers |
 | `/api/maps/[mapId]` | GET, PUT, DELETE | Map configuration |
 | `/api/users` | GET | User list |
+| `/api/articles/[id]/claim-reviews` | GET, PATCH | Claim review status list and editor/admin claim decisions |
+| `/api/reviewers` | GET | Editor/admin reviewer candidates |
+| `/api/reviews` | GET, POST | List or create review requests |
+| `/api/reviews/[id]` | GET, PUT, DELETE | Review detail, assignment, decisions, and deletion |
+| `/api/reviews/[id]/comments` | GET, POST | Review request comments |
 | `/api/upload` | POST | Upload images to Vercel Blob |
 | `/api/export` | GET | Batch wiki export |
 | `/api/export/zip` | GET | Bulk ZIP export — all articles as Markdown files in category subfolders |

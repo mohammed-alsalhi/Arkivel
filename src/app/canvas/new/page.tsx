@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 export default function NewCanvasPage() {
   const [name, setName] = useState("");
@@ -27,8 +28,11 @@ export default function NewCanvasPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto py-16">
-      <h1 className="text-xl font-bold text-heading mb-6">New Canvas</h1>
+    <Page width="narrow">
+      <PageHeader
+        title="New canvas"
+        description="Name the canvas before opening the visual editor."
+      />
       <form onSubmit={handleCreate} className="flex flex-col gap-4">
         <input
           type="text"
@@ -36,16 +40,16 @@ export default function NewCanvasPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           autoFocus
-          className="border border-border rounded-lg px-3 py-2 text-sm bg-background text-heading placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+          className="ui-input"
         />
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="h-8 px-4 text-sm border border-border rounded bg-accent text-white hover:bg-accent/90 disabled:opacity-50"
+          variant="primary"
         >
-          {loading ? "Creating…" : "Create canvas"}
-        </button>
+          {loading ? "Creating..." : "Create canvas"}
+        </Button>
       </form>
-    </div>
+    </Page>
   );
 }

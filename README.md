@@ -52,7 +52,7 @@ It is designed to feel like a working encyclopedia: dense, readable, serif-forwa
 
 **Writing and editing**
 
-- Tiptap rich text editor with a calm icon-first toolbar, Insert/Review/Outline feature trays, selection actions, contextual table controls, slash commands, Markdown mode, syntax highlighting, collapsed-border tables, footnotes, images, captions, pull quotes, two-column blocks, accordions, vertical timelines, and auto-save.
+- Tiptap rich text editor with a calm icon-first toolbar, Insert/Review/Outline feature trays, selection actions, contextual table controls, slash commands, Markdown mode, claim marking, syntax highlighting, collapsed-border tables, footnotes, images, captions, pull quotes, two-column blocks, accordions, vertical timelines, and auto-save.
 - Wiki link autocomplete with `[[Article Name]]`, broken-link styling, backlinks, semantic relations, redirects, disambiguation pages, templates, custom metadata schemas, infoboxes, and automatic revision snapshots.
 - AI assistance for rewriting, title/category/tag suggestions, outline building, grammar and style checks, alt text, section expansion, article generation, category synthesis, and revision summaries.
 
@@ -63,7 +63,7 @@ It is designed to feel like a working encyclopedia: dense, readable, serif-forwa
 
 **Governance and collaboration**
 
-- Multi-user auth with viewer/editor/admin roles, legacy admin secret support, status workflow, review due dates, verification stamps, edit suggestions, discussions, co-authors, locks, snapshots, restore, watchlists, notifications, and activity logs.
+- Multi-user auth with viewer/editor/admin roles, legacy admin secret support, status workflow, review requests, claim-level review states, review due dates, verification stamps, edit suggestions, discussions, co-authors, locks, snapshots, restore, watchlists, notifications, and activity logs.
 
 **Knowledge operations**
 

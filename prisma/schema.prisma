@@ -121,6 +121,7 @@ model Article {
   ratings          ArticleRating[]
   todos            ArticleTodo[]
   polls            ArticlePoll[]
+  claimReviews     ClaimReview[]
 
   // v4.41 additions
   contentWarnings  String[] @default([])  // e.g. ["spoilers", "violence", "mature"]
@@ -337,6 +338,7 @@ model User {
   canvases         Canvas[]
   workspaces       Workspace[]
   assets           Asset[]
+  claimReviews     ClaimReview[]
 
   createdAt    DateTime  @default(now())
 
@@ -592,6 +594,26 @@ model ReviewComment {
 
   @@index([reviewRequestId])
   @@index([userId])
+}
+
+// ── v4.73: Claim Review Mode ──
+model ClaimReview {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  claimHash   String
+  claimText   String   @db.Text
+  status      String   @default("unreviewed") // "unreviewed", "approved", "needs_source", "disputed", "rejected"
+  note        String?  @db.Text
+  reviewerId  String?
+  reviewer    User?    @relation(fields: [reviewerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([articleId, claimHash])
+  @@index([articleId])
+  @@index([reviewerId])
+  @@index([status])
 }
 
 // ── v3.0: Change Requests ──

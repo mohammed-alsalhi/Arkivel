@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import ArticleStatusBadge from "@/components/ArticleStatusBadge";
+import { DataTable, EmptyState, LinkButton, Page, PageHeader, Section } from "@/components/ui";
 
 type ReviewArticle = {
   id: string;
@@ -49,65 +50,63 @@ export default function AdminPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Admin
-      </h1>
-
+    <Page>
+      <PageHeader
+        title="Admin"
+        description="Review drafts and keep operational tools close at hand."
+        actions={
+          <>
+            <LinkButton href="/admin/users">Users</LinkButton>
+            <LinkButton href="/admin/categories">Categories</LinkButton>
+            <LinkButton href="/admin/quality">Quality</LinkButton>
+            <LinkButton href="/admin/plugins">Plugins</LinkButton>
+          </>
+        }
+      />
       {isAdmin ? (
-        <div>
-
-          {/* Articles needing review */}
-          {reviewArticles.length > 0 && (
-            <div className="mt-6">
-              <h2
-                className="text-base font-normal text-heading border-b border-border pb-1 mb-2"
-                style={{ fontFamily: "var(--font-serif)" }}
-              >
-                Articles needing review ({reviewArticles.length})
-              </h2>
-              <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-                <thead>
-                  <tr className="bg-surface-hover">
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-24">Status</th>
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Last edited</th>
+        reviewArticles.length > 0 ? (
+          <Section title={`Articles needing review (${reviewArticles.length})`}>
+            <DataTable>
+              <thead>
+                <tr>
+                  <th>Article</th>
+                  <th className="w-24">Status</th>
+                  <th className="w-28">Last edited</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reviewArticles.map((article) => (
+                  <tr key={article.id}>
+                    <td>
+                      <Link href={`/articles/${article.slug}/edit`} className="font-medium">
+                        {article.title}
+                      </Link>
+                    </td>
+                    <td>
+                      <ArticleStatusBadge status={article.status} />
+                    </td>
+                    <td className="text-muted text-[12px]">
+                      {new Date(article.updatedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {reviewArticles.map((article) => (
-                    <tr key={article.id} className="hover:bg-surface-hover">
-                      <td className="border border-border px-3 py-1.5">
-                        <Link href={`/articles/${article.slug}/edit`} className="font-medium">
-                          {article.title}
-                        </Link>
-                      </td>
-                      <td className="border border-border px-3 py-1.5">
-                        <ArticleStatusBadge status={article.status} />
-                      </td>
-                      <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                        {new Date(article.updatedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                ))}
+              </tbody>
+            </DataTable>
+          </Section>
+        ) : (
+          <EmptyState
+            title="Nothing needs review"
+            description="Draft and review queues are clear."
+            actions={<LinkButton href="/articles" variant="primary">Browse articles</LinkButton>}
+          />
+        )
       ) : (
-        <div className="wiki-notice">
-          <p className="text-[13px] mb-3">
-            You need to be logged in as an admin to access this page.
-          </p>
-          <Link href="/login" className="text-[13px] text-wiki-link hover:underline">
-            Log in
-          </Link>
-        </div>
+        <EmptyState
+          title="Admin access required"
+          description="You need to be logged in as an admin to access this page."
+          actions={<LinkButton href="/login" variant="primary">Log in</LinkButton>}
+        />
       )}
-    </div>
+    </Page>
   );
 }

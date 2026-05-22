@@ -209,6 +209,34 @@ textarea:disabled {
   margin-bottom: 0.5rem;
 }
 
+.ui-section {
+  display: grid;
+  min-width: 0;
+  gap: 0.55rem;
+}
+
+.ui-section-header {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.ui-section-header .ui-section-title {
+  min-width: 0;
+  flex: 1 1 auto;
+  margin-bottom: 0;
+}
+
+.ui-section-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
 .ui-label {
   display: block;
   margin-bottom: 0.15rem;
@@ -246,6 +274,11 @@ textarea:disabled {
   background: var(--color-surface-hover);
   color: var(--color-foreground);
   text-decoration: none;
+}
+
+.ui-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .ui-button[aria-pressed="true"],
@@ -489,12 +522,151 @@ textarea:disabled {
 }
 
 .ui-empty-state {
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  padding: 2rem;
+  border: 1px dashed var(--color-border-light);
+  background: var(--color-background);
+  padding: 1.35rem;
   text-align: center;
   color: var(--color-muted);
   font-size: 0.8125rem;
+}
+
+.ui-page {
+  display: grid;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.ui-page > .ui-page-header {
+  margin-bottom: 0;
+}
+
+.ui-page-narrow {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.ui-page-wide,
+.ui-page-full {
+  max-width: none;
+}
+
+.ui-page-header-copy {
+  min-width: 0;
+}
+
+.ui-empty-state-icon {
+  margin-bottom: 0.6rem;
+  color: var(--color-border);
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.ui-empty-state-title {
+  margin-bottom: 0.2rem;
+  color: var(--color-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.ui-empty-state-description {
+  max-width: 34rem;
+  margin: 0 auto;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.ui-empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+}
+
+.ui-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.ui-stat-card {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.65rem 0.75rem;
+}
+
+.ui-stat-card-value {
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.ui-stat-card-label {
+  margin-top: 0.25rem;
+  color: var(--color-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ui-stat-card-detail {
+  margin-top: 0.15rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+}
+
+.ui-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.ui-card-link {
+  display: grid;
+  min-width: 0;
+  gap: 0.3rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.65rem 0.75rem;
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.ui-card-link:hover {
+  border-color: var(--color-border-light);
+  background: var(--color-surface-hover);
+  text-decoration: none;
+}
+
+.ui-card-title {
+  min-width: 0;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.ui-card-description,
+.ui-card-meta {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.ui-card-meta {
+  font-size: 0.6875rem;
 }
 
 .wiki-top-brand,
@@ -655,6 +827,16 @@ textarea:disabled {
   }
 
   .ui-page-actions {
+    justify-content: flex-start;
+  }
+
+  .ui-section-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ui-section-actions {
     justify-content: flex-start;
   }
 
@@ -1020,32 +1202,49 @@ p a:hover {
 }
 
 /* ── Article tabs (Article | Edit | History) ── */
-.wiki-tabs {
+.wiki-tabs:not([data-tabs]) {
   display: flex;
-  border-bottom: 1px solid var(--color-border);
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.2rem;
+  border: 1px solid var(--color-border);
+  border-bottom: 0;
+  background: var(--color-background);
+  padding: 0.35rem 0.45rem 0;
   margin-bottom: 0;
 }
 .wiki-tab {
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
-  color: var(--color-wiki-link);
-  background: var(--color-surface-hover);
-  border: 1px solid var(--color-border);
-  border-bottom: none;
-  margin-right: 2px;
+  display: inline-flex;
+  min-width: 0;
+  min-height: 1.85rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
   margin-bottom: -1px;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid transparent;
+  border-bottom-color: var(--color-border);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
 }
 .wiki-tab:hover {
-  background: var(--color-background);
+  background: var(--color-surface-hover);
+  color: var(--color-foreground);
   text-decoration: none;
 }
 .wiki-tab-active {
+  border-color: var(--color-border);
+  border-bottom-color: var(--color-surface);
   background: var(--color-surface);
   color: var(--color-heading);
-  font-weight: 700;
-  border-bottom: 1px solid var(--color-surface);
 }
 
 /* ── Article page shell ── */
@@ -5206,7 +5405,7 @@ html.night-reading #article-content {
 }
 
 /* ── Tabbed content blocks ── */
-.wiki-tabs {
+.wiki-tabs[data-tabs] {
   border: 1px solid var(--color-border);
   border-radius: 6px;
   overflow: hidden;
@@ -5241,8 +5440,8 @@ html.night-reading #article-content {
 }
 .wiki-tab-panel.active { display: block; }
 /* In editor, show all panels stacked */
-.ProseMirror .wiki-tab-panel { display: block; }
-.ProseMirror .wiki-tabs-nav { display: none; }
+.ProseMirror .wiki-tabs[data-tabs] .wiki-tab-panel { display: block; }
+.ProseMirror .wiki-tabs[data-tabs] .wiki-tabs-nav { display: none; }
 
 /* ── Gallery grid blocks ── */
 .wiki-gallery {

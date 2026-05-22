@@ -6,6 +6,10 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const session = await getSession();
+  const denied = requireRole(session, "editor");
+  if (denied) return denied;
+
   const { id } = await params;
 
   try {
@@ -47,7 +51,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getSession();
-  const denied = requireRole(session, "viewer");
+  const denied = requireRole(session, "editor");
   if (denied) return denied;
 
   const { id } = await params;
@@ -56,7 +60,14 @@ export async function POST(
     // Verify the review request exists
     const review = await prisma.reviewRequest.findUnique({
       where: { id },
-      select: { id: true, status: true },
+      select: {
+        id: true,
+        status: true,
+        authorId: true,
+        reviewerId: true,
+        articleId: true,
+        article: { select: { title: true } },
+      },
     });
 
     if (!review) {
@@ -76,19 +87,40 @@ export async function POST(
       );
     }
 
-    const comment = await prisma.reviewComment.create({
-      data: {
-        reviewRequestId: id,
-        userId: session!.id,
-        content: content.trim(),
-        selector: selector || null,
-        resolved: false,
-      },
-      include: {
-        user: {
-          select: { id: true, username: true, displayName: true },
+    const comment = await prisma.$transaction(async (tx) => {
+      const saved = await tx.reviewComment.create({
+        data: {
+          reviewRequestId: id,
+          userId: session!.id,
+          content: content.trim(),
+          selector: selector || null,
+          resolved: false,
         },
-      },
+        include: {
+          user: {
+            select: { id: true, username: true, displayName: true },
+          },
+        },
+      });
+
+      const recipients = [review.authorId, review.reviewerId].filter(
+        (userId): userId is string => !!userId && userId !== session!.id
+      );
+      const uniqueRecipients = [...new Set(recipients)];
+
+      if (uniqueRecipients.length > 0) {
+        const actorName = session!.displayName || session!.username;
+        await tx.notification.createMany({
+          data: uniqueRecipients.map((userId) => ({
+            userId,
+            articleId: review.articleId,
+            type: "review_comment",
+            message: `${actorName} commented on the review for "${review.article.title}"`,
+          })),
+        });
+      }
+
+      return saved;
     });
 
     return NextResponse.json(comment, { status: 201 });

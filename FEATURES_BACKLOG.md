@@ -155,7 +155,9 @@ Completed features are marked `[x]`. All others are `[ ]`.
 - [x] Real-time collaborative editing (Yjs — full production wiring)
 - [ ] Edit conflict resolution UI (merge conflicting saves)
 - [x] Change proposal workflow (editor proposes, admin approves)
-- [ ] Peer review queue
+- [x] Peer review queue
+- [x] Review request workspace (assign/self-assign, draft preview, comments, approve, request changes, reject, resubmit)
+- [x] Claim Review Mode (approve, request source, dispute, reject, and annotate marked claims)
 - [x] Discussion threading (nested replies)
 - [ ] Discussion subscriptions (follow a single thread)
 - [ ] Inline discussion permalinks

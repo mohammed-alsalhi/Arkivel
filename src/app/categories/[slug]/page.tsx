@@ -6,6 +6,7 @@ import CategoryWatchButton from "@/components/CategoryWatchButton";
 import RandomArticleButton from "@/components/RandomArticleButton";
 import SynthesizeButton from "@/components/SynthesizeButton";
 import CategoryOverviewGenerator from "@/components/CategoryOverviewGenerator";
+import { DataTable, EmptyState, LinkButton, Page, PageHeader, Section } from "@/components/ui";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -53,8 +54,10 @@ export default async function CategoryPage({ params }: Props) {
     getParentChain(category.parentId),
   ]);
 
+  const articleCountText = `${articles.length} article${articles.length !== 1 ? "s" : ""} in this category`;
+
   return (
-    <div>
+    <Page>
       {/* Cover image banner */}
       {category.coverImage && (
         <div className="w-full h-36 mb-4 overflow-hidden rounded-sm border border-border">
@@ -80,59 +83,61 @@ export default async function CategoryPage({ params }: Props) {
         </nav>
       )}
 
-      <div className="mb-1 flex flex-wrap items-start justify-between gap-2 border-b border-border pb-1">
-        <h1 className="font-serif text-[1.7rem] font-normal text-heading">
-          Category: {category.name}
-        </h1>
-        <div className="ui-toolbar">
-          <SynthesizeButton categoryId={category.id} categoryName={category.name} articleCount={articles.length} />
-          <RandomArticleButton categorySlug={slug} label="Random" />
-          <CategoryWatchButton categoryId={category.id} />
-        </div>
-      </div>
-      {category.description && (
-        <p className="text-[13px] text-muted mb-3">{category.description}</p>
-      )}
-      <div className="mb-3">
+      <PageHeader
+        title={`Category: ${category.name}`}
+        description={
+          category.description ? (
+            <>
+              {category.description}
+              <br />
+              <span>{articleCountText}</span>
+            </>
+          ) : (
+            articleCountText
+          )
+        }
+        actions={
+          <div className="ui-toolbar">
+            <SynthesizeButton categoryId={category.id} categoryName={category.name} articleCount={articles.length} />
+            <RandomArticleButton categorySlug={slug} label="Random" />
+            <CategoryWatchButton categoryId={category.id} />
+          </div>
+        }
+      />
+
+      <div>
         <CategoryOverviewGenerator categoryId={category.id} />
       </div>
-      <p className="text-[12px] text-muted mb-3">
-        {articles.length} article{articles.length !== 1 ? "s" : ""} in this category
-      </p>
 
       {/* Subcategories */}
       {category.children.length > 0 && (
-        <div className="wiki-portal mb-4">
-          <div className="wiki-portal-header">Subcategories</div>
-          <div className="wiki-portal-body">
-            <ul className="list-disc pl-5 space-y-0.5">
-              {category.children.map((child) => (
-                <li key={child.id}>
-                  <Link href={`/categories/${child.slug}`}>
-                    {child.name}
-                  </Link>
-                  {child._count.articles > 0 && (
-                    <span className="text-[11px] text-muted ml-1">
-                      ({child._count.articles} article{child._count.articles !== 1 ? "s" : ""})
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <Section title="Subcategories">
+          <ul className="list-disc pl-5 space-y-0.5">
+            {category.children.map((child) => (
+              <li key={child.id}>
+                <Link href={`/categories/${child.slug}`}>
+                  {child.name}
+                </Link>
+                {child._count.articles > 0 && (
+                  <span className="text-[11px] text-muted ml-1">
+                    ({child._count.articles} article{child._count.articles !== 1 ? "s" : ""})
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Section>
       )}
 
       {articles.length === 0 ? (
-        <div className="wiki-notice">
-          This category has no articles yet. <Link href="/articles/new">Create one.</Link>
-        </div>
+        <EmptyState
+          title="No articles yet"
+          description="This category is ready for its first article."
+          actions={<LinkButton href="/articles/new" variant="primary">Create one</LinkButton>}
+        />
       ) : (
-        <div>
-          <h2 className="ui-section-title">
-            Articles in this category
-          </h2>
-          <table className="ui-table">
+        <Section title="Articles in this category">
+          <DataTable>
             <thead>
               <tr>
                 <th>Article</th>
@@ -166,8 +171,8 @@ export default async function CategoryPage({ params }: Props) {
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
+          </DataTable>
+        </Section>
       )}
 
       <p className="mt-4 text-[13px] flex items-center gap-4">
@@ -176,7 +181,7 @@ export default async function CategoryPage({ params }: Props) {
           Concept map
         </Link>
       </p>
-    </div>
+    </Page>
   );
 }
 

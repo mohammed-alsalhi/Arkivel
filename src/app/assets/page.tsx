@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { TabButton, Tabs } from "@/components/ui";
 
 type Asset = {
   id: string;
@@ -77,20 +78,17 @@ export default function AssetsPage() {
         </div>
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-1 mb-4">
+      <Tabs label="Asset filters" className="mb-4">
         {filterOptions.map((opt) => (
-          <button
+          <TabButton
             key={opt.value}
+            active={filter === opt.value}
             onClick={() => setFilter(opt.value)}
-            className={`h-6 px-2 text-[11px] border border-border rounded transition-colors ${
-              filter === opt.value ? "bg-accent text-white" : "text-muted hover:text-foreground"
-            }`}
           >
             {opt.label}
-          </button>
+          </TabButton>
         ))}
-      </div>
+      </Tabs>
 
       {loading && <div className="text-sm text-muted py-4">Loading…</div>}
 

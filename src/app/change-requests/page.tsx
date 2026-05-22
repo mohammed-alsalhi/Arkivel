@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAdmin } from "@/components/AdminContext";
+import { TabButton, Tabs } from "@/components/ui";
 
 type ChangeRequestArticle = {
   id: string;
@@ -140,22 +141,17 @@ export default function ChangeRequestsPage() {
         Change Requests
       </h1>
 
-      {/* Tabs */}
-      <div className="flex gap-1 mb-4 border-b border-border">
+      <Tabs label="Change request status" className="mb-4">
         {tabs.map((tab) => (
-          <button
+          <TabButton
             key={tab.key}
+            active={activeTab === tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-3 py-1.5 text-[12px] border-b-2 transition-colors ${
-              activeTab === tab.key
-                ? "border-accent text-accent font-bold"
-                : "border-transparent text-muted hover:text-foreground"
-            }`}
           >
             {tab.label}
-          </button>
+          </TabButton>
         ))}
-      </div>
+      </Tabs>
 
       {/* Content */}
       {loading ? (

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { TabButton, Tabs } from "@/components/ui";
 
 interface Bounty {
   id: string;
@@ -100,19 +101,17 @@ export default function BountiesPage() {
         )}
 
         {/* Status filter tabs */}
-        <div className="flex gap-2 mb-4 text-xs">
+        <Tabs label="Bounty status" className="mb-4">
           {["open", "claimed", "fulfilled", "closed"].map((s) => (
-            <button
+            <TabButton
               key={s}
+              active={filter === s}
               onClick={() => setFilter(s)}
-              className={`px-2 py-0.5 rounded border transition-colors ${
-                filter === s ? "bg-accent text-white border-accent" : "border-border text-muted hover:border-accent/40"
-              }`}
             >
               {s.charAt(0).toUpperCase() + s.slice(1)}
-            </button>
+            </TabButton>
           ))}
-        </div>
+        </Tabs>
 
         {loading ? (
           <p className="text-sm text-muted">Loading…</p>

@@ -16,6 +16,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.73.0
+
+- [x] Claim Review Mode - marked article claims now have persistent review states for approved, needs source, disputed, rejected, and unreviewed
+- [x] Article-integrated review surface - the existing claims panel shows review status, reviewer attribution, notes, and editor/admin controls beside each marked claim
+- [x] Claim review API and data model - `/api/articles/[id]/claim-reviews` stores claim decisions in `ClaimReview`, protects draft visibility, notifies article authors, and logs activity
+- [x] Documentation/version discipline - package version, changelog, roadmap, feature docs, help docs, architecture, design notes, README, backlog, and in-app feature/help pages describe the completed workflow
+
 ## v4.72.3
 
 - [x] Cleaner editor chrome - the editor header now shows only the title, word/read-time summary, Insert/Review/Outline trays, and Markdown mode
@@ -29,6 +36,14 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Progressive toolbar - everyday formatting stays visible while advanced text, knowledge, AI, claim, color, voice, and shortcut controls move behind a single More disclosure
 - [x] Editor-local styling - the new shell and toolbar use component CSS modules so unrelated global UI work can continue without editor style collisions
 - [x] Responsive editor QA - Playwright coverage now opens the editor trays on desktop and phone widths and asserts no horizontal overflow
+
+## v4.72.1
+
+- [x] Review Requests workflow - editors can request review from article pages, optionally assign a reviewer, and jump to the live request workspace
+- [x] Review detail workspace - `/reviews/[id]` shows the current draft preview, request note, comment thread, assignment controls, approval, change request, rejection, and resubmission actions
+- [x] Governance status transitions - approved requests publish articles, requested changes/rejections return reviewed drafts to draft state, and resubmissions move them back into review
+- [x] Review notifications and API hardening - reviewer validation, duplicate active-review prevention, decision permissions, notifications, activity events, and reviewer lookup are wired into the API
+- [x] Documentation/version discipline - package version, changelog, roadmap, feature docs, help docs, architecture, design notes, README, and in-app feature/help pages describe the completed workflow
 
 ## v4.72.0
 

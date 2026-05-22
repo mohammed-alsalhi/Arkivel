@@ -286,6 +286,8 @@ export default function HelpPage() {
             <li><strong>Blame view</strong> &mdash; visit the <em>Blame</em> tab on any article to see each paragraph colour-coded by the revision that first introduced it; sidebar shows editor name, date, and edit summary with a link to the full revision.</li>
             <li><strong>Content warning tags</strong> &mdash; admins add CW labels to articles in the edit form; readers see a dismissible amber banner (Spoilers, Violence, Mature content, etc.) before the article body.</li>
             <li><strong>Article forks</strong> &mdash; propose a complete rewrite of any article. Admins review, merge, or reject forks at <Link href="/forks">/forks</Link>.</li>
+            <li><strong>Review requests</strong> &mdash; editors can request review from an article action, assign or self-assign a reviewer, discuss the draft at <Link href="/reviews">/reviews</Link>, approve to publish, request changes, reject, or resubmit after fixes.</li>
+            <li><strong>Claim Review Mode</strong> &mdash; claims marked in the editor appear in the article claims panel. Editors can approve, request a source, dispute, reject, or leave notes for each claim.</li>
             <li><strong>Knowledge bounties</strong> &mdash; request articles on specific topics at <Link href="/bounties">/bounties</Link>. Contributors can claim and fulfil them.</li>
             <li><strong>Expert badges</strong> &mdash; admins grant expert badges per category. Expert contributors are highlighted in revision history and bylines.</li>
             <li><strong>Article certification</strong> &mdash; admins can certify articles reviewed by at least two experts. Certified articles show a &ldquo;Verified by experts&rdquo; badge.</li>
@@ -529,7 +531,7 @@ export default function HelpPage() {
           <p className="font-semibold mb-0.5">Discover</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">
             <li><Link href="/explore">Explore</Link> — curated entry points; <Link href="/activity">Activity</Link> — recent contribution feed; <Link href="/intelligence">Command center</Link> — live wiki cockpit and intelligence engines</li>
-            <li><Link href="/collections">Collections</Link>, <Link href="/change-requests">Change requests</Link>, <Link href="/reviews">Reviews</Link>, <Link href="/bounties">Bounties</Link>, <Link href="/forks">Forks</Link></li>
+            <li><Link href="/collections">Collections</Link>, <Link href="/change-requests">Change requests</Link>, <Link href="/reviews">Review requests</Link>, <Link href="/bounties">Bounties</Link>, <Link href="/forks">Forks</Link></li>
           </ul>
           <p className="font-semibold mb-0.5">Personal</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">

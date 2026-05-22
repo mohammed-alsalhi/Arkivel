@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { TabButton, Tabs } from "@/components/ui";
 
 type CoverageItem = {
   id: string;
@@ -123,36 +124,32 @@ export default function CoverageMapPage() {
       </div>
 
       {/* Filter + View toggle */}
-      <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <div className="flex items-center gap-1 flex-wrap">
+      <div className="flex items-start justify-between mb-3 flex-wrap gap-2">
+        <Tabs label="Coverage filters">
           {(["all", "empty", "sparse", "growing", "solid", "rich"] as const).map((f) => (
-            <button
+            <TabButton
               key={f}
+              active={filter === f}
               onClick={() => setFilter(f)}
-              className={`h-6 px-2 text-[11px] border rounded capitalize transition-colors ${
-                filter === f
-                  ? "border-accent text-accent bg-accent/10"
-                  : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-              }`}
             >
               {f === "all" ? `All (${items.length})` : `${STATUS_LABEL[f]} (${items.filter((i) => i.status === f).length})`}
-            </button>
+            </TabButton>
           ))}
-        </div>
-        <div className="flex border border-border rounded overflow-hidden">
-          <button
+        </Tabs>
+        <Tabs label="Coverage view">
+          <TabButton
+            active={view === "grid"}
             onClick={() => setView("grid")}
-            className={`h-6 px-2.5 text-[11px] transition-colors ${view === "grid" ? "bg-accent text-white" : "text-muted hover:bg-surface-hover"}`}
           >
             Grid
-          </button>
-          <button
+          </TabButton>
+          <TabButton
+            active={view === "table"}
             onClick={() => setView("table")}
-            className={`h-6 px-2.5 text-[11px] transition-colors ${view === "table" ? "bg-accent text-white" : "text-muted hover:bg-surface-hover"}`}
           >
             Table
-          </button>
-        </div>
+          </TabButton>
+        </Tabs>
       </div>
 
       {view === "grid" ? (

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import LocalGraph from "@/components/LocalGraph";
+import { TabButton, Tabs } from "@/components/ui";
 
 type BacklinkItem = { id: string; title: string; slug: string };
 type HeadingItem = { id: string; text: string; level: number };
@@ -65,13 +66,12 @@ export default function ArticleRightSidebar({
   }, [open, panel]);
 
   const panelBtn = (p: Panel, label: string) => (
-    <button
+    <TabButton
+      active={panel === p}
       onClick={() => setPanel(p)}
-      aria-pressed={panel === p}
-      className="ui-button"
     >
       {label}
-    </button>
+    </TabButton>
   );
 
   return (
@@ -94,11 +94,11 @@ export default function ArticleRightSidebar({
       {open && (
         <aside className="wiki-right-sidebar fixed right-0 top-[40px] z-20 h-[calc(100vh-40px)] w-56 bg-surface border-l border-border overflow-y-auto shadow-lg flex flex-col">
           {/* Panel tabs */}
-          <div className="flex items-center gap-1 px-3 py-2 border-b border-border flex-wrap">
+          <Tabs label="Article sidebar panels" className="border-x-0 border-t-0 px-3 pt-2">
             {panelBtn("outline", "Outline")}
             {panelBtn("backlinks", "Links")}
             {panelBtn("graph", "Graph")}
-          </div>
+          </Tabs>
 
           <div className="flex-1 overflow-y-auto px-3 py-3">
             {panel === "outline" && (
