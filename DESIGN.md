@@ -68,11 +68,11 @@ Related actions are grouped visually with a hairline divider:
 ### Editor tray standard
 
 The Tiptap editor should feel like a writing canvas first and a power tool second:
-- Header: short editor identity, word/read-time summary, readiness badge, feature tray toggles, and Markdown toggle.
-- Toolbar: keep common actions visible (block style, undo/redo, bold, italic, links, lists, quote, image, table). Move advanced text, knowledge, AI, claim, color, voice, and shortcut controls behind More.
-- Feature trays: Insert, Review, Outline, and Coach are progressive disclosures. They should be closed by default, full-width, and never force a side inspector onto the canvas.
-- Insert tray: rich blocks use concise two-line tiles with stable minimum sizes.
-- Review tray: readiness, document signals, quality checks, and grammar tools appear together only when requested.
+- Header: short editor identity, word/read-time summary, Insert/Review/Outline tray toggles, and Markdown toggle. Avoid extra badges or close buttons in the default chrome.
+- Toolbar: keep common actions visible (block style, undo/redo, bold, italic, links, lists, image). Move quote, table, advanced text, knowledge, AI, claim, color, voice, and shortcut controls behind More.
+- Feature trays: Insert, Review, and Outline are progressive disclosures. They should be closed by default, full-width, and never force a side inspector onto the canvas.
+- Insert tray: rich blocks are grouped by purpose instead of shown as one large wall of tiles.
+- Review tray: readiness and signals appear first; grammar and writing coach tools live in nested disclosures.
 - Context bars: table controls appear only while editing a table. Do not show row, column, merge, split, or delete-table controls globally.
 - Selection actions: appear only when text is selected and expose selection-specific commands. They must not reserve empty space when inactive.
 

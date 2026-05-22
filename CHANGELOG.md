@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.72.3] - 2026-05-21
+
+### Changed
+
+- **Cleaner editor chrome** - Reduced the editor header to identity, three feature trays, and Markdown mode so the writing surface feels calmer by default.
+- **Quieter toolbar** - Kept only core formatting visible, moved quote/table and heavier commands behind More, and changed the toolbar to compact icon-first controls.
+- **Lighter feature trays** - Grouped Insert actions, folded grammar and writing coach into Review disclosures, and simplified Outline so advanced tools stay available without taking over the page.
+
 ## [4.72.2] - 2026-05-21
 
 ### Changed

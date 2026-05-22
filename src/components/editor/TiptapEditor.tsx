@@ -125,7 +125,7 @@ type EditorTelemetry = {
   score: number;
 };
 
-type EditorTray = "insert" | "review" | "outline" | "coach" | null;
+type EditorTray = "insert" | "review" | "outline" | null;
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -909,12 +909,17 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       { kind: "query", label: "Query block", meta: "Live list" },
     ];
 
+    const quickBlockGroups = [
+      { label: "Start", kinds: ["scaffold", "note", "tip", "warning"] },
+      { label: "Structure", kinds: ["table", "timeline", "collapse", "query"] },
+      { label: "Advanced", kinds: ["data", "mermaid", "math", "decision"] },
+    ];
+
     const activeChecks = telemetry.checks.length > 0 ? telemetry.checks : emptyTelemetry.checks;
     const trayButtons: { key: Exclude<EditorTray, null>; label: string; detail: string }[] = [
-      { key: "insert", label: "Insert", detail: "Blocks" },
-      { key: "review", label: "Review", detail: `${telemetry.score}%` },
-      { key: "outline", label: "Outline", detail: `${telemetry.outline.length}` },
-      { key: "coach", label: "Coach", detail: "AI" },
+      { key: "insert", label: "Insert", detail: "Add blocks" },
+      { key: "review", label: "Review", detail: `${telemetry.score}% ready` },
+      { key: "outline", label: "Outline", detail: `${telemetry.outline.length} sections` },
     ];
 
     function toggleTray(tray: Exclude<EditorTray, null>) {
@@ -930,20 +935,31 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             <div className={styles.trayHeader}>
               <div>
                 <h3 className={styles.trayTitle}>Insert</h3>
-                <p className={styles.trayDescription}>Add rich wiki blocks without leaving the page.</p>
+                <p className={styles.trayDescription}>Add a block, then get straight back to writing.</p>
               </div>
             </div>
-            <div className={styles.commandGrid}>
-              {quickBlocks.map((block) => (
-                <button
-                  key={block.kind}
-                  type="button"
-                  onClick={() => insertQuickBlock(block.kind)}
-                  className={styles.commandTile}
-                >
-                  <span>{block.label}</span>
-                  <small>{block.meta}</small>
-                </button>
+            <div className={styles.commandSections}>
+              {quickBlockGroups.map((group) => (
+                <section key={group.label} className={styles.commandSection}>
+                  <h4 className={styles.commandSectionTitle}>{group.label}</h4>
+                  <div className={styles.commandList}>
+                    {group.kinds.map((kind) => {
+                      const block = quickBlocks.find((item) => item.kind === kind);
+                      if (!block) return null;
+                      return (
+                        <button
+                          key={block.kind}
+                          type="button"
+                          onClick={() => insertQuickBlock(block.kind)}
+                          className={styles.commandButton}
+                        >
+                          <span>{block.label}</span>
+                          <small>{block.meta}</small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
               ))}
             </div>
           </section>
@@ -956,11 +972,11 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             <div className={styles.trayHeader}>
               <div>
                 <h3 className={styles.trayTitle}>Review</h3>
-                <p className={styles.trayDescription}>Check structure, links, sources, readability, and grammar.</p>
+                <p className={styles.trayDescription}>A quick pass for structure, links, sources, and style.</p>
               </div>
             </div>
-            <div className={styles.traySplit}>
-              <div className={cx(styles.trayPanel, styles.scorePanel)}>
+            <div className={styles.reviewStrip}>
+              <div className={styles.scorePanel}>
                 <div className={styles.scoreRing} style={{ "--editor-score": `${telemetry.score}%` } as CSSProperties}>
                   <span>{telemetry.score}</span>
                 </div>
@@ -970,20 +986,19 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
                 </div>
               </div>
 
-              <div className={styles.trayPanel}>
-                <h4>Signals</h4>
-                <div className={styles.signalGrid}>
-                  <span><strong>{telemetry.wikiLinks}</strong> wiki links</span>
-                  <span><strong>{telemetry.links}</strong> links</span>
-                  <span><strong>{telemetry.footnotes}</strong> notes</span>
-                  <span><strong>{telemetry.tables}</strong> tables</span>
-                  <span><strong>{telemetry.images}</strong> images</span>
-                  <span><strong>{telemetry.richBlocks}</strong> rich blocks</span>
-                </div>
+              <div className={styles.signalRow}>
+                <span><strong>{telemetry.wikiLinks}</strong> wiki</span>
+                <span><strong>{telemetry.links}</strong> links</span>
+                <span><strong>{telemetry.footnotes}</strong> notes</span>
+                <span><strong>{telemetry.tables}</strong> tables</span>
+                <span><strong>{telemetry.images}</strong> images</span>
+                <span><strong>{telemetry.richBlocks}</strong> rich</span>
               </div>
+            </div>
 
-              <div className={styles.trayPanel}>
-                <h4>Quality</h4>
+            <details className={styles.disclosure} open>
+              <summary>Quality checks</summary>
+              <div className={styles.disclosureBody}>
                 <div className={styles.checkList}>
                   {activeChecks.map((check) => (
                     <div key={check.label} className={styles.checkItem} data-status={check.status}>
@@ -996,10 +1011,24 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
                   ))}
                 </div>
               </div>
-            </div>
-            <div className={styles.auxPanel}>
-              <GrammarCheckPanel editor={editor} />
-            </div>
+            </details>
+
+            <details className={styles.disclosure}>
+              <summary>Grammar and style</summary>
+              <div className={styles.disclosureBody}>
+                <GrammarCheckPanel editor={editor} />
+              </div>
+            </details>
+
+            <details className={styles.disclosure}>
+              <summary>Writing coach</summary>
+              <div className={styles.disclosureBody}>
+                <WritingCoachPanel
+                  getHtml={() => editor.getHTML()}
+                  hasExcerpt={false}
+                />
+              </div>
+            </details>
           </section>
         );
       }
@@ -1010,7 +1039,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             <div className={styles.trayHeader}>
               <div>
                 <h3 className={styles.trayTitle}>Outline</h3>
-                <p className={styles.trayDescription}>Jump between sections or generate a stronger structure.</p>
+                <p className={styles.trayDescription}>Move through sections or generate a cleaner shape.</p>
               </div>
             </div>
             <div className={styles.traySplit}>
@@ -1033,39 +1062,24 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
                   <p className={styles.emptyNote}>No headings yet.</p>
                 )}
               </div>
-              <div className={styles.trayPanel}>
-                <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
-              </div>
+              <details className={cx(styles.trayPanel, styles.disclosure)}>
+                <summary>Outline builder</summary>
+                <div className={styles.disclosureBody}>
+                  <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
+                </div>
+              </details>
             </div>
           </section>
         );
       }
-
-      return (
-        <section className={styles.tray} data-testid="editor-coach-tray" aria-label="Writing coach">
-          <div className={styles.trayHeader}>
-            <div>
-              <h3 className={styles.trayTitle}>Coach</h3>
-              <p className={styles.trayDescription}>Run readability and writing suggestions when you want another pass.</p>
-            </div>
-          </div>
-          <div className={styles.auxPanel}>
-            <WritingCoachPanel
-              getHtml={() => editor.getHTML()}
-              hasExcerpt={false}
-            />
-          </div>
-        </section>
-      );
     }
 
     return (
       <div className={styles.shell} data-testid="editor-shell">
         <header className={styles.header}>
           <div className={styles.identity}>
-            <span className={styles.mark} aria-hidden="true">A</span>
             <div className={styles.titleBlock}>
-              <strong className={styles.title}>Editor</strong>
+              <strong className={styles.title}>{articleTitle || "Editor"}</strong>
               <span className={styles.subtitle}>
                 {markdownMode ? "Markdown mode" : `${telemetry.words} words - ${telemetry.readMinutes} min read`}
               </span>
@@ -1075,27 +1089,18 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
           <div className={styles.headerActions} data-testid="editor-feature-tabs">
             {!markdownMode && (
               <>
-                <span className={styles.scoreBadge}>{telemetry.score}% ready</span>
                 {trayButtons.map((button) => (
                   <button
                     key={button.key}
                     type="button"
                     onClick={() => toggleTray(button.key)}
                     aria-pressed={activeTray === button.key}
+                    aria-label={`${button.label}: ${button.detail}`}
                     className={styles.trayToggle}
                   >
-                    <span>{button.label}</span>
-                    <small>{button.detail}</small>
+                    {button.label}
                   </button>
                 ))}
-                <button
-                  type="button"
-                  onClick={() => setActiveTray(null)}
-                  className={styles.trayToggle}
-                  disabled={activeTray === null}
-                >
-                  Close
-                </button>
               </>
             )}
             <button
@@ -1104,7 +1109,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
               className={styles.trayToggle}
               aria-pressed={markdownMode}
             >
-              {markdownMode ? "Rich text" : "Markdown"}
+              {markdownMode ? "Write" : "Markdown"}
             </button>
           </div>
         </header>
@@ -1180,13 +1185,12 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
               <div className={styles.statusbar}>
                 <div className={styles.statusStats}>
                   <span>{telemetry.words} words</span>
-                  <span>{telemetry.characters} chars</span>
                   <span>{telemetry.readMinutes} min read</span>
-                  <span>{telemetry.headings} headings</span>
+                  <span>{telemetry.score}% ready</span>
                 </div>
                 <WritingSessionGoal editor={editor} />
                 <div className={styles.statusState}>
-                  <span>{hasChanges ? "Unsaved changes" : "No changes"}</span>
+                  <span>{hasChanges ? "Unsaved" : "Saved"}</span>
                   <span>{editor.state.doc.content.childCount} blocks</span>
                 </div>
               </div>

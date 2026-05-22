@@ -49,25 +49,24 @@ export default function HelpPage() {
           <p className="mb-2">The rich text editor opens as a calm writing surface with advanced tools tucked into feature trays:</p>
           <ul className="list-disc pl-5 mb-2 space-y-0.5">
             <li><strong>Block</strong> &mdash; paragraph, heading, quote, and code block styles</li>
-            <li><strong>Primary toolbar</strong> &mdash; undo/redo, bold, italic, URL links, wiki links, lists, quote, image, and collapsed-border tables</li>
-            <li><strong>More</strong> &mdash; strikethrough, inline code, superscript, subscript, footnotes, math, TOC, find/replace, typewriter mode, AI, claims, highlight, voice, and shortcuts</li>
+            <li><strong>Primary toolbar</strong> &mdash; undo/redo, bold, italic, URL links, wiki links, lists, and image upload</li>
+            <li><strong>More</strong> &mdash; quote, table, strikethrough, inline code, superscript, subscript, footnotes, math, TOC, find/replace, typewriter mode, AI, claims, highlight, voice, and shortcuts</li>
             <li><strong>Insert tray</strong> &mdash; scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks</li>
-            <li><strong>Review tray</strong> &mdash; readiness score, word/read-time metrics, document signals, quality checks, and grammar/style checker</li>
-            <li><strong>Outline tray</strong> &mdash; section navigation and the outline builder</li>
-            <li><strong>Coach tray</strong> &mdash; readability and writing-coach analysis</li>
+            <li><strong>Review tray</strong> &mdash; readiness score, document signals, quality checks, grammar/style checker, and writing coach</li>
+            <li><strong>Outline tray</strong> &mdash; section navigation, with the outline builder tucked into a disclosure</li>
             <li><strong>Table lab</strong> &mdash; row, column, merge, split, header, and delete controls while editing a table</li>
           </ul>
           <p className="mb-2">
             <strong>Slash commands:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">/</code> anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo video embed, Twitter/X post embed, vertical timeline, GitHub Gist embed, and your saved snippets via <code className="bg-surface-hover px-1 text-[12px]">/snippet</code>.
           </p>
           <p className="mb-2">
-            <strong>Feature trays:</strong> Click <strong>Insert</strong>, <strong>Review</strong>, <strong>Outline</strong>, or <strong>Coach</strong> when you need advanced tools. The editor keeps those panels closed by default so the writing canvas stays clear.
+            <strong>Feature trays:</strong> Click <strong>Insert</strong>, <strong>Review</strong>, or <strong>Outline</strong> when you need advanced tools. The editor keeps those panels closed by default so the writing canvas stays clear.
           </p>
           <p className="mb-2">
             <strong>Selection actions:</strong> Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
           </p>
           <p className="mb-2">
-            <strong>Markdown mode:</strong> Click the <code className="bg-surface-hover px-1 text-[12px]">Markdown</code> button to switch to raw markdown editing. Click <code className="bg-surface-hover px-1 text-[12px]">Rich Text</code> to switch back.
+            <strong>Markdown mode:</strong> Click the <code className="bg-surface-hover px-1 text-[12px]">Markdown</code> button to switch to raw markdown editing. Click <code className="bg-surface-hover px-1 text-[12px]">Write</code> to switch back.
           </p>
           <p className="mb-2">
             <strong>Templates:</strong> When creating a new article, choose from predefined templates (Person, Place, Event, Thing, Group) that provide a starting structure with an infobox and sections.
@@ -185,7 +184,7 @@ export default function HelpPage() {
         <div className="wiki-portal-body text-[13px]">
           <p className="mb-2">AI features are gated on environment variables and degrade gracefully when keys are absent.</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Writing Coach</strong> &mdash; collapsible panel at the bottom of the editor. Shows Flesch-Kincaid readability score, passive-voice count, sentence length stats, and AI suggestions.</li>
+            <li><strong>Writing Coach</strong> &mdash; disclosure inside the Review tray. Shows Flesch-Kincaid readability score, passive-voice count, sentence length stats, and AI suggestions.</li>
             <li><strong>Article summaries</strong> &mdash; auto-generated on save; used as the page meta description.</li>
             <li><strong>Semantic search</strong> &mdash; vector embeddings via OpenAI. Requires <code className="bg-surface-hover px-1 text-[12px]">OPENAI_API_KEY</code>.</li>
             <li><strong>Knowledge gaps</strong> &mdash; <Link href="/admin/knowledge-gaps">/admin/knowledge-gaps</Link> lists referenced but uncreated article titles, sorted by incoming-link count.</li>

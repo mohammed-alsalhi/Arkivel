@@ -27,17 +27,16 @@ The rich text editor opens as a calm writing surface with advanced tools tucked 
 | Button | Action |
 |--------|--------|
 | **Block** | Switch paragraph, heading, quote, and code block styles |
-| **Primary toolbar** | Undo/redo, bold, italic, URL links, wiki links, lists, quote, image, and collapsed-border tables |
-| **More** | Strikethrough, inline code, superscript, subscript, footnotes, math, TOC, find/replace, typewriter mode, AI, claims, highlight, voice, and shortcuts |
+| **Primary toolbar** | Undo/redo, bold, italic, URL links, wiki links, lists, and image upload |
+| **More** | Quote, table, strikethrough, inline code, superscript, subscript, footnotes, math, TOC, find/replace, typewriter mode, AI, claims, highlight, voice, and shortcuts |
 | **Insert tray** | Scaffolds, callouts, tables, data tables, diagrams, math, decision trees, timelines, collapsibles, and live query blocks |
-| **Review tray** | Readiness score, word/read-time metrics, document signals, quality checks, and grammar/style checker |
-| **Outline tray** | Section navigation and the outline builder |
-| **Coach tray** | Readability and writing-coach analysis |
+| **Review tray** | Readiness score, document signals, quality checks, grammar/style checker, and writing coach |
+| **Outline tray** | Section navigation, with the outline builder tucked into a disclosure |
 | **Table lab** | Row, column, merge, split, header, and delete controls while editing a table |
 
 **Slash commands:** Type `/` anywhere in the editor to open the command palette. Commands include: Mermaid diagram, Math block, Excalidraw drawing, Data table, Decision tree, all heading/list types, accordion/FAQ block, two-column layout, YouTube/Vimeo embed, Twitter/X post embed, vertical timeline, GitHub Gist embed, and your saved snippets via `/snippet`.
 
-**Feature trays:** Click **Insert**, **Review**, **Outline**, or **Coach** when you need advanced tools. The editor keeps those panels closed by default so the writing canvas stays clear.
+**Feature trays:** Click **Insert**, **Review**, or **Outline** when you need advanced tools. The editor keeps those panels closed by default so the writing canvas stays clear.
 
 **Selection actions:** Selecting text opens inline actions for AI rewrite, AI expand, wiki links, URL links, and footnotes.
 
@@ -49,7 +48,7 @@ The rich text editor opens as a calm writing surface with advanced tools tucked 
 
 **Editor snippets:** Create reusable HTML blocks at `/settings/snippets`. Insert them in any article via the slash-command menu (type `/snippet name`).
 
-**Markdown mode:** Click `Markdown` to switch to raw markdown editing. Click `Rich Text` to switch back.
+**Markdown mode:** Click `Markdown` to switch to raw markdown editing. Click `Write` to switch back.
 
 **Templates:** When creating a new article, choose from predefined templates (Person, Place, Event, Thing, Group) that provide a starting structure with an infobox and sections.
 
@@ -143,7 +142,7 @@ Press `Ctrl+Shift+L` (Cmd on Mac) to insert a wiki link.
 
 AI features are gated on environment variables and degrade gracefully when keys are absent.
 
-- **Writing Coach** — collapsible panel at the bottom of the editor. Shows Flesch-Kincaid readability score, passive-voice count, sentence length stats, and AI suggestions.
+- **Writing Coach** — disclosure inside the Review tray. Shows Flesch-Kincaid readability score, passive-voice count, sentence length stats, and AI suggestions.
 - **Article summaries** — auto-generated on save; used as the page meta description.
 - **Semantic search** — vector embeddings via OpenAI. Requires `OPENAI_API_KEY`.
 - **Knowledge gaps** — `/admin/knowledge-gaps` lists referenced but uncreated article titles, sorted by incoming-link count.

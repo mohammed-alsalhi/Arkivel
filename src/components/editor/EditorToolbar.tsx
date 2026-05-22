@@ -155,13 +155,13 @@ export default function EditorToolbar({
   const primaryActions: ToolAction[] = [
     {
       label: "Undo",
-      icon: "UN",
+      icon: "↶",
       action: () => activeEditor.chain().focus().undo().run(),
       disabled: !activeEditor.can().undo(),
     },
     {
       label: "Redo",
-      icon: "RE",
+      icon: "↷",
       action: () => activeEditor.chain().focus().redo().run(),
       disabled: !activeEditor.can().redo(),
     },
@@ -171,9 +171,7 @@ export default function EditorToolbar({
     { label: "Wiki link", icon: "[[]]", action: insertWikiLink },
     { label: "Bullets", icon: "UL", action: () => activeEditor.chain().focus().toggleBulletList().run(), active: activeEditor.isActive("bulletList") },
     { label: "Numbers", icon: "1.", action: () => activeEditor.chain().focus().toggleOrderedList().run(), active: activeEditor.isActive("orderedList") },
-    { label: "Quote", icon: "QT", action: () => activeEditor.chain().focus().toggleBlockquote().run(), active: activeEditor.isActive("blockquote") },
     { label: "Image", icon: "IMG", action: onImageUpload },
-    { label: "Table", icon: "TBL", action: () => activeEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
   ];
 
   const textActions: ToolAction[] = [
@@ -184,7 +182,9 @@ export default function EditorToolbar({
   ];
 
   const structureActions: ToolAction[] = [
+    { label: "Quote", icon: "QT", action: () => activeEditor.chain().focus().toggleBlockquote().run(), active: activeEditor.isActive("blockquote") },
     { label: "Pull quote", icon: "PQ", action: () => activeEditor.chain().focus().togglePullQuote().run(), active: activeEditor.isActive("pullQuote") },
+    { label: "Table", icon: "TBL", action: () => activeEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
     { label: "Divider", icon: "--", action: () => activeEditor.chain().focus().setHorizontalRule().run() },
     { label: "Footnote", icon: "fn", action: insertFootnote },
     { label: "Math block", icon: "SUM", action: () => activeEditor.chain().focus().insertBlockMath().run() },
@@ -230,7 +230,6 @@ export default function EditorToolbar({
     <div className={styles.toolbar} data-testid="editor-toolbar">
       <div className={styles.main}>
         <div className={styles.blockPicker}>
-          <span className={styles.groupLabel}>Block</span>
           <select
             value={blockValue}
             onChange={(event) => setBlock(event.target.value)}
@@ -264,8 +263,8 @@ export default function EditorToolbar({
 
       {advancedOpen && (
         <div className={styles.advancedPanel}>
-          <ToolbarGroup label="Text" actions={textActions} />
-          <ToolbarGroup label="Structure" actions={structureActions} />
+          <ToolbarGroup label="Format" actions={textActions} />
+          <ToolbarGroup label="Insert" actions={structureActions} />
           <ToolbarGroup label="Knowledge" actions={knowledgeActions} />
           <ToolbarGroup label="AI" actions={aiActions} />
 

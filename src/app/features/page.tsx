@@ -29,9 +29,9 @@ export default function FeaturesPage() {
         <div className="wiki-portal-header">Writing &amp; Editing</div>
         <div className="wiki-portal-body text-[13px]">
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with a calm toolbar, progressive feature trays, selection actions, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering</li>
+            <li><strong>Rich text editor</strong> — Tiptap-based WYSIWYG editor with a calm icon-first toolbar, progressive feature trays, selection actions, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering</li>
             <li><strong>Markdown mode</strong> — toggle between rich text and raw Markdown at any time</li>
-            <li><strong>Editor feature trays</strong> — Insert, Review, Outline, and Coach reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed</li>
+            <li><strong>Editor feature trays</strong> — Insert, Review, and Outline reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed</li>
             <li><strong>Selection actions</strong> — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline</li>
             <li><strong>Insert tray</strong> — one-click scaffolds, callouts, tables, data tables, Mermaid diagrams, math, decision trees, timelines, collapsibles, and live query blocks</li>
             <li><strong>Contextual table lab</strong> — row, column, merge, split, header, and delete-table controls appear only while editing a table</li>
@@ -57,7 +57,7 @@ export default function FeaturesPage() {
             <li><strong>Vertical timeline blocks</strong> — chronological timeline with date labels and dot connectors via <code className="bg-surface-hover px-1 text-[12px]">/timeline</code></li>
             <li><strong>GitHub Gist embeds</strong> — embed a Gist link via <code className="bg-surface-hover px-1 text-[12px]">/github gist</code></li>
             <li><strong>Article todo checklist</strong> — per-article task list; readers check off items, admins add and remove tasks; shows completion progress</li>
-            <li><strong>AI grammar &amp; style check</strong> — collapsible panel below editor analyses text for errors, warnings, and style suggestions; Apply buttons fix issues inline; falls back to heuristic checks when AI is not configured</li>
+            <li><strong>AI grammar &amp; style check</strong> — Review tray disclosure analyses text for errors, warnings, and style suggestions; Apply buttons fix issues inline; falls back to heuristic checks when AI is not configured</li>
             <li><strong>Footnotes &amp; citations</strong> — inline footnote references auto-numbered via CSS counters</li>
             <li><strong>Syntax highlighting</strong> — code blocks with language detection and theme-aware colours</li>
             <li><strong>Voice dictation</strong> — click the microphone button to insert speech at the cursor</li>
@@ -241,7 +241,7 @@ export default function FeaturesPage() {
         <div className="wiki-portal-body text-[13px]">
           <p className="mb-2">AI features degrade gracefully when API keys are absent.</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Writing coach</strong> — Flesch-Kincaid score, passive-voice count, sentence-length stats, and AI suggestions in the editor</li>
+            <li><strong>Writing coach</strong> — Review tray disclosure with Flesch-Kincaid score, passive-voice count, sentence-length stats, and AI suggestions</li>
             <li><strong>Article summaries</strong> — auto-generated on save; used as the page meta description</li>
             <li><strong>Semantic search</strong> — vector embeddings via OpenAI blend meaning-based results with keyword matches</li>
             <li><strong>Duplicate detection</strong> — warns when a new article is semantically similar to an existing one</li>

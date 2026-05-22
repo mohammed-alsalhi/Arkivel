@@ -16,6 +16,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.72.3
+
+- [x] Cleaner editor chrome - the editor header now shows only the title, word/read-time summary, Insert/Review/Outline trays, and Markdown mode
+- [x] Quieter toolbar - common formatting remains visible while quote, table, text variants, knowledge tools, AI, claims, color, voice, and shortcuts sit behind More
+- [x] Lighter tray model - Insert groups actions by purpose, Review folds grammar and writing coach into disclosures, and Outline keeps the builder tucked away until requested
+
 ## v4.72.2
 
 - [x] Simplified editor surface - the editor now opens as a calm writing canvas with a compact toolbar instead of an always-visible cockpit

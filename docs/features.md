@@ -6,9 +6,9 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 
 ## Writing & Editing
 
-- **Rich text editor** — Tiptap-based WYSIWYG editor with a calm toolbar, progressive feature trays, selection actions, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering
+- **Rich text editor** — Tiptap-based WYSIWYG editor with a calm icon-first toolbar, progressive feature trays, selection actions, contextual table controls, slash commands, collapsed-border tables, and drag-and-drop block reordering
 - **Markdown mode** — toggle between rich text and raw Markdown at any time
-- **Editor feature trays** — Insert, Review, Outline, and Coach reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed
+- **Editor feature trays** — Insert, Review, and Outline reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed
 - **Selection actions** — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline
 - **Insert tray** — one-click scaffolds, callouts, tables, data tables, Mermaid diagrams, math, decision trees, timelines, collapsibles, and live query blocks
 - **Contextual table lab** — row, column, merge, split, header, and delete-table controls appear only while editing a table
@@ -91,7 +91,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Satisfaction star rating** — 1–5 star widget on every article; per-session upsert; average and count shown in real time
 - **Hot articles widget** — "Trending this week" panel on the homepage sidebar showing top-5 most-viewed articles in last 7 days
 - **Article todo checklist** — per-article task list; readers check off items, admins add/delete tasks inline
-- **AI grammar & style check** — collapsible panel below editor analyses for errors, warnings, style; Apply buttons fix inline; heuristic fallback when AI unavailable
+- **AI grammar & style check** — Review tray disclosure analyses for errors, warnings, and style; Apply buttons fix inline; heuristic fallback when AI unavailable
 - **Scroll position memory** — article scroll saved to localStorage; restored on return visits; capped at 50 articles
 - **Bulk tag operations** — add or remove a tag from multiple articles at once via the article list batch bar
 - **PWA / installable app** — web app manifest enables installing the wiki on mobile and desktop home screens
@@ -252,7 +252,7 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 
 AI features degrade gracefully when API keys are absent.
 
-- **Writing coach** — Flesch-Kincaid score, passive-voice count, sentence-length stats, and AI suggestions in the editor
+- **Writing coach** — Review tray disclosure with Flesch-Kincaid score, passive-voice count, sentence-length stats, and AI suggestions
 - **Article summaries** — auto-generated on save; used as the page meta description
 - **Semantic search** — vector embeddings via OpenAI blend meaning-based results with keyword matches
 - **Duplicate detection** — warns when a new article is semantically similar to an existing one

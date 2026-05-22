@@ -2,8 +2,8 @@
   position: relative;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: 0.375rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 0.25rem;
   background: var(--color-surface);
 }
 
@@ -14,8 +14,8 @@
   justify-content: space-between;
   gap: 0.75rem;
   border-bottom: 1px solid var(--color-border-light);
-  background: var(--color-infobox-bg);
-  padding: 0.55rem 0.65rem;
+  background: var(--color-surface);
+  padding: 0.5rem 0.65rem;
 }
 
 .identity,
@@ -32,21 +32,6 @@
 
 .identity {
   flex: 1 1 auto;
-}
-
-.mark {
-  display: inline-flex;
-  width: 1.75rem;
-  height: 1.75rem;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.25rem;
-  background: var(--color-accent);
-  color: var(--color-accent-foreground);
-  font-family: var(--font-serif);
-  font-size: 1rem;
-  line-height: 1;
 }
 
 .titleBlock {
@@ -73,32 +58,24 @@
   justify-content: flex-end;
 }
 
-.scoreBadge,
 .trayToggle {
   display: inline-flex;
-  min-height: 1.75rem;
+  min-height: 1.65rem;
   align-items: center;
   justify-content: center;
-  gap: 0.28rem;
-  border: 1px solid var(--color-border-light);
-  border-radius: 0.25rem;
-  background: var(--color-surface);
+  border: 1px solid transparent;
+  border-radius: 0.2rem;
+  background: transparent;
   color: var(--color-muted);
-  padding: 0 0.5rem;
+  padding: 0 0.45rem;
   font-size: 0.7rem;
   font-weight: 700;
   white-space: nowrap;
 }
 
-.scoreBadge {
-  border-color: var(--color-success-border);
-  background: var(--color-success-soft);
-  color: var(--color-success);
-}
-
 .trayToggle:hover,
 .trayToggle[aria-pressed="true"] {
-  border-color: var(--color-accent);
+  border-color: var(--color-border-light);
   background: var(--color-accent-soft);
   color: var(--color-accent);
 }
@@ -108,20 +85,13 @@
   opacity: 0.45;
 }
 
-.trayToggle small {
-  color: inherit;
-  font-size: 0.62rem;
-  font-weight: 800;
-  opacity: 0.72;
-}
-
 .tray {
   display: grid;
   min-width: 0;
-  gap: 0.6rem;
+  gap: 0.5rem;
   border-top: 1px solid var(--color-border-light);
   background: var(--color-background);
-  padding: 0.7rem;
+  padding: 0.6rem 0.65rem;
 }
 
 .trayHeader {
@@ -150,44 +120,66 @@
   line-height: 1.45;
 }
 
-.commandGrid {
+.commandSections {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-  gap: 0.45rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.55rem;
 }
 
-.commandTile {
+.commandSection {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 0.3rem;
+}
+
+.commandSectionTitle {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.commandList {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.commandButton {
   display: flex;
   min-width: 0;
-  min-height: 2.45rem;
+  min-height: 2rem;
   align-items: center;
   justify-content: space-between;
-  gap: 0.55rem;
+  gap: 0.45rem;
   border: 1px solid var(--color-border-light);
-  border-radius: 0.375rem;
+  border-radius: 0.25rem;
   background: var(--color-surface);
   color: var(--color-foreground);
-  padding: 0.45rem 0.6rem;
+  padding: 0.35rem 0.48rem;
   text-align: left;
   transition: background-color 0.15s, border-color 0.15s, color 0.15s;
 }
 
-.commandTile:hover {
+.commandButton:hover {
   border-color: var(--color-accent);
   background: var(--color-accent-soft);
   color: var(--color-accent);
 }
 
-.commandTile span {
+.commandButton span {
   overflow-wrap: anywhere;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 800;
 }
 
-.commandTile small {
+.commandButton small {
   flex: 0 0 auto;
   color: var(--color-muted);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   white-space: nowrap;
 }
 
@@ -197,12 +189,13 @@
   gap: 0.55rem;
 }
 
-.trayPanel {
+.trayPanel,
+.disclosure {
   min-width: 0;
   border: 1px solid var(--color-border-light);
-  border-radius: 0.375rem;
+  border-radius: 0.25rem;
   background: var(--color-surface);
-  padding: 0.65rem;
+  padding: 0.55rem;
 }
 
 .scorePanel {
@@ -212,11 +205,18 @@
   gap: 0.65rem;
 }
 
+.reviewStrip {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 0.55rem;
+}
+
 .scoreRing {
   position: relative;
   display: grid;
-  width: 3.2rem;
-  height: 3.2rem;
+  width: 2.75rem;
+  height: 2.75rem;
   place-items: center;
   border-radius: 999px;
   background: conic-gradient(var(--color-accent) var(--editor-score), var(--color-surface-hover) 0);
@@ -228,7 +228,7 @@
 .scoreRing::after {
   content: "";
   position: absolute;
-  inset: 0.35rem;
+  inset: 0.32rem;
   border-radius: 999px;
   background: var(--color-surface);
 }
@@ -254,27 +254,46 @@
   font-size: 0.72rem;
 }
 
-.signalGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.35rem;
-  margin-top: 0.45rem;
+.signalRow {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
 }
 
-.signalGrid span {
+.signalRow span {
   min-width: 0;
   border: 1px solid var(--color-border-light);
-  border-radius: 0.25rem;
-  background: var(--color-background);
-  padding: 0.35rem;
+  border-radius: 999px;
+  background: var(--color-surface);
+  padding: 0.18rem 0.45rem;
   color: var(--color-muted);
   font-size: 0.68rem;
 }
 
-.signalGrid strong {
-  display: block;
+.signalRow strong {
   color: var(--color-heading);
-  font-size: 0.95rem;
+  font-size: 0.72rem;
+}
+
+.disclosure {
+  padding: 0;
+}
+
+.disclosure summary {
+  cursor: pointer;
+  color: var(--color-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  list-style-position: inside;
+  padding: 0.5rem 0.55rem;
+}
+
+.disclosureBody {
+  border-top: 1px solid var(--color-border-light);
+  padding: 0.55rem;
 }
 
 .checkList,
@@ -339,14 +358,6 @@
 
 .outlineList button[data-level="3"] {
   margin-left: 0.75rem;
-}
-
-.auxPanel {
-  min-width: 0;
-  border: 1px solid var(--color-border-light);
-  border-radius: 0.375rem;
-  background: var(--color-surface);
-  overflow: hidden;
 }
 
 .workspace {
@@ -428,8 +439,8 @@
   justify-content: space-between;
   gap: 0.5rem;
   flex-wrap: wrap;
-  border-top: 1px solid var(--color-border);
-  background: var(--color-infobox-bg);
+  border-top: 1px solid var(--color-border-light);
+  background: var(--color-surface);
   padding: 0.45rem 0.65rem;
   color: var(--color-muted);
   font-size: 0.68rem;
@@ -453,13 +464,13 @@
     justify-content: flex-start;
   }
 
-  .scoreBadge,
   .trayToggle {
     flex: 1 1 auto;
   }
 
-  .commandGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .commandSections,
+  .reviewStrip {
+    grid-template-columns: 1fr;
   }
 
   .canvas :global(.tiptap),
@@ -470,9 +481,9 @@
 }
 
 @media (max-width: 420px) {
-  .commandGrid,
+  .commandSections,
   .traySplit,
-  .signalGrid {
+  .reviewStrip {
     grid-template-columns: 1fr;
   }
 }
