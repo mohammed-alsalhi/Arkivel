@@ -22,6 +22,23 @@ test.describe("Homepage", () => {
     await expect(sidebar).toBeVisible();
   });
 
+  test("desktop main menu button collapses the sidebar", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/");
+
+    const sidebar = page.locator("aside");
+    const menuButton = page.getByRole("button", { name: "Toggle main menu" });
+
+    await expect(menuButton).toBeVisible();
+    await expect(sidebar).toBeVisible();
+
+    await menuButton.click();
+    await expect(sidebar).toBeHidden();
+
+    await menuButton.click();
+    await expect(sidebar).toBeVisible();
+  });
+
   test("search bar is accessible", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Open search" }).click();

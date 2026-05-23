@@ -454,7 +454,7 @@ export default function HelpPage() {
             <li><strong>Smart URL paste</strong> &mdash; pasting a plain HTTP/HTTPS URL in the editor auto-creates a hyperlink; if text is selected the URL becomes its href, otherwise it is inserted as linked text</li>
             <li><strong>Typewriter scrolling mode</strong> &mdash; &ldquo;Typewriter&rdquo; toggle in the editor toolbar keeps the cursor vertically centred as you type; preference persisted to localStorage</li>
             <li><strong>Short-article merger suggestions</strong> &mdash; <Link href="/admin/short-articles">/admin/short-articles</Link>; lists stub articles under 100 words and suggests up to 3 same-category merge targets</li>
-            <li><strong>Sidebar position</strong> &mdash; the Dock left/right button in the sidebar footer moves the desktop sidebar to either side with matching borders; preference persisted to localStorage</li>
+            <li><strong>Sidebar position</strong> &mdash; the Dock left/right button in the sidebar footer moves the desktop sidebar to either side with matching borders; the top-left main-menu icon collapses or expands it on larger screens, and both preferences persist to localStorage</li>
             <li><strong>Tabbed content blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/tabs</code> slash command inserts an interactive two-tab block; panels are editable inline</li>
             <li><strong>Gallery grid blocks</strong> &mdash; <code className="bg-surface-hover px-1 text-[12px]">/gallery</code> slash command inserts a responsive image grid with captions</li>
             <li><strong>AI wiki assistant</strong> &mdash; floating chat button on every article page; ask questions about the current article or the whole wiki; context-aware conversation powered by AI</li>
@@ -525,7 +525,7 @@ export default function HelpPage() {
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Navigation &amp; Organization</div>
         <div className="wiki-portal-body text-[13px]">
-          <p className="mb-1">On desktop and tablet, the sidebar is divided into simplified collapsible sections — click any section header to collapse or expand it, and use Dock left/right in the footer to choose the sidebar side. On phones, the top-left three-line button opens the same menu, while the bottom navigation keeps Home, Search, Create, and Recent one tap away.</p>
+          <p className="mb-1">On desktop and tablet, the top-left three-line button collapses or expands the simplified sidebar, section headers fold individual groups, and Dock left/right in the footer chooses the sidebar side. On phones, the same top-left button opens the menu as an overlay, while the bottom navigation keeps Home, Search, Create, and Recent one tap away.</p>
           <p className="mb-2">Use <kbd>Cmd+K</kbd> / <kbd>Ctrl+K</kbd> to open the command palette from anywhere. It groups destinations across navigation, discovery, personal, reference, and admin areas, then searches articles in the same panel when you type a query.</p>
           <p className="font-semibold mb-0.5">Navigation</p>
           <ul className="list-disc pl-5 space-y-0.5 mb-2">

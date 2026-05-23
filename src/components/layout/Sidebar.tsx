@@ -34,6 +34,14 @@ function getStoredSidebarSide(): SidebarSide {
   }
 }
 
+function getStoredDesktopSidebarOpen(): boolean {
+  try {
+    return localStorage.getItem("wiki_sidebar_desktop_open") !== "false";
+  } catch {
+    return true;
+  }
+}
+
 function safePathSegment(value: string | null | undefined, fallback: string, id: string): string {
   const raw = (value?.trim() || generateSlug(fallback) || id).replace(/^\/+|\/+$/g, "");
   return encodeURIComponent(raw);
@@ -108,6 +116,7 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState(getStoredDesktopSidebarOpen);
   const [sidebarSide, setSidebarSide] = useState<SidebarSide>(getStoredSidebarSide);
   const isAdmin = useAdmin();
   const close = () => setMobileOpen(false);
@@ -226,6 +235,18 @@ export default function Sidebar({
     window.dispatchEvent(new CustomEvent("mobile-sidebar-state-change", { detail: mobileOpen }));
   }, [mobileOpen]);
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("desktop-sidebar-state-change", { detail: desktopOpen }));
+  }, [desktopOpen]);
+
+  function setDesktopSidebarVisibility(next: boolean) {
+    setDesktopOpen(next);
+    try {
+      localStorage.setItem("wiki_sidebar_desktop_open", String(next));
+      window.dispatchEvent(new CustomEvent("desktop-sidebar-state-change", { detail: next }));
+    } catch {}
+  }
+
   function setSidebarPosition(next: SidebarSide) {
     setSidebarSide(next);
     try {
@@ -244,15 +265,25 @@ export default function Sidebar({
       >
         {mobileOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
+      <button
+        onClick={() => setDesktopSidebarVisibility(!desktopOpen)}
+        aria-label="Toggle main menu"
+        aria-pressed={desktopOpen}
+        className="wiki-main-menu-button ui-icon-button fixed top-1.5 left-2 z-50 hidden bg-surface border-border text-foreground md:inline-flex"
+      >
+        {desktopOpen ? <CloseIcon /> : <MenuIcon />}
+      </button>
 
       <aside
         data-side={sidebarSide}
+        data-desktop-open={desktopOpen}
         className={clsx(
           "wiki-sidebar fixed top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg transition-[transform,opacity,visibility] flex flex-col",
           mobileOpen
             ? "translate-x-0 opacity-100 visible pointer-events-auto"
             : "-translate-x-full max-md:opacity-0 max-md:invisible max-md:pointer-events-none",
-          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0 md:opacity-100 md:visible md:pointer-events-auto"
+          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0 md:opacity-100 md:visible md:pointer-events-auto",
+          desktopOpen ? "md:flex" : "md:hidden"
         )}
       >
         {/* Logo / Title */}

@@ -143,6 +143,23 @@ test.describe("Responsive shell", () => {
     await expectNoHorizontalOverflow(page);
   });
 
+  test("keeps the main menu toggle usable on desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/");
+
+    const sidebar = page.locator("aside");
+    const menuButton = page.getByRole("button", { name: "Toggle main menu" });
+
+    await expect(menuButton).toBeVisible();
+    await expect(sidebar).toBeVisible();
+    await menuButton.click();
+    await expect(sidebar).toBeHidden();
+    await expectNoHorizontalOverflow(page);
+    await menuButton.click();
+    await expect(sidebar).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  });
+
   test("renders the intelligence cockpit without viewport overflow", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/intelligence");

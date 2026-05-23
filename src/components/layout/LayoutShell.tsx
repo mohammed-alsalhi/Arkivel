@@ -10,19 +10,34 @@ function getStoredSidebarSide(): "left" | "right" {
   }
 }
 
+function getStoredDesktopSidebarOpen(): boolean {
+  try {
+    return localStorage.getItem("wiki_sidebar_desktop_open") !== "false";
+  } catch {
+    return true;
+  }
+}
+
 /**
- * Client wrapper that manages the sidebar position preference (left / right).
- * Reads `wiki_sidebar_position` from localStorage on mount and listens for
- * the custom `sidebar-position-change` event dispatched by the Sidebar toggle.
+ * Client wrapper that manages sidebar shell preferences.
+ * Reads persisted sidebar side/open state and listens for custom events from
+ * Sidebar so the content border and flex direction stay in sync.
  */
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const [sidebarSide, setSidebarSide] = useState<"left" | "right">(getStoredSidebarSide);
+  const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(getStoredDesktopSidebarOpen);
 
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute("data-sidebar-side", sidebarSide);
     return () => root.removeAttribute("data-sidebar-side");
   }, [sidebarSide]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-sidebar-open", desktopSidebarOpen ? "true" : "false");
+    return () => root.removeAttribute("data-sidebar-open");
+  }, [desktopSidebarOpen]);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -33,8 +48,20 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
     return () => window.removeEventListener("sidebar-position-change", handler);
   }, []);
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      setDesktopSidebarOpen((e as CustomEvent<boolean>).detail !== false);
+    };
+    window.addEventListener("desktop-sidebar-state-change", handler);
+    return () => window.removeEventListener("desktop-sidebar-state-change", handler);
+  }, []);
+
   return (
-    <div className="wiki-layout flex min-h-[calc(100vh-40px)]" data-sidebar-side={sidebarSide}>
+    <div
+      className="wiki-layout flex min-h-[calc(100vh-40px)]"
+      data-sidebar-open={desktopSidebarOpen}
+      data-sidebar-side={sidebarSide}
+    >
       {children}
     </div>
   );

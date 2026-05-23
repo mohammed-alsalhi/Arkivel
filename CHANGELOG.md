@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.2] - 2026-05-23
+
+### Changed
+
+- **Desktop main menu toggle** - Made the top-left three-line main-menu button available on desktop and tablet too, with a remembered collapsed/expanded sidebar state.
+- **Full-width reading shell** - Let the content area expand cleanly when the desktop sidebar is collapsed, including right-docked sidebar layouts.
+- **Responsive coverage** - Added shell coverage for the desktop main-menu toggle so fullscreen navigation stays testable.
+
 ## [4.74.1] - 2026-05-22
 
 ### Changed

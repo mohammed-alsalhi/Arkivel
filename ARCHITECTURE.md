@@ -242,7 +242,7 @@ Each root category defines a field schema in `src/lib/infobox-schema.ts`. Subcat
 CSS variables in `src/app/globals.css` under a `@theme` block. Dark mode applies overrides via `html[data-theme="dark"]`. Uses `@theme` (not `@theme inline`) so CSS variable overrides work correctly with Tailwind.
 
 ### Responsive App Shell
-`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep the simplified dockable sidebar as the main navigation spine, with `LayoutShell` applying the persisted left/right side preference and matching content borders. Phone layouts use a persistent top-left three-line main-menu button to open the sidebar and a safe-area-aware bottom navigation for Home, Search, Create, and Recent.
+`src/app/layout.tsx` composes the global header, `LayoutShell`, `Sidebar`, and `MobileNavigation`. Desktop and tablet layouts keep a persistent top-left three-line main-menu button that collapses or expands the simplified dockable sidebar, with `LayoutShell` applying the persisted open/closed state, left/right side preference, and matching content borders. Phone layouts use the same top-left button to open the sidebar overlay and a safe-area-aware bottom navigation for Home, Search, Create, and Recent.
 
 Focused workspace routes (`/ask`, `/graph`, `/split`, `/map`, and `/present/*`) hide the bottom navigation so full-height canvases and chat/workspace composers are not covered. They keep the same top-left mobile menu button. Closed mobile sidebars are translated, hidden, and pointer-inert so off-canvas links cannot be hit-tested or reported as covered controls.
 
