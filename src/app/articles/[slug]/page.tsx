@@ -109,7 +109,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
 
   return {
-    title: `${article.title} — ${config.name}`,
+    title: article.title,
     description: article.summaryShort || article.excerpt || undefined,
     alternates: {
       canonical: `${baseUrl}/articles/${article.slug}`,

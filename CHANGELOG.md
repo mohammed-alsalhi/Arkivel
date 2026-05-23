@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.3] - 2026-05-23
+
+### Changed
+
+- **Full-width app shell** - Removed the global `max-w-6xl` content cap so dashboards, Studio, and grid-heavy pages do not leave a large unused right-side strip.
+- **Cleaner sidebar** - Removed the repeated Arkivel brand block from the sidebar so the top header owns app identity and the sidebar starts directly with navigation.
+- **Title format** - Standardized browser titles to `Arkivel - Page Name`, including route-driven fallback titles for pages that do not export metadata yet.
+
 ## [4.74.2] - 2026-05-23
 
 ### Changed

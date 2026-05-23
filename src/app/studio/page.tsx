@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { getStudioReport } from "@/lib/studio";
 
 export const metadata: Metadata = {
-  title: "Arkivel Studio",
+  title: "Studio",
   description: "A live command board that turns wiki articles, links, base views, review pressure, and JSON Canvas export into one workspace.",
 };
 

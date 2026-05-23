@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BrandMark from "@/components/brand/BrandMark";
 import Sidebar from "@/components/layout/Sidebar";
+import DocumentTitle from "@/components/layout/DocumentTitle";
 import LayoutShell from "@/components/layout/LayoutShell";
 import MobileNavigation from "@/components/layout/MobileNavigation";
 import SearchBar from "@/components/layout/SearchBar";
@@ -36,7 +37,10 @@ const geistMono = Geist_Mono({
 export function generateMetadata(): Metadata {
   return {
     metadataBase: new URL(config.baseUrl),
-    title: config.name,
+    title: {
+      default: config.name,
+      template: `${config.name} - %s`,
+    },
     description: config.description,
     icons: {
       icon: [
@@ -128,7 +132,7 @@ export default async function RootLayout({
               <AnnouncementBanner />
               {maintenanceMode && <MaintenanceBanner />}
               {readOnlyMode && <ReadOnlyBanner />}
-              <main id="main-content" className="wiki-main-content max-w-6xl px-4 py-4 sm:px-6">
+              <main id="main-content" className="wiki-main-content w-full max-w-none px-4 py-4 sm:px-6">
                 {children}
               </main>
               <footer className="wiki-footer border-t border-border px-6 py-3 text-center text-[11px] text-muted">
@@ -139,6 +143,7 @@ export default async function RootLayout({
           <MobileNavigation />
           <KeyboardShortcuts />
           <CommandPalette />
+          <DocumentTitle appName={config.name} />
           <BackToTop />
           <QuickCapture />
         </ToastProvider>

@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { useEffect, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
-import BrandMark from "@/components/brand/BrandMark";
 import { config } from "@/lib/config";
 import { generateSlug } from "@/lib/utils";
 
@@ -286,19 +285,6 @@ export default function Sidebar({
           desktopOpen ? "md:flex" : "md:hidden"
         )}
       >
-        {/* Logo / Title */}
-        <div className="border-b border-border px-3 py-3">
-          <Link href="/" className="wiki-sidebar-brand hover:no-underline" onClick={close}>
-            <BrandMark className="wiki-sidebar-brand-mark" imageSize={36} priority />
-            <h1
-              className="wiki-sidebar-brand-name"
-              style={{ fontFamily: "var(--font-serif)" }}
-            >
-              {config.name}
-            </h1>
-          </Link>
-        </div>
-
         <MenuSection title="Main" items={mainItems} pathname={pathname} onNavigate={close} />
         <MenuSection title="Discover" items={discoverItems} pathname={pathname} onNavigate={close} />
         <MenuSection title="Work" items={workItems} pathname={pathname} onNavigate={close} />
