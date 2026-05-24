@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.76.1] - 2026-05-24
+
+### Added
+
+- **Customization diagnostics** - Added a Diagnostics tab to `/admin/customization` with pass, warning, and error checks for brand copy, logo paths, app icon, base URL, selected style, color theme, layout, map readiness, and alternate-palette contrast review.
+- **Diagnostics export** - Added downloadable diagnostics JSON so self-host admins can attach the active report to support requests, GitHub issues, and release reviews without exposing secret runtime config.
+- **Reusable diagnostics helper** - Added `src/lib/customization-diagnostics.ts` with unit tests for valid drafts, missing assets, invalid URLs, unknown presets, planned layouts, and alternate color-theme review prompts.
+
 ## [4.76.0] - 2026-05-24
 
 ### Added

@@ -22,6 +22,11 @@ import {
   ToolbarGroup,
 } from "@/components/ui";
 import { useAdmin } from "@/components/AdminContext";
+import {
+  analyzeCustomizationDraft,
+  type CustomizationDiagnosticsReport,
+  type DiagnosticSeverity,
+} from "@/lib/customization-diagnostics";
 import { validateThemePack } from "@/lib/marketplace";
 
 type CustomizationManifest = {
@@ -72,13 +77,14 @@ type EnvEntry = {
   value: string | number | boolean;
 };
 
-type StudioTab = "brand" | "appearance" | "features" | "preview" | "output" | "packs";
+type StudioTab = "brand" | "appearance" | "features" | "diagnostics" | "preview" | "output" | "packs";
 type OutputMode = "env" | "local" | "vercel" | "docker";
 
 const tabs: { id: StudioTab; label: string }[] = [
   { id: "brand", label: "Brand" },
   { id: "appearance", label: "Appearance" },
   { id: "features", label: "Features" },
+  { id: "diagnostics", label: "Diagnostics" },
   { id: "preview", label: "Preview" },
   { id: "output", label: "Output" },
   { id: "packs", label: "Packs" },
@@ -188,6 +194,22 @@ function sourceTone(source: EnvEntry["source"]) {
   return "default";
 }
 
+function diagnosticTone(severity: DiagnosticSeverity) {
+  if (severity === "error") return "danger";
+  if (severity === "warning") return "warning";
+  return "success";
+}
+
+function downloadDiagnostics(report: CustomizationDiagnosticsReport) {
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `arkivel-customization-diagnostics-${report.version}.json`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function AdminCustomizationPage() {
   const isAdmin = useAdmin();
   const [activeTab, setActiveTab] = useState<StudioTab>("brand");
@@ -222,6 +244,19 @@ export default function AdminCustomizationPage() {
 
   const envEntries = useMemo(() => (manifest && draft ? buildEnvEntries(manifest, draft) : []), [draft, manifest]);
   const output = useMemo(() => buildOutput(envEntries, outputMode), [envEntries, outputMode]);
+  const diagnostics = useMemo(
+    () => (
+      manifest && draft
+        ? analyzeCustomizationDraft(draft, {
+          colorThemePresets: manifest.ui.colorThemePresets,
+          layoutPresets: manifest.ui.layoutPresets,
+          stylePresets: manifest.ui.stylePresets,
+          version: manifest.customization.version,
+        })
+        : null
+    ),
+    [draft, manifest],
+  );
   const changedCount = envEntries.filter((entry) => entry.source === "draft").length;
   const themePackValidation = useMemo(() => {
     if (!themePackJson.trim()) return { errors: ["Paste a theme pack JSON object to validate."], valid: false };
@@ -263,7 +298,7 @@ export default function AdminCustomizationPage() {
           <SectionPanel title="Current instance" bodyClassName="grid gap-3 md:grid-cols-4">
             <Metric label="Version" value={manifest.customization.version} />
             <Metric label="Draft changes" value={String(changedCount)} />
-            <Metric label="Style" value={draft.styleId} />
+            <Metric label="Diagnostics" value={diagnostics ? `${diagnostics.counts.error} errors / ${diagnostics.counts.warning} warnings` : "Pending"} />
             <Metric label="Layout" value={draft.layoutId} />
           </SectionPanel>
 
@@ -420,6 +455,46 @@ export default function AdminCustomizationPage() {
                 </Field>
                 <Notice className="mt-3 border-info-border bg-info-soft text-info">
                   These values still compile from environment variables in v1. The studio previews and exports the values but does not persist database overrides.
+                </Notice>
+              </SectionPanel>
+            </div>
+          )}
+
+          {activeTab === "diagnostics" && diagnostics && (
+            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+              <SectionPanel
+                title="Deployment diagnostics"
+                actions={<Button onClick={() => downloadDiagnostics(diagnostics)}>Download JSON</Button>}
+              >
+                <div className="mb-3 grid gap-3 md:grid-cols-3">
+                  <Metric label="Passed" value={String(diagnostics.counts.pass)} />
+                  <Metric label="Warnings" value={String(diagnostics.counts.warning)} />
+                  <Metric label="Errors" value={String(diagnostics.counts.error)} />
+                </div>
+                <div className="space-y-2">
+                  {diagnostics.diagnostics.map((diagnostic) => (
+                    <div key={diagnostic.id} className="border border-border bg-surface p-3">
+                      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-[13px] font-semibold text-heading">{diagnostic.title}</p>
+                        <Chip tone={diagnosticTone(diagnostic.severity)}>{diagnostic.severity}</Chip>
+                      </div>
+                      <p className="text-[12px] text-muted">{diagnostic.detail}</p>
+                      <InlineCode className="mt-2 inline-block">{diagnostic.id}</InlineCode>
+                    </div>
+                  ))}
+                </div>
+              </SectionPanel>
+
+              <SectionPanel title="What diagnostics cover">
+                <ul className="list-disc space-y-2 pl-5 text-[13px] text-muted">
+                  <li>Required brand copy and empty identity fields.</li>
+                  <li>Logo, mark, and app icon paths before deployment.</li>
+                  <li>Canonical base URL shape for metadata, feeds, and share links.</li>
+                  <li>Registered style, color theme, and layout compatibility.</li>
+                  <li>Manual review prompts for alternate palettes, contrast surfaces, and map imagery.</li>
+                </ul>
+                <Notice className="mt-3 border-info-border bg-info-soft text-info">
+                  Diagnostics are advisory and preview-safe. They do not fetch remote assets, execute packs, or write deployment settings.
                 </Notice>
               </SectionPanel>
             </div>

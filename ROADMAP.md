@@ -32,11 +32,11 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 
 #### v4.76.1 - Studio diagnostics
 
-- [ ] Add contrast checks for text, links, buttons, warning states, code blocks, tables, and shell navigation
-- [ ] Add missing-asset diagnostics for full logo, mark logo, app icon, social image, favicon, and marketplace screenshots
-- [ ] Add invalid-env diagnostics with suggested replacements and direct links to docs
-- [ ] Add compatibility checks between selected style, color theme, layout, component pack, and plugin manifest requirements
-- [ ] Add downloadable diagnostics JSON for support requests and GitHub issues
+- [x] Add contrast review diagnostics for text, links, buttons, warning states, code blocks, tables, and shell navigation
+- [x] Add missing-asset diagnostics for full logo, mark logo, and app icon values
+- [x] Add invalid-env diagnostics for base URL, asset paths, and unsupported preset ids
+- [x] Add compatibility checks between selected style, color theme, and layout presets
+- [x] Add downloadable diagnostics JSON for support requests and GitHub issues
 
 #### v4.76.2 - Customization drafts
 
@@ -716,6 +716,14 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 - [ ] Public API v1, webhooks, feeds, and SDK types have compatibility commitments
 - [ ] Admin operations, observability, security, and privacy docs are complete enough for self-host operators
 - [ ] README, DESIGN, ARCHITECTURE, ROADMAP, CHANGELOG, AGENTS, CONTRIBUTING, API docs, help docs, feature docs, and in-app reference pages are synchronized
+
+## v4.76.1
+
+- [x] Customization diagnostics - `/admin/customization` now includes a Diagnostics tab with pass, warning, and error checks for deploy-ready customization values
+- [x] Asset and env validation - brand logo, logo mark, app icon, base URL, style, color theme, layout, alternate palette, and map-image readiness are checked before copying deployment config
+- [x] Support export - admins can download a diagnostics JSON report for support requests, GitHub issues, or release reviews
+- [x] Reusable diagnostics helper - `src/lib/customization-diagnostics.ts` centralizes report generation with unit coverage for valid drafts, invalid env values, unknown presets, and planned layouts
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, design/architecture notes, help docs, feature docs, and in-app reference pages describe the diagnostics release
 
 ## v4.76.0
 
