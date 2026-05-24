@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button, Field, Input, Page, PageHeader } from "@/components/ui";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -58,71 +59,67 @@ export default function RegisterPage() {
   }
 
   return (
-    <div>
-      <h1 className="ui-page-title">Create account</h1>
-
+    <Page>
+      <PageHeader title="Create account" />
       <div className="max-w-sm">
         <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <label className="ui-label">Username *</label>
-            <input
+          <Field htmlFor="register-username" label="Username *">
+            <Input
+              id="register-username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
               minLength={3}
-              className="ui-input"
               placeholder="Choose a username"
             />
-          </div>
+          </Field>
 
-          <div>
-            <label className="ui-label">Email *</label>
-            <input
+          <Field htmlFor="register-email" label="Email *">
+            <Input
+              id="register-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="ui-input"
               placeholder="your@email.com"
             />
-          </div>
+          </Field>
 
-          <div>
-            <label className="ui-label">Password *</label>
-            <input
+          <Field htmlFor="register-password" label="Password *">
+            <Input
+              id="register-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="ui-input"
               placeholder="At least 6 characters"
             />
-          </div>
+          </Field>
 
-          <div>
-            <label className="ui-label">Confirm password *</label>
-            <input
+          <Field htmlFor="register-confirm-password" label="Confirm password *">
+            <Input
+              id="register-confirm-password"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               minLength={6}
-              className="ui-input"
               placeholder="Re-enter password"
             />
-          </div>
+          </Field>
 
           {error && <p className="text-[12px] text-danger">{error}</p>}
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="ui-button ui-button-primary disabled:opacity-50"
+            variant="primary"
+            className="disabled:opacity-50"
           >
             {loading ? "Creating account…" : "Create account"}
-          </button>
+          </Button>
         </form>
 
         <p className="text-[12px] text-muted mt-4">
@@ -132,6 +129,6 @@ export default function RegisterPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </Page>
   );
 }

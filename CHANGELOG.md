@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.8] - 2026-05-24
+
+### Changed
+
+- **Auth and capture page primitives** - Migrated login, registration, bookmarklet, and clipper-extension pages to shared page, form, button, code, and panel primitives for a more reusable open-source UI surface.
+
 ## [4.74.7] - 2026-05-24
 
 ### Changed

@@ -16,6 +16,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.74.8
+
+- [x] Auth page primitive reuse - login and registration pages now use shared page, header, field, input, and button primitives
+- [x] Capture page primitive reuse - bookmarklet and clipper-extension install pages now use shared page, panel, button, textarea, and inline-code primitives
+- [x] Documentation/version discipline - package metadata, changelog, and roadmap describe the auth/capture UI consistency batch
+
 ## v4.74.7
 
 - [x] Read-only admin controls - `/admin/read-only` uses shared UI primitives with clear loading, saved, warning, and error states

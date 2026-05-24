@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button, Field, Input, Page, PageHeader } from "@/components/ui";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -39,44 +40,42 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
-      <h1 className="ui-page-title">Log in</h1>
-
+    <Page>
+      <PageHeader title="Log in" />
       <div className="max-w-sm">
         <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <label className="ui-label">Username</label>
-            <input
+          <Field htmlFor="login-username" label="Username">
+            <Input
+              id="login-username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="ui-input"
               placeholder="Username"
             />
-          </div>
+          </Field>
 
-          <div>
-            <label className="ui-label">Password</label>
-            <input
+          <Field htmlFor="login-password" label="Password">
+            <Input
+              id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="ui-input"
               placeholder="Password"
             />
-          </div>
+          </Field>
 
           {error && <p className="text-[12px] text-danger">{error}</p>}
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="ui-button ui-button-primary disabled:opacity-50"
+            variant="primary"
+            className="disabled:opacity-50"
           >
             {loading ? "Logging in…" : "Log in"}
-          </button>
+          </Button>
         </form>
 
         <p className="text-[12px] text-muted mt-4">
@@ -87,6 +86,6 @@ export default function LoginPage() {
         </p>
 
       </div>
-    </div>
+    </Page>
   );
 }
