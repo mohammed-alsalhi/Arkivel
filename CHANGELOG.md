@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.76.2] - 2026-05-24
+
+### Added
+
+- **Browser-local customization drafts** - Added a Drafts tab to `/admin/customization` with localStorage-backed saved drafts for preview combinations that should not change runtime config yet.
+- **Named starter presets** - Added personal wiki, team handbook, docs portal, worldbuilding atlas, research notebook, and read-only archive draft presets.
+- **Draft diff and reset flows** - Added active-vs-draft comparison plus confirmable reset-to-active and reset-to-default actions.
+
 ## [4.76.1] - 2026-05-24
 
 ### Added

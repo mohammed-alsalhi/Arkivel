@@ -40,11 +40,11 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 
 #### v4.76.2 - Customization drafts
 
-- [ ] Add browser-local customization drafts so admins can try combinations without changing runtime config
-- [ ] Add named draft presets for personal wiki, team handbook, docs portal, worldbuilding atlas, research notebook, and archive
-- [ ] Add visual diff between active config and draft config
-- [ ] Add reset-to-default and reset-to-active actions with confirmation states
-- [ ] Document draft workflows for self-host admins and open-source theme authors
+- [x] Add browser-local customization drafts so admins can try combinations without changing runtime config
+- [x] Add named draft presets for personal wiki, team handbook, docs portal, worldbuilding atlas, research notebook, and archive
+- [x] Add visual diff between active config and draft config
+- [x] Add reset-to-default and reset-to-active actions with confirmation states
+- [x] Document draft workflows for self-host admins and open-source theme authors
 
 #### v4.76.3 - Studio accessibility and polish
 
@@ -716,6 +716,14 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 - [ ] Public API v1, webhooks, feeds, and SDK types have compatibility commitments
 - [ ] Admin operations, observability, security, and privacy docs are complete enough for self-host operators
 - [ ] README, DESIGN, ARCHITECTURE, ROADMAP, CHANGELOG, AGENTS, CONTRIBUTING, API docs, help docs, feature docs, and in-app reference pages are synchronized
+
+## v4.76.2
+
+- [x] Browser-local customization drafts - `/admin/customization` now includes a Drafts tab backed by localStorage so admins can save and reload preview combinations without runtime overrides
+- [x] Named starter presets - personal wiki, team handbook, docs portal, worldbuilding atlas, research notebook, and read-only archive presets quickly reshape brand, layout, theme, and feature draft values
+- [x] Active-vs-draft diff - admins can compare active environment-derived values against the current draft before copying deployment output
+- [x] Reset confirmations - reset-to-active and reset-to-default actions require a confirm click so draft experiments are not lost accidentally
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, design/architecture notes, help docs, feature docs, in-app reference pages, and tests describe the drafts release
 
 ## v4.76.1
 

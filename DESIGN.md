@@ -38,7 +38,7 @@ Color themes are selected independently through `NEXT_PUBLIC_ARKIVEL_COLOR_THEME
 
 New skins, color themes, layouts, component packs, theme packs, and plugin listings should be registered in `src/lib/marketplace.ts`, exposed through `/api/customization`, and implemented through scoped CSS variables/classes in `src/app/globals.css` when they affect visuals. Treat all of them as marketplace-ready metadata: stable `id`, clear `kind`, explicit `status`, compatibility notes, and tags.
 
-The `/admin/customization` studio and `/admin/marketplace` catalog must stay preview-safe in v1: they can copy env values, validate/import JSON for preview, and explain compatibility, but they must not execute remote code or persist customization overrides. The studio is a tabbed workbench, so brand/copy controls, appearance presets, feature flags, diagnostics, preview panels, deployment output, and pack validation should remain reusable sections instead of route-specific one-offs.
+The `/admin/customization` studio and `/admin/marketplace` catalog must stay preview-safe in v1: they can copy env values, validate/import JSON for preview, and explain compatibility, but they must not execute remote code or persist customization overrides. The studio is a tabbed workbench, so brand/copy controls, browser-local drafts, named presets, active-vs-draft diffs, appearance presets, feature flags, diagnostics, preview panels, deployment output, and pack validation should remain reusable sections instead of route-specific one-offs.
 
 Prefer composition over one-off variants:
 

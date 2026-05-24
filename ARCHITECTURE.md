@@ -184,7 +184,7 @@ The public `/api/customization` endpoint exposes:
 - Built-in style presets, color themes, layout presets, component packs, plugin manifests, theme pack schemas, per-space customization metadata, and marketplace items.
 - Theme hook locations for CSS-variable and shared-class customization.
 
-Use this contract before adding new self-host flags, public branding controls, style presets, color themes, layouts, plugin-facing metadata, marketplace entries, per-space customization metadata, or theme hooks. `/admin/customization` is env-first and preview-only in v1; it does not create database overrides. The admin studio consumes the public manifest, lets admins draft brand/copy/logo/feature/appearance values in the browser, checks diagnostics with `src/lib/customization-diagnostics.ts`, previews key product surfaces, and exports deployment-ready env formats for the self-host runtime.
+Use this contract before adding new self-host flags, public branding controls, style presets, color themes, layouts, plugin-facing metadata, marketplace entries, per-space customization metadata, or theme hooks. `/admin/customization` is env-first and preview-only in v1; it does not create database overrides. The admin studio consumes the public manifest, lets admins draft brand/copy/logo/feature/appearance values in the browser, saves preview-only local drafts through `src/lib/customization-drafts.ts`, checks diagnostics with `src/lib/customization-diagnostics.ts`, previews key product surfaces, and exports deployment-ready env formats for the self-host runtime.
 
 ## Database Models
 

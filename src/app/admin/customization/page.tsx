@@ -23,6 +23,17 @@ import {
 } from "@/components/ui";
 import { useAdmin } from "@/components/AdminContext";
 import {
+  applyCustomizationDraftPreset,
+  createCustomizationDraftDiff,
+  createSavedCustomizationDraft,
+  CUSTOMIZATION_DRAFT_PRESETS,
+  CUSTOMIZATION_DRAFT_STORAGE_KEY,
+  DEFAULT_CUSTOMIZATION_DRAFT,
+  parseSavedCustomizationDrafts,
+  type CustomizationDraft,
+  type SavedCustomizationDraft,
+} from "@/lib/customization-drafts";
+import {
   analyzeCustomizationDraft,
   type CustomizationDiagnosticsReport,
   type DiagnosticSeverity,
@@ -53,35 +64,18 @@ type CustomizationManifest = {
   };
 };
 
-type DraftConfig = {
-  appIcon: string;
-  baseUrl: string;
-  colorThemeId: string;
-  description: string;
-  discussionsEnabled: boolean;
-  footerText: string;
-  layoutId: string;
-  logo: string;
-  logoMark: string;
-  mapEnabled: boolean;
-  name: string;
-  registrationEnabled: boolean;
-  styleId: string;
-  tagline: string;
-  welcomeText: string;
-};
-
 type EnvEntry = {
   key: string;
   source: "default" | "env" | "draft";
   value: string | number | boolean;
 };
 
-type StudioTab = "brand" | "appearance" | "features" | "diagnostics" | "preview" | "output" | "packs";
+type StudioTab = "brand" | "drafts" | "appearance" | "features" | "diagnostics" | "preview" | "output" | "packs";
 type OutputMode = "env" | "local" | "vercel" | "docker";
 
 const tabs: { id: StudioTab; label: string }[] = [
   { id: "brand", label: "Brand" },
+  { id: "drafts", label: "Drafts" },
   { id: "appearance", label: "Appearance" },
   { id: "features", label: "Features" },
   { id: "diagnostics", label: "Diagnostics" },
@@ -114,7 +108,7 @@ function sourceFor(defaults: Map<string, string>, key: string, value: string | n
   return String(value) === defaults.get(key) ? "default" : "env";
 }
 
-function createDraft(manifest: CustomizationManifest): DraftConfig {
+function createDraft(manifest: CustomizationManifest): CustomizationDraft {
   const current = manifest.customization;
 
   return {
@@ -136,7 +130,7 @@ function createDraft(manifest: CustomizationManifest): DraftConfig {
   };
 }
 
-function buildEnvEntries(manifest: CustomizationManifest, draft: DraftConfig): EnvEntry[] {
+function buildEnvEntries(manifest: CustomizationManifest, draft: CustomizationDraft): EnvEntry[] {
   const current = manifest.customization;
   const defaults = optionDefaults(manifest);
   const rows: [string, string | number | boolean, string | number | boolean][] = [
@@ -214,10 +208,15 @@ export default function AdminCustomizationPage() {
   const isAdmin = useAdmin();
   const [activeTab, setActiveTab] = useState<StudioTab>("brand");
   const [copied, setCopied] = useState(false);
-  const [draft, setDraft] = useState<DraftConfig | null>(null);
+  const [confirmReset, setConfirmReset] = useState<"" | "active" | "default">("");
+  const [draft, setDraft] = useState<CustomizationDraft | null>(null);
+  const [draftName, setDraftName] = useState("");
+  const [draftNotice, setDraftNotice] = useState("");
+  const [draftsLoaded, setDraftsLoaded] = useState(false);
   const [error, setError] = useState("");
   const [manifest, setManifest] = useState<CustomizationManifest | null>(null);
   const [outputMode, setOutputMode] = useState<OutputMode>("env");
+  const [savedDrafts, setSavedDrafts] = useState<SavedCustomizationDraft[]>([]);
   const [themePackJson, setThemePackJson] = useState("");
 
   useEffect(() => {
@@ -242,8 +241,26 @@ export default function AdminCustomizationPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const handle = window.setTimeout(() => {
+      setSavedDrafts(parseSavedCustomizationDrafts(window.localStorage.getItem(CUSTOMIZATION_DRAFT_STORAGE_KEY)));
+      setDraftsLoaded(true);
+    }, 0);
+    return () => window.clearTimeout(handle);
+  }, []);
+
+  useEffect(() => {
+    if (!draftsLoaded) return;
+    window.localStorage.setItem(CUSTOMIZATION_DRAFT_STORAGE_KEY, JSON.stringify(savedDrafts));
+  }, [draftsLoaded, savedDrafts]);
+
+  const activeDraft = useMemo(() => (manifest ? createDraft(manifest) : null), [manifest]);
   const envEntries = useMemo(() => (manifest && draft ? buildEnvEntries(manifest, draft) : []), [draft, manifest]);
   const output = useMemo(() => buildOutput(envEntries, outputMode), [envEntries, outputMode]);
+  const draftDiff = useMemo(
+    () => (activeDraft && draft ? createCustomizationDraftDiff(activeDraft, draft) : []),
+    [activeDraft, draft],
+  );
   const diagnostics = useMemo(
     () => (
       manifest && draft
@@ -257,7 +274,7 @@ export default function AdminCustomizationPage() {
     ),
     [draft, manifest],
   );
-  const changedCount = envEntries.filter((entry) => entry.source === "draft").length;
+  const changedCount = draftDiff.length;
   const themePackValidation = useMemo(() => {
     if (!themePackJson.trim()) return { errors: ["Paste a theme pack JSON object to validate."], valid: false };
     try {
@@ -266,6 +283,46 @@ export default function AdminCustomizationPage() {
       return { errors: ["Theme pack must be valid JSON."], valid: false };
     }
   }, [themePackJson]);
+
+  function saveDraft() {
+    if (!draft) return;
+    const saved = createSavedCustomizationDraft(draftName || `${draft.name} draft`, draft);
+    setSavedDrafts((current) => [saved, ...current.filter((item) => item.id !== saved.id)].slice(0, 12));
+    setDraftName(saved.name);
+    setDraftNotice(`Saved ${saved.name} in this browser.`);
+  }
+
+  function loadDraft(saved: SavedCustomizationDraft) {
+    setDraft(saved.values);
+    setDraftName(saved.name);
+    setActiveTab("drafts");
+    setDraftNotice(`Loaded ${saved.name}.`);
+  }
+
+  function deleteDraft(id: string) {
+    setSavedDrafts((current) => current.filter((item) => item.id !== id));
+    setDraftNotice("Saved draft removed from this browser.");
+  }
+
+  function applyPreset(presetId: string) {
+    if (!draft) return;
+    const nextDraft = applyCustomizationDraftPreset(draft, presetId);
+    const preset = CUSTOMIZATION_DRAFT_PRESETS.find((item) => item.id === presetId);
+    setDraft(nextDraft);
+    setDraftName(preset?.name ?? draftName);
+    setDraftNotice(preset ? `Applied ${preset.name} preset.` : "Preset was not found.");
+  }
+
+  function confirmOrReset(kind: "active" | "default") {
+    if (!manifest) return;
+    if (confirmReset !== kind) {
+      setConfirmReset(kind);
+      return;
+    }
+    setDraft(kind === "active" ? createDraft(manifest) : DEFAULT_CUSTOMIZATION_DRAFT);
+    setConfirmReset("");
+    setDraftNotice(kind === "active" ? "Draft reset to the active environment values." : "Draft reset to Arkivel defaults.");
+  }
 
   if (!isAdmin) {
     return (
@@ -282,14 +339,22 @@ export default function AdminCustomizationPage() {
         description="Preview self-host branding, styles, color themes, layouts, feature flags, copy, logos, and deployment config without writing database overrides."
         actions={
           manifest && draft ? (
-            <Button onClick={() => setDraft(createDraft(manifest))} disabled={changedCount === 0}>
-              Reset draft
-            </Button>
+            <Toolbar>
+              <ToolbarGroup>
+                <Button onClick={() => confirmOrReset("active")} disabled={changedCount === 0 && confirmReset !== "active"}>
+                  {confirmReset === "active" ? "Confirm active reset" : "Reset to active"}
+                </Button>
+                <Button onClick={() => confirmOrReset("default")}>
+                  {confirmReset === "default" ? "Confirm default reset" : "Reset to defaults"}
+                </Button>
+              </ToolbarGroup>
+            </Toolbar>
           ) : null
         }
       />
 
       {error && <Notice className="mb-4 border-danger-border bg-danger-soft text-danger">{error}</Notice>}
+      {draftNotice && <Notice className="mb-4 border-info-border bg-info-soft text-info">{draftNotice}</Notice>}
 
       {!manifest || !draft ? (
         <p className="text-[13px] text-muted">Loading customization manifest...</p>
@@ -353,6 +418,98 @@ export default function AdminCustomizationPage() {
                   </Field>
                   <BrandPreview draft={draft} />
                 </div>
+              </SectionPanel>
+            </div>
+          )}
+
+          {activeTab === "drafts" && (
+            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+              <div className="space-y-4">
+                <SectionPanel
+                  title="Browser-local draft"
+                  actions={<Button onClick={saveDraft} variant="primary">Save draft</Button>}
+                >
+                  <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
+                    <Field htmlFor="draft-name" label="Draft name">
+                      <Input
+                        id="draft-name"
+                        value={draftName}
+                        onChange={(event) => setDraftName(event.target.value)}
+                        placeholder={`${draft.name} draft`}
+                      />
+                    </Field>
+                    <div className="flex items-end">
+                      <Chip tone={changedCount > 0 ? "warning" : "success"}>
+                        {changedCount > 0 ? `${changedCount} changes` : "matches active"}
+                      </Chip>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-[12px] text-muted">
+                    Saved drafts stay in this browser with localStorage. They are preview-only and do not change deployment config or database state.
+                  </p>
+                </SectionPanel>
+
+                <SectionPanel title="Preset starters" bodyClassName="grid gap-3 md:grid-cols-2">
+                  {CUSTOMIZATION_DRAFT_PRESETS.map((preset) => (
+                    <div key={preset.id} className="border border-border bg-surface p-3">
+                      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-[13px] font-semibold text-heading">{preset.name}</p>
+                        <Button onClick={() => applyPreset(preset.id)}>Apply</Button>
+                      </div>
+                      <p className="text-[12px] text-muted">{preset.description}</p>
+                      <InlineCode className="mt-2 inline-block">{preset.id}</InlineCode>
+                    </div>
+                  ))}
+                </SectionPanel>
+
+                <SectionPanel title="Active vs draft diff">
+                  {draftDiff.length === 0 ? (
+                    <EmptyState title="No draft changes" description="The current preview matches the active environment-derived configuration." />
+                  ) : (
+                    <DataTable>
+                      <thead>
+                        <tr>
+                          <th>Field</th>
+                          <th>Active</th>
+                          <th>Draft</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {draftDiff.map((row) => (
+                          <tr key={row.field}>
+                            <th>{row.label}</th>
+                            <td>{row.activeValue}</td>
+                            <td>{row.draftValue}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </DataTable>
+                  )}
+                </SectionPanel>
+              </div>
+
+              <SectionPanel title="Saved drafts">
+                {savedDrafts.length === 0 ? (
+                  <EmptyState title="No saved drafts" description="Save a draft or apply a preset to start building a reusable self-host setup." />
+                ) : (
+                  <div className="space-y-2">
+                    {savedDrafts.map((saved) => (
+                      <div key={saved.id} className="border border-border bg-surface p-3">
+                        <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                          <p className="text-[13px] font-semibold text-heading">{saved.name}</p>
+                          <Chip>{new Date(saved.updatedAt).toLocaleDateString()}</Chip>
+                        </div>
+                        <p className="text-[12px] text-muted">
+                          {saved.values.styleId} / {saved.values.colorThemeId} / {saved.values.layoutId}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <Button onClick={() => loadDraft(saved)}>Load</Button>
+                          <Button onClick={() => deleteDraft(saved.id)}>Delete</Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </SectionPanel>
             </div>
           )}
@@ -647,7 +804,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
-function BrandPreview({ draft }: { draft: DraftConfig }) {
+function BrandPreview({ draft }: { draft: CustomizationDraft }) {
   return (
     <div className="border border-border bg-background p-3">
       <div className="flex items-center gap-3">
@@ -691,7 +848,7 @@ function PresetGrid({
   );
 }
 
-function PreviewFrame({ children, draft, title }: { children: ReactNode; draft: DraftConfig; title: string }) {
+function PreviewFrame({ children, draft, title }: { children: ReactNode; draft: CustomizationDraft; title: string }) {
   return (
     <div
       className="border border-border bg-surface p-4"
