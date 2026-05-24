@@ -4,8 +4,11 @@ import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   HTMLAttributes,
+  InputHTMLAttributes,
   ReactNode,
+  SelectHTMLAttributes,
   TableHTMLAttributes,
+  TextareaHTMLAttributes,
 } from "react";
 
 type PageWidth = "default" | "narrow" | "wide" | "full";
@@ -57,6 +60,7 @@ export function PageHeader({
 }
 
 type ButtonVariant = "default" | "primary" | "danger";
+type Tone = "default" | "success" | "warning" | "danger" | "info";
 
 export function buttonClassName(variant: ButtonVariant = "default", className?: string) {
   return clsx(
@@ -75,6 +79,14 @@ export function Button({ className, type = "button", variant = "default", ...pro
   return <button className={buttonClassName(variant, className)} type={type} {...props} />;
 }
 
+type AnchorButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  variant?: ButtonVariant;
+};
+
+export function AnchorButton({ className, variant = "default", ...props }: AnchorButtonProps) {
+  return <a className={buttonClassName(variant, className)} {...props} />;
+}
+
 type LinkButtonProps = LinkProps &
   Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> & {
     variant?: ButtonVariant;
@@ -82,6 +94,123 @@ type LinkButtonProps = LinkProps &
 
 export function LinkButton({ className, variant = "default", ...props }: LinkButtonProps) {
   return <Link className={buttonClassName(variant, className)} {...props} />;
+}
+
+type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  label: string;
+};
+
+export function IconButton({
+  children,
+  className,
+  label,
+  title,
+  type = "button",
+  ...props
+}: IconButtonProps) {
+  return (
+    <button
+      aria-label={label}
+      className={clsx("ui-icon-button", className)}
+      title={title ?? label}
+      type={type}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+
+type FieldProps = HTMLAttributes<HTMLDivElement> & {
+  error?: ReactNode;
+  hint?: ReactNode;
+  htmlFor?: string;
+  label: ReactNode;
+};
+
+export function Field({
+  children,
+  className,
+  error,
+  hint,
+  htmlFor,
+  label,
+  ...props
+}: FieldProps) {
+  return (
+    <div className={clsx("ui-field", className)} {...props}>
+      <label className="ui-label" htmlFor={htmlFor}>
+        {label}
+      </label>
+      {children}
+      {hint && <p className="ui-muted">{hint}</p>}
+      {error && <p className="ui-field-error">{error}</p>}
+    </div>
+  );
+}
+
+type InputProps = InputHTMLAttributes<HTMLInputElement>;
+
+export function Input({ className, ...props }: InputProps) {
+  return <input className={clsx("ui-input", className)} {...props} />;
+}
+
+type SelectProps = SelectHTMLAttributes<HTMLSelectElement>;
+
+export function Select({ className, ...props }: SelectProps) {
+  return <select className={clsx("ui-select", className)} {...props} />;
+}
+
+type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+export function Textarea({ className, ...props }: TextareaProps) {
+  return <textarea className={clsx("ui-textarea", className)} {...props} />;
+}
+
+type InlineCodeProps = HTMLAttributes<HTMLElement>;
+
+export function InlineCode({ className, ...props }: InlineCodeProps) {
+  return <code className={clsx("ui-inline-code", className)} {...props} />;
+}
+
+type CodeBlockProps = HTMLAttributes<HTMLPreElement>;
+
+export function CodeBlock({ className, ...props }: CodeBlockProps) {
+  return <pre className={clsx("ui-code-block", className)} {...props} />;
+}
+
+type KeyboardKeyProps = HTMLAttributes<HTMLElement>;
+
+export function KeyboardKey({ className, ...props }: KeyboardKeyProps) {
+  return <kbd className={clsx("ui-kbd", className)} {...props} />;
+}
+
+type NoticeProps = HTMLAttributes<HTMLDivElement>;
+
+export function Notice({ className, ...props }: NoticeProps) {
+  return <div className={clsx("wiki-notice", className)} {...props} />;
+}
+
+type ToggleSwitchProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  checked: boolean;
+};
+
+export function ToggleSwitch({
+  checked,
+  className,
+  type = "button",
+  ...props
+}: ToggleSwitchProps) {
+  return (
+    <button
+      aria-pressed={checked}
+      className={clsx("ui-toggle-switch", checked && "ui-toggle-switch-checked", className)}
+      type={type}
+      {...props}
+    >
+      <span className="ui-toggle-switch-thumb" />
+    </button>
+  );
 }
 
 type TabsProps = HTMLAttributes<HTMLElement> & {
@@ -126,6 +255,72 @@ export function TabLink({ active = false, className, ...props }: TabLinkProps) {
       role="tab"
       {...props}
     />
+  );
+}
+
+type ToolbarProps = HTMLAttributes<HTMLDivElement>;
+
+export function Toolbar({ className, ...props }: ToolbarProps) {
+  return <div className={clsx("ui-toolbar", className)} {...props} />;
+}
+
+type ToolbarGroupProps = HTMLAttributes<HTMLDivElement> & {
+  label?: ReactNode;
+};
+
+export function ToolbarGroup({ children, className, label, ...props }: ToolbarGroupProps) {
+  return (
+    <div className={clsx("ui-toolbar-group", className)} {...props}>
+      {label && <span className="ui-toolbar-label">{label}</span>}
+      {children}
+    </div>
+  );
+}
+
+type ToolbarDividerProps = HTMLAttributes<HTMLSpanElement>;
+
+export function ToolbarDivider({ className, ...props }: ToolbarDividerProps) {
+  return <span aria-hidden="true" className={clsx("ui-toolbar-divider", className)} {...props} />;
+}
+
+type ChipProps = HTMLAttributes<HTMLSpanElement> & {
+  tone?: Tone;
+};
+
+export function Chip({ className, tone = "default", ...props }: ChipProps) {
+  return <span className={clsx("ui-chip", tone !== "default" && `ui-chip-${tone}`, className)} {...props} />;
+}
+
+type DropdownProps = HTMLAttributes<HTMLDivElement>;
+
+export function Dropdown({ className, ...props }: DropdownProps) {
+  return <div className={clsx("ui-dropdown", className)} {...props} />;
+}
+
+type DropdownItemProps = ButtonHTMLAttributes<HTMLButtonElement>;
+
+export function DropdownItem({ className, type = "button", ...props }: DropdownItemProps) {
+  return <button className={clsx("ui-dropdown-item", className)} type={type} {...props} />;
+}
+
+type DropdownLinkProps = LinkProps &
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps>;
+
+export function DropdownLink({ className, ...props }: DropdownLinkProps) {
+  return <Link className={clsx("ui-dropdown-item", className)} {...props} />;
+}
+
+type PanelProps = HTMLAttributes<HTMLDivElement> & {
+  bodyClassName?: string;
+  title?: ReactNode;
+};
+
+export function Panel({ bodyClassName, children, className, title, ...props }: PanelProps) {
+  return (
+    <div className={clsx("ui-panel", className)} {...props}>
+      {title && <div className="ui-panel-header">{title}</div>}
+      <div className={clsx("ui-panel-body", bodyClassName)}>{children}</div>
+    </div>
   );
 }
 
@@ -179,6 +374,62 @@ type DataTableProps = TableHTMLAttributes<HTMLTableElement>;
 
 export function DataTable({ className, ...props }: DataTableProps) {
   return <table className={clsx("ui-table", className)} {...props} />;
+}
+
+type ListProps = HTMLAttributes<HTMLUListElement> & {
+  density?: "default" | "compact";
+};
+
+export function List({ className, density = "default", ...props }: ListProps) {
+  return (
+    <ul
+      className={clsx(
+        "ui-list",
+        density === "compact" && "ui-list-compact",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+type FeatureItemProps = HTMLAttributes<HTMLLIElement> & {
+  title?: ReactNode;
+};
+
+export function FeatureItem({ children, className, title, ...props }: FeatureItemProps) {
+  return (
+    <li className={className} {...props}>
+      {title ? (
+        <>
+          <strong>{title}</strong>
+          {children ? <> — {children}</> : null}
+        </>
+      ) : (
+        children
+      )}
+    </li>
+  );
+}
+
+type DefinitionGridProps = HTMLAttributes<HTMLDListElement>;
+
+export function DefinitionGrid({ className, ...props }: DefinitionGridProps) {
+  return <dl className={clsx("ui-definition-grid", className)} {...props} />;
+}
+
+type DefinitionItemProps = HTMLAttributes<HTMLDivElement> & {
+  label: ReactNode;
+  value: ReactNode;
+};
+
+export function DefinitionItem({ className, label, value, ...props }: DefinitionItemProps) {
+  return (
+    <div className={clsx("ui-definition-item", className)} {...props}>
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+    </div>
+  );
 }
 
 type EmptyStateProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
@@ -240,19 +491,44 @@ export function CardGrid({ className, ...props }: CardGridProps) {
   return <div className={clsx("ui-card-grid", className)} {...props} />;
 }
 
+type CardProps = HTMLAttributes<HTMLDivElement> & {
+  description?: ReactNode;
+  media?: ReactNode;
+  meta?: ReactNode;
+  title?: ReactNode;
+};
+
+export function Card({ children, className, description, media, meta, title, ...props }: CardProps) {
+  return (
+    <div className={clsx("ui-card", className)} {...props}>
+      {media && <div className="ui-card-media">{media}</div>}
+      <div className="ui-card-body">
+        {title && <div className="ui-card-title">{title}</div>}
+        {description && <div className="ui-card-description">{description}</div>}
+        {children}
+        {meta && <div className="ui-card-meta">{meta}</div>}
+      </div>
+    </div>
+  );
+}
+
 type CardLinkProps = LinkProps &
-  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps | "title"> & {
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps | "media" | "title"> & {
     description?: ReactNode;
+    media?: ReactNode;
     meta?: ReactNode;
     title: ReactNode;
   };
 
-export function CardLink({ className, description, meta, title, ...props }: CardLinkProps) {
+export function CardLink({ className, description, media, meta, title, ...props }: CardLinkProps) {
   return (
     <Link className={clsx("ui-card-link", className)} {...props}>
-      <span className="ui-card-title">{title}</span>
-      {description && <span className="ui-card-description">{description}</span>}
-      {meta && <span className="ui-card-meta">{meta}</span>}
+      {media && <span className="ui-card-media">{media}</span>}
+      <span className="ui-card-body">
+        <span className="ui-card-title">{title}</span>
+        {description && <span className="ui-card-description">{description}</span>}
+        {meta && <span className="ui-card-meta">{meta}</span>}
+      </span>
     </Link>
   );
 }

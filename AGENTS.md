@@ -15,6 +15,30 @@ node prisma/seed.mjs # Seed default categories
 
 After changing `prisma/schema.prisma`, always run `npx prisma generate` and delete `.next/` to avoid stale client errors.
 
+## Documentation and Versioning Discipline
+
+Every commit must keep product docs, in-app docs, and version metadata synchronized with the code change. This is a standing repo rule for all agents and contributors.
+
+Before finishing any change, check whether the change affects behavior, UI, configuration, API shape, data model, workflow, feature availability, or contributor guidance. If it does, update the relevant docs in the same commit:
+
+- Root references: `README.md`, `CHANGELOG.md`, `ROADMAP.md`, `DESIGN.md`, `ARCHITECTURE.md`, `CONTRIBUTING.md`, `AGENTS.md`, and other root docs that describe the touched area.
+- Markdown product docs: `docs/help.md`, `docs/features.md`, and any relevant files under `docs/archive/`.
+- In-app product pages: `src/app/help/page.tsx`, `src/app/features/page.tsx`, `src/app/api-docs/page.tsx`, and any route-specific documentation or settings copy affected by the change.
+- Version metadata: bump `package.json` and `package-lock.json` for every user-visible, docs-visible, or release-note-worthy change. Use a patch bump for documentation/process/UI copy changes, minor for new product capabilities, and major only for breaking changes.
+
+If a doc does not need changes, leave it untouched. Do not make a code-only change for a user-visible feature unless the matching documentation and version updates are included.
+
+## Commit Message Standard
+
+Follow the existing repository history when writing commit messages.
+
+- Release/version commits must use `vX.Y.Z: imperative summary`, matching the version in `package.json`. Examples: `v4.74.4: document release discipline`, `v4.71.2: collapse article and presentation tables`.
+- The summary after the colon should be short, lower-case unless it contains a proper noun, and written as an imperative verb phrase: `add`, `fix`, `harden`, `simplify`, `document`, `refactor`, `polish`, `bump`.
+- Non-version commits may use the same imperative style without a version prefix, e.g. `Fix build: wrap useSearchParams in Suspense` or `Polish theme-aware Arkivel logo`.
+- Dependency automation keeps Conventional Commit style from Dependabot, e.g. `build(deps): bump ...` or `build(deps-dev): bump ...`.
+- Merge commits may keep GitHub/Git defaults.
+- Keep the subject focused on the shipped outcome, not implementation trivia. If a body is needed, use brief bullets for docs updated, tests run, and notable risks.
+
 ## Architecture
 
 **Stack:** Next.js 16 (App Router) + React 19 + TypeScript + Prisma 7 + PostgreSQL (Neon) + Tailwind CSS 4 + Tiptap editor

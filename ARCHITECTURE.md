@@ -158,6 +158,16 @@ docs/
   help.md                     # Feature guide reference
 ```
 
+## Documentation Surfaces
+
+Documentation is part of the release surface. Changes that affect behavior, UI, configuration, APIs, schema, workflows, product positioning, or contributor guidance must update the matching docs and version metadata in the same commit.
+
+- Agent and contributor rules live in `AGENTS.md` and `CONTRIBUTING.md`.
+- Product reference docs live in `README.md`, `docs/help.md`, and `docs/features.md`.
+- In-app product docs live in `src/app/help/page.tsx`, `src/app/features/page.tsx`, and route-specific reference pages such as `src/app/api-docs/page.tsx`.
+- Release history and planning live in `CHANGELOG.md` and `ROADMAP.md`.
+- Version metadata lives in `package.json` and `package-lock.json`.
+
 ## Database Models
 
 ### Core Content

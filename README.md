@@ -175,6 +175,14 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), [ROADMAP.md](ROADMAP.md), [docs/features.md](docs/features.md), and [docs/help.md](docs/help.md) for the contributor-level references.
 
+## Documentation And Versioning
+
+Arkivel treats documentation as part of the product. Every commit that changes behavior, UI, configuration, APIs, schema, workflows, or contributor guidance should update the matching docs and version metadata in the same commit.
+
+At minimum, check [AGENTS.md](AGENTS.md), [CHANGELOG.md](CHANGELOG.md), [ROADMAP.md](ROADMAP.md), [DESIGN.md](DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md), [docs/features.md](docs/features.md), [docs/help.md](docs/help.md), the in-app `/features` and `/help` pages, plus `package.json` and `package-lock.json`.
+
+Commit messages follow the project history: release commits use `vX.Y.Z: imperative summary` matching `package.json`, while dependency automation keeps `build(deps): ...`.
+
 ## Commands
 
 ```bash

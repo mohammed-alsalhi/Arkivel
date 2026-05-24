@@ -1,3 +1,5 @@
+import { Chip } from "@/components/ui";
+
 type Variant = "default" | "accent" | "success" | "warning" | "danger";
 
 type Props = {
@@ -7,7 +9,11 @@ type Props = {
 };
 
 export default function Badge({ children, variant = "default", size = "md" }: Props) {
-  const variantClass = variant === "default" ? "badge" : `badge badge-${variant}`;
-  const sizeClass = size === "sm" ? "badge-sm" : "";
-  return <span className={`${variantClass} ${sizeClass}`.trim()}>{children}</span>;
+  const tone = variant === "accent" ? "info" : variant;
+
+  return (
+    <Chip className={size === "sm" ? "badge-sm" : undefined} tone={tone}>
+      {children}
+    </Chip>
+  );
 }

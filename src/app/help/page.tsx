@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Help",
@@ -7,21 +8,23 @@ export const metadata: Metadata = {
 
 export default function HelpPage() {
   return (
-    <div>
-      <header className="ui-page-header">
-        <div>
-          <p className="ui-page-kicker">Reference</p>
-          <h1 className="ui-page-title">Help &amp; Features Guide</h1>
-          <p className="ui-page-dek">
+    <Page>
+      <PageHeader
+        kicker="Reference"
+        title="Help &amp; Features Guide"
+        description={
+          <>
             This guide covers all features available in the wiki. Use the sections below to learn how to create, edit, organize, and get the most from your articles.
             For a feature overview see <Link href="/features">Features</Link>.
-          </p>
-        </div>
-        <div className="ui-page-actions">
-          <Link href="/features" className="ui-button">Features</Link>
-          <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
-        </div>
-      </header>
+          </>
+        }
+        actions={
+          <>
+            <LinkButton href="/features">Features</LinkButton>
+            <LinkButton href="/articles/new" variant="primary">Create article</LinkButton>
+          </>
+        }
+      />
 
       {/* Getting Started */}
       <div className="wiki-portal mb-4">
@@ -579,6 +582,22 @@ export default function HelpPage() {
         </div>
       </div>
 
+      {/* Maintainer Workflow */}
+      <div className="wiki-portal mb-4">
+        <div className="wiki-portal-header">Maintainer Workflow</div>
+        <div className="wiki-portal-body text-[13px]">
+          <p className="mb-2">
+            Documentation and versioning are part of every release. User-visible, API, schema, configuration, workflow, design, or contributor-guidance changes should update the matching references in the same commit.
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>Root docs: <code className="bg-surface-hover px-1 text-[12px]">README.md</code>, <code className="bg-surface-hover px-1 text-[12px]">CHANGELOG.md</code>, <code className="bg-surface-hover px-1 text-[12px]">ROADMAP.md</code>, <code className="bg-surface-hover px-1 text-[12px]">DESIGN.md</code>, <code className="bg-surface-hover px-1 text-[12px]">ARCHITECTURE.md</code>, <code className="bg-surface-hover px-1 text-[12px]">CONTRIBUTING.md</code>, and <code className="bg-surface-hover px-1 text-[12px]">AGENTS.md</code></li>
+            <li>Product docs: <code className="bg-surface-hover px-1 text-[12px]">docs/help.md</code>, <code className="bg-surface-hover px-1 text-[12px]">docs/features.md</code>, <Link href="/help">/help</Link>, <Link href="/features">/features</Link>, and <Link href="/api-docs">/api-docs</Link> when relevant</li>
+            <li>Version metadata: bump <code className="bg-surface-hover px-1 text-[12px]">package.json</code> and <code className="bg-surface-hover px-1 text-[12px]">package-lock.json</code>; patch for docs/process/UI copy, minor for new capabilities, major for breaking changes</li>
+            <li>Commit messages: release commits use <code className="bg-surface-hover px-1 text-[12px]">vX.Y.Z: imperative summary</code>, dependency commits keep <code className="bg-surface-hover px-1 text-[12px]">build(deps): ...</code>, and non-version commits use a short imperative subject</li>
+          </ul>
+        </div>
+      </div>
+
       {/* User Accounts */}
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">User Accounts</div>
@@ -672,6 +691,6 @@ export default function HelpPage() {
       <div className="wiki-notice">
         <strong>Tip:</strong> Type <code className="bg-surface-hover px-1 text-[12px]">[[</code> anywhere in the editor to search and link to existing articles. Type <code className="bg-surface-hover px-1 text-[12px]">/</code> to open the slash command menu for rich content blocks.
       </div>
-    </div>
+    </Page>
   );
 }

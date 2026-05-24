@@ -39,8 +39,9 @@ Open [http://localhost:3000](http://localhost:3000). With no `ADMIN_SECRET` set,
 
 1. **Create a branch** from `main` for your feature or fix
 2. **Make your changes** — see the project structure in [ARCHITECTURE.md](ARCHITECTURE.md)
-3. **Test locally** — run `npm run build` to catch TypeScript errors
-4. **Submit a pull request** with a clear description of what changed and why
+3. **Update docs and versioning** — keep docs and in-app references synchronized with the change
+4. **Test locally** — run `npm run build` to catch TypeScript errors
+5. **Submit a pull request** with a clear description of what changed and why
 
 ## Project Structure
 
@@ -58,6 +59,18 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 1. Create the page under `src/app/` following Next.js App Router conventions
 2. Server components are the default; add `"use client"` only when needed
 3. Use existing CSS classes (`.wiki-tabs`, `.wiki-infobox`, `.wiki-notice`, etc.)
+
+### Documentation and versioning
+1. For every user-visible, docs-visible, API, schema, configuration, workflow, or contributor-guidance change, update the matching documentation in the same commit.
+2. Check root references such as `README.md`, `CHANGELOG.md`, `ROADMAP.md`, `DESIGN.md`, `ARCHITECTURE.md`, `CONTRIBUTING.md`, and `AGENTS.md`.
+3. Check product docs and in-app docs: `docs/help.md`, `docs/features.md`, `src/app/help/page.tsx`, `src/app/features/page.tsx`, and `src/app/api-docs/page.tsx` when relevant.
+4. Bump `package.json` and `package-lock.json`: patch for documentation/process/UI copy, minor for new product capabilities, major for breaking changes.
+
+### Commit messages
+1. Release/version commits use `vX.Y.Z: imperative summary`, matching `package.json`; for example, `v4.74.4: document release discipline`.
+2. Use short imperative verbs that match repo history: `add`, `fix`, `harden`, `simplify`, `document`, `refactor`, `polish`, or `bump`.
+3. Non-version commits may omit the prefix but should stay imperative, e.g. `Fix build: wrap useSearchParams in Suspense`.
+4. Dependency automation keeps its Conventional Commit style, e.g. `build(deps): bump ...`.
 
 ### Modifying the database schema
 1. Edit `prisma/schema.prisma`

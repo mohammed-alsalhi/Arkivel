@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Features",
@@ -8,21 +9,23 @@ export const metadata: Metadata = {
 
 export default function FeaturesPage() {
   return (
-    <div>
-      <header className="ui-page-header">
-        <div>
-          <p className="ui-page-kicker">Reference</p>
-          <h1 className="ui-page-title">Features</h1>
-          <p className="ui-page-dek">
+    <Page>
+      <PageHeader
+        kicker="Reference"
+        title="Features"
+        description={
+          <>
             A complete overview of everything the wiki can do. For step-by-step instructions see the{" "}
             <Link href="/help">Help &amp; Features Guide</Link>.
-          </p>
-        </div>
-        <div className="ui-page-actions">
-          <Link href="/help" className="ui-button">Help guide</Link>
-          <Link href="/api-docs" className="ui-button">API docs</Link>
-        </div>
-      </header>
+          </>
+        }
+        actions={
+          <>
+            <LinkButton href="/help">Help guide</LinkButton>
+            <LinkButton href="/api-docs">API docs</LinkButton>
+          </>
+        }
+      />
 
       {/* Writing & Editing */}
       <div className="wiki-portal mb-4">
@@ -376,6 +379,7 @@ export default function FeaturesPage() {
             <li><strong>Atlas JSON feed</strong> — <Link href="/api/atlas">/api/atlas</Link> exposes territories, article signals, story threads, the flagship dossier, continuity pressure, and recommended atlas moves</li>
             <li><strong>Trails JSON feed</strong> — <Link href="/api/trails">/api/trails</Link> exposes guided reading routes, stop reasons, reading estimates, word totals, and link totals</li>
             <li><strong>Intelligence JSON feed</strong> — <Link href="/api/intelligence">/api/intelligence</Link> exposes the command-center score, summary, graph constellation, radar axes, pressure model, 20 engines, and next-best-work queue for dashboards or automation</li>
+            <li><strong>Documentation, version, and commit discipline</strong> — every user-visible, API, schema, configuration, workflow, design, or contributor-guidance change updates the matching root docs, markdown docs, in-app docs, changelog/roadmap entries, and package metadata in the same commit; release commit messages follow <code className="bg-surface-hover px-1 text-[12px]">vX.Y.Z: imperative summary</code></li>
             <li><strong>Content lint</strong> — broken links, missing excerpts, orphans at <Link href="/admin/lint">/admin/lint</Link></li>
             <li><strong>Stale articles</strong> — articles not updated in 180+ days at <Link href="/admin/staleness">/admin/staleness</Link></li>
             <li><strong>Embeddings coverage</strong> — semantic search index per article at <Link href="/admin/embeddings">/admin/embeddings</Link></li>
@@ -474,6 +478,6 @@ export default function FeaturesPage() {
         For detailed usage instructions and keyboard shortcuts, see the <Link href="/help">Help &amp; Features Guide</Link>.
         For API reference, see <Link href="/api-docs">API Documentation</Link>.
       </div>
-    </div>
+    </Page>
   );
 }

@@ -1,91 +1,81 @@
 import { config } from "@/lib/config";
+import {
+  CodeBlock,
+  DataTable,
+  InlineCode,
+  Notice,
+  Page,
+  PageHeader,
+  Section,
+} from "@/components/ui";
 
 export default function ApiDocsPage() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        {config.name} API Documentation
-      </h1>
+    <Page>
+      <PageHeader title={`${config.name} API Documentation`} />
 
-      <div className="wiki-notice mb-4">
+      <Notice className="mb-4">
         <strong>Authentication:</strong> All API v1 endpoints require an API key
-        passed in the <code className="bg-surface-hover px-1 text-[12px]">X-API-Key</code> header.
+        passed in the <InlineCode>X-API-Key</InlineCode> header.
         API keys can be managed from your user account settings.
-      </div>
+      </Notice>
 
       <div className="text-[13px] space-y-6">
         {/* Base URL */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Base URL
-          </h2>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto">
-            {baseUrl}/api/v1
-          </pre>
-        </section>
+        <Section title="Base URL">
+          <CodeBlock>{baseUrl}/api/v1</CodeBlock>
+        </Section>
 
         {/* Articles */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Articles
-          </h2>
+        <Section title="Articles">
 
           <h3 className="font-semibold mt-3 mb-1">GET /api/v1/articles</h3>
           <p className="text-muted mb-2">
             List published articles with pagination and optional filters.
           </p>
 
-          <table className="w-full border border-border text-[12px] mb-3">
+          <DataTable className="mb-3 text-[12px]">
             <thead>
-              <tr className="bg-surface-hover">
-                <th className="text-left px-2 py-1 border-b border-border">Parameter</th>
-                <th className="text-left px-2 py-1 border-b border-border">Type</th>
-                <th className="text-left px-2 py-1 border-b border-border">Description</th>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">page</td>
-                <td className="px-2 py-1 border-b border-border">integer</td>
-                <td className="px-2 py-1 border-b border-border">Page number (default: 1)</td>
+                <td className="font-mono">page</td>
+                <td>integer</td>
+                <td>Page number (default: 1)</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">limit</td>
-                <td className="px-2 py-1 border-b border-border">integer</td>
-                <td className="px-2 py-1 border-b border-border">Items per page, max 100 (default: 20)</td>
+                <td className="font-mono">limit</td>
+                <td>integer</td>
+                <td>Items per page, max 100 (default: 20)</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">category</td>
-                <td className="px-2 py-1 border-b border-border">string</td>
-                <td className="px-2 py-1 border-b border-border">Filter by category slug</td>
+                <td className="font-mono">category</td>
+                <td>string</td>
+                <td>Filter by category slug</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">tag</td>
-                <td className="px-2 py-1 border-b border-border">string</td>
-                <td className="px-2 py-1 border-b border-border">Filter by tag slug</td>
+                <td className="font-mono">tag</td>
+                <td>string</td>
+                <td>Filter by tag slug</td>
               </tr>
             </tbody>
-          </table>
+          </DataTable>
 
           <p className="font-semibold mb-1">Example:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`curl -H "X-API-Key: YOUR_KEY" \\
   "${baseUrl}/api/v1/articles?page=1&limit=10&category=people"`}
-          </pre>
+          </CodeBlock>
 
           <p className="font-semibold mt-3 mb-1">Response:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`{
   "articles": [
     {
@@ -106,60 +96,48 @@ export default function ApiDocsPage() {
     "totalPages": 5
   }
 }`}
-          </pre>
-        </section>
+          </CodeBlock>
+        </Section>
 
         {/* Search */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Search
-          </h2>
+        <Section title="Search">
 
           <h3 className="font-semibold mt-3 mb-1">GET /api/v1/search</h3>
           <p className="text-muted mb-2">
             Search articles by title and content. Multi-word queries use AND logic.
           </p>
 
-          <table className="w-full border border-border text-[12px] mb-3">
+          <DataTable className="mb-3 text-[12px]">
             <thead>
-              <tr className="bg-surface-hover">
-                <th className="text-left px-2 py-1 border-b border-border">Parameter</th>
-                <th className="text-left px-2 py-1 border-b border-border">Type</th>
-                <th className="text-left px-2 py-1 border-b border-border">Description</th>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">q</td>
-                <td className="px-2 py-1 border-b border-border">string</td>
-                <td className="px-2 py-1 border-b border-border">Search query (min 2 characters)</td>
+                <td className="font-mono">q</td>
+                <td>string</td>
+                <td>Search query (min 2 characters)</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">limit</td>
-                <td className="px-2 py-1 border-b border-border">integer</td>
-                <td className="px-2 py-1 border-b border-border">Max results, max 100 (default: 20)</td>
+                <td className="font-mono">limit</td>
+                <td>integer</td>
+                <td>Max results, max 100 (default: 20)</td>
               </tr>
             </tbody>
-          </table>
+          </DataTable>
 
           <p className="font-semibold mb-1">Example:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`curl -H "X-API-Key: YOUR_KEY" \\
   "${baseUrl}/api/v1/search?q=kingdom&limit=5"`}
-          </pre>
-        </section>
+          </CodeBlock>
+        </Section>
 
         {/* Categories */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Categories
-          </h2>
+        <Section title="Categories">
 
           <h3 className="font-semibold mt-3 mb-1">GET /api/v1/categories</h3>
           <p className="text-muted mb-2">
@@ -167,13 +145,13 @@ export default function ApiDocsPage() {
           </p>
 
           <p className="font-semibold mb-1">Example:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`curl -H "X-API-Key: YOUR_KEY" \\
   "${baseUrl}/api/v1/categories"`}
-          </pre>
+          </CodeBlock>
 
           <p className="font-semibold mt-3 mb-1">Response:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`{
   "categories": [
     {
@@ -188,17 +166,11 @@ export default function ApiDocsPage() {
     }
   ]
 }`}
-          </pre>
-        </section>
+          </CodeBlock>
+        </Section>
 
         {/* Tags */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Tags
-          </h2>
+        <Section title="Tags">
 
           <h3 className="font-semibold mt-3 mb-1">GET /api/v1/tags</h3>
           <p className="text-muted mb-2">
@@ -206,43 +178,31 @@ export default function ApiDocsPage() {
           </p>
 
           <p className="font-semibold mb-1">Example:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`curl -H "X-API-Key: YOUR_KEY" \\
   "${baseUrl}/api/v1/tags"`}
-          </pre>
-        </section>
+          </CodeBlock>
+        </Section>
 
         {/* Feeds */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            RSS / Atom Feeds
-          </h2>
+        <Section title="RSS / Atom Feeds">
           <p className="text-muted mb-2">
             Public feeds are available without authentication:
           </p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
               <strong>RSS 2.0:</strong>{" "}
-              <code className="bg-surface-hover px-1 text-[12px]">/feed.xml</code>
+              <InlineCode>/feed.xml</InlineCode>
             </li>
             <li>
               <strong>Atom:</strong>{" "}
-              <code className="bg-surface-hover px-1 text-[12px]">/feed/atom</code>
+              <InlineCode>/feed/atom</InlineCode>
             </li>
           </ul>
-        </section>
+        </Section>
 
         {/* Stats */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Statistics
-          </h2>
+        <Section title="Statistics">
 
           <h3 className="font-semibold mt-3 mb-1">GET /api/stats</h3>
           <p className="text-muted mb-2">
@@ -250,12 +210,12 @@ export default function ApiDocsPage() {
           </p>
 
           <p className="font-semibold mb-1">Example:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`curl "${baseUrl}/api/stats"`}
-          </pre>
+          </CodeBlock>
 
           <p className="font-semibold mt-3 mb-1">Response:</p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`{
   "articles": 42,
   "categories": 6,
@@ -265,75 +225,57 @@ export default function ApiDocsPage() {
   "discussions": 24,
   "recentEditsThisWeek": 12
 }`}
-          </pre>
-        </section>
+          </CodeBlock>
+        </Section>
 
         {/* Sitemap */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Sitemap &amp; SEO
-          </h2>
+        <Section title="Sitemap & SEO">
           <ul className="list-disc pl-6 space-y-1 text-muted">
             <li>
               <strong>Sitemap:</strong>{" "}
-              <code className="bg-surface-hover px-1 text-[12px]">/sitemap.xml</code> &mdash; Dynamic sitemap with all articles and categories
+              <InlineCode>/sitemap.xml</InlineCode> &mdash; Dynamic sitemap with all articles and categories
             </li>
             <li>
               <strong>Robots:</strong>{" "}
-              <code className="bg-surface-hover px-1 text-[12px]">/robots.txt</code> &mdash; Crawler instructions
+              <InlineCode>/robots.txt</InlineCode> &mdash; Crawler instructions
             </li>
             <li>
               <strong>API Sitemap:</strong>{" "}
-              <code className="bg-surface-hover px-1 text-[12px]">/api/sitemap</code> &mdash; XML sitemap via API route
+              <InlineCode>/api/sitemap</InlineCode> &mdash; XML sitemap via API route
             </li>
           </ul>
-        </section>
+        </Section>
 
         {/* Operational feeds */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Operational Feeds
-          </h2>
+        <Section title="Operational Feeds">
           <p className="text-muted mb-2">
             These app feeds are designed for dashboards, demos, and local automation.
           </p>
           <ul className="list-disc pl-6 space-y-1 text-muted">
             <li>
-              <code className="bg-surface-hover px-1 text-[12px]">GET /api/studio</code> — Arkivel Studio summary, generated board nodes, graph edges, base views, and action queue
+              <InlineCode>GET /api/studio</InlineCode> — Arkivel Studio summary, generated board nodes, graph edges, base views, and action queue
             </li>
             <li>
-              <code className="bg-surface-hover px-1 text-[12px]">GET /api/studio/canvas</code> — JSON Canvas export of the generated Studio board
+              <InlineCode>GET /api/studio/canvas</InlineCode> — JSON Canvas export of the generated Studio board
             </li>
             <li>
-              <code className="bg-surface-hover px-1 text-[12px]">GET /api/atlas</code> — Canon Atlas territories, signals, threads, dossier, continuity pressure, and next moves
+              <InlineCode>GET /api/atlas</InlineCode> — Canon Atlas territories, signals, threads, dossier, continuity pressure, and next moves
             </li>
             <li>
-              <code className="bg-surface-hover px-1 text-[12px]">GET /api/trails</code> — Canon Trails guided routes, stop reasons, reading estimates, word totals, and link totals
+              <InlineCode>GET /api/trails</InlineCode> — Canon Trails guided routes, stop reasons, reading estimates, word totals, and link totals
             </li>
             <li>
-              <code className="bg-surface-hover px-1 text-[12px]">GET /api/intelligence</code> — Knowledge cockpit score, radar, constellation, pressure model, engines, and action queue
+              <InlineCode>GET /api/intelligence</InlineCode> — Knowledge cockpit score, radar, constellation, pressure model, engines, and action queue
             </li>
           </ul>
-        </section>
+        </Section>
 
         {/* Errors */}
-        <section>
-          <h2
-            className="text-lg font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Error Responses
-          </h2>
+        <Section title="Error Responses">
           <p className="text-muted mb-2">
-            All errors return a JSON object with an <code className="bg-surface-hover px-1 text-[12px]">error</code> field:
+            All errors return a JSON object with an <InlineCode>error</InlineCode> field:
           </p>
-          <pre className="bg-surface-hover border border-border p-3 text-[12px] font-mono overflow-x-auto whitespace-pre-wrap">
+          <CodeBlock>
 {`// 401 Unauthorized
 { "error": "Invalid or missing API key. Include X-API-Key header." }
 
@@ -342,40 +284,40 @@ export default function ApiDocsPage() {
 
 // 404 Not Found
 { "error": "Resource not found" }`}
-          </pre>
+          </CodeBlock>
 
-          <table className="w-full border border-border text-[12px] mt-3">
+          <DataTable className="mt-3 text-[12px]">
             <thead>
-              <tr className="bg-surface-hover">
-                <th className="text-left px-2 py-1 border-b border-border">Status Code</th>
-                <th className="text-left px-2 py-1 border-b border-border">Meaning</th>
+              <tr>
+                <th>Status Code</th>
+                <th>Meaning</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">200</td>
-                <td className="px-2 py-1 border-b border-border">Success</td>
+                <td className="font-mono">200</td>
+                <td>Success</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">400</td>
-                <td className="px-2 py-1 border-b border-border">Bad Request (missing or invalid parameters)</td>
+                <td className="font-mono">400</td>
+                <td>Bad Request (missing or invalid parameters)</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">401</td>
-                <td className="px-2 py-1 border-b border-border">Unauthorized (missing or invalid API key)</td>
+                <td className="font-mono">401</td>
+                <td>Unauthorized (missing or invalid API key)</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">404</td>
-                <td className="px-2 py-1 border-b border-border">Not Found</td>
+                <td className="font-mono">404</td>
+                <td>Not Found</td>
               </tr>
               <tr>
-                <td className="px-2 py-1 border-b border-border font-mono">500</td>
-                <td className="px-2 py-1 border-b border-border">Internal Server Error</td>
+                <td className="font-mono">500</td>
+                <td>Internal Server Error</td>
               </tr>
             </tbody>
-          </table>
-        </section>
+          </DataTable>
+        </Section>
       </div>
-    </div>
+    </Page>
   );
 }

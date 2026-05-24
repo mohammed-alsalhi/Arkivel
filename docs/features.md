@@ -350,6 +350,7 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Atlas JSON feed** — `/api/atlas` exposes territories, article signals, story threads, the flagship dossier, continuity pressure, and recommended atlas moves
 - **Trails JSON feed** — `/api/trails` exposes guided reading routes, stop reasons, reading estimates, word totals, and link totals
 - **Intelligence JSON feed** — `/api/intelligence` exposes the command-center score, summary, graph constellation, radar axes, pressure model, 20 engines, and next-best-work queue for dashboards or automation
+- **Documentation, version, and commit discipline** — every user-visible, API, schema, configuration, workflow, design, or contributor-guidance change updates the matching root docs, markdown docs, in-app docs, changelog/roadmap entries, and package metadata in the same commit; release commit messages follow `vX.Y.Z: imperative summary`
 - **Content lint** — broken links, missing excerpts, orphans at `/admin/lint`
 - **Stale articles** — articles not updated in 180+ days at `/admin/staleness`
 - **Embeddings coverage** — semantic search index per article at `/admin/embeddings`

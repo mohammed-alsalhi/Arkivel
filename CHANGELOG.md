@@ -4,6 +4,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.4] - 2026-05-24
+
+### Changed
+
+- **Persistent documentation/versioning rule** - Added a standing `AGENTS.md` policy requiring every agent and contributor to update relevant root docs, markdown docs, in-app reference pages, changelog/roadmap entries, and package metadata with user-visible or release-note-worthy changes.
+- **Commit message standard** - Documented the repository's historical `vX.Y.Z: imperative summary` release-commit pattern, plus exceptions for dependency automation, merge commits, and short non-version fixes.
+- **Contributor docs sync** - Mirrored the rule across README, architecture, design, contributing, help, and feature references so humans and agents see the same release discipline.
+- **Version metadata** - Bumped package metadata to 4.74.4 for the process-policy update.
+
 ## [4.74.3] - 2026-05-23
 
 ### Changed

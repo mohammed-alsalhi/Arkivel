@@ -489,6 +489,18 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 
 ---
 
+## Maintainer Workflow
+
+Documentation and versioning are part of every release. For any user-visible, API, schema, configuration, workflow, design, or contributor-guidance change:
+
+- Update the relevant root docs: `README.md`, `CHANGELOG.md`, `ROADMAP.md`, `DESIGN.md`, `ARCHITECTURE.md`, `CONTRIBUTING.md`, `AGENTS.md`, and any other touched reference.
+- Update the markdown product docs: `docs/help.md`, `docs/features.md`, and relevant archive docs when needed.
+- Update the in-app docs: `/help`, `/features`, `/api-docs`, and any route-specific documentation page affected by the change.
+- Bump `package.json` and `package-lock.json` in the same commit. Use patch for docs/process/UI copy changes, minor for new product capabilities, and major for breaking changes.
+- Use the commit-message standard from repo history: release commits are `vX.Y.Z: imperative summary`, dependency commits keep `build(deps): ...`, and non-version commits use a short imperative subject.
+
+---
+
 ## User Accounts
 
 - Register at `/register` with username, email, and password

@@ -247,9 +247,62 @@ textarea:disabled {
   font-weight: 700;
 }
 
+.ui-field {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.ui-field .ui-label {
+  margin-bottom: 0;
+}
+
+.ui-field-error {
+  color: var(--color-danger);
+  font-size: 0.75rem;
+}
+
 .ui-muted {
   color: var(--color-muted);
   font-size: 0.75rem;
+}
+
+.ui-inline-code {
+  border-radius: 0.125rem;
+  background: var(--color-surface-hover);
+  padding: 0.05rem 0.25rem;
+  color: var(--color-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.ui-kbd {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: 0.1875rem;
+  background: var(--color-surface);
+  padding: 0 0.3rem;
+  color: var(--color-heading);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ui-code-block {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-hover);
+  padding: 0.75rem;
+  color: var(--color-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
 }
 
 .ui-button {
@@ -311,6 +364,40 @@ textarea:disabled {
   background: var(--color-danger-soft);
   border-color: var(--color-danger);
   color: var(--color-danger);
+}
+
+.ui-toggle-switch {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 1.5rem;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-muted) 35%, transparent);
+  padding: 0;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.ui-toggle-switch-checked {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+}
+
+.ui-toggle-switch-thumb {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.25rem;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  transition: transform 0.15s;
+}
+
+.ui-toggle-switch-checked .ui-toggle-switch-thumb {
+  transform: translateX(1.25rem);
 }
 
 .ui-icon-button {
@@ -523,6 +610,50 @@ textarea:disabled {
   background: var(--color-surface-hover);
 }
 
+.ui-list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ui-list-compact {
+  gap: 0.125rem;
+}
+
+.ui-list li {
+  min-width: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.ui-definition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.5rem;
+}
+
+.ui-definition-item {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.6rem 0.75rem;
+}
+
+.ui-definition-item dt {
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.ui-definition-item dd {
+  margin-top: 0.25rem;
+  color: var(--color-heading);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
 .ui-empty-state {
   border: 1px dashed var(--color-border-light);
   background: var(--color-background);
@@ -631,15 +762,15 @@ textarea:disabled {
   min-width: 0;
 }
 
+.ui-card,
 .ui-card-link {
   display: grid;
   min-width: 0;
-  gap: 0.3rem;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  padding: 0.65rem 0.75rem;
   color: var(--color-foreground);
   text-decoration: none;
+  overflow: hidden;
   transition: background-color 0.15s, border-color 0.15s;
 }
 
@@ -649,7 +780,26 @@ textarea:disabled {
   text-decoration: none;
 }
 
+.ui-card-body {
+  display: grid;
+  min-width: 0;
+  gap: 0.3rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.ui-card-media {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ui-card-media img {
+  display: block;
+  width: 100%;
+}
+
 .ui-card-title {
+  display: block;
   min-width: 0;
   color: var(--color-heading);
   font-family: var(--font-serif);
@@ -661,6 +811,7 @@ textarea:disabled {
 
 .ui-card-description,
 .ui-card-meta {
+  display: block;
   color: var(--color-muted);
   font-size: 0.75rem;
   line-height: 1.45;

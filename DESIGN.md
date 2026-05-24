@@ -22,6 +22,25 @@ Every interactive element that performs a similar role looks and behaves identic
 
 ## Component Standards
 
+### Reusable component contract
+
+Product UI should start from `@/components/ui` primitives before adding route-specific markup. The shared layer is intentionally small and self-host friendly: components expose semantic slots such as `title`, `description`, `actions`, `media`, `meta`, `hint`, and `error`, while styling flows through `ui-*` and `wiki-*` CSS variables/classes in `globals.css`.
+
+Use the catalog in `src/components/ui/catalog.ts` as the living index of supported reusable components and their theming hooks. When adding a new reusable primitive, add it to the catalog with its category, import name, description, and CSS hooks.
+
+Prefer composition over one-off variants:
+
+- Use `Page` and `PageHeader` for app routes.
+- Use `Section` for unframed content groups and `SectionPanel` or `Panel` for bordered modules.
+- Use `Button`, `LinkButton`, `IconButton`, `Toolbar`, and `Dropdown` for controls.
+- Use `Field`, `Input`, `Select`, `Textarea`, and `ToggleSwitch` for forms.
+- Use `Card`, `CardLink`, `StatCard`, `DataTable`, `List`, `FeatureItem`, and `DefinitionGrid` for reusable content/data views.
+- Use `Chip`, `Notice`, and `EmptyState` for feedback and status.
+
+### Documentation-visible design changes
+
+Design changes are product changes. If a commit changes reusable components, page shell behavior, article/editor layout, navigation, theme tokens, responsive behavior, or visible product copy, update the matching design/product docs and bump the package version in the same commit. At minimum, check `DESIGN.md`, `README.md`, `ROADMAP.md`, `CHANGELOG.md`, `docs/help.md`, `docs/features.md`, `src/app/help/page.tsx`, and `src/app/features/page.tsx`.
+
 ### Button anatomy
 
 All action-bar buttons use a single shared token:

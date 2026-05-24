@@ -16,6 +16,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.74.4
+
+- [x] Persistent documentation/versioning rule - `AGENTS.md` now requires every agent and contributor to sync relevant docs, in-app reference pages, changelog/roadmap entries, and package metadata with each user-visible or release-note-worthy change
+- [x] Commit message standard - release commits now follow the historical `vX.Y.Z: imperative summary` pattern, with documented exceptions for dependency automation, merge commits, and short non-version fixes
+- [x] Contributor documentation sync - README, architecture, design, contributing, feature docs, help docs, and in-app Help/Features pages now describe the standing docs-and-version checklist
+- [x] Version discipline - package metadata bumped to 4.74.4 for the repository process/policy update
+
 ## v4.73.0
 
 - [x] Claim Review Mode - marked article claims now have persistent review states for approved, needs source, disputed, rejected, and unreviewed
