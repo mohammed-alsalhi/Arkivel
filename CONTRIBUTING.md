@@ -72,6 +72,12 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 3. Non-version commits may omit the prefix but should stay imperative, e.g. `Fix build: wrap useSearchParams in Suspense`.
 4. Dependency automation keeps its Conventional Commit style, e.g. `build(deps): bump ...`.
 
+### Customization and marketplace changes
+1. Public self-host settings belong in `src/lib/customization.ts` and must be exposed through `/api/customization`.
+2. Style presets, color themes, component packs, and plugin-like listings belong in `src/lib/marketplace.ts` with stable ids, `kind`, `status`, compatibility notes, and tags.
+3. Reusable UI primitives should come from `src/components/ui` and be registered in `src/components/ui/catalog.ts`.
+4. Theme and skin work should use CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]` and `html[data-color-theme="..."]`.
+
 ### Modifying the database schema
 1. Edit `prisma/schema.prisma`
 2. Run `npx prisma generate` to regenerate the client

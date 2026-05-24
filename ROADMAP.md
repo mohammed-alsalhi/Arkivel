@@ -16,6 +16,19 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.74.6
+
+- [x] Color theme presets - `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` selects `standard`, `forest`, or `ember` independently from the selected style preset
+- [x] Palette marketplace metadata - color themes are published through `/api/customization` and `src/lib/marketplace.ts` as first-class marketplace items
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, architecture, design notes, feature docs, help docs, API docs, environment template, and tests describe the color theme contract
+
+## v4.74.5
+
+- [x] Self-host customization manifest - `/api/customization` exposes grouped brand, feature, limit, map, integration, reusable component, and theme-hook metadata for open-source forks, plugins, and deployment dashboards
+- [x] Typed customization contract - `src/lib/customization.ts` centralizes public env var defaults/descriptions and keeps `src/lib/config.ts` backward compatible with existing flat aliases
+- [x] Style and marketplace foundation - `NEXT_PUBLIC_ARKIVEL_STYLE` selects `classic-wiki` or `atlas-modern`, while `src/lib/marketplace.ts` establishes stable metadata for future styles, component packs, and plugins
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, architecture, design notes, feature docs, help docs, API docs, environment template, tests, and in-app Help/Features pages describe the new customization surface
+
 ## v4.74.4
 
 - [x] Persistent documentation/versioning rule - `AGENTS.md` now requires every agent and contributor to sync relevant docs, in-app reference pages, changelog/roadmap entries, and package metadata with each user-visible or release-note-worthy change

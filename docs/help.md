@@ -486,6 +486,9 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 - **Import tools** — `/admin/import`, Confluence/Notion/Obsidian import in one place
 - **Batch operations:** on `/articles`, bulk-assign category, publish/unpublish, or delete
 - **Customization:** name, tagline, welcome text, footer set via `NEXT_PUBLIC_*` environment variables
+- **Customization manifest:** `/api/customization`, public grouped config, supported env vars, style presets, color themes, reusable component catalog, marketplace metadata, and theme hooks for self-hosters and plugins
+- **Style preset:** Set `NEXT_PUBLIC_ARKIVEL_STYLE` to `classic-wiki` or `atlas-modern`, then rebuild/redeploy because `NEXT_PUBLIC_*` values are build-time config
+- **Color theme:** Set `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` to `standard`, `forest`, or `ember`, then rebuild/redeploy because `NEXT_PUBLIC_*` values are build-time config
 
 ---
 

@@ -1,31 +1,28 @@
-import packageJson from "../../package.json";
+import { customization } from "./customization";
 
 export const config = {
-  name: process.env.NEXT_PUBLIC_ARKIVEL_NAME || process.env.NEXT_PUBLIC_WIKI_NAME || "Arkivel",
-  version: packageJson.version,
-  logo: process.env.NEXT_PUBLIC_ARKIVEL_LOGO || "/brand/arkivel-logo.png",
-  logoMark: process.env.NEXT_PUBLIC_ARKIVEL_LOGO_MARK || "/brand/arkivel-logo.svg",
-  appIcon: process.env.NEXT_PUBLIC_ARKIVEL_APP_ICON || "/brand/arkivel-icon-512.png",
-  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
-  tagline: process.env.NEXT_PUBLIC_ARKIVEL_TAGLINE || process.env.NEXT_PUBLIC_WIKI_TAGLINE || "The self-hosted knowledge platform",
-  description:
-    process.env.NEXT_PUBLIC_ARKIVEL_DESCRIPTION ||
-    process.env.NEXT_PUBLIC_WIKI_DESCRIPTION ||
-    "A powerful open-source knowledge platform for individuals and teams",
-  welcomeText:
-    process.env.NEXT_PUBLIC_ARKIVEL_WELCOME_TEXT ||
-    process.env.NEXT_PUBLIC_WIKI_WELCOME_TEXT ||
-    "Welcome to Arkivel. Create articles, organize knowledge, and build your own encyclopedia — on infrastructure you own.",
-  footerText:
-    process.env.NEXT_PUBLIC_ARKIVEL_FOOTER_TEXT ||
-    process.env.NEXT_PUBLIC_WIKI_FOOTER_TEXT ||
-    "Content is available under Creative Commons Attribution.",
-  mapEnabled: process.env.NEXT_PUBLIC_MAP_ENABLED === "true",
-  mapLabel: process.env.NEXT_PUBLIC_MAP_LABEL || "Map",
-  mapImage: process.env.NEXT_PUBLIC_MAP_IMAGE || "",
-  defaultLocale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "en",
-  articlesPerPage: parseInt(process.env.NEXT_PUBLIC_ARTICLES_PER_PAGE || "20", 10),
-  maxUploadSize: parseInt(process.env.NEXT_PUBLIC_MAX_UPLOAD_SIZE || "5242880", 10),
-  registrationEnabled: process.env.NEXT_PUBLIC_ENABLE_REGISTRATION !== "false",
-  discussionsEnabled: process.env.NEXT_PUBLIC_ENABLE_DISCUSSIONS !== "false",
+  ...customization,
+  name: customization.brand.name,
+  version: customization.version,
+  logo: customization.brand.logo,
+  logoMark: customization.brand.logoMark,
+  appIcon: customization.brand.appIcon,
+  baseUrl: customization.integrations.baseUrl,
+  tagline: customization.brand.tagline,
+  description: customization.brand.description,
+  welcomeText: customization.brand.welcomeText,
+  footerText: customization.brand.footerText,
+  style: customization.style,
+  styleId: customization.style.id,
+  stylePreset: customization.style.preset,
+  colorThemeId: customization.style.colorThemeId,
+  colorTheme: customization.style.colorTheme,
+  mapEnabled: customization.map.enabled,
+  mapLabel: customization.map.label,
+  mapImage: customization.map.image,
+  defaultLocale: customization.limits.defaultLocale,
+  articlesPerPage: customization.limits.articlesPerPage,
+  maxUploadSize: customization.limits.maxUploadSize,
+  registrationEnabled: customization.features.registrationEnabled,
+  discussionsEnabled: customization.features.discussionsEnabled,
 };

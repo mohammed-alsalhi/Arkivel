@@ -93,7 +93,12 @@ export default async function RootLayout({
   const readOnlyMode = readOnlyRecord?.enabled ?? false;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-style={config.stylePreset.themeAttribute}
+      data-color-theme={config.colorTheme.themeAttribute}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="alternate" type="application/rss+xml" title={`${config.name} RSS Feed`} href="/feed.xml" />
         <link rel="alternate" type="application/atom+xml" title={`${config.name} Atom Feed`} href="/feed/atom" />

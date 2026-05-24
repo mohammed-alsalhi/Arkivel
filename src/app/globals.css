@@ -107,6 +107,207 @@ html[data-theme="dark"] {
   --color-diff-removed: #3a1a1a;
 }
 
+/* ── Built-in style preset: Atlas Modern ── */
+html[data-style="atlas-modern"] {
+  --color-background: #f6f7f8;
+  --color-foreground: #1f2933;
+  --color-surface: #ffffff;
+  --color-surface-hover: #eef2f3;
+  --color-border: #c3ccd2;
+  --color-border-light: #d8dee2;
+  --color-accent: #146b64;
+  --color-accent-hover: #0f514c;
+  --color-accent-foreground: #ffffff;
+  --color-accent-soft: rgba(20, 107, 100, 0.1);
+  --color-muted: #5e6b73;
+  --color-muted-foreground: #5e6b73;
+  --color-heading: #111827;
+  --color-popover: #ffffff;
+  --color-brand-mark: #146b64;
+  --color-info: #315d8a;
+  --color-info-soft: rgba(49, 93, 138, 0.1);
+  --color-info-border: #91abc4;
+  --color-wiki-link: #115e8a;
+  --color-wiki-link-visited: #5c4a8a;
+  --color-wiki-link-broken: #b42333;
+  --color-infobox-header: #dce9e6;
+  --color-infobox-header-text: #123532;
+  --color-infobox-bg: #fbfcfc;
+  --color-infobox-border: #b9c7c5;
+  --color-infobox-label: #5e6b73;
+  --color-sidebar-bg: #f2f5f5;
+  --color-sidebar-header: #e5eceb;
+  --color-toc-bg: #fbfcfc;
+  --color-toc-border: #c3ccd2;
+  --font-serif: "Georgia", "Iowan Old Style", "Times", serif;
+}
+
+html[data-style="atlas-modern"][data-theme="dark"] {
+  --color-background: #111816;
+  --color-foreground: #dce5e1;
+  --color-surface: #18211f;
+  --color-surface-hover: #22302d;
+  --color-border: #40534e;
+  --color-border-light: #2c3b38;
+  --color-accent: #7dd3c7;
+  --color-accent-hover: #9fe4da;
+  --color-accent-foreground: #101816;
+  --color-accent-soft: rgba(125, 211, 199, 0.12);
+  --color-muted: #9baaa5;
+  --color-muted-foreground: #9baaa5;
+  --color-heading: #f2f7f5;
+  --color-popover: #18211f;
+  --color-brand-mark: #7dd3c7;
+  --color-info: #a7c7ff;
+  --color-info-soft: rgba(167, 199, 255, 0.12);
+  --color-info-border: #536b83;
+  --color-wiki-link: #9bd7ff;
+  --color-wiki-link-visited: #cabdff;
+  --color-wiki-link-broken: #ff9a9a;
+  --color-infobox-header: #243b37;
+  --color-infobox-header-text: #e8f3ef;
+  --color-infobox-bg: #151d1b;
+  --color-infobox-border: #40534e;
+  --color-infobox-label: #9baaa5;
+  --color-sidebar-bg: #111816;
+  --color-sidebar-header: #22302d;
+  --color-toc-bg: #151d1b;
+  --color-toc-border: #40534e;
+}
+
+/* ── Built-in color themes ── */
+html[data-color-theme="forest"] {
+  --color-background: #f5f8f3;
+  --color-foreground: #1f2d24;
+  --color-surface: #ffffff;
+  --color-surface-hover: #e9f0e6;
+  --color-border: #a9b9a3;
+  --color-border-light: #cbd6c6;
+  --color-accent: #26734d;
+  --color-accent-hover: #1e5d3f;
+  --color-accent-foreground: #ffffff;
+  --color-accent-soft: rgba(38, 115, 77, 0.1);
+  --color-muted: #58675a;
+  --color-muted-foreground: #58675a;
+  --color-heading: #142016;
+  --color-popover: #ffffff;
+  --color-brand-mark: #26734d;
+  --color-info: #27637a;
+  --color-info-soft: rgba(39, 99, 122, 0.1);
+  --color-info-border: #8cb6c4;
+  --color-wiki-link: #1c6b55;
+  --color-wiki-link-visited: #51673d;
+  --color-wiki-link-broken: #a63d3d;
+  --color-infobox-header: #d8e8d2;
+  --color-infobox-header-text: #1b3322;
+  --color-infobox-bg: #fbfcfa;
+  --color-infobox-border: #a9b9a3;
+  --color-infobox-label: #58675a;
+  --color-sidebar-bg: #eef4eb;
+  --color-sidebar-header: #dfeadd;
+  --color-toc-bg: #fbfcfa;
+  --color-toc-border: #a9b9a3;
+}
+
+html[data-color-theme="forest"][data-theme="dark"] {
+  --color-background: #111811;
+  --color-foreground: #dce8dc;
+  --color-surface: #182118;
+  --color-surface-hover: #233123;
+  --color-border: #435443;
+  --color-border-light: #2d3d2d;
+  --color-accent: #8ed9a7;
+  --color-accent-hover: #a8edbf;
+  --color-accent-foreground: #101811;
+  --color-accent-soft: rgba(142, 217, 167, 0.12);
+  --color-muted: #9caa9c;
+  --color-muted-foreground: #9caa9c;
+  --color-heading: #f0f7ef;
+  --color-popover: #182118;
+  --color-brand-mark: #8ed9a7;
+  --color-info: #9bd2e3;
+  --color-info-soft: rgba(155, 210, 227, 0.12);
+  --color-info-border: #4f6d75;
+  --color-wiki-link: #a8e8c2;
+  --color-wiki-link-visited: #c5dba1;
+  --color-wiki-link-broken: #ff9b9b;
+  --color-infobox-header: #273c29;
+  --color-infobox-header-text: #e7f3e7;
+  --color-infobox-bg: #151d15;
+  --color-infobox-border: #435443;
+  --color-infobox-label: #9caa9c;
+  --color-sidebar-bg: #111811;
+  --color-sidebar-header: #233123;
+  --color-toc-bg: #151d15;
+  --color-toc-border: #435443;
+}
+
+html[data-color-theme="ember"] {
+  --color-background: #faf7f2;
+  --color-foreground: #302820;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f2ebe1;
+  --color-border: #bda994;
+  --color-border-light: #d8cabe;
+  --color-accent: #9a4f16;
+  --color-accent-hover: #7d3f12;
+  --color-accent-foreground: #ffffff;
+  --color-accent-soft: rgba(154, 79, 22, 0.1);
+  --color-muted: #706256;
+  --color-muted-foreground: #706256;
+  --color-heading: #201811;
+  --color-popover: #ffffff;
+  --color-brand-mark: #9a4f16;
+  --color-info: #5c6794;
+  --color-info-soft: rgba(92, 103, 148, 0.1);
+  --color-info-border: #a7aecf;
+  --color-wiki-link: #8a4c18;
+  --color-wiki-link-visited: #744f86;
+  --color-wiki-link-broken: #ad3434;
+  --color-infobox-header: #f0dcc7;
+  --color-infobox-header-text: #3a2617;
+  --color-infobox-bg: #fffaf5;
+  --color-infobox-border: #bda994;
+  --color-infobox-label: #706256;
+  --color-sidebar-bg: #f5eee5;
+  --color-sidebar-header: #eadccb;
+  --color-toc-bg: #fffaf5;
+  --color-toc-border: #bda994;
+}
+
+html[data-color-theme="ember"][data-theme="dark"] {
+  --color-background: #1a1511;
+  --color-foreground: #eadfd4;
+  --color-surface: #241d18;
+  --color-surface-hover: #31271f;
+  --color-border: #59483a;
+  --color-border-light: #3d3028;
+  --color-accent: #f0aa6a;
+  --color-accent-hover: #ffc18a;
+  --color-accent-foreground: #1a1511;
+  --color-accent-soft: rgba(240, 170, 106, 0.13);
+  --color-muted: #b0a196;
+  --color-muted-foreground: #b0a196;
+  --color-heading: #fff5eb;
+  --color-popover: #241d18;
+  --color-brand-mark: #f0aa6a;
+  --color-info: #b9c4ff;
+  --color-info-soft: rgba(185, 196, 255, 0.12);
+  --color-info-border: #656d94;
+  --color-wiki-link: #ffc18a;
+  --color-wiki-link-visited: #d8bcff;
+  --color-wiki-link-broken: #ff9d9d;
+  --color-infobox-header: #443222;
+  --color-infobox-header-text: #f8ece0;
+  --color-infobox-bg: #201913;
+  --color-infobox-border: #59483a;
+  --color-infobox-label: #b0a196;
+  --color-sidebar-bg: #1a1511;
+  --color-sidebar-header: #31271f;
+  --color-toc-bg: #201913;
+  --color-toc-border: #59483a;
+}
+
 /* Dark mode syntax highlighting overrides */
 html[data-theme="dark"] .hljs { background: var(--color-background); color: var(--color-foreground); }
 html[data-theme="dark"] .hljs-keyword { color: #ff7b72; }

@@ -34,6 +34,7 @@ src/
       atlas/                  # Canon Atlas report
       trails/                 # Canon Trails guided route report
       intelligence/           # Knowledge Command Center cockpit report
+      customization/          # Public self-host customization manifest
       map-markers/            # Marker CRUD
         [id]/
       maps/                   # Multi-map management
@@ -132,6 +133,7 @@ src/
     auth.ts                   # Auth helpers: getSession, isAdmin, requireAdmin, requireRole
     api-auth.ts               # API key validation for public REST API
     config.ts                 # Environment-driven branding config
+    customization.ts          # Typed self-host customization groups, env metadata, and defaults
     claims.ts                 # Claim extraction, hashing, and review status helpers
     wikilinks.ts              # Wiki link resolution and backlink queries
     infobox-schema.ts         # Category-specific infobox field definitions
@@ -167,6 +169,22 @@ Documentation is part of the release surface. Changes that affect behavior, UI, 
 - In-app product docs live in `src/app/help/page.tsx`, `src/app/features/page.tsx`, and route-specific reference pages such as `src/app/api-docs/page.tsx`.
 - Release history and planning live in `CHANGELOG.md` and `ROADMAP.md`.
 - Version metadata lives in `package.json` and `package-lock.json`.
+
+## Customization Surface
+
+Arkivel's self-host customization contract lives in `src/lib/customization.ts`. It groups public configuration into `brand`, `style`, `features`, `limits`, `map`, and `integrations`, while `src/lib/config.ts` keeps backward-compatible flat aliases such as `config.name` and `config.mapEnabled`.
+
+Reusable extension metadata lives in `src/lib/marketplace.ts`. Built-in style presets such as `classic-wiki` and `atlas-modern`, plus color themes such as `standard`, `forest`, and `ember`, are marketplace items now, so future component packs and plugins can follow the same id/status/compatibility contract.
+
+The public `/api/customization` endpoint exposes:
+
+- Current grouped customization values.
+- Supported `NEXT_PUBLIC_*` environment variables with defaults and descriptions.
+- Reusable UI component catalog metadata from `src/components/ui/catalog.ts`.
+- Built-in style presets, color themes, and planned marketplace items.
+- Theme hook locations for CSS-variable and shared-class customization.
+
+Use this contract before adding new self-host flags, public branding controls, style presets, color themes, plugin-facing metadata, marketplace entries, or theme hooks.
 
 ## Database Models
 

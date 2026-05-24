@@ -267,6 +267,9 @@ export default function ApiDocsPage() {
             <li>
               <InlineCode>GET /api/intelligence</InlineCode> — Knowledge cockpit score, radar, constellation, pressure model, engines, and action queue
             </li>
+            <li>
+              <InlineCode>GET /api/customization</InlineCode> — Public self-host manifest for grouped customization, supported env vars, style presets, color themes, reusable UI components, marketplace metadata, and theme hooks
+            </li>
           </ul>
         </Section>
 

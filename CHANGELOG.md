@@ -4,6 +4,22 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.6] - 2026-05-24
+
+### Added
+
+- **Color theme presets** - Added `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`, built-in `standard`, `forest`, and `ember` palettes, layout `data-color-theme` hooks, and marketplace metadata for palette packs.
+- **Customization docs** - Updated environment template, README, architecture/design notes, help/features pages, API docs, roadmap, tests, and version metadata for color themes.
+
+## [4.74.5] - 2026-05-24
+
+### Added
+
+- **Self-host customization manifest** - Added typed customization groups for brand, features, limits, map, and integrations, with `/api/customization` exposing current values, supported env vars, reusable UI catalog metadata, and theme hooks.
+- **Style presets and marketplace foundation** - Added `NEXT_PUBLIC_ARKIVEL_STYLE`, built-in `classic-wiki` and `atlas-modern` style presets, and marketplace-ready metadata for future style, component-pack, and plugin listings.
+- **Config compatibility layer** - Preserved existing flat `config.name`, `config.mapEnabled`, and similar aliases while adding nested customization objects for open-source forks and plugin tooling.
+- **Customization docs sync** - Updated README, architecture/design notes, API docs, help/features docs, in-app Help/Features pages, environment template, tests, roadmap, changelog, and package metadata.
+
 ## [4.74.4] - 2026-05-24
 
 ### Changed

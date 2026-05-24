@@ -28,6 +28,16 @@ Product UI should start from `@/components/ui` primitives before adding route-sp
 
 Use the catalog in `src/components/ui/catalog.ts` as the living index of supported reusable components and their theming hooks. When adding a new reusable primitive, add it to the catalog with its category, import name, description, and CSS hooks.
 
+The public `/api/customization` endpoint publishes the component catalog and theme hook summary for self-hosters, forks, plugins, and deployment dashboards. Keep the endpoint useful whenever reusable components, theme hooks, or public customization flags change.
+
+### Style presets, color themes, and marketplace skins
+
+The default skin is `classic-wiki`, selected through `NEXT_PUBLIC_ARKIVEL_STYLE`. `atlas-modern` is the first alternate built-in skin and demonstrates how a self-hosted instance can change the product feel through CSS variables and the `html[data-style="..."]` hook without forking routes or components.
+
+Color themes are selected independently through `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`. `standard`, `forest`, and `ember` are built in today and use the `html[data-color-theme="..."]` hook, so self-hosters can combine layout feel and palette separately.
+
+New skins and color themes should be registered in `src/lib/marketplace.ts`, exposed through `/api/customization`, and implemented through scoped CSS variables/classes in `src/app/globals.css`. Treat style presets, color themes, component packs, and plugin listings as marketplace-ready metadata: stable `id`, clear `kind`, explicit `status`, compatibility notes, and tags.
+
 Prefer composition over one-off variants:
 
 - Use `Page` and `PageHeader` for app routes.

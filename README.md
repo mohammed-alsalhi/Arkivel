@@ -144,10 +144,14 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 | `NEXT_PUBLIC_ARKIVEL_LOGO` | No | Full square logo, default `/brand/arkivel-logo.png`. |
 | `NEXT_PUBLIC_ARKIVEL_LOGO_MARK` | No | Compact sidebar/mobile mark, default `/brand/arkivel-logo.svg`. |
 | `NEXT_PUBLIC_ARKIVEL_APP_ICON` | No | Manifest/app icon, default `/brand/arkivel-icon-512.png`. |
+| `NEXT_PUBLIC_ARKIVEL_STYLE` | No | Built-in style preset, currently `classic-wiki` or `atlas-modern`. |
+| `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` | No | Built-in color theme, currently `standard`, `forest`, or `ember`. |
 | `NEXT_PUBLIC_MAP_ENABLED` | No | Set `true` to enable the interactive map. |
 | `BLOB_READ_WRITE_TOKEN` | No | Vercel Blob token for image uploads. |
 
 `NEXT_PUBLIC_*` values are baked into the build. Rebuild or redeploy after changing them.
+
+Arkivel also exposes a self-host customization manifest at `/api/customization`. It lists supported public env vars, their defaults, grouped runtime config, reusable UI components, built-in style presets, color themes, marketplace item metadata, and theme hook locations so forks, plugins, and deployment dashboards can customize the platform without scraping source files.
 
 ## API And Integrations
 
@@ -155,6 +159,7 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 |---|---:|---|
 | Public API | `/api/v1/*` | API-key protected article, category, search, and tag endpoints. |
 | API documentation | `/api-docs` | In-app reference for endpoints, auth, and errors. |
+| Customization manifest | `/api/customization` | Public brand, style preset, color theme, feature flag, limit, map, reusable component, marketplace, and theme-hook manifest for self-hosters and plugins. |
 | Studio feed | `/api/studio` | Generated command board, base views, graph links, and action queue. |
 | Studio canvas export | `/api/studio/canvas` | JSON Canvas export for portable visual knowledge work. |
 | Canon Trails feed | `/api/trails` | Guided route report for demos, readers, and automation. |

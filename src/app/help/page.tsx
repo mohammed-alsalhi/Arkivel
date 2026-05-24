@@ -578,6 +578,9 @@ export default function HelpPage() {
             <li><Link href="/admin/import">Import tools</Link> — Confluence, Notion, Obsidian import in one place</li>
             <li><strong>Batch operations:</strong> on <Link href="/articles">All Articles</Link>, bulk-assign category, publish/unpublish, or delete</li>
             <li><strong>Customization:</strong> name, tagline, welcome text, footer set via <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> environment variables</li>
+            <li><strong>Customization manifest:</strong> <code className="bg-surface-hover px-1 text-[12px]">/api/customization</code>, public grouped config, supported env vars, style presets, color themes, reusable component catalog, marketplace metadata, and theme hooks for self-hosters and plugins</li>
+            <li><strong>Style preset:</strong> Set <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_ARKIVEL_STYLE</code> to <code className="bg-surface-hover px-1 text-[12px]">classic-wiki</code> or <code className="bg-surface-hover px-1 text-[12px]">atlas-modern</code>, then rebuild/redeploy because <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> values are build-time config</li>
+            <li><strong>Color theme:</strong> Set <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_ARKIVEL_COLOR_THEME</code> to <code className="bg-surface-hover px-1 text-[12px]">standard</code>, <code className="bg-surface-hover px-1 text-[12px]">forest</code>, or <code className="bg-surface-hover px-1 text-[12px]">ember</code>, then rebuild/redeploy because <code className="bg-surface-hover px-1 text-[12px]">NEXT_PUBLIC_*</code> values are build-time config</li>
           </ul>
         </div>
       </div>
