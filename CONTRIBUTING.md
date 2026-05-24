@@ -65,7 +65,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 2. Check root references such as `README.md`, `CHANGELOG.md`, `ROADMAP.md`, `DESIGN.md`, `ARCHITECTURE.md`, `CONTRIBUTING.md`, and `AGENTS.md`.
 3. Check product docs and in-app docs: `docs/help.md`, `docs/features.md`, `src/app/help/page.tsx`, `src/app/features/page.tsx`, and `src/app/api-docs/page.tsx` when relevant.
 4. Bump `package.json` and `package-lock.json`: patch for documentation/process/UI copy, minor for new product capabilities, major for breaking changes.
-5. Treat the v4 line as beta. `ROADMAP.md` owns the path through v4.99.99, and v5.0.0 should only be tagged once the stable release gates are complete.
+5. Treat the v4 line as beta. `ROADMAP.md` owns the patch-level path through v4.99.99, and v5.0.0 should only be tagged once the stable release gates are complete.
 
 ### Commit messages
 1. Release/version commits use `vX.Y.Z: imperative summary`, matching `package.json`; for example, `v4.74.4: document release discipline`.

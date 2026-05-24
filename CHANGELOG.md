@@ -4,6 +4,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.75.3] - 2026-05-24
+
+### Changed
+
+- **Patch-level stable roadmap** - Expanded the pre-v5 roadmap into detailed `v4.x.y` release batches from v4.76.0 through v4.99.99, with more feature work, QA gates, and documentation expectations assigned to each release.
+- **Final beta ladder** - Added explicit late-stage correction windows for v4.99.90, v4.99.95, and v4.99.99 before promoting the exact passing codebase to v5.0.0.
+
 ## [4.75.2] - 2026-05-24
 
 ### Changed

@@ -28,7 +28,7 @@ Before finishing any change, check whether the change affects behavior, UI, conf
 
 If a doc does not need changes, leave it untouched. Do not make a code-only change for a user-visible feature unless the matching documentation and version updates are included.
 
-The v4 line is beta. Treat `ROADMAP.md` as the source of truth for the pre-v5 work ladder, with v4.99.99 reserved for the last beta candidate and v5.0.0 reserved for the first stable release after the documented release gates are satisfied.
+The v4 line is beta. Treat `ROADMAP.md` as the source of truth for the pre-v5 patch-level work ladder, with v4.99.99 reserved for the last beta candidate and v5.0.0 reserved for the first stable release after the documented release gates are satisfied.
 
 ## Customization and Marketplace Discipline
 
