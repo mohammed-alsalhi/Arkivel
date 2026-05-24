@@ -48,11 +48,11 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 
 #### v4.76.3 - Studio accessibility and polish
 
-- [ ] Add keyboard navigation, focus rings, ARIA labels, and screen-reader summaries for all studio controls
-- [ ] Add responsive layout QA for mobile, tablet, laptop, and wide desktop previews
-- [ ] Add warning states for one-note palettes, low-contrast dark themes, and oversized brand assets
-- [ ] Add UI primitive reuse pass so studio controls become reusable admin components
-- [ ] Update in-app Help and Features pages with the full studio workflow
+- [x] Add keyboard navigation, focus rings, ARIA labels, and screen-reader summaries for all studio controls
+- [x] Add responsive layout QA for mobile, tablet, laptop, and wide desktop previews
+- [x] Add warning states for one-note palettes, low-contrast dark themes, and oversized brand assets
+- [x] Add UI primitive reuse pass so studio controls become reusable admin components
+- [x] Update in-app Help and Features pages with the full studio workflow
 
 ### v4.77 - Local-First Marketplace Pipeline
 
@@ -716,6 +716,14 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 - [ ] Public API v1, webhooks, feeds, and SDK types have compatibility commitments
 - [ ] Admin operations, observability, security, and privacy docs are complete enough for self-host operators
 - [ ] README, DESIGN, ARCHITECTURE, ROADMAP, CHANGELOG, AGENTS, CONTRIBUTING, API docs, help docs, feature docs, and in-app reference pages are synchronized
+
+## v4.76.3
+
+- [x] Studio accessibility polish - `/admin/customization` now has roving keyboard tabs, ARIA tab/panel wiring, labelled preview regions, live screen-reader summary text, and stronger focus-visible styling
+- [x] Responsive QA checklist - Preview now includes mobile, tablet, laptop, and wide-desktop review checkpoints for customization layouts
+- [x] Polish diagnostics - diagnostics now warn about one-note palettes, dark-theme contrast review, and custom brand asset size review before deployment
+- [x] Reusable UI primitives - the shared UI catalog now documents tab, stat, switch, and screen-reader-only primitives used by the studio
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, design/architecture notes, help docs, feature docs, in-app reference pages, and tests describe the accessibility/polish release
 
 ## v4.76.2
 

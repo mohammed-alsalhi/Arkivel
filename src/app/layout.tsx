@@ -22,6 +22,7 @@ import MaintenanceBanner from "@/components/MaintenanceBanner";
 import ReadOnlyBanner from "@/components/ReadOnlyBanner";
 import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
+import { getSession, isAdmin } from "@/lib/auth";
 import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
@@ -89,8 +90,13 @@ export default async function RootLayout({
     prisma.pluginState.findUnique({ where: { id: "maintenance_mode" } }).catch(() => null),
     prisma.pluginState.findUnique({ where: { id: "read_only_mode" } }).catch(() => null),
   ]);
+  const [initialAdmin, initialSession] = await Promise.all([
+    isAdmin().catch(() => false),
+    getSession().catch(() => null),
+  ]);
   const maintenanceMode = maintenanceRecord?.enabled ?? false;
   const readOnlyMode = readOnlyRecord?.enabled ?? false;
+  const initialAuth = { admin: initialAdmin, loggedIn: Boolean(initialSession) };
 
   return (
     <html
@@ -108,7 +114,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <a href="#main-content" className="skip-to-content">Skip to content</a>
-        <AdminProvider>
+        <AdminProvider initialAuth={initialAuth}>
         <ToastProvider>
           {/* Top banner bar */}
           <header className="bg-surface border-b border-border">

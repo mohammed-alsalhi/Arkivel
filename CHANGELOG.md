@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.76.3] - 2026-05-24
+
+### Added
+
+- **Studio accessibility polish** - Added roving keyboard tab navigation, ARIA tab/panel wiring, live screen-reader summaries, labelled preview regions, and stronger focus-visible styling to `/admin/customization`.
+- **Responsive studio QA** - Added mobile, tablet, laptop, and wide-desktop preview checklist metadata and UI so self-host admins can review customization layouts before deployment.
+- **Polish diagnostics** - Added warning states for one-note palettes, dark-theme contrast review, and custom brand asset size review.
+- **Reusable studio primitives** - Registered tab, stat, switch, and screen-reader-only primitives in the UI catalog and migrated studio summary metrics to shared stat cards.
+- **Admin shell polish** - Seeded the client admin context from server auth state so admin-only studio surfaces do not flash the logged-out fallback during local and self-host previews.
+
 ## [4.76.2] - 2026-05-24
 
 ### Added

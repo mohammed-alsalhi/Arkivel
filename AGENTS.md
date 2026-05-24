@@ -36,6 +36,7 @@ Arkivel is an open-source, self-hostable knowledge platform. Prefer reusable, co
 
 - Public customization belongs in `src/lib/customization.ts`, with defaults and env metadata exposed through `/api/customization`.
 - Style presets, color themes, layout presets, component packs, theme packs, and plugin-like extension listings belong in `src/lib/marketplace.ts` with stable ids, clear `kind`, `status`, compatibility notes, and tags.
+- Customization Studio tab metadata, responsive QA checkpoints, keyboard-navigation helpers, and assistive summary text belong in `src/lib/customization-studio.ts`.
 - UI primitives should be built from `src/components/ui` and registered in `src/components/ui/catalog.ts` when they are reusable.
 - Theme changes should flow through CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]`.
 - When adding or changing customization, marketplace, style, color theme, or reusable component contracts, update `DESIGN.md`, `ARCHITECTURE.md`, `README.md`, `docs/help.md`, `docs/features.md`, in-app Help/Features/API docs, changelog, roadmap, tests, and version metadata as relevant.
@@ -63,7 +64,7 @@ Follow the existing repository history when writing commit messages.
 
 **Marketplace metadata:** Built-in and planned style presets, color themes, layout presets, component packs, theme packs, and plugin listings live in `src/lib/marketplace.ts`. Treat these records as the seed of the future marketplace contract.
 
-**Auth:** Dual auth system. Legacy: single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. Multi-user: bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
+**Auth:** Dual auth system. Legacy local/self-host mode treats missing `ADMIN_SECRET` as admin access; multi-user mode uses bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns current user, `isAdmin()` checks admin access, `requireRole(user, role)` handles granular permissions, and `AdminProvider` is seeded from server auth state in the root layout before its client refresh. Roles: admin, editor, viewer.
 
 **Prisma:** Uses `@prisma/adapter-pg` with raw `pg` pool (required for Neon). Singleton in `src/lib/prisma.ts` with `globalThis` caching for dev hot-reload.
 

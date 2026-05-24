@@ -50,6 +50,12 @@ export const componentCatalog = {
     importName: "IconButton",
     theming: ["ui-icon-button"],
   },
+  ToggleSwitch: {
+    category: "input",
+    description: "Accessible binary switch primitive with pressed-state styling.",
+    importName: "ToggleSwitch",
+    theming: ["ui-toggle-switch", "ui-toggle-switch-checked"],
+  },
   Field: {
     category: "input",
     description: "Label, hint, error, and control wrapper for consistent forms.",
@@ -73,6 +79,18 @@ export const componentCatalog = {
     description: "Textarea primitive using shared focus, border, and theme colors.",
     importName: "Textarea",
     theming: ["ui-textarea"],
+  },
+  Tabs: {
+    category: "navigation",
+    description: "Accessible tablist wrapper for admin, article, and settings workbenches.",
+    importName: "Tabs",
+    theming: ["article-tabbar"],
+  },
+  TabButton: {
+    category: "navigation",
+    description: "Ref-forwarding tab button for roving focus, ARIA-selected state, and keyboard navigation.",
+    importName: "TabButton",
+    theming: ["article-tab", "article-tab-active"],
   },
   CardLink: {
     category: "navigation",
@@ -98,6 +116,18 @@ export const componentCatalog = {
     importName: "Chip",
     theming: ["ui-chip", "ui-chip-success", "ui-chip-warning", "ui-chip-danger", "ui-chip-info"],
   },
+  StatGrid: {
+    category: "data",
+    description: "Responsive stat card grid for admin summaries and dashboard metrics.",
+    importName: "StatGrid",
+    theming: ["ui-stat-grid"],
+  },
+  StatCard: {
+    category: "data",
+    description: "Reusable metric card with value, label, and optional detail text.",
+    importName: "StatCard",
+    theming: ["ui-stat-card", "ui-stat-card-value", "ui-stat-card-label"],
+  },
   Notice: {
     category: "feedback",
     description: "Inline notice/callout block for warnings, guidance, and contextual help.",
@@ -115,6 +145,12 @@ export const componentCatalog = {
     description: "Preformatted code block for docs, examples, exports, and API responses.",
     importName: "CodeBlock",
     theming: ["ui-code-block"],
+  },
+  ScreenReaderOnly: {
+    category: "feedback",
+    description: "Visually hidden text primitive for live summaries and assistive-technology-only labels.",
+    importName: "ScreenReaderOnly",
+    theming: ["ui-sr-only"],
   },
 } satisfies Record<string, ComponentRecipe>;
 

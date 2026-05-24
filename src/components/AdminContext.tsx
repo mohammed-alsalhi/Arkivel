@@ -6,8 +6,14 @@ type AuthState = { admin: boolean; loggedIn: boolean };
 
 const AdminContext = createContext<AuthState>({ admin: false, loggedIn: false });
 
-export function AdminProvider({ children }: { children: React.ReactNode }) {
-  const [auth, setAuth] = useState<AuthState>({ admin: false, loggedIn: false });
+export function AdminProvider({
+  children,
+  initialAuth = { admin: false, loggedIn: false },
+}: {
+  children: React.ReactNode;
+  initialAuth?: AuthState;
+}) {
+  const [auth, setAuth] = useState<AuthState>(initialAuth);
 
   useEffect(() => {
     fetch("/api/auth/check")

@@ -45,6 +45,14 @@ function hasImageLikeExtension(value: string) {
   return /\.(avif|gif|ico|jpe?g|png|svg|webp)(\?.*)?$/i.test(value.trim());
 }
 
+function isDefaultBrandAsset(value: string) {
+  return [
+    "/brand/arkivel-icon-512.png",
+    "/brand/arkivel-logo.png",
+    "/brand/arkivel-logo.svg",
+  ].includes(value.trim());
+}
+
 function isValidUrl(value: string) {
   try {
     const parsed = new URL(value);
@@ -217,10 +225,46 @@ export function analyzeCustomizationDraft(
 
   if (draft.colorThemeId !== "standard") {
     add(diagnostics, {
+      detail: "Alternate palettes should include neutral surfaces, semantic success/warning/danger states, and non-accent text colors so the UI does not become a single-hue theme.",
+      id: "palette-one-note-review",
+      severity: "warning",
+      title: "One-note palette review recommended",
+    });
+    add(diagnostics, {
       detail: "Alternate palettes should be checked against article body text, links, buttons, warning notices, code blocks, tables, and shell navigation before deployment.",
       id: "contrast-alt-theme-review",
       severity: "warning",
       title: "Manual contrast review recommended",
+    });
+    add(diagnostics, {
+      detail: "Dark mode token overrides should be checked with the selected color theme, especially muted text, borders, inline code, tab states, and warning notices.",
+      id: "dark-theme-contrast-review",
+      severity: "warning",
+      title: "Dark theme contrast review recommended",
+    });
+  } else {
+    add(diagnostics, {
+      detail: "The standard palette keeps a neutral base with semantic state colors. Recheck this when overriding color tokens.",
+      id: "palette-balance-baseline",
+      severity: "pass",
+      title: "Palette balance baseline is available",
+    });
+  }
+
+  const customAssets = [draft.logo, draft.logoMark, draft.appIcon].filter((asset) => asset.trim() && !isDefaultBrandAsset(asset));
+  if (customAssets.length > 0) {
+    add(diagnostics, {
+      detail: "Custom logos and app icons should be compressed, cacheable, and sized for their slots before deployment. The studio cannot measure local or remote image byte size in preview-only mode.",
+      id: "brand-asset-size-review",
+      severity: "warning",
+      title: "Brand asset size review recommended",
+    });
+  } else {
+    add(diagnostics, {
+      detail: "Default Arkivel brand assets are sized for the app shell, metadata preview, and installable app icon slots.",
+      id: "brand-asset-size-baseline",
+      severity: "pass",
+      title: "Brand asset size baseline is available",
     });
   }
 

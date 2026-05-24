@@ -8,7 +8,7 @@ const manifest = {
     { envValue: "docs-portal", name: "Docs Portal", status: "planned" },
   ],
   stylePresets: [{ id: "classic-wiki" }, { id: "atlas-modern" }],
-  version: "4.76.1",
+  version: "4.76.3",
 };
 
 const draft: CustomizationDiagnosticsDraft = {
@@ -71,6 +71,14 @@ describe("customization diagnostics", () => {
 
     expect(report.counts.warning).toBeGreaterThanOrEqual(2);
     expect(report.diagnostics.some((diagnostic) => diagnostic.id === "layout-planned")).toBe(true);
+    expect(report.diagnostics.some((diagnostic) => diagnostic.id === "palette-one-note-review")).toBe(true);
     expect(report.diagnostics.some((diagnostic) => diagnostic.id === "contrast-alt-theme-review")).toBe(true);
+    expect(report.diagnostics.some((diagnostic) => diagnostic.id === "dark-theme-contrast-review")).toBe(true);
+  });
+
+  it("warns when custom brand assets need size review", () => {
+    const report = analyzeCustomizationDraft(draft, manifest, "2026-05-24T00:00:00.000Z");
+
+    expect(report.diagnostics.some((diagnostic) => diagnostic.id === "brand-asset-size-review")).toBe(true);
   });
 });

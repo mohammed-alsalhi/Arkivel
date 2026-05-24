@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import {
   Button,
   Chip,
@@ -13,8 +13,11 @@ import {
   Notice,
   Page,
   PageHeader,
+  ScreenReaderOnly,
   SectionPanel,
   Select,
+  StatCard,
+  StatGrid,
   TabButton,
   Tabs,
   Textarea,
@@ -38,6 +41,13 @@ import {
   type CustomizationDiagnosticsReport,
   type DiagnosticSeverity,
 } from "@/lib/customization-diagnostics";
+import {
+  createCustomizationStudioSummary,
+  CUSTOMIZATION_STUDIO_TABS,
+  CUSTOMIZATION_STUDIO_VIEWPORTS,
+  getNextCustomizationStudioTab,
+  type CustomizationStudioTabId,
+} from "@/lib/customization-studio";
 import { validateThemePack } from "@/lib/marketplace";
 
 type CustomizationManifest = {
@@ -70,19 +80,8 @@ type EnvEntry = {
   value: string | number | boolean;
 };
 
-type StudioTab = "brand" | "drafts" | "appearance" | "features" | "diagnostics" | "preview" | "output" | "packs";
+type StudioTab = CustomizationStudioTabId;
 type OutputMode = "env" | "local" | "vercel" | "docker";
-
-const tabs: { id: StudioTab; label: string }[] = [
-  { id: "brand", label: "Brand" },
-  { id: "drafts", label: "Drafts" },
-  { id: "appearance", label: "Appearance" },
-  { id: "features", label: "Features" },
-  { id: "diagnostics", label: "Diagnostics" },
-  { id: "preview", label: "Preview" },
-  { id: "output", label: "Output" },
-  { id: "packs", label: "Packs" },
-];
 
 const outputModes: { id: OutputMode; label: string }[] = [
   { id: "env", label: ".env" },
@@ -204,8 +203,17 @@ function downloadDiagnostics(report: CustomizationDiagnosticsReport) {
   URL.revokeObjectURL(url);
 }
 
+function tabButtonId(tabId: StudioTab) {
+  return `customization-tab-${tabId}`;
+}
+
+function tabPanelId(tabId: StudioTab) {
+  return `customization-panel-${tabId}`;
+}
+
 export default function AdminCustomizationPage() {
   const isAdmin = useAdmin();
+  const tabRefs = useRef(new Map<StudioTab, HTMLButtonElement>());
   const [activeTab, setActiveTab] = useState<StudioTab>("brand");
   const [copied, setCopied] = useState(false);
   const [confirmReset, setConfirmReset] = useState<"" | "active" | "default">("");
@@ -283,6 +291,45 @@ export default function AdminCustomizationPage() {
       return { errors: ["Theme pack must be valid JSON."], valid: false };
     }
   }, [themePackJson]);
+  const studioSummary = useMemo(
+    () => (
+      manifest && draft
+        ? createCustomizationStudioSummary({
+          activeTab,
+          changedCount,
+          diagnostics,
+          draft,
+          themePackValid: themePackValidation.valid,
+          version: manifest.customization.version,
+        })
+        : "Customization Studio is loading its manifest."
+    ),
+    [activeTab, changedCount, diagnostics, draft, manifest, themePackValidation.valid],
+  );
+
+  function selectTab(tabId: StudioTab, focus = false) {
+    setActiveTab(tabId);
+    if (focus) {
+      window.requestAnimationFrame(() => tabRefs.current.get(tabId)?.focus());
+    }
+  }
+
+  function setTabRef(tabId: StudioTab) {
+    return (node: HTMLButtonElement | null) => {
+      if (node) {
+        tabRefs.current.set(tabId, node);
+      } else {
+        tabRefs.current.delete(tabId);
+      }
+    };
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLElement>) {
+    const nextTab = getNextCustomizationStudioTab(activeTab, event.key);
+    if (nextTab === activeTab) return;
+    event.preventDefault();
+    selectTab(nextTab, true);
+  }
 
   function saveDraft() {
     if (!draft) return;
@@ -295,7 +342,7 @@ export default function AdminCustomizationPage() {
   function loadDraft(saved: SavedCustomizationDraft) {
     setDraft(saved.values);
     setDraftName(saved.name);
-    setActiveTab("drafts");
+    selectTab("drafts");
     setDraftNotice(`Loaded ${saved.name}.`);
   }
 
@@ -341,10 +388,17 @@ export default function AdminCustomizationPage() {
           manifest && draft ? (
             <Toolbar>
               <ToolbarGroup>
-                <Button onClick={() => confirmOrReset("active")} disabled={changedCount === 0 && confirmReset !== "active"}>
+                <Button
+                  aria-label={confirmReset === "active" ? "Confirm resetting draft to active environment values" : "Reset draft to active environment values"}
+                  onClick={() => confirmOrReset("active")}
+                  disabled={changedCount === 0 && confirmReset !== "active"}
+                >
                   {confirmReset === "active" ? "Confirm active reset" : "Reset to active"}
                 </Button>
-                <Button onClick={() => confirmOrReset("default")}>
+                <Button
+                  aria-label={confirmReset === "default" ? "Confirm resetting draft to Arkivel defaults" : "Reset draft to Arkivel defaults"}
+                  onClick={() => confirmOrReset("default")}
+                >
                   {confirmReset === "default" ? "Confirm default reset" : "Reset to defaults"}
                 </Button>
               </ToolbarGroup>
@@ -353,28 +407,61 @@ export default function AdminCustomizationPage() {
         }
       />
 
-      {error && <Notice className="mb-4 border-danger-border bg-danger-soft text-danger">{error}</Notice>}
-      {draftNotice && <Notice className="mb-4 border-info-border bg-info-soft text-info">{draftNotice}</Notice>}
+      <ScreenReaderOnly id="customization-studio-summary" aria-live="polite">
+        {studioSummary}
+      </ScreenReaderOnly>
+
+      {error && <Notice className="mb-4 border-danger-border bg-danger-soft text-danger" role="alert">{error}</Notice>}
+      {draftNotice && (
+        <Notice className="mb-4 border-info-border bg-info-soft text-info" role="status" aria-live="polite">
+          {draftNotice}
+        </Notice>
+      )}
 
       {!manifest || !draft ? (
         <p className="text-[13px] text-muted">Loading customization manifest...</p>
       ) : (
         <div className="space-y-4">
-          <SectionPanel title="Current instance" bodyClassName="grid gap-3 md:grid-cols-4">
-            <Metric label="Version" value={manifest.customization.version} />
-            <Metric label="Draft changes" value={String(changedCount)} />
-            <Metric label="Diagnostics" value={diagnostics ? `${diagnostics.counts.error} errors / ${diagnostics.counts.warning} warnings` : "Pending"} />
-            <Metric label="Layout" value={draft.layoutId} />
+          <SectionPanel title="Current instance">
+            <StatGrid>
+              <StatCard label="Version" value={manifest.customization.version} />
+              <StatCard label="Draft changes" value={String(changedCount)} />
+              <StatCard
+                label="Diagnostics"
+                value={diagnostics ? `${diagnostics.counts.error} / ${diagnostics.counts.warning}` : "Pending"}
+                detail="errors / warnings"
+              />
+              <StatCard label="Layout" value={draft.layoutId} />
+            </StatGrid>
           </SectionPanel>
 
-          <Tabs label="Customization workbench">
-            {tabs.map((tab) => (
-              <TabButton key={tab.id} active={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>
+          <Tabs
+            aria-describedby="customization-studio-summary"
+            label="Customization workbench"
+            onKeyDown={handleTabKeyDown}
+          >
+            {CUSTOMIZATION_STUDIO_TABS.map((tab) => (
+              <TabButton
+                key={tab.id}
+                active={activeTab === tab.id}
+                aria-controls={tabPanelId(tab.id)}
+                aria-label={`${tab.label}: ${tab.description}`}
+                id={tabButtonId(tab.id)}
+                onClick={() => selectTab(tab.id)}
+                ref={setTabRef(tab.id)}
+                tabIndex={activeTab === tab.id ? 0 : -1}
+              >
                 {tab.label}
               </TabButton>
             ))}
           </Tabs>
 
+          <div
+            id={tabPanelId(activeTab)}
+            role="tabpanel"
+            aria-labelledby={tabButtonId(activeTab)}
+            tabIndex={0}
+          >
           {activeTab === "brand" && (
             <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
               <SectionPanel title="Brand and copy" bodyClassName="grid gap-3 md:grid-cols-2">
@@ -427,7 +514,7 @@ export default function AdminCustomizationPage() {
               <div className="space-y-4">
                 <SectionPanel
                   title="Browser-local draft"
-                  actions={<Button onClick={saveDraft} variant="primary">Save draft</Button>}
+                  actions={<Button aria-label="Save current customization draft in this browser" onClick={saveDraft} variant="primary">Save draft</Button>}
                 >
                   <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
                     <Field htmlFor="draft-name" label="Draft name">
@@ -454,7 +541,7 @@ export default function AdminCustomizationPage() {
                     <div key={preset.id} className="border border-border bg-surface p-3">
                       <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
                         <p className="text-[13px] font-semibold text-heading">{preset.name}</p>
-                        <Button onClick={() => applyPreset(preset.id)}>Apply</Button>
+                        <Button aria-label={`Apply ${preset.name} customization preset`} onClick={() => applyPreset(preset.id)}>Apply</Button>
                       </div>
                       <p className="text-[12px] text-muted">{preset.description}</p>
                       <InlineCode className="mt-2 inline-block">{preset.id}</InlineCode>
@@ -466,7 +553,7 @@ export default function AdminCustomizationPage() {
                   {draftDiff.length === 0 ? (
                     <EmptyState title="No draft changes" description="The current preview matches the active environment-derived configuration." />
                   ) : (
-                    <DataTable>
+                    <DataTable aria-label="Active environment values compared with draft values">
                       <thead>
                         <tr>
                           <th>Field</th>
@@ -503,8 +590,8 @@ export default function AdminCustomizationPage() {
                           {saved.values.styleId} / {saved.values.colorThemeId} / {saved.values.layoutId}
                         </p>
                         <div className="mt-3 flex flex-wrap gap-2">
-                          <Button onClick={() => loadDraft(saved)}>Load</Button>
-                          <Button onClick={() => deleteDraft(saved.id)}>Delete</Button>
+                          <Button aria-label={`Load saved draft ${saved.name}`} onClick={() => loadDraft(saved)}>Load</Button>
+                          <Button aria-label={`Delete saved draft ${saved.name}`} onClick={() => deleteDraft(saved.id)}>Delete</Button>
                         </div>
                       </div>
                     ))}
@@ -621,13 +708,13 @@ export default function AdminCustomizationPage() {
             <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
               <SectionPanel
                 title="Deployment diagnostics"
-                actions={<Button onClick={() => downloadDiagnostics(diagnostics)}>Download JSON</Button>}
+                actions={<Button aria-label="Download customization diagnostics JSON" onClick={() => downloadDiagnostics(diagnostics)}>Download JSON</Button>}
               >
-                <div className="mb-3 grid gap-3 md:grid-cols-3">
-                  <Metric label="Passed" value={String(diagnostics.counts.pass)} />
-                  <Metric label="Warnings" value={String(diagnostics.counts.warning)} />
-                  <Metric label="Errors" value={String(diagnostics.counts.error)} />
-                </div>
+                <StatGrid className="mb-3">
+                  <StatCard label="Passed" value={String(diagnostics.counts.pass)} />
+                  <StatCard label="Warnings" value={String(diagnostics.counts.warning)} />
+                  <StatCard label="Errors" value={String(diagnostics.counts.error)} />
+                </StatGrid>
                 <div className="space-y-2">
                   {diagnostics.diagnostics.map((diagnostic) => (
                     <div key={diagnostic.id} className="border border-border bg-surface p-3">
@@ -648,7 +735,7 @@ export default function AdminCustomizationPage() {
                   <li>Logo, mark, and app icon paths before deployment.</li>
                   <li>Canonical base URL shape for metadata, feeds, and share links.</li>
                   <li>Registered style, color theme, and layout compatibility.</li>
-                  <li>Manual review prompts for alternate palettes, contrast surfaces, and map imagery.</li>
+                  <li>Manual review prompts for alternate palettes, dark theme contrast, oversized brand assets, responsive previews, and map imagery.</li>
                 </ul>
                 <Notice className="mt-3 border-info-border bg-info-soft text-info">
                   Diagnostics are advisory and preview-safe. They do not fetch remote assets, execute packs, or write deployment settings.
@@ -658,56 +745,75 @@ export default function AdminCustomizationPage() {
           )}
 
           {activeTab === "preview" && (
-            <SectionPanel title="Live preview panels" bodyClassName="grid gap-3 lg:grid-cols-2">
-              <PreviewFrame title="Homepage" draft={draft}>
-                <p className="text-[18px] font-semibold text-heading">{draft.name}</p>
-                <p className="mt-1 text-[13px] text-muted">{draft.welcomeText}</p>
-                <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                  <PreviewTile label="Articles" value="Browse" />
-                  <PreviewTile label="Studio" value="Plan" />
-                  <PreviewTile label="Search" value="Find" />
-                </div>
-              </PreviewFrame>
-              <PreviewFrame title="Article reader" draft={draft}>
-                <p className="text-[18px] font-semibold text-heading">Example Article</p>
-                <p className="mt-1 text-[13px] text-muted">A preview of article chrome, metadata, and reading rhythm.</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Chip>published</Chip>
-                  <Chip tone="info">{draft.layoutId}</Chip>
-                  <Chip tone="success">{draft.colorThemeId}</Chip>
-                </div>
-              </PreviewFrame>
-              <PreviewFrame title="Editor" draft={draft}>
-                <div className="border border-border bg-background p-3">
-                  <p className="text-[12px] font-semibold text-heading">Insert / Review / Outline</p>
-                  <p className="mt-2 text-[13px] text-muted">Reusable editor controls will inherit the selected style and space pack.</p>
-                </div>
-              </PreviewFrame>
-              <PreviewFrame title="Dashboard" draft={draft}>
-                <div className="grid gap-2 sm:grid-cols-3">
-                  <PreviewTile label="Health" value="92%" />
-                  <PreviewTile label="Drafts" value="8" />
-                  <PreviewTile label="Reviews" value="3" />
-                </div>
-              </PreviewFrame>
-              <PreviewFrame title="Marketplace" draft={draft}>
-                <p className="text-[13px] text-muted">Catalog cards reflect style, color theme, and layout selections before install.</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Chip tone="info">style</Chip>
-                  <Chip tone="warning">component-pack</Chip>
-                  <Chip>plugin</Chip>
-                </div>
-              </PreviewFrame>
-              <PreviewFrame title="Mobile shell" draft={draft}>
-                <div className="mx-auto max-w-[220px] border border-border bg-background p-3">
-                  <p className="text-[12px] font-semibold text-heading">{draft.name}</p>
-                  <p className="mt-1 text-[11px] text-muted">{draft.tagline}</p>
-                  <div className="mt-3 grid grid-cols-4 gap-1 text-center text-[10px] text-muted">
-                    <span>Home</span><span>Search</span><span>Create</span><span>Menu</span>
+            <div className="space-y-4">
+              <SectionPanel title="Live preview panels" bodyClassName="grid gap-3 lg:grid-cols-2">
+                <PreviewFrame title="Homepage" draft={draft}>
+                  <p className="text-[18px] font-semibold text-heading">{draft.name}</p>
+                  <p className="mt-1 text-[13px] text-muted">{draft.welcomeText}</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                    <PreviewTile label="Articles" value="Browse" />
+                    <PreviewTile label="Studio" value="Plan" />
+                    <PreviewTile label="Search" value="Find" />
                   </div>
-                </div>
-              </PreviewFrame>
-            </SectionPanel>
+                </PreviewFrame>
+                <PreviewFrame title="Article reader" draft={draft}>
+                  <p className="text-[18px] font-semibold text-heading">Example Article</p>
+                  <p className="mt-1 text-[13px] text-muted">A preview of article chrome, metadata, and reading rhythm.</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Chip>published</Chip>
+                    <Chip tone="info">{draft.layoutId}</Chip>
+                    <Chip tone="success">{draft.colorThemeId}</Chip>
+                  </div>
+                </PreviewFrame>
+                <PreviewFrame title="Editor" draft={draft}>
+                  <div className="border border-border bg-background p-3">
+                    <p className="text-[12px] font-semibold text-heading">Insert / Review / Outline</p>
+                    <p className="mt-2 text-[13px] text-muted">Reusable editor controls will inherit the selected style and space pack.</p>
+                  </div>
+                </PreviewFrame>
+                <PreviewFrame title="Dashboard" draft={draft}>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    <PreviewTile label="Health" value="92%" />
+                    <PreviewTile label="Drafts" value="8" />
+                    <PreviewTile label="Reviews" value="3" />
+                  </div>
+                </PreviewFrame>
+                <PreviewFrame title="Marketplace" draft={draft}>
+                  <p className="text-[13px] text-muted">Catalog cards reflect style, color theme, and layout selections before install.</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Chip tone="info">style</Chip>
+                    <Chip tone="warning">component-pack</Chip>
+                    <Chip>plugin</Chip>
+                  </div>
+                </PreviewFrame>
+                <PreviewFrame title="Mobile shell" draft={draft}>
+                  <div className="mx-auto max-w-[220px] border border-border bg-background p-3">
+                    <p className="text-[12px] font-semibold text-heading">{draft.name}</p>
+                    <p className="mt-1 text-[11px] text-muted">{draft.tagline}</p>
+                    <div className="mt-3 grid grid-cols-4 gap-1 text-center text-[10px] text-muted">
+                      <span>Home</span><span>Search</span><span>Create</span><span>Menu</span>
+                    </div>
+                  </div>
+                </PreviewFrame>
+              </SectionPanel>
+
+              <SectionPanel title="Responsive QA checklist" bodyClassName="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                {CUSTOMIZATION_STUDIO_VIEWPORTS.map((viewport) => (
+                  <div key={viewport.id} className="border border-border bg-surface p-3">
+                    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-[13px] font-semibold text-heading">{viewport.label}</p>
+                      <Chip tone="info">{viewport.width}</Chip>
+                    </div>
+                    <p className="text-[12px] text-muted">{viewport.description}</p>
+                    <ul className="mt-3 list-disc space-y-1 pl-5 text-[12px] text-muted">
+                      {viewport.checks.map((check) => (
+                        <li key={check}>{check}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </SectionPanel>
+            </div>
           )}
 
           {activeTab === "output" && (
@@ -716,6 +822,7 @@ export default function AdminCustomizationPage() {
                 title="Deployment output"
                 actions={
                   <Button
+                    aria-label={copied ? "Deployment output copied" : "Copy deployment output to clipboard"}
                     onClick={async () => {
                       await navigator.clipboard.writeText(output);
                       setCopied(true);
@@ -732,6 +839,8 @@ export default function AdminCustomizationPage() {
                     {outputModes.map((mode) => (
                       <Button
                         key={mode.id}
+                        aria-pressed={outputMode === mode.id}
+                        aria-label={`Show deployment output as ${mode.label}`}
                         onClick={() => setOutputMode(mode.id)}
                         variant={outputMode === mode.id ? "primary" : "default"}
                       >
@@ -747,7 +856,7 @@ export default function AdminCustomizationPage() {
               </SectionPanel>
 
               <SectionPanel title="Config source map">
-                <DataTable>
+                <DataTable aria-label="Environment variable source map">
                   <tbody>
                     {envEntries.map((entry) => (
                       <tr key={entry.key}>
@@ -772,6 +881,7 @@ export default function AdminCustomizationPage() {
                   onChange={(event) => setThemePackJson(event.target.value)}
                 />
                 <Notice
+                  aria-live="polite"
                   className={
                     themePackValidation.valid
                       ? "mt-3 border-success-border bg-success-soft text-success"
@@ -789,24 +899,16 @@ export default function AdminCustomizationPage() {
               </SectionPanel>
             </div>
           )}
+          </div>
         </div>
       )}
     </Page>
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="border border-border bg-surface p-3">
-      <p className="text-[11px] uppercase text-muted">{label}</p>
-      <p className="mt-1 truncate text-[15px] font-semibold text-heading">{value}</p>
-    </div>
-  );
-}
-
 function BrandPreview({ draft }: { draft: CustomizationDraft }) {
   return (
-    <div className="border border-border bg-background p-3">
+    <div className="border border-border bg-background p-3" role="region" aria-label="Brand asset preview">
       <div className="flex items-center gap-3">
         <span
           aria-hidden="true"
@@ -851,10 +953,12 @@ function PresetGrid({
 function PreviewFrame({ children, draft, title }: { children: ReactNode; draft: CustomizationDraft; title: string }) {
   return (
     <div
+      aria-label={`${title} preview`}
       className="border border-border bg-surface p-4"
       data-color-theme={draft.colorThemeId}
       data-layout={draft.layoutId}
       data-style={draft.styleId}
+      role="region"
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-[12px] font-semibold uppercase text-muted">{title}</p>

@@ -152,7 +152,7 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 
 `NEXT_PUBLIC_*` values are baked into the build. Rebuild or redeploy after changing them.
 
-Arkivel also exposes a self-host customization manifest at `/api/customization`. It lists supported public env vars, their defaults, grouped runtime config, reusable UI components, built-in style presets, color themes, layout presets, theme pack schemas, plugin manifests, component packs, marketplace item metadata, catalog validation, and theme hook locations so forks, plugins, and deployment dashboards can customize the platform without scraping source files. Admins can use `/admin/customization` as an env-first workbench for brand copy, logos, styles, colors, layouts, feature flags, browser-local drafts, named presets, active-vs-draft diffs, diagnostics, live preview panels, source badges, theme-pack JSON validation, downloadable support reports, and copy-ready `.env`, `.env.local`, Vercel, or Docker Compose output, then browse and filter the built-in marketplace catalog at `/admin/marketplace`.
+Arkivel also exposes a self-host customization manifest at `/api/customization`. It lists supported public env vars, their defaults, grouped runtime config, reusable UI components, built-in style presets, color themes, layout presets, theme pack schemas, plugin manifests, component packs, marketplace item metadata, catalog validation, and theme hook locations so forks, plugins, and deployment dashboards can customize the platform without scraping source files. Admins can use `/admin/customization` as an env-first workbench for brand copy, logos, styles, colors, layouts, feature flags, browser-local drafts, named presets, active-vs-draft diffs, keyboard-accessible tabs, screen-reader summaries, responsive QA checkpoints, polish diagnostics, live preview panels, source badges, theme-pack JSON validation, downloadable support reports, and copy-ready `.env`, `.env.local`, Vercel, or Docker Compose output, then browse and filter the built-in marketplace catalog at `/admin/marketplace`.
 
 Arkivel is still in beta throughout the v4 line. The roadmap now tracks the path from v4.76.0 through v4.99.99 toward a stable v5.0.0 release, with patch-level batches for customization, marketplace safety, plugin contracts, portability, auth hardening, security, operations, testing, documentation, and release-candidate evidence gates.
 
@@ -178,7 +178,7 @@ Arkivel is still in beta throughout the v4 line. The roadmap now tracks the path
 - **Data:** Prisma 7, PostgreSQL, `@prisma/adapter-pg`, Neon-compatible `pg` pool
 - **Editor:** Tiptap 3 with wiki links, footnotes, tables, code highlighting, and custom blocks
 - **Styling:** Tailwind CSS 4 with CSS variables in `src/app/globals.css`
-- **Auth:** Legacy admin cookie plus multi-user sessions with viewer/editor/admin roles
+- **Auth:** Local/self-host admin mode plus multi-user sessions with viewer/editor/admin roles; the app shell seeds admin context from server auth before the client refresh
 - **Content model:** HTML article body, optional raw Markdown, revisions, categories, tags, translations, relations, discussions, watchlists, notifications, and operational metrics
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [DESIGN.md](DESIGN.md), [ROADMAP.md](ROADMAP.md), [docs/features.md](docs/features.md), and [docs/help.md](docs/help.md) for the contributor-level references.

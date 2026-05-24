@@ -1,14 +1,15 @@
 import Link, { type LinkProps } from "next/link";
 import clsx from "clsx";
-import type {
-  AnchorHTMLAttributes,
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  InputHTMLAttributes,
-  ReactNode,
-  SelectHTMLAttributes,
-  TableHTMLAttributes,
-  TextareaHTMLAttributes,
+import {
+  forwardRef,
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type HTMLAttributes,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TableHTMLAttributes,
+  type TextareaHTMLAttributes,
 } from "react";
 
 type PageWidth = "default" | "narrow" | "wide" | "full";
@@ -185,6 +186,12 @@ export function KeyboardKey({ className, ...props }: KeyboardKeyProps) {
   return <kbd className={clsx("ui-kbd", className)} {...props} />;
 }
 
+type ScreenReaderOnlyProps = HTMLAttributes<HTMLSpanElement>;
+
+export function ScreenReaderOnly({ className, ...props }: ScreenReaderOnlyProps) {
+  return <span className={clsx("ui-sr-only", className)} {...props} />;
+}
+
 type NoticeProps = HTMLAttributes<HTMLDivElement>;
 
 export function Notice({ className, ...props }: NoticeProps) {
@@ -229,17 +236,21 @@ type TabButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean;
 };
 
-export function TabButton({ active = false, className, type = "button", ...props }: TabButtonProps) {
+export const TabButton = forwardRef<HTMLButtonElement, TabButtonProps>(function TabButton(
+  { active = false, className, type = "button", ...props },
+  ref,
+) {
   return (
     <button
       aria-selected={active}
       className={clsx("article-tab", active && "article-tab-active", className)}
+      ref={ref}
       role="tab"
       type={type}
       {...props}
     />
   );
-}
+});
 
 type TabLinkProps = LinkProps &
   Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> & {
