@@ -24,11 +24,11 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 
 #### v4.76.0 - Studio workbench foundation
 
-- [ ] Promote `/admin/customization` into a multi-tab workbench for brand, style, color, layout, content copy, feature flags, logos, social metadata, and deployment notes
-- [ ] Add side-by-side preview frames for homepage, article reader, article editor, dashboard, marketplace, help, and mobile shell
-- [ ] Add config source badges for defaults, env vars, inherited space settings, imported packs, and unsaved preview changes
-- [ ] Add copy-ready `.env`, Vercel env, Docker Compose env, and `.env.local` output modes
-- [ ] Add tests for fallback behavior when unknown style, color theme, layout, or logo values are supplied
+- [x] Promote `/admin/customization` into a multi-tab workbench for brand, style, color, layout, content copy, feature flags, logos, canonical URL, and deployment notes
+- [x] Add preview frames for homepage, article reader, article editor, dashboard, marketplace, and mobile shell
+- [x] Add config source badges for defaults, env vars, and unsaved preview changes
+- [x] Add copy-ready `.env`, Vercel env, Docker Compose env, and `.env.local` output modes
+- [x] Keep fallback coverage for unknown style, color theme, and layout values
 
 #### v4.76.1 - Studio diagnostics
 
@@ -716,6 +716,14 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 - [ ] Public API v1, webhooks, feeds, and SDK types have compatibility commitments
 - [ ] Admin operations, observability, security, and privacy docs are complete enough for self-host operators
 - [ ] README, DESIGN, ARCHITECTURE, ROADMAP, CHANGELOG, AGENTS, CONTRIBUTING, API docs, help docs, feature docs, and in-app reference pages are synchronized
+
+## v4.76.0
+
+- [x] Customization Studio workbench - `/admin/customization` now uses Brand, Appearance, Features, Preview, Output, and Packs tabs for env-first customization planning
+- [x] Brand draft controls - admins can preview site name, tagline, description, welcome text, footer text, logo, mark, app icon, base URL, and feature flags without writing runtime overrides
+- [x] Deployment output modes - copy-ready `.env`, `.env.local`, Vercel, and Docker Compose formats now share the same draft values and source map
+- [x] Preview panels - homepage, article reader, editor, dashboard, marketplace, and mobile shell previews show the selected style, color theme, layout, and brand copy
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, help docs, feature docs, and in-app reference pages describe the studio foundation release
 
 ## v4.75.1
 

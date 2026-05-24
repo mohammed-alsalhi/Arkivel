@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.76.0] - 2026-05-24
+
+### Added
+
+- **Customization Studio workbench** - Rebuilt `/admin/customization` as a tabbed admin workbench for brand copy, logos, style presets, color themes, layouts, feature flags, previews, deployment output, and theme-pack validation.
+- **Deployment output modes** - Added copy-ready `.env`, `.env.local`, Vercel, and Docker Compose output formats generated from the same draft customization values.
+- **Preview and source mapping** - Added homepage, article reader, editor, dashboard, marketplace, and mobile shell preview panels, plus source badges that identify default, env-driven, and unsaved draft values.
+
 ## [4.75.3] - 2026-05-24
 
 ### Changed

@@ -310,7 +310,7 @@ Capture content from the web directly into the wiki without switching context.
 - **Style presets** — `NEXT_PUBLIC_ARKIVEL_STYLE` switches between the default `classic-wiki` skin and the alternate `atlas-modern` skin without changing route code.
 - **Color themes** — `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` switches between `standard`, `forest`, and `ember` palettes independently from the selected style preset.
 - **Layout presets** — `NEXT_PUBLIC_ARKIVEL_LAYOUT` publishes layout intent such as `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, or `research-notebook` for preview and future shell variants.
-- **Customization Studio** — `/admin/customization` previews the env-first branding, style, color theme, layout, feature flag, and theme-pack contract with selectable presets, theme-pack JSON validation, and copy-ready `.env` output.
+- **Customization Studio** — `/admin/customization` is a tabbed env-first workbench for brand copy, logos, style, color theme, layout, feature flags, preview panels, source badges, theme-pack JSON validation, and copy-ready `.env`, `.env.local`, Vercel, or Docker Compose output.
 - **Built-in Marketplace** — `/admin/marketplace` lists and filters styles, color themes, layouts, component packs, plugins, and theme packs with catalog health checks and no remote code fetching.
 - **RSS & Atom feeds** — `/feed.xml` and `/feed/atom`
 - **Webhooks** — HTTP callbacks dispatched on article events; delivery log at `/admin/webhooks`
