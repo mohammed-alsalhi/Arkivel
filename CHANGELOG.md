@@ -4,6 +4,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.7] - 2026-05-24
+
+### Changed
+
+- **Read-only admin controls** - Migrated the read-only admin page to shared UI primitives and added explicit loading/error states for status reads and updates.
+- **Read-only API resilience** - Wrapped read-only status reads and writes with service-unavailable responses when the backing state cannot be reached.
+
 ## [4.74.6] - 2026-05-24
 
 ### Added

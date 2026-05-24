@@ -16,6 +16,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.74.7
+
+- [x] Read-only admin controls - `/admin/read-only` uses shared UI primitives with clear loading, saved, warning, and error states
+- [x] Read-only API resilience - `/api/admin/read-only` returns explicit unavailable responses when state checks or updates fail
+- [x] Documentation/version discipline - package metadata, changelog, and roadmap describe the admin hardening batch
+
 ## v4.74.6
 
 - [x] Color theme presets - `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` selects `standard`, `forest`, or `ember` independently from the selected style preset
