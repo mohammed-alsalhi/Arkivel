@@ -6,13 +6,17 @@ import {
   CodeBlock,
   DataTable,
   EmptyState,
+  Field,
   InlineCode,
   Notice,
   Page,
   PageHeader,
   SectionPanel,
+  Select,
+  Textarea,
 } from "@/components/ui";
 import { useAdmin } from "@/components/AdminContext";
+import { validateThemePack } from "@/lib/marketplace";
 
 type CustomizationManifest = {
   customization: {
@@ -38,11 +42,17 @@ type CustomizationManifest = {
   };
 };
 
+type DraftConfig = {
+  colorThemeId: string;
+  layoutId: string;
+  styleId: string;
+};
+
 function envValue(value: string | number | boolean) {
   return typeof value === "boolean" ? String(value) : JSON.stringify(String(value));
 }
 
-function buildEnvOutput(manifest: CustomizationManifest) {
+function buildEnvOutput(manifest: CustomizationManifest, draft: DraftConfig) {
   const current = manifest.customization;
   const values: Record<string, string | number | boolean> = {
     NEXT_PUBLIC_ARKIVEL_NAME: current.brand.name,
@@ -53,9 +63,9 @@ function buildEnvOutput(manifest: CustomizationManifest) {
     NEXT_PUBLIC_ARKIVEL_LOGO: current.brand.logo,
     NEXT_PUBLIC_ARKIVEL_LOGO_MARK: current.brand.logoMark,
     NEXT_PUBLIC_ARKIVEL_APP_ICON: current.brand.appIcon,
-    NEXT_PUBLIC_ARKIVEL_STYLE: current.style.id,
-    NEXT_PUBLIC_ARKIVEL_COLOR_THEME: current.style.colorThemeId,
-    NEXT_PUBLIC_ARKIVEL_LAYOUT: current.style.layoutId,
+    NEXT_PUBLIC_ARKIVEL_STYLE: draft.styleId,
+    NEXT_PUBLIC_ARKIVEL_COLOR_THEME: draft.colorThemeId,
+    NEXT_PUBLIC_ARKIVEL_LAYOUT: draft.layoutId,
     NEXT_PUBLIC_ENABLE_REGISTRATION: current.features.registrationEnabled,
     NEXT_PUBLIC_ENABLE_DISCUSSIONS: current.features.discussionsEnabled,
     NEXT_PUBLIC_DEFAULT_LOCALE: current.limits.defaultLocale,
@@ -75,8 +85,10 @@ function buildEnvOutput(manifest: CustomizationManifest) {
 export default function AdminCustomizationPage() {
   const isAdmin = useAdmin();
   const [copied, setCopied] = useState(false);
+  const [draft, setDraft] = useState<DraftConfig>({ colorThemeId: "", layoutId: "", styleId: "" });
   const [manifest, setManifest] = useState<CustomizationManifest | null>(null);
   const [error, setError] = useState("");
+  const [themePackJson, setThemePackJson] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -85,7 +97,15 @@ export default function AdminCustomizationPage() {
         const res = await fetch("/api/customization");
         if (!res.ok) throw new Error("Customization manifest request failed");
         const data = await res.json();
-        if (!cancelled) setManifest(data);
+        if (!cancelled) {
+          setManifest(data);
+          setDraft({
+            colorThemeId: data.customization.style.colorThemeId,
+            layoutId: data.customization.style.layoutId,
+            styleId: data.customization.style.id,
+          });
+          setThemePackJson(JSON.stringify(data.ui.themePacks?.[0] ?? data.ui.themePackSchema, null, 2));
+        }
       } catch {
         if (!cancelled) setError("Could not load the customization manifest.");
       }
@@ -96,7 +116,15 @@ export default function AdminCustomizationPage() {
     };
   }, []);
 
-  const envOutput = useMemo(() => (manifest ? buildEnvOutput(manifest) : ""), [manifest]);
+  const envOutput = useMemo(() => (manifest ? buildEnvOutput(manifest, draft) : ""), [draft, manifest]);
+  const themePackValidation = useMemo(() => {
+    if (!themePackJson.trim()) return { errors: ["Paste a theme pack JSON object to validate."], valid: false };
+    try {
+      return validateThemePack(JSON.parse(themePackJson));
+    } catch {
+      return { errors: ["Theme pack must be valid JSON."], valid: false };
+    }
+  }, [themePackJson]);
 
   if (!isAdmin) {
     return (
@@ -132,6 +160,53 @@ export default function AdminCustomizationPage() {
                   <tr><th>Discussions</th><td>{manifest.customization.features.discussionsEnabled ? "Enabled" : "Disabled"}</td></tr>
                 </tbody>
               </DataTable>
+            </SectionPanel>
+
+            <SectionPanel title="Preview configuration" bodyClassName="grid gap-3 md:grid-cols-3">
+              <Field htmlFor="preview-style" label="Style">
+                <Select
+                  id="preview-style"
+                  value={draft.styleId}
+                  onChange={(event) => setDraft((current) => ({ ...current, styleId: event.target.value }))}
+                >
+                  {manifest.ui.stylePresets.map((preset) => (
+                    <option key={preset.id} value={preset.id}>{preset.name}</option>
+                  ))}
+                </Select>
+              </Field>
+              <Field htmlFor="preview-color-theme" label="Color theme">
+                <Select
+                  id="preview-color-theme"
+                  value={draft.colorThemeId}
+                  onChange={(event) => setDraft((current) => ({ ...current, colorThemeId: event.target.value }))}
+                >
+                  {manifest.ui.colorThemePresets.map((preset) => (
+                    <option key={preset.id} value={preset.id}>{preset.name}</option>
+                  ))}
+                </Select>
+              </Field>
+              <Field htmlFor="preview-layout" label="Layout">
+                <Select
+                  id="preview-layout"
+                  value={draft.layoutId}
+                  onChange={(event) => setDraft((current) => ({ ...current, layoutId: event.target.value }))}
+                >
+                  {manifest.ui.layoutPresets.map((preset) => (
+                    <option key={preset.id} value={preset.id}>{preset.name}</option>
+                  ))}
+                </Select>
+              </Field>
+              <div
+                className="md:col-span-3 border border-border bg-background p-4"
+                data-color-theme={draft.colorThemeId}
+                data-layout={draft.layoutId}
+                data-style={draft.styleId}
+              >
+                <p className="text-[12px] font-semibold text-heading">Preview target</p>
+                <p className="mt-1 text-[12px] text-muted">
+                  {draft.styleId} style, {draft.colorThemeId} palette, {draft.layoutId} layout.
+                </p>
+              </div>
             </SectionPanel>
 
             <SectionPanel title="Style presets" bodyClassName="grid gap-3 md:grid-cols-2">
@@ -182,6 +257,27 @@ export default function AdminCustomizationPage() {
 
             <SectionPanel title="Theme pack schema">
               <CodeBlock>{JSON.stringify(manifest.ui.themePackSchema, null, 2)}</CodeBlock>
+            </SectionPanel>
+
+            <SectionPanel title="Theme pack validator">
+              <Textarea
+                aria-label="Theme pack JSON"
+                className="font-mono"
+                rows={10}
+                value={themePackJson}
+                onChange={(event) => setThemePackJson(event.target.value)}
+              />
+              <Notice
+                className={
+                  themePackValidation.valid
+                    ? "mt-3 border-success-border bg-success-soft text-success"
+                    : "mt-3 border-warning-border bg-warning-soft text-warning"
+                }
+              >
+                {themePackValidation.valid
+                  ? "Theme pack is valid for preview."
+                  : themePackValidation.errors.join(" ")}
+              </Notice>
             </SectionPanel>
           </div>
         </div>

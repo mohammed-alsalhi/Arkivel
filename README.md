@@ -152,7 +152,7 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 
 `NEXT_PUBLIC_*` values are baked into the build. Rebuild or redeploy after changing them.
 
-Arkivel also exposes a self-host customization manifest at `/api/customization`. It lists supported public env vars, their defaults, grouped runtime config, reusable UI components, built-in style presets, color themes, layout presets, theme pack schemas, plugin manifests, component packs, marketplace item metadata, and theme hook locations so forks, plugins, and deployment dashboards can customize the platform without scraping source files. Admins can inspect this env-first surface at `/admin/customization` and browse the built-in marketplace catalog at `/admin/marketplace`.
+Arkivel also exposes a self-host customization manifest at `/api/customization`. It lists supported public env vars, their defaults, grouped runtime config, reusable UI components, built-in style presets, color themes, layout presets, theme pack schemas, plugin manifests, component packs, marketplace item metadata, catalog validation, and theme hook locations so forks, plugins, and deployment dashboards can customize the platform without scraping source files. Admins can preview env-first combinations and validate theme-pack JSON at `/admin/customization`, then browse and filter the built-in marketplace catalog at `/admin/marketplace`.
 
 ## API And Integrations
 

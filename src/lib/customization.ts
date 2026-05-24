@@ -278,7 +278,7 @@ export function createCustomization(env: Env = process.env): ArkivelCustomizatio
       preset: stylePreset,
       colorThemeId: colorTheme.id,
       colorTheme,
-      layoutId: layout.id,
+      layoutId: layout.envValue,
       layout,
     },
   };

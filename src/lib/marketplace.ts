@@ -24,6 +24,11 @@ export type MarketplaceItem = {
   tags: string[];
 };
 
+export type MarketplaceValidationResult = {
+  errors: string[];
+  valid: boolean;
+};
+
 export type StylePreset = MarketplaceItem & {
   kind: "style";
   themeAttribute: string;
@@ -146,7 +151,7 @@ export const colorThemePresets = [
 
 export const layoutPresets: LayoutPreset[] = [
   {
-    id: "classic-wiki",
+    id: "layout-classic-wiki",
     kind: "layout",
     name: "Classic Wiki",
     description: "Dense encyclopedia shell with sidebar navigation, article-first reading, and compact admin surfaces.",
@@ -157,7 +162,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "classic-wiki",
   },
   {
-    id: "docs-portal",
+    id: "layout-docs-portal",
     kind: "layout",
     name: "Docs Portal",
     description: "Documentation-oriented navigation and preview metadata for support and developer portals.",
@@ -168,7 +173,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "docs-portal",
   },
   {
-    id: "team-knowledge-base",
+    id: "layout-team-knowledge-base",
     kind: "layout",
     name: "Team Knowledge Base",
     description: "Team operations layout metadata for onboarding, SOPs, ownership, and review workflows.",
@@ -179,7 +184,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "team-knowledge-base",
   },
   {
-    id: "worldbuilding-atlas",
+    id: "layout-worldbuilding-atlas",
     kind: "layout",
     name: "Worldbuilding Atlas",
     description: "Atlas-first layout metadata for canon, maps, territories, characters, and relationships.",
@@ -190,7 +195,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "worldbuilding-atlas",
   },
   {
-    id: "research-notebook",
+    id: "layout-research-notebook",
     kind: "layout",
     name: "Research Notebook",
     description: "Research-oriented layout metadata for notes, citations, claims, revisions, and synthesis.",
@@ -295,7 +300,7 @@ export function resolveColorThemePreset(themeId: string | undefined): ColorTheme
 }
 
 export function resolveLayoutPreset(layoutId: string | undefined): LayoutPreset {
-  return layoutPresets.find((layout) => layout.id === layoutId) ?? layoutPresets[0];
+  return layoutPresets.find((layout) => layout.id === layoutId || layout.envValue === layoutId) ?? layoutPresets[0];
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -310,18 +315,29 @@ function hasStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every(hasString);
 }
 
-export function validateThemePack(input: ThemePackInput): { errors: string[]; valid: boolean } {
+export function validateThemePack(input: ThemePackInput): MarketplaceValidationResult {
   const errors: string[] = [];
   if (!hasString(input.id)) errors.push("id is required");
   if (!hasString(input.name)) errors.push("name is required");
   if (input.kind !== "theme-pack") errors.push("kind must be theme-pack");
   if (!hasString(input.version)) errors.push("version is required");
   if (!hasString(input.compatibility)) errors.push("compatibility is required");
-  if (!isRecord(input.tokens)) errors.push("tokens must be an object");
+  if (!isRecord(input.tokens)) {
+    errors.push("tokens must be an object");
+  } else {
+    for (const [key, value] of Object.entries(input.tokens)) {
+      if (!key.startsWith("--color-") && !key.startsWith("--font-")) {
+        errors.push(`token ${key} must be a supported CSS variable`);
+      }
+      if (!hasString(value)) {
+        errors.push(`token ${key} must have a string value`);
+      }
+    }
+  }
   return { errors, valid: errors.length === 0 };
 }
 
-export function validatePluginManifest(input: PluginManifestInput): { errors: string[]; valid: boolean } {
+export function validatePluginManifest(input: PluginManifestInput): MarketplaceValidationResult {
   const errors: string[] = [];
   if (!hasString(input.id)) errors.push("id is required");
   if (!hasString(input.name)) errors.push("name is required");
@@ -333,6 +349,41 @@ export function validatePluginManifest(input: PluginManifestInput): { errors: st
   if (!hasStringArray(input.settings)) errors.push("settings must be a string array");
   if (!hasStringArray(input.widgets)) errors.push("widgets must be a string array");
   if (!hasStringArray(input.hooks)) errors.push("hooks must be a string array");
+  if (hasStringArray(input.routes) && input.routes.some((route) => !route.startsWith("/"))) {
+    errors.push("routes must start with /");
+  }
+  if (hasStringArray(input.permissions) && input.permissions.some((permission) => !permission.includes(":"))) {
+    errors.push("permissions must use resource:action format");
+  }
+  return { errors, valid: errors.length === 0 };
+}
+
+export function validateMarketplaceCatalog(items: MarketplaceItem[] = marketplaceItems): MarketplaceValidationResult {
+  const errors: string[] = [];
+  const ids = new Set<string>();
+  const requiredKinds: MarketplaceItemKind[] = [
+    "style",
+    "color-theme",
+    "layout",
+    "component-pack",
+    "plugin",
+    "theme-pack",
+  ];
+  const kinds = new Set(items.map((item) => item.kind));
+
+  for (const item of items) {
+    if (ids.has(item.id)) errors.push(`duplicate marketplace id: ${item.id}`);
+    ids.add(item.id);
+    if (!hasString(item.name)) errors.push(`${item.id} is missing a name`);
+    if (!hasString(item.description)) errors.push(`${item.id} is missing a description`);
+    if (!hasString(item.compatibility)) errors.push(`${item.id} is missing compatibility`);
+    if (!Array.isArray(item.tags) || item.tags.length === 0) errors.push(`${item.id} must include tags`);
+  }
+
+  for (const kind of requiredKinds) {
+    if (!kinds.has(kind)) errors.push(`missing marketplace kind: ${kind}`);
+  }
+
   return { errors, valid: errors.length === 0 };
 }
 
@@ -353,4 +404,6 @@ export const perSpaceCustomizationContract = {
   status: "preview-only",
   inherits: ["global brand", "global style", "global color theme", "global layout"],
   fields: ["styleId", "colorThemeId", "layoutId", "templateIds", "metadataSchemaId", "navigationMode"],
+  precedence: ["category preview", "global env customization", "Arkivel defaults"],
+  persistence: "deferred; no database overrides in v1",
 };

@@ -4,6 +4,14 @@
 
 All notable changes to this project are documented here.
 
+## [4.75.1] - 2026-05-24
+
+### Changed
+
+- **Customization Studio optimization** - Added selectable preview presets, draft-based `.env` output, and in-page theme-pack JSON validation so admins can test combinations before editing deployment config.
+- **Marketplace optimization** - Added catalog health metrics, search/filtering, kind-specific metadata, status tones, safer load errors, and integrity validation surfaced through `/api/customization`.
+- **Contract hardening** - Enforced unique marketplace ids, stricter theme/plugin validation rules, layout env-value preservation, and expanded marketplace tests.
+
 ## [4.75.0] - 2026-05-24
 
 ### Added

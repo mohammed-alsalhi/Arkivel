@@ -16,6 +16,13 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.75.1
+
+- [x] Customization Studio optimization - preview selectors drive copy-ready env output and theme-pack JSON validation before deployment changes
+- [x] Marketplace optimization - catalog health, search, item metadata, status tones, and load-error handling make `/admin/marketplace` more useful
+- [x] Contract hardening - unique marketplace ids, stricter theme/plugin validators, layout env-value compatibility, and catalog integrity tests improve extension safety
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, features/help docs, and tests describe the optimization pass
+
 ## v4.75.0
 
 - [x] Admin Customization Studio - `/admin/customization` previews env-first branding, styles, color themes, layouts, feature flags, theme-pack schema, and copy-ready `.env` output

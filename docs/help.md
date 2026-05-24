@@ -490,7 +490,7 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 - **Style preset:** Set `NEXT_PUBLIC_ARKIVEL_STYLE` to `classic-wiki` or `atlas-modern`, then rebuild/redeploy because `NEXT_PUBLIC_*` values are build-time config
 - **Color theme:** Set `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` to `standard`, `forest`, or `ember`, then rebuild/redeploy because `NEXT_PUBLIC_*` values are build-time config
 - **Layout preset:** Set `NEXT_PUBLIC_ARKIVEL_LAYOUT` to `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, or `research-notebook`
-- **Admin customization:** `/admin/customization` previews the env-first contract and copy-ready `.env` values; `/admin/marketplace` browses the built-in catalog
+- **Admin customization:** `/admin/customization` previews the env-first contract, validates theme-pack JSON, and creates copy-ready `.env` values; `/admin/marketplace` filters the built-in catalog and shows catalog health
 
 ---
 

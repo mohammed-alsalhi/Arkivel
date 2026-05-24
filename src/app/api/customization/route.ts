@@ -11,6 +11,7 @@ import {
   stylePresets,
   themePackSchema,
   themePacks,
+  validateMarketplaceCatalog,
 } from "@/lib/marketplace";
 
 export async function GET() {
@@ -56,6 +57,7 @@ export async function GET() {
         status: "built-in | planned | experimental",
         compatibility: "Arkivel version range or future marker",
       },
+      validation: validateMarketplaceCatalog(),
     },
   });
 }
