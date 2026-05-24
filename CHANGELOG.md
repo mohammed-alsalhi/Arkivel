@@ -4,6 +4,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.74.9] - 2026-05-24
+
+### Changed
+
+- **Settings page primitives** - Migrated settings, keyboard shortcuts, and editor snippets pages to shared form, panel, table, empty-state, code, and button primitives.
+- **Editor cleanup** - Removed an unused collaboration import so the editor surface stays leaner while the settings UI migration lands.
+
 ## [4.74.8] - 2026-05-24
 
 ### Changed

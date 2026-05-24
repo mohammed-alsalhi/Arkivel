@@ -9,6 +9,15 @@ import {
   SHORTCUT_LABELS,
   type ShortcutMap,
 } from "@/lib/shortcuts";
+import {
+  Button,
+  InlineCode,
+  Input,
+  Notice,
+  Page,
+  PageHeader,
+  SectionPanel,
+} from "@/components/ui";
 
 export default function ShortcutsPage() {
   const [shortcuts, setShortcuts] = useState<ShortcutMap>(DEFAULT_SHORTCUTS);
@@ -36,64 +45,46 @@ export default function ShortcutsPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-xl font-normal text-heading mb-4 pb-1 border-b border-border"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Keyboard Shortcuts
-      </h1>
-
+    <Page>
+      <PageHeader title="Keyboard Shortcuts" />
       <div className="max-w-xl">
-        <div className="wiki-notice mb-4 text-[13px]">
+        <Notice className="mb-4 text-[13px]">
           Customise the two-key navigation chords. Type the desired keys (e.g.{" "}
-          <code className="bg-surface-hover px-1">gh</code> means press{" "}
+          <InlineCode>gh</InlineCode> means press{" "}
           <kbd>g</kbd> then <kbd>h</kbd>). Changes are saved to your browser.
-        </div>
+        </Notice>
 
-        <section className="border border-border bg-surface mb-4">
-          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
-            Navigation chords
-          </div>
-          <div className="px-4 py-3 space-y-3">
-            {(Object.keys(shortcuts) as (keyof ShortcutMap)[]).map((key) => (
-              <div key={key} className="flex items-center gap-3">
-                <label className="w-44 text-[13px] text-foreground shrink-0">
-                  {SHORTCUT_LABELS[key]}
-                </label>
-                <input
-                  type="text"
-                  value={shortcuts[key]}
-                  onChange={(e) => handleChange(key, e.target.value)}
-                  maxLength={4}
-                  className="w-20 px-2 py-1 text-[13px] border border-border bg-background text-foreground font-mono focus:border-accent focus:outline-none"
-                />
-                {shortcuts[key] !== DEFAULT_SHORTCUTS[key] && (
-                  <span className="text-[11px] text-muted">
-                    default: <code className="bg-surface-hover px-1">{DEFAULT_SHORTCUTS[key]}</code>
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
+        <SectionPanel className="mb-4" title="Navigation chords" bodyClassName="space-y-3">
+          {(Object.keys(shortcuts) as (keyof ShortcutMap)[]).map((key) => (
+            <div key={key} className="flex items-center gap-3">
+              <label className="w-44 text-[13px] text-foreground shrink-0">
+                {SHORTCUT_LABELS[key]}
+              </label>
+              <Input
+                type="text"
+                value={shortcuts[key]}
+                onChange={(e) => handleChange(key, e.target.value)}
+                maxLength={4}
+                className="w-20 font-mono"
+              />
+              {shortcuts[key] !== DEFAULT_SHORTCUTS[key] && (
+                <span className="text-[11px] text-muted">
+                  default: <InlineCode>{DEFAULT_SHORTCUTS[key]}</InlineCode>
+                </span>
+              )}
+            </div>
+          ))}
+        </SectionPanel>
 
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleSave}
-            className="home-action-btn home-action-btn-primary"
-          >
+          <Button onClick={handleSave} variant="primary">
             {saved ? "Saved!" : "Save shortcuts"}
-          </button>
-          <button
-            onClick={handleReset}
-            className="home-action-btn"
-            type="button"
-          >
+          </Button>
+          <Button onClick={handleReset} type="button">
             Reset to defaults
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

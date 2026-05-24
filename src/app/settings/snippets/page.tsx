@@ -1,6 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import {
+  Button,
+  DataTable,
+  EmptyState,
+  Field,
+  InlineCode,
+  Input,
+  Page,
+  PageHeader,
+  Textarea,
+} from "@/components/ui";
 
 type Snippet = { id: string; name: string; content: string; createdAt: string };
 
@@ -59,106 +70,110 @@ export default function SnippetsPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Editor Snippets
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Snippets are reusable content blocks. Type <code className="bg-surface-hover px-1">/snippet</code> in the editor to insert one.
-      </p>
+    <Page>
+      <PageHeader
+        title="Editor Snippets"
+        description={
+          <>
+            Snippets are reusable content blocks. Type <InlineCode>/snippet</InlineCode> in the
+            editor to insert one.
+          </>
+        }
+      />
 
-      {/* Create/edit form */}
       <form onSubmit={handleSave} className="wiki-portal mb-6">
         <div className="wiki-portal-header">{editId ? "Edit snippet" : "New snippet"}</div>
         <div className="wiki-portal-body space-y-3">
-          <div>
-            <label className="block text-[12px] text-muted mb-1">
-              Name <span className="text-muted">(used as trigger in /snippet menu)</span>
-            </label>
-            <input
+          <Field
+            htmlFor="snippet-name"
+            label={
+              <>
+                Name <span className="text-muted">(used as trigger in /snippet menu)</span>
+              </>
+            }
+          >
+            <Input
+              id="snippet-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full max-w-xs border border-border bg-background px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+              className="max-w-xs"
               placeholder="e.g. meeting-notes, warning-box"
             />
-          </div>
-          <div>
-            <label className="block text-[12px] text-muted mb-1">Content (HTML)</label>
-            <textarea
+          </Field>
+          <Field htmlFor="snippet-content" label="Content (HTML)">
+            <Textarea
+              id="snippet-content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={4}
-              className="w-full border border-border bg-background px-2 py-1.5 text-[13px] text-foreground font-mono focus:border-accent focus:outline-none resize-y"
+              className="font-mono"
               placeholder="<p>Your snippet content here…</p>"
             />
-          </div>
+          </Field>
           <div className="flex gap-2">
-            <button
+            <Button
               type="submit"
               disabled={saving || !name.trim() || !content.trim()}
-              className="h-6 px-2 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent-hover disabled:opacity-40"
+              variant="primary"
+              className="disabled:opacity-40"
             >
               {saving ? "Saving…" : editId ? "Update" : "Create snippet"}
-            </button>
+            </Button>
             {editId && (
-              <button
+              <Button
                 type="button"
                 onClick={cancelEdit}
-                className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:bg-surface-hover"
               >
                 Cancel
-              </button>
+              </Button>
             )}
           </div>
         </div>
       </form>
 
-      {/* List */}
       {loading ? (
         <div className="text-muted text-[13px] italic">Loading…</div>
       ) : snippets.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No snippets yet.</p>
+        <EmptyState
+          title="No snippets yet"
+          description="Create a reusable block above to make it available in the editor."
+        />
       ) : (
-        <table className="w-full text-[13px] border-collapse">
+        <DataTable>
           <thead>
-            <tr className="text-[11px] text-muted text-left border-b border-border">
-              <th className="pb-1 pr-3">Name</th>
-              <th className="pb-1 pr-3">Preview</th>
-              <th className="pb-1" />
+            <tr>
+              <th>Name</th>
+              <th>Preview</th>
+              <th />
             </tr>
           </thead>
           <tbody>
             {snippets.map((s) => (
-              <tr key={s.id} className="border-t border-border-light hover:bg-surface-hover">
-                <td className="py-1.5 pr-3 font-mono text-[12px] text-accent">{s.name}</td>
-                <td className="py-1.5 pr-3 max-w-xs text-muted truncate text-[12px]">
+              <tr key={s.id}>
+                <td className="font-mono text-[12px] text-accent">{s.name}</td>
+                <td className="max-w-xs text-muted truncate text-[12px]">
                   {s.content.replace(/<[^>]+>/g, " ").trim().slice(0, 80)}
                 </td>
-                <td className="py-1.5 text-right">
+                <td className="text-right">
                   <span className="inline-flex gap-1">
-                    <button
+                    <Button
                       onClick={() => startEdit(s)}
-                      className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:bg-surface-hover"
                     >
                       Edit
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => handleDelete(s.id)}
-                      className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:bg-surface-hover"
                     >
                       Delete
-                    </button>
+                    </Button>
                   </span>
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }

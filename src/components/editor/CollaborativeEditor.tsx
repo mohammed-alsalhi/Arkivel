@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import * as Y from "yjs";
-import { prosemirrorToYXmlFragment, yXmlFragmentToProseMirrorRootNode } from "y-prosemirror";
 import TiptapEditor, { type TiptapEditorHandle } from "./TiptapEditor";
 
 type User = {

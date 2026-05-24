@@ -16,6 +16,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.74.9
+
+- [x] Settings primitive reuse - settings, shortcut customization, and snippet management pages now use shared reusable UI primitives
+- [x] Editor import cleanup - removed an unused collaboration import while finishing the settings UI consistency batch
+- [x] Documentation/version discipline - package metadata, changelog, and roadmap describe the settings cleanup batch
+
 ## v4.74.8
 
 - [x] Auth page primitive reuse - login and registration pages now use shared page, header, field, input, and button primitives

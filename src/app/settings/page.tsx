@@ -3,6 +3,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  Button,
+  Field,
+  InlineCode,
+  Input,
+  Page,
+  PageHeader,
+  SectionPanel,
+  Select,
+} from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import { DEFAULT_PREFERENCES, type UserPreferences } from "@/lib/preferences";
 
@@ -80,244 +90,187 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div>
-        <h1
-          className="text-xl font-normal text-heading mb-4 pb-1 border-b border-border"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Settings
-        </h1>
+      <Page>
+        <PageHeader title="Settings" />
         <div className="space-y-4">
           <div className="skeleton skeleton-title" />
           <div className="skeleton skeleton-text w-3/4" />
           <div className="skeleton skeleton-text w-1/2" />
           <div className="skeleton skeleton-text w-2/3" />
         </div>
-      </div>
+      </Page>
     );
   }
 
   return (
-    <div>
-      <h1
-        className="text-xl font-normal text-heading mb-4 pb-1 border-b border-border"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Settings
-      </h1>
+    <Page>
+      <PageHeader title="Settings" />
 
       <div className="max-w-xl space-y-6">
-        {/* ── Editor Section ── */}
-        <section className="border border-border bg-surface">
-          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
-            Editor
-          </div>
-          <div className="px-4 py-3 space-y-3">
-            <div>
-              <label className="block text-[13px] font-medium text-heading mb-1.5">
-                Default editor mode
+        <SectionPanel title="Editor" bodyClassName="space-y-3">
+          <div>
+            <label className="block text-[13px] font-medium text-heading mb-1.5">
+              Default editor mode
+            </label>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-1.5 text-[13px] cursor-pointer">
+                <input
+                  type="radio"
+                  name="editorMode"
+                  value="rich"
+                  checked={prefs.editorMode === "rich"}
+                  onChange={() =>
+                    setPrefs((p) => ({ ...p, editorMode: "rich" }))
+                  }
+                  className="accent-accent"
+                />
+                Rich text
               </label>
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-1.5 text-[13px] cursor-pointer">
-                  <input
-                    type="radio"
-                    name="editorMode"
-                    value="rich"
-                    checked={prefs.editorMode === "rich"}
-                    onChange={() =>
-                      setPrefs((p) => ({ ...p, editorMode: "rich" }))
-                    }
-                    className="accent-accent"
-                  />
-                  Rich text
-                </label>
-                <label className="flex items-center gap-1.5 text-[13px] cursor-pointer">
-                  <input
-                    type="radio"
-                    name="editorMode"
-                    value="markdown"
-                    checked={prefs.editorMode === "markdown"}
-                    onChange={() =>
-                      setPrefs((p) => ({ ...p, editorMode: "markdown" }))
-                    }
-                    className="accent-accent"
-                  />
-                  Markdown
-                </label>
-              </div>
+              <label className="flex items-center gap-1.5 text-[13px] cursor-pointer">
+                <input
+                  type="radio"
+                  name="editorMode"
+                  value="markdown"
+                  checked={prefs.editorMode === "markdown"}
+                  onChange={() =>
+                    setPrefs((p) => ({ ...p, editorMode: "markdown" }))
+                  }
+                  className="accent-accent"
+                />
+                Markdown
+              </label>
             </div>
           </div>
-        </section>
+        </SectionPanel>
 
-        {/* ── Notifications Section ── */}
-        <section className="border border-border bg-surface">
-          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
-            Notifications
-          </div>
-          <div className="px-4 py-3 space-y-2.5">
-            <label className="flex items-center gap-2 text-[13px] cursor-pointer">
-              <input
-                type="checkbox"
-                checked={prefs.notifyOnEdit}
-                onChange={(e) =>
-                  setPrefs((p) => ({ ...p, notifyOnEdit: e.target.checked }))
-                }
-                className="accent-accent"
-              />
-              Notify me when a watched article is edited
-            </label>
-            <label className="flex items-center gap-2 text-[13px] cursor-pointer">
-              <input
-                type="checkbox"
-                checked={prefs.notifyOnReply}
-                onChange={(e) =>
-                  setPrefs((p) => ({ ...p, notifyOnReply: e.target.checked }))
-                }
-                className="accent-accent"
-              />
-              Notify me when someone replies to my discussion
-            </label>
-            <label className="flex items-center gap-2 text-[13px] cursor-pointer">
-              <input
-                type="checkbox"
-                checked={prefs.notifyOnMention}
-                onChange={(e) =>
-                  setPrefs((p) => ({
-                    ...p,
-                    notifyOnMention: e.target.checked,
-                  }))
-                }
-                className="accent-accent"
-              />
-              Notify me when I am mentioned
-            </label>
-          </div>
-        </section>
+        <SectionPanel title="Notifications" bodyClassName="space-y-2.5">
+          <label className="flex items-center gap-2 text-[13px] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={prefs.notifyOnEdit}
+              onChange={(e) =>
+                setPrefs((p) => ({ ...p, notifyOnEdit: e.target.checked }))
+              }
+              className="accent-accent"
+            />
+            Notify me when a watched article is edited
+          </label>
+          <label className="flex items-center gap-2 text-[13px] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={prefs.notifyOnReply}
+              onChange={(e) =>
+                setPrefs((p) => ({ ...p, notifyOnReply: e.target.checked }))
+              }
+              className="accent-accent"
+            />
+            Notify me when someone replies to my discussion
+          </label>
+          <label className="flex items-center gap-2 text-[13px] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={prefs.notifyOnMention}
+              onChange={(e) =>
+                setPrefs((p) => ({
+                  ...p,
+                  notifyOnMention: e.target.checked,
+                }))
+              }
+              className="accent-accent"
+            />
+            Notify me when I am mentioned
+          </label>
+        </SectionPanel>
 
-        {/* ── Display Section ── */}
-        <section className="border border-border bg-surface">
-          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
-            Display
-          </div>
-          <div className="px-4 py-3 space-y-3">
-            <div>
-              <label
-                htmlFor="articlesPerPage"
-                className="block text-[13px] font-medium text-heading mb-1"
-              >
-                Articles per page
-              </label>
-              <input
-                id="articlesPerPage"
-                type="number"
-                min={5}
-                max={100}
-                step={5}
-                value={prefs.articlesPerPage}
-                onChange={(e) =>
-                  setPrefs((p) => ({
-                    ...p,
-                    articlesPerPage: Math.max(
-                      5,
-                      Math.min(100, parseInt(e.target.value) || 20)
-                    ),
-                  }))
-                }
-                className="w-20 px-2 py-1 text-[13px] border border-border bg-background text-foreground"
-              />
-            </div>
-            <label className="flex items-center gap-2 text-[13px] cursor-pointer">
-              <input
-                type="checkbox"
-                checked={prefs.showReadingProgress}
-                onChange={(e) =>
-                  setPrefs((p) => ({
-                    ...p,
-                    showReadingProgress: e.target.checked,
-                  }))
-                }
-                className="accent-accent"
-              />
-              Show reading progress bar on articles
-            </label>
-          </div>
-        </section>
+        <SectionPanel title="Display" bodyClassName="space-y-3">
+          <Field htmlFor="articlesPerPage" label="Articles per page">
+            <Input
+              id="articlesPerPage"
+              type="number"
+              min={5}
+              max={100}
+              step={5}
+              value={prefs.articlesPerPage}
+              onChange={(e) =>
+                setPrefs((p) => ({
+                  ...p,
+                  articlesPerPage: Math.max(
+                    5,
+                    Math.min(100, parseInt(e.target.value) || 20)
+                  ),
+                }))
+              }
+              className="w-20"
+            />
+          </Field>
+          <label className="flex items-center gap-2 text-[13px] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={prefs.showReadingProgress}
+              onChange={(e) =>
+                setPrefs((p) => ({
+                  ...p,
+                  showReadingProgress: e.target.checked,
+                }))
+              }
+              className="accent-accent"
+            />
+            Show reading progress bar on articles
+          </label>
+        </SectionPanel>
 
-        {/* ── Locale Section ── */}
-        <section className="border border-border bg-surface">
-          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
-            Locale
-          </div>
-          <div className="px-4 py-3">
-            <div>
-              <label
-                htmlFor="locale"
-                className="block text-[13px] font-medium text-heading mb-1"
-              >
-                Language
-              </label>
-              <select
-                id="locale"
-                value={prefs.locale}
-                onChange={(e) =>
-                  setPrefs((p) => ({ ...p, locale: e.target.value }))
-                }
-                className="w-48 px-2 py-1 text-[13px] border border-border bg-background text-foreground"
-              >
-                {LOCALES.map((loc) => (
-                  <option key={loc.value} value={loc.value}>
-                    {loc.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </section>
+        <SectionPanel title="Locale">
+          <Field htmlFor="locale" label="Language">
+            <Select
+              id="locale"
+              value={prefs.locale}
+              onChange={(e) =>
+                setPrefs((p) => ({ ...p, locale: e.target.value }))
+              }
+              className="w-48"
+            >
+              {LOCALES.map((loc) => (
+                <option key={loc.value} value={loc.value}>
+                  {loc.label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        </SectionPanel>
 
-        {/* Keyboard Shortcuts link */}
-        <section className="border border-border bg-surface">
-          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
-            Keyboard Shortcuts
-          </div>
-          <div className="px-4 py-3 text-[13px]">
-            <p className="text-muted mb-2">Customise the two-key navigation chords (e.g. <code className="bg-surface-hover px-1">gh</code> for home).</p>
-            <Link href="/settings/shortcuts" className="text-accent hover:underline text-[13px]">
-              Customise shortcuts →
-            </Link>
-          </div>
-        </section>
+        <SectionPanel title="Keyboard Shortcuts" bodyClassName="text-[13px]">
+          <p className="text-muted mb-2">
+            Customise the two-key navigation chords (e.g. <InlineCode>gh</InlineCode> for home).
+          </p>
+          <Link href="/settings/shortcuts" className="text-accent hover:underline text-[13px]">
+            Customise shortcuts →
+          </Link>
+        </SectionPanel>
 
-        {/* Editor Snippets link */}
-        <section className="border border-border bg-surface">
-          <div className="bg-infobox-header px-4 py-2 text-[13px] font-bold text-foreground border-b border-border">
-            Editor Snippets
-          </div>
-          <div className="px-4 py-3 text-[13px]">
-            <p className="text-muted mb-2">Create reusable content blocks that can be inserted via the <code className="bg-surface-hover px-1">/snippet</code> slash command.</p>
-            <Link href="/settings/snippets" className="text-accent hover:underline text-[13px]">
-              Manage snippets →
-            </Link>
-          </div>
-        </section>
+        <SectionPanel title="Editor Snippets" bodyClassName="text-[13px]">
+          <p className="text-muted mb-2">
+            Create reusable content blocks that can be inserted via the{" "}
+            <InlineCode>/snippet</InlineCode> slash command.
+          </p>
+          <Link href="/settings/snippets" className="text-accent hover:underline text-[13px]">
+            Manage snippets →
+          </Link>
+        </SectionPanel>
 
-        {/* Save button */}
         <div className="flex items-center gap-3 pt-2">
-          <button
+          <Button
             onClick={handleSave}
             disabled={saving}
-            className="home-action-btn home-action-btn-primary disabled:opacity-50"
+            variant="primary"
+            className="disabled:opacity-50"
           >
             {saving ? "Saving..." : "Save settings"}
-          </button>
-          <button
-            onClick={() => setPrefs(DEFAULT_PREFERENCES)}
-            className="home-action-btn"
-            type="button"
-          >
+          </Button>
+          <Button onClick={() => setPrefs(DEFAULT_PREFERENCES)} type="button">
             Reset to defaults
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }
