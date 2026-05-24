@@ -306,9 +306,12 @@ Capture content from the web directly into the wiki without switching context.
 - **REST API v1** — `/api/v1/` with `X-API-Key` auth. See `/api-docs`.
 - **REST API v2** — pagination cursors, field selection
 - **GraphQL API** — `/api/graphql` powered by graphql-yoga; includes GraphiQL playground. Queries for articles, categories, tags, revisions, search, and stats.
-- **Customization manifest** — `/api/customization` exposes grouped brand, style preset, color theme, feature flag, limit, map, reusable component, marketplace item, and theme-hook metadata for self-hosters, plugins, forks, and deployment dashboards.
+- **Customization manifest** — `/api/customization` exposes grouped brand, style preset, color theme, layout, feature flag, limit, map, reusable component, marketplace item, plugin, theme-pack, and theme-hook metadata for self-hosters, plugins, forks, and deployment dashboards.
 - **Style presets** — `NEXT_PUBLIC_ARKIVEL_STYLE` switches between the default `classic-wiki` skin and the alternate `atlas-modern` skin without changing route code.
 - **Color themes** — `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` switches between `standard`, `forest`, and `ember` palettes independently from the selected style preset.
+- **Layout presets** — `NEXT_PUBLIC_ARKIVEL_LAYOUT` publishes layout intent such as `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, or `research-notebook` for preview and future shell variants.
+- **Customization Studio** — `/admin/customization` previews the env-first branding, style, color theme, layout, feature flag, and theme-pack contract with copy-ready `.env` output.
+- **Built-in Marketplace** — `/admin/marketplace` lists styles, color themes, layouts, component packs, plugins, and theme packs without fetching remote code.
 - **RSS & Atom feeds** — `/feed.xml` and `/feed/atom`
 - **Webhooks** — HTTP callbacks dispatched on article events; delivery log at `/admin/webhooks`
 - **Embeds** — iframe-safe embed tokens per article at `/embed/[token]`

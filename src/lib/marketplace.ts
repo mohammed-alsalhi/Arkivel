@@ -1,5 +1,17 @@
-export type MarketplaceItemKind = "style" | "color-theme" | "component-pack" | "plugin";
+export type MarketplaceItemKind =
+  | "style"
+  | "color-theme"
+  | "layout"
+  | "component-pack"
+  | "plugin"
+  | "theme-pack";
 export type MarketplaceItemStatus = "built-in" | "planned" | "experimental";
+export type ComponentPackSlot =
+  | "article-card"
+  | "metadata-panel"
+  | "dashboard-widget"
+  | "homepage-section"
+  | "infobox-layout";
 
 export type MarketplaceItem = {
   author: string;
@@ -20,6 +32,55 @@ export type StylePreset = MarketplaceItem & {
 export type ColorThemePreset = MarketplaceItem & {
   kind: "color-theme";
   themeAttribute: string;
+};
+
+export type LayoutPreset = MarketplaceItem & {
+  kind: "layout";
+  envValue: string;
+};
+
+export type ComponentPack = MarketplaceItem & {
+  kind: "component-pack";
+  slots: ComponentPackSlot[];
+};
+
+export type PluginManifest = MarketplaceItem & {
+  kind: "plugin";
+  hooks: string[];
+  permissions: string[];
+  routes: string[];
+  settings: string[];
+  version: string;
+  widgets: string[];
+};
+
+export type ThemePack = MarketplaceItem & {
+  kind: "theme-pack";
+  tokens: Record<string, string>;
+  version: string;
+};
+
+export type ThemePackInput = {
+  author?: unknown;
+  compatibility?: unknown;
+  id?: unknown;
+  kind?: unknown;
+  name?: unknown;
+  tokens?: unknown;
+  version?: unknown;
+};
+
+export type PluginManifestInput = {
+  compatibility?: unknown;
+  hooks?: unknown;
+  id?: unknown;
+  kind?: unknown;
+  name?: unknown;
+  permissions?: unknown;
+  routes?: unknown;
+  settings?: unknown;
+  version?: unknown;
+  widgets?: unknown;
 };
 
 export const stylePresets = [
@@ -83,9 +144,76 @@ export const colorThemePresets = [
   },
 ] satisfies ColorThemePreset[];
 
-export const marketplaceItems = [
-  ...stylePresets,
-  ...colorThemePresets,
+export const layoutPresets: LayoutPreset[] = [
+  {
+    id: "classic-wiki",
+    kind: "layout",
+    name: "Classic Wiki",
+    description: "Dense encyclopedia shell with sidebar navigation, article-first reading, and compact admin surfaces.",
+    author: "Arkivel",
+    compatibility: ">=4.75.0",
+    status: "built-in",
+    tags: ["wiki", "default", "dense"],
+    envValue: "classic-wiki",
+  },
+  {
+    id: "docs-portal",
+    kind: "layout",
+    name: "Docs Portal",
+    description: "Documentation-oriented navigation and preview metadata for support and developer portals.",
+    author: "Arkivel",
+    compatibility: ">=4.75.0",
+    status: "planned",
+    tags: ["docs", "portal", "support"],
+    envValue: "docs-portal",
+  },
+  {
+    id: "team-knowledge-base",
+    kind: "layout",
+    name: "Team Knowledge Base",
+    description: "Team operations layout metadata for onboarding, SOPs, ownership, and review workflows.",
+    author: "Arkivel",
+    compatibility: ">=4.75.0",
+    status: "planned",
+    tags: ["team", "operations", "knowledge-base"],
+    envValue: "team-knowledge-base",
+  },
+  {
+    id: "worldbuilding-atlas",
+    kind: "layout",
+    name: "Worldbuilding Atlas",
+    description: "Atlas-first layout metadata for canon, maps, territories, characters, and relationships.",
+    author: "Arkivel",
+    compatibility: ">=4.75.0",
+    status: "planned",
+    tags: ["worldbuilding", "atlas", "canon"],
+    envValue: "worldbuilding-atlas",
+  },
+  {
+    id: "research-notebook",
+    kind: "layout",
+    name: "Research Notebook",
+    description: "Research-oriented layout metadata for notes, citations, claims, revisions, and synthesis.",
+    author: "Arkivel",
+    compatibility: ">=4.75.0",
+    status: "planned",
+    tags: ["research", "notes", "citations"],
+    envValue: "research-notebook",
+  },
+];
+
+export const componentPacks: ComponentPack[] = [
+  {
+    id: "core-wiki-components",
+    kind: "component-pack",
+    name: "Core Wiki Components",
+    description: "Built-in reusable article cards, panels, lists, data tables, empty states, and definition surfaces.",
+    author: "Arkivel",
+    compatibility: ">=4.75.0",
+    status: "built-in",
+    tags: ["core", "ui", "built-in"],
+    slots: ["article-card", "metadata-panel", "dashboard-widget", "homepage-section", "infobox-layout"],
+  },
   {
     id: "operations-component-pack",
     kind: "component-pack",
@@ -95,6 +223,7 @@ export const marketplaceItems = [
     compatibility: "future",
     status: "planned",
     tags: ["dashboard", "admin", "operations"],
+    slots: ["dashboard-widget", "metadata-panel", "homepage-section"],
   },
   {
     id: "canon-worldbuilding-pack",
@@ -105,7 +234,11 @@ export const marketplaceItems = [
     compatibility: "future",
     status: "planned",
     tags: ["worldbuilding", "canon", "map", "relationships"],
+    slots: ["article-card", "metadata-panel", "infobox-layout", "homepage-section"],
   },
+];
+
+export const pluginManifests: PluginManifest[] = [
   {
     id: "web-clipper-plugin",
     kind: "plugin",
@@ -115,7 +248,42 @@ export const marketplaceItems = [
     compatibility: "future",
     status: "planned",
     tags: ["capture", "import", "browser"],
+    version: "0.1.0",
+    permissions: ["article:create", "asset:read"],
+    routes: ["/bookmarklet", "/clipper-extension"],
+    settings: ["baseUrl", "defaultCategoryId"],
+    widgets: ["capture-button"],
+    hooks: ["article.beforeCreate", "article.afterCreate"],
   },
+];
+
+export const themePacks: ThemePack[] = [
+  {
+    id: "forest-theme-pack",
+    kind: "theme-pack",
+    name: "Forest Theme Pack",
+    description: "Exportable sample pack for the built-in Forest color theme.",
+    author: "Arkivel",
+    compatibility: ">=4.75.0",
+    status: "built-in",
+    tags: ["theme", "forest", "green"],
+    version: "1.0.0",
+    tokens: {
+      "--color-accent": "#26734d",
+      "--color-background": "#f5f8f3",
+      "--color-surface": "#ffffff",
+      "--color-foreground": "#1f2d24",
+    },
+  },
+];
+
+export const marketplaceItems = [
+  ...stylePresets,
+  ...colorThemePresets,
+  ...layoutPresets,
+  ...componentPacks,
+  ...pluginManifests,
+  ...themePacks,
 ] satisfies MarketplaceItem[];
 
 export function resolveStylePreset(styleId: string | undefined): StylePreset {
@@ -125,3 +293,64 @@ export function resolveStylePreset(styleId: string | undefined): StylePreset {
 export function resolveColorThemePreset(themeId: string | undefined): ColorThemePreset {
   return colorThemePresets.find((theme) => theme.id === themeId) ?? colorThemePresets[0];
 }
+
+export function resolveLayoutPreset(layoutId: string | undefined): LayoutPreset {
+  return layoutPresets.find((layout) => layout.id === layoutId) ?? layoutPresets[0];
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function hasString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function hasStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every(hasString);
+}
+
+export function validateThemePack(input: ThemePackInput): { errors: string[]; valid: boolean } {
+  const errors: string[] = [];
+  if (!hasString(input.id)) errors.push("id is required");
+  if (!hasString(input.name)) errors.push("name is required");
+  if (input.kind !== "theme-pack") errors.push("kind must be theme-pack");
+  if (!hasString(input.version)) errors.push("version is required");
+  if (!hasString(input.compatibility)) errors.push("compatibility is required");
+  if (!isRecord(input.tokens)) errors.push("tokens must be an object");
+  return { errors, valid: errors.length === 0 };
+}
+
+export function validatePluginManifest(input: PluginManifestInput): { errors: string[]; valid: boolean } {
+  const errors: string[] = [];
+  if (!hasString(input.id)) errors.push("id is required");
+  if (!hasString(input.name)) errors.push("name is required");
+  if (input.kind !== "plugin") errors.push("kind must be plugin");
+  if (!hasString(input.version)) errors.push("version is required");
+  if (!hasString(input.compatibility)) errors.push("compatibility is required");
+  if (!hasStringArray(input.permissions)) errors.push("permissions must be a string array");
+  if (!hasStringArray(input.routes)) errors.push("routes must be a string array");
+  if (!hasStringArray(input.settings)) errors.push("settings must be a string array");
+  if (!hasStringArray(input.widgets)) errors.push("widgets must be a string array");
+  if (!hasStringArray(input.hooks)) errors.push("hooks must be a string array");
+  return { errors, valid: errors.length === 0 };
+}
+
+export const themePackSchema = {
+  id: "Stable machine-readable pack id",
+  name: "Human-readable pack name",
+  kind: "theme-pack",
+  version: "Pack version, for example 1.0.0",
+  compatibility: "Arkivel version range, for example >=4.75.0",
+  author: "Pack author",
+  tokens: {
+    "--color-accent": "CSS color token value",
+  },
+};
+
+export const perSpaceCustomizationContract = {
+  source: "category",
+  status: "preview-only",
+  inherits: ["global brand", "global style", "global color theme", "global layout"],
+  fields: ["styleId", "colorThemeId", "layoutId", "templateIds", "metadataSchemaId", "navigationMode"],
+};

@@ -1,8 +1,10 @@
 import packageJson from "../../package.json";
 import {
   resolveColorThemePreset,
+  resolveLayoutPreset,
   resolveStylePreset,
   type ColorThemePreset,
+  type LayoutPreset,
   type StylePreset,
 } from "./marketplace";
 
@@ -32,6 +34,8 @@ export type StyleCustomization = {
   colorTheme: ColorThemePreset;
   colorThemeId: string;
   id: string;
+  layout: LayoutPreset;
+  layoutId: string;
   preset: StylePreset;
 };
 
@@ -129,6 +133,13 @@ export const customizationOptions = [
     description: "Built-in color theme id. Supported today: standard, forest, ember.",
   },
   {
+    env: "NEXT_PUBLIC_ARKIVEL_LAYOUT",
+    section: "style",
+    defaultValue: "classic-wiki",
+    description:
+      "Built-in layout preset id. Supported today: classic-wiki, docs-portal, team-knowledge-base, worldbuilding-atlas, research-notebook.",
+  },
+  {
     env: "NEXT_PUBLIC_MAP_ENABLED",
     section: "map",
     defaultValue: "false",
@@ -210,6 +221,8 @@ export function createCustomization(env: Env = process.env): ArkivelCustomizatio
   const stylePreset = resolveStylePreset(styleId);
   const colorThemeId = read(env, "NEXT_PUBLIC_ARKIVEL_COLOR_THEME", "standard");
   const colorTheme = resolveColorThemePreset(colorThemeId);
+  const layoutId = read(env, "NEXT_PUBLIC_ARKIVEL_LAYOUT", "classic-wiki");
+  const layout = resolveLayoutPreset(layoutId);
 
   return {
     version: packageJson.version,
@@ -265,6 +278,8 @@ export function createCustomization(env: Env = process.env): ArkivelCustomizatio
       preset: stylePreset,
       colorThemeId: colorTheme.id,
       colorTheme,
+      layoutId: layout.id,
+      layout,
     },
   };
 }

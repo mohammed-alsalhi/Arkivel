@@ -33,7 +33,7 @@ If a doc does not need changes, leave it untouched. Do not make a code-only chan
 Arkivel is an open-source, self-hostable knowledge platform. Prefer reusable, configurable surfaces over route-specific one-offs whenever a change could reasonably be customized by another instance.
 
 - Public customization belongs in `src/lib/customization.ts`, with defaults and env metadata exposed through `/api/customization`.
-- Style presets, color themes, component packs, and plugin-like extension listings belong in `src/lib/marketplace.ts` with stable ids, clear `kind`, `status`, compatibility notes, and tags.
+- Style presets, color themes, layout presets, component packs, theme packs, and plugin-like extension listings belong in `src/lib/marketplace.ts` with stable ids, clear `kind`, `status`, compatibility notes, and tags.
 - UI primitives should be built from `src/components/ui` and registered in `src/components/ui/catalog.ts` when they are reusable.
 - Theme changes should flow through CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]`.
 - When adding or changing customization, marketplace, style, color theme, or reusable component contracts, update `DESIGN.md`, `ARCHITECTURE.md`, `README.md`, `docs/help.md`, `docs/features.md`, in-app Help/Features/API docs, changelog, roadmap, tests, and version metadata as relevant.
@@ -59,7 +59,7 @@ Follow the existing repository history when writing commit messages.
 
 **Configuration:** Public self-host customization is centralized in `src/lib/customization.ts` and exposed through `/api/customization`. `src/lib/config.ts` keeps backward-compatible aliases for runtime callers. Defaults produce a generic wiki; branding, style presets, and color themes are selected through `NEXT_PUBLIC_*` env vars such as `NEXT_PUBLIC_ARKIVEL_STYLE` and `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`.
 
-**Marketplace metadata:** Built-in and planned style presets, color themes, component packs, and plugin listings live in `src/lib/marketplace.ts`. Treat these records as the seed of the future marketplace contract.
+**Marketplace metadata:** Built-in and planned style presets, color themes, layout presets, component packs, theme packs, and plugin listings live in `src/lib/marketplace.ts`. Treat these records as the seed of the future marketplace contract.
 
 **Auth:** Dual auth system. Legacy: single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. Multi-user: bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
 
@@ -71,7 +71,7 @@ Follow the existing repository history when writing commit messages.
 
 **Content Storage:** Articles store `content` (HTML from Tiptap) and `contentRaw` (optional Markdown). The HTML is what gets displayed; Markdown is for export.
 
-**Theming:** CSS variables defined in `src/app/globals.css` under `@theme` block. Dark mode via `html[data-theme="dark"]` overrides; style presets use `html[data-style="..."]` overrides; color themes use `html[data-color-theme="..."]` overrides. Important: use `@theme` not `@theme inline` — the latter inlines hex values into Tailwind utilities, breaking CSS variable overrides.
+**Theming:** CSS variables defined in `src/app/globals.css` under `@theme` block. Dark mode via `html[data-theme="dark"]` overrides; style presets use `html[data-style="..."]` overrides; color themes use `html[data-color-theme="..."]` overrides; layout presets use `html[data-layout="..."]` hooks. Important: use `@theme` not `@theme inline` — the latter inlines hex values into Tailwind utilities, breaking CSS variable overrides.
 
 **Map:** Disabled by default (`NEXT_PUBLIC_MAP_ENABLED`). Uses Leaflet with `CRS.Simple` (pixel coords, not geographic). Dynamically imported (no SSR). Markers stored in `MapMarker` table and optionally linked to articles.
 

@@ -4,6 +4,15 @@
 
 All notable changes to this project are documented here.
 
+## [4.75.0] - 2026-05-24
+
+### Added
+
+- **Customization Studio** - Added `/admin/customization`, an env-first preview surface for branding, style presets, color themes, layout presets, feature flags, theme pack schema, and copy-ready `.env` output.
+- **Built-in Marketplace** - Added `/admin/marketplace` for built-in and planned styles, color themes, layouts, component packs, plugin manifests, and theme packs without remote code fetching.
+- **Theme and plugin pack contracts** - Added theme pack schema metadata, plugin manifest validation, component-pack slot declarations, layout presets, and per-space customization preview metadata to `/api/customization`.
+- **Layout preset config** - Added `NEXT_PUBLIC_ARKIVEL_LAYOUT` with `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, and `research-notebook` preset metadata.
+
 ## [4.74.9] - 2026-05-24
 
 ### Changed

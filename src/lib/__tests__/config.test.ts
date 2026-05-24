@@ -41,6 +41,7 @@ describe("config", () => {
       NEXT_PUBLIC_ARKIVEL_NAME: "My Wiki",
       NEXT_PUBLIC_ARKIVEL_STYLE: "atlas-modern",
       NEXT_PUBLIC_ARKIVEL_COLOR_THEME: "forest",
+      NEXT_PUBLIC_ARKIVEL_LAYOUT: "research-notebook",
       NEXT_PUBLIC_ARTICLES_PER_PAGE: "42",
       NEXT_PUBLIC_ENABLE_REGISTRATION: "false",
       NEXT_PUBLIC_MAP_ENABLED: "true",
@@ -51,6 +52,8 @@ describe("config", () => {
     expect(custom.style.preset.themeAttribute).toBe("atlas-modern");
     expect(custom.style.colorThemeId).toBe("forest");
     expect(custom.style.colorTheme.themeAttribute).toBe("forest");
+    expect(custom.style.layoutId).toBe("research-notebook");
+    expect(custom.style.layout.envValue).toBe("research-notebook");
     expect(custom.limits.articlesPerPage).toBe(42);
     expect(custom.features.registrationEnabled).toBe(false);
     expect(custom.map.enabled).toBe(true);
@@ -74,10 +77,20 @@ describe("config", () => {
     expect(custom.style.colorTheme.name).toBe("Standard");
   });
 
+  it("falls back to the default layout preset for unknown layout ids", () => {
+    const custom = createCustomization({
+      NEXT_PUBLIC_ARKIVEL_LAYOUT: "my-future-layout",
+    });
+
+    expect(custom.style.layoutId).toBe("classic-wiki");
+    expect(custom.style.layout.name).toBe("Classic Wiki");
+  });
+
   it("exposes customization option metadata", () => {
     expect(customizationOptions.length).toBeGreaterThan(0);
     expect(customizationOptions.some((option) => option.env === "NEXT_PUBLIC_ARKIVEL_NAME")).toBe(true);
     expect(customizationOptions.some((option) => option.env === "NEXT_PUBLIC_ARKIVEL_STYLE")).toBe(true);
     expect(customizationOptions.some((option) => option.env === "NEXT_PUBLIC_ARKIVEL_COLOR_THEME")).toBe(true);
+    expect(customizationOptions.some((option) => option.env === "NEXT_PUBLIC_ARKIVEL_LAYOUT")).toBe(true);
   });
 });

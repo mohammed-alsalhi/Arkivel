@@ -97,6 +97,7 @@ export default async function RootLayout({
       lang="en"
       data-style={config.stylePreset.themeAttribute}
       data-color-theme={config.colorTheme.themeAttribute}
+      data-layout={config.layoutPreset.envValue}
       suppressHydrationWarning
     >
       <head>

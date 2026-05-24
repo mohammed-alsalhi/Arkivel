@@ -17,6 +17,8 @@ export const config = {
   stylePreset: customization.style.preset,
   colorThemeId: customization.style.colorThemeId,
   colorTheme: customization.style.colorTheme,
+  layoutId: customization.style.layoutId,
+  layoutPreset: customization.style.layout,
   mapEnabled: customization.map.enabled,
   mapLabel: customization.map.label,
   mapImage: customization.map.image,

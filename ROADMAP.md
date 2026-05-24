@@ -16,6 +16,17 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v4.75.0
+
+- [x] Admin Customization Studio - `/admin/customization` previews env-first branding, styles, color themes, layouts, feature flags, theme-pack schema, and copy-ready `.env` output
+- [x] Theme Export/Import Packs - theme-pack schema, sample pack metadata, and validation helpers support preview-safe JSON pack workflows
+- [x] Component Pack Registry - component packs declare supported slots for article cards, metadata panels, dashboard widgets, homepage sections, and infobox layouts
+- [x] Layout Presets - `NEXT_PUBLIC_ARKIVEL_LAYOUT` publishes `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, and `research-notebook` layout intent
+- [x] Plugin Manifest Contract - plugin examples define permissions, routes, settings, widgets, hooks, compatibility, and version fields
+- [x] Marketplace Page - `/admin/marketplace` lists built-in and planned styles, themes, layouts, component packs, plugins, and theme packs with copy-config actions
+- [x] Per-Space Customization - `/api/customization` exposes category/space-level inherited customization metadata as a preview-only contract
+- [x] Documentation/version discipline - package metadata, changelog, roadmap, README, architecture, design, feature docs, help docs, API docs, env template, tests, and agent docs describe the customization roadmap release
+
 ## v4.74.9
 
 - [x] Settings primitive reuse - settings, shortcut customization, and snippet management pages now use shared reusable UI primitives

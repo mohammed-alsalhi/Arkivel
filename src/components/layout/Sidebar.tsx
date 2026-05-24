@@ -194,6 +194,8 @@ export default function Sidebar({
     { href: "/admin/search-analytics", label: "Search analytics" },
     { href: "/admin/search-gaps", label: "Search gaps" },
     { href: "/admin/plugins", label: "Plugins" },
+    { href: "/admin/customization", label: "Customization" },
+    { href: "/admin/marketplace", label: "Marketplace" },
     { href: "/admin/webhooks", label: "Webhooks" },
     { href: "/admin/templates", label: "Templates" },
     { href: "/admin/theme", label: "Theme" },
