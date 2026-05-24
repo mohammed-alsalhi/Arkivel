@@ -4,6 +4,13 @@
 
 All notable changes to this project are documented here.
 
+## [4.75.2] - 2026-05-24
+
+### Changed
+
+- **Pre-5.0 roadmap** - Added a milestone roadmap from v4.76.x through v4.99.99, reserving v4.99.99 as the final beta candidate and v5.0.0 as the first stable release gate.
+- **Release planning** - Defined the major workstreams for customization, marketplace, component packs, plugins, data portability, multi-user hardening, governance, search, editor stability, APIs, operations, security, testing, documentation, and release-candidate hardening.
+
 ## [4.75.1] - 2026-05-24
 
 ### Changed

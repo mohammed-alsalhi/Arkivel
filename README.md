@@ -154,6 +154,8 @@ A full template lives in [.env.example](.env.example). Only two variables are re
 
 Arkivel also exposes a self-host customization manifest at `/api/customization`. It lists supported public env vars, their defaults, grouped runtime config, reusable UI components, built-in style presets, color themes, layout presets, theme pack schemas, plugin manifests, component packs, marketplace item metadata, catalog validation, and theme hook locations so forks, plugins, and deployment dashboards can customize the platform without scraping source files. Admins can preview env-first combinations and validate theme-pack JSON at `/admin/customization`, then browse and filter the built-in marketplace catalog at `/admin/marketplace`.
 
+Arkivel is still in beta throughout the v4 line. The roadmap now tracks the path from v4.76.x through v4.99.99 toward a stable v5.0.0 release, with customization, marketplace safety, plugin contracts, portability, auth hardening, security, operations, testing, and documentation all treated as release gates rather than nice-to-have polish.
+
 ## API And Integrations
 
 | Surface | Route | Notes |

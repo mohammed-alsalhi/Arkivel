@@ -16,6 +16,187 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## Pre-5.0 Stable Release Roadmap
+
+Arkivel remains beta through the entire v4 line. The goal is to make the platform reusable, self-hostable, customizable, and extension-ready before tagging v5.0.0 as the first stable release. Patch releases can still land inside any band when a feature needs cleanup, tests, documentation, or compatibility hardening.
+
+### v4.76.x - Customization Studio v2
+
+- [ ] Promote the env-first studio into a complete admin workbench for branding, styles, color themes, layouts, feature flags, copy, logos, metadata, preview URLs, and deployment notes
+- [ ] Add richer preview frames for homepage, article, dashboard, marketplace, editor, and space-level surfaces
+- [ ] Add contrast, missing-asset, invalid-env, and incompatible-preset diagnostics before admins copy config into production
+- [ ] Keep the v1 safety rule: no arbitrary remote code and no silent runtime overrides
+
+### v4.77.x - Marketplace Import Pipeline
+
+- [ ] Convert the built-in marketplace catalog into a signed, versioned, local-first registry model
+- [ ] Add import/export flows for theme packs and plugin manifests with schema validation, compatibility checks, preview diffs, and rollback notes
+- [ ] Add marketplace detail pages for install requirements, screenshots, permissions, env vars, and known limitations
+- [ ] Keep marketplace v1 self-host safe by requiring explicit local installation for anything executable
+
+### v4.78.x - Component And Layout Pack Runtime Slots
+
+- [ ] Define stable runtime slots for article cards, metadata panels, dashboard widgets, homepage sections, infobox layouts, editor panels, and space navigation
+- [ ] Introduce typed component-pack contracts that separate metadata, styling hooks, and executable React components
+- [ ] Ship first-class sample packs for default wiki, docs portal, team knowledge base, worldbuilding atlas, and research notebook experiences
+- [ ] Add tests that prove unknown packs cannot break the base shell
+
+### v4.79.x - Per-Space Customization Persistence
+
+- [ ] Add persisted category/space customization preferences for style, color theme, layout, templates, navigation, metadata schema, and default article chrome
+- [ ] Implement inheritance from global config to spaces to articles, with clear admin previews before saving
+- [ ] Add migration-safe APIs for reading and updating space customization without exposing private draft content
+- [ ] Document portable space packs for teams, RPG worlds, research libraries, product docs, and personal wikis
+
+### v4.80.x - Plugin Runtime Sandbox
+
+- [ ] Finalize `plugin.json` permissions for routes, widgets, webhooks, settings, storage, API scopes, scheduled jobs, and admin surfaces
+- [ ] Add a disabled-by-default plugin loader for trusted local plugins with explicit admin enablement
+- [ ] Build permission review UI, audit events, lifecycle hooks, and safe failure states for broken plugins
+- [ ] Ship starter examples for web clipper, import adapter, export adapter, dashboard widget, and editor command plugins
+
+### v4.81.x - Data Portability Hardening
+
+- [ ] Normalize full-site export/import around articles, revisions, categories, tags, users, settings, plugin state, maps, comments, and assets
+- [ ] Add portable bundle manifests with checksums, schema versions, dry-run import reports, and conflict handling
+- [ ] Improve Markdown, HTML, JSON, CSV, MediaWiki, and ZIP workflows so migrations can be rehearsed before production
+- [ ] Document self-host backup and restore playbooks for local, Vercel, Docker, and managed Postgres deployments
+
+### v4.82.x - Multi-User And Workspace Maturity
+
+- [ ] Harden organizations/workspaces, invitations, default roles, member management, profile settings, and account recovery
+- [ ] Add role templates for personal wiki, private team, public docs, editorial review, and read-only archive setups
+- [ ] Make admin, editor, viewer, and API-key permissions consistent across pages, feeds, webhooks, exports, and plugin surfaces
+- [ ] Add regression tests for auth boundaries and cross-workspace data isolation
+
+### v4.83.x - Governance And Auditability
+
+- [ ] Deepen review requests, claim review, verification stamps, editorial queues, ownership, due dates, and escalation paths
+- [ ] Add immutable audit trails for sensitive admin actions, customization changes, plugin enablement, imports, exports, and permission updates
+- [ ] Provide moderation tools for discussions, suggestions, comments, and public contribution flows
+- [ ] Add governance dashboards for stale reviews, disputed claims, unverified pages, orphaned ownership, and risk hotspots
+
+### v4.84.x - Search And Discovery Intelligence
+
+- [ ] Upgrade search with saved filters, facets, synonyms, redirects, aliases, semantic links, stale-result signals, and admin-tunable ranking
+- [ ] Add discovery surfaces for related trails, duplicate pages, unresolved questions, canon conflicts, glossary gaps, and topic clusters
+- [ ] Expose stable search APIs for plugins, marketplace widgets, dashboards, and future mobile clients
+- [ ] Add search-quality tests with representative wiki fixtures
+
+### v4.85.x - Editor And Collaboration Hardening
+
+- [ ] Stabilize collaborative editing, draft recovery, offline conflict warnings, autosave repair, rich embed handling, and editor performance
+- [ ] Convert complex editor controls into reusable command, tray, and inspector components that plugin packs can extend later
+- [ ] Add reusable template blocks for callouts, metadata tables, timelines, infoboxes, decision logs, research notes, and worldbuilding entries
+- [ ] Expand editor QA across desktop, tablet, mobile, light theme, dark theme, and custom themes
+
+### v4.86.x - API, SDK, And Webhook Stabilization
+
+- [ ] Version the public REST API as a stable v1 surface with documented pagination, errors, filtering, permissions, and rate-limit behavior
+- [ ] Add SDK-ready TypeScript types for articles, categories, tags, revisions, search, customization, marketplace, plugins, webhooks, and exports
+- [ ] Harden webhook signing, retries, delivery logs, redelivery, event filtering, and local testing tools
+- [ ] Publish migration notes for any pre-v5 API changes
+
+### v4.87.x - Admin Operations And Observability
+
+- [ ] Add operations dashboards for queues, jobs, metrics, slow pages, failed webhooks, import/export runs, plugin errors, and database health
+- [ ] Add structured logs and admin-readable diagnostics for config, auth, Prisma, migrations, assets, search, and customization
+- [ ] Improve maintenance mode, read-only mode, safe upgrades, background tasks, and health checks
+- [ ] Document production runbooks for self-host admins
+
+### v4.88.x - Performance, Cache, And Offline Polish
+
+- [ ] Profile and optimize article pages, graph surfaces, Studio, Atlas, Trails, search, editor startup, and admin dashboards
+- [ ] Add cache invalidation rules for articles, categories, feeds, sitemap, customization, marketplace metadata, and plugin manifests
+- [ ] Improve PWA install, offline reading, stale-cache warnings, asset caching, and mobile startup behavior
+- [ ] Add benchmark fixtures and performance budgets before the release candidate phase
+
+### v4.89.x - Security And Privacy Baseline
+
+- [ ] Complete a security review for auth, sessions, API keys, webhooks, imports, file uploads, plugin manifests, marketplace packs, and admin routes
+- [ ] Add privacy controls for public/private spaces, indexing, feeds, exports, analytics, AI features, and webhook payloads
+- [ ] Harden headers, CSRF-sensitive actions, upload validation, permission checks, secret handling, and audit logs
+- [ ] Produce a pre-v5 threat model and self-host security checklist
+
+### v4.90.x - Marketplace Beta
+
+- [ ] Launch the local-first marketplace beta with styles, color themes, layouts, component packs, theme packs, plugin manifests, examples, screenshots, and compatibility badges
+- [ ] Add install intent flows that explain required files, env vars, permissions, data access, and manual verification steps
+- [ ] Add author metadata, license metadata, changelog links, source links, and review status for catalog entries
+- [ ] Publish marketplace contribution guidelines for open-source pack authors
+
+### v4.91.x - Templates And Space Products
+
+- [ ] Ship complete starter spaces for personal wiki, product docs, team handbook, worldbuilding bible, research notebook, reading archive, and project knowledge base
+- [ ] Add template bundles that include category trees, article templates, metadata schemas, infobox fields, navigation, and recommended plugins
+- [ ] Support previewing a space template before importing it into a live wiki
+- [ ] Document how to build and share reusable space packs
+
+### v4.92.x - Optional AI Assistant Packs
+
+- [ ] Convert AI features into opt-in assistant packs with explicit provider, model, privacy, cost, and data-retention guidance
+- [ ] Add reusable assistant contracts for drafting, summarizing, search augmentation, claim extraction, alt text, taxonomy suggestions, and import cleanup
+- [ ] Make all AI surfaces degrade gracefully when no provider is configured
+- [ ] Document local/offline-friendly and privacy-first deployment modes
+
+### v4.93.x - Federation And Sync Planning
+
+- [ ] Define federation boundaries for public read replicas, private mirrors, archive snapshots, and cross-instance references
+- [ ] Add sync manifests and conflict reports for moving spaces between Arkivel installs
+- [ ] Explore signed public indexes for optional discovery without centralizing private content
+- [ ] Keep federation planning separate from the v5 stable gate unless reliability is proven
+
+### v4.94.x - Desktop, Mobile, And PWA Finish
+
+- [ ] Polish mobile navigation, editor ergonomics, admin surfaces, install prompts, safe areas, touch targets, and offline states
+- [ ] Add desktop-app packaging research for self-host admins who want local-first deployments
+- [ ] Improve responsive QA for every flagship surface and admin page across phone, tablet, laptop, and wide desktop sizes
+- [ ] Remove visual overlap, overflow, and unreadable-state debt before release candidates
+
+### v4.95.x - Migration, Backup, And Restore Guarantees
+
+- [ ] Add migration dry runs, backup prompts, restore validation, data-integrity checks, and clear failure recovery guidance
+- [ ] Test upgrade paths from representative v4 installations to the latest beta
+- [ ] Stabilize Prisma schema changes and document any v5-breaking migration decisions before freeze
+- [ ] Add disaster-recovery drills to docs and release QA
+
+### v4.96.x - Test And Quality Gate Expansion
+
+- [ ] Expand unit, integration, API, permission, import/export, customization, marketplace, plugin, and responsive tests
+- [ ] Add stable fixtures for small wiki, team wiki, public docs, worldbuilding atlas, and large archive scenarios
+- [ ] Gate release candidates on lint, typecheck, tests, build, migration dry run, and smoke verification
+- [ ] Track known warnings and either resolve them or document why they are acceptable for v5.0.0
+
+### v4.97.x - Documentation And Onboarding Complete Pass
+
+- [ ] Rewrite install, upgrade, deployment, customization, marketplace, plugin, API, security, backup, and contribution docs for new maintainers
+- [ ] Add guided examples, screenshots, env recipes, troubleshooting pages, and “choose your setup” flows
+- [ ] Keep root docs, markdown docs, in-app Help/Features pages, API docs, changelog, roadmap, and agent instructions synchronized
+- [ ] Publish a v5 readiness checklist for self-host admins
+
+### v4.98.x - Release Candidate Hardening
+
+- [ ] Enter feature freeze except for release blockers, documentation gaps, migration fixes, security issues, and broken tests
+- [ ] Run full install, upgrade, import/export, marketplace, plugin, customization, auth, API, webhook, and restore rehearsals
+- [ ] Fix release-blocking bugs and tag release-candidate builds with explicit known-issues notes
+- [ ] Prepare final v5 migration guide, changelog, and compatibility matrix
+
+### v4.99.x - Final Beta Freeze
+
+- [ ] Treat v4.99.0 as the first final beta and reserve patch releases for blockers only
+- [ ] Use v4.99.90 through v4.99.98 for final documentation, security, migration, and compatibility corrections if needed
+- [ ] Reserve v4.99.99 as the last beta release candidate before v5.0.0
+- [ ] Require a clean release gate before promoting the exact codebase to stable
+
+### v5.0.0 - Stable Release Gate
+
+- [ ] Auth, roles, sessions, API keys, and permission boundaries are audited and covered by tests
+- [ ] Database migrations, backup/restore, imports, exports, and upgrades have documented recovery paths
+- [ ] Customization, marketplace metadata, theme packs, layout presets, component packs, and plugin manifest contracts are stable
+- [ ] Public API v1, webhooks, feeds, and SDK types have compatibility commitments
+- [ ] Admin operations, observability, security, and privacy docs are complete enough for self-host operators
+- [ ] README, DESIGN, ARCHITECTURE, ROADMAP, CHANGELOG, AGENTS, CONTRIBUTING, API docs, help docs, feature docs, and in-app reference pages are synchronized
+
 ## v4.75.1
 
 - [x] Customization Studio optimization - preview selectors drive copy-ready env output and theme-pack JSON validation before deployment changes
