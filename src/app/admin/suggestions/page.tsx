@@ -9,17 +9,24 @@ type Suggestion = {
   author: string;
   email: string | null;
   suggestion: string;
-  status: "pending" | "accepted" | "rejected";
+  status: "pending" | "accepted" | "rejected" | "commented" | "assigned" | "converted";
   adminNote: string | null;
+  assigneeId: string | null;
+  reviewerComment: string | null;
+  convertedTaskUrl: string | null;
+  spamScore: number;
+  moderationState: string;
   createdAt: string;
   article: { title: string; slug: string };
 };
 
 export default function AdminSuggestionsPage() {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [statusFilter, setStatusFilter] = useState<"pending" | "accepted" | "rejected" | "all">("pending");
+  const [statusFilter, setStatusFilter] = useState<Suggestion["status"] | "all">("pending");
   const [loading, setLoading] = useState(true);
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
+  const [assigneeInputs, setAssigneeInputs] = useState<Record<string, string>>({});
+  const [taskInputs, setTaskInputs] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setLoading(true);
@@ -29,11 +36,21 @@ export default function AdminSuggestionsPage() {
       .finally(() => setLoading(false));
   }, [statusFilter]);
 
-  async function updateStatus(id: string, status: "accepted" | "rejected", adminNote?: string) {
+  async function reviewSuggestion(
+    id: string,
+    action: "accept" | "reject" | "comment" | "assign" | "convert-to-task",
+    adminNote?: string
+  ) {
     await fetch(`/api/suggestions/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status, adminNote: adminNote || undefined }),
+      body: JSON.stringify({
+        action,
+        adminNote: adminNote || undefined,
+        assigneeId: assigneeInputs[id] || undefined,
+        convertedTaskUrl: taskInputs[id] || undefined,
+        reviewerComment: adminNote || undefined,
+      }),
     });
     setSuggestions((prev) => prev.filter((s) => s.id !== id));
   }
@@ -47,6 +64,9 @@ export default function AdminSuggestionsPage() {
     pending: "text-yellow-700 bg-yellow-50 border-yellow-200",
     accepted: "text-green-700 bg-green-50 border-green-200",
     rejected: "text-red-700 bg-red-50 border-red-200",
+    commented: "text-blue-700 bg-blue-50 border-blue-200",
+    assigned: "text-purple-700 bg-purple-50 border-purple-200",
+    converted: "text-slate-700 bg-slate-50 border-slate-200",
   };
 
   return (
@@ -56,7 +76,7 @@ export default function AdminSuggestionsPage() {
       </h1>
 
       <div className="flex gap-2 mb-4">
-        {(["pending", "accepted", "rejected", "all"] as const).map((s) => (
+        {(["pending", "commented", "assigned", "accepted", "rejected", "converted", "all"] as const).map((s) => (
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
@@ -81,7 +101,7 @@ export default function AdminSuggestionsPage() {
                     {s.article.title}
                   </Link>
                   <span className="text-muted ml-2 text-[11px]">
-                    {s.author}{s.email ? ` <${s.email}>` : ""} · {new Date(s.createdAt).toLocaleDateString()}
+                    {s.author}{s.email ? ` <${s.email}>` : ""} · {new Date(s.createdAt).toLocaleDateString()} · spam {s.spamScore} · {s.moderationState}
                   </span>
                 </div>
                 <span className={`text-[10px] border rounded px-1.5 py-0.5 capitalize ${statusColors[s.status]}`}>
@@ -94,6 +114,12 @@ export default function AdminSuggestionsPage() {
               {s.adminNote && (
                 <p className="text-[12px] text-muted italic mb-2">Note: {s.adminNote}</p>
               )}
+              {s.reviewerComment && (
+                <p className="text-[12px] text-muted italic mb-2">Reviewer comment: {s.reviewerComment}</p>
+              )}
+              {s.convertedTaskUrl && (
+                <p className="text-[12px] text-muted italic mb-2">Task: {s.convertedTaskUrl}</p>
+              )}
 
               {s.status === "pending" && (
                 <div className="space-y-1.5">
@@ -103,18 +129,50 @@ export default function AdminSuggestionsPage() {
                     placeholder="Optional admin note…"
                     className="w-full h-6 px-2 text-[12px] border border-border rounded bg-surface focus:outline-none"
                   />
-                  <div className="flex gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    <input
+                      value={assigneeInputs[s.id] ?? ""}
+                      onChange={(e) => setAssigneeInputs((p) => ({ ...p, [s.id]: e.target.value }))}
+                      placeholder="Assignee user id"
+                      className="w-full h-6 px-2 text-[12px] border border-border rounded bg-surface focus:outline-none"
+                    />
+                    <input
+                      value={taskInputs[s.id] ?? ""}
+                      onChange={(e) => setTaskInputs((p) => ({ ...p, [s.id]: e.target.value }))}
+                      placeholder="Task URL or id"
+                      className="w-full h-6 px-2 text-[12px] border border-border rounded bg-surface focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-2">
                     <button
-                      onClick={() => updateStatus(s.id, "accepted", noteInputs[s.id])}
+                      onClick={() => reviewSuggestion(s.id, "accept", noteInputs[s.id])}
                       className="h-6 px-2 text-[11px] border border-green-300 rounded text-green-700 hover:bg-green-50"
                     >
                       Accept
                     </button>
                     <button
-                      onClick={() => updateStatus(s.id, "rejected", noteInputs[s.id])}
+                      onClick={() => reviewSuggestion(s.id, "reject", noteInputs[s.id])}
                       className="h-6 px-2 text-[11px] border border-red-200 rounded text-red-600 hover:bg-red-50"
                     >
                       Reject
+                    </button>
+                    <button
+                      onClick={() => reviewSuggestion(s.id, "comment", noteInputs[s.id])}
+                      className="h-6 px-2 text-[11px] border border-blue-200 rounded text-blue-700 hover:bg-blue-50"
+                    >
+                      Comment
+                    </button>
+                    <button
+                      onClick={() => reviewSuggestion(s.id, "assign", noteInputs[s.id])}
+                      className="h-6 px-2 text-[11px] border border-purple-200 rounded text-purple-700 hover:bg-purple-50"
+                    >
+                      Assign
+                    </button>
+                    <button
+                      onClick={() => reviewSuggestion(s.id, "convert-to-task", noteInputs[s.id])}
+                      className="h-6 px-2 text-[11px] border border-border rounded text-foreground hover:bg-surface-hover"
+                    >
+                      Convert
                     </button>
                     <button
                       onClick={() => deleteSuggestion(s.id)}
