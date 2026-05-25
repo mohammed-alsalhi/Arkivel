@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.84.1] - 2026-05-25
+
+### Added
+
+- **add discovery engines** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.84.0] - 2026-05-25
 
 ### Added
