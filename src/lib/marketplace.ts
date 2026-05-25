@@ -1,4 +1,9 @@
 import packageJson from "../../package.json";
+import {
+  isComponentSlotId,
+  type ComponentSlotId,
+} from "./component-slots";
+import { getLayoutComposition, type LayoutCompositionHooks } from "./layout-composition";
 
 export const MARKETPLACE_REGISTRY_ID = "arkivel-local-marketplace";
 export const MARKETPLACE_REGISTRY_SCHEMA_VERSION = "arkivel.marketplace.registry.v1";
@@ -9,6 +14,7 @@ export const SUPPORTED_MARKETPLACE_KINDS = [
   "component-pack",
   "plugin",
   "theme-pack",
+  "template-pack",
 ] as const;
 export const SUPPORTED_MARKETPLACE_LICENSES = [
   "MIT",
@@ -20,14 +26,15 @@ export const SUPPORTED_MARKETPLACE_LICENSES = [
 ] as const;
 
 export type MarketplaceItemKind = (typeof SUPPORTED_MARKETPLACE_KINDS)[number];
-export type MarketplaceItemStatus = "built-in" | "planned" | "experimental";
+export type MarketplaceItemStatus =
+  | "built-in"
+  | "planned"
+  | "experimental"
+  | "local-only"
+  | "deprecated"
+  | "blocked";
 export type MarketplaceItemLicense = (typeof SUPPORTED_MARKETPLACE_LICENSES)[number];
-export type ComponentPackSlot =
-  | "article-card"
-  | "metadata-panel"
-  | "dashboard-widget"
-  | "homepage-section"
-  | "infobox-layout";
+export type ComponentPackSlot = ComponentSlotId;
 
 export type MarketplaceItemSource = {
   label: string;
@@ -118,12 +125,19 @@ export type ColorThemePreset = MarketplaceItem & {
 };
 
 export type LayoutPreset = MarketplaceItem & {
+  composition: LayoutCompositionHooks;
   kind: "layout";
   envValue: string;
 };
 
 export type ComponentPack = MarketplaceItem & {
+  components: Array<{
+    description: string;
+    name: string;
+    slot: ComponentPackSlot;
+  }>;
   kind: "component-pack";
+  recommendedLayout: string;
   slots: ComponentPackSlot[];
 };
 
@@ -139,6 +153,15 @@ export type PluginManifest = MarketplaceItem & {
 export type ThemePack = MarketplaceItem & {
   kind: "theme-pack";
   tokens: Record<string, string>;
+};
+
+export type TemplatePack = MarketplaceItem & {
+  articleTemplatePreview: string[];
+  categoryTreePreview: string[];
+  compatibilityNotes: string[];
+  includedSchema: string[];
+  includedTemplateIds: string[];
+  kind: "template-pack";
 };
 
 export type ThemePackInput = {
@@ -173,7 +196,7 @@ export const marketplaceCatalogSource = {
 
 export const marketplaceRegistryContract = {
   id: "Stable machine-readable listing id",
-  kind: "style | color-theme | layout | component-pack | plugin | theme-pack",
+  kind: "style | color-theme | layout | component-pack | plugin | theme-pack | template-pack",
   version: "Semantic listing or pack version, for example 1.0.0",
   compatibility: "Arkivel version range, future marker, or exact version",
   author: "Listing author",
@@ -183,7 +206,7 @@ export const marketplaceRegistryContract = {
     path: "Local registry or pack path",
     remote: "false for the v1 local-first registry",
   },
-  status: "built-in | planned | experimental",
+  status: "built-in | planned | experimental | local-only | deprecated | blocked",
   checksums: {
     manifest: "Stable local manifest checksum",
     screenshots: "Optional screenshot checksum map",
@@ -310,6 +333,7 @@ export const layoutPresets: LayoutPreset[] = [
     status: "built-in",
     tags: ["wiki", "default", "dense"],
     envValue: "classic-wiki",
+    composition: getLayoutComposition("classic-wiki"),
   },
   {
     ...registryMetadata({ id: "layout-docs-portal", kind: "layout" }),
@@ -322,6 +346,7 @@ export const layoutPresets: LayoutPreset[] = [
     status: "planned",
     tags: ["docs", "portal", "support"],
     envValue: "docs-portal",
+    composition: getLayoutComposition("docs-portal"),
   },
   {
     ...registryMetadata({ id: "layout-team-knowledge-base", kind: "layout" }),
@@ -334,6 +359,7 @@ export const layoutPresets: LayoutPreset[] = [
     status: "planned",
     tags: ["team", "operations", "knowledge-base"],
     envValue: "team-knowledge-base",
+    composition: getLayoutComposition("team-knowledge-base"),
   },
   {
     ...registryMetadata({ id: "layout-worldbuilding-atlas", kind: "layout" }),
@@ -346,6 +372,7 @@ export const layoutPresets: LayoutPreset[] = [
     status: "planned",
     tags: ["worldbuilding", "atlas", "canon"],
     envValue: "worldbuilding-atlas",
+    composition: getLayoutComposition("worldbuilding-atlas"),
   },
   {
     ...registryMetadata({ id: "layout-research-notebook", kind: "layout" }),
@@ -358,45 +385,105 @@ export const layoutPresets: LayoutPreset[] = [
     status: "planned",
     tags: ["research", "notes", "citations"],
     envValue: "research-notebook",
+    composition: getLayoutComposition("research-notebook"),
   },
 ];
 
 export const componentPacks: ComponentPack[] = [
   {
-    ...registryMetadata({ id: "core-wiki-components", kind: "component-pack" }),
-    id: "core-wiki-components",
+    ...registryMetadata({ id: "default-wiki-components", kind: "component-pack" }),
+    id: "default-wiki-components",
     kind: "component-pack",
-    name: "Core Wiki Components",
-    description: "Built-in reusable article cards, panels, lists, data tables, empty states, and definition surfaces.",
+    name: "Default Wiki Components",
+    description: "Built-in dense wiki pack with compact article cards, practical metadata, classic infoboxes, and quick-edit affordances.",
     author: "Arkivel",
-    compatibility: ">=4.75.0",
+    compatibility: ">=4.78.1",
     status: "built-in",
-    tags: ["core", "ui", "built-in"],
-    slots: ["article-card", "metadata-panel", "dashboard-widget", "homepage-section", "infobox-layout"],
+    tags: ["default", "wiki", "dense", "quick-edit"],
+    recommendedLayout: "classic-wiki",
+    slots: ["article-card", "article-header", "metadata-panel", "infobox-layout", "dashboard-widget", "homepage-section", "search-result", "editor-panel", "space-navigation", "admin-summary"],
+    components: [
+      { slot: "article-card", name: "Dense Article Card", description: "Compact title, category, status, and excerpt preview for scan-heavy wiki lists." },
+      { slot: "metadata-panel", name: "Compact Metadata Panel", description: "Small definition-list treatment for category, tags, relations, status, and timestamps." },
+      { slot: "infobox-layout", name: "Classic Infobox", description: "Table-like facts panel that mirrors traditional wiki reading patterns." },
+      { slot: "editor-panel", name: "Quick Edit Panel", description: "Editor-adjacent shortcuts for status, category, tags, and article actions." },
+    ],
   },
   {
-    ...registryMetadata({ id: "operations-component-pack", kind: "component-pack", version: "0.1.0" }),
-    id: "operations-component-pack",
+    ...registryMetadata({ id: "docs-portal-components", kind: "component-pack" }),
+    id: "docs-portal-components",
     kind: "component-pack",
-    name: "Operations Component Pack",
-    description: "Reusable dashboard and admin components for teams using Arkivel as an internal knowledge operations hub.",
+    name: "Docs Portal Components",
+    description: "Documentation portal pack with version badges, sidebar section cards, page status, and last-reviewed metadata.",
     author: "Arkivel",
-    compatibility: "future",
-    status: "planned",
-    tags: ["dashboard", "admin", "operations"],
-    slots: ["dashboard-widget", "metadata-panel", "homepage-section"],
+    compatibility: ">=4.78.1",
+    status: "built-in",
+    tags: ["docs", "portal", "versioned", "support"],
+    recommendedLayout: "docs-portal",
+    slots: ["article-card", "article-header", "metadata-panel", "homepage-section", "search-result", "space-navigation"],
+    components: [
+      { slot: "article-header", name: "Version Badge Header", description: "Docs title treatment with version, page status, and last-reviewed indicators." },
+      { slot: "space-navigation", name: "Sidebar Section Cards", description: "Section-oriented navigation cards for docs portal category trees." },
+      { slot: "metadata-panel", name: "Docs Review Metadata", description: "Last-reviewed, owner, version, and support-state metadata summary." },
+      { slot: "search-result", name: "Docs Search Result", description: "Result row tuned for version, status, and matched docs section context." },
+    ],
   },
   {
-    ...registryMetadata({ id: "canon-worldbuilding-pack", kind: "component-pack", version: "0.1.0" }),
-    id: "canon-worldbuilding-pack",
+    ...registryMetadata({ id: "team-knowledge-base-components", kind: "component-pack" }),
+    id: "team-knowledge-base-components",
     kind: "component-pack",
-    name: "Canon Worldbuilding Pack",
-    description: "Worldbuilding-oriented article cards, metadata panels, map modules, and relationship widgets.",
+    name: "Team Knowledge Base Components",
+    description: "Team handbook pack with owners, review dates, teams, escalation paths, and operational handbook widgets.",
     author: "Arkivel",
-    compatibility: "future",
-    status: "planned",
-    tags: ["worldbuilding", "canon", "map", "relationships"],
-    slots: ["article-card", "metadata-panel", "infobox-layout", "homepage-section"],
+    compatibility: ">=4.78.1",
+    status: "built-in",
+    tags: ["team", "handbook", "owners", "operations"],
+    recommendedLayout: "team-knowledge-base",
+    slots: ["article-card", "article-header", "metadata-panel", "dashboard-widget", "homepage-section", "admin-summary"],
+    components: [
+      { slot: "article-header", name: "Owner Header", description: "Article header with owner, team, review date, and escalation metadata." },
+      { slot: "metadata-panel", name: "Team Metadata Panel", description: "Operational metadata for team, owner, escalation path, and review cadence." },
+      { slot: "dashboard-widget", name: "Handbook Widget", description: "Dashboard card for stale SOPs, owner gaps, and onboarding-critical articles." },
+      { slot: "admin-summary", name: "Team Health Summary", description: "Admin summary for review obligations and handbook governance health." },
+    ],
+  },
+  {
+    ...registryMetadata({ id: "worldbuilding-atlas-components", kind: "component-pack" }),
+    id: "worldbuilding-atlas-components",
+    kind: "component-pack",
+    name: "Worldbuilding Atlas Components",
+    description: "Atlas pack with canon badges, region metadata, timeline cards, relation panels, and lore infoboxes.",
+    author: "Arkivel",
+    compatibility: ">=4.78.1",
+    status: "built-in",
+    tags: ["worldbuilding", "atlas", "canon", "timeline"],
+    recommendedLayout: "worldbuilding-atlas",
+    slots: ["article-card", "article-header", "metadata-panel", "infobox-layout", "homepage-section", "space-navigation"],
+    components: [
+      { slot: "article-header", name: "Canon Badge Header", description: "Lore header with canon status, continuity scope, and location context." },
+      { slot: "metadata-panel", name: "Region Metadata Panel", description: "Region, faction, era, and continuity metadata for atlas articles." },
+      { slot: "homepage-section", name: "Timeline Cards", description: "Homepage module for era cards, active arcs, and world events." },
+      { slot: "infobox-layout", name: "Lore Infobox", description: "Worldbuilding facts panel for characters, places, factions, and artifacts." },
+    ],
+  },
+  {
+    ...registryMetadata({ id: "research-notebook-components", kind: "component-pack" }),
+    id: "research-notebook-components",
+    kind: "component-pack",
+    name: "Research Notebook Components",
+    description: "Research notebook pack with citation panels, evidence confidence, experiment logs, and bibliography widgets.",
+    author: "Arkivel",
+    compatibility: ">=4.78.1",
+    status: "built-in",
+    tags: ["research", "citations", "evidence", "experiments"],
+    recommendedLayout: "research-notebook",
+    slots: ["article-card", "article-header", "metadata-panel", "dashboard-widget", "infobox-layout", "search-result"],
+    components: [
+      { slot: "metadata-panel", name: "Citation Panel", description: "Citation, source, confidence, and evidence-state metadata for research notes." },
+      { slot: "article-header", name: "Evidence Confidence Header", description: "Header treatment for confidence, review state, and experiment lineage." },
+      { slot: "infobox-layout", name: "Experiment Log", description: "Structured experiment facts, methods, observations, and result summaries." },
+      { slot: "dashboard-widget", name: "Bibliography Widget", description: "Dashboard card for sources, open claims, unreviewed citations, and evidence gaps." },
+    ],
   },
 ];
 
@@ -439,6 +526,34 @@ export const themePacks: ThemePack[] = [
   },
 ];
 
+export const templatePacks: TemplatePack[] = [
+  {
+    ...registryMetadata({ id: "starter-space-template-pack", kind: "template-pack" }),
+    id: "starter-space-template-pack",
+    kind: "template-pack",
+    name: "Starter Space Template Pack",
+    description: "Preview-safe starter spaces for personal, docs, team, worldbuilding, research, reading, project, and public documentation use cases.",
+    author: "Arkivel",
+    compatibility: ">=4.91.0",
+    status: "built-in",
+    tags: ["templates", "starter-spaces", "spaces"],
+    articleTemplatePreview: ["Home", "Getting Started", "Team Handbook", "Research Question"],
+    categoryTreePreview: ["Library", "Docs", "Handbook", "Research"],
+    compatibilityNotes: ["Requires the v1 space-template contract and preview-only import flow."],
+    includedSchema: ["categoryTree", "articleTemplates", "metadataSchema", "infoboxFields", "navigation", "dashboard"],
+    includedTemplateIds: [
+      "personal-wiki",
+      "product-docs",
+      "team-handbook",
+      "worldbuilding-bible",
+      "research-notebook",
+      "reading-archive",
+      "project-knowledge-base",
+      "public-documentation",
+    ],
+  },
+];
+
 export const marketplaceItems = [
   ...stylePresets,
   ...colorThemePresets,
@@ -446,6 +561,7 @@ export const marketplaceItems = [
   ...componentPacks,
   ...pluginManifests,
   ...themePacks,
+  ...templatePacks,
 ] satisfies MarketplaceItem[];
 
 export function resolveStylePreset(styleId: string | undefined): StylePreset {
@@ -477,7 +593,14 @@ function isMarketplaceItemKind(value: unknown): value is MarketplaceItemKind {
 }
 
 function isMarketplaceStatus(value: unknown): value is MarketplaceItemStatus {
-  return value === "built-in" || value === "planned" || value === "experimental";
+  return (
+    value === "built-in" ||
+    value === "planned" ||
+    value === "experimental" ||
+    value === "local-only" ||
+    value === "deprecated" ||
+    value === "blocked"
+  );
 }
 
 function isMarketplaceLicense(value: unknown): value is MarketplaceItemLicense {
@@ -638,6 +761,18 @@ export function validateMarketplaceCatalog(items: MarketplaceItem[] = marketplac
         }
       }
     }
+    if (item.kind === "component-pack") {
+      const slots = (item as Partial<ComponentPack>).slots;
+      if (!hasStringArray(slots)) {
+        addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} must declare component slots`, severity: "error" });
+      } else {
+        for (const slot of slots) {
+          if (!isComponentSlotId(slot)) {
+            addIssue({ code: "unsupported-kind", itemId, kind: item.kind, message: `${itemId} uses unsupported component slot: ${slot}`, severity: "error" });
+          }
+        }
+      }
+    }
   }
 
   for (const kind of SUPPORTED_MARKETPLACE_KINDS) {
@@ -662,8 +797,11 @@ export function createMarketplaceValidationSummary(
   ) as Record<MarketplaceItemKind, number>;
   const statusCounts = {
     "built-in": items.filter((item) => item.status === "built-in").length,
-    planned: items.filter((item) => item.status === "planned").length,
+    blocked: items.filter((item) => item.status === "blocked").length,
+    deprecated: items.filter((item) => item.status === "deprecated").length,
     experimental: items.filter((item) => item.status === "experimental").length,
+    "local-only": items.filter((item) => item.status === "local-only").length,
+    planned: items.filter((item) => item.status === "planned").length,
   };
   const errorCount = issues.filter((issue) => issue.severity === "error").length;
   const warningCount = issues.filter((issue) => issue.severity === "warning").length;
@@ -713,11 +851,19 @@ export const themePackSchema = {
 
 export const perSpaceCustomizationContract = {
   source: "category",
-  status: "preview-only",
-  inherits: ["global brand", "global style", "global color theme", "global layout"],
-  fields: ["styleId", "colorThemeId", "layoutId", "templateIds", "metadataSchemaId", "navigationMode"],
-  precedence: ["category preview", "global env customization", "Arkivel defaults"],
-  persistence: "deferred; no database overrides in v1",
+  status: "persisted",
+  inherits: ["global environment customization", "parent category", "category", "article override"],
+  fields: [
+    "styleId",
+    "colorThemeId",
+    "layoutId",
+    "componentPackId",
+    "templatePackId",
+    "metadataSchemaId",
+    "navigationMode",
+  ],
+  precedence: ["article override", "category", "parent category", "global environment customization"],
+  persistence: "SpaceCustomization and ArticleCustomizationOverride database records in v4.79.0",
 };
 
 export const marketplaceRegistry = createMarketplaceRegistry();

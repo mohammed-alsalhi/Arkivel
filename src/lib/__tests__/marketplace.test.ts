@@ -13,6 +13,7 @@ import {
   SUPPORTED_MARKETPLACE_KINDS,
   SUPPORTED_MARKETPLACE_LICENSES,
   themePacks,
+  templatePacks,
   validateMarketplaceCatalog,
   validatePluginManifest,
   validateThemePack,
@@ -23,14 +24,36 @@ describe("marketplace", () => {
     const kinds = new Set(marketplaceItems.map((item) => item.kind));
 
     expect(kinds).toEqual(
-      new Set(["style", "color-theme", "layout", "component-pack", "plugin", "theme-pack"]),
+      new Set(["style", "color-theme", "layout", "component-pack", "plugin", "theme-pack", "template-pack"]),
     );
-    expect(SUPPORTED_MARKETPLACE_KINDS).toHaveLength(6);
+    expect(SUPPORTED_MARKETPLACE_KINDS).toHaveLength(7);
   });
 
   it("declares component-pack slots", () => {
     expect(componentPacks.some((pack) => pack.slots.includes("article-card"))).toBe(true);
     expect(componentPacks.every((pack) => pack.slots.length > 0)).toBe(true);
+    expect(componentPacks.every((pack) => pack.components.length > 0)).toBe(true);
+  });
+
+  it("declares template packs", () => {
+    expect(templatePacks.map((pack) => pack.kind)).toEqual(["template-pack"]);
+    expect(templatePacks[0].includedSchema).toContain("categoryTree");
+    expect(templatePacks[0].includedTemplateIds).toContain("public-documentation");
+  });
+
+  it("publishes the v4.78.1 built-in component packs", () => {
+    expect(componentPacks.map((pack) => pack.id)).toEqual([
+      "default-wiki-components",
+      "docs-portal-components",
+      "team-knowledge-base-components",
+      "worldbuilding-atlas-components",
+      "research-notebook-components",
+    ]);
+    expect(componentPacks.every((pack) => pack.status === "built-in")).toBe(true);
+    expect(componentPacks.find((pack) => pack.id === "docs-portal-components")?.components.map((component) => component.name)).toContain("Version Badge Header");
+    expect(componentPacks.find((pack) => pack.id === "team-knowledge-base-components")?.components.map((component) => component.name)).toContain("Handbook Widget");
+    expect(componentPacks.find((pack) => pack.id === "worldbuilding-atlas-components")?.components.map((component) => component.name)).toContain("Lore Infobox");
+    expect(componentPacks.find((pack) => pack.id === "research-notebook-components")?.components.map((component) => component.name)).toContain("Citation Panel");
   });
 
   it("provides layout presets and plugin manifest examples", () => {
@@ -49,6 +72,14 @@ describe("marketplace", () => {
     expect(registry.supportedLicenses).toEqual(SUPPORTED_MARKETPLACE_LICENSES);
     expect(registry.validation.valid).toBe(true);
     expect(registry.validation.summary?.itemCount).toBe(marketplaceItems.length);
+  });
+
+  it("supports the full marketplace status vocabulary", () => {
+    const statuses = marketplaceRegistryContract.status.split(" | ");
+    const customLocalItem = { ...marketplaceItems[0], id: "local-sample", status: "local-only" } as MarketplaceItem;
+
+    expect(statuses).toEqual(["built-in", "planned", "experimental", "local-only", "deprecated", "blocked"]);
+    expect(validateMarketplaceCatalog([...marketplaceItems, customLocalItem]).valid).toBe(true);
   });
 
   it("adds registry metadata to every marketplace item", () => {
@@ -106,7 +137,7 @@ describe("marketplace", () => {
   it("reports every v4.77.0 registry failure mode", () => {
     const invalidItems = [
       { ...marketplaceItems[0], id: marketplaceItems[1].id },
-      { ...marketplaceItems[0], id: "unsupported-kind", kind: "template-pack" },
+      { ...marketplaceItems[0], id: "unsupported-kind", kind: "unsupported-pack" },
       { ...marketplaceItems[0], id: "incompatible-version", compatibility: ">=99.0.0" },
       { ...marketplaceItems[0], id: "missing-screenshot", screenshots: [] },
       { ...pluginManifests[0], id: "unsafe-plugin", permissions: ["system:execute"] },
