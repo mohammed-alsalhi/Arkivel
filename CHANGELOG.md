@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.99.95] - 2026-05-25
+
+### Added
+
+- **Final security and migration correction metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.99.90] - 2026-05-25
 
 ### Added
