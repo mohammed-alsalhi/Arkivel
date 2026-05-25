@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.80.0] - 2026-05-25
+
+### Added
+
+- **add plugin manifest schema** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.79.3] - 2026-05-25
 
 ### Added
