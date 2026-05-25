@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.93.2] - 2026-05-25
+
+### Added
+
+- **add archive mirror workflows** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.93.1] - 2026-05-25
 
 ### Added
