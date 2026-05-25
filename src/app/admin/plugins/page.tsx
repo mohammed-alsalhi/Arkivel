@@ -9,10 +9,33 @@ interface PluginManifest {
   version: string;
   description: string;
   enabled: boolean;
+  compatibility?: {
+    arkivel: string;
+    pluginApi: string;
+  };
+  hooks?: string[];
+  health?: {
+    lastError: string | null;
+    lastLoad: string;
+    status: "available" | "error";
+  };
+  permissions?: string[];
+  permissionPrompts?: {
+    label: string;
+    prompt: string;
+    risk: "low" | "medium" | "high";
+    scope: string;
+  }[];
+  routes?: string[];
+  settings?: string[];
+  source?: "registered" | "trusted-local";
+  widgets?: string[];
 }
 
 export default function PluginsPage() {
   const [plugins, setPlugins] = useState<PluginManifest[]>([]);
+  const [loader, setLoader] = useState<{ enabled: boolean; root?: string }>({ enabled: false });
+  const [loadErrors, setLoadErrors] = useState<{ id?: string; message: string; path?: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -28,7 +51,15 @@ export default function PluginsPage() {
         return r.json();
       })
       .then((data) => {
-        if (data) setPlugins(Array.isArray(data) ? data : []);
+        if (data) {
+          if (Array.isArray(data)) {
+            setPlugins(data);
+          } else {
+            setPlugins(Array.isArray(data.plugins) ? data.plugins : []);
+            setLoader(data.loader ?? { enabled: false });
+            setLoadErrors(Array.isArray(data.errors) ? data.errors : []);
+          }
+        }
         setLoading(false);
       })
       .catch(() => {
@@ -48,6 +79,9 @@ export default function PluginsPage() {
       setPlugins((prev) =>
         prev.map((p) => (p.id === pluginId ? { ...p, enabled } : p))
       );
+    } else {
+      const data = await res.json().catch(() => null);
+      setError(data?.error ?? "Failed to update plugin");
     }
   }
 
@@ -77,18 +111,38 @@ export default function PluginsPage() {
       </h1>
 
       <div className="wiki-notice mb-4">
-        Manage installed plugins. Enable or disable plugins to extend wiki
-        functionality.
+        Trusted local plugins are disabled unless{" "}
+        <code className="bg-background px-1 py-0.5 text-[12px]">ARKIVEL_ENABLE_TRUSTED_PLUGINS=true</code>{" "}
+        and an absolute{" "}
+        <code className="bg-background px-1 py-0.5 text-[12px]">ARKIVEL_TRUSTED_PLUGIN_DIR</code>{" "}
+        are configured. Arkivel reads manifests and permission metadata here; runtime loading remains guarded.
+      </div>
+
+      <div className="border border-border mb-4 p-3 text-[12px]">
+        <div className="font-bold text-heading">Trusted local loader</div>
+        <div className="text-muted mt-1">
+          Status: {loader.enabled ? "Enabled for manifest discovery" : "Disabled"}
+          {loader.root ? ` - Directory: ${loader.root}` : ""}
+        </div>
+        {loadErrors.length > 0 && (
+          <ul className="mt-2 list-disc pl-5 text-wiki-link-broken">
+            {loadErrors.map((item, index) => (
+              <li key={`${item.id ?? "plugin"}-${index}`}>
+                {item.id ? `${item.id}: ` : ""}{item.message}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {plugins.length === 0 ? (
         <div className="border border-border p-6 text-center">
           <p className="text-[13px] text-muted">
-            No plugins installed yet. Plugins can be registered in{" "}
+            No valid plugins discovered yet. Plugins can be registered in{" "}
             <code className="bg-background px-1 py-0.5 text-[12px]">
               src/lib/plugins/registry.ts
-            </code>
-            .
+            </code>{" "}
+            or declared with a trusted local <code className="bg-background px-1 py-0.5 text-[12px]">plugin.json</code>.
           </p>
         </div>
       ) : (
@@ -115,6 +169,11 @@ export default function PluginsPage() {
                   >
                     {plugin.enabled ? "Enabled" : "Disabled"}
                   </span>
+                  {plugin.health && (
+                    <span className="text-[10px] px-1.5 py-0.5 border border-border-light text-muted">
+                      Health: {plugin.health.status}
+                    </span>
+                  )}
                 </div>
                 {plugin.description && (
                   <p className="text-[12px] text-muted mt-0.5">
@@ -122,8 +181,48 @@ export default function PluginsPage() {
                   </p>
                 )}
                 <p className="text-[10px] text-muted mt-0.5">
-                  ID: {plugin.id}
+                  ID: {plugin.id} - Source: {plugin.source ?? "registered"}
                 </p>
+                {plugin.compatibility && (
+                  <p className="text-[10px] text-muted mt-0.5">
+                    Arkivel {plugin.compatibility.arkivel} - {plugin.compatibility.pluginApi}
+                  </p>
+                )}
+                {plugin.permissions && plugin.permissions.length > 0 && (
+                  <p className="text-[10px] text-muted mt-1">
+                    Permissions: {plugin.permissions.join(", ")}
+                  </p>
+                )}
+                {plugin.permissionPrompts && plugin.permissionPrompts.length > 0 && (
+                  <div className="mt-2 grid gap-1 sm:grid-cols-2">
+                    {plugin.permissionPrompts.map((prompt) => (
+                      <div key={prompt.scope} className="border border-border-light p-2 text-[10px]">
+                        <div className="font-bold text-heading">{prompt.label} ({prompt.risk})</div>
+                        <div className="text-muted mt-0.5">{prompt.prompt}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {plugin.routes && plugin.routes.length > 0 && (
+                  <p className="text-[10px] text-muted mt-0.5">
+                    Routes: {plugin.routes.join(", ")}
+                  </p>
+                )}
+                {plugin.widgets && plugin.widgets.length > 0 && (
+                  <p className="text-[10px] text-muted mt-0.5">
+                    Widgets: {plugin.widgets.join(", ")}
+                  </p>
+                )}
+                {plugin.hooks && plugin.hooks.length > 0 && (
+                  <p className="text-[10px] text-muted mt-0.5">
+                    Hooks: {plugin.hooks.join(", ")}
+                  </p>
+                )}
+                {plugin.health?.lastError && (
+                  <p className="text-[10px] text-wiki-link-broken mt-0.5">
+                    Last error: {plugin.health.lastError}
+                  </p>
+                )}
               </div>
 
               <button
