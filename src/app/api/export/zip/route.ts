@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import JSZip from "jszip";
 import prisma from "@/lib/prisma";
 import { isAdmin, requireAdmin } from "@/lib/auth";
+import { logAudit } from "@/lib/audit";
+import { createExportManifest, recordExportHistory, sha256 } from "@/lib/export-hardening";
 
 export const dynamic = "force-dynamic";
 
@@ -118,11 +120,27 @@ export async function GET(request: NextRequest) {
 
   const safeName = (categorySlug ?? wikiName).replace(/[^a-z0-9-]/gi, "_").toLowerCase();
   const filename = `${safeName}-export-${new Date().toISOString().slice(0, 10)}.zip`;
+  const manifest = createExportManifest({
+    files: [{ content: zipBuffer, path: filename }],
+    format: "zip",
+    omittedData: status ? ["sessions", "apiKeys", "analytics", "users"] : ["sessions", "apiKeys", "analytics", "users"],
+    scope: { category: categorySlug, status: status ?? "all", type: "articles" },
+  });
+  await recordExportHistory(manifest);
+  await logAudit("export.create", { type: "export", label: "ZIP article export" }, {
+    checksum: sha256(JSON.stringify(manifest)),
+    fileCount: manifest.fileCount,
+    format: manifest.format,
+    omittedData: manifest.omittedData,
+    scope: manifest.scope,
+  }, { severity: "high", request });
 
   return new NextResponse(zipBuffer, {
     headers: {
       "Content-Type": "application/zip",
       "Content-Disposition": `attachment; filename="${filename}"`,
+      "X-Arkivel-Export-Checksum": sha256(zipBuffer),
+      "X-Arkivel-Export-Manifest": JSON.stringify(manifest),
     },
   });
 }

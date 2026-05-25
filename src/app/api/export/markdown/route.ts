@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { logAudit } from "@/lib/audit";
+import { createExportManifest, recordExportHistory, sha256 } from "@/lib/export-hardening";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -67,12 +69,28 @@ export async function GET(request: NextRequest) {
   const filename = categorySlug
     ? `wiki-export-${categorySlug}.md`
     : "wiki-export.md";
+  const manifest = createExportManifest({
+    files: [{ content: markdown, path: filename }],
+    format: "markdown",
+    omittedData: ["draftContent", "privateSpaces", "sessions", "apiKeys", "analytics", "users"],
+    scope: { category: categorySlug, status: "published", type: "articles" },
+  });
+  await recordExportHistory(manifest);
+  await logAudit("export.create", { type: "export", label: "Markdown article export" }, {
+    checksum: sha256(JSON.stringify(manifest)),
+    fileCount: manifest.fileCount,
+    format: manifest.format,
+    omittedData: manifest.omittedData,
+    scope: manifest.scope,
+  }, { request });
 
   return new NextResponse(markdown, {
     status: 200,
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
       "Content-Disposition": `attachment; filename="${filename}"`,
+      "X-Arkivel-Export-Checksum": sha256(markdown),
+      "X-Arkivel-Export-Manifest": JSON.stringify(manifest),
     },
   });
 }

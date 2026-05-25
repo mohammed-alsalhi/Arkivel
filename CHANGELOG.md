@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.81.1] - 2026-05-25
+
+### Added
+
+- **harden export workflows** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.81.0] - 2026-05-25
 
 ### Added
