@@ -1,5 +1,12 @@
 import packageJson from "../../package.json";
 import {
+  getDangerousCapabilityWarnings,
+  hasExcessiveMarketplacePermissions,
+  isBlockedMarketplacePermission,
+  isUnsafeMarketplaceHook,
+  marketplaceSecurityContract,
+} from "./marketplace-security";
+import {
   SUPPORTED_MARKETPLACE_LICENSES,
   isMarketplaceCompatibilitySupported,
   themePacks,
@@ -14,6 +21,7 @@ export const SUPPORTED_MARKETPLACE_IMPORT_KINDS = [
   "layout-pack",
   "component-pack",
   "plugin",
+  "template-pack",
 ] as const;
 
 export type MarketplaceImportKind = (typeof SUPPORTED_MARKETPLACE_IMPORT_KINDS)[number];
@@ -45,12 +53,14 @@ export type MarketplaceImportPreview = {
   metadata: MarketplaceImportMetadata;
   parsed: boolean;
   permissions: string[];
+  provenanceWarnings: string[];
   previewOnly: true;
   rawKind?: string;
   requiredEnvVars: string[];
   requiredFiles: string[];
   routes: string[];
   securityErrors: string[];
+  securityWarnings: string[];
   settings: string[];
   slots: string[];
   status: MarketplaceImportStatus;
@@ -82,6 +92,7 @@ const requiredFilesByKind: Record<MarketplaceImportKind, string[]> = {
   "layout-pack": ["layout-pack.json", "layout.css"],
   "component-pack": ["component-pack.json", "slots.json"],
   plugin: ["plugin.json"],
+  "template-pack": ["template-pack.json", "templates.json", "README.md"],
 };
 
 const requiredEnvVarsByKind: Record<MarketplaceImportKind, string[]> = {
@@ -89,6 +100,7 @@ const requiredEnvVarsByKind: Record<MarketplaceImportKind, string[]> = {
   "layout-pack": ["NEXT_PUBLIC_ARKIVEL_LAYOUT"],
   "component-pack": [],
   plugin: [],
+  "template-pack": [],
 };
 
 export const marketplaceImportContract = {
@@ -106,9 +118,11 @@ export const marketplaceImportContract = {
     "widgets",
     "hooks",
     "tokens",
+    "templates",
   ],
   blockedFields: ["scripts", "postinstall", "command", "exec", "eval", "code", "remote", "module", "main"],
   blockedValues: ["http://", "https://", "git+", "npm:", "javascript:", "../"],
+  security: marketplaceSecurityContract,
 };
 
 export const marketplaceImportExamples = {
@@ -174,6 +188,18 @@ export const marketplaceImportExamples = {
     widgets: ["capture-button"],
     hooks: ["article.beforeCreate"],
   },
+  "template-pack": {
+    schemaVersion: MARKETPLACE_IMPORT_SCHEMA_VERSION,
+    id: "example-starter-spaces",
+    kind: "template-pack",
+    name: "Example Starter Spaces",
+    version: "1.0.0",
+    compatibility: ">=4.91.0",
+    author: "Example Author",
+    license: "MIT",
+    requiredFiles: ["template-pack.json", "templates.json", "README.md", "preview.png"],
+    templates: ["personal-wiki", "product-docs"],
+  },
 } satisfies Record<MarketplaceImportKind, Record<string, unknown>>;
 
 export function createMarketplaceImportPreview(source: string | unknown): MarketplaceImportPreview {
@@ -230,6 +256,12 @@ export function createMarketplaceImportPreview(source: string | unknown): Market
   for (const permission of permissions) {
     if (isUnsafePermission(permission)) securityErrors.push(`unsafe permission is not allowed: ${permission}`);
   }
+  if (hasExcessiveMarketplacePermissions(permissions)) {
+    securityErrors.push(`excessive permissions requested: ${permissions.length} permissions declared`);
+  }
+  for (const hook of hooks) {
+    if (isUnsafeMarketplaceHook(hook)) securityErrors.push(`unsafe hook is not allowed: ${hook}`);
+  }
 
   if (kind === "theme-pack") {
     validationErrors.push(...validateThemePack({ ...input, kind: "theme-pack" }).errors);
@@ -240,6 +272,8 @@ export function createMarketplaceImportPreview(source: string | unknown): Market
 
   const uniqueValidationErrors = unique(validationErrors);
   const uniqueSecurityErrors = unique(securityErrors);
+  const securityWarnings = unique(getDangerousCapabilityWarnings(permissions));
+  const provenanceWarnings = createProvenanceWarnings(input);
   const valid = uniqueValidationErrors.length === 0 && uniqueSecurityErrors.length === 0;
 
   return {
@@ -248,12 +282,14 @@ export function createMarketplaceImportPreview(source: string | unknown): Market
     metadata,
     parsed: true,
     permissions,
+    provenanceWarnings,
     previewOnly: true,
     rawKind,
     requiredEnvVars,
     requiredFiles,
     routes,
     securityErrors: uniqueSecurityErrors,
+    securityWarnings,
     settings,
     slots,
     status: valid ? "accepted-preview" : "blocked",
@@ -271,11 +307,13 @@ function createBlockedPreview(validationErrors: string[]): MarketplaceImportPrev
     metadata: {},
     parsed: false,
     permissions: [],
+    provenanceWarnings: [],
     previewOnly: true,
     requiredEnvVars: [],
     requiredFiles: [],
     routes: [],
     securityErrors: [],
+    securityWarnings: [],
     settings: [],
     slots: [],
     status: "blocked",
@@ -366,13 +404,19 @@ function isPathLikeKey(key: string) {
 }
 
 function isUnsafePermission(permission: string) {
-  return (
-    permission.includes("*") ||
-    permission === "admin:all" ||
-    permission.startsWith("filesystem:") ||
-    permission.startsWith("shell:") ||
-    permission.startsWith("system:")
-  );
+  return isBlockedMarketplacePermission(permission);
+}
+
+function createProvenanceWarnings(input: Record<string, unknown>) {
+  const warnings: string[] = [];
+  const source = isRecord(input.source) ? input.source : null;
+  const checksums = isRecord(input.checksums) ? input.checksums : null;
+
+  if (!source || readString(source.path) === undefined) warnings.push("source.path is recommended for local provenance review");
+  if (source && source.remote !== false) warnings.push("source.remote should be false for local-only marketplace previews");
+  if (!checksums || readString(checksums.manifest) === undefined) warnings.push("checksums.manifest is recommended before local install intent");
+
+  return warnings;
 }
 
 function isMarketplaceImportKind(value: unknown): value is MarketplaceImportKind {
