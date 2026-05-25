@@ -1,5 +1,14 @@
 import prisma from "@/lib/prisma";
-import { createHmac } from "crypto";
+import {
+  WEBHOOK_DELIVERY_HEADER,
+  WEBHOOK_RETRY_DELAYS_MS,
+  WEBHOOK_SIGNATURE_HEADER,
+  WEBHOOK_TIMESTAMP_HEADER,
+  createWebhookBody,
+  createWebhookSignature,
+  isSupportedWebhookEvent,
+  shouldRetryWebhook,
+} from "@/lib/webhook-reliability";
 
 export function dispatchWebhook(
   event: string,
@@ -15,6 +24,8 @@ async function doDispatch(
   event: string,
   payload: Record<string, unknown>
 ): Promise<void> {
+  if (!isSupportedWebhookEvent(event)) return;
+
   const webhooks = await prisma.webhook.findMany({
     where: {
       active: true,
@@ -22,37 +33,57 @@ async function doDispatch(
     },
   });
 
-  const body = JSON.stringify({ event, payload, timestamp: new Date().toISOString() });
+  const timestamp = new Date().toISOString();
+  const body = createWebhookBody(event, payload, timestamp);
 
   for (const webhook of webhooks) {
+    const startedAt = Date.now();
     let status = "success";
     let responseCode: number | null = null;
+    let lastError: string | null = null;
+    const deliveryId = crypto.randomUUID();
 
-    try {
+    for (let attempt = 1; attempt <= WEBHOOK_RETRY_DELAYS_MS.length; attempt++) {
+      const delay = WEBHOOK_RETRY_DELAYS_MS[attempt - 1] ?? 0;
+      if (delay > 0) await new Promise((resolve) => setTimeout(resolve, delay));
+
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
+        [WEBHOOK_TIMESTAMP_HEADER]: timestamp,
+        [WEBHOOK_DELIVERY_HEADER]: deliveryId,
       };
 
       if (webhook.secret) {
-        const signature = createHmac("sha256", webhook.secret)
-          .update(body)
-          .digest("hex");
-        headers["X-Webhook-Signature"] = `sha256=${signature}`;
+        headers[WEBHOOK_SIGNATURE_HEADER] = createWebhookSignature({
+          body,
+          secret: webhook.secret,
+          timestamp,
+        });
       }
 
-      const res = await fetch(webhook.url, {
-        method: "POST",
-        headers,
-        body,
-        signal: AbortSignal.timeout(10000),
-      });
+      try {
+        const res = await fetch(webhook.url, {
+          method: "POST",
+          headers,
+          body,
+          signal: AbortSignal.timeout(10000),
+        });
 
-      responseCode = res.status;
-      if (!res.ok) {
+        responseCode = res.status;
+        lastError = null;
+        if (res.ok) {
+          status = "success";
+          break;
+        }
         status = "failed";
+      } catch (error) {
+        status = "failed";
+        responseCode = null;
+        lastError = error instanceof Error ? error.message : "Delivery failed";
       }
-    } catch {
-      status = "failed";
+
+      if (!shouldRetryWebhook(responseCode, attempt)) break;
+      status = "retrying";
     }
 
     // Log delivery
@@ -60,10 +91,24 @@ async function doDispatch(
       data: {
         webhookId: webhook.id,
         event,
-        payload: payload as object,
+        payload: {
+          ...(payload as object),
+          deliveryId,
+          attempts: status === "success" ? undefined : WEBHOOK_RETRY_DELAYS_MS.length,
+          lastError,
+        },
         status,
         responseCode,
       },
     });
+    await prisma.metricLog.create({
+      data: {
+        duration: Date.now() - startedAt,
+        metadata: { deliveryId, event, webhookId: webhook.id },
+        path: webhook.url,
+        status: responseCode,
+        type: "webhook_delivery",
+      },
+    }).catch(() => null);
   }
 }
