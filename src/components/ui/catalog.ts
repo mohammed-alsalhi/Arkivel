@@ -4,7 +4,8 @@ export type ComponentCategory =
   | "input"
   | "feedback"
   | "data"
-  | "content";
+  | "content"
+  | "editor";
 
 export type ComponentRecipe = {
   category: ComponentCategory;
@@ -145,6 +146,36 @@ export const componentCatalog = {
     description: "Preformatted code block for docs, examples, exports, and API responses.",
     importName: "CodeBlock",
     theming: ["ui-code-block"],
+  },
+  EditorInsertTray: {
+    category: "editor",
+    description: "Reusable grouped block insertion tray for built-in and plugin-provided editor commands.",
+    importName: "EditorInsertTray",
+    theming: ["editor-tray", "editor-command-section", "editor-command-item"],
+  },
+  EditorReviewTray: {
+    category: "editor",
+    description: "Reusable editor review panel for readiness signals, quality checks, grammar, and coaching.",
+    importName: "EditorReviewTray",
+    theming: ["editor-tray", "editor-review-strip", "editor-check-list"],
+  },
+  EditorOutlineTray: {
+    category: "editor",
+    description: "Reusable section outline navigator and side-panel host for long-form editing.",
+    importName: "EditorOutlineTray",
+    theming: ["editor-tray", "editor-outline-list", "editor-side-panel"],
+  },
+  EditorSelectionActions: {
+    category: "editor",
+    description: "Contextual selected-text action bar for rewrite, expand, link, footnote, and plugin actions.",
+    importName: "EditorSelectionActions",
+    theming: ["editor-selection-bar", "editor-selection-action"],
+  },
+  EditorTableControls: {
+    category: "editor",
+    description: "Contextual table control group for row, column, header, merge, split, and delete-table actions.",
+    importName: "EditorTableControls",
+    theming: ["editor-toolbar-group", "editor-tool-button"],
   },
   ScreenReaderOnly: {
     category: "feedback",

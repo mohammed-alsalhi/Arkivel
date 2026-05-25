@@ -7,5 +7,7 @@ describe("ui component catalog", () => {
     expect(componentCatalog.ScreenReaderOnly.theming).toContain("ui-sr-only");
     expect(componentCatalog.StatCard.importName).toBe("StatCard");
     expect(componentCatalog.ToggleSwitch.category).toBe("input");
+    expect(componentCatalog.EditorInsertTray.category).toBe("editor");
+    expect(componentCatalog.EditorTableControls.theming).toContain("editor-tool-button");
   });
 });
