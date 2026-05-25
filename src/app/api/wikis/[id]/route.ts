@@ -50,7 +50,7 @@ export async function GET(
 
 // PUT /api/wikis/[id]
 // Updates wiki metadata. Wiki admin only.
-// Body: { name?, description?, settings? }
+// Body: { name?, description?, settings?, visibility?, defaultRole?, navigationMode?, marketplaceSelections? }
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -79,7 +79,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { name, description, settings } = body;
+    const { name, description, settings, visibility, defaultRole, navigationMode, marketplaceSelections } = body;
 
     const updated = await prisma.wiki.update({
       where: { id },
@@ -87,6 +87,10 @@ export async function PUT(
         ...(name !== undefined && { name }),
         ...(description !== undefined && { description }),
         ...(settings !== undefined && { settings }),
+        ...(visibility !== undefined && { visibility }),
+        ...(defaultRole !== undefined && { defaultRole }),
+        ...(navigationMode !== undefined && { navigationMode }),
+        ...(marketplaceSelections !== undefined && { marketplaceSelections }),
       },
       include: {
         owner: {

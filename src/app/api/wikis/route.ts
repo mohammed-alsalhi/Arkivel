@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { getWorkspaceBootstrapPlan, normalizeWorkspaceSlug } from "@/lib/workspaces";
 
 // GET /api/wikis
 // Lists all public wikis plus the current user's own wikis (when authenticated).
@@ -46,7 +47,7 @@ export async function GET() {
 
 // POST /api/wikis
 // Creates a new wiki. Authentication required.
-// Body: { slug, name, description? }
+// Body: { slug, name, description?, bootstrapProfile?, visibility?, defaultRole?, navigationMode?, settings?, marketplaceSelections? }
 export async function POST(request: NextRequest) {
   const session = await getSession();
   if (!session) {
@@ -58,7 +59,17 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { slug, name, description } = body;
+    const {
+      slug,
+      name,
+      description,
+      bootstrapProfile,
+      visibility,
+      defaultRole,
+      navigationMode,
+      settings,
+      marketplaceSelections,
+    } = body;
 
     if (!slug || !name) {
       return NextResponse.json(
@@ -68,7 +79,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate slug format
-    if (!/^[a-z0-9-]+$/.test(slug)) {
+    const normalizedSlug = normalizeWorkspaceSlug(slug);
+    if (normalizedSlug !== slug || !/^[a-z0-9-]+$/.test(slug)) {
       return NextResponse.json(
         { error: "slug must contain only lowercase letters, numbers, and hyphens" },
         { status: 400 }
@@ -84,11 +96,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const plan = getWorkspaceBootstrapPlan(bootstrapProfile);
+
     const wiki = await prisma.wiki.create({
       data: {
         slug,
         name,
         description: description || null,
+        visibility: visibility || plan.visibility,
+        defaultRole: defaultRole || plan.defaultRole,
+        navigationMode: navigationMode || plan.navigationMode,
+        bootstrapProfile: plan.profile,
+        settings: settings || plan.settings,
+        marketplaceSelections: marketplaceSelections || plan.settings.marketplaceSelections,
         ownerId: session.id,
         // Automatically add the creator as an admin member
         memberships: {
