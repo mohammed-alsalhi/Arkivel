@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.81.0] - 2026-05-25
+
+### Added
+
+- **add portable bundle contract** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.80.3] - 2026-05-25
 
 ### Added
