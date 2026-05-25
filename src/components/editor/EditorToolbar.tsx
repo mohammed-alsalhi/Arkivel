@@ -21,7 +21,7 @@ type Props = {
   onTypewriterToggle: () => void;
 };
 
-type ToolAction = {
+export type EditorToolAction = {
   label: string;
   icon: string;
   action: () => void;
@@ -34,7 +34,7 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-function ToolButton({ action }: { action: ToolAction }) {
+function ToolButton({ action }: { action: EditorToolAction }) {
   return (
     <button
       type="button"
@@ -52,12 +52,12 @@ function ToolButton({ action }: { action: ToolAction }) {
   );
 }
 
-function ToolbarGroup({
+export function ToolbarGroup({
   label,
   actions,
 }: {
   label: string;
-  actions: ToolAction[];
+  actions: EditorToolAction[];
 }) {
   const visible = actions.filter((action) => !action.disabled || action.label === "Undo" || action.label === "Redo");
   if (visible.length === 0) return null;
@@ -72,6 +72,10 @@ function ToolbarGroup({
       </div>
     </div>
   );
+}
+
+export function EditorTableControls({ actions }: { actions: EditorToolAction[] }) {
+  return <ToolbarGroup label="Table" actions={actions} />;
 }
 
 function getBlockValue(editor: Editor) {
@@ -152,7 +156,7 @@ export default function EditorToolbar({
     activeEditor.chain().focus().insertContent({ type: "footnoteRef", attrs: { note } }).run();
   }
 
-  const primaryActions: ToolAction[] = [
+  const primaryActions: EditorToolAction[] = [
     {
       label: "Undo",
       icon: "↶",
@@ -174,14 +178,14 @@ export default function EditorToolbar({
     { label: "Image", icon: "IMG", action: onImageUpload },
   ];
 
-  const textActions: ToolAction[] = [
+  const textActions: EditorToolAction[] = [
     { label: "Strike", icon: "S", action: () => activeEditor.chain().focus().toggleStrike().run(), active: activeEditor.isActive("strike") },
     { label: "Inline code", icon: "</>", action: () => activeEditor.chain().focus().toggleCode().run(), active: activeEditor.isActive("code") },
     { label: "Superscript", icon: "x2", action: () => activeEditor.chain().focus().toggleSuperscript().run(), active: activeEditor.isActive("superscript") },
     { label: "Subscript", icon: "x_2", action: () => activeEditor.chain().focus().toggleSubscript().run(), active: activeEditor.isActive("subscript") },
   ];
 
-  const structureActions: ToolAction[] = [
+  const structureActions: EditorToolAction[] = [
     { label: "Quote", icon: "QT", action: () => activeEditor.chain().focus().toggleBlockquote().run(), active: activeEditor.isActive("blockquote") },
     { label: "Pull quote", icon: "PQ", action: () => activeEditor.chain().focus().togglePullQuote().run(), active: activeEditor.isActive("pullQuote") },
     { label: "Table", icon: "TBL", action: () => activeEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
@@ -190,7 +194,7 @@ export default function EditorToolbar({
     { label: "Math block", icon: "SUM", action: () => activeEditor.chain().focus().insertBlockMath().run() },
   ];
 
-  const knowledgeActions: ToolAction[] = [
+  const knowledgeActions: EditorToolAction[] = [
     {
       label: "Detect wiki links",
       icon: detectedLinkCount > 0 ? `${detectedLinkCount}` : "LINK",
@@ -202,13 +206,13 @@ export default function EditorToolbar({
     { label: "Typewriter mode", icon: "TYPE", action: onTypewriterToggle, active: typewriterMode },
   ];
 
-  const aiActions: ToolAction[] = [
+  const aiActions: EditorToolAction[] = [
     { label: "AI rewrite selection", icon: "Rewrite", action: onAiRewrite, tone: "ai" },
     { label: "AI expand selection", icon: "Expand", action: onAiExpand, tone: "ai" },
     { label: "AI generate article from headings", icon: "Draft", action: onAiGenerate, tone: "ai" },
   ];
 
-  const tableActions: ToolAction[] = [
+  const tableActions: EditorToolAction[] = [
     { label: "Add row below", icon: "+R", action: () => activeEditor.chain().focus().addRowAfter().run() },
     { label: "Add column after", icon: "+C", action: () => activeEditor.chain().focus().addColumnAfter().run() },
     { label: "Delete row", icon: "-R", action: () => activeEditor.chain().focus().deleteRow().run() },
@@ -312,10 +316,7 @@ export default function EditorToolbar({
 
       {isTableActive && (
         <div className={styles.contextBar} aria-label="Table controls">
-          <span className={styles.contextLabel}>Table</span>
-          {tableActions.map((action) => (
-            <ToolButton key={action.label} action={action} />
-          ))}
+          <EditorTableControls actions={tableActions} />
         </div>
       )}
     </div>
