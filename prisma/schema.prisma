@@ -28,6 +28,7 @@ model Article {
   outgoingLinks    ArticleLink[] @relation("OutgoingLinks")
   watchedBy        Watchlist[]
   notifications    Notification[]
+  customizationOverride ArticleCustomizationOverride?
 
   // Phase 2 additions
   sortOrder        Int      @default(0)
@@ -96,6 +97,9 @@ model Article {
   // v4.16 additions
   shareToken       String?  @unique  // secret token for draft share links
   lastVerifiedAt   DateTime?         // when an admin last verified this article
+  lastVerifiedById String?
+  verificationEvidence String? @db.Text
+  verificationExpiresAt DateTime?
 
   // v4.17 additions
   flags            String[] @default([])  // custom admin labels e.g. ["Needs images", "Outdated"]
@@ -160,10 +164,75 @@ model Category {
   articles        Article[]
   expertBadges    ExpertBadge[]
   metadataSchema  MetadataSchema?
+  customization   SpaceCustomization?
+  governance      SpaceGovernance?
   watchers        CategoryWatch[]
   createdAt       DateTime    @default(now())
 
   @@index([parentId])
+}
+
+// ── v4.79: Per-space customization persistence ──
+model SpaceCustomization {
+  id               String   @id @default(cuid())
+  categoryId       String   @unique
+  category         Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  styleId          String?
+  colorThemeId     String?
+  layoutId         String?
+  componentPackId  String?
+  templatePackId   String?
+  navigationMode   String?
+  metadataSchemaId String?
+  privateDraftConfig Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([layoutId])
+  @@index([componentPackId])
+}
+
+// ── v4.79: Per-space governance hooks ──
+model SpaceGovernance {
+  id                    String   @id @default(cuid())
+  categoryId            String   @unique
+  category              Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  ownerId               String?
+  ownerLabel            String?
+  reviewerId            String?
+  reviewerLabel         String?
+  defaultVisibility     String?
+  reviewCadenceDays     Int?
+  healthStaleDays       Int?
+  healthRequiredSignals Json?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([ownerId])
+  @@index([reviewerId])
+  @@index([defaultVisibility])
+}
+
+model ArticleCustomizationOverride {
+  id               String   @id @default(cuid())
+  articleId        String   @unique
+  article          Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  styleId          String?
+  colorThemeId     String?
+  layoutId         String?
+  componentPackId  String?
+  templatePackId   String?
+  navigationMode   String?
+  metadataSchemaId String?
+  privateDraftConfig Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([layoutId])
+  @@index([componentPackId])
 }
 
 model Tag {
@@ -220,11 +289,21 @@ model Discussion {
   parent    Discussion?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Discussion[] @relation("Replies")
   isPinned  Boolean      @default(false)
+  status    String       @default("visible") // "visible" | "hidden" | "reported" | "removed"
+  visibility String      @default("public") // "public" | "reviewers"
+  reportCount Int        @default(0)
+  reportReason String?
+  reportedAt DateTime?
+  moderationReason String?
+  moderatedAt DateTime?
+  moderatedById String?
   createdAt DateTime     @default(now())
 
   @@index([articleId])
   @@index([createdAt])
   @@index([parentId])
+  @@index([status])
+  @@index([visibility])
 }
 
 model MapMarker {
@@ -339,6 +418,8 @@ model User {
   workspaces       Workspace[]
   assets           Asset[]
   claimReviews     ClaimReview[]
+  workspaceInvitesSent WorkspaceInvitation[] @relation("WorkspaceInvitesSent")
+  workspaceInvitesAccepted WorkspaceInvitation[] @relation("WorkspaceInvitesAccepted")
 
   createdAt    DateTime  @default(now())
 
@@ -571,6 +652,11 @@ model ReviewRequest {
   reviewer    User?    @relation("ReviewAssigned", fields: [reviewerId], references: [id])
   status      String   @default("pending") // "pending", "in_review", "approved", "changes_requested", "rejected"
   message     String?  @db.Text
+  dueAt       DateTime?
+  requiredReviewerIds String[] @default([])
+  approvalThreshold Int @default(1)
+  cycleCount  Int      @default(0)
+  decisionNote String? @db.Text
   comments    ReviewComment[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -605,6 +691,8 @@ model ClaimReview {
   claimText   String   @db.Text
   status      String   @default("unreviewed") // "unreviewed", "approved", "needs_source", "disputed", "rejected"
   note        String?  @db.Text
+  evidence    String?  @db.Text
+  expiresAt   DateTime?
   reviewerId  String?
   reviewer    User?    @relation(fields: [reviewerId], references: [id])
   createdAt   DateTime @default(now())
@@ -614,6 +702,7 @@ model ClaimReview {
   @@index([articleId])
   @@index([reviewerId])
   @@index([status])
+  @@index([expiresAt])
 }
 
 // ── v3.0: Change Requests ──
@@ -706,15 +795,23 @@ model Wiki {
   name        String
   description String?
   settings    Json?
+  visibility  String   @default("private") // "private", "members", "public"
+  defaultRole String   @default("viewer")  // default role for invitations and public joins
+  navigationMode String @default("standard") // "standard", "docs", "archive", "demo"
+  bootstrapProfile String @default("personal") // personal, team, public-docs, private-archive, demo
+  marketplaceSelections Json?
   ownerId     String
   owner       User     @relation(fields: [ownerId], references: [id])
   articles    Article[]
   memberships WikiMembership[]
+  invitations WorkspaceInvitation[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([slug])
   @@index([ownerId])
+  @@index([visibility])
+  @@index([bootstrapProfile])
 }
 
 model WikiMembership {
@@ -724,10 +821,38 @@ model WikiMembership {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   role   String @default("viewer") // "admin", "editor", "viewer"
+  status String @default("active") // "active", "invited", "suspended"
+  invitedAt DateTime?
+  joinedAt  DateTime @default(now())
 
   @@unique([wikiId, userId])
   @@index([wikiId])
   @@index([userId])
+  @@index([role])
+  @@index([status])
+}
+
+model WorkspaceInvitation {
+  id          String   @id @default(cuid())
+  wikiId      String
+  wiki        Wiki     @relation(fields: [wikiId], references: [id], onDelete: Cascade)
+  email       String
+  role        String   @default("viewer")
+  token       String   @unique
+  status      String   @default("pending") // "pending", "accepted", "revoked", "expired"
+  invitedById String?
+  invitedBy   User?    @relation("WorkspaceInvitesSent", fields: [invitedById], references: [id])
+  acceptedById String?
+  acceptedBy   User?   @relation("WorkspaceInvitesAccepted", fields: [acceptedById], references: [id])
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([wikiId])
+  @@index([email])
+  @@index([status])
+  @@index([expiresAt])
 }
 
 // ── v4.1: Learning & Retention ──
@@ -1059,12 +1184,22 @@ model AuditLog {
   entityType  String   // "article", "category", "user", "revision"
   entityId    String?
   entityLabel String?
+  workspaceId String?
+  severity    String   @default("info") // "info", "warning", "critical"
+  actorType   String   @default("user") // "user", "api-key", "system", "anonymous"
+  ipAddress   String?
+  userAgent   String?
+  success     Boolean  @default(true)
   metadata    Json?
   createdAt   DateTime @default(now())
 
   @@index([createdAt])
   @@index([action])
   @@index([userId])
+  @@index([workspaceId])
+  @@index([severity])
+  @@index([entityType])
+  @@index([success])
 }
 
 // ── v4.10: Custom Metadata Schemas ──
@@ -1317,13 +1452,22 @@ model EditSuggestion {
   author      String   @default("Anonymous")
   email       String?
   suggestion  String   @db.Text
-  status      String   @default("pending")  // "pending" | "accepted" | "rejected"
+  status      String   @default("pending")  // "pending" | "accepted" | "rejected" | "commented" | "assigned" | "converted"
   adminNote   String?
+  assigneeId  String?
+  reviewerComment String?
+  convertedTaskUrl String?
+  sourceType  String   @default("edit-suggestion") // "edit-suggestion" | "public-contribution"
+  spamScore   Int      @default(0)
+  moderationState String @default("open") // "open" | "needs_review" | "blocked"
+  ipAddress   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([articleId])
   @@index([status])
+  @@index([assigneeId])
+  @@index([moderationState])
 }
 
 // ── v4.33: Referrer Tracking ──
@@ -1472,4 +1616,26 @@ model SpacedRepetitionItem {
 
   @@unique([userId, articleId])
   @@index([userId, nextReviewAt])
+}
+
+// ── v4.81: Export hardening ──
+model ExportHistory {
+  id          String    @id @default(cuid())
+  format      String
+  scope       Json      @default("{}")
+  status      String
+  manifest    Json      @default("{}")
+  warnings    String[]  @default([])
+  omittedData String[]  @default([])
+  fileCount   Int       @default(0)
+  byteCount   Int       @default(0)
+  checksum    String?
+  userId      String?
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([createdAt])
+  @@index([format])
+  @@index([status])
+  @@index([userId])
 }
