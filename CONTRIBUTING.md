@@ -76,9 +76,10 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 ### Customization and marketplace changes
 1. Public self-host settings belong in `src/lib/customization.ts` and must be exposed through `/api/customization`.
 2. Style presets, color themes, layout presets, component packs, theme packs, and plugin-like listings belong in `src/lib/marketplace.ts` with stable ids, `kind`, semantic `version`, `status`, compatibility notes, author, license, local source, screenshots, checksums, and tags.
-3. Reusable UI primitives should come from `src/components/ui` and be registered in `src/components/ui/catalog.ts`.
-4. Customization Studio tab metadata, responsive QA checkpoints, and assistive summaries belong in `src/lib/customization-studio.ts`.
-5. Theme and skin work should use CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]`, `html[data-color-theme="..."]`, and `html[data-layout="..."]`.
+3. Preview-only marketplace import parsing belongs in `src/lib/marketplace-import.ts`; do not add install, file-write, remote-fetch, or code-execution behavior to the preview surface.
+4. Reusable UI primitives should come from `src/components/ui` and be registered in `src/components/ui/catalog.ts`.
+5. Customization Studio tab metadata, responsive QA checkpoints, and assistive summaries belong in `src/lib/customization-studio.ts`.
+6. Theme and skin work should use CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]`, `html[data-color-theme="..."]`, and `html[data-layout="..."]`.
 
 ### Modifying the database schema
 1. Edit `prisma/schema.prisma`

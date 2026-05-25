@@ -5,6 +5,7 @@ import {
   Button,
   Chip,
   CodeBlock,
+  DataTable,
   EmptyState,
   Field,
   InlineCode,
@@ -13,10 +14,19 @@ import {
   Page,
   PageHeader,
   SectionPanel,
+  Select,
   StatCard,
   StatGrid,
+  Textarea,
 } from "@/components/ui";
 import { useAdmin } from "@/components/AdminContext";
+import {
+  SUPPORTED_MARKETPLACE_IMPORT_KINDS,
+  createMarketplaceImportPreview,
+  marketplaceImportExamples,
+  type MarketplaceImportKind,
+  type MarketplaceImportPreview,
+} from "@/lib/marketplace-import";
 
 type MarketplaceItemSource = {
   label: string;
@@ -103,6 +113,9 @@ export default function AdminMarketplacePage() {
   const isAdmin = useAdmin();
   const [copied, setCopied] = useState("");
   const [error, setError] = useState("");
+  const [importJson, setImportJson] = useState(() => JSON.stringify(marketplaceImportExamples["theme-pack"], null, 2));
+  const [importPreview, setImportPreview] = useState<MarketplaceImportPreview | null>(null);
+  const [selectedExample, setSelectedExample] = useState<MarketplaceImportKind>("theme-pack");
   const [manifest, setManifest] = useState<MarketplaceManifest | null>(null);
   const [query, setQuery] = useState("");
 
@@ -241,6 +254,69 @@ export default function AdminMarketplacePage() {
             </SectionPanel>
           )}
 
+          <SectionPanel title="Import preview" bodyClassName="space-y-4">
+            <Notice className="border-info-border bg-info-soft text-info" role="status">
+              Imports are preview-only in v1. Arkivel parses metadata and safety checks here, but it does not install packs, execute code, write files, or change runtime config.
+            </Notice>
+            <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(220px,280px)]">
+              <Field htmlFor="marketplace-import-json" label="Paste pack JSON">
+                <Textarea
+                  id="marketplace-import-json"
+                  value={importJson}
+                  onChange={(event) => {
+                    setImportJson(event.target.value);
+                    setImportPreview(null);
+                  }}
+                  rows={14}
+                  spellCheck={false}
+                />
+              </Field>
+              <div className="space-y-3">
+                <Field htmlFor="marketplace-import-example" label="Sample contract">
+                  <Select
+                    id="marketplace-import-example"
+                    value={selectedExample}
+                    onChange={(event) => setSelectedExample(event.target.value as MarketplaceImportKind)}
+                  >
+                    {SUPPORTED_MARKETPLACE_IMPORT_KINDS.map((kind) => (
+                      <option key={kind} value={kind}>{kind}</option>
+                    ))}
+                  </Select>
+                </Field>
+                <Button
+                  aria-label={`Load ${selectedExample} import sample`}
+                  onClick={() => {
+                    setImportJson(JSON.stringify(marketplaceImportExamples[selectedExample], null, 2));
+                    setImportPreview(null);
+                  }}
+                >
+                  Load sample
+                </Button>
+                <Field htmlFor="marketplace-import-file" label="Upload JSON">
+                  <Input
+                    accept="application/json,.json"
+                    id="marketplace-import-file"
+                    type="file"
+                    onChange={async (event) => {
+                      const file = event.currentTarget.files?.[0];
+                      if (!file) return;
+                      setImportJson(await file.text());
+                      setImportPreview(null);
+                    }}
+                  />
+                </Field>
+                <Button
+                  aria-label="Preview marketplace import JSON"
+                  variant="primary"
+                  onClick={() => setImportPreview(createMarketplaceImportPreview(importJson))}
+                >
+                  Preview import
+                </Button>
+              </div>
+            </div>
+            {importPreview && <ImportPreviewPanel preview={importPreview} />}
+          </SectionPanel>
+
           {grouped.map(([kind, items]) => (
             <SectionPanel key={kind} title={kind.replaceAll("-", " ")}>
               <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -290,6 +366,130 @@ export default function AdminMarketplacePage() {
         </div>
       )}
     </Page>
+  );
+}
+
+function ImportPreviewPanel({ preview }: { preview: MarketplaceImportPreview }) {
+  const issueCount = preview.validationErrors.length + preview.securityErrors.length;
+  const metadataRows = [
+    ["id", preview.metadata.id],
+    ["kind", preview.metadata.kind ?? preview.rawKind],
+    ["name", preview.metadata.name],
+    ["version", preview.metadata.version],
+    ["compatibility", preview.metadata.compatibility],
+    ["author", preview.metadata.author],
+    ["license", preview.metadata.license],
+    ["schema", preview.metadata.schemaVersion],
+  ].filter(([, value]) => value);
+
+  return (
+    <div className="space-y-4">
+      <Notice
+        role={preview.valid ? "status" : "alert"}
+        className={
+          preview.valid
+            ? "border-success-border bg-success-soft text-success"
+            : "border-danger-border bg-danger-soft text-danger"
+        }
+      >
+        {preview.valid
+          ? "Import preview accepted. No files were installed and runtime config was not changed."
+          : `Import preview blocked with ${issueCount} issue${issueCount === 1 ? "" : "s"}.`}
+      </Notice>
+
+      <StatGrid>
+        <StatCard label="Status" value={preview.status} detail={preview.previewOnly ? "preview only" : ""} />
+        <StatCard label="Required files" value={preview.requiredFiles.length} />
+        <StatCard label="Required env vars" value={preview.requiredEnvVars.length} />
+        <StatCard label="Security issues" value={preview.securityErrors.length} />
+      </StatGrid>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div>
+          <h3 className="mb-2 text-[13px] font-semibold text-heading">Parsed metadata</h3>
+          <DataTable aria-label="Parsed import metadata">
+            <tbody>
+              {metadataRows.map(([label, value]) => (
+                <tr key={label}>
+                  <th className="w-32 text-left">{label}</th>
+                  <td>{value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </DataTable>
+        </div>
+        <div className="space-y-3">
+          <ImportList title="Required files" values={preview.requiredFiles} />
+          <ImportList title="Required env vars" values={preview.requiredEnvVars} />
+          <ImportList title="Permissions" values={preview.permissions} />
+          <ImportList title="Routes" values={preview.routes} />
+          <ImportList title="Settings" values={preview.settings} />
+          <ImportList title="Slots" values={preview.slots} />
+          <ImportList title="Widgets" values={preview.widgets} />
+          <ImportList title="Hooks" values={preview.hooks} />
+        </div>
+      </div>
+
+      {(preview.validationErrors.length > 0 || preview.securityErrors.length > 0 || preview.compatibilityWarnings.length > 0) && (
+        <div className="grid gap-3 md:grid-cols-3">
+          <IssueList title="Validation" tone="danger" values={preview.validationErrors} />
+          <IssueList title="Security" tone="danger" values={preview.securityErrors} />
+          <IssueList title="Compatibility" tone="warning" values={preview.compatibilityWarnings} />
+        </div>
+      )}
+
+      {preview.tokenDiff.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-[13px] font-semibold text-heading">Theme token diff</h3>
+          <DataTable aria-label="Theme token diff">
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Built in</th>
+                <th>Imported</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {preview.tokenDiff.map((row) => (
+                <tr key={row.token}>
+                  <td><InlineCode>{row.token}</InlineCode></td>
+                  <td>{row.builtInValue ?? "-"}</td>
+                  <td>{row.importedValue ?? "-"}</td>
+                  <td><Chip tone={row.status === "changed" || row.status === "added" ? "warning" : "default"}>{row.status}</Chip></td>
+                </tr>
+              ))}
+            </tbody>
+          </DataTable>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ImportList({ title, values }: { title: string; values: string[] }) {
+  if (values.length === 0) return null;
+  return (
+    <div>
+      <h3 className="mb-1 text-[12px] font-semibold text-heading">{title}</h3>
+      <div className="flex flex-wrap gap-1">
+        {values.map((value) => <Chip key={value}>{value}</Chip>)}
+      </div>
+    </div>
+  );
+}
+
+function IssueList({ title, tone, values }: { title: string; tone: "danger" | "warning"; values: string[] }) {
+  if (values.length === 0) return null;
+  return (
+    <div className="border border-border bg-background p-3">
+      <h3 className={`mb-2 text-[12px] font-semibold ${tone === "danger" ? "text-danger" : "text-warning"}`}>
+        {title}
+      </h3>
+      <ul className="space-y-1 text-[12px] text-muted">
+        {values.map((value) => <li key={value}>{value}</li>)}
+      </ul>
+    </div>
   );
 }
 

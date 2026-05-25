@@ -66,11 +66,11 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 
 #### v4.77.1 - Pack import preview
 
-- [ ] Add upload/paste import preview for theme packs, layout packs, component packs, and plugin manifests
-- [ ] Show parsed metadata, required files, required env vars, permissions, hooks, routes, widgets, and compatibility warnings
-- [ ] Add diff view between imported pack tokens and built-in defaults
-- [ ] Reject executable payloads, remote code references, path traversal, and unsupported schema versions
-- [ ] Keep all imports preview-only until the trusted local install flow ships
+- [x] Add upload/paste import preview for theme packs, layout packs, component packs, and plugin manifests
+- [x] Show parsed metadata, required files, required env vars, permissions, hooks, routes, widgets, and compatibility warnings
+- [x] Add diff view between imported pack tokens and built-in defaults
+- [x] Reject executable payloads, remote code references, path traversal, and unsupported schema versions
+- [x] Keep all imports preview-only until the trusted local install flow ships
 
 #### v4.77.2 - Marketplace detail pages
 
@@ -716,6 +716,14 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 - [ ] Public API v1, webhooks, feeds, and SDK types have compatibility commitments
 - [ ] Admin operations, observability, security, and privacy docs are complete enough for self-host operators
 - [ ] README, DESIGN, ARCHITECTURE, ROADMAP, CHANGELOG, AGENTS, CONTRIBUTING, API docs, help docs, feature docs, and in-app reference pages are synchronized
+
+## v4.77.1
+
+- [x] Pack import preview - `/admin/marketplace` now accepts pasted JSON or uploaded JSON for theme packs, layout packs, component packs, and plugin manifests without installing anything
+- [x] Parsed import report - previews show metadata, required files, required env vars, permissions, hooks, routes, widgets, settings, and compatibility warnings
+- [x] Theme token diff - imported theme-pack tokens are compared against the built-in sample pack so admins can review added, changed, removed, and unchanged values
+- [x] Import security checks - executable fields, remote code references, path traversal, unsafe permissions, malformed JSON, unsupported kinds, and unsupported schema versions are blocked
+- [x] API and tests - `/api/customization` exposes the import-preview contract and examples, while unit tests cover valid examples and rejected unsafe payloads
 
 ## v4.77.0
 

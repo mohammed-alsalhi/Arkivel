@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.77.1] - 2026-05-25
+
+### Added
+
+- **Pack import preview** - Added paste/upload preview for theme packs, layout packs, component packs, and plugin manifests directly in `/admin/marketplace`.
+- **Import safety contract** - Added `src/lib/marketplace-import.ts` with preview-only schema metadata, sample packs, parsed metadata summaries, required files/env vars, permissions, hooks, routes, widgets, and compatibility warnings.
+- **Token diff review** - Added theme-token diffs against built-in pack tokens so admins can see added, changed, removed, and unchanged values before installation exists.
+- **Import hardening** - Blocked executable payload fields, remote code references, path traversal, unsafe plugin permissions, malformed JSON, unsupported kinds, and unsupported schema versions.
+- **Customization API metadata** - Exposed marketplace import-preview schema, supported kinds, contract, and examples through `/api/customization`.
+
 ## [4.77.0] - 2026-05-25
 
 ### Added

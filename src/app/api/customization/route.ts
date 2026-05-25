@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { customization, customizationOptions } from "@/lib/customization";
 import { componentCatalog } from "@/components/ui/catalog";
 import {
+  MARKETPLACE_IMPORT_SCHEMA_VERSION,
+  SUPPORTED_MARKETPLACE_IMPORT_KINDS,
+  marketplaceImportContract,
+  marketplaceImportExamples,
+} from "@/lib/marketplace-import";
+import {
   colorThemePresets,
   componentPacks,
   createMarketplaceRegistry,
@@ -59,6 +65,13 @@ export async function GET() {
       schemaVersion: registry.schemaVersion,
       catalogSource: registry.source,
       contract: marketplaceRegistryContract,
+      importPreview: {
+        contract: marketplaceImportContract,
+        examples: marketplaceImportExamples,
+        previewOnly: true,
+        schemaVersion: MARKETPLACE_IMPORT_SCHEMA_VERSION,
+        supportedKinds: SUPPORTED_MARKETPLACE_IMPORT_KINDS,
+      },
       validation: registry.validation,
     },
   });

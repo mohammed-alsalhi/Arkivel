@@ -486,11 +486,11 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 - **Import tools** — `/admin/import`, Confluence/Notion/Obsidian import in one place
 - **Batch operations:** on `/articles`, bulk-assign category, publish/unpublish, or delete
 - **Customization:** name, tagline, welcome text, footer set via `NEXT_PUBLIC_*` environment variables
-- **Customization manifest:** `/api/customization`, public grouped config, supported env vars, style presets, color themes, layouts, reusable component catalog, marketplace registry metadata, plugin manifests, theme packs, and theme hooks for self-hosters and plugins
+- **Customization manifest:** `/api/customization`, public grouped config, supported env vars, style presets, color themes, layouts, reusable component catalog, marketplace registry/import-preview metadata, plugin manifests, theme packs, and theme hooks for self-hosters and plugins
 - **Style preset:** Set `NEXT_PUBLIC_ARKIVEL_STYLE` to `classic-wiki` or `atlas-modern`, then rebuild/redeploy because `NEXT_PUBLIC_*` values are build-time config
 - **Color theme:** Set `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` to `standard`, `forest`, or `ember`, then rebuild/redeploy because `NEXT_PUBLIC_*` values are build-time config
 - **Layout preset:** Set `NEXT_PUBLIC_ARKIVEL_LAYOUT` to `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, or `research-notebook`
-- **Admin customization:** `/admin/customization` is a tabbed env-first workbench for brand copy, logos, style presets, color themes, layout presets, feature flags, browser-local drafts, named presets, active-vs-draft diffs, keyboard-accessible tabs, screen-reader summaries, responsive QA checkpoints, palette/dark-theme/asset-size diagnostics, live preview panels, source badges, theme-pack validation, downloadable support reports, and copy-ready `.env`, `.env.local`, Vercel, or Docker Compose values; `/admin/marketplace` filters the versioned local registry and shows schema, source, license, checksum, and validation health
+- **Admin customization:** `/admin/customization` is a tabbed env-first workbench for brand copy, logos, style presets, color themes, layout presets, feature flags, browser-local drafts, named presets, active-vs-draft diffs, keyboard-accessible tabs, screen-reader summaries, responsive QA checkpoints, palette/dark-theme/asset-size diagnostics, live preview panels, source badges, theme-pack validation, downloadable support reports, and copy-ready `.env`, `.env.local`, Vercel, or Docker Compose values; `/admin/marketplace` filters the versioned local registry and previews pasted/uploaded pack JSON with schema, source, license, checksum, token diff, and validation health
 
 ---
 
