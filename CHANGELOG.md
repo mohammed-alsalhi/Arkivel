@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.87.2] - 2026-05-25
+
+### Added
+
+- **add observability plumbing** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.87.1] - 2026-05-25
 
 ### Added
