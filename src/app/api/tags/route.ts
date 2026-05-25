@@ -2,21 +2,29 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { generateSlug } from "@/lib/utils";
 import { isAdmin, requireAdmin } from "@/lib/auth";
+import { createWorkspaceArticleWhere, getWorkspaceIdFromRequestLike } from "@/lib/workspaces";
+import { invalidateCacheForEvent } from "@/lib/cache-strategy";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const workspaceId = getWorkspaceIdFromRequestLike({
+    searchParams: request.nextUrl.searchParams,
+    headers: request.headers,
+  });
+  const includeGlobal = request.nextUrl.searchParams.get("includeGlobal") === "1";
+  const articleWhere = createWorkspaceArticleWhere({ workspaceId, includeGlobal: workspaceId ? includeGlobal : true });
   try {
     const tags = await prisma.tag.findMany({
       orderBy: { name: "asc" },
       include: {
-        _count: { select: { articles: true } },
+        _count: { select: { articles: { where: { article: articleWhere } } } },
         parent: { select: { id: true, name: true, slug: true } },
         children: {
           orderBy: { name: "asc" },
           include: {
-            _count: { select: { articles: true } },
+            _count: { select: { articles: { where: { article: articleWhere } } } },
             children: {
               orderBy: { name: "asc" },
-              include: { _count: { select: { articles: true } } },
+              include: { _count: { select: { articles: { where: { article: articleWhere } } } } },
             },
           },
         },
@@ -59,6 +67,8 @@ export async function POST(request: NextRequest) {
       parentId: parentId || null,
     },
   });
+
+  await invalidateCacheForEvent("tag.write");
 
   return NextResponse.json(tag, { status: 201 });
 }

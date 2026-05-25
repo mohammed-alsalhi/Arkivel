@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { createPublicWorkspaceArticleWhere } from "@/lib/workspaces";
 
 export async function GET() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://example.com";
 
   const articles = await prisma.article.findMany({
-    where: { published: true, status: "published" },
+    where: { published: true, status: "published", ...createPublicWorkspaceArticleWhere() },
     select: { slug: true, updatedAt: true },
     orderBy: { updatedAt: "desc" },
   });
 
   const categories = await prisma.category.findMany({
+    where: {
+      articles: {
+        some: { published: true, status: "published", ...createPublicWorkspaceArticleWhere() },
+      },
+    },
     select: { slug: true },
   });
 

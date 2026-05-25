@@ -86,9 +86,11 @@ import ClaimsPanel from "@/components/article/ClaimsPanel";
 import TutorButton from "@/components/article/TutorButton";
 import AudioNarration from "@/components/article/AudioNarration";
 import FactCheckPanel from "@/components/article/FactCheckPanel";
+import SpaceGovernanceBadges from "@/components/article/SpaceGovernanceBadges";
 import ArticleRightSidebar from "@/components/ArticleRightSidebar";
 import { resolveQueryBlocks } from "@/lib/queryblocks";
 import { ACTIVE_REVIEW_STATUSES } from "@/lib/reviews";
+import { defaultGlobalSpaceGovernance, resolveSpaceGovernanceInheritance, type SpaceGovernanceValues } from "@/lib/space-governance";
 
 // ISR: revalidate published articles every 5 minutes
 export const revalidate = 300;
@@ -169,7 +171,7 @@ export default async function ArticlePage({ params }: Props) {
   const transcluded = await resolveTransclusions(macroExpanded);
   const expandedContent = await resolveQueryBlocks(transcluded);
   const glossaryTerms = await prisma.glossaryTerm.findMany({ select: { term: true, definition: true, aliases: true } });
-  const [resolvedContent, backlinks, allCategories] = await Promise.all([
+  const [resolvedContent, backlinks, allCategories, governanceCategories] = await Promise.all([
     resolveWikiLinks(expandedContent),
     getBacklinks(slug),
     prisma.category.findMany({
@@ -181,7 +183,11 @@ export default async function ArticlePage({ params }: Props) {
         },
       },
     }),
+    prisma.category.findMany({ include: { governance: true } }),
   ]);
+  const governance = article.categoryId
+    ? resolveArticleGovernance(governanceCategories, article.categoryId)
+    : resolveSpaceGovernanceInheritance({ categoryChain: [], globalDefaults: defaultGlobalSpaceGovernance() });
 
   const [lastRevision, recentRevisions, adminFlag, coAuthors, readCount, reactionCount, activeReview] = await Promise.all([
     prisma.articleRevision.findFirst({
@@ -395,6 +401,7 @@ export default async function ArticlePage({ params }: Props) {
 
         <div className="article-notice-stack">
           <ArticleFlags flags={article.flags} />
+          <SpaceGovernanceBadges badges={governance.badges} />
 
           {article.status !== "published" && (
             <div className={`wiki-notice article-status-notice ${article.status === "draft" ? "article-status-notice-warning" : "article-status-notice-info"}`}>
@@ -633,6 +640,38 @@ export default async function ArticlePage({ params }: Props) {
       <ArticleRightSidebar slug={slug} backlinks={backlinks} />
     </div>
   );
+}
+
+function resolveArticleGovernance(
+  categories: Array<{
+    governance: (Omit<Partial<SpaceGovernanceValues>, "defaultVisibility" | "healthRequiredSignals"> & {
+      defaultVisibility?: string | null;
+      healthRequiredSignals?: unknown;
+    }) | null;
+    id: string;
+    name: string;
+    parentId: string | null;
+  }>,
+  categoryId: string,
+) {
+  const byId = new Map(categories.map((category) => [category.id, category]));
+  const chain: typeof categories = [];
+  let cursor = byId.get(categoryId);
+
+  while (cursor) {
+    chain.unshift(cursor);
+    cursor = cursor.parentId ? byId.get(cursor.parentId) : undefined;
+  }
+
+  return resolveSpaceGovernanceInheritance({
+    categoryChain: chain.map((category) => ({
+      ...(category.governance ?? {}),
+      id: category.id,
+      label: category.name,
+      parentId: category.parentId,
+    })),
+    globalDefaults: defaultGlobalSpaceGovernance(),
+  });
 }
 
 export const dynamic = "force-dynamic";

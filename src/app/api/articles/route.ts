@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { generateSlug } from "@/lib/utils";
 import { isAdmin, requireAdmin } from "@/lib/auth";
+import { createWorkspaceArticleWhere, getWorkspaceIdFromRequestLike } from "@/lib/workspaces";
+import { invalidateCacheForEvent } from "@/lib/cache-strategy";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
+  const workspaceId = getWorkspaceIdFromRequestLike({ searchParams, headers: request.headers });
+  const includeGlobal = searchParams.get("includeGlobal") === "1";
   const category = searchParams.get("category");
   const tag = searchParams.get("tag");
   const page = parseInt(searchParams.get("page") || "1");
@@ -13,7 +17,9 @@ export async function GET(request: NextRequest) {
   const status = searchParams.get("status");
   const slug = searchParams.get("slug");
 
-  const where: Record<string, unknown> = {};
+  const where: Record<string, unknown> = {
+    ...createWorkspaceArticleWhere({ workspaceId, includeGlobal: workspaceId ? includeGlobal : true }),
+  };
   if (category) where.category = { slug: category };
   if (tag) where.tags = { some: { tag: { slug: tag } } };
   if (status) where.status = status;
@@ -45,7 +51,7 @@ export async function POST(request: NextRequest) {
   if (denied) return denied;
 
   const body = await request.json();
-  const { title, content, contentRaw, excerpt, coverImage, categoryId, tagIds, isDisambiguation, redirectTo, infobox, status: articleStatus, isPinned } = body;
+  const { title, content, contentRaw, excerpt, coverImage, categoryId, tagIds, isDisambiguation, redirectTo, infobox, status: articleStatus, isPinned, workspaceId, wikiId } = body;
 
   if (!title || !content) {
     return NextResponse.json({ error: "Title and content are required" }, { status: 400 });
@@ -71,6 +77,7 @@ export async function POST(request: NextRequest) {
       redirectTo: redirectTo || null,
       infobox: infobox || null,
       categoryId: categoryId || null,
+      wikiId: workspaceId || wikiId || null,
       status: articleStatus || "published",
       isPinned: isPinned || false,
       tags: tagIds?.length
@@ -82,6 +89,8 @@ export async function POST(request: NextRequest) {
       tags: { include: { tag: true } },
     },
   });
+
+  await invalidateCacheForEvent("article.write");
 
   return NextResponse.json(article, { status: 201 });
 }

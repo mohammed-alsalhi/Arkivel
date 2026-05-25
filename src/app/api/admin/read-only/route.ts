@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { isAdmin } from "@/lib/auth";
+import { READ_ONLY_MODE_KEY, parseModeEnabled } from "@/lib/maintenance-tooling";
 
 export const dynamic = "force-dynamic";
 
-const KEY = "read_only_mode";
+const KEY = READ_ONLY_MODE_KEY;
 
 export async function GET() {
   try {
@@ -29,8 +30,8 @@ export async function POST(request: NextRequest) {
     const { enabled } = await request.json();
     const record = await prisma.pluginState.upsert({
       where: { id: KEY },
-      update: { enabled: !!enabled },
-      create: { id: KEY, enabled: !!enabled },
+      update: { enabled: parseModeEnabled(enabled) },
+      create: { id: KEY, enabled: parseModeEnabled(enabled) },
     });
     return NextResponse.json({ enabled: record.enabled });
   } catch {

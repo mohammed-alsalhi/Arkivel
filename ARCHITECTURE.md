@@ -35,6 +35,16 @@ src/
       trails/                 # Canon Trails guided route report
       intelligence/           # Knowledge Command Center cockpit report
       customization/          # Public self-host customization manifest
+      offline/                # Offline/PWA contract metadata
+      security/               # Security review contract metadata
+      privacy/                # Privacy controls contract metadata
+      marketplace/security/   # Marketplace and plugin security metadata
+      marketplace/beta/       # Marketplace beta launch metadata
+      marketplace/lifecycle/  # Marketplace pack lifecycle metadata
+      marketplace/authoring/  # Marketplace authoring metadata
+      marketplace/templates/  # Template-pack marketplace metadata
+      space-workflows/        # Domain workflow metadata
+      assistant-packs/        # AI assistant pack metadata
       map-markers/            # Marker CRUD
         [id]/
       maps/                   # Multi-map management
@@ -87,8 +97,9 @@ src/
     feed/atom/                # Atom feed
   components/
     editor/                   # Tiptap editor and extensions
-      TiptapEditor.tsx        # Main rich text editor shell, feature trays, telemetry, and writing tools
-      EditorToolbar.tsx       # Ribbon toolbar and contextual table lab
+      TiptapEditor.tsx        # Main rich text editor shell, feature tray orchestration, telemetry, and writing tools
+      EditorPrimitives.tsx    # Reusable insert/review/outline trays and selected-text action bar
+      EditorToolbar.tsx       # Ribbon toolbar and reusable contextual table controls
       WikiLinkExtension.ts    # [[Article Name]] node extension
       WikiLinkSuggester.tsx   # Autocomplete dropdown for wiki links
       useWikiLinkSuggester.ts # Hook for wiki link suggestions
@@ -177,24 +188,69 @@ Documentation is part of the release surface. Changes that affect behavior, UI, 
 
 Arkivel's self-host customization contract lives in `src/lib/customization.ts`. It groups public configuration into `brand`, `style`, `features`, `limits`, `map`, and `integrations`, while `src/lib/config.ts` keeps backward-compatible flat aliases such as `config.name` and `config.mapEnabled`.
 
-Reusable extension metadata lives in `src/lib/marketplace.ts`. Built-in style presets such as `classic-wiki` and `atlas-modern`, color themes such as `standard`, `forest`, and `ember`, layout presets, component packs, theme packs, and plugin manifests share the same versioned local registry contract: stable id, kind, version, compatibility, author, license, local source, status, screenshots, and checksums. Preview-only pack import parsing lives in `src/lib/marketplace-import.ts` so future local installs can reuse the same schema and safety checks.
+Reusable extension metadata lives in `src/lib/marketplace.ts`. Built-in style presets such as `classic-wiki` and `atlas-modern`, color themes such as `standard`, `forest`, and `ember`, layout presets, component packs, theme packs, and plugin manifests share the same versioned local registry contract: stable id, kind, version, compatibility, author, license, local source, status, screenshots, and checksums. The v1 plugin manifest contract lives in `src/lib/plugin-manifest.ts`; it declares identity, compatibility, permissions, routes, settings, widgets, hooks, jobs, storage, API scopes, webhooks, examples, validation issues, and Arkivel/plugin API compatibility metadata before any runtime loader is enabled. Preview-only pack import parsing lives in `src/lib/marketplace-import.ts` so future local installs can reuse the same schema and safety checks.
+
+Trusted local plugin discovery lives in `src/lib/plugins/local-loader.ts`. It is disabled unless `ARKIVEL_ENABLE_TRUSTED_PLUGINS=true` and `ARKIVEL_TRUSTED_PLUGIN_DIR` is an absolute directory. The v4.80.1 loader reads one `plugin.json` per plugin subdirectory, validates it with the v1 manifest schema, reports invalid manifests through `/api/plugins`, and never imports or executes plugin code while the runtime sandbox is still being built.
+
+Plugin permission prompts live in `src/lib/plugins/permissions.ts`, and plugin health metadata is assembled by `src/lib/plugins/registry.ts` for `/api/plugins` and `/admin/plugins`. Only admins can grant plugin permissions through enablement decisions; editors, viewers, API keys, and anonymous actors have narrower runtime defaults for future sandbox checks. Plugin enable/disable, route access, job runs, settings changes, install events, and hook failures are modeled as audit actions, with enable/disable and article render hook failures logged today.
+
+Audit trail helpers live in `src/lib/audit.ts`, with append-only `AuditLog` rows storing actor, target, workspace, severity, success, network metadata, and JSON details. `/api/admin/audit-log` supports actor/action/target/workspace/severity/success/date filters plus JSON export with summary, standard, strict, or full redaction. Alert trigger metadata and retention defaults are published through `/api/customization` as `auditTrail` and documented in `docs/audit-trail.md`.
+
+Plugin authoring assets live in `examples/plugins/starter-plugin/`, `examples/plugins/marketplace-listing-template.json`, and `docs/plugin-authoring.md`. The `npm run plugin:validate` CLI validates local `plugin.json` files with the same manifest helper used by the app and can list supported permissions, hooks, webhook events, schema fields, and compatibility surfaces.
+
+Portable bundle contracts live in `src/lib/portable-bundle.ts` and are documented in `docs/portable-bundles.md`. The v1 contract defines full-site manifests for articles, revisions, categories, tags, users, settings, plugin state, maps, comments, discussions, assets, and customizations, while explicitly excluding sessions, API keys, and analytics by default. It also defines SHA-256 checksum fields, source instance metadata, created-at, export scope, privacy filters, and dry-run import reports for conflicts, missing assets, unsupported schemas, duplicate slugs, and permission gaps.
+
+Export hardening helpers live in `src/lib/export-hardening.ts`. Markdown, HTML, JSON, and ZIP export endpoints attach checksum and manifest headers, record `ExportHistory` rows when the database is available, and expose recent/downloadable reports through `/api/export/history`. The shared contract covers Markdown, HTML, JSON, CSV, ZIP, MediaWiki, and database-shaped exports, with progress stages for queued, collecting, rendering, packaging, completed, failed, cancelled, and retrying flows.
+
+Import rehearsal contracts live in `src/lib/import-rehearsal.ts` and `/api/import/rehearsal`. Rehearsals are no-write previews that wrap the portable dry-run report shape, group conflicts for duplicate slugs, categories, tags, users, assets, revisions, unsupported schemas, and permission gaps, and require rollback plans before any future import writes.
+
+Moderation contracts live in `src/lib/moderation.ts` and are exposed through `/api/customization`. Discussion rows carry public/reviewer visibility, report counts/reasons, moderation status, moderator id, and moderation timestamps; public discussion reads only return visible public comments. Edit suggestions support accept, reject, comment, assign, and convert-to-task review actions, with spam score, moderation state, assignee, reviewer comment, task URL, and request IP metadata for public contribution workflows.
+
+Workspace contracts live in `src/lib/workspaces.ts`; the durable database entity is the existing `Wiki` model. v4.82 adds visibility, default role, navigation mode, bootstrap profile, marketplace selections, membership status, and `WorkspaceInvitation` records. Articles already carry `wikiId`; core article, search, category, and tag APIs accept `workspaceId`, `wikiId`, or `X-Arkivel-Workspace`, with `includeGlobal=1` reserved for migration windows while legacy unscoped rows are backfilled.
+
+Role template contracts live in `src/lib/role-templates.ts` and are exposed through `/api/customization`. They define personal admin, team owner, docs maintainer, editor, reviewer, contributor, viewer, and public reader templates, with a permission matrix for pages, APIs, exports, webhooks, plugins, customization, and marketplace actions. API-key actors are allowed to use API surfaces according to their user role but cannot administer plugins, customization, or marketplace settings.
+
+Collaboration controls live in `src/lib/collaboration-controls.ts` and are exposed through `/api/customization`. They define workspace-aware policy for co-authors, edit locks, review assignments, comments, mentions, notifications, workspace activity digests, and contribution summaries. Anonymous RSS, Atom, sitemap, and `/api/sitemap` only include legacy unscoped published articles or public workspace articles; API v1 callers can read unscoped articles plus public, owned, or actively-membered workspace content.
+
+Editorial governance contracts live in `src/lib/editorial-governance.ts` and are exposed through `/api/customization`. Review requests carry due dates, required reviewer ids, approval thresholds, change-request cycle counts, and decision notes. Claim reviews carry evidence and expiration metadata for disputed/needs-source/stale/rejected/unreviewed queues. Verification stamps include reviewer, evidence, and expiration metadata, and `/api/admin/editorial-governance/summary` aggregates release blockers, editorial risk, claim queues, verification renewals, and owner gaps.
+
+Marketplace contribution guidance lives in `docs/marketplace-contributions.md`, with sample folders under `examples/marketplace/` and GitHub issue templates for submissions and pack bugs. These artifacts define the author-facing review path for pack naming, semantic versioning, screenshots, compatibility notes, tests, and security/accessibility/performance checks.
+
+Component slot contracts live in `src/lib/component-slots.ts` and are exposed through `/api/customization`. They define the stable component-pack target surface for article cards, article headers, metadata panels, infobox layouts, dashboard widgets, homepage sections, search results, editor panels, space navigation, and admin summaries. Marketplace component packs are validated against those slot ids before they can be treated as compatible.
+
+The built-in component-pack registry in `src/lib/marketplace.ts` currently publishes default wiki, docs portal, team knowledge base, worldbuilding atlas, and research notebook packs. Each pack maps named component affordances to stable slots and declares a recommended layout, which lets later runtime loading work bind real components without changing the public marketplace contract.
+
+Layout composition hooks live in `src/lib/layout-composition.ts` and are attached to layout presets in the marketplace registry. The customization API exposes shell density, homepage module order, article column structure, right-rail behavior, dashboard modules, category landing behavior, and scoped CSS/data-attribute hooks for each built-in layout, while Customization Studio renders them as preview-only metadata.
+
+Persisted space customization lives in `SpaceCustomization` and `ArticleCustomizationOverride` records, with validation and inheritance helpers in `src/lib/space-customization.ts`. Public reads from `/api/categories/:id/customization` and `/api/articles/:id/customization` resolve global environment defaults, parent categories, the current category, and article overrides into a redacted shape that hides `privateDraftConfig`; admin-only `PUT` requests validate style, color theme, layout, component pack, template pack, navigation, and metadata schema values before saving.
+
+The first admin UI for this contract lives in `/admin/categories`. It edits category-space overrides, shows inherited effective values and source markers, offers reset-to-parent/global controls, warns about obvious global-feature conflicts, and previews article-list, metadata/navigation, theme/layout, and responsive QA outcomes before later dedicated space-governance screens arrive.
+
+Space template contracts live in `src/lib/space-templates.ts` and are exposed through `/api/space-templates`, `/space-templates/:id`, and `/api/customization`. Templates are preview-safe JSON manifests for category trees, starter article templates, sample metadata, default tags, infobox fields, navigation, dashboards, layout ids, component pack ids, and recommended packs. The v4.91.0 registry ships personal wiki, product docs, team handbook, worldbuilding bible, research notebook, reading archive, project knowledge base, and public documentation templates; imports are validated and summarized before any future apply flow can write categories or articles.
+
+Space governance hooks live in `SpaceGovernance` records and `src/lib/space-governance.ts`. Governance resolves from global defaults through parent categories to the current category, covering owner, reviewer, default visibility, review cadence, stale-page threshold, and required health signals. Article pages render inherited governance badges, `/admin` summarizes space health widgets, and `/api/categories/:id/governance` writes are admin-only and audit logged.
+
+Component-pack developer tooling lives in `scripts/generate-component-pack.ts`, `scripts/validate-component-pack.ts`, `examples/marketplace/component-pack`, `docs/component-pack-preview-harness.md`, and `src/lib/component-pack-fixtures.ts`. The tooling scaffolds preview-safe packs, validates import-preview manifests and slot ids, and gives authors typed article, category, dashboard, marketplace, and editor fixture data before runtime pack loading exists.
 
 The public `/api/customization` endpoint exposes:
 
 - Current grouped customization values.
 - Supported `NEXT_PUBLIC_*` environment variables with defaults and descriptions.
 - Reusable UI component catalog metadata from `src/components/ui/catalog.ts`.
-- Built-in style presets, color themes, layout presets, component packs, plugin manifests, theme pack schemas, per-space customization metadata, marketplace registry metadata, import-preview examples, validation summaries, and marketplace items.
+- Built-in style presets, color themes, layout presets, component packs, plugin manifest schema/examples/compatibility matrix, trusted local plugin loader contract, plugin manifests, theme pack schemas, persisted space customization contracts, marketplace registry metadata, import-preview examples, validation summaries, migration guidance, and marketplace items.
 - Theme hook locations for CSS-variable and shared-class customization.
 
-Use this contract before adding new self-host flags, public branding controls, style presets, color themes, layouts, plugin-facing metadata, marketplace entries, per-space customization metadata, or theme hooks. `/admin/customization` is env-first and preview-only in v1; it does not create database overrides. The admin studio consumes the public manifest, lets admins draft brand/copy/logo/feature/appearance values in the browser, saves preview-only local drafts through `src/lib/customization-drafts.ts`, checks diagnostics with `src/lib/customization-diagnostics.ts`, shares tab metadata, responsive QA checkpoints, and screen-reader summaries through `src/lib/customization-studio.ts`, previews key product surfaces, and exports deployment-ready env formats for the self-host runtime. `/admin/marketplace` consumes the same local registry, reports registry version, schema version, catalog source, item totals, kind coverage, checksums, licenses, and validation issues, and previews pasted/uploaded pack JSON without fetching remote code, executing payloads, installing files, or changing runtime config.
+Use this contract before adding new self-host flags, public branding controls, style presets, color themes, layouts, plugin-facing metadata, marketplace entries, per-space customization metadata, or theme hooks. `/admin/customization` is env-first for global config and reads the same persisted space customization contract used by the category/article APIs. The admin studio consumes the public manifest, lets admins draft brand/copy/logo/feature/appearance values in the browser, saves preview-only local drafts through `src/lib/customization-drafts.ts`, checks diagnostics with `src/lib/customization-diagnostics.ts`, shares tab metadata, responsive QA checkpoints, and screen-reader summaries through `src/lib/customization-studio.ts`, previews key product surfaces, and exports deployment-ready env formats for the self-host runtime. `/admin/marketplace` consumes the same local registry, reports registry version, schema version, catalog source, item totals, kind coverage, checksums, licenses, validation issues, status badges, facet filters, and item details, and previews pasted/uploaded pack JSON without fetching remote code, executing payloads, installing files, or changing runtime config.
 
 ## Database Models
 
 ### Core Content
 - **Article** — Central content model. Stores HTML from Tiptap, optional raw Markdown, excerpt, cover image, infobox data (JSON), status (draft/review/published), sortOrder, isPinned, isFeatured. Supports redirects and disambiguation pages.
+- **ArticleCustomizationOverride** — Optional per-article appearance/navigation/template/metadata override that wins over global and category space customization.
 - **ArticleRevision** — Immutable snapshots created automatically on every edit. Stores content, title, and infobox state before changes. Powers history timeline and diff viewer. Tracks userId for attribution.
 - **Category** — Hierarchical with self-referencing `parentId`. Six root categories with subcategories. Drives infobox field schemas. Ordered by `sortOrder`.
+- **SpaceGovernance** — Optional per-category governance record for owner, reviewer, visibility, review cadence, content health preferences, and health widget signals.
+- **SpaceCustomization** — Optional per-category customization record for style, color theme, layout, component pack, template pack, navigation mode, metadata schema, and private draft config.
 - **Tag** — Hierarchical with self-referencing `parentId`. Many-to-many with articles via `ArticleTag` join table.
 - **ArticleTranslation** — Multi-language article content (locale, title, content).
 - **Discussion** — Per-article comment threads with optional user attribution.
@@ -251,10 +307,93 @@ Claims marked in the editor as `certain`, `probable`, or `disputed` are extracte
 Articles cross-reference using `[[Article Name]]` syntax. The custom Tiptap `WikiLink` extension renders these as `<a data-wiki-link="Title">` in the editor. At display time, `resolveWikiLinks()` queries the database to verify targets exist and marks broken links with a CSS class. `getBacklinks()` finds articles that reference a given slug.
 
 ### Editor Experience
-`TiptapEditor` owns the ProseMirror extension stack, Markdown conversion, paste/drop handling, wiki-link suggestions, link bubble, feature trays, selection actions, status bar, and live document telemetry. Insert, Review, and Outline trays expose grouped rich blocks, readiness signals, outline navigation, grammar checks, and writing coach analysis only when requested. `EditorToolbar` keeps core formatting visible, moves quote/table and advanced text/knowledge/AI/claim tools behind a More disclosure, and renders contextual table controls only while the selection is inside a table. `CollaborativeEditor` wraps the same editor and forwards every update to the article edit form so local draft autosave and optional Yjs sync stay in step.
+`TiptapEditor` owns the ProseMirror extension stack, Markdown conversion, paste/drop handling, wiki-link suggestions, link bubble, feature tray orchestration, status bar, and live document telemetry. `EditorPrimitives.tsx` holds the reusable Insert, Review, Outline, and selection-action surfaces so first-party editor UI, plugin surfaces, and customization previews can target the same component names. Insert, Review, and Outline trays expose grouped rich blocks, readiness signals, outline navigation, grammar checks, and writing coach analysis only when requested. `EditorToolbar` keeps core formatting visible, moves quote/table and advanced text/knowledge/AI/claim tools behind a More disclosure, and exports contextual table controls for reuse while the selection is inside a table. `src/lib/editor-controls.ts` publishes primitive metadata, plugin command/toolbar/slash/side-panel extension points, shared block templates, and shortcut scopes through `/api/customization`. `CollaborativeEditor` wraps the same editor and forwards every update to the article edit form so local draft autosave and optional Yjs sync stay in step; `src/lib/collaboration-ux.ts` publishes connection states, presence-name requirements, conflict/reconnect copy, inline review planning, notification routing, mobile QA, and accessibility checkpoints for live collaboration surfaces.
+
+`src/lib/editor-reliability.ts` defines the v4.85.0 reliability contract for collaborative sync, draft recovery, offline warnings, autosave repair, paste cleanup, embed handling, editor health diagnostics, and large-document fixtures. `/api/articles/:id/snapshots` supports snapshot read, compare, restore, and discard flows; restore preserves the current article as a new "Before restore" snapshot before applying the selected version.
+
+`src/lib/sync-manifests.ts` defines the v4.93.0 preview-safe sync contract for moving spaces between Arkivel installs. `GET /api/sync-manifests` publishes source/target manifest fields, per-section checksums, visibility rules, dry-run reports for categories, articles, tags, assets, revisions, comments, and customizations, signed snapshot plans for public read replicas and private mirrors, and the release gate that keeps live network federation outside stable scope.
+
+`src/lib/external-references.ts` defines the v4.93.1 cross-instance reference contract for external articles, spaces, sources, and imported snapshots. `GET /api/external-references` publishes provenance labels, broken-reference diagnostics, and public-index planning that allows only explicit public-indexable references while omitting authenticated, private, and sensitive metadata.
+
+`src/lib/archive-mirrors.ts` defines the v4.93.2 archive and mirror workflow contract. `GET /api/archive-mirrors` publishes read-only archive snapshot planning, private mirror setup checklists, selected-space export/import steps, repeated-sync conflict strategies, and the release decision checkpoint for whether federation can graduate before v5.
+
+`src/lib/mobile-polish.ts` defines the v4.94.0 mobile polish contract. `GET /api/mobile-polish` publishes responsive QA checkpoints for phone, tablet, laptop, and wide desktop viewports across mobile navigation, article actions, editor trays, admin panels, marketplace pages, and customization previews. Shared CSS guardrails in `src/app/globals.css` enforce touch-target minimums, overflow wrapping, dialog bounds, and phone-width horizontal overflow protection.
+
+`src/lib/desktop-research.ts` defines the v4.94.1 desktop research contract. `GET /api/desktop-research` compares Electron, Tauri, browser PWA, and Docker Desktop options; records local deployment recipes, filesystem import/export UX, and the decision that desktop packaging remains research-only before v5.
+
+`src/lib/accessibility-finish.ts` defines the v4.94.2 accessibility finish contract. `GET /api/accessibility` publishes release-blocking audits for keyboard access, focus management, dialogs, dropdowns, table controls, editor controls, admin forms, marketplace filters, and customization previews, plus screen-reader summaries for graph, atlas, dashboard, marketplace, and editor widgets.
+
+`src/lib/migration-readiness.ts` defines the v4.95.0 migration readiness contract. `GET /api/migration-readiness` publishes blocking dry-run phases, backup prompts, schema compatibility reports, data-integrity checks, restore validation, representative v4 upgrade paths, Prisma freeze decisions, and migration test coverage for customization, marketplace, plugins, spaces, and templates.
+
+`src/lib/backup-restore.ts` defines the v4.95.1 backup and restore contract. `GET /api/backup-restore` publishes admin backup wizard sections for database, assets, env vars, marketplace packs, plugin manifests, and customization settings; restore rehearsal manifest validation; conflict reports; scheduled backup planning; storage notes; and disaster-recovery drill guidance.
+
+`src/lib/upgrade-assistant.ts` defines the v4.95.2 upgrade assistant contract. `GET /api/upgrade-assistant` publishes the v5 readiness checklist, pre-upgrade diagnostics, post-upgrade smoke checks, compatibility warning types for env vars/APIs/plugin permissions/pack schemas, release-note links, and upgrade planning guidance.
+
+`src/lib/test-quality-gates.ts` defines the v4.96.0 test quality gates contract. `GET /api/test-quality` publishes expanded test surfaces, stable fixture planning, CI matrix dimensions, known-warning policy, and release-manager quality dashboard sections.
+
+`src/lib/e2e-smoke-suite.ts` defines the v4.96.1 end-to-end smoke suite contract. `GET /api/e2e-smoke-suite` publishes required product smoke flows, responsive smoke routes, fixture seed script metadata, and Playwright failure artifact settings. `e2e/smoke-suite.spec.ts` exercises the smoke routes, and `scripts/seed-smoke-fixtures.mjs` seeds repeatable database fixtures.
+
+`src/lib/release-gate-automation.ts` defines the v4.96.2 release gate automation contract. `GET /api/release-gates` publishes release candidate gates, docs sync planning, release checklist metadata, known issue labels, and blocker labels. `scripts/verify-docs-sync.mjs` verifies package, changelog, roadmap, docs, in-app docs, and `/api/customization` alignment.
+
+`src/lib/documentation-onboarding.ts` defines the v4.97.0 documentation onboarding contract. `GET /api/documentation-onboarding` publishes maintainer doc topics, setup paths, troubleshooting topics, docs IA review metadata, and practical docs link-test coverage for new maintainers.
+
+`src/lib/in-app-onboarding.ts` defines the v4.97.1 in-app onboarding contract. `GET /api/in-app-onboarding` publishes the first-run setup checklist, guided admin setup topics, collapsed contextual help panel plan, sample content pack metadata, and screenshot checkpoints for demo installs.
+
+`src/lib/example-site-recipes.ts` defines the v4.97.2 example site recipe contract. `GET /api/example-site-recipes` publishes setup recipes, environment snippets, screenshot targets, marketplace and template recommendations, migration stories, and v5 readiness checks for self-host admins.
+
+`src/lib/feature-freeze.ts` defines the v4.98.0 feature-freeze contract. `GET /api/release-freeze` publishes allowed freeze change classes, full rehearsal areas, known-issue blocker labels, v5 gate ownership, and release-note draft sections for release managers.
+
+`src/lib/release-candidate-one.ts` defines the v4.98.1 release candidate one contract. `GET /api/release-candidate-one` publishes required RC1 gates, deployment-path validation, starter/pack/import/export validation areas, review checklists, and feedback-template metadata.
+
+`src/lib/final-release-gates.ts` defines the v5.0.0 final release gate contract. `GET /api/final-release-gates` publishes RC fix closure, final beta freeze contracts, gate evidence, compatibility targets, correction windows, and stable-release gate status.
 
 ### Content Storage
 Articles store `content` (HTML from Tiptap) and optionally `contentRaw` (Markdown for export). HTML is the canonical format displayed to users.
+
+### Public API v1 Contract
+`src/lib/public-api-v1.ts` is the pre-v5 public API contract source for articles, categories, tags, revisions, search, customization, marketplace, plugins, webhooks, exports, and health. It defines stable endpoint metadata, pagination/filter/sort contracts, error shape, rate-limit headers, fixture responses, and OpenAPI generation. `GET /api/v1/contract`, `GET /api/v1/openapi.json`, and `publicApiV1` in `/api/customization` expose the same contract; update `docs/api-v1-migration.md` and in-app API docs when changing v1 behavior.
+
+`src/lib/sdk-types.ts` layers SDK-ready type names, API-key scopes, generated client snippets, and sample script metadata on top of the frozen v1 contract. `GET /api/v1/sdk` and `sdkTypes` in `/api/customization` expose this metadata for generated clients and docs.
+
+### Webhook Reliability
+`src/lib/webhook-reliability.ts` defines the timestamped HMAC signature contract, replay window, retry delays, delivery headers, event schemas, test sender, redelivery endpoint, and failure-alert metadata. `dispatchWebhook()` signs `timestamp.rawBody`, retries transient failures, skips unsupported events, and logs delivery metadata in `WebhookDelivery`. Admins can queue test events with `POST /api/webhooks/test` and redeliver historical attempts with `POST /api/webhooks/deliveries/:id/redeliver`.
+
+### Operations Dashboard
+`src/lib/operations-dashboard.ts` defines the v4.87.0 operations dashboard contract, service/queue/metric/alert shapes, diagnostic-bundle redactions, and browser-local acknowledgement metadata. `GET /api/admin/operations` aggregates database, Prisma, storage, AI provider, webhook, search, background-job, import, export, plugin, metric, and slow-page signals for `/admin/operations`; `?bundle=1` returns the same admin-only report as a redacted support bundle.
+
+### Maintenance Tooling
+`src/lib/maintenance-tooling.ts` defines maintenance mode keys, read-only mode keys, background task pause state, safe-upgrade checks, cleanup task metadata, and runbook links. `GET /api/admin/maintenance/report` aggregates database health, backup readiness, failed export/webhook blockers, stale sessions, orphaned assets, and cleanup queues for `/admin/maintenance`; `POST /api/admin/maintenance/report` defaults cleanup tasks to dry-run and requires `dryRun: false` for mutation.
+
+### Observability
+`src/lib/observability.ts` defines structured log categories, metric types, privacy controls, metadata redaction, and event-feed contracts. `POST /api/observability/metrics` records supported latency/autosave/search/export/import/webhook metrics into `MetricLog`; `GET/POST /api/admin/observability` exposes an admin event feed and privacy controls for `/admin/observability`.
+
+### Performance Budgets
+`src/lib/performance-budgets.ts` defines route p95, interaction, and bundle-size budgets for article pages, graph, Studio, Atlas, Trails, search, editor startup, admin dashboards, and marketplace. `GET /api/admin/performance` maps recent `MetricLog` samples to those budgets, publishes large-wiki fixture profiles, and lists slow-query diagnostics for Prisma review; `/admin/performance` renders the report for operators.
+
+### Cache Strategy
+`src/lib/cache-strategy.ts` defines invalidation rules for articles, categories, tags, feeds, sitemap, customization, marketplace metadata, plugin manifests, search, and dashboards. Article/category/tag write APIs call `invalidateCacheForEvent()` after successful creates. `GET/POST /api/admin/cache` exposes cache status, manual invalidation, stale warnings, and CDN/Vercel/Docker/reverse-proxy recipes for `/admin/cache`.
+
+`src/lib/offline-pwa.ts` defines the installable-app and offline-reading contract for service-worker cache rules, article/list fallbacks, stale response headers, retry queue eligibility, mobile startup QA, offline-safe draft warnings, and browser-local privacy limits. `/sw.js` registers static, page, and read-only API caches while bypassing admin/auth/export/upload/webhook/observability/plugin routes; `/api/offline/contract` and `/api/customization` expose the public metadata.
+
+`src/lib/security-review.ts` defines the v4.89.0 security review contract for auth, sessions, API keys, CSRF-sensitive writes, webhooks, imports, uploads, plugin manifests, marketplace packs, admin routes, and exports. `middleware.ts` applies conservative browser headers and a report-only CSP; `/api/security/review` publishes the review checklist, abuse-case gates, dependency/supply-chain checklist, and pre-v5 threat-model draft.
+
+`src/lib/privacy-controls.ts` defines the v4.89.1 privacy controls contract for spaces, indexing, feeds, exports, analytics, AI features, webhooks, user profiles, retention settings, user data lifecycle planning, and integration warnings. `/api/privacy/controls` and `/api/customization` publish the contract for personal, team, and public deployment guidance.
+
+`src/lib/marketplace-security.ts` defines the v4.89.2 marketplace/plugin security contract for blocked permissions, blocked hook prefixes, dangerous plugin capability warnings, local-only install guidance, provenance requirements, and checksum verification planning. `src/lib/marketplace-import.ts` reuses this contract to reject unsafe hooks and excessive permission sets in preview before future install flows exist.
+
+`src/lib/marketplace-beta.ts` defines the v4.90.0 marketplace beta launch contract for landing metrics, featured/recent/recommended packs, collections, compatibility badges, search facets, install-intent steps, and beta limitations. `/api/marketplace/beta` publishes this report from the local registry without remote fetches or automatic installs.
+
+`src/lib/marketplace-lifecycle.ts` defines the v4.90.1 pack lifecycle contract for draft, previewed, installed-local, enabled, disabled, deprecated, incompatible, blocked, and removed states. `/api/marketplace/lifecycle` publishes allowed transitions, local inventory, health checks, preview media validation, changelog/update metadata, compatibility warnings, and rollback guidance for preview-safe marketplace operations.
+
+`src/lib/marketplace-authoring.ts` defines the v4.90.2 marketplace authoring contract for local validation, metadata previews, screenshot checks, license checks, docs completeness, README generation, author quality checklists, compatibility matrix rows, and submission templates. `/api/marketplace/authoring` keeps authoring workflows preview-safe and local-first.
+
+`src/lib/template-marketplace.ts` defines the v4.91.1 template marketplace contract for first-class `template-pack` listings, included schema, category tree previews, article template previews, compatibility notes, diff-before-apply metadata, merge options, and export-from-space fixture output. `/api/marketplace/templates` publishes the preview-safe report.
+
+`src/lib/domain-workflows.ts` defines the v4.91.2 domain workflow contract for docs portals, team handbooks, worldbuilding bibles, research notebooks, and personal wikis. `/api/space-workflows` publishes workflow controls, steps, starter template links, and release gates for future dashboard/product flows.
+
+`src/lib/assistant-packs.ts` defines the v4.92 assistant pack contract for provider, model, privacy, cost, retention, prompt scope, permissions, tools, prompts, context sources, output types, limits, safety notes, per-space availability, prompt/context previews, usage logs, cost estimates, and graceful fallback metadata. `/api/assistant-packs`, `/admin/assistants`, and `/api/customization` expose disabled-by-default built-in packs for drafting, summarization, search, claim extraction, taxonomy, alt-text, import cleanup, and review.
+
+`src/lib/assistant-governance.ts` defines the v4.92.2 responsible AI contract for privacy warnings, human-review requirements, citation prompts, confidence metadata, AI audit actions, private-space and sensitive-article opt-outs, and the release gate that AI must remain optional and non-blocking. `/api/assistant-packs/governance` publishes the governance report.
 Standard HTML tables remain native table markup from editor through display; global content styles collapse borders, zero spacing, and wrap cell content so article and presentation views preserve a single merged grid.
 
 ### Revision System
@@ -282,9 +421,11 @@ Focused workspace routes (`/ask`, `/graph`, `/split`, `/map`, and `/present/*`) 
 Responsive shell changes should be verified across phone, tablet, laptop, and wide desktop widths. At minimum, check for document horizontal overflow, clipped labels/controls, and fixed elements covering interactive targets.
 
 ### Search
-Relevance-ranked full-text search. Multi-word queries use AND logic. Results scored by: exact title match (100) > starts with (80) > title contains (60) > content only (0). Search covers titles, content, and excerpts.
+Relevance-ranked full-text search. Multi-word queries use AND logic. `src/lib/search-relevance.ts` defines the v2 ranking contract for exact title, phrase, alias/redirect, word coverage, freshness, review status, and verification signals. `/api/search` returns additive `facets` and optional `score`/`searchExplain` fields when an admin passes `explain=1`.
 
 `/api/search` returns an object response containing `results`, optional `semanticResults`, and optional `suggestions`. Client surfaces must consume it through `src/lib/search-response.ts` so header instant search, the search page, command palette article lookup, wiki-link autocomplete, split view pickers, and edit fallbacks stay aligned if the API shape evolves. Semantic search results are displayed as a distinct group on the search page when enabled.
+
+`src/lib/search-api.ts` publishes the stable v4.84.2 search API contract for plugins, widgets, dashboards, external tools, and mobile clients. `/api/search/contract` returns typed result shapes for articles, categories, tags, discussions, revisions, and marketplace items, plus query analytics privacy/retention metadata and planned webhook events for saved search hits and important content changes.
 
 ### Map
 Disabled by default (`NEXT_PUBLIC_MAP_ENABLED=true` to enable). Uses Leaflet with `CRS.Simple` for pixel coordinates on a custom image. Dynamically imported to avoid SSR issues. Supports multiple maps, layers, and zoom-dependent detail levels.
@@ -297,6 +438,9 @@ D3 force-directed graph at `/graph`. API at `/api/graph` returns nodes/edges fro
 
 ### Arkivel Studio
 `src/lib/studio.ts` builds `/studio`, `/api/studio`, and `/api/studio/canvas` from live article content, wiki links, semantic relations, revision counts, review pressure, taxonomy coverage, engagement signals, and freshness. It emits a fixed-coordinate command board, database-style lanes for review/stubs/orphans/taxonomy/stale work, next Studio moves, and a JSON Canvas export compatible with visual knowledge workflows. Empty or unavailable local databases fall back to a starter board that points users toward creating articles, categories, links, and canvases.
+
+### Discovery Engines
+`src/lib/discovery-engines.ts` builds the v4.84.1 discovery contract for duplicate pages, unresolved questions, canon conflicts, glossary gaps, orphan topics, topic clusters, continue-reading entries, admin actions, and dashboard widgets. `/api/discovery` returns the live report, while `/api/customization` publishes the `discoveryEngines` contract for clients and future widgets.
 
 ### Canon Atlas
 `src/lib/canon-atlas.ts` builds `/atlas` and `/api/atlas` from live article, category, tag, revision, engagement, excerpt, infobox, and wiki-link metadata. It projects categories into atlas territories, scores top articles as map signals, derives story threads from real wiki links, selects a flagship dossier, and exposes continuity pressure around stubs, uncategorized pages, missing tags, missing outgoing links, excerpts, and infoboxes. Empty local databases fall back to starter territories and starter signal routes so the page remains visually complete without pretending published article data exists.

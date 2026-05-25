@@ -4,449 +4,715 @@
 
 All notable changes to this project are documented here.
 
+## [5.0.0] - 2026-05-25
+
+### Added
+
+- **Final release gate contract** - Added `src/lib/final-release-gates.ts`, `GET /api/final-release-gates`, and `finalReleaseGates` metadata in `/api/customization`.
+- **Stable release evidence** - Added final gate metadata for RC fixes, final beta freeze contracts, gate evidence, compatibility targets, correction windows, and v5 stable-release signoff.
+- **Final release docs** - Added `docs/final-release-gates.md` and tests for final release gate coverage.
+
 ## [4.99.99] - 2026-05-25
 
 ### Added
 
-- **Last beta candidate metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Last beta candidate metadata** - Captured last-beta requirements for lint, typecheck, tests, build, migration dry run, smoke suite, docs sync, security review, privacy review, release notes, and maintainer signoff.
 
 ## [4.99.95] - 2026-05-25
 
 ### Added
 
-- **Final security and migration correction metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Final security and migration correction metadata** - Captured security, migration, backup, restore, permission, and privacy correction windows in the final release gate contract.
 
 ## [4.99.90] - 2026-05-25
 
 ### Added
 
-- **Final documentation correction metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Final documentation correction metadata** - Captured final documentation, screenshot, recipe, migration guide, and release-note correction expectations.
 
 ## [4.99.2] - 2026-05-25
 
 ### Added
 
-- **Compatibility pass metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Compatibility pass metadata** - Captured Node, Next.js, Prisma, PostgreSQL, Vercel, Docker, local Node, plugin manifest, marketplace pack, and export bundle compatibility targets.
 
 ## [4.99.1] - 2026-05-25
 
 ### Added
 
-- **Gate evidence pass metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Gate evidence pass metadata** - Captured stable gate evidence types for tests, docs, screenshots, migration reports, security notes, and deployment checks.
 
 ## [4.99.0] - 2026-05-25
 
 ### Added
 
-- **Final beta freeze metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Final beta freeze metadata** - Captured final beta freeze contracts for public API v1, plugin manifests, marketplace packs, theme packs, export bundles, and stable env vars.
 
 ## [4.98.2] - 2026-05-25
 
 ### Added
 
-- **Release candidate fix metadata** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Release candidate fix metadata** - Captured RC blocker areas, compatibility updates, gate rerun expectations, copy freeze rules, and final migration guide preparation in the final release gate contract.
 
 ## [4.98.1] - 2026-05-25
 
 ### Added
 
-- **add release candidate one** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Release candidate one contract** - Added `src/lib/release-candidate-one.ts`, `GET /api/release-candidate-one`, and `releaseCandidateOne` metadata in `/api/customization`.
+- **RC1 gate evidence** - Added required gate metadata for lint, typecheck, tests, build, migration dry run, smoke suite, and docs sync.
+- **Deployment validation matrix** - Added Vercel, Docker, local Node, and managed Postgres validation tracking.
+- **Release validation areas** - Added starter spaces, marketplace packs, plugin examples, exports, imports, backups, and restores validation metadata.
+- **RC feedback template** - Added `docs/rc-feedback-template.md` plus accessibility, performance, security, and privacy checklist metadata.
 
 ## [4.98.0] - 2026-05-25
 
 ### Added
 
-- **enter feature freeze** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Feature freeze contract** - Added `src/lib/feature-freeze.ts`, `GET /api/release-freeze`, and `featureFreeze` metadata in `/api/customization`.
+- **Freeze policy** - Added allowed change classes for release blockers, documentation gaps, migration fixes, security issues, and broken tests.
+- **Release rehearsal matrix** - Added install, upgrade, import/export, marketplace, plugin, customization, auth, API, webhook, backup, restore, and smoke rehearsal metadata.
+- **Gate ownership and blocker report** - Added v5 gate ownership metadata and known-issue blocker label checks.
+- **Release notes draft plan** - Added draft sections for stable scope, upgrade notes, risky changes, self-host checklist, known issues, and verification evidence.
 
 ## [4.97.2] - 2026-05-25
 
 ### Added
 
-- **add example site recipes** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Example site recipe contract** - Added `src/lib/example-site-recipes.ts`, `GET /api/example-site-recipes`, and `exampleSiteRecipes` metadata in `/api/customization`.
+- **Configuration recipes** - Added personal wiki, team handbook, public docs, worldbuilding atlas, research library, read-only archive, and product knowledge base recipes.
+- **Recipe evidence metadata** - Added environment snippets, screenshot targets, template recommendations, and marketplace pack recommendations per recipe.
+- **Migration stories** - Added Notion, Obsidian, MediaWiki, Markdown folder, and docs-site migration story metadata.
+- **v5 readiness checklist** - Added release-blocking self-host readiness checks and `examples/recipes/site-recipes.json`.
 
 ## [4.97.1] - 2026-05-25
 
 ### Added
 
-- **add in-app onboarding** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **In-app onboarding contract** - Added `src/lib/in-app-onboarding.ts`, `GET /api/in-app-onboarding`, and `inAppOnboarding` metadata in `/api/customization`.
+- **First-run checklist** - Added ordered setup metadata for database, admin account, branding, style, theme, layout, first space, first article, backup, and security.
+- **Guided admin onboarding** - Added admin guide metadata for customization, marketplace, templates, plugins, imports, and users.
+- **Contextual help planning** - Added collapsed-by-default contextual help panel metadata for key admin and setup routes.
+- **Demo content pack** - Added `examples/onboarding/demo-content-pack.json` and `docs/in-app-onboarding.md` with screenshot checkpoints for onboarding evidence.
 
 ## [4.97.0] - 2026-05-25
 
 ### Added
 
-- **rewrite maintainer documentation** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Documentation onboarding contract** - Added `src/lib/documentation-onboarding.ts`, `GET /api/documentation-onboarding`, and `documentationOnboarding` metadata in `/api/customization`.
+- **Maintainer documentation rewrite** - Added `docs/maintainer-guide.md` covering install, upgrade, deployment, customization, marketplace, plugin, API, security, backup, and contribution guidance.
+- **Setup paths and troubleshooting** - Added `docs/setup-paths.md` for Vercel, Docker, local Node, managed Postgres, private team, public docs, personal wiki, and demo instances plus `docs/troubleshooting.md` for common maintainer issues.
+- **Docs information architecture** - Added `docs/index.md` and docs IA metadata connecting README, help, features, API docs, architecture, design, and roadmap.
+- **Docs link tests** - Added practical docs link and slug coverage tests for the new documentation index.
 
 ## [4.96.2] - 2026-05-25
 
 ### Added
 
-- **add release gate automation** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Release gate automation contract** - Added `src/lib/release-gate-automation.ts`, `GET /api/release-gates`, and `releaseGateAutomation` metadata in `/api/customization`.
+- **Release docs sync script** - Added `scripts/verify-docs-sync.mjs` and `npm run release:docs-sync` to verify package, changelog, roadmap, docs, in-app docs, and manifest alignment.
+- **Release checklist metadata** - Added gate metadata for lint, typecheck, unit tests, API tests, e2e smoke tests, build, migration dry run, and docs sync.
+- **Known issues and blocker labels** - Added `docs/known-issues.md` with release, security, migration, docs, and smoke failure labels.
+- **Release manager docs** - Added `docs/release-gate-automation.md` for release candidate gate evidence and blocker handling.
 
 ## [4.96.1] - 2026-05-25
 
 ### Added
 
-- **add e2e smoke suite** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **End-to-end smoke suite contract** - Added `src/lib/e2e-smoke-suite.ts`, `GET /api/e2e-smoke-suite`, and `e2eSmokeSuite` metadata in `/api/customization`.
+- **Product smoke tests** - Added `e2e/smoke-suite.spec.ts` coverage for install, login, create/edit article, wiki links, search, customization, marketplace, export, import dry run, plugin manifest, and admin health surfaces.
+- **Responsive smoke tests** - Added smoke coverage for homepage, article, editor, dashboard, marketplace, customization, and help pages across phone, tablet, and desktop viewports.
+- **Repeatable smoke fixtures** - Added `scripts/seed-smoke-fixtures.mjs` and `npm run qa:seed-smoke` for idempotent smoke QA setup.
+- **Failure artifacts and docs** - Added failure screenshots in Playwright config and `docs/e2e-smoke-suite.md` for local/CI smoke runs.
 
 ## [4.96.0] - 2026-05-25
 
 ### Added
 
-- **add test quality gates** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Test quality gates contract** - Added `src/lib/test-quality-gates.ts`, `GET /api/test-quality`, and `testQualityGates` metadata in `/api/customization`.
+- **Expanded test surface planning** - Added unit, integration, API, permission, import/export, customization, marketplace, plugin, editor, and responsive test coverage metadata.
+- **Stable QA fixtures** - Added small wiki, team wiki, public docs, worldbuilding atlas, research notebook, large archive, and plugin-heavy install fixture planning.
+- **CI matrix planning** - Added Node version, database mode, and feature-flag matrix metadata.
+- **Known-warning and dashboard planning** - Added warning policy and release-manager quality dashboard sections.
 
 ## [4.95.2] - 2026-05-25
 
 ### Added
 
-- **add upgrade assistant** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Upgrade assistant contract** - Added `src/lib/upgrade-assistant.ts`, `GET /api/upgrade-assistant`, and `upgradeAssistant` metadata in `/api/customization`.
+- **Upgrade readiness checklist** - Added version, Node, Prisma, database, env vars, plugins, marketplace packs, and migrations readiness checks.
+- **Diagnostics and smoke checks** - Added pre-upgrade diagnostics and post-upgrade smoke-check metadata.
+- **Compatibility warnings** - Added deprecated env var, deprecated API, plugin permission, and pack schema warning metadata.
+- **v5 planning guide** - Added `docs/v5-upgrade-planning.md` with release-note, migration, backup/restore, and post-upgrade verification guidance.
 
 ## [4.95.1] - 2026-05-25
 
 ### Added
 
-- **add backup restore planning** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Backup and restore contract** - Added `src/lib/backup-restore.ts`, `GET /api/backup-restore`, and `backupRestore` metadata in `/api/customization`.
+- **Admin backup wizard metadata** - Added required backup sections for database, assets, env vars, marketplace packs, plugin manifests, and customization settings.
+- **Restore rehearsal validation** - Added manifest verification with missing-section, checksum, unsupported-schema, version, slug, and plugin-permission conflict classes.
+- **Scheduled backup planning** - Added daily, weekly, before-upgrade, and manual cadence planning plus local disk, S3-compatible, and offsite-drive storage notes.
+- **Disaster-recovery drill docs** - Added `docs/backup-restore.md` and tests for restore manifest validation.
 
 ## [4.95.0] - 2026-05-25
 
 ### Added
 
-- **add migration readiness** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Migration readiness contract** - Added `src/lib/migration-readiness.ts`, `GET /api/migration-readiness`, and `migrationReadiness` metadata in `/api/customization`.
+- **Blocking migration dry runs** - Added backup prompts, schema compatibility checks, data-integrity checks, restore validation, and failure recovery guidance.
+- **Representative upgrade matrix** - Added v4.80 personal wiki, v4.82 team workspace, v4.86 public docs, v4.90 marketplace-heavy, and v4.92 plugin-enabled upgrade path metadata.
+- **Schema compatibility gate** - Added admin-operations schema report metadata and Prisma freeze decisions for v5-breaking migration review.
+- **Migration coverage tests** - Added tests for customization, marketplace, plugins, spaces, and templates migration coverage.
 
 ## [4.94.2] - 2026-05-25
 
 ### Added
 
-- **finish accessibility review** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Accessibility finish contract** - Added `src/lib/accessibility-finish.ts`, `GET /api/accessibility`, and `accessibilityFinish` metadata in `/api/customization`.
+- **Release audit matrix** - Added keyboard, focus, dialog, dropdown, table-control, editor-control, admin-form, marketplace-filter, and customization-preview audit metadata.
+- **Widget summaries** - Added screen-reader summary requirements for graph, atlas, dashboard, marketplace, and editor widgets.
+- **Contrast and motion checks** - Added high-contrast and reduced-motion release checks.
+- **Accessibility docs and gate** - Added `docs/accessibility.md`, contribution checklist, tests, and v5 release-blocker metadata for known accessibility issues.
 
 ## [4.94.1] - 2026-05-25
 
 ### Added
 
-- **document desktop app research** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Desktop app research contract** - Added `src/lib/desktop-research.ts`, `GET /api/desktop-research`, and `desktopResearch` metadata in `/api/customization`.
+- **Packaging research** - Added Electron, Tauri, browser PWA, and Docker Desktop notes covering storage, updates, backups, plugin safety, strengths, and risks.
+- **Local deployment planning** - Added Docker Desktop, local Node/Postgres, and trusted local-network PWA recipe metadata.
+- **Filesystem UX planning** - Added import/export UX notes for folder selection, manifests, checksums, privacy omissions, dry-run conflicts, and restore points.
+- **Desktop scope decision record** - Documented that desktop packaging remains research-only before v5 until backup/restore, signed updates, plugin safety, and local database support are proven.
 
 ## [4.94.0] - 2026-05-25
 
 ### Added
 
-- **polish mobile layouts** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Mobile polish contract** - Added `src/lib/mobile-polish.ts`, `GET /api/mobile-polish`, and `mobilePolish` metadata in `/api/customization`.
+- **Responsive QA checkpoints** - Added phone, tablet, laptop, and wide desktop QA coverage for mobile navigation, article actions, editor trays, admin panels, marketplace pages, and customization previews.
+- **Mobile regression checklist** - Added release checks for overflow, clipping, touch targets, safe areas, dialogs, popovers, and wrapping.
+- **Mobile docs** - Added `docs/mobile-polish.md` with mobile-first screenshot slots and release-candidate checklist guidance.
+
+### Changed
+
+- **Mobile layout guardrails** - Added shared CSS guardrails for 44px touch targets, safe-area-aware surfaces, overflow wrapping, dialog bounds, and phone-width horizontal overflow prevention.
 
 ## [4.93.2] - 2026-05-25
 
 ### Added
 
-- **add archive mirror workflows** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Archive and mirror workflow contract** - Added `src/lib/archive-mirrors.ts`, `GET /api/archive-mirrors`, and `archiveMirrors` metadata in `/api/customization`.
+- **Read-only archive snapshots** - Added immutable archive snapshot planning that preserves revisions, assets, categories, and metadata.
+- **Private mirror guidance** - Added team and personal-wiki mirror setup checklists.
+- **Selected-space transfers** - Added export/import workflow metadata for moving selected spaces between installs with sync manifests, signed snapshots, and external provenance.
+- **Repeated-sync conflict notes** - Added source-wins, target-wins, manual-merge, and skip-and-report guidance plus a pre-v5 federation release decision checkpoint.
 
 ## [4.93.1] - 2026-05-25
 
 ### Added
 
-- **add external references** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **External reference contract** - Added `src/lib/external-references.ts`, `GET /api/external-references`, and `externalReferences` metadata in `/api/customization`.
+- **Provenance UI helper** - Added article provenance rendering for imported-from and mirrored-from external Arkivel references.
+- **Reference diagnostics** - Added broken external reference diagnostics for missing URLs, stale instances, checksum drift planning, and private public-index leaks.
+- **Privacy-safe public index planning** - Added public-index metadata that excludes authenticated, private, and sensitive references from centralized listings.
+- **External reference docs and tests** - Added `docs/external-references.md` and tests for reference metadata, provenance labels, diagnostics, and privacy filtering.
 
 ## [4.93.0] - 2026-05-25
 
 ### Added
 
-- **add sync manifests** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Sync manifest contract** - Added `src/lib/sync-manifests.ts`, `GET /api/sync-manifests`, and `syncManifests` metadata in `/api/customization`.
+- **Dry-run sync reports** - Added section-level dry-run reports for categories, articles, tags, assets, revisions, comments, and customizations.
+- **Signed snapshot planning** - Added public read replica and private mirror snapshot plans with Ed25519 manifest-signature requirements.
+- **Promotion guidance** - Added `docs/sync-manifests.md` with staging-to-production checks, conflict classes, visibility rules, and the network-federation release gate.
 
 ## [4.92.2] - 2026-05-25
 
 ### Added
 
-- **add assistant governance** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Assistant governance contract** - Added `src/lib/assistant-governance.ts`, `GET /api/assistant-packs/governance`, and `assistantGovernance` metadata in `/api/customization`.
+- **AI output governance** - Added privacy warnings, human-review requirements, citation prompts, and confidence metadata requirements for AI outputs.
+- **AI audit events** - Added audit actions for generated content, rewrites, summaries, and taxonomy changes.
+- **AI opt-out controls** - Added private-space and sensitive-article opt-out metadata plus release-gate checks requiring AI to remain optional and non-blocking.
+- **Responsible AI docs and tests** - Added `docs/assistant-governance.md` and tests for governance report coverage, audit severity, human review, and opt-out helpers.
 
 ## [4.92.1] - 2026-05-25
 
 ### Added
 
-- **add built-in assistant packs** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Built-in assistant packs** - Added disabled-by-default drafting, summarization, search, claim extraction, taxonomy, alt-text, import cleanup, and review assistant pack metadata.
+- **Per-space assistant controls** - Added personal, team, public-docs, research, and worldbuilding availability rules with data access scopes and sensitive-article opt-out flags.
+- **Prompt and context previews** - Added prompt preview, context source, redaction, output, and limit metadata for admin review.
+- **Usage and cost metadata** - Added assistant preview/run usage log fields and cost estimate descriptions without storing prompt bodies.
+- **Assistant tests** - Added tests for built-in pack coverage, disabled-provider defaults, prompt previews, usage logs, and permission boundaries.
 
 ## [4.92.0] - 2026-05-25
 
 ### Added
 
-- **add assistant pack contract** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Assistant pack contract** - Added `src/lib/assistant-packs.ts`, `GET /api/assistant-packs`, `/admin/assistants`, and `assistantPacks` metadata in `/api/customization`.
+- **Opt-in AI manifest fields** - Added provider, model, privacy, cost, data-retention, prompt scope, permission, tool, prompt, context source, output type, limit, and safety-note metadata.
+- **Graceful AI degradation** - Added disabled/default assistant pack metadata for local, offline-friendly, and privacy-first deployments when no AI provider is configured.
+- **Assistant docs and tests** - Added `docs/assistant-packs.md` and tests for manifest coverage, fallback metadata, and validation warnings.
 
 ## [4.91.2] - 2026-05-25
 
 ### Added
 
-- **add domain workflows** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Domain workflow contract** - Added `src/lib/domain-workflows.ts`, `GET /api/space-workflows`, and `domainWorkflows` metadata in `/api/customization`.
+- **Space-product workflows** - Added docs portal, team handbook, worldbuilding, research, and personal wiki workflow metadata tied to starter templates.
+- **Workflow release gates** - Added domain-specific controls, workflow steps, and release-gate checklist metadata for future dashboards.
+- **Workflow docs and tests** - Added `docs/domain-workflows.md` and tests for workflow coverage, controls, starter template links, and matrix output.
 
 ## [4.91.1] - 2026-05-25
 
 ### Added
 
-- **add template marketplace** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Template marketplace kind** - Added `template-pack` to the local marketplace registry with starter-space pack metadata, screenshots, included schema, category previews, article previews, and compatibility notes.
+- **Template marketplace report** - Added `src/lib/template-marketplace.ts`, `GET /api/marketplace/templates`, and `templateMarketplace` metadata in `/api/customization`.
+- **Template diff and merge contracts** - Added preview-only diff metadata plus append-only, replace-empty, skip-conflicts, and metadata-only merge options.
+- **Template export contract** - Added export-from-space fixture generation for future space product sharing.
+- **Template marketplace docs and tests** - Added `docs/template-marketplace.md` and tests for template packs, previews, diffs, merge options, imports, and exports.
 
 ## [4.91.0] - 2026-05-25
 
 ### Added
 
-- **refresh starter spaces** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Starter spaces refresh** - Expanded built-in space templates to include personal wiki, product docs, team handbook, worldbuilding bible, research notebook, reading archive, project knowledge base, and public documentation.
+- **Richer starter fixtures** - Added sample metadata, article excerpts, navigation metadata, dashboard widgets, preview routes, and recommended packs to starter templates.
+- **Preview pages and import previews** - Added `/space-templates/:id` preview pages plus one-click local import preview support through `POST /api/space-templates` with a `templateId`.
+- **Template validation coverage** - Extended template validation and tests for navigation, dashboards, sample metadata, preview pages, and fixture import previews.
 
 ## [4.90.2] - 2026-05-25
 
 ### Added
 
-- **add marketplace authoring** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Marketplace authoring contract** - Added `src/lib/marketplace-authoring.ts`, `GET /api/marketplace/authoring`, and `marketplaceAuthoring` metadata in `/api/customization`.
+- **Pack author dashboard metadata** - Added local validation, metadata preview, screenshot checks, license checks, docs completeness, and compatibility matrix sections.
+- **README and checklist generator** - Added pack README generation plus author quality checklist coverage for docs, screenshots, accessibility, performance, security, compatibility, and rollback planning.
+- **Submission templates** - Added `examples/marketplace/submission-template.md` and `examples/marketplace/pack-readme-template.md`.
+- **Authoring docs and tests** - Added `docs/marketplace-authoring.md` and tests for dashboard metadata, health data, README generation, and compatibility matrix output.
 
 ## [4.90.1] - 2026-05-25
 
 ### Added
 
-- **add marketplace lifecycle** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Pack lifecycle contract** - Added `src/lib/marketplace-lifecycle.ts`, `GET /api/marketplace/lifecycle`, and `marketplaceLifecycle` metadata in `/api/customization`.
+- **Lifecycle states and transitions** - Added draft, previewed, installed-local, enabled, disabled, deprecated, incompatible, blocked, and removed states with allowed transition rules.
+- **Inventory and health checks** - Added local pack inventory metadata plus preview media health counts.
+- **Preview media validation** - Added local screenshot path, image extension, and checksum validation planning.
+- **Lifecycle docs and tests** - Added `docs/marketplace-lifecycle.md` and tests for state transitions, inventory health, and preview media validation.
 
 ## [4.90.0] - 2026-05-25
 
 ### Added
 
-- **launch marketplace beta** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Marketplace beta report** - Added `src/lib/marketplace-beta.ts`, `GET /api/marketplace/beta`, and `marketplaceBeta` metadata in `/api/customization`.
+- **Marketplace landing metadata** - Added total item, author, kind-count, registry-health, screenshot-coverage, featured, recently updated, recommended, and collection metadata.
+- **Compatibility badges and search facets** - Added derived compatibility badges plus kind, tag, author, slot, layout, permission, and compatibility facets for local registry browsing.
+- **Install intent planning** - Added review steps for required files, env vars, permissions/data access, compatibility, checksums, and manual verification.
+- **Beta docs and limitations** - Added `docs/marketplace-beta.md` and tests for metrics, collections, search facets, install intent, compatibility badges, and limitations.
 
 ## [4.89.2] - 2026-05-25
 
 ### Added
 
-- **secure marketplace plugins** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Marketplace security contract** - Added `src/lib/marketplace-security.ts`, `GET /api/marketplace/security`, and `marketplaceSecurity` metadata in `/api/customization`.
+- **Unsafe pack rejection** - Marketplace import previews now reject unsafe hooks and excessive permission sets in addition to remote URLs, executable fields, path traversal, unsupported kinds, and unsupported schema versions.
+- **Dangerous capability warnings** - Added warnings for `file:read`, `job:execute`, `settings:write`, and `webhook:send` plugin capabilities.
+- **Provenance planning** - Added source, checksum, license, author, and compatibility metadata requirements for future local install intent flows.
+- **Local-only security docs** - Added `docs/secure-marketplace-plugins.md` and tests for blocked permissions, unsafe hooks, excessive permissions, provenance metadata, and dangerous capability warnings.
 
 ## [4.89.1] - 2026-05-25
 
 ### Added
 
-- **add privacy controls** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Privacy controls contract** - Added `src/lib/privacy-controls.ts`, `GET /api/privacy/controls`, and `privacyControls` metadata in `/api/customization` for spaces, indexing, feeds, exports, analytics, AI features, webhooks, and user profiles.
+- **Retention planning** - Added defaults and bounds for activity, audit logs, query analytics, notifications, sessions, and webhook deliveries.
+- **User data lifecycle** - Added export scope, deletion/anonymization modes, and admin checklist for self-host user data requests.
+- **AI and integration warnings** - Added privacy warnings for AI providers, webhook receivers, export downloads, and public feed/indexing exposure.
+- **Privacy docs and tests** - Added `docs/privacy-controls.md` plus regression coverage for surface coverage, retention normalization, lifecycle planning, and warnings.
 
 ## [4.89.0] - 2026-05-25
 
 ### Added
 
-- **add security review** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Security review contract** - Added `src/lib/security-review.ts`, `GET /api/security/review`, and `securityReview` metadata in `/api/customization` for auth, session, API key, CSRF, webhook, import, upload, plugin, marketplace, admin route, and export review surfaces.
+- **Browser header hardening** - Added middleware-managed security headers plus report-only CSP for pre-v5 validation.
+- **Abuse-case gates** - Added regression metadata and tests for admin route access, draft visibility, API key requirements, and plugin permission grants.
+- **Supply-chain checklist** - Added dependency review guidance for release candidates, lockfile discipline, advisory review, marketplace/plugin payload rejection, and accepted-vulnerability notes.
+- **Threat model draft** - Added `docs/security-review.md` with reviewed assets, primary threats, trust boundaries, header behavior, and release-gate expectations.
 
 ## [4.88.2] - 2026-05-25
 
 ### Added
 
-- **add offline pwa support** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Offline/PWA contract** - Added `src/lib/offline-pwa.ts`, `GET /api/offline/contract`, and `offlinePwa` metadata in `/api/customization` for install, cache, stale-header, retry-queue, mobile QA, draft-warning, and privacy-limit details.
+- **Service worker registration** - Added an app-shell service worker manager with install prompts, offline/reconnect messages, manual retry, and queued-save replay triggers.
+- **Offline cache strategy** - Updated `/sw.js` to cache static assets, public reading pages, article lists, and read-only APIs while excluding admin, auth, export, upload, webhook, observability, and plugin routes.
+- **PWA docs** - Added `docs/offline-pwa.md` with offline reading behavior, stale indicators, retry queue limits, mobile QA, and privacy guidance.
+- **Offline tests** - Added regression coverage for route cache classification, retry queue eligibility, stale headers, install metadata, and mobile QA checkpoints.
 
 ## [4.88.1] - 2026-05-25
 
 ### Added
 
-- **add cache strategy** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Cache strategy contract** - Added invalidation rules for articles, categories, feeds, sitemap, customization, marketplace metadata, plugin manifests, search, dashboards, and tags.
+- **Admin cache tools** - Added `/admin/cache` and `GET/POST /api/admin/cache` for cache status, manual invalidation, stale warnings, and deployment recipes.
+- **Write invalidation hooks** - Article, category, and tag create routes now run shared cache invalidation.
+- **Caching recipes** - Added CDN, Vercel, Docker, and reverse-proxy cache guidance.
+- **Cache tests** - Added regression coverage for article/category/tag invalidation rules and stale warning metadata.
 
 ## [4.88.0] - 2026-05-25
 
 ### Added
 
-- **add performance budgets** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Performance budgets** - Added route p95, interaction, and bundle-size budgets for article pages, graph, Studio, Atlas, Trails, search, editor startup, admin dashboards, and marketplace.
+- **Performance admin report** - Added `/admin/performance` and `GET /api/admin/performance` with budget status, recent slow samples, large-wiki fixtures, and slow-query review guidance.
+- **Large-wiki fixtures** - Added small-team, large-archive, and public-docs fixture profiles for local performance checks.
+- **Slow-query diagnostics** - Added Prisma/query review metadata for article lists, fallback search, graph neighborhoods, and admin operation aggregates.
+- **Performance docs and contract** - Added `docs/performance-tuning.md` and exposed `performanceBudgets` through `/api/customization`.
 
 ## [4.87.2] - 2026-05-25
 
 ### Added
 
-- **add observability plumbing** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Observability contract** - Added structured log categories for config, auth, Prisma, migrations, assets, search, customization, marketplace, plugins, and webhooks.
+- **Metric ingestion** - Added `POST /api/observability/metrics` for page latency, API latency, editor autosave, search response time, export/import duration, and webhook delivery metrics.
+- **Operational event feed** - Added `/admin/observability` and `GET /api/admin/observability` for recent operational events derived from `MetricLog`.
+- **Privacy-aware controls** - Added admin controls for analytics ingestion, event feed visibility, IP anonymization, search query logging, and retention days.
+- **Built-in instrumentation** - Added search response-time and webhook delivery metrics.
 
 ## [4.87.1] - 2026-05-25
 
 ### Added
 
-- **add maintenance tooling** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Maintenance readiness** - Added `GET /api/admin/maintenance/report` with safe-upgrade checks for database health, backup reminder, migration readiness, write-traffic mode, and background-task pause state.
+- **Maintenance cleanup queues** - Added stale session, orphaned asset, old failed export, and old failed webhook cleanup metadata with dry-run-first task execution.
+- **Background task pause flag** - Added an admin-controlled `background_tasks_paused` mode for workers and plugins to honor during maintenance windows.
+- **Runbook links** - Added direct runbook links to maintenance and operations admin pages.
+- **Maintenance tests** - Added API regression tests for maintenance and read-only mode behavior.
 
 ## [4.87.0] - 2026-05-25
 
 ### Added
 
-- **add operations dashboard** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Operations dashboard** - Added `/admin/operations` for service health, queues, jobs, metrics, slow pages, failed webhooks, imports, exports, plugin errors, database health, and production triage.
+- **Operations API** - Added `GET /api/admin/operations` with redacted instance metadata and `?bundle=1` support bundle download for admins.
+- **Service health cards** - Added database, Prisma, storage, AI provider, webhook, search, and background-job health summaries.
+- **Admin alert acknowledgements** - Added browser-local acknowledgement state for operations alerts without creating a new persistence requirement.
+- **Operations contract docs** - Added `src/lib/operations-dashboard.ts`, `/api/customization` metadata, docs, and tests for the operations dashboard contract.
 
 ## [4.86.2] - 2026-05-25
 
 ### Added
 
-- **improve webhook reliability** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Webhook reliability contract** - Added timestamped HMAC signing, retry, replay-protection, delivery-log, redelivery, test-sender, failure-alert, and event-schema metadata.
+- **Hardened dispatcher** - Updated webhook dispatch to skip unsupported events, add Arkivel delivery/timestamp/signature headers, retry transient failures, and log delivery attempts.
+- **Admin webhook testing** - Added `POST /api/webhooks/test` and `POST /api/webhooks/deliveries/:id/redeliver`.
+- **Webhook event schemas** - Added article, category, review, claim, export, import, plugin, customization, and user event groups.
+- **Webhook docs and tests** - Added `docs/webhook-reliability.md` and regression tests for signatures, replay windows, retry decisions, and event schemas.
 
 ## [4.86.1] - 2026-05-25
 
 ### Added
 
-- **add sdk types** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **SDK-ready types** - Added shared TypeScript payload names for REST responses, webhook events, customization manifests, marketplace packs, plugin manifests, and export bundle manifests.
+- **SDK metadata endpoint** - Added `GET /api/v1/sdk` and exposed `sdkTypes` through `/api/customization`.
+- **Typed API key scopes** - Added read/write scope metadata for articles, categories, tags, revisions, search, customization, marketplace, plugins, webhooks, exports, and health.
+- **Generated examples and scripts** - Added Node, browser, curl, and webhook snippets plus sample backup, import, search, content-audit, and webhook-test scripts under `examples/api/`.
+- **SDK docs** - Added `docs/sdk-types.md` and updated API docs with v1 SDK contract references.
 
 ## [4.86.0] - 2026-05-25
 
 ### Added
 
-- **freeze public api v1** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Public API v1 freeze** - Added a versioned public API v1 contract for articles, categories, tags, revisions, search, customization, marketplace, plugins, webhooks, exports, and health.
+- **OpenAPI schema endpoint** - Added `GET /api/v1/openapi.json` plus `GET /api/v1/contract` for SDKs, plugins, dashboards, and schema checks.
+- **Standard headers and errors** - Added v1 schema/rate-limit headers and a shared `{ error, code }` error helper to current API-key v1 routes.
+- **Fixture responses** - Added stable article and search fixture responses for API contract tests.
+- **Migration guide** - Added `docs/api-v1-migration.md` for pre-v5 API clients and self-host automation.
 
 ## [4.85.2] - 2026-05-25
 
 ### Added
 
-- **polish collaboration ux** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Collaboration UX contract** - Added shared metadata for live connection states, presence indicators, cursor names, conflict warnings, reconnect/offline states, and last-saved copy.
+- **Live editor status polish** - Expanded the collaborative editor toolbar with connection status, collaborator names, overflow handling, remote-change warnings, and defensive last-saved formatting.
+- **Inline review planning** - Added comment anchor, suggestion mode, inline note, and resolved-thread history planning metadata.
+- **Notification routing metadata** - Published mention, assignment, review-change, and watched-article update routing rules through `/api/customization`.
+- **Mobile and accessibility QA** - Added collaboration-specific mobile editor checkpoints and accessibility requirements plus `docs/collaboration-ux.md`.
 
 ## [4.85.1] - 2026-05-25
 
 ### Added
 
-- **add reusable editor controls** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Reusable editor controls** - Added shared editor primitives for insert trays, review trays, outline trays, table controls, selection actions, inspector panels, and command palette metadata.
+- **Editor extension points** - Published plugin command, toolbar group, slash command, and side-panel extension point metadata through `/api/customization`.
+- **Block template registry** - Added reusable callout, metadata table, timeline, infobox, decision log, research note, and worldbuilding entry templates.
+- **Keyboard shortcut registry** - Added scoped shortcut metadata for global, editor, selection, table, and plugin-safe command surfaces.
+- **Editor primitive docs and catalog entries** - Added `docs/editor-controls.md` and registered editor primitives in the reusable UI component catalog.
 
 ## [4.85.0] - 2026-05-25
 
 ### Added
 
-- **improve editor reliability** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Editor reliability contract** - Added shared metadata for collaborative sync, draft recovery, offline warnings, autosave repair, paste cleanup, embed handling, and large-document checks.
+- **Recoverable snapshots** - Expanded article snapshots with read, compare, restore, and discard flows; restore preserves the current article as a "Before restore" snapshot.
+- **Editor diagnostics** - Added helpers for extension load failures, schema conflicts, storage availability, offline state, and large-document pressure.
+- **Large-document fixtures** - Added focused fixtures for tables, code blocks, footnotes, images, and wiki links.
+- **Troubleshooting docs** - Added `docs/editor-troubleshooting.md` and exposed `editorReliability` through `/api/customization`.
 
 ## [4.84.2] - 2026-05-25
 
 ### Added
 
-- **add search API contract** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Stable search API contract** - Added typed search result shapes for articles, categories, tags, discussions, revisions, and marketplace items.
+- **Search contract endpoint** - Added `/api/search/contract` and exposed `searchApi` through `/api/customization` for plugins, widgets, dashboards, external tools, and mobile clients.
+- **Search privacy metadata** - Added query analytics retention, IP anonymization, opt-out planning, and public-client redaction fields.
+- **Search webhook planning** - Added planned webhook event metadata for saved search hits and important content changes.
+- **Search plugin docs** - Added `docs/search-powered-plugins.md` for building against the search API contract.
 
 ## [4.84.1] - 2026-05-25
 
 ### Added
 
-- **add discovery engines** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Discovery engines** - Added duplicate-page, unresolved-question, canon-conflict, glossary-gap, and orphan-topic detection helpers.
+- **Topic clusters** - Added category/tag-based topic clusters with continue-reading entries for related trail modules.
+- **Discovery report API** - Added `/api/discovery` with contract metadata, opportunities, clusters, dashboard widgets, and admin action descriptors.
+- **Discovery customization metadata** - Published the discovery engine contract through `/api/customization`.
+- **Discovery tests and docs** - Added discovery fixtures and `docs/discovery-engines.md`.
 
 ## [4.84.0] - 2026-05-25
 
 ### Added
 
-- **improve search relevance** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Search relevance v2** - Added shared relevance weights for exact title, phrase, alias, redirect, freshness, draft, review, and verification signals.
+- **Search contract metadata** - Published saved-filter, facet, synonym, alias, redirect, stemming, phrase-ranking, explain-mode, and migration metadata through `/api/customization`.
+- **Search facets** - Added category, tag, and status facet summaries to `/api/search` responses.
+- **Admin explain mode** - Added admin-only `explain=1` scoring explanations with matched terms, signal contributions, and weights.
+- **Search quality tests** - Added fixtures for wiki-style synonyms, stemming, stale/review/verification signals, explain payloads, and facets.
 
 ## [4.83.2] - 2026-05-25
 
 ### Added
 
-- **add moderation and suggestions** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Moderation contract** - Added discussion moderation statuses, reviewer-only visibility, report metadata, suggestion queue actions, and public contribution anti-spam planning metadata.
+- **Discussion moderation tools** - Added report and admin moderation paths for discussion threads with status, visibility, reason, moderator, and audit events.
+- **Suggestion review queue** - Expanded edit suggestions with accept, reject, comment, assign, and convert-to-task actions plus assignee, reviewer comment, task URL, spam score, moderation state, and IP metadata.
+- **Public contribution scoring** - Added shared spam-score helpers for short content, excessive links, blocked phrases, anonymous authors, and invalid email shape.
+- **Moderation docs** - Added `docs/moderation.md` and exposed the moderation contract through `/api/customization`.
 
 ## [4.83.1] - 2026-05-25
 
 ### Added
 
-- **expand audit trail** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Audit trail expansion** - Added workspace, severity, actor type, success state, IP, user-agent, and retention metadata to immutable audit events.
+- **Audit filtering and export** - Expanded `/api/admin/audit-log` with actor, action, target, workspace, severity, success, and date filters plus downloadable JSON exports.
+- **Privacy redaction** - Added summary, standard, strict, and full audit export redaction modes for sensitive metadata and actor/network fields.
+- **Alert hooks** - Added shared audit alert rules and trigger helpers for suspicious activity, failed admin operations, critical admin actions, and plugin hook failures.
+- **Audit documentation** - Added `docs/audit-trail.md` and published the audit contract through `/api/customization`.
 
 ## [4.83.0] - 2026-05-25
 
 ### Added
 
-- **add editorial governance** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Editorial governance contract** - Added review governance, claim queues, verification stamp metadata, ownership/escalation paths, and dashboard card metadata.
+- **Review governance fields** - Added review due dates, required reviewers, approval thresholds, change-request cycle counts, decision notes, and constrained status transitions.
+- **Claim queue metadata** - Added claim evidence and expiration fields plus queue grouping for disputed, needs-source, stale, rejected, and unreviewed claims.
+- **Verification stamps** - Added verification reviewer, evidence, and expiration metadata to article verification stamps.
+- **Governance dashboard summary** - Added `/api/admin/editorial-governance/summary` for release blockers, editorial risk, claim queues, verification renewals, and owner gaps.
 
 ## [4.82.2] - 2026-05-25
 
 ### Added
 
-- **add collaboration controls** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Collaboration controls contract** - Added workspace-aware metadata for co-authors, edit locks, review assignments, comments, mentions, notifications, workspace activity digests, and per-user contribution summaries.
+- **Workspace collaboration routing** - Scoped review assignment candidates, mention notifications, edit locks, and co-author management to active workspace members where applicable.
+- **Profile preference expansion** - Expanded user preference defaults for avatar URL, notification digest cadence, timezone, and default editor preferences.
+- **Public surface visibility checks** - Restricted RSS, Atom, sitemap, `/api/sitemap`, and API v1 article/search reads to public, owned, active-member, or legacy unscoped content as appropriate.
+- **Private team docs** - Added `docs/private-team-knowledge-base.md` for running Arkivel as a private team knowledge base.
 
 ## [4.82.1] - 2026-05-25
 
 ### Added
 
-- **add role templates** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Role template contract** - Added personal admin, team owner, docs maintainer, editor, reviewer, contributor, viewer, and public reader templates.
+- **Permission matrix metadata** - Added page, API, export, webhook, plugin, customization, and marketplace permission levels for docs and future UI surfaces.
+- **Invitation resend/revoke flow** - Expanded workspace invitations with resend and revoke actions plus audit events for create/resend/revoke.
+- **Recovery guidance** - Added self-host admin and account recovery guidance for `ADMIN_SECRET`, database promotion, session revocation, and API-key cleanup.
+- **Role regression tests** - Added admin/editor/viewer/API-key behavior tests for permission surfaces and role-template defaults.
 
 ## [4.82.0] - 2026-05-25
 
 ### Added
 
-- **add workspace model** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Workspace model hardening** - Expanded the existing `Wiki` workspace entity with visibility, default role, navigation mode, bootstrap profile, marketplace selections, membership status, and invitation persistence.
+- **Workspace bootstrap profiles** - Added personal, team, public docs, private archive, and demo workspace plans with starter spaces, tags, settings, navigation defaults, and migration notes.
+- **Workspace-scoped APIs** - Added `workspaceId`/`wikiId` query and `X-Arkivel-Workspace` header scoping for articles, search, categories, and tags, with `includeGlobal=1` for legacy single-workspace migration windows.
+- **Workspace invitations API** - Added `/api/wikis/:id/invitations` for admin-managed invitation review and creation.
+- **Isolation tests and docs** - Added workspace contract tests, data-isolation scenarios, `/api/customization` metadata, and documentation for migrating single-workspace installs.
 
 ## [4.81.2] - 2026-05-25
 
 ### Added
 
-- **add import rehearsal** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Import rehearsal contract** - Added dry-run-only import rehearsal metadata for conflict categories, recommended actions, blocked changes, and rollback plans before any write flow.
+- **Conflict handling options** - Added contract coverage for duplicate slugs, category merges, tag merges, user mapping, asset mapping, revision preservation, unsupported schemas, and permission gaps.
+- **Import rehearsal API** - Added `/api/import/rehearsal` to expose the rehearsal contract and preview dry-run reports.
+- **Fixture profiles** - Added small wiki, large archive, docs portal, and worldbuilding atlas fixture profiles for import rehearsal planning.
+- **Safe rehearsal docs** - Added `docs/import-rehearsal.md` and `docs/import-fixtures/README.md`.
 
 ## [4.81.1] - 2026-05-25
 
 ### Added
 
-- **harden export workflows** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Export manifests** - Added export manifest metadata for file counts, byte counts, checksums, warnings, omitted private data, privacy filters, scope, format, and status.
+- **Export history** - Added `ExportHistory` persistence plus `/api/export/history` for admin review and downloadable JSON reports.
+- **Export workflow metadata** - Added shared status/progress contract for Markdown, HTML, JSON, CSV, ZIP, MediaWiki, and database-shaped exports, including cancellation, retry, and error stages for long-running flows.
+- **Export endpoint hardening** - Added checksum and manifest headers to Markdown, HTML, JSON, and ZIP exports while recording history when persistence is available.
+- **Export tests** - Added coverage for manifest correctness, private-data omissions, checksum generation, lifecycle statuses, and downloadable history fields.
 
 ## [4.81.0] - 2026-05-25
 
 ### Added
 
-- **add portable bundle contract** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Portable bundle contract** - Added the v1 full-site bundle manifest for articles, revisions, categories, tags, users, settings, plugin state, maps, comments, discussions, assets, customizations, and explicit sessions/API-key/analytics exclusions.
+- **Bundle checksums and scope** - Added schema version, app version, source instance metadata, created-at, export scope, SHA-256 checksum fields, and default privacy filters.
+- **Import dry-run shape** - Added dry-run report groups for conflicts, missing assets, unsupported schemas, duplicate slugs, permission gaps, blocked changes, and recommended actions.
+- **Compatibility promise** - Documented pre-v5 portable bundle compatibility expectations in `docs/portable-bundles.md`.
+- **Customization API metadata** - Exposed the portable bundle contract through `/api/customization`.
 
 ## [4.80.3] - 2026-05-25
 
 ### Added
 
-- **add plugin starter kit** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Plugin starter kit** - Added `examples/plugins/starter-plugin/` with a manifest, route, dashboard widget, setting schema, hook, job, and smoke-test notes.
+- **Plugin manifest CLI** - Added `npm run plugin:validate` to validate `plugin.json` files and list supported plugin surfaces, permissions, hooks, webhook events, schema fields, and compatibility metadata.
+- **Plugin author docs** - Added `docs/plugin-authoring.md` with trusted-local setup, validation, compatibility, security boundaries, and smoke-test guidance.
+- **Marketplace listing template** - Added `examples/plugins/marketplace-listing-template.json` for plugin authors preparing local marketplace submissions.
+- **Author workflow docs** - Updated product and in-app docs with starter kit, CLI, and plugin smoke-test references.
 
 ## [4.80.2] - 2026-05-25
 
 ### Added
 
-- **add plugin permissions and audit** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Plugin permission prompts** - Added reusable prompts and risk labels for article read/write, category read/write, user read, settings write, webhook send, file read, and job execution scopes.
+- **Plugin audit coverage** - Added audit actions for plugin install, enable, disable, settings change, route access, job run, and hook failure, with enable/disable and render-hook failure logging wired into the runtime surfaces.
+- **Plugin health metadata** - Expanded plugin API/admin metadata with last load, last error, permissions, routes, widgets, version, compatibility, and source details.
+- **Trusted plugin security docs** - Documented why v1 remains trusted-local and manifest-first, with no remote arbitrary-code loading.
+- **Permission tests** - Added role and actor coverage for admin, editor, viewer, API key, and anonymous plugin permission decisions.
 
 ## [4.80.1] - 2026-05-25
 
 ### Added
 
-- **add trusted local plugin loader** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Trusted local plugin loader** - Added a disabled-by-default manifest discovery path gated by `ARKIVEL_ENABLE_TRUSTED_PLUGINS=true` and an absolute `ARKIVEL_TRUSTED_PLUGIN_DIR`.
+- **Admin permission review** - Expanded `/admin/plugins` and `/api/plugins` to show trusted local plugin source, compatibility, permissions, routes, widgets, hooks, loader status, and load errors before enabling a plugin.
+- **Loader safety boundaries** - Kept v4.80.1 discovery manifest-only: plugin code is not imported or executed, routes must stay under `/plugins`, and invalid manifests are reported without crashing the base app.
+- **Loader tests** - Added coverage for disabled discovery, missing/relative plugin directories, valid manifests, invalid manifests, and non-executed plugin code.
+- **Customization API metadata** - Exposed the trusted local loader env contract and execution boundary through `/api/customization`.
 
 ## [4.80.0] - 2026-05-25
 
 ### Added
 
-- **add plugin manifest schema** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Plugin manifest schema** - Added the v1 `plugin.json` contract for identity, version, compatibility, permissions, routes, settings, widgets, hooks, jobs, storage, API scopes, and webhooks.
+- **Manifest validation** - Added actionable fielded validation errors for unsafe routes, unsupported hooks, unsupported permissions, literal webhook URLs, storage issues, and plugin API incompatibility.
+- **Plugin compatibility matrix** - Added Arkivel/plugin API compatibility metadata for the v4.80 beta line and the v5.0 target.
+- **Planned plugin examples** - Added preview-safe manifest examples for web clipper, import adapter, export adapter, dashboard widget, editor command, and notification bridge plugins.
+- **Customization API metadata** - Exposed the plugin manifest schema, examples, compatibility matrix, and validation summary through `/api/customization`.
 
 ## [4.79.3] - 2026-05-25
 
 ### Added
 
-- **add space governance hooks** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Space governance persistence** - Added category-level governance records for owner, reviewer, default visibility, review cadence, stale-page thresholds, and required health signals.
+- **Governance inheritance** - Added global-to-parent-to-space governance resolution with public badges and widget metadata for stale pages, unreviewed claims, orphaned content, and broken links.
+- **Governance APIs and audit** - Added `/api/categories/:id/governance` plus admin summary data at `/api/admin/space-governance/summary`, and audit events for customization/governance updates.
+- **Governance UI hooks** - Added inherited governance badges on article pages and a space governance summary panel on the admin dashboard.
+- **Permission coverage** - Added tests for admin, editor, viewer, and legacy no-admin-secret governance edit permissions.
 
 ## [4.79.2] - 2026-05-25
 
 ### Added
 
-- **add space templates** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Space template contract** - Added preview-safe space template manifests for category trees, article templates, metadata schema, default tags, infobox fields, layout intent, and recommended component packs.
+- **Built-in space templates** - Added personal wiki, team handbook, product docs, worldbuilding bible, research notebook, reading archive, and project knowledge base templates.
+- **Template preview API** - Added `/api/space-templates` for registry reads and preview-only JSON import/export validation before any future apply flow.
+- **Template author docs** - Added `docs/space-templates.md` for shareable space-template structure, validation, and safety guidance.
 
 ## [4.79.1] - 2026-05-25
 
 ### Added
 
-- **add space customization UI** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Space customization editor** - Added a category admin editor for persisted space overrides across style, color theme, layout, component pack, template pack, navigation, and metadata schema.
+- **Inheritance preview controls** - Added effective-value previews, source badges, reset-to-parent, reset-to-global, and private-draft redaction status for category spaces.
+- **Space landing previews** - Added article-list, metadata/navigation, theme/layout, warning, and responsive QA preview panels for customized spaces.
 
 ## [4.79.0] - 2026-05-25
 
 ### Added
 
-- **add space customization schema** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Space customization persistence** - Added `SpaceCustomization` and `ArticleCustomizationOverride` models for per-category and per-article style, color theme, layout, component pack, template pack, navigation, metadata schema, and private draft settings.
+- **Customization inheritance contract** - Added validation and resolution helpers for global-to-parent-to-child-to-article inheritance, with public redaction of private draft config.
+- **Space customization APIs** - Added admin-only update endpoints and public read endpoints at `/api/categories/:id/customization` and `/api/articles/:id/customization`.
+- **Self-host migration docs** - Documented the v4.79.0 Prisma generate/db push flow and rollback notes through `/api/customization` metadata and product docs.
 
 ## [4.78.3] - 2026-05-25
 
 ### Added
 
-- **add component pack developer tooling** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Component-pack generator** - Added `npm run marketplace:generate-component-pack` to scaffold a local component-pack manifest, component docs, screenshots folder, tests folder, and README stub.
+- **Pack validation command** - Added `npm run marketplace:validate-pack` for CI and pack authors to validate preview manifests and slot ids.
+- **Component-pack sample** - Added `examples/marketplace/component-pack` with manifest, component notes, screenshots guidance, compatibility notes, and test checklist.
+- **Preview harness planning** - Added `docs/component-pack-preview-harness.md` with route-based preview goals, planned surfaces, fixture coverage, and validation output expectations.
+- **Typed fixtures** - Added component-pack fixture data for article card, metadata panel, dashboard widget, homepage section, and editor panel previews.
 
 ## [4.78.2] - 2026-05-25
 
 ### Added
 
-- **add layout composition hooks** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Layout composition hooks** - Added layout metadata for shell density, homepage module order, article columns, right-rail behavior, dashboard modules, category landing pages, and layout-specific CSS hooks.
+- **Studio layout preview** - Added preview-only layout composition details to Customization Studio for the selected layout preset.
+- **Customization API metadata** - Exposed layout composition hooks through `/api/customization` and attached active composition metadata to layout marketplace entries.
+- **Layout regression tests** - Added tests for built-in layout hook coverage, active layout metadata, and fallback behavior for unknown layouts.
 
 ## [4.78.1] - 2026-05-25
 
 ### Added
 
-- **add built-in component packs** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Built-in component packs** - Added default wiki, docs portal, team knowledge base, worldbuilding atlas, and research notebook component packs to the local marketplace registry.
+- **Pack component metadata** - Added slot-specific component definitions, descriptions, and recommended layout metadata for built-in packs.
+- **Marketplace detail support** - Surfaced component lists and recommended layouts in marketplace item details and filters.
+- **Component-pack tests** - Added registry coverage for the required v4.78.1 packs and their named component affordances.
 
 ## [4.78.0] - 2026-05-25
 
 ### Added
 
-- **add component slot registry** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Component slot registry** - Added stable slot contracts for article cards, article headers, metadata panels, infobox layouts, dashboard widgets, homepage sections, search results, editor panels, space navigation, and admin summaries.
+- **Slot fallback metadata** - Added props, data boundaries, loading states, error states, permission notes, and default fallback component names for every slot.
+- **Customization API slot metadata** - Exposed component slot contracts through `/api/customization` alongside marketplace component packs.
+- **Slot validation tests** - Added tests for slot contract coverage, fallback declarations, and incompatible component-pack slot rejection.
 
 ## [4.77.3] - 2026-05-25
 
 ### Added
 
-- **document marketplace contributions** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Marketplace contribution guide** - Added `docs/marketplace-contributions.md` with supported pack types, required files, naming rules, semantic versioning guidance, review checklist, and submission flow.
+- **Sample marketplace packs** - Added `examples/marketplace/` sample folders for theme packs and plugin manifests with README files, manifests, screenshot expectations, compatibility notes, and test notes.
+- **Marketplace issue templates** - Added GitHub issue templates for marketplace submissions and marketplace pack bug reports.
+- **Contributor docs sync** - Updated contributor, design, architecture, help, feature, and README references for the preview-safe marketplace contribution workflow.
 
 ## [4.77.2] - 2026-05-25
 
 ### Added
 
-- **add marketplace detail pages** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+- **Marketplace detail pages** - Added a detail panel for every catalog item with overview, screenshots, compatibility, permissions, author, license, changelog, docs links, source metadata, and checksums.
+- **Marketplace copy actions** - Added copy-ready env vars, pack JSON, plugin manifest JSON, and installation notes for self-host admins and pack authors.
+- **Marketplace faceting** - Added filters for kind, status, slot, permission, compatibility, layout, style, and tag, plus local-registry empty states for self-host builds.
+- **Status vocabulary** - Extended marketplace status support to built-in, planned, experimental, local-only, deprecated, and blocked listings.
 
 ## [4.77.1] - 2026-05-25
 

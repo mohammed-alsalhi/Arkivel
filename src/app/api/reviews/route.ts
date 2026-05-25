@@ -8,6 +8,7 @@ import {
   isReviewerRole,
   type ReviewStatus,
 } from "@/lib/reviews";
+import { createWorkspaceArticleWhere, getWorkspaceIdFromRequestLike } from "@/lib/workspaces";
 
 export async function GET(request: NextRequest) {
   const session = await getSession();
@@ -20,6 +21,8 @@ export async function GET(request: NextRequest) {
   const authorId = searchParams.get("authorId");
   const articleId = searchParams.get("articleId");
   const active = searchParams.get("active");
+  const workspaceId = getWorkspaceIdFromRequestLike({ searchParams, headers: request.headers });
+  const includeGlobal = searchParams.get("includeGlobal") === "1";
 
   const where: Record<string, unknown> = {};
   if (status) where.status = status;
@@ -27,6 +30,9 @@ export async function GET(request: NextRequest) {
   if (reviewerId) where.reviewerId = reviewerId;
   if (authorId) where.authorId = authorId;
   if (articleId) where.articleId = articleId;
+  if (workspaceId) {
+    where.article = createWorkspaceArticleWhere({ workspaceId, includeGlobal });
+  }
 
   try {
     const reviews = await prisma.reviewRequest.findMany({
@@ -63,7 +69,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { articleId, message, reviewerId } = body;
+    const { articleId, message, reviewerId, dueAt, requiredReviewerIds, approvalThreshold } = body;
 
     if (!articleId) {
       return NextResponse.json(
@@ -75,7 +81,7 @@ export async function POST(request: NextRequest) {
     // Verify article exists
     const article = await prisma.article.findUnique({
       where: { id: articleId },
-      select: { id: true, title: true, slug: true, status: true },
+      select: { id: true, title: true, slug: true, status: true, wikiId: true },
     });
     if (!article) {
       return NextResponse.json(
@@ -96,6 +102,19 @@ export async function POST(request: NextRequest) {
           { error: "Reviewer must be an editor or admin" },
           { status: 400 }
         );
+      }
+
+      if (article.wikiId) {
+        const membership = await prisma.wikiMembership.findUnique({
+          where: { wikiId_userId: { wikiId: article.wikiId, userId: reviewerId } },
+          select: { status: true },
+        });
+        if (membership?.status !== "active") {
+          return NextResponse.json(
+            { error: "Reviewer must be an active member of the article workspace" },
+            { status: 400 }
+          );
+        }
       }
     }
 
@@ -139,6 +158,11 @@ export async function POST(request: NextRequest) {
           authorId: session!.id,
           reviewerId: reviewerId || null,
           message: typeof message === "string" && message.trim() ? message.trim() : null,
+          dueAt: dueAt ? new Date(dueAt) : null,
+          requiredReviewerIds: Array.isArray(requiredReviewerIds)
+            ? requiredReviewerIds.filter((id: unknown) => typeof id === "string")
+            : [],
+          approvalThreshold: Number.isInteger(approvalThreshold) && approvalThreshold > 0 ? approvalThreshold : 1,
           status: (reviewerId ? "in_review" : "pending") satisfies ReviewStatus,
         },
         include: {
@@ -169,6 +193,9 @@ export async function POST(request: NextRequest) {
           where: {
             role: { in: ["admin", "editor"] },
             NOT: { id: session!.id },
+            ...(article.wikiId
+              ? { wikiMemberships: { some: { wikiId: article.wikiId, status: "active" } } }
+              : {}),
           },
           select: { id: true },
         });

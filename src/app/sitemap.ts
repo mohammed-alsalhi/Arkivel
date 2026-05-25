@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import prisma from "@/lib/prisma";
+import { createPublicWorkspaceArticleWhere } from "@/lib/workspaces";
 
 export const dynamic = "force-dynamic";
 
@@ -7,12 +8,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://example.com";
 
   const articles = await prisma.article.findMany({
-    where: { published: true, status: "published" },
+    where: { published: true, status: "published", ...createPublicWorkspaceArticleWhere() },
     select: { slug: true, updatedAt: true },
     orderBy: { updatedAt: "desc" },
   });
 
   const categories = await prisma.category.findMany({
+    where: {
+      articles: {
+        some: { published: true, status: "published", ...createPublicWorkspaceArticleWhere() },
+      },
+    },
     select: { slug: true, createdAt: true },
   });
 

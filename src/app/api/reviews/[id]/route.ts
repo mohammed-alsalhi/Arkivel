@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { getSession, isAdmin, requireRole } from "@/lib/auth";
 import { logActivity } from "@/lib/activity";
 import { isReviewerRole, isReviewStatus, reviewStatusLabel } from "@/lib/reviews";
+import { isAllowedReviewTransition } from "@/lib/editorial-governance";
 
 export async function GET(
   request: NextRequest,
@@ -75,6 +76,7 @@ export async function PUT(
         authorId: true,
         reviewerId: true,
         status: true,
+        cycleCount: true,
         article: {
           select: { title: true, slug: true, status: true },
         },
@@ -92,11 +94,18 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { status, reviewerId, comment } = body;
+    const { status, reviewerId, comment, dueAt, requiredReviewerIds, approvalThreshold, decisionNote } = body;
 
     if (status && !isReviewStatus(status)) {
       return NextResponse.json(
         { error: "Invalid review status" },
+        { status: 400 }
+      );
+    }
+
+    if (status && status !== review.status && !isAllowedReviewTransition(review.status, status)) {
+      return NextResponse.json(
+        { error: `Cannot transition review from ${review.status} to ${status}` },
         { status: 400 }
       );
     }
@@ -154,6 +163,13 @@ export async function PUT(
     const data: Record<string, unknown> = {};
     if (status) data.status = status;
     if (reviewerId !== undefined) data.reviewerId = reviewerId || null;
+    if (dueAt !== undefined) data.dueAt = dueAt ? new Date(dueAt) : null;
+    if (Array.isArray(requiredReviewerIds)) {
+      data.requiredReviewerIds = requiredReviewerIds.filter((id: unknown) => typeof id === "string");
+    }
+    if (Number.isInteger(approvalThreshold) && approvalThreshold > 0) data.approvalThreshold = approvalThreshold;
+    if (typeof decisionNote === "string") data.decisionNote = decisionNote.trim() || null;
+    if (status === "in_review" && review.status === "changes_requested") data.cycleCount = review.cycleCount + 1;
 
     // If assigning a reviewer and status is pending, move to in_review
     if (reviewerId && !status && review.status === "pending") {

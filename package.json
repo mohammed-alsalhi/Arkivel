@@ -1,6 +1,6 @@
 {
   "name": "arkivel",
-  "version": "4.99.99",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "import": "tsx scripts/import-articles.ts"
+    "qa:seed-smoke": "node scripts/seed-smoke-fixtures.mjs",
+    "release:docs-sync": "node scripts/verify-docs-sync.mjs",
+    "import": "tsx scripts/import-articles.ts",
+    "marketplace:generate-component-pack": "tsx scripts/generate-component-pack.ts",
+    "marketplace:validate-pack": "tsx scripts/validate-component-pack.ts",
+    "plugin:validate": "tsx scripts/validate-plugin-manifest.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.78",

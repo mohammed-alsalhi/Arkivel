@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
+import { createPublicWorkspaceArticleWhere } from "@/lib/workspaces";
 
 function escapeXml(str: string): string {
   return str
@@ -17,7 +18,7 @@ function stripHtml(html: string): string {
 
 export async function GET() {
   const articles = await prisma.article.findMany({
-    where: { published: true },
+    where: { published: true, status: "published", ...createPublicWorkspaceArticleWhere() },
     orderBy: { updatedAt: "desc" },
     take: 50,
     select: {

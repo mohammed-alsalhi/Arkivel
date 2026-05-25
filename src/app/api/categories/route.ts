@@ -2,20 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { isAdmin, requireAdmin } from "@/lib/auth";
 import { generateSlug } from "@/lib/utils";
+import { createWorkspaceArticleWhere, getWorkspaceIdFromRequestLike } from "@/lib/workspaces";
+import { invalidateCacheForEvent } from "@/lib/cache-strategy";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const workspaceId = getWorkspaceIdFromRequestLike({
+    searchParams: request.nextUrl.searchParams,
+    headers: request.headers,
+  });
+  const includeGlobal = request.nextUrl.searchParams.get("includeGlobal") === "1";
+  const articleWhere = createWorkspaceArticleWhere({ workspaceId, includeGlobal: workspaceId ? includeGlobal : true });
   try {
     const categories = await prisma.category.findMany({
       orderBy: { sortOrder: "asc" },
       include: {
-        _count: { select: { articles: true } },
+        _count: { select: { articles: { where: articleWhere } } },
         children: {
           orderBy: { sortOrder: "asc" },
           include: {
-            _count: { select: { articles: true } },
+            _count: { select: { articles: { where: articleWhere } } },
             children: {
               orderBy: { sortOrder: "asc" },
-              include: { _count: { select: { articles: true } } },
+              include: { _count: { select: { articles: { where: articleWhere } } } },
             },
           },
         },
@@ -59,6 +67,8 @@ export async function POST(request: NextRequest) {
       parent: true,
     },
   });
+
+  await invalidateCacheForEvent("category.write");
 
   return NextResponse.json(category, { status: 201 });
 }

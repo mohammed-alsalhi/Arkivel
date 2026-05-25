@@ -67,6 +67,26 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 4. Bump `package.json` and `package-lock.json`: patch for documentation/process/UI copy, minor for new product capabilities, major for breaking changes.
 5. Treat the v4 line as beta. `ROADMAP.md` owns the patch-level path through v4.99.99, and v5.0.0 should only be tagged once the stable release gates are complete.
 
+### Smoke testing
+1. Seed repeatable smoke fixtures with `npm run qa:seed-smoke` when a database is available.
+2. Run the v5 smoke suite with `npm run test:e2e -- e2e/smoke-suite.spec.ts`.
+3. Attach Playwright screenshots and traces from failed smoke runs to release blocker notes.
+
+### Release gates
+1. Run `npm run release:docs-sync` before tagging a release candidate.
+2. Release candidates require clean lint, typecheck, unit tests, API tests, e2e smoke tests, build, migration dry run, and docs sync evidence.
+3. Track unresolved release, security, migration, docs, or smoke failures in `docs/known-issues.md`.
+
+### Maintainer docs
+1. Start with `docs/index.md` and `docs/maintainer-guide.md` when onboarding a new maintainer.
+2. Use `docs/setup-paths.md` to choose deployment shape and `docs/troubleshooting.md` to route common failures.
+3. Use `docs/in-app-onboarding.md` and `examples/onboarding/demo-content-pack.json` when validating first-run setup, demo content, or onboarding screenshots.
+4. Use `docs/example-site-recipes.md` and `examples/recipes/site-recipes.json` when comparing self-host recipe shapes or publishing v5 readiness guidance.
+5. Use `docs/feature-freeze.md` and `docs/known-issues.md` when preparing release candidates or deciding whether a change is allowed during freeze.
+6. Use `docs/release-candidate-one.md` and `docs/rc-feedback-template.md` when collecting RC1 validation evidence.
+7. Use `docs/final-release-gates.md` when collecting final v5 release evidence.
+8. Keep the docs index, README, in-app help, features, API docs, architecture, design, and roadmap cross-linked when adding major documentation.
+
 ### Commit messages
 1. Release/version commits use `vX.Y.Z: imperative summary`, matching `package.json`; for example, `v4.74.4: document release discipline`.
 2. Use short imperative verbs that match repo history: `add`, `fix`, `harden`, `simplify`, `document`, `refactor`, `polish`, or `bump`.
@@ -80,6 +100,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 4. Reusable UI primitives should come from `src/components/ui` and be registered in `src/components/ui/catalog.ts`.
 5. Customization Studio tab metadata, responsive QA checkpoints, and assistive summaries belong in `src/lib/customization-studio.ts`.
 6. Theme and skin work should use CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]`, `html[data-color-theme="..."]`, and `html[data-layout="..."]`.
+7. Marketplace pack authors should follow [docs/marketplace-contributions.md](docs/marketplace-contributions.md), start from `examples/marketplace/`, validate manifests with `/admin/marketplace`, and use the marketplace submission or pack bug issue templates.
 
 ### Modifying the database schema
 1. Edit `prisma/schema.prisma`

@@ -10,7 +10,15 @@ export const DEFAULT_PREFERENCES = {
   notifyOnEdit: true,
   notifyOnReply: true,
   notifyOnMention: true,
+  notificationDigestCadence: "daily" as "off" | "daily" | "weekly",
   locale: "en",
+  timezone: "UTC",
+  avatarUrl: "",
+  defaultEditorPreferences: {
+    mode: "rich" as "rich" | "markdown",
+    spellcheck: true,
+    autosave: true,
+  },
   articlesPerPage: 20,
   showReadingProgress: true,
   // v4.1: Daily digest

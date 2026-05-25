@@ -68,7 +68,7 @@ export async function PATCH(
 
   try {
     const body = await request.json();
-    const { claimHash, claimText, status, note } = body;
+    const { claimHash, claimText, status, note, evidence, expiresAt } = body;
 
     if (typeof claimHash !== "string" || !claimHash.trim()) {
       return NextResponse.json(
@@ -105,6 +105,8 @@ export async function PATCH(
 
     const trimmedNote =
       typeof note === "string" && note.trim() ? note.trim() : null;
+    const trimmedEvidence =
+      typeof evidence === "string" && evidence.trim() ? evidence.trim() : null;
     const trimmedHash = claimHash.trim();
     const trimmedText = claimText.trim();
 
@@ -122,12 +124,16 @@ export async function PATCH(
           claimText: trimmedText,
           status,
           note: trimmedNote,
+          evidence: trimmedEvidence,
+          expiresAt: expiresAt ? new Date(expiresAt) : null,
           reviewerId: session!.id,
         },
         update: {
           claimText: trimmedText,
           status,
           note: trimmedNote,
+          evidence: trimmedEvidence,
+          expiresAt: expiresAt ? new Date(expiresAt) : null,
           reviewerId: session!.id,
         },
         include: includeReviewer,
