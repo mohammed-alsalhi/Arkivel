@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { validateApiKey } from "@/lib/api-auth";
+import { apiV1Headers, createApiV1Error } from "@/lib/public-api-v1";
 
 export async function GET(request: NextRequest) {
   const user = await validateApiKey(request);
   if (!user) {
-    return NextResponse.json(
-      { error: "Invalid or missing API key. Include X-API-Key header." },
-      { status: 401 }
-    );
+    const error = createApiV1Error("Invalid or missing API key. Include X-API-Key header.", 401, "api_key_required");
+    return NextResponse.json(error.body, { status: error.status, headers: error.headers });
   }
 
   const tags = await prisma.tag.findMany({
@@ -31,7 +30,7 @@ export async function GET(request: NextRequest) {
     childCount: t._count.children,
   }));
 
-  return NextResponse.json({ tags: formatted });
+  return NextResponse.json({ tags: formatted }, { headers: apiV1Headers });
 }
 
 export const dynamic = "force-dynamic";

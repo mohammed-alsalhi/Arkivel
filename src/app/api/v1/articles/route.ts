@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { validateApiKey } from "@/lib/api-auth";
+import { createApiKeyWorkspaceArticleWhere, getWorkspaceIdFromRequestLike } from "@/lib/workspaces";
+import { apiV1Headers, createApiV1Error } from "@/lib/public-api-v1";
 
 export async function GET(request: NextRequest) {
   const user = await validateApiKey(request);
   if (!user) {
-    return NextResponse.json(
-      { error: "Invalid or missing API key. Include X-API-Key header." },
-      { status: 401 }
-    );
+    const error = createApiV1Error("Invalid or missing API key. Include X-API-Key header.", 401, "api_key_required");
+    return NextResponse.json(error.body, { status: error.status, headers: error.headers });
   }
 
   const { searchParams } = request.nextUrl;
@@ -17,8 +17,13 @@ export async function GET(request: NextRequest) {
   const category = searchParams.get("category") || undefined;
   const tag = searchParams.get("tag") || undefined;
   const status = searchParams.get("status") || undefined;
+  const workspaceId = getWorkspaceIdFromRequestLike({ searchParams, headers: request.headers });
+  const includeGlobal = searchParams.get("includeGlobal") === "1";
 
-  const where: Record<string, unknown> = { published: true };
+  const where: Record<string, unknown> = {
+    published: true,
+    ...createApiKeyWorkspaceArticleWhere({ userId: user.userId, workspaceId, includeGlobal }),
+  };
   if (category) {
     where.category = { slug: category };
   }
@@ -78,7 +83,7 @@ export async function GET(request: NextRequest) {
       total,
       totalPages: Math.ceil(total / limit),
     },
-  });
+  }, { headers: apiV1Headers });
 }
 
 export const dynamic = "force-dynamic";

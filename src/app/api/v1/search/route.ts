@@ -1,17 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { validateApiKey } from "@/lib/api-auth";
+import { createApiKeyWorkspaceArticleWhere, getWorkspaceIdFromRequestLike } from "@/lib/workspaces";
+import { apiV1Headers, createApiV1Error } from "@/lib/public-api-v1";
 
 export async function GET(request: NextRequest) {
   const user = await validateApiKey(request);
   if (!user) {
-    return NextResponse.json(
-      { error: "Invalid or missing API key. Include X-API-Key header." },
-      { status: 401 }
-    );
+    const error = createApiV1Error("Invalid or missing API key. Include X-API-Key header.", 401, "api_key_required");
+    return NextResponse.json(error.body, { status: error.status, headers: error.headers });
   }
 
   const query = request.nextUrl.searchParams.get("q")?.trim();
+  const workspaceId = getWorkspaceIdFromRequestLike({
+    searchParams: request.nextUrl.searchParams,
+    headers: request.headers,
+  });
+  const includeGlobal = request.nextUrl.searchParams.get("includeGlobal") === "1";
   const limit = Math.min(
     100,
     Math.max(1, parseInt(request.nextUrl.searchParams.get("limit") || "20"))
@@ -21,29 +26,39 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       results: [],
       query: query || "",
-    });
+    }, { headers: apiV1Headers });
   }
 
   const words = query.split(/\s+/).filter((w) => w.length >= 2);
+
+  const workspaceWhere = createApiKeyWorkspaceArticleWhere({ userId: user.userId, workspaceId, includeGlobal });
 
   const where =
     words.length > 1
       ? {
           published: true,
-          AND: words.map((word) => ({
-            OR: [
-              { title: { contains: word, mode: "insensitive" as const } },
-              { content: { contains: word, mode: "insensitive" as const } },
-              { excerpt: { contains: word, mode: "insensitive" as const } },
-            ],
-          })),
+          AND: [
+            workspaceWhere,
+            ...words.map((word) => ({
+              OR: [
+                { title: { contains: word, mode: "insensitive" as const } },
+                { content: { contains: word, mode: "insensitive" as const } },
+                { excerpt: { contains: word, mode: "insensitive" as const } },
+              ],
+            })),
+          ],
         }
       : {
           published: true,
-          OR: [
-            { title: { contains: query, mode: "insensitive" as const } },
-            { content: { contains: query, mode: "insensitive" as const } },
-            { excerpt: { contains: query, mode: "insensitive" as const } },
+          AND: [
+            workspaceWhere,
+            {
+              OR: [
+                { title: { contains: query, mode: "insensitive" as const } },
+                { content: { contains: query, mode: "insensitive" as const } },
+                { excerpt: { contains: query, mode: "insensitive" as const } },
+              ],
+            },
           ],
         };
 
@@ -72,7 +87,7 @@ export async function GET(request: NextRequest) {
     updatedAt: a.updatedAt.toISOString(),
   }));
 
-  return NextResponse.json({ results, query });
+  return NextResponse.json({ results, query }, { headers: apiV1Headers });
 }
 
 function relevanceScore(title: string, query: string): number {
