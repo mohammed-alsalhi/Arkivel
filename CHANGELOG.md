@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.91.1] - 2026-05-25
+
+### Added
+
+- **add template marketplace** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.91.0] - 2026-05-25
 
 ### Added
