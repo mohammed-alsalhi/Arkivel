@@ -31,15 +31,23 @@ import { QueryBlock } from "./QueryBlockExtension";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import Highlight from "@tiptap/extension-highlight";
-import OutlineBuilderPanel from "./OutlineBuilderPanel";
-import GrammarCheckPanel from "./GrammarCheckPanel";
 import EditorToolbar from "./EditorToolbar";
 import WikiLinkSuggester from "./WikiLinkSuggester";
 import LinkBubble from "./LinkBubble";
-import WritingCoachPanel from "./WritingCoachPanel";
 import WritingSessionGoal from "./WritingSessionGoal";
+import {
+  EditorInsertTray,
+  EditorOutlineTray,
+  EditorReviewTray,
+  EditorSelectionActions,
+  type EditorCommandItem,
+  type EditorCheck,
+  type EditorOutlineItem,
+  type EditorTelemetry,
+} from "./EditorPrimitives";
+import { editorBlockTemplates, getEditorBlockTemplate } from "@/lib/editor-controls";
 import { useWikiLinkSuggester } from "./useWikiLinkSuggester";
-import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef, type CSSProperties } from "react";
+import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef } from "react";
 import styles from "./TiptapEditor.module.css";
 
 export type TiptapEditorHandle = {
@@ -93,37 +101,6 @@ function looksLikeMarkdown(text: string): boolean {
   // Require at least 2 different Markdown indicators to avoid false positives
   return matchCount >= 2;
 }
-
-type EditorCheck = {
-  label: string;
-  detail: string;
-  status: "good" | "warn" | "info";
-};
-
-type EditorOutlineItem = {
-  level: number;
-  text: string;
-  pos: number;
-};
-
-type EditorTelemetry = {
-  words: number;
-  characters: number;
-  readMinutes: number;
-  headings: number;
-  links: number;
-  wikiLinks: number;
-  footnotes: number;
-  images: number;
-  tables: number;
-  richBlocks: number;
-  codeBlocks: number;
-  selectedWords: number;
-  selectedCharacters: number;
-  outline: EditorOutlineItem[];
-  checks: EditorCheck[];
-  score: number;
-};
 
 type EditorTray = "insert" | "review" | "outline" | null;
 
@@ -815,6 +792,12 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
     function insertQuickBlock(kind: string) {
       if (!editor) return;
 
+      const template = getEditorBlockTemplate(kind);
+      if (template) {
+        editor.chain().focus().insertContent(template.html).run();
+        return;
+      }
+
       if (kind === "note") editor.chain().focus().insertCallout("note").run();
       if (kind === "tip") editor.chain().focus().insertCallout("tip").run();
       if (kind === "warning") editor.chain().focus().insertCallout("warning").run();
@@ -894,28 +877,39 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       setMarkdownMode(!markdownMode);
     }
 
-    const quickBlocks = [
-      { kind: "scaffold", label: "Article scaffold", meta: "Sections" },
-      { kind: "note", label: "Note callout", meta: "Context" },
-      { kind: "tip", label: "Tip callout", meta: "Advice" },
-      { kind: "warning", label: "Warning callout", meta: "Risk" },
-      { kind: "table", label: "Table", meta: "4 x 4" },
-      { kind: "data", label: "Data table", meta: "CSV" },
-      { kind: "mermaid", label: "Diagram", meta: "Mermaid" },
-      { kind: "math", label: "Math", meta: "KaTeX" },
-      { kind: "decision", label: "Decision tree", meta: "Branches" },
-      { kind: "timeline", label: "Timeline", meta: "Events" },
-      { kind: "collapse", label: "Collapsible", meta: "Details" },
-      { kind: "query", label: "Query block", meta: "Live list" },
+    const quickBlocks: EditorCommandItem[] = [
+      { id: "scaffold", label: "Article scaffold", meta: "Sections", group: "Start" },
+      { id: "callout-note", label: "Note callout", meta: "Template", group: "Start" },
+      { id: "metadata-table", label: "Metadata table", meta: "Template", group: "Structure" },
+      { id: "infobox", label: "Infobox", meta: "Template", group: "Structure" },
+      { id: "timeline", label: "Timeline", meta: "Template", group: "Structure" },
+      { id: "decision-log", label: "Decision log", meta: "Template", group: "Research" },
+      { id: "research-note", label: "Research note", meta: "Template", group: "Research" },
+      { id: "worldbuilding-entry", label: "Worldbuilding entry", meta: "Template", group: "Research" },
+      { id: "table", label: "Table", meta: "4 x 4", group: "Structure" },
+      { id: "data", label: "Data table", meta: "CSV", group: "Advanced" },
+      { id: "mermaid", label: "Diagram", meta: "Mermaid", group: "Advanced" },
+      { id: "math", label: "Math", meta: "KaTeX", group: "Advanced" },
+      { id: "decision", label: "Decision tree", meta: "Branches", group: "Advanced" },
+      { id: "collapse", label: "Collapsible", meta: "Details", group: "Structure" },
+      { id: "query", label: "Query block", meta: "Live list", group: "Structure" },
+      ...editorBlockTemplates
+        .filter((template) => !["callout-note", "metadata-table", "timeline", "infobox", "decision-log", "research-note", "worldbuilding-entry"].includes(template.id))
+        .map((template) => ({
+          id: template.id,
+          label: template.label,
+          meta: "Template",
+          group: template.group,
+        })),
     ];
 
     const quickBlockGroups = [
-      { label: "Start", kinds: ["scaffold", "note", "tip", "warning"] },
-      { label: "Structure", kinds: ["table", "timeline", "collapse", "query"] },
-      { label: "Advanced", kinds: ["data", "mermaid", "math", "decision"] },
+      { label: "Start", ids: ["scaffold", "callout-note"] },
+      { label: "Structure", ids: ["metadata-table", "infobox", "timeline", "table", "collapse", "query"] },
+      { label: "Research", ids: ["decision-log", "research-note", "worldbuilding-entry"] },
+      { label: "Advanced", ids: ["data", "mermaid", "math", "decision"] },
     ];
 
-    const activeChecks = telemetry.checks.length > 0 ? telemetry.checks : emptyTelemetry.checks;
     const trayButtons: { key: Exclude<EditorTray, null>; label: string; detail: string }[] = [
       { key: "insert", label: "Insert", detail: "Add blocks" },
       { key: "review", label: "Review", detail: `${telemetry.score}% ready` },
@@ -931,145 +925,26 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
 
       if (activeTray === "insert") {
         return (
-          <section className={styles.tray} data-testid="editor-insert-tray" aria-label="Insert tools">
-            <div className={styles.trayHeader}>
-              <div>
-                <h3 className={styles.trayTitle}>Insert</h3>
-                <p className={styles.trayDescription}>Add a block, then get straight back to writing.</p>
-              </div>
-            </div>
-            <div className={styles.commandSections}>
-              {quickBlockGroups.map((group) => (
-                <section key={group.label} className={styles.commandSection}>
-                  <h4 className={styles.commandSectionTitle}>{group.label}</h4>
-                  <div className={styles.commandList}>
-                    {group.kinds.map((kind) => {
-                      const block = quickBlocks.find((item) => item.kind === kind);
-                      if (!block) return null;
-                      return (
-                        <button
-                          key={block.kind}
-                          type="button"
-                          onClick={() => insertQuickBlock(block.kind)}
-                          className={styles.commandButton}
-                        >
-                          <span>{block.label}</span>
-                          <small>{block.meta}</small>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </section>
-              ))}
-            </div>
-          </section>
+          <EditorInsertTray
+            commands={quickBlocks}
+            groups={quickBlockGroups}
+            onInsert={insertQuickBlock}
+          />
         );
       }
 
       if (activeTray === "review") {
-        return (
-          <section className={styles.tray} data-testid="editor-review-tray" aria-label="Review tools">
-            <div className={styles.trayHeader}>
-              <div>
-                <h3 className={styles.trayTitle}>Review</h3>
-                <p className={styles.trayDescription}>A quick pass for structure, links, sources, and style.</p>
-              </div>
-            </div>
-            <div className={styles.reviewStrip}>
-              <div className={styles.scorePanel}>
-                <div className={styles.scoreRing} style={{ "--editor-score": `${telemetry.score}%` } as CSSProperties}>
-                  <span>{telemetry.score}</span>
-                </div>
-                <div className={styles.scoreCopy}>
-                  <strong>Readiness</strong>
-                  <span>{telemetry.words} words - {telemetry.readMinutes} min read</span>
-                </div>
-              </div>
-
-              <div className={styles.signalRow}>
-                <span><strong>{telemetry.wikiLinks}</strong> wiki</span>
-                <span><strong>{telemetry.links}</strong> links</span>
-                <span><strong>{telemetry.footnotes}</strong> notes</span>
-                <span><strong>{telemetry.tables}</strong> tables</span>
-                <span><strong>{telemetry.images}</strong> images</span>
-                <span><strong>{telemetry.richBlocks}</strong> rich</span>
-              </div>
-            </div>
-
-            <details className={styles.disclosure} open>
-              <summary>Quality checks</summary>
-              <div className={styles.disclosureBody}>
-                <div className={styles.checkList}>
-                  {activeChecks.map((check) => (
-                    <div key={check.label} className={styles.checkItem} data-status={check.status}>
-                      <span />
-                      <div>
-                        <strong>{check.label}</strong>
-                        <p>{check.detail}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </details>
-
-            <details className={styles.disclosure}>
-              <summary>Grammar and style</summary>
-              <div className={styles.disclosureBody}>
-                <GrammarCheckPanel editor={editor} />
-              </div>
-            </details>
-
-            <details className={styles.disclosure}>
-              <summary>Writing coach</summary>
-              <div className={styles.disclosureBody}>
-                <WritingCoachPanel
-                  getHtml={() => editor.getHTML()}
-                  hasExcerpt={false}
-                />
-              </div>
-            </details>
-          </section>
-        );
+        return <EditorReviewTray editor={editor} telemetry={telemetry} />;
       }
 
       if (activeTray === "outline") {
         return (
-          <section className={styles.tray} data-testid="editor-outline-tray" aria-label="Outline tools">
-            <div className={styles.trayHeader}>
-              <div>
-                <h3 className={styles.trayTitle}>Outline</h3>
-                <p className={styles.trayDescription}>Move through sections or generate a cleaner shape.</p>
-              </div>
-            </div>
-            <div className={styles.traySplit}>
-              <div className={styles.trayPanel}>
-                <h4>Current sections</h4>
-                {telemetry.outline.length > 0 ? (
-                  <div className={styles.outlineList}>
-                    {telemetry.outline.slice(0, 16).map((item, index) => (
-                      <button
-                        key={`${item.pos}-${index}`}
-                        type="button"
-                        onClick={() => jumpToOutlineItem(item)}
-                        data-level={item.level}
-                      >
-                        {item.text}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className={styles.emptyNote}>No headings yet.</p>
-                )}
-              </div>
-              <details className={cx(styles.trayPanel, styles.disclosure)}>
-                <summary>Outline builder</summary>
-                <div className={styles.disclosureBody}>
-                  <OutlineBuilderPanel editor={editor} articleTitle={articleTitle} />
-                </div>
-              </details>
-            </div>
-          </section>
+          <EditorOutlineTray
+            editor={editor}
+            articleTitle={articleTitle}
+            outline={telemetry.outline}
+            onJump={jumpToOutlineItem}
+          />
         );
       }
     }
@@ -1145,19 +1020,16 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         <div className={cx(styles.workspace, markdownMode && styles.markdownWorkspace)}>
           <div className={styles.mainPanel}>
             {!markdownMode && telemetry.selectedCharacters > 0 && (
-              <div className={styles.selectionBar}>
-                <div className={styles.selectionSummary}>
-                  <strong>Selection</strong>
-                  <span>{telemetry.selectedWords} words</span>
-                </div>
-                <div className={styles.selectionActions}>
-                  <button type="button" onClick={handleAiRewrite}>Rewrite</button>
-                  <button type="button" onClick={handleAiExpand}>Expand</button>
-                  <button type="button" onClick={handleSelectionWikiLink}>Wiki link</button>
-                  <button type="button" onClick={handleSelectionLink}>URL</button>
-                  <button type="button" onClick={handleSelectionFootnote}>Footnote</button>
-                </div>
-              </div>
+              <EditorSelectionActions
+                selectedWords={telemetry.selectedWords}
+                actions={[
+                  { id: "rewrite", label: "Rewrite", onSelect: handleAiRewrite },
+                  { id: "expand", label: "Expand", onSelect: handleAiExpand },
+                  { id: "wiki-link", label: "Wiki link", onSelect: handleSelectionWikiLink },
+                  { id: "url", label: "URL", onSelect: handleSelectionLink },
+                  { id: "footnote", label: "Footnote", onSelect: handleSelectionFootnote },
+                ]}
+              />
             )}
 
             {markdownMode ? (

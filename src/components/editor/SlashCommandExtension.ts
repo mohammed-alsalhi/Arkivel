@@ -3,6 +3,7 @@ import type { Editor } from "@tiptap/core";
 import { PluginKey } from "@tiptap/pm/state";
 import type { Range } from "@tiptap/core";
 import Suggestion, { type SuggestionOptions } from "@tiptap/suggestion";
+import { editorBlockTemplates } from "@/lib/editor-controls";
 
 export type SlashCommandItem = {
   title: string;
@@ -127,6 +128,15 @@ export function getSuggestionItems(
         editor.chain().focus().deleteRange(range).insertQueryBlock().run();
       },
     },
+    ...editorBlockTemplates
+      .filter((template) => ["metadata-table", "infobox", "decision-log", "research-note", "worldbuilding-entry"].includes(template.id))
+      .map((template) => ({
+        title: template.label,
+        description: template.description,
+        command: ({ editor, range }: { editor: Editor; range: Range }) => {
+          editor.chain().focus().deleteRange(range).insertContent(template.html).run();
+        },
+      })),
     {
       title: "Callout Note",
       description: "Highlighted note callout block [!NOTE]",
