@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "arkivel.demo-content-pack.v1",
+  "id": "demo-starter-knowledge-base",
+  "name": "Demo Starter Knowledge Base",
+  "description": "Small starter pack for first-run demos and onboarding screenshots.",
+  "categories": [
+    { "slug": "getting-started", "title": "Getting started" },
+    { "slug": "operations", "title": "Operations" },
+    { "slug": "examples", "title": "Examples" }
+  ],
+  "articles": [
+    {
+      "slug": "welcome-to-arkivel",
+      "title": "Welcome to Arkivel",
+      "category": "getting-started",
+      "excerpt": "A short landing note for a demo Arkivel install.",
+      "contentRaw": "# Welcome to Arkivel\n\nUse this starter page to confirm editing, search, wiki links, and publishing."
+    },
+    {
+      "slug": "first-space-checklist",
+      "title": "First Space Checklist",
+      "category": "getting-started",
+      "excerpt": "Suggested tasks for the first useful space.",
+      "contentRaw": "# First Space Checklist\n\nCreate a space, add an owner, write a first article, and link to [[Welcome to Arkivel]]."
+    },
+    {
+      "slug": "backup-and-restore-notes",
+      "title": "Backup And Restore Notes",
+      "category": "operations",
+      "excerpt": "Demo backup and restore reminders for admins.",
+      "contentRaw": "# Backup And Restore Notes\n\nDocument the database backup cadence, asset storage, env vars, and restore rehearsal owner."
+    },
+    {
+      "slug": "marketplace-preview-notes",
+      "title": "Marketplace Preview Notes",
+      "category": "examples",
+      "excerpt": "Local-first marketplace preview guidance.",
+      "contentRaw": "# Marketplace Preview Notes\n\nPreview packs before install, review permissions, and keep executable payloads out of imported metadata."
+    }
+  ]
+}
