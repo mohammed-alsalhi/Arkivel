@@ -1294,6 +1294,38 @@ textarea:disabled {
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
+.wiki-mobile-nav a,
+.wiki-touch-target,
+.wiki-article-actions button,
+.wiki-article-actions a,
+.wiki-editor-tray button,
+.wiki-admin-panel button,
+.wiki-admin-panel a,
+.wiki-marketplace-panel button,
+.wiki-marketplace-panel a,
+.wiki-customization-preview button,
+.wiki-customization-preview a {
+  min-height: 44px;
+}
+
+.wiki-responsive-guard,
+.wiki-article-actions,
+.wiki-editor-tray,
+.wiki-admin-panel,
+.wiki-marketplace-panel,
+.wiki-customization-preview {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.wiki-dialog,
+.wiki-popover,
+.wiki-marketplace-panel,
+.wiki-customization-preview {
+  max-width: min(100%, calc(100vw - 1.5rem));
+}
+
 .wiki-notification-dropdown {
   width: 18rem;
 }
@@ -1307,6 +1339,11 @@ textarea:disabled {
 }
 
 @media (max-width: 639px) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   .ui-page-header {
     align-items: stretch;
     flex-direction: column;
@@ -1325,6 +1362,16 @@ textarea:disabled {
 
   .ui-section-actions {
     justify-content: flex-start;
+  }
+
+  .wiki-article-actions,
+  .wiki-editor-tray,
+  .wiki-admin-panel,
+  .wiki-marketplace-panel,
+  .wiki-customization-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .ui-table {
