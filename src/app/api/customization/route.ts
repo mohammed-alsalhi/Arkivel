@@ -4,17 +4,20 @@ import { componentCatalog } from "@/components/ui/catalog";
 import {
   colorThemePresets,
   componentPacks,
+  createMarketplaceRegistry,
   layoutPresets,
   marketplaceItems,
+  marketplaceRegistryContract,
   perSpaceCustomizationContract,
   pluginManifests,
   stylePresets,
   themePackSchema,
   themePacks,
-  validateMarketplaceCatalog,
 } from "@/lib/marketplace";
 
 export async function GET() {
+  const registry = createMarketplaceRegistry();
+
   return NextResponse.json({
     customization,
     options: customizationOptions,
@@ -51,13 +54,12 @@ export async function GET() {
     },
     marketplace: {
       items: marketplaceItems,
-      contract: {
-        id: "Stable machine-readable id",
-        kind: "style | color-theme | layout | component-pack | plugin | theme-pack",
-        status: "built-in | planned | experimental",
-        compatibility: "Arkivel version range or future marker",
-      },
-      validation: validateMarketplaceCatalog(),
+      registry,
+      registryVersion: registry.version,
+      schemaVersion: registry.schemaVersion,
+      catalogSource: registry.source,
+      contract: marketplaceRegistryContract,
+      validation: registry.validation,
     },
   });
 }

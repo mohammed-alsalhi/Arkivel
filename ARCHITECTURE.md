@@ -175,17 +175,17 @@ Documentation is part of the release surface. Changes that affect behavior, UI, 
 
 Arkivel's self-host customization contract lives in `src/lib/customization.ts`. It groups public configuration into `brand`, `style`, `features`, `limits`, `map`, and `integrations`, while `src/lib/config.ts` keeps backward-compatible flat aliases such as `config.name` and `config.mapEnabled`.
 
-Reusable extension metadata lives in `src/lib/marketplace.ts`. Built-in style presets such as `classic-wiki` and `atlas-modern`, color themes such as `standard`, `forest`, and `ember`, layout presets, component packs, theme packs, and plugin manifests share the same id/status/compatibility contract.
+Reusable extension metadata lives in `src/lib/marketplace.ts`. Built-in style presets such as `classic-wiki` and `atlas-modern`, color themes such as `standard`, `forest`, and `ember`, layout presets, component packs, theme packs, and plugin manifests share the same versioned local registry contract: stable id, kind, version, compatibility, author, license, local source, status, screenshots, and checksums.
 
 The public `/api/customization` endpoint exposes:
 
 - Current grouped customization values.
 - Supported `NEXT_PUBLIC_*` environment variables with defaults and descriptions.
 - Reusable UI component catalog metadata from `src/components/ui/catalog.ts`.
-- Built-in style presets, color themes, layout presets, component packs, plugin manifests, theme pack schemas, per-space customization metadata, and marketplace items.
+- Built-in style presets, color themes, layout presets, component packs, plugin manifests, theme pack schemas, per-space customization metadata, marketplace registry metadata, validation summaries, and marketplace items.
 - Theme hook locations for CSS-variable and shared-class customization.
 
-Use this contract before adding new self-host flags, public branding controls, style presets, color themes, layouts, plugin-facing metadata, marketplace entries, per-space customization metadata, or theme hooks. `/admin/customization` is env-first and preview-only in v1; it does not create database overrides. The admin studio consumes the public manifest, lets admins draft brand/copy/logo/feature/appearance values in the browser, saves preview-only local drafts through `src/lib/customization-drafts.ts`, checks diagnostics with `src/lib/customization-diagnostics.ts`, shares tab metadata, responsive QA checkpoints, and screen-reader summaries through `src/lib/customization-studio.ts`, previews key product surfaces, and exports deployment-ready env formats for the self-host runtime.
+Use this contract before adding new self-host flags, public branding controls, style presets, color themes, layouts, plugin-facing metadata, marketplace entries, per-space customization metadata, or theme hooks. `/admin/customization` is env-first and preview-only in v1; it does not create database overrides. The admin studio consumes the public manifest, lets admins draft brand/copy/logo/feature/appearance values in the browser, saves preview-only local drafts through `src/lib/customization-drafts.ts`, checks diagnostics with `src/lib/customization-diagnostics.ts`, shares tab metadata, responsive QA checkpoints, and screen-reader summaries through `src/lib/customization-studio.ts`, previews key product surfaces, and exports deployment-ready env formats for the self-host runtime. `/admin/marketplace` consumes the same local registry and reports registry version, schema version, catalog source, item totals, kind coverage, checksums, licenses, and validation issues without fetching remote code.
 
 ## Database Models
 

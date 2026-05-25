@@ -306,12 +306,12 @@ Capture content from the web directly into the wiki without switching context.
 - **REST API v1** — `/api/v1/` with `X-API-Key` auth. See `/api-docs`.
 - **REST API v2** — pagination cursors, field selection
 - **GraphQL API** — `/api/graphql` powered by graphql-yoga; includes GraphiQL playground. Queries for articles, categories, tags, revisions, search, and stats.
-- **Customization manifest** — `/api/customization` exposes grouped brand, style preset, color theme, layout, feature flag, limit, map, reusable component, marketplace item, plugin, theme-pack, and theme-hook metadata for self-hosters, plugins, forks, and deployment dashboards.
+- **Customization manifest** — `/api/customization` exposes grouped brand, style preset, color theme, layout, feature flag, limit, map, reusable component, marketplace registry, plugin, theme-pack, and theme-hook metadata for self-hosters, plugins, forks, and deployment dashboards.
 - **Style presets** — `NEXT_PUBLIC_ARKIVEL_STYLE` switches between the default `classic-wiki` skin and the alternate `atlas-modern` skin without changing route code.
 - **Color themes** — `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` switches between `standard`, `forest`, and `ember` palettes independently from the selected style preset.
 - **Layout presets** — `NEXT_PUBLIC_ARKIVEL_LAYOUT` publishes layout intent such as `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, or `research-notebook` for preview and future shell variants.
 - **Customization Studio** — `/admin/customization` is a tabbed env-first workbench for brand copy, logos, style, color theme, layout, feature flags, browser-local drafts, named presets, active-vs-draft diffs, keyboard-accessible tabs, screen-reader summaries, responsive QA checkpoints, palette/dark-theme/asset-size diagnostics, preview panels, source badges, theme-pack JSON validation, downloadable support reports, and copy-ready `.env`, `.env.local`, Vercel, or Docker Compose output.
-- **Built-in Marketplace** — `/admin/marketplace` lists and filters styles, color themes, layouts, component packs, plugins, and theme packs with catalog health checks and no remote code fetching.
+- **Built-in Marketplace** — `/admin/marketplace` lists and filters styles, color themes, layouts, component packs, plugins, and theme packs with versioned local-registry health, schema/source metadata, license/checksum details, validation issue reporting, and no remote code fetching.
 - **RSS & Atom feeds** — `/feed.xml` and `/feed/atom`
 - **Webhooks** — HTTP callbacks dispatched on article events; delivery log at `/admin/webhooks`
 - **Embeds** — iframe-safe embed tokens per article at `/embed/[token]`

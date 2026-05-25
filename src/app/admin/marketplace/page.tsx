@@ -13,15 +13,32 @@ import {
   Page,
   PageHeader,
   SectionPanel,
+  StatCard,
+  StatGrid,
 } from "@/components/ui";
 import { useAdmin } from "@/components/AdminContext";
 
+type MarketplaceItemSource = {
+  label: string;
+  path: string;
+  remote: boolean;
+  type: "built-in" | "local";
+};
+
 type MarketplaceItem = {
+  author: string;
   compatibility: string;
+  checksums: {
+    manifest: string;
+    screenshots?: Record<string, string>;
+  };
   description: string;
   id: string;
   kind: string;
+  license: string;
   name: string;
+  screenshots: string[];
+  source: MarketplaceItemSource;
   status: "built-in" | "planned" | "experimental";
   tags: string[];
   slots?: string[];
@@ -32,11 +49,51 @@ type MarketplaceItem = {
   version?: string;
 };
 
+type MarketplaceValidationIssue = {
+  code: string;
+  itemId?: string;
+  kind?: string;
+  message: string;
+  severity: "error" | "warning";
+};
+
+type MarketplaceValidation = {
+  errors: string[];
+  issues?: MarketplaceValidationIssue[];
+  summary?: {
+    errorCount: number;
+    itemCount: number;
+    kindCounts: Record<string, number>;
+    schemaVersion: string;
+    source: MarketplaceItemSource;
+    status: "healthy" | "warnings" | "errors";
+    statusCounts: Record<string, number>;
+    version: string;
+    warningCount: number;
+  };
+  valid: boolean;
+  warnings?: string[];
+};
+
 type MarketplaceManifest = {
   marketplace: {
-    contract: Record<string, string>;
+    contract: Record<string, unknown>;
+    catalogSource: MarketplaceItemSource;
     items: MarketplaceItem[];
-    validation: { errors: string[]; valid: boolean };
+    registry: {
+      contract: Record<string, unknown>;
+      id: string;
+      items: MarketplaceItem[];
+      schemaVersion: string;
+      source: MarketplaceItemSource;
+      supportedKinds: string[];
+      supportedLicenses: string[];
+      validation: MarketplaceValidation;
+      version: string;
+    };
+    registryVersion: string;
+    schemaVersion: string;
+    validation: MarketplaceValidation;
   };
 };
 
@@ -85,10 +142,14 @@ export default function AdminMarketplacePage() {
 
   const totals = useMemo(() => {
     const items = manifest?.marketplace.items ?? [];
+    const validation = manifest?.marketplace.registry?.validation ?? manifest?.marketplace.validation;
     return {
       builtIn: items.filter((item) => item.status === "built-in").length,
+      errors: validation?.summary?.errorCount ?? validation?.errors.length ?? 0,
+      experimental: items.filter((item) => item.status === "experimental").length,
       planned: items.filter((item) => item.status === "planned").length,
       total: items.length,
+      warnings: validation?.summary?.warningCount ?? validation?.warnings?.length ?? 0,
     };
   }, [manifest]);
 
@@ -114,13 +175,31 @@ export default function AdminMarketplacePage() {
       ) : (
         <div className="space-y-5">
           {manifest && (
-            <SectionPanel title="Catalog health" bodyClassName="space-y-3">
-              <div className="grid gap-3 md:grid-cols-3">
-                <Metric label="Total items" value={totals.total} />
-                <Metric label="Built in" value={totals.builtIn} />
-                <Metric label="Planned" value={totals.planned} />
-              </div>
+            <SectionPanel title="Registry health" bodyClassName="space-y-4">
+              <StatGrid>
+                <StatCard
+                  label="Registry version"
+                  value={manifest.marketplace.registryVersion}
+                  detail={manifest.marketplace.schemaVersion}
+                />
+                <StatCard
+                  label="Catalog items"
+                  value={totals.total}
+                  detail={`${totals.builtIn} built in / ${totals.planned} planned / ${totals.experimental} experimental`}
+                />
+                <StatCard
+                  label="Validation"
+                  value={manifest.marketplace.validation.valid ? "Healthy" : "Needs review"}
+                  detail={`${totals.errors} errors / ${totals.warnings} warnings`}
+                />
+                <StatCard
+                  label="Source"
+                  value={manifest.marketplace.catalogSource.type}
+                  detail={manifest.marketplace.catalogSource.path}
+                />
+              </StatGrid>
               <Notice
+                role={manifest.marketplace.validation.valid ? "status" : "alert"}
                 className={
                   manifest.marketplace.validation.valid
                     ? "border-success-border bg-success-soft text-success"
@@ -131,6 +210,26 @@ export default function AdminMarketplacePage() {
                   ? "Catalog integrity checks passed."
                   : manifest.marketplace.validation.errors.join(" ")}
               </Notice>
+              {manifest.marketplace.validation.summary && (
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(manifest.marketplace.validation.summary.kindCounts).map(([kind, count]) => (
+                    <Chip key={kind}>{kind}: {count}</Chip>
+                  ))}
+                </div>
+              )}
+              {manifest.marketplace.validation.issues?.length ? (
+                <ul className="space-y-1 text-[12px] text-muted">
+                  {manifest.marketplace.validation.issues.slice(0, 8).map((issue) => (
+                    <li key={`${issue.code}-${issue.itemId ?? issue.kind}`}>
+                      <strong className={issue.severity === "error" ? "text-danger" : "text-warning"}>
+                        {issue.severity}
+                      </strong>
+                      {": "}
+                      {issue.message}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               <Field htmlFor="marketplace-search" label="Filter catalog">
                 <Input
                   id="marketplace-search"
@@ -164,6 +263,7 @@ export default function AdminMarketplacePage() {
                       <p className="mb-3 text-[11px] text-muted">Compatibility: {item.compatibility}</p>
                       {configLine && (
                         <Button
+                          aria-label={`Copy config for ${item.name}`}
                           onClick={async () => {
                             await navigator.clipboard.writeText(configLine);
                             setCopied(item.id);
@@ -184,8 +284,8 @@ export default function AdminMarketplacePage() {
             <EmptyState title="No marketplace items match" description="Try a different search term or clear the filter." />
           )}
 
-          {manifest && <SectionPanel title="Catalog contract">
-            <CodeBlock>{JSON.stringify(manifest.marketplace.contract, null, 2)}</CodeBlock>
+          {manifest && <SectionPanel title="Registry contract">
+            <CodeBlock>{JSON.stringify(manifest.marketplace.registry.contract, null, 2)}</CodeBlock>
           </SectionPanel>}
         </div>
       )}
@@ -206,18 +306,14 @@ function toneForStatus(status: MarketplaceItem["status"]) {
   return "info";
 }
 
-function Metric({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="border border-border bg-background p-3">
-      <div className="text-[11px] uppercase text-muted">{label}</div>
-      <div className="text-lg font-semibold text-heading">{value}</div>
-    </div>
-  );
-}
-
 function Metadata({ item }: { item: MarketplaceItem }) {
   const rows = [
     item.version && `version: ${item.version}`,
+    item.author && `author: ${item.author}`,
+    item.license && `license: ${item.license}`,
+    item.source?.type && `source: ${item.source.type}`,
+    item.checksums?.manifest && `checksum: ${item.checksums.manifest}`,
+    item.screenshots?.length ? `screenshots: ${item.screenshots.length}` : "",
     item.slots?.length ? `slots: ${item.slots.join(", ")}` : "",
     item.routes?.length ? `routes: ${item.routes.join(", ")}` : "",
     item.permissions?.length ? `permissions: ${item.permissions.join(", ")}` : "",

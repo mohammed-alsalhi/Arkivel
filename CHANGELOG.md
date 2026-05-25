@@ -4,6 +4,16 @@
 
 All notable changes to this project are documented here.
 
+## [4.77.0] - 2026-05-25
+
+### Added
+
+- **Local marketplace registry contract** - Converted built-in marketplace listings into a versioned local registry with stable id, kind, version, compatibility, author, license, source, status, screenshot, and checksum metadata.
+- **Registry validation** - Added registry checks for duplicate ids, unsupported kinds, incompatible Arkivel versions, missing screenshots, unsafe plugin permissions, invalid licenses, missing checksums, and remote sources.
+- **Marketplace health panel** - Upgraded `/admin/marketplace` with registry version, schema version, local catalog source, validation counts, kind totals, and issue reporting.
+- **Marketplace API metadata** - Extended `/api/customization` with registry version, schema version, catalog source, registry contract, validation summary, supported kinds, and supported licenses.
+- **Registry tests** - Expanded marketplace unit coverage across every item kind and the full v4.77.0 failure-mode set.
+
 ## [4.76.3] - 2026-05-24
 
 ### Added

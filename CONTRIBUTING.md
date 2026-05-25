@@ -75,7 +75,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 
 ### Customization and marketplace changes
 1. Public self-host settings belong in `src/lib/customization.ts` and must be exposed through `/api/customization`.
-2. Style presets, color themes, layout presets, component packs, theme packs, and plugin-like listings belong in `src/lib/marketplace.ts` with stable ids, `kind`, `status`, compatibility notes, and tags.
+2. Style presets, color themes, layout presets, component packs, theme packs, and plugin-like listings belong in `src/lib/marketplace.ts` with stable ids, `kind`, semantic `version`, `status`, compatibility notes, author, license, local source, screenshots, checksums, and tags.
 3. Reusable UI primitives should come from `src/components/ui` and be registered in `src/components/ui/catalog.ts`.
 4. Customization Studio tab metadata, responsive QA checkpoints, and assistive summaries belong in `src/lib/customization-studio.ts`.
 5. Theme and skin work should use CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]`, `html[data-color-theme="..."]`, and `html[data-layout="..."]`.

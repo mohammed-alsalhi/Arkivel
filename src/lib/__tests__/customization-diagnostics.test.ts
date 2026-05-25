@@ -8,7 +8,7 @@ const manifest = {
     { envValue: "docs-portal", name: "Docs Portal", status: "planned" },
   ],
   stylePresets: [{ id: "classic-wiki" }, { id: "atlas-modern" }],
-  version: "4.76.3",
+  version: "4.77.0",
 };
 
 const draft: CustomizationDiagnosticsDraft = {

@@ -58,11 +58,11 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 
 #### v4.77.0 - Registry contract
 
-- [ ] Convert marketplace metadata into a versioned local registry contract with `id`, `kind`, `version`, `compatibility`, `author`, `license`, `source`, `status`, and `checksums`
-- [ ] Add registry validation for duplicate ids, unsupported kinds, incompatible versions, missing screenshots, unsafe permissions, and invalid licenses
-- [ ] Add a registry health panel to `/admin/marketplace`
-- [ ] Add marketplace API fields for registry version, schema version, validation summary, and catalog source
-- [ ] Add tests for every marketplace item kind and registry failure mode
+- [x] Convert marketplace metadata into a versioned local registry contract with `id`, `kind`, `version`, `compatibility`, `author`, `license`, `source`, `status`, and `checksums`
+- [x] Add registry validation for duplicate ids, unsupported kinds, incompatible versions, missing screenshots, unsafe permissions, and invalid licenses
+- [x] Add a registry health panel to `/admin/marketplace`
+- [x] Add marketplace API fields for registry version, schema version, validation summary, and catalog source
+- [x] Add tests for every marketplace item kind and registry failure mode
 
 #### v4.77.1 - Pack import preview
 
@@ -716,6 +716,14 @@ Arkivel remains beta through the entire v4 line. The goal is to make the platfor
 - [ ] Public API v1, webhooks, feeds, and SDK types have compatibility commitments
 - [ ] Admin operations, observability, security, and privacy docs are complete enough for self-host operators
 - [ ] README, DESIGN, ARCHITECTURE, ROADMAP, CHANGELOG, AGENTS, CONTRIBUTING, API docs, help docs, feature docs, and in-app reference pages are synchronized
+
+## v4.77.0
+
+- [x] Versioned local registry - marketplace listings now expose stable id, kind, version, compatibility, author, license, source, status, screenshot, and checksum metadata from `src/lib/marketplace.ts`
+- [x] Registry validation - duplicate ids, unsupported kinds, incompatible versions, missing screenshots, unsafe plugin permissions, invalid licenses, missing checksums, and remote sources are reported before catalog data is trusted
+- [x] Marketplace health panel - `/admin/marketplace` shows registry version, schema version, local source, item totals, validation status, kind counts, and issue details
+- [x] Marketplace API metadata - `/api/customization` now returns registry version, schema version, catalog source, supported kinds, supported licenses, registry contract, and validation summary
+- [x] Registry tests - marketplace unit tests cover every item kind and the v4.77.0 validation failure modes
 
 ## v4.76.3
 

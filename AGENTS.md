@@ -35,7 +35,7 @@ The v4 line is beta. Treat `ROADMAP.md` as the source of truth for the pre-v5 pa
 Arkivel is an open-source, self-hostable knowledge platform. Prefer reusable, configurable surfaces over route-specific one-offs whenever a change could reasonably be customized by another instance.
 
 - Public customization belongs in `src/lib/customization.ts`, with defaults and env metadata exposed through `/api/customization`.
-- Style presets, color themes, layout presets, component packs, theme packs, and plugin-like extension listings belong in `src/lib/marketplace.ts` with stable ids, clear `kind`, `status`, compatibility notes, and tags.
+- Style presets, color themes, layout presets, component packs, theme packs, and plugin-like extension listings belong in `src/lib/marketplace.ts` with stable ids, clear `kind`, semantic `version`, `status`, compatibility notes, author, license, local source, screenshots, checksums, and tags.
 - Customization Studio tab metadata, responsive QA checkpoints, keyboard-navigation helpers, and assistive summary text belong in `src/lib/customization-studio.ts`.
 - UI primitives should be built from `src/components/ui` and registered in `src/components/ui/catalog.ts` when they are reusable.
 - Theme changes should flow through CSS variables, shared `ui-*` / `wiki-*` classes, and scoped hooks such as `html[data-style="..."]`.
@@ -62,7 +62,7 @@ Follow the existing repository history when writing commit messages.
 
 **Configuration:** Public self-host customization is centralized in `src/lib/customization.ts` and exposed through `/api/customization`. `src/lib/config.ts` keeps backward-compatible aliases for runtime callers. Defaults produce a generic wiki; branding, style presets, and color themes are selected through `NEXT_PUBLIC_*` env vars such as `NEXT_PUBLIC_ARKIVEL_STYLE` and `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`.
 
-**Marketplace metadata:** Built-in and planned style presets, color themes, layout presets, component packs, theme packs, and plugin listings live in `src/lib/marketplace.ts`. Treat these records as the seed of the future marketplace contract.
+**Marketplace metadata:** Built-in and planned style presets, color themes, layout presets, component packs, theme packs, and plugin listings live in `src/lib/marketplace.ts`. Treat these records as the local-first marketplace registry contract with version, schema, source, license, checksum, compatibility, and validation metadata.
 
 **Auth:** Dual auth system. Legacy local/self-host mode treats missing `ADMIN_SECRET` as admin access; multi-user mode uses bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns current user, `isAdmin()` checks admin access, `requireRole(user, role)` handles granular permissions, and `AdminProvider` is seeded from server auth state in the root layout before its client refresh. Roles: admin, editor, viewer.
 

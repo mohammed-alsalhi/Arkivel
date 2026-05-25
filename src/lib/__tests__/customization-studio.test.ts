@@ -44,7 +44,7 @@ describe("customization studio helpers", () => {
         counts: { error: 0, pass: 8, warning: 3 },
         diagnostics: [],
         generatedAt: "2026-05-24T00:00:00.000Z",
-        version: "4.76.3",
+        version: "4.77.0",
       },
       draft: {
         ...DEFAULT_CUSTOMIZATION_DRAFT,
@@ -52,7 +52,7 @@ describe("customization studio helpers", () => {
         layoutId: "docs-portal",
       },
       themePackValid: false,
-      version: "4.76.3",
+      version: "4.77.0",
     });
 
     expect(summary).toContain("Current tab: Diagnostics.");

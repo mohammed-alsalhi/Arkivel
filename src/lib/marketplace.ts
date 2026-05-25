@@ -1,11 +1,27 @@
-export type MarketplaceItemKind =
-  | "style"
-  | "color-theme"
-  | "layout"
-  | "component-pack"
-  | "plugin"
-  | "theme-pack";
+import packageJson from "../../package.json";
+
+export const MARKETPLACE_REGISTRY_ID = "arkivel-local-marketplace";
+export const MARKETPLACE_REGISTRY_SCHEMA_VERSION = "arkivel.marketplace.registry.v1";
+export const SUPPORTED_MARKETPLACE_KINDS = [
+  "style",
+  "color-theme",
+  "layout",
+  "component-pack",
+  "plugin",
+  "theme-pack",
+] as const;
+export const SUPPORTED_MARKETPLACE_LICENSES = [
+  "MIT",
+  "Apache-2.0",
+  "CC-BY-4.0",
+  "CC0-1.0",
+  "MPL-2.0",
+  "AGPL-3.0",
+] as const;
+
+export type MarketplaceItemKind = (typeof SUPPORTED_MARKETPLACE_KINDS)[number];
 export type MarketplaceItemStatus = "built-in" | "planned" | "experimental";
+export type MarketplaceItemLicense = (typeof SUPPORTED_MARKETPLACE_LICENSES)[number];
 export type ComponentPackSlot =
   | "article-card"
   | "metadata-panel"
@@ -13,20 +29,82 @@ export type ComponentPackSlot =
   | "homepage-section"
   | "infobox-layout";
 
+export type MarketplaceItemSource = {
+  label: string;
+  path: string;
+  remote: boolean;
+  type: "built-in" | "local";
+};
+
+export type MarketplaceItemChecksums = {
+  manifest: string;
+  screenshots?: Record<string, string>;
+};
+
 export type MarketplaceItem = {
   author: string;
+  checksums: MarketplaceItemChecksums;
   compatibility: string;
   description: string;
   id: string;
   kind: MarketplaceItemKind;
+  license: MarketplaceItemLicense;
   name: string;
+  screenshots: string[];
+  source: MarketplaceItemSource;
   status: MarketplaceItemStatus;
   tags: string[];
+  version: string;
+};
+
+export type MarketplaceValidationIssue = {
+  code:
+    | "duplicate-id"
+    | "unsupported-kind"
+    | "missing-field"
+    | "missing-required-kind"
+    | "incompatible-version"
+    | "missing-screenshot"
+    | "invalid-license"
+    | "unsafe-permission"
+    | "missing-checksum"
+    | "invalid-source";
+  itemId?: string;
+  kind?: string;
+  message: string;
+  severity: "error" | "warning";
+};
+
+export type MarketplaceValidationSummary = {
+  errorCount: number;
+  itemCount: number;
+  kindCounts: Record<MarketplaceItemKind, number>;
+  schemaVersion: string;
+  source: typeof marketplaceCatalogSource;
+  status: "healthy" | "warnings" | "errors";
+  statusCounts: Record<MarketplaceItemStatus, number>;
+  version: string;
+  warningCount: number;
 };
 
 export type MarketplaceValidationResult = {
   errors: string[];
+  issues?: MarketplaceValidationIssue[];
+  summary?: MarketplaceValidationSummary;
   valid: boolean;
+  warnings?: string[];
+};
+
+export type MarketplaceRegistry = {
+  contract: typeof marketplaceRegistryContract;
+  id: typeof MARKETPLACE_REGISTRY_ID;
+  items: MarketplaceItem[];
+  schemaVersion: typeof MARKETPLACE_REGISTRY_SCHEMA_VERSION;
+  source: typeof marketplaceCatalogSource;
+  supportedKinds: readonly MarketplaceItemKind[];
+  supportedLicenses: readonly MarketplaceItemLicense[];
+  validation: MarketplaceValidationResult;
+  version: string;
 };
 
 export type StylePreset = MarketplaceItem & {
@@ -55,14 +133,12 @@ export type PluginManifest = MarketplaceItem & {
   permissions: string[];
   routes: string[];
   settings: string[];
-  version: string;
   widgets: string[];
 };
 
 export type ThemePack = MarketplaceItem & {
   kind: "theme-pack";
   tokens: Record<string, string>;
-  version: string;
 };
 
 export type ThemePackInput = {
@@ -88,8 +164,77 @@ export type PluginManifestInput = {
   widgets?: unknown;
 };
 
+export const marketplaceCatalogSource = {
+  label: "Arkivel built-in local registry",
+  path: "src/lib/marketplace.ts",
+  remote: false,
+  type: "built-in",
+} as const;
+
+export const marketplaceRegistryContract = {
+  id: "Stable machine-readable listing id",
+  kind: "style | color-theme | layout | component-pack | plugin | theme-pack",
+  version: "Semantic listing or pack version, for example 1.0.0",
+  compatibility: "Arkivel version range, future marker, or exact version",
+  author: "Listing author",
+  license: "MIT | Apache-2.0 | CC-BY-4.0 | CC0-1.0 | MPL-2.0 | AGPL-3.0",
+  source: {
+    type: "built-in | local",
+    path: "Local registry or pack path",
+    remote: "false for the v1 local-first registry",
+  },
+  status: "built-in | planned | experimental",
+  checksums: {
+    manifest: "Stable local manifest checksum",
+    screenshots: "Optional screenshot checksum map",
+  },
+  screenshots: ["Local preview path"],
+};
+
+function createLocalChecksum(value: string) {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return `local-fnv1a-${(hash >>> 0).toString(16).padStart(8, "0")}`;
+}
+
+function registryMetadata({
+  id,
+  kind,
+  license = "MIT",
+  screenshots,
+  version = "1.0.0",
+}: {
+  id: string;
+  kind: MarketplaceItemKind;
+  license?: MarketplaceItemLicense;
+  screenshots?: string[];
+  version?: string;
+}) {
+  const screenshotPaths = screenshots ?? [`/marketplace/${kind}/${id}.png`];
+  const seed = `${kind}:${id}:${version}`;
+  return {
+    checksums: {
+      manifest: createLocalChecksum(seed),
+      screenshots: Object.fromEntries(
+        screenshotPaths.map((path) => [path, createLocalChecksum(`${seed}:${path}`)]),
+      ),
+    },
+    license,
+    screenshots: screenshotPaths,
+    source: {
+      ...marketplaceCatalogSource,
+      path: `${marketplaceCatalogSource.path}#${kind}:${id}`,
+    },
+    version,
+  };
+}
+
 export const stylePresets = [
   {
+    ...registryMetadata({ id: "classic-wiki", kind: "style" }),
     id: "classic-wiki",
     kind: "style",
     name: "Classic Wiki",
@@ -101,6 +246,7 @@ export const stylePresets = [
     themeAttribute: "classic-wiki",
   },
   {
+    ...registryMetadata({ id: "atlas-modern", kind: "style" }),
     id: "atlas-modern",
     kind: "style",
     name: "Atlas Modern",
@@ -115,6 +261,7 @@ export const stylePresets = [
 
 export const colorThemePresets = [
   {
+    ...registryMetadata({ id: "standard", kind: "color-theme" }),
     id: "standard",
     kind: "color-theme",
     name: "Standard",
@@ -126,6 +273,7 @@ export const colorThemePresets = [
     themeAttribute: "standard",
   },
   {
+    ...registryMetadata({ id: "forest", kind: "color-theme" }),
     id: "forest",
     kind: "color-theme",
     name: "Forest",
@@ -137,6 +285,7 @@ export const colorThemePresets = [
     themeAttribute: "forest",
   },
   {
+    ...registryMetadata({ id: "ember", kind: "color-theme" }),
     id: "ember",
     kind: "color-theme",
     name: "Ember",
@@ -151,6 +300,7 @@ export const colorThemePresets = [
 
 export const layoutPresets: LayoutPreset[] = [
   {
+    ...registryMetadata({ id: "layout-classic-wiki", kind: "layout" }),
     id: "layout-classic-wiki",
     kind: "layout",
     name: "Classic Wiki",
@@ -162,6 +312,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "classic-wiki",
   },
   {
+    ...registryMetadata({ id: "layout-docs-portal", kind: "layout" }),
     id: "layout-docs-portal",
     kind: "layout",
     name: "Docs Portal",
@@ -173,6 +324,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "docs-portal",
   },
   {
+    ...registryMetadata({ id: "layout-team-knowledge-base", kind: "layout" }),
     id: "layout-team-knowledge-base",
     kind: "layout",
     name: "Team Knowledge Base",
@@ -184,6 +336,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "team-knowledge-base",
   },
   {
+    ...registryMetadata({ id: "layout-worldbuilding-atlas", kind: "layout" }),
     id: "layout-worldbuilding-atlas",
     kind: "layout",
     name: "Worldbuilding Atlas",
@@ -195,6 +348,7 @@ export const layoutPresets: LayoutPreset[] = [
     envValue: "worldbuilding-atlas",
   },
   {
+    ...registryMetadata({ id: "layout-research-notebook", kind: "layout" }),
     id: "layout-research-notebook",
     kind: "layout",
     name: "Research Notebook",
@@ -209,6 +363,7 @@ export const layoutPresets: LayoutPreset[] = [
 
 export const componentPacks: ComponentPack[] = [
   {
+    ...registryMetadata({ id: "core-wiki-components", kind: "component-pack" }),
     id: "core-wiki-components",
     kind: "component-pack",
     name: "Core Wiki Components",
@@ -220,6 +375,7 @@ export const componentPacks: ComponentPack[] = [
     slots: ["article-card", "metadata-panel", "dashboard-widget", "homepage-section", "infobox-layout"],
   },
   {
+    ...registryMetadata({ id: "operations-component-pack", kind: "component-pack", version: "0.1.0" }),
     id: "operations-component-pack",
     kind: "component-pack",
     name: "Operations Component Pack",
@@ -231,6 +387,7 @@ export const componentPacks: ComponentPack[] = [
     slots: ["dashboard-widget", "metadata-panel", "homepage-section"],
   },
   {
+    ...registryMetadata({ id: "canon-worldbuilding-pack", kind: "component-pack", version: "0.1.0" }),
     id: "canon-worldbuilding-pack",
     kind: "component-pack",
     name: "Canon Worldbuilding Pack",
@@ -245,6 +402,7 @@ export const componentPacks: ComponentPack[] = [
 
 export const pluginManifests: PluginManifest[] = [
   {
+    ...registryMetadata({ id: "web-clipper-plugin", kind: "plugin", version: "0.1.0" }),
     id: "web-clipper-plugin",
     kind: "plugin",
     name: "Web Clipper Plugin",
@@ -253,7 +411,6 @@ export const pluginManifests: PluginManifest[] = [
     compatibility: "future",
     status: "planned",
     tags: ["capture", "import", "browser"],
-    version: "0.1.0",
     permissions: ["article:create", "asset:read"],
     routes: ["/bookmarklet", "/clipper-extension"],
     settings: ["baseUrl", "defaultCategoryId"],
@@ -264,6 +421,7 @@ export const pluginManifests: PluginManifest[] = [
 
 export const themePacks: ThemePack[] = [
   {
+    ...registryMetadata({ id: "forest-theme-pack", kind: "theme-pack" }),
     id: "forest-theme-pack",
     kind: "theme-pack",
     name: "Forest Theme Pack",
@@ -272,7 +430,6 @@ export const themePacks: ThemePack[] = [
     compatibility: ">=4.75.0",
     status: "built-in",
     tags: ["theme", "forest", "green"],
-    version: "1.0.0",
     tokens: {
       "--color-accent": "#26734d",
       "--color-background": "#f5f8f3",
@@ -313,6 +470,58 @@ function hasString(value: unknown): value is string {
 
 function hasStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every(hasString);
+}
+
+function isMarketplaceItemKind(value: unknown): value is MarketplaceItemKind {
+  return SUPPORTED_MARKETPLACE_KINDS.includes(value as MarketplaceItemKind);
+}
+
+function isMarketplaceStatus(value: unknown): value is MarketplaceItemStatus {
+  return value === "built-in" || value === "planned" || value === "experimental";
+}
+
+function isMarketplaceLicense(value: unknown): value is MarketplaceItemLicense {
+  return SUPPORTED_MARKETPLACE_LICENSES.includes(value as MarketplaceItemLicense);
+}
+
+function hasChecksum(value: unknown): value is string {
+  return typeof value === "string" && /^(local-fnv1a-[a-f0-9]{8}|sha256-[a-f0-9]{8,64})$/.test(value);
+}
+
+function parseVersion(version: string) {
+  const match = version.match(/^(\d+)\.(\d+)\.(\d+)/);
+  if (!match) return null;
+  return [Number(match[1]), Number(match[2]), Number(match[3])] as const;
+}
+
+function compareVersions(left: readonly [number, number, number], right: readonly [number, number, number]) {
+  for (let index = 0; index < 3; index += 1) {
+    if (left[index] > right[index]) return 1;
+    if (left[index] < right[index]) return -1;
+  }
+  return 0;
+}
+
+export function isMarketplaceCompatibilitySupported(
+  compatibility: string,
+  currentVersion = packageJson.version,
+) {
+  if (compatibility === "future") return true;
+  const current = parseVersion(currentVersion);
+  if (!current) return false;
+
+  if (compatibility.startsWith(">=")) {
+    const minimum = parseVersion(compatibility.slice(2).trim());
+    return minimum ? compareVersions(current, minimum) >= 0 : false;
+  }
+
+  if (compatibility.startsWith("^")) {
+    const minimum = parseVersion(compatibility.slice(1).trim());
+    return minimum ? current[0] === minimum[0] && compareVersions(current, minimum) >= 0 : false;
+  }
+
+  const exact = parseVersion(compatibility);
+  return exact ? compareVersions(current, exact) === 0 : false;
 }
 
 export function validateThemePack(input: ThemePackInput): MarketplaceValidationResult {
@@ -359,32 +568,131 @@ export function validatePluginManifest(input: PluginManifestInput): MarketplaceV
 }
 
 export function validateMarketplaceCatalog(items: MarketplaceItem[] = marketplaceItems): MarketplaceValidationResult {
-  const errors: string[] = [];
+  const issues: MarketplaceValidationIssue[] = [];
   const ids = new Set<string>();
-  const requiredKinds: MarketplaceItemKind[] = [
-    "style",
-    "color-theme",
-    "layout",
-    "component-pack",
-    "plugin",
-    "theme-pack",
-  ];
-  const kinds = new Set(items.map((item) => item.kind));
+  const kinds = new Set<MarketplaceItemKind>();
 
-  for (const item of items) {
-    if (ids.has(item.id)) errors.push(`duplicate marketplace id: ${item.id}`);
-    ids.add(item.id);
-    if (!hasString(item.name)) errors.push(`${item.id} is missing a name`);
-    if (!hasString(item.description)) errors.push(`${item.id} is missing a description`);
-    if (!hasString(item.compatibility)) errors.push(`${item.id} is missing compatibility`);
-    if (!Array.isArray(item.tags) || item.tags.length === 0) errors.push(`${item.id} must include tags`);
+  function addIssue(issue: MarketplaceValidationIssue) {
+    issues.push(issue);
   }
 
-  for (const kind of requiredKinds) {
-    if (!kinds.has(kind)) errors.push(`missing marketplace kind: ${kind}`);
+  for (const [index, item] of items.entries()) {
+    const itemId = hasString(item.id) ? item.id : `item-${index}`;
+    const itemKind = isMarketplaceItemKind(item.kind) ? item.kind : undefined;
+    if (itemKind) kinds.add(itemKind);
+
+    if (!hasString(item.id)) {
+      addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} is missing id`, severity: "error" });
+    } else if (ids.has(item.id)) {
+      addIssue({ code: "duplicate-id", itemId, kind: item.kind, message: `duplicate marketplace id: ${item.id}`, severity: "error" });
+    }
+    if (hasString(item.id)) ids.add(item.id);
+
+    if (!itemKind) {
+      addIssue({ code: "unsupported-kind", itemId, kind: String(item.kind), message: `${itemId} uses unsupported kind: ${String(item.kind)}`, severity: "error" });
+    }
+    if (!hasString(item.name)) addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} is missing a name`, severity: "error" });
+    if (!hasString(item.description)) addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} is missing a description`, severity: "error" });
+    if (!hasString(item.author)) addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} is missing author`, severity: "error" });
+    if (!hasString(item.version)) addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} is missing version`, severity: "error" });
+    if (!hasString(item.compatibility)) {
+      addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} is missing compatibility`, severity: "error" });
+    } else if (!isMarketplaceCompatibilitySupported(item.compatibility)) {
+      addIssue({ code: "incompatible-version", itemId, kind: item.kind, message: `${itemId} is not compatible with Arkivel ${packageJson.version}`, severity: "error" });
+    } else if (item.compatibility === "future" && item.status !== "planned") {
+      addIssue({ code: "incompatible-version", itemId, kind: item.kind, message: `${itemId} uses future compatibility but is not planned`, severity: "error" });
+    }
+    if (!isMarketplaceStatus(item.status)) {
+      addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} has an invalid status`, severity: "error" });
+    }
+    if (!isMarketplaceLicense(item.license)) {
+      addIssue({ code: "invalid-license", itemId, kind: item.kind, message: `${itemId} uses unsupported license: ${String(item.license)}`, severity: "error" });
+    }
+    if (!Array.isArray(item.tags) || item.tags.length === 0) {
+      addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} must include tags`, severity: "error" });
+    }
+    if (!Array.isArray(item.screenshots) || item.screenshots.length === 0 || !item.screenshots.every((path) => hasString(path) && path.startsWith("/"))) {
+      addIssue({ code: "missing-screenshot", itemId, kind: item.kind, message: `${itemId} must include at least one local screenshot path`, severity: "error" });
+    }
+    if (!isRecord(item.checksums) || !hasChecksum(item.checksums.manifest)) {
+      addIssue({ code: "missing-checksum", itemId, kind: item.kind, message: `${itemId} must include a manifest checksum`, severity: "error" });
+    }
+    if (!isRecord(item.source) || !hasString(item.source.path) || item.source.remote !== false) {
+      addIssue({ code: "invalid-source", itemId, kind: item.kind, message: `${itemId} must use a local non-remote source`, severity: "error" });
+    }
+    if (item.kind === "plugin") {
+      const permissions = (item as Partial<PluginManifest>).permissions;
+      if (!hasStringArray(permissions)) {
+        addIssue({ code: "missing-field", itemId, kind: item.kind, message: `${itemId} must declare plugin permissions`, severity: "error" });
+      } else {
+        for (const permission of permissions) {
+          if (
+            permission.includes("*") ||
+            permission === "admin:all" ||
+            permission.startsWith("system:") ||
+            permission.startsWith("shell:") ||
+            permission.startsWith("filesystem:")
+          ) {
+            addIssue({ code: "unsafe-permission", itemId, kind: item.kind, message: `${itemId} uses unsafe permission: ${permission}`, severity: "error" });
+          }
+        }
+      }
+    }
   }
 
-  return { errors, valid: errors.length === 0 };
+  for (const kind of SUPPORTED_MARKETPLACE_KINDS) {
+    if (!kinds.has(kind)) {
+      addIssue({ code: "missing-required-kind", kind, message: `missing marketplace kind: ${kind}`, severity: "error" });
+    }
+  }
+
+  const errors = issues.filter((issue) => issue.severity === "error").map((issue) => issue.message);
+  const warnings = issues.filter((issue) => issue.severity === "warning").map((issue) => issue.message);
+  const summary = createMarketplaceValidationSummary(items, issues);
+
+  return { errors, issues, summary, valid: errors.length === 0, warnings };
+}
+
+export function createMarketplaceValidationSummary(
+  items: MarketplaceItem[],
+  issues: MarketplaceValidationIssue[],
+): MarketplaceValidationSummary {
+  const kindCounts = Object.fromEntries(
+    SUPPORTED_MARKETPLACE_KINDS.map((kind) => [kind, items.filter((item) => item.kind === kind).length]),
+  ) as Record<MarketplaceItemKind, number>;
+  const statusCounts = {
+    "built-in": items.filter((item) => item.status === "built-in").length,
+    planned: items.filter((item) => item.status === "planned").length,
+    experimental: items.filter((item) => item.status === "experimental").length,
+  };
+  const errorCount = issues.filter((issue) => issue.severity === "error").length;
+  const warningCount = issues.filter((issue) => issue.severity === "warning").length;
+
+  return {
+    errorCount,
+    itemCount: items.length,
+    kindCounts,
+    schemaVersion: MARKETPLACE_REGISTRY_SCHEMA_VERSION,
+    source: marketplaceCatalogSource,
+    status: errorCount > 0 ? "errors" : warningCount > 0 ? "warnings" : "healthy",
+    statusCounts,
+    version: packageJson.version,
+    warningCount,
+  };
+}
+
+export function createMarketplaceRegistry(items: MarketplaceItem[] = marketplaceItems): MarketplaceRegistry {
+  return {
+    contract: marketplaceRegistryContract,
+    id: MARKETPLACE_REGISTRY_ID,
+    items,
+    schemaVersion: MARKETPLACE_REGISTRY_SCHEMA_VERSION,
+    source: marketplaceCatalogSource,
+    supportedKinds: SUPPORTED_MARKETPLACE_KINDS,
+    supportedLicenses: SUPPORTED_MARKETPLACE_LICENSES,
+    validation: validateMarketplaceCatalog(items),
+    version: packageJson.version,
+  };
 }
 
 export const themePackSchema = {
@@ -394,6 +702,10 @@ export const themePackSchema = {
   version: "Pack version, for example 1.0.0",
   compatibility: "Arkivel version range, for example >=4.75.0",
   author: "Pack author",
+  license: "Open-source license identifier, for example MIT",
+  source: "Local registry source metadata",
+  checksums: "Manifest and optional screenshot checksums",
+  screenshots: ["Local screenshot path"],
   tokens: {
     "--color-accent": "CSS color token value",
   },
@@ -407,3 +719,5 @@ export const perSpaceCustomizationContract = {
   precedence: ["category preview", "global env customization", "Arkivel defaults"],
   persistence: "deferred; no database overrides in v1",
 };
+
+export const marketplaceRegistry = createMarketplaceRegistry();
