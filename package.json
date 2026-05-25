@@ -1,6 +1,6 @@
 {
   "name": "arkivel",
-  "version": "4.81.1",
+  "version": "4.81.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
