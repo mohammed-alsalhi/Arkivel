@@ -68,6 +68,16 @@ type CustomizationManifest = {
   ui: {
     colorThemePresets: { id: string; name: string; description: string; themeAttribute: string }[];
     layoutPresets: { id: string; name: string; description: string; envValue: string; status: string }[];
+    layoutComposition: Array<{
+      articleColumns: string;
+      categoryLanding: string;
+      cssHooks: string[];
+      dashboardModules: string[];
+      homepageModuleOrder: string[];
+      id: string;
+      rightRail: string;
+      shellDensity: string;
+    }>;
     stylePresets: { id: string; name: string; description: string; themeAttribute: string }[];
     themePacks: { id: string; name: string; tokens: Record<string, string>; version: string }[];
     themePackSchema: Record<string, unknown>;
@@ -795,6 +805,31 @@ export default function AdminCustomizationPage() {
                     </div>
                   </div>
                 </PreviewFrame>
+              </SectionPanel>
+
+              <SectionPanel title="Layout composition preview" bodyClassName="grid gap-3 md:grid-cols-2">
+                {manifest.ui.layoutComposition
+                  .filter((layout) => layout.id === draft.layoutId)
+                  .map((layout) => (
+                    <div key={layout.id} className="border border-border bg-surface p-3">
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-[13px] font-semibold text-heading">{layout.id}</p>
+                        <Chip tone="info">{layout.shellDensity}</Chip>
+                      </div>
+                      <DataTable aria-label={`${layout.id} layout composition preview`}>
+                        <tbody>
+                          <tr><th className="w-40 text-left">Homepage</th><td>{layout.homepageModuleOrder.join(" -> ")}</td></tr>
+                          <tr><th className="w-40 text-left">Article columns</th><td>{layout.articleColumns}</td></tr>
+                          <tr><th className="w-40 text-left">Right rail</th><td>{layout.rightRail}</td></tr>
+                          <tr><th className="w-40 text-left">Dashboard</th><td>{layout.dashboardModules.join(", ")}</td></tr>
+                          <tr><th className="w-40 text-left">Category landing</th><td>{layout.categoryLanding}</td></tr>
+                        </tbody>
+                      </DataTable>
+                      <div className="mt-3 flex flex-wrap gap-1">
+                        {layout.cssHooks.map((hook) => <Chip key={hook}>{hook}</Chip>)}
+                      </div>
+                    </div>
+                  ))}
               </SectionPanel>
 
               <SectionPanel title="Responsive QA checklist" bodyClassName="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
