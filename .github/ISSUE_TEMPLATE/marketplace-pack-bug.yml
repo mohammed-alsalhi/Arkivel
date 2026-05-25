@@ -1,0 +1,46 @@
+name: Marketplace pack bug
+description: Report a bug, compatibility issue, or safety concern in a marketplace listing or sample pack.
+title: "Marketplace bug: "
+labels: ["marketplace", "bug"]
+body:
+  - type: input
+    id: pack-id
+    attributes:
+      label: Pack id
+      description: The marketplace id or sample folder path.
+    validations:
+      required: true
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue type
+      options:
+        - Security
+        - Accessibility
+        - Compatibility
+        - Manifest validation
+        - Screenshots or docs
+        - Performance
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe what is wrong and how you found it.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Include import-preview output, screenshots, browser details, logs, or manifest snippets.
+    validations:
+      required: false

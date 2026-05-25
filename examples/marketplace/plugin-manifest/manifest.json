@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "arkivel.marketplace.import.v1",
+  "id": "example-plugin-manifest",
+  "kind": "plugin",
+  "name": "Example Plugin Manifest",
+  "version": "0.1.0",
+  "compatibility": "future",
+  "author": "Example Author",
+  "license": "MIT",
+  "status": "accepted-preview",
+  "permissions": ["article:read"],
+  "routes": ["/admin/example-plugin"],
+  "settings": ["enabled"],
+  "widgets": ["example-dashboard-widget"],
+  "hooks": ["article.afterUpdate"],
+  "requiredFiles": ["manifest.json", "README.md"],
+  "requiredEnvVars": []
+}
