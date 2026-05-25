@@ -16,6 +16,7 @@ import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import CommandPalette from "@/components/CommandPalette";
 import BackToTop from "@/components/BackToTop";
 import QuickCapture from "@/components/QuickCapture";
+import ServiceWorkerManager from "@/components/ServiceWorkerManager";
 import { ToastProvider } from "@/components/Toast";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
@@ -158,6 +159,7 @@ export default async function RootLayout({
           <DocumentTitle appName={config.name} />
           <BackToTop />
           <QuickCapture />
+          <ServiceWorkerManager />
         </ToastProvider>
         </AdminProvider>
         <Analytics />

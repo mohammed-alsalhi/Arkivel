@@ -1,17 +1,18 @@
-// Wiki Service Worker — offline support with network-first strategy
-// and background sync for queued mutations.
+// Arkivel Service Worker - offline reading, install support, and narrow retry queues.
 
-const CACHE_NAME = "wiki-v1";
-const OFFLINE_URL = "/offline";
+const STATIC_CACHE = "arkivel-static-v4.88.2";
+const PAGE_CACHE = "arkivel-pages-v4.88.2";
+const API_CACHE = "arkivel-api-v4.88.2";
+const OFFLINE_URL = "/offline.html";
 
 // Pages to pre-cache on install
-const PRECACHE_URLS = ["/", "/help", "/search", OFFLINE_URL];
+const PRECACHE_URLS = ["/", "/help", "/features", "/search", "/manifest.webmanifest", OFFLINE_URL];
 
 // ── Install: pre-cache key pages ──────────────────────────────────────────────
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
-      .open(CACHE_NAME)
+      .open(STATIC_CACHE)
       .then((cache) => cache.addAll(PRECACHE_URLS))
       .then(() => self.skipWaiting())
   );
@@ -25,7 +26,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE_NAME)
+            .filter((key) => ![STATIC_CACHE, PAGE_CACHE, API_CACHE].includes(key))
             .map((key) => caches.delete(key))
         )
       )
@@ -41,21 +42,27 @@ self.addEventListener("fetch", (event) => {
   // Only handle same-origin requests
   if (url.origin !== self.location.origin) return;
 
-  // Intercept non-GET mutations: queue for later sync
-  if (request.method !== "GET") {
-    event.respondWith(handleMutation(request));
+  if (isBypassPath(url.pathname)) {
+    event.respondWith(fetch(request));
     return;
   }
 
-  // Cache GET requests for article and API article routes
-  const shouldCache =
-    url.pathname.startsWith("/api/articles/") ||
-    url.pathname.startsWith("/articles/");
+  // Intercept selected non-GET mutations: queue for later sync.
+  if (request.method !== "GET") {
+    if (shouldQueueMutation(url.pathname, request.method)) {
+      event.respondWith(handleMutation(request));
+    }
+    return;
+  }
 
-  if (shouldCache) {
-    event.respondWith(networkFirstWithCache(request));
+  if (isStaticAsset(url.pathname)) {
+    event.respondWith(cacheFirst(request, STATIC_CACHE));
+  } else if (isReadOnlyApi(url.pathname)) {
+    event.respondWith(networkFirstWithCache(request, API_CACHE, true));
+  } else if (isReadablePage(url.pathname)) {
+    event.respondWith(networkFirstWithCache(request, PAGE_CACHE, false));
   } else {
-    event.respondWith(networkFirstWithOfflineFallback(request));
+    event.respondWith(networkFirstWithOfflineFallback(request, PAGE_CACHE));
   }
 });
 
@@ -63,20 +70,38 @@ self.addEventListener("fetch", (event) => {
  * Network-first strategy: tries the network, falls back to cache.
  * Caches successful GET responses for offline use.
  */
-async function networkFirstWithCache(request) {
-  const cache = await caches.open(CACHE_NAME);
+async function cacheFirst(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+
+  const networkResponse = await fetch(request);
+  if (networkResponse.ok) {
+    cache.put(request, withCachedAt(networkResponse.clone()));
+  }
+  return networkResponse;
+}
+
+async function networkFirstWithCache(request, cacheName, jsonFallback) {
+  const cache = await caches.open(cacheName);
   try {
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
+      cache.put(request, withCachedAt(networkResponse.clone()));
     }
     return networkResponse;
   } catch {
     const cached = await cache.match(request);
-    return cached || new Response(JSON.stringify({ error: "Offline" }), {
-      status: 503,
-      headers: { "Content-Type": "application/json" },
-    });
+    if (cached) return withOfflineHeaders(cached);
+
+    if (jsonFallback) {
+      return new Response(JSON.stringify({ error: "Offline", cached: false }), {
+        status: 503,
+        headers: { "Content-Type": "application/json", "X-Arkivel-Offline": "true" },
+      });
+    }
+
+    return offlineTextResponse();
   }
 }
 
@@ -84,29 +109,27 @@ async function networkFirstWithCache(request) {
  * Network-first for HTML navigation requests.
  * Shows the offline page when both network and cache fail.
  */
-async function networkFirstWithOfflineFallback(request) {
-  const cache = await caches.open(CACHE_NAME);
+async function networkFirstWithOfflineFallback(request, cacheName) {
+  const cache = await caches.open(cacheName);
   try {
     const networkResponse = await fetch(request);
     if (networkResponse.ok && request.method === "GET") {
-      cache.put(request, networkResponse.clone());
+      cache.put(request, withCachedAt(networkResponse.clone()));
     }
     return networkResponse;
   } catch {
     const cached = await cache.match(request);
-    if (cached) return cached;
+    if (cached) return withOfflineHeaders(cached);
 
     // For HTML navigation, show the offline page
     const acceptHeader = request.headers.get("Accept") || "";
     if (acceptHeader.includes("text/html")) {
-      const offlinePage = await cache.match(OFFLINE_URL);
-      if (offlinePage) return offlinePage;
+      const staticCache = await caches.open(STATIC_CACHE);
+      const offlinePage = await staticCache.match(OFFLINE_URL);
+      if (offlinePage) return withOfflineHeaders(offlinePage);
     }
 
-    return new Response("You are offline", {
-      status: 503,
-      headers: { "Content-Type": "text/plain" },
-    });
+    return offlineTextResponse();
   }
 }
 
@@ -130,11 +153,93 @@ async function handleMutation(request) {
       timestamp: Date.now(),
     });
 
+    if ("sync" in self.registration) {
+      await self.registration.sync.register("wiki-sync-mutations").catch(() => undefined);
+    }
+
     return new Response(
       JSON.stringify({ queued: true, message: "Request queued for sync when online" }),
       { status: 202, headers: { "Content-Type": "application/json" } }
     );
   }
+}
+
+function withCachedAt(response) {
+  const headers = new Headers(response.headers);
+  headers.set("X-Arkivel-Cached-At", new Date().toISOString());
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+function withOfflineHeaders(response) {
+  const headers = new Headers(response.headers);
+  headers.set("X-Arkivel-Offline", "true");
+  headers.set("X-Arkivel-Cache-Stale", "true");
+  if (!headers.has("X-Arkivel-Cached-At")) {
+    headers.set("X-Arkivel-Cached-At", new Date().toISOString());
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+function offlineTextResponse() {
+  return new Response("You are offline", {
+    status: 503,
+    headers: { "Content-Type": "text/plain", "X-Arkivel-Offline": "true" },
+  });
+}
+
+function isStaticAsset(pathname) {
+  return (
+    pathname.startsWith("/_next/static/") ||
+    pathname.startsWith("/brand/") ||
+    pathname === "/favicon.ico" ||
+    pathname === "/manifest.webmanifest" ||
+    pathname === OFFLINE_URL
+  );
+}
+
+function isReadOnlyApi(pathname) {
+  return ["/api/articles", "/api/categories", "/api/tags", "/api/search", "/api/customization"].some((prefix) =>
+    pathname.startsWith(prefix)
+  );
+}
+
+function isReadablePage(pathname) {
+  return (
+    pathname === "/" ||
+    pathname === "/help" ||
+    pathname === "/features" ||
+    pathname.startsWith("/articles") ||
+    pathname.startsWith("/article/") ||
+    pathname.startsWith("/categories") ||
+    pathname.startsWith("/tags") ||
+    pathname.startsWith("/search")
+  );
+}
+
+function isBypassPath(pathname) {
+  return [
+    "/admin",
+    "/api/admin",
+    "/api/auth",
+    "/api/export",
+    "/api/webhooks",
+    "/api/observability",
+    "/api/upload",
+    "/api/plugins",
+  ].some((prefix) => pathname.startsWith(prefix));
+}
+
+function shouldQueueMutation(pathname, method) {
+  if (method === "GET" || isBypassPath(pathname)) return false;
+  return ["/api/articles", "/api/categories", "/api/tags", "/api/discussions"].some((prefix) => pathname.startsWith(prefix));
 }
 
 /**
