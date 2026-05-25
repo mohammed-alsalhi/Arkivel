@@ -9,6 +9,8 @@ export type SearchOptions = {
   dateTo?: string;
   author?: string;
   status?: string;
+  workspaceId?: string;
+  includeGlobal?: boolean;
 };
 
 export type TsvectorResult = {
@@ -50,6 +52,16 @@ export async function tsvectorSearch(
       if (options.categoryId) {
         conditions.push(`"categoryId" = $${paramIndex}`);
         params.push(options.categoryId);
+        paramIndex++;
+      }
+
+      if (options.workspaceId && options.includeGlobal) {
+        conditions.push(`("wikiId" = $${paramIndex} OR "wikiId" IS NULL)`);
+        params.push(options.workspaceId);
+        paramIndex++;
+      } else if (options.workspaceId) {
+        conditions.push(`"wikiId" = $${paramIndex}`);
+        params.push(options.workspaceId);
         paramIndex++;
       }
 
@@ -181,6 +193,12 @@ async function fallbackLikeSearch(
 
   if (options.author) {
     filters.push({ userId: options.author });
+  }
+
+  if (options.workspaceId && options.includeGlobal) {
+    filters.push({ OR: [{ wikiId: options.workspaceId }, { wikiId: null }] });
+  } else if (options.workspaceId) {
+    filters.push({ wikiId: options.workspaceId });
   }
 
   const where = { AND: [textWhere, ...filters] };

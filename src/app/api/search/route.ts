@@ -3,12 +3,21 @@ import prisma from "@/lib/prisma";
 import { tsvectorSearch, SearchOptions } from "@/lib/search";
 import { findFuzzyMatches } from "@/lib/fuzzy";
 import { semanticSearch } from "@/lib/embeddings";
+import { createWorkspaceArticleWhere, getWorkspaceIdFromRequestLike } from "@/lib/workspaces";
+import { isAdmin } from "@/lib/auth";
+import { buildSearchExplain, createSearchFacets, scoreSearchCandidate } from "@/lib/search-relevance";
 
 export async function GET(request: NextRequest) {
+  const startedAt = Date.now();
   const query = request.nextUrl.searchParams.get("q")?.trim();
   const limit = parseInt(request.nextUrl.searchParams.get("limit") || "20");
   const includeSemantic = request.nextUrl.searchParams.get("semantic") === "1";
   const categoryId = request.nextUrl.searchParams.get("category") || null;
+  const workspaceId = getWorkspaceIdFromRequestLike({
+    searchParams: request.nextUrl.searchParams,
+    headers: request.headers,
+  });
+  const includeGlobal = request.nextUrl.searchParams.get("includeGlobal") === "1";
   const tagSlugs = request.nextUrl.searchParams.get("tags") || null; // comma-separated tag slugs
   const dateFrom = request.nextUrl.searchParams.get("dateFrom") || null;
   const dateTo = request.nextUrl.searchParams.get("dateTo") || null;
@@ -16,6 +25,7 @@ export async function GET(request: NextRequest) {
   const status = request.nextUrl.searchParams.get("status") || null;
   const wordCountMin = request.nextUrl.searchParams.get("wordCountMin") ? parseInt(request.nextUrl.searchParams.get("wordCountMin")!, 10) : null;
   const wordCountMax = request.nextUrl.searchParams.get("wordCountMax") ? parseInt(request.nextUrl.searchParams.get("wordCountMax")!, 10) : null;
+  const explain = request.nextUrl.searchParams.get("explain") === "1" && await isAdmin();
 
   if (!query || query.length < 2) {
     return NextResponse.json({ results: [], suggestions: [] });
@@ -30,6 +40,8 @@ export async function GET(request: NextRequest) {
     dateTo: dateTo || undefined,
     author: author || undefined,
     status: status || undefined,
+    workspaceId,
+    includeGlobal,
   };
 
   // Try tsvector search first
@@ -47,7 +59,13 @@ export async function GET(request: NextRequest) {
         where: { id: { in: articleIds } },
         select: {
           id: true,
+          content: true,
+          status: true,
           updatedAt: true,
+          redirectTo: true,
+          reviewDueAt: true,
+          lastVerifiedAt: true,
+          verificationExpiresAt: true,
           category: { select: { id: true, name: true, slug: true } },
           tags: { include: { tag: true } },
         },
@@ -57,6 +75,18 @@ export async function GET(request: NextRequest) {
 
       results = tsvResults.map((r) => {
         const extra = enrichedMap.get(r.id);
+        const relevance = scoreSearchCandidate(query, {
+          title: r.title,
+          slug: r.slug,
+          excerpt: r.excerpt,
+          content: extra?.content,
+          status: extra?.status,
+          redirectTo: extra?.redirectTo,
+          updatedAt: extra?.updatedAt,
+          reviewDueAt: extra?.reviewDueAt,
+          lastVerifiedAt: extra?.lastVerifiedAt,
+          verificationExpiresAt: extra?.verificationExpiresAt,
+        });
         return {
           id: r.id,
           title: r.title,
@@ -64,10 +94,24 @@ export async function GET(request: NextRequest) {
           excerpt: r.excerpt,
           highlightedExcerpt: r.headline,
           updatedAt: extra?.updatedAt ?? null,
+          status: extra?.status ?? null,
           category: extra?.category ?? null,
           tags: extra?.tags ?? [],
+          score: Math.round((r.rank * 100) + relevance.score),
+          searchExplain: explain ? buildSearchExplain(query, {
+            title: r.title,
+            slug: r.slug,
+            excerpt: r.excerpt,
+            content: extra?.content,
+            status: extra?.status,
+            redirectTo: extra?.redirectTo,
+            updatedAt: extra?.updatedAt,
+            reviewDueAt: extra?.reviewDueAt,
+            lastVerifiedAt: extra?.lastVerifiedAt,
+            verificationExpiresAt: extra?.verificationExpiresAt,
+          }) : undefined,
         };
-      });
+      }).sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
     }
   } catch {
     // tsvector search threw — fall through to LIKE-based search
@@ -75,7 +119,7 @@ export async function GET(request: NextRequest) {
 
   // Fall back to LIKE-based search if tsvector returned no results
   if (!usedTsvector || results.length === 0) {
-    results = await likeBasedSearch(query, limit, categoryId, tagSlugs, dateFrom, dateTo, author, status);
+    results = await likeBasedSearch(query, limit, categoryId, tagSlugs, dateFrom, dateTo, author, status, workspaceId, includeGlobal, explain);
   }
 
   // Apply word count filter (post-process: computed from content)
@@ -98,7 +142,10 @@ export async function GET(request: NextRequest) {
   if (results.length < 3) {
     try {
       const allTitles = await prisma.article.findMany({
-        where: { status: status || "published" },
+        where: {
+          status: status || "published",
+          ...createWorkspaceArticleWhere({ workspaceId, includeGlobal: workspaceId ? includeGlobal : true }),
+        },
         select: { title: true },
       });
 
@@ -130,7 +177,11 @@ export async function GET(request: NextRequest) {
 
       if (extra.length > 0) {
         const extraArticles = await prisma.article.findMany({
-          where: { id: { in: extra.map((e) => e.id) }, status: "published" },
+          where: {
+            id: { in: extra.map((e) => e.id) },
+            status: "published",
+            ...createWorkspaceArticleWhere({ workspaceId, includeGlobal: workspaceId ? includeGlobal : true }),
+          },
           select: {
             id: true, title: true, slug: true, excerpt: true, updatedAt: true,
             category: { select: { id: true, name: true, slug: true } },
@@ -156,8 +207,17 @@ export async function GET(request: NextRequest) {
   // Log all queries for search analytics (fire-and-forget)
   const totalCount = results.length + semanticResults.length;
   prisma.searchQueryLog.create({ data: { query, resultCount: totalCount } }).catch(() => {});
+  prisma.metricLog.create({
+    data: {
+      duration: Date.now() - startedAt,
+      metadata: { includeSemantic, resultCount: totalCount },
+      path: "/api/search",
+      status: 200,
+      type: "search_response_time",
+    },
+  }).catch(() => {});
 
-  return NextResponse.json({ results, semanticResults, suggestions });
+  return NextResponse.json({ results, semanticResults, suggestions, facets: createSearchFacets(results) });
 }
 
 type SearchResult = {
@@ -167,6 +227,9 @@ type SearchResult = {
   excerpt: string | null;
   highlightedExcerpt: string;
   updatedAt: Date | null;
+  status?: string | null;
+  score?: number;
+  searchExplain?: ReturnType<typeof buildSearchExplain>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   category: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -181,7 +244,10 @@ async function likeBasedSearch(
   dateFrom: string | null,
   dateTo: string | null,
   author: string | null,
-  status: string | null
+  status: string | null,
+  workspaceId: string | undefined,
+  includeGlobal: boolean,
+  explain: boolean
 ): Promise<SearchResult[]> {
   const select = {
     id: true,
@@ -189,7 +255,12 @@ async function likeBasedSearch(
     slug: true,
     excerpt: true,
     content: true,
+    status: true,
+    redirectTo: true,
     updatedAt: true,
+    reviewDueAt: true,
+    lastVerifiedAt: true,
+    verificationExpiresAt: true,
     category: { select: { id: true, name: true, slug: true } },
     tags: { include: { tag: true } },
   };
@@ -256,6 +327,8 @@ async function likeBasedSearch(
     filters.push({ userId: author });
   }
 
+  filters.push(createWorkspaceArticleWhere({ workspaceId, includeGlobal: workspaceId ? includeGlobal : true }));
+
   // Combine text search with filters
   const where = { AND: [textWhere, ...filters] };
 
@@ -266,14 +339,12 @@ async function likeBasedSearch(
     select,
   });
 
-  // Rank by relevance: exact title > title starts with > title contains > content only
-  const queryLower = query.toLowerCase();
-  articles.sort((a, b) => {
-    return relevanceScore(b.title, queryLower) - relevanceScore(a.title, queryLower);
-  });
+  const ranked = articles
+    .map((article) => ({ article, score: scoreSearchCandidate(query, article) }))
+    .sort((a, b) => b.score.score - a.score.score);
 
   // Add highlighted excerpts
-  return articles.slice(0, limit).map((article) => {
+  return ranked.slice(0, limit).map(({ article, score }) => {
     const highlightedExcerpt = highlightText(
       article.excerpt || stripHtml(article.content).substring(0, 300),
       words.length > 0 ? words : [query]
@@ -286,18 +357,13 @@ async function likeBasedSearch(
       excerpt: article.excerpt,
       highlightedExcerpt,
       updatedAt: article.updatedAt,
+      status: article.status,
       category: article.category,
       tags: article.tags,
+      score: score.score,
+      searchExplain: explain ? buildSearchExplain(query, article) : undefined,
     };
   });
-}
-
-function relevanceScore(title: string, query: string): number {
-  const t = title.toLowerCase();
-  if (t === query) return 100;           // exact match
-  if (t.startsWith(query)) return 80;    // title starts with query
-  if (t.includes(query)) return 60;      // title contains query
-  return 0;                              // content-only match
 }
 
 function stripHtml(html: string): string {
