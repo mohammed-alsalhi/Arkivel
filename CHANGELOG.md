@@ -4,6 +4,12 @@
 
 All notable changes to this project are documented here.
 
+## [4.95.0] - 2026-05-25
+
+### Added
+
+- **add migration readiness** - Release-sized roadmap commit reconstructed from the completed v5 worktree.
+
 ## [4.94.2] - 2026-05-25
 
 ### Added
