@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 type ActionGroup = {
   label: string;
   children: ReactNode;
+  /** Render collapsed behind a disclosure menu instead of inline. */
+  menu?: boolean;
 };
 
 type Props = {
@@ -10,8 +12,8 @@ type Props = {
 };
 
 export default function ArticleActionPanel({ groups }: Props) {
-  const primaryGroups = groups.filter((group) => group.label !== "Read" && group.label !== "Tools");
-  const drawerGroups = groups.filter((group) => group.label === "Read" || group.label === "Tools");
+  const primaryGroups = groups.filter((group) => !group.menu);
+  const drawerGroups = groups.filter((group) => group.menu);
 
   return (
     <section className="article-action-panel" aria-label="Article actions">

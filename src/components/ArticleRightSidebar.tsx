@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import LocalGraph from "@/components/LocalGraph";
 import { TabButton, Tabs } from "@/components/ui";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type BacklinkItem = { id: string; title: string; slug: string };
 type HeadingItem = { id: string; text: string; level: number };
@@ -22,6 +23,19 @@ export default function ArticleRightSidebar({
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [unlinkedMentions, setUnlinkedMentions] = useState<BacklinkItem[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // On phones the panel is a bottom sheet over the content, so lock the page
+  // behind it; on desktop it docks beside the article and scrolling stays free.
+  useScrollLock(open && isMobile);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   // Extract headings from rendered DOM
   useEffect(() => {
@@ -76,23 +90,32 @@ export default function ArticleRightSidebar({
 
   return (
     <>
-      {/* Toggle button */}
+      {/* Toggle: edge tab on desktop, floating button above the bottom nav on phones */}
       <button
         onClick={() => setOpen((o) => !o)}
         title={open ? "Close sidebar" : "Open article sidebar"}
         aria-label={open ? "Close sidebar" : "Open article sidebar"}
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-surface border border-border px-1.5 py-3 text-muted hover:text-foreground shadow-sm"
-        style={{ writingMode: "vertical-rl" }}
+        aria-expanded={open}
+        className="fixed z-30 bg-surface border border-border text-muted hover:text-foreground shadow-sm right-3 bottom-20 h-10 w-10 inline-flex items-center justify-center rounded-full md:rounded-none md:h-auto md:w-auto md:right-0 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:px-1.5 md:py-3 md:[writing-mode:vertical-rl]"
       >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <rect x="3" y="3" width="18" height="18" rx="2" />
           <line x1="15" y1="3" x2="15" y2="21" />
         </svg>
       </button>
 
-      {/* Panel */}
+      {/* Backdrop for the mobile bottom sheet */}
       {open && (
-        <aside className="wiki-right-sidebar fixed right-0 top-[40px] z-20 h-[calc(100vh-40px)] w-56 bg-surface border-l border-border overflow-y-auto shadow-lg flex flex-col">
+        <div
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          aria-hidden="true"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* Panel: bottom sheet on phones, docked right panel on md+ */}
+      {open && (
+        <aside className="wiki-right-sidebar fixed z-50 inset-x-0 bottom-0 h-[70dvh] w-full border-t border-border bg-surface overflow-y-auto shadow-lg flex flex-col md:z-30 md:inset-x-auto md:right-0 md:top-[40px] md:bottom-auto md:h-[calc(100vh-40px)] md:w-64 md:border-t-0 md:border-l">
           {/* Panel tabs */}
           <Tabs label="Article sidebar panels" className="border-x-0 border-t-0 px-3 pt-2">
             {panelBtn("outline", "Outline")}
@@ -110,7 +133,8 @@ export default function ArticleRightSidebar({
                   <a
                     key={h.id}
                     href={`#${h.id}`}
-                    className={`block text-[11px] py-0.5 hover:text-foreground truncate transition-colors ${
+                    onClick={() => { if (isMobile) setOpen(false); }}
+                    className={`block text-[13px] py-1.5 md:text-[11px] md:py-0.5 hover:text-foreground truncate transition-colors ${
                       activeId === h.id ? "text-accent font-medium" : "text-muted"
                     }`}
                     style={{ paddingLeft: `${(h.level - 1) * 10}px` }}
@@ -135,7 +159,7 @@ export default function ArticleRightSidebar({
                       <Link
                         key={b.id}
                         href={`/articles/${b.slug}`}
-                        className="block text-[11px] text-muted hover:text-foreground truncate"
+                        className="block text-[13px] py-1 md:text-[11px] md:py-0 text-muted hover:text-foreground truncate"
                       >
                         {b.title}
                       </Link>
@@ -153,7 +177,7 @@ export default function ArticleRightSidebar({
                         <Link
                           key={b.id}
                           href={`/articles/${b.slug}`}
-                          className="block text-[11px] text-muted hover:text-foreground truncate"
+                          className="block text-[13px] py-1 md:text-[11px] md:py-0 text-muted hover:text-foreground truncate"
                         >
                           {b.title}
                         </Link>

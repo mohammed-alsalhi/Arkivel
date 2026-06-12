@@ -1870,6 +1870,57 @@ p a:hover {
   padding: 1rem 1.25rem 1.25rem;
 }
 
+/* Readable measure for article prose. ArticleWidthPreference overrides this
+   via its injected #wiki-width-pref-style element (narrow 65ch / wide 100%). */
+#article-content {
+  max-width: min(100%, 80ch);
+}
+
+/* Collapsed end-of-article sections (stats, community widgets, …) */
+.article-extras {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.article-extras > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.article-extras > summary::-webkit-details-marker {
+  display: none;
+}
+
+.article-extras > summary::after {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.article-extras[open] > summary::after {
+  transform: rotate(225deg);
+}
+
+.article-extras > summary:hover {
+  color: var(--color-foreground);
+}
+
+.article-extras-body {
+  padding-bottom: 0.75rem;
+}
+
 .article-hero {
   margin: 0.35rem 0 0.85rem;
   padding-bottom: 0.75rem;
@@ -2282,7 +2333,11 @@ p a:hover {
   .article-taxonomy-label {
     margin-bottom: -0.25rem;
   }
+}
 
+/* The floated 280px infobox leaves too little room for prose below lg,
+   not just on phones — stack it on tablets too. */
+@media (max-width: 1023px) {
   .wiki-infobox {
     float: none;
     width: 100%;

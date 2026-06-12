@@ -12,7 +12,6 @@ import RelatedArticles from "@/components/RelatedArticles";
 import CopyButton from "@/components/CopyButton";
 import ShareButton from "@/components/ShareButton";
 import PrintButton from "@/components/PrintButton";
-import BackToTop from "@/components/BackToTop";
 import ReadingProgress from "@/components/ReadingProgress";
 import Breadcrumb from "@/components/Breadcrumb";
 import SessionReadingTrail from "@/components/SessionReadingTrail";
@@ -36,7 +35,6 @@ import ArticleChangelogPanel from "@/components/ArticleChangelogPanel";
 import WordGoalBadge from "@/components/WordGoalBadge";
 import YouMightAlsoLike from "@/components/YouMightAlsoLike";
 import VerifyButton from "@/components/VerifyButton";
-import TableOfContentsFloat from "@/components/TableOfContentsFloat";
 import ArticleStatsPanel from "@/components/ArticleStatsPanel";
 import ArticleFlags from "@/components/ArticleFlags";
 import ReadingModeToggle from "@/components/ReadingModeToggle";
@@ -315,11 +313,28 @@ export default async function ArticlePage({ params }: Props) {
         <ArticleActionPanel
           groups={[
             {
-              label: "Navigate",
+              label: "Collect",
               children: (
-                <Link href={`/present/${article.slug}`} className="ui-button" title="Present as slideshow">
-                  Present
-                </Link>
+                <>
+                  <BookmarkButton articleId={article.id} />
+                  <AddToReadingList articleId={article.id} />
+                </>
+              ),
+            },
+            {
+              label: "Share",
+              children: (
+                <>
+                  <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL || ""}/articles/${article.slug}`} label="Copy link" />
+                  <ShareButton title={article.title} />
+                  <ArticleExportMenu
+                    articleId={article.id}
+                    articleSlug={article.slug}
+                    articleTitle={article.title}
+                    contentRaw={article.contentRaw}
+                    contentHtml={resolvedContent}
+                  />
+                </>
               ),
             },
             ...(canRequestReview
@@ -337,33 +352,8 @@ export default async function ArticlePage({ params }: Props) {
                 ]
               : []),
             {
-              label: "Collect",
-              children: (
-                <>
-                  <BookmarkButton articleId={article.id} />
-                  <AddToReadingList articleId={article.id} />
-                </>
-              ),
-            },
-            {
-              label: "Share",
-              children: (
-                <>
-                  <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL || ""}/articles/${article.slug}`} label="Copy link" />
-                  <ShareButton title={article.title} />
-                  <PrintButton />
-                  <ArticleExportMenu
-                    articleId={article.id}
-                    articleSlug={article.slug}
-                    articleTitle={article.title}
-                    contentRaw={article.contentRaw}
-                    contentHtml={resolvedContent}
-                  />
-                </>
-              ),
-            },
-            {
-              label: "Read",
+              label: "Display",
+              menu: true,
               children: (
                 <>
                   <FontSizeControl />
@@ -382,8 +372,13 @@ export default async function ArticlePage({ params }: Props) {
             },
             {
               label: "Tools",
+              menu: true,
               children: (
                 <>
+                  <Link href={`/present/${article.slug}`} className="ui-button" title="Present as slideshow">
+                    Present
+                  </Link>
+                  <PrintButton />
                   <AudioNarration html={resolvedContent} title={article.title} />
                   <SpeedReader articleId={article.id} />
                   <ArticleQuizMode articleId={article.id} articleTitle={article.title} />
@@ -393,6 +388,14 @@ export default async function ArticlePage({ params }: Props) {
                   <CopyMarkdownButton markdown={article.contentRaw} title={article.title} />
                   <CopyPlainTextButton html={resolvedContent} />
                   <DuplicateArticleButton articleId={article.id} />
+                  <Link
+                    href={`/api/articles/${article.id}/fork`}
+                    className="ui-button"
+                    title="Fork this article to propose a complete rewrite"
+                    prefetch={false}
+                  >
+                    Fork
+                  </Link>
                 </>
               ),
             },
@@ -527,49 +530,19 @@ export default async function ArticlePage({ params }: Props) {
         {/* Star rating */}
         <ArticleRatingWidget articleId={article.id} />
 
-        {/* Fork this article */}
-        <div className="article-footer-actions">
-          <Link
-            href={`/api/articles/${article.id}/fork`}
-            className="ui-button"
-            title="Fork this article to propose a complete rewrite"
-            prefetch={false}
-          >
-            Fork this article
-          </Link>
-        </div>
-
         {/* Series table of contents + navigation */}
         <SeriesTableOfContents articleId={article.id} />
         <ArticleSeriesNav articleId={article.id} />
 
-        {/* Word goal progress */}
-        {article.wordGoal && (
-          <WordGoalBadge wordGoal={article.wordGoal} currentWords={plainTextWords} />
-        )}
-
-        {/* Article stats panel */}
-        <ArticleStatsPanel
-          articleId={article.id}
-          reads={readCount}
-          reactions={reactionCount}
-          qualityScore={quality.score}
-          qualityLabel={quality.label}
-          ageDays={articleAgeDays}
-          wordCount={plainTextWords}
-        />
-
-        {/* Word frequency cloud */}
-        <WordFrequencyCloud html={article.content} />
-
-        {/* Changelog panel */}
-        <ArticleChangelogPanel slug={article.slug} revisions={recentRevisions.map(r => ({
-          ...r,
-          createdAt: r.createdAt.toISOString(),
-        }))} />
-
         {/* See also */}
         <SeeAlsoSection articleId={article.id} isAdmin={adminFlag} />
+
+        {/* Related articles */}
+        <RelatedArticles
+          articleId={article.id}
+          categoryId={article.categoryId}
+          tagIds={article.tags.map(t => t.tag.id)}
+        />
 
         {/* You might also like */}
         <YouMightAlsoLike
@@ -582,12 +555,30 @@ export default async function ArticlePage({ params }: Props) {
           <VerifyButton articleId={article.id} lastVerifiedAt={article.lastVerifiedAt?.toISOString() ?? null} />
         )}
 
-        {/* Related articles */}
-        <RelatedArticles
-          articleId={article.id}
-          categoryId={article.categoryId}
-          tagIds={article.tags.map(t => t.tag.id)}
-        />
+        {/* Stats, word cloud and changelog — collapsed so the reading
+            experience ends with content, not dashboards */}
+        <details className="article-extras">
+          <summary>Article insights</summary>
+          <div className="article-extras-body">
+            {article.wordGoal && (
+              <WordGoalBadge wordGoal={article.wordGoal} currentWords={plainTextWords} />
+            )}
+            <ArticleStatsPanel
+              articleId={article.id}
+              reads={readCount}
+              reactions={reactionCount}
+              qualityScore={quality.score}
+              qualityLabel={quality.label}
+              ageDays={articleAgeDays}
+              wordCount={plainTextWords}
+            />
+            <WordFrequencyCloud html={article.content} />
+            <ArticleChangelogPanel slug={article.slug} revisions={recentRevisions.map(r => ({
+              ...r,
+              createdAt: r.createdAt.toISOString(),
+            }))} />
+          </div>
+        </details>
 
         {/* What links here */}
         {backlinks.length > 0 && (
@@ -613,10 +604,18 @@ export default async function ArticlePage({ params }: Props) {
         <div className="mt-2 text-right">
           <SuggestEditButton articleId={article.id} />
         </div>
-        <ArticleTodoList articleId={article.id} isAdmin={adminFlag} />
-        <ArticleQuickNote articleId={article.id} />
-        <ArticlePollWidget articleId={article.id} isAdmin={adminFlag} />
-        <ArticleQA articleSlug={article.slug} />
+
+        {/* Personal notes, todos, polls and Q&A — collapsed by default */}
+        <details className="article-extras">
+          <summary>Notes &amp; community</summary>
+          <div className="article-extras-body">
+            <ArticleTodoList articleId={article.id} isAdmin={adminFlag} />
+            <ArticleQuickNote articleId={article.id} />
+            <ArticlePollWidget articleId={article.id} isAdmin={adminFlag} />
+            <ArticleQA articleSlug={article.slug} />
+          </div>
+        </details>
+
         <SessionReadingTrail slug={article.slug} title={article.title} />
         <ScrollDepthTracker articleId={article.id} />
         <ReferrerTracker articleId={article.id} />
@@ -626,15 +625,11 @@ export default async function ArticlePage({ params }: Props) {
         <ExternalLinkTracker articleId={article.id} />
         <PrefetchArticleLinks />
         <AnnotationLayer articleId={article.id} isLoggedIn={!!session} />
-        <BackToTop />
         <ReadingProgress />
         <ImageLightbox />
         <TabsActivator />
         <WikiChatAssistant articleTitle={article.title} />
       </article>
-
-      {/* Floating TOC — rendered outside the padded box so it can be fixed */}
-      <TableOfContentsFloat html={resolvedContent} />
 
       {/* Right sidebar: outline + backlinks + local graph */}
       <ArticleRightSidebar slug={slug} backlinks={backlinks} />
