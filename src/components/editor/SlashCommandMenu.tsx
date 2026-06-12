@@ -89,7 +89,7 @@ const SlashCommandMenu = forwardRef<SlashCommandMenuRef, Props>(
     return (
       <div
         ref={containerRef}
-        className="fixed z-[9999] max-h-[300px] w-[280px] overflow-y-auto border border-border bg-surface shadow-md"
+        className="fixed z-[60] max-h-[300px] w-[280px] overflow-y-auto border border-border bg-surface shadow-md"
         style={{
           top: rect.bottom + 4,
           left: rect.left,

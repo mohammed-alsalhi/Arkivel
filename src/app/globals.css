@@ -1,6 +1,23 @@
 @import "tailwindcss";
 @import "highlight.js/styles/github.css";
 
+/*
+  Layout conventions (keep new code on these scales):
+
+  Breakpoints — Tailwind boundaries only:
+    sm 640px · md 768px · lg 1024px · xl 1280px
+    (max-width queries use boundary minus 1: 639 / 767 / 1023 / 1279)
+
+  Z-index tiers:
+    1-30  in-page floating elements (TOC, sticky header, grips)
+    40    app chrome (sidebar drawer, mobile bottom nav, bulk bar)
+    50    dropdowns, popovers, tooltips, floating toggles
+    60    full-width overlays that sit over chrome (search shell, editor menus)
+    70    modals and dialog overlays
+    80    toasts and transient notifications
+    100   skip-to-content link (must beat everything when focused)
+*/
+
 @theme {
   /* ── Standard wiki color scheme (light) ── */
   --color-background: #f8f9fa;
@@ -2250,7 +2267,7 @@ p a:hover {
   }
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1023px) {
   .article-action-menu {
     position: static;
   }
@@ -2811,7 +2828,7 @@ p a:hover {
   background: var(--color-surface);
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1023px) {
   .editor-workspace {
     grid-template-columns: 1fr;
   }
@@ -3676,13 +3693,13 @@ p a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1279px) {
   .trails-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1023px) {
   .trails-hero {
     grid-template-columns: 1fr;
   }
@@ -4781,7 +4798,7 @@ p a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1023px) {
   .intelligence-command-strip {
     grid-template-columns: 1fr;
   }
@@ -5485,7 +5502,7 @@ p a:hover {
   overflow-wrap: anywhere;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1023px) {
   .studio-command-strip {
     grid-template-columns: 1fr;
   }
@@ -5501,7 +5518,7 @@ p a:hover {
   }
 }
 
-@media (min-width: 640px) and (max-width: 1099px) {
+@media (min-width: 640px) and (max-width: 1279px) {
   .studio-base-grid,
   .studio-action-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5847,7 +5864,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  z-index: 9999;
+  z-index: 80;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -5934,7 +5951,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 70;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6094,7 +6111,7 @@ kbd {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 70;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -6303,7 +6320,7 @@ html[data-dyslexia][data-theme="dark"] .wiki-content {
   position: absolute;
   top: -100%;
   left: 0;
-  z-index: 9999;
+  z-index: 100;
   padding: 0.5rem 1rem;
   background: var(--color-accent);
   color: white;
@@ -6339,7 +6356,7 @@ html[data-reading-mode="1"] [data-reading-mode-toggle] {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 100;
+  z-index: 50;
 }
 
 

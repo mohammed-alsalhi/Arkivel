@@ -76,7 +76,7 @@ export default function NoteComposer({ editor, articleId }: Props) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[9998] flex items-start justify-center pt-32 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}>
+        <div className="fixed inset-0 z-[70] flex items-start justify-center pt-32 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}>
           <div className="bg-surface border border-border rounded shadow-2xl w-full max-w-md p-5 flex flex-col gap-3" onClick={(e) => e.stopPropagation()}>
             <div className="font-semibold text-sm text-heading">Extract selection to new article</div>
             <p className="text-[11px] text-muted">The selected text will be moved to a new article and replaced with a wiki link.</p>

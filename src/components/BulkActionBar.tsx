@@ -45,7 +45,7 @@ export default function BulkActionBar({ selectedIds, onClear, categories, tags }
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-4 py-3 flex flex-wrap items-center gap-3 shadow-lg">
+    <div className="fixed bottom-14 left-0 right-0 z-40 md:bottom-0 bg-background border-t border-border px-4 py-3 flex flex-wrap items-center gap-3 shadow-lg">
       <span className="text-sm font-medium">{selectedIds.length} selected</span>
 
       <select

@@ -93,7 +93,7 @@ export default function ServiceWorkerManager() {
 
   if (isOffline) {
     return (
-      <div className="fixed inset-x-3 bottom-16 z-50 mx-auto flex max-w-lg items-center justify-between gap-3 rounded border border-border bg-surface px-3 py-2 text-[13px] shadow-lg md:bottom-4">
+      <div className="fixed inset-x-3 bottom-20 z-[80] md:bottom-6 mx-auto flex max-w-lg items-center justify-between gap-3 rounded border border-border bg-surface px-3 py-2 text-[13px] shadow-lg md:bottom-4">
         <span className="min-w-0 text-foreground">Offline. Cached pages may be stale, and eligible article changes will retry after reconnect.</span>
         <button type="button" className="btn-secondary shrink-0 px-2 py-1 text-[12px]" onClick={replayQueue}>
           Retry
@@ -105,7 +105,7 @@ export default function ServiceWorkerManager() {
   if (!installPrompt || installDismissed) return null;
 
   return (
-    <div className="fixed inset-x-3 bottom-16 z-50 mx-auto flex max-w-lg items-center justify-between gap-3 rounded border border-border bg-surface px-3 py-2 text-[13px] shadow-lg md:bottom-4">
+    <div className="fixed inset-x-3 bottom-20 z-[80] md:bottom-6 mx-auto flex max-w-lg items-center justify-between gap-3 rounded border border-border bg-surface px-3 py-2 text-[13px] shadow-lg md:bottom-4">
       <span className="min-w-0 text-foreground">Install Arkivel for faster startup and offline reading of recently opened pages.</span>
       <div className="flex shrink-0 items-center gap-2">
         <button type="button" className="btn-secondary px-2 py-1 text-[12px]" onClick={dismissInstall}>

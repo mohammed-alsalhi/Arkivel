@@ -56,7 +56,7 @@ export default function QuickCapture() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-32 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}>
+    <div className="fixed inset-0 z-[70] flex items-start justify-center pt-32 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}>
       <div
         className="bg-surface border border-border rounded shadow-2xl w-full max-w-lg p-5 flex flex-col gap-3"
         onClick={(e) => e.stopPropagation()}

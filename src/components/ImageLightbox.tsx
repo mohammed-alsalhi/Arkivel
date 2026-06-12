@@ -40,7 +40,7 @@ export default function ImageLightbox() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm"
       onClick={() => setImage(null)}
     >
       <button
