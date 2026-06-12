@@ -54,7 +54,7 @@ export default function HighlightColorPicker({ editor }: Props) {
                 editor.chain().focus().setHighlight({ color: c.value }).run();
                 setOpen(false);
               }}
-              className="w-5 h-5 rounded border border-border hover:scale-110 transition-transform"
+              className="w-5 h-5 pointer-coarse:w-9 pointer-coarse:h-9 rounded border border-border hover:scale-110 transition-transform"
               style={{ background: c.value }}
             />
           ))}
@@ -65,7 +65,7 @@ export default function HighlightColorPicker({ editor }: Props) {
               editor.chain().focus().unsetHighlight().run();
               setOpen(false);
             }}
-            className="w-5 h-5 rounded border border-border text-[10px] text-muted hover:bg-surface-hover flex items-center justify-center"
+            className="w-5 h-5 pointer-coarse:w-9 pointer-coarse:h-9 rounded border border-border text-[10px] text-muted hover:bg-surface-hover flex items-center justify-center"
           >
             ✕
           </button>

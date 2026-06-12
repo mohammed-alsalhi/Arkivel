@@ -373,13 +373,13 @@ function SidebarCategoryItem({
         {hasChildren ? (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="flex items-center justify-center w-4 flex-shrink-0 text-muted hover:text-foreground transition-colors"
+            className="flex items-center justify-center w-7 self-stretch md:w-4 flex-shrink-0 text-muted hover:text-foreground transition-colors"
             aria-label={expanded ? "Collapse" : "Expand"}
           >
             <ChevronIcon open={expanded} />
           </button>
         ) : (
-          <span className="w-4 flex-shrink-0" />
+          <span className="w-7 md:w-4 flex-shrink-0" />
         )}
         <SidebarLink
           href={href}
@@ -457,7 +457,7 @@ function SidebarSection({
     <div className="border-b border-border">
       <button
         onClick={() => setOpen(!open)}
-          className="flex items-center justify-between w-full bg-infobox-header px-3 py-1 text-[11px] font-bold text-foreground uppercase hover:bg-surface-hover transition-colors"
+        className="flex items-center justify-between w-full bg-infobox-header px-3 py-2 text-[12px] md:py-1 md:text-[11px] font-bold text-foreground uppercase hover:bg-surface-hover transition-colors"
         aria-expanded={open}
       >
         <span>{title}</span>
@@ -486,7 +486,7 @@ function SidebarLink({
       href={href}
       onClick={onClick}
       className={clsx(
-        "block py-[3px] text-[13px] transition-colors hover:no-underline",
+        "block py-2 text-[15px] md:py-[3px] md:text-[13px] transition-colors hover:no-underline",
         indent ? "px-4" : "px-2",
         active ? "bg-surface text-heading font-bold" : "text-wiki-link hover:bg-surface-hover"
       )}

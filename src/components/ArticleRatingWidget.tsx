@@ -46,7 +46,7 @@ export default function ArticleRatingWidget({ articleId }: { articleId: string }
             onMouseLeave={() => setHoveredStar(null)}
             disabled={submitting}
             title={`${s} star${s !== 1 ? "s" : ""}`}
-            className="transition-colors disabled:opacity-50"
+            className="transition-colors disabled:opacity-50 p-1 pointer-coarse:p-2.5"
             style={{ lineHeight: 1 }}
           >
             <svg

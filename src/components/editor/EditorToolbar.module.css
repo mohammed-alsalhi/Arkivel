@@ -202,3 +202,14 @@
     margin-left: 0;
   }
 }
+
+/* Touch ergonomics: comfortable toolbar targets on coarse pointers */
+@media (pointer: coarse) {
+  .toolButton,
+  .moreButton,
+  .claimButton {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    font-size: 0.8rem;
+  }
+}
