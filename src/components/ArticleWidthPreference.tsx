@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-type Width = "narrow" | "default" | "wide";
+type Width = "narrow" | "reading" | "default" | "wide";
 const KEY = "wiki_article_width";
 
 const WIDTHS: { value: Width; label: string; style: string }[] = [
-  { value: "narrow", label: "Narrow", style: "max-width:65ch;margin:0 auto;" },
-  { value: "default", label: "Default", style: "" },
-  { value: "wide", label: "Wide", style: "max-width:100%;margin:0;" },
+  { value: "narrow", label: "Narrow (65ch)", style: "max-width:65ch;margin:0 auto;" },
+  { value: "reading", label: "Reading (80ch)", style: "max-width:80ch;margin:0 auto;" },
+  { value: "default", label: "Full width", style: "" },
 ];
 
 export default function ArticleWidthPreference() {

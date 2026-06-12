@@ -321,7 +321,7 @@ export function DropdownLink({ className, ...props }: DropdownLinkProps) {
   return <Link className={clsx("ui-dropdown-item", className)} {...props} />;
 }
 
-type PanelProps = HTMLAttributes<HTMLDivElement> & {
+type PanelProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
   bodyClassName?: string;
   title?: ReactNode;
 };
@@ -335,13 +335,13 @@ export function Panel({ bodyClassName, children, className, title, ...props }: P
   );
 }
 
-type SectionPanelProps = HTMLAttributes<HTMLElement> & {
+type SectionPanelProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   actions?: ReactNode;
   bodyClassName?: string;
   title?: ReactNode;
 };
 
-type SectionProps = HTMLAttributes<HTMLElement> & {
+type SectionProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   actions?: ReactNode;
   title?: ReactNode;
 };
@@ -408,7 +408,7 @@ export function List({ className, density = "default", ...props }: ListProps) {
   );
 }
 
-type FeatureItemProps = HTMLAttributes<HTMLLIElement> & {
+type FeatureItemProps = Omit<HTMLAttributes<HTMLLIElement>, "title"> & {
   title?: ReactNode;
 };
 
@@ -506,7 +506,7 @@ export function CardGrid({ className, ...props }: CardGridProps) {
   return <div className={clsx("ui-card-grid", className)} {...props} />;
 }
 
-type CardProps = HTMLAttributes<HTMLDivElement> & {
+type CardProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
   description?: ReactNode;
   media?: ReactNode;
   meta?: ReactNode;

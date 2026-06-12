@@ -1928,11 +1928,8 @@ p a:hover {
   padding: 1rem 1.25rem 1.25rem;
 }
 
-/* Readable measure for article prose. ArticleWidthPreference overrides this
-   via its injected #wiki-width-pref-style element (narrow 65ch / wide 100%). */
-#article-content {
-  max-width: min(100%, 80ch);
-}
+/* Article prose spans the full shell by default; ArticleWidthPreference
+   injects #wiki-width-pref-style to opt into narrow/reading measures. */
 
 /* Collapsed end-of-article sections (stats, community widgets, …) */
 .article-extras {
