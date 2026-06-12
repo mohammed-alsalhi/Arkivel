@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Button, LinkButton, Page, PageHeader } from "@/components/ui";
 
 type ArticleEntry = {
   id: string;
@@ -108,27 +109,19 @@ export default function ContentSchedulePage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-xl font-semibold text-heading">Content Schedule</h1>
-          <p className="text-[12px] text-muted mt-0.5">
-            Articles with expiry or review dates. Set these in the article editor.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={runArchive}
-            disabled={archiving}
-            className="h-6 px-2 text-[11px] border border-border rounded bg-surface hover:bg-surface-hover disabled:opacity-50"
-          >
-            {archiving ? "Archiving..." : "Run auto-archive"}
-          </button>
-          <Link href="/admin" className="h-6 px-2 text-[11px] border border-border rounded bg-surface hover:bg-surface-hover">
-            ← Admin
-          </Link>
-        </div>
-      </div>
+    <Page>
+      <PageHeader
+        title="Content Schedule"
+        description="Articles with expiry or review dates. Set these in the article editor."
+        actions={
+          <>
+            <Button onClick={runArchive} disabled={archiving}>
+              {archiving ? "Archiving..." : "Run auto-archive"}
+            </Button>
+            <LinkButton href="/admin">← Admin</LinkButton>
+          </>
+        }
+      />
 
       {!data ? (
         <p className="text-[13px] text-muted italic">Loading...</p>
@@ -164,6 +157,6 @@ export default function ContentSchedulePage() {
           />
         </>
       )}
-    </div>
+    </Page>
   );
 }

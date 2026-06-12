@@ -2,6 +2,7 @@ import { isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { Button, EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -43,43 +44,35 @@ export default async function LongArticlesPage({
     .sort((a, b) => b.wc - a.wc);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Long Articles
-      </h1>
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-[13px] text-muted">
-          Published articles with{" "}
-          <strong>{threshold.toLocaleString()}+</strong> words that may benefit from being split into
-          multiple focused articles.{" "}
-          <strong className="ml-1">{long.length}</strong> of {articles.length} articles.
-        </p>
-        <form method="get" className="flex items-center gap-2">
-          <label className="text-[11px] text-muted">Threshold:</label>
-          <input
-            name="threshold"
-            type="number"
-            min={500}
-            step={500}
-            defaultValue={threshold}
-            className="h-6 w-24 px-2 text-[11px] border border-border rounded bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
-          />
-          <button
-            type="submit"
-            className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover transition-colors"
-          >
-            Update
-          </button>
-        </form>
-      </div>
+    <Page>
+      <PageHeader
+        title="Long Articles"
+        description={
+          <>
+            Published articles with{" "}
+            <strong>{threshold.toLocaleString()}+</strong> words that may benefit from being split into
+            multiple focused articles.{" "}
+            <strong className="ml-1">{long.length}</strong> of {articles.length} articles.
+          </>
+        }
+        actions={
+          <form method="get" className="flex items-center gap-2">
+            <label className="text-[11px] text-muted">Threshold:</label>
+            <input
+              name="threshold"
+              type="number"
+              min={500}
+              step={500}
+              defaultValue={threshold}
+              className="h-6 w-24 px-2 text-[11px] border border-border rounded bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+            />
+            <Button type="submit">Update</Button>
+          </form>
+        }
+      />
 
       {long.length === 0 ? (
-        <p className="text-[13px] text-green-600 dark:text-green-400">
-          ✓ No articles exceed {threshold.toLocaleString()} words.
-        </p>
+        <EmptyState title={`✓ No articles exceed ${threshold.toLocaleString()} words.`} />
       ) : (
         <div className="border border-border divide-y divide-border">
           {long.map((a) => (
@@ -104,17 +97,14 @@ export default async function LongArticlesPage({
                 <span className="text-[11px] font-mono text-muted">
                   {a.wc.toLocaleString()} words
                 </span>
-                <Link
-                  href={`/articles/${a.slug}/edit`}
-                  className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover transition-colors"
-                >
+                <LinkButton href={`/articles/${a.slug}/edit`}>
                   Edit
-                </Link>
+                </LinkButton>
               </div>
             </div>
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

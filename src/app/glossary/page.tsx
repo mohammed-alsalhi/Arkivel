@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
+import { EmptyState, Page, PageHeader, Section } from "@/components/ui";
 
 export const metadata: Metadata = { title: "Glossary" };
 export const dynamic = "force-dynamic";
@@ -18,20 +19,15 @@ export default async function GlossaryPage() {
   const letters = Object.keys(groups).sort();
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Glossary
-      </h1>
+    <Page>
+      <PageHeader title="Glossary" />
 
       {terms.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No glossary terms defined yet.</p>
+        <EmptyState title="No glossary terms defined yet." />
       ) : (
         <>
           {/* Letter index */}
-          <div className="flex flex-wrap gap-1 mb-6">
+          <div className="flex flex-wrap gap-1">
             {letters.map((l) => (
               <a
                 key={l}
@@ -44,8 +40,7 @@ export default async function GlossaryPage() {
           </div>
 
           {letters.map((letter) => (
-            <section key={letter} id={`letter-${letter}`} className="mb-6">
-              <h2 className="text-[1rem] font-bold text-heading border-b border-border mb-2">{letter}</h2>
+            <Section key={letter} id={`letter-${letter}`} title={letter}>
               <dl className="space-y-3">
                 {groups[letter].map((t) => (
                   <div key={t.id} className="pl-2">
@@ -61,10 +56,10 @@ export default async function GlossaryPage() {
                   </div>
                 ))}
               </dl>
-            </section>
+            </Section>
           ))}
         </>
       )}
-    </div>
+    </Page>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 interface TILPost {
   id: string;
@@ -68,16 +69,15 @@ export default function TILPage() {
   const allTags = Array.from(new Set(posts.flatMap((p) => p.tags)));
 
   return (
-    <div>
-      <div className="wiki-tabs">
-        <span className="wiki-tab wiki-tab-active">Today I Learned</span>
-      </div>
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-normal text-heading">Today I Learned</h1>
+    <Page>
+      <PageHeader
+        title="Today I Learned"
+        actions={
           <span className="text-xs text-muted">{total} post{total !== 1 ? "s" : ""}</span>
-        </div>
+        }
+      />
 
+      <div>
         {/* New TIL form */}
         <form onSubmit={handleSubmit} className="border border-border rounded p-3 mb-5 bg-canvas">
           <textarea
@@ -98,7 +98,7 @@ export default function TILPage() {
             <button
               type="submit"
               disabled={submitting || !newContent.trim()}
-              className="px-3 py-1 text-xs bg-accent text-white rounded disabled:opacity-50"
+              className="ui-button ui-button-primary"
             >
               Post
             </button>
@@ -127,7 +127,7 @@ export default function TILPage() {
         {loading ? (
           <p className="text-sm text-muted">Loading…</p>
         ) : posts.length === 0 ? (
-          <p className="text-sm text-muted">No posts yet.</p>
+          <EmptyState title="No posts yet." />
         ) : (
           <div className="space-y-3">
             {posts.map((post) => (
@@ -167,6 +167,6 @@ export default function TILPage() {
           </div>
         )}
       </div>
-    </div>
+    </Page>
   );
 }

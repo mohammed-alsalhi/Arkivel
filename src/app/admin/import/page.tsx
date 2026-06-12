@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef } from "react";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 type ImportedArticle = { id: string; title: string; slug: string };
 
@@ -107,13 +108,8 @@ export default function ImportPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Import
-      </h1>
+    <Page>
+      <PageHeader title="Import" />
 
       {/* ── Bulk JSON ───────────────────────────────────────────────────────── */}
       <div className="wiki-portal mb-6">
@@ -129,20 +125,12 @@ export default function ImportPage() {
           </p>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => jsonFileRef.current?.click()}
-              className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-            >
+            <Button onClick={() => jsonFileRef.current?.click()}>
               Load .json file
-            </button>
-            <button
-              type="button"
-              onClick={() => setJsonText(JSON_EXAMPLE)}
-              className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-muted"
-            >
+            </Button>
+            <Button onClick={() => setJsonText(JSON_EXAMPLE)} className="text-muted">
               Load example
-            </button>
+            </Button>
             <input ref={jsonFileRef} type="file" accept=".json" className="hidden" onChange={loadJsonFile} />
           </div>
 
@@ -167,13 +155,9 @@ export default function ImportPage() {
             </div>
           )}
 
-          <button
-            onClick={runJsonImport}
-            disabled={jsonLoading || !jsonText.trim()}
-            className="h-6 px-2 text-[11px] border border-border rounded bg-accent text-white hover:opacity-90 disabled:opacity-50"
-          >
+          <Button variant="primary" onClick={runJsonImport} disabled={jsonLoading || !jsonText.trim()}>
             {jsonLoading ? "Importing…" : "Run JSON import"}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -226,13 +210,9 @@ export default function ImportPage() {
             </p>
           )}
 
-          <button
-            onClick={importConfluence}
-            disabled={confLoading}
-            className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover disabled:opacity-50"
-          >
+          <Button onClick={importConfluence} disabled={confLoading}>
             {confLoading ? "Importing…" : "Import page"}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -242,7 +222,7 @@ export default function ImportPage() {
         <code className="bg-surface-hover px-1 rounded">/api/import/notion</code> (Notion) and{" "}
         <code className="bg-surface-hover px-1 rounded">/api/import/obsidian</code> (Obsidian Markdown vault).
       </div>
-    </div>
+    </Page>
   );
 }
 

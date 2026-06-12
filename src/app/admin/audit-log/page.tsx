@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { Button, EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 type AuditEntry = {
   id: string;
@@ -140,16 +141,12 @@ export default function AuditLogPage() {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-xl font-semibold text-heading">Audit Log</h1>
-          <p className="text-[12px] text-muted mt-0.5">{total} entries total</p>
-        </div>
-        <Link href="/admin" className="h-6 px-2 text-[11px] border border-border rounded bg-surface hover:bg-surface-hover">
-          ← Admin
-        </Link>
-      </div>
+    <Page>
+      <PageHeader
+        title="Audit Log"
+        description={`${total} entries total`}
+        actions={<LinkButton href="/admin">← Admin</LinkButton>}
+      />
 
       {/* Filters */}
       <div className="grid grid-cols-1 gap-2 mb-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
@@ -214,7 +211,7 @@ export default function AuditLogPage() {
             onChange={(e) => resetPage(setDateToFilter)(e.target.value)}
             className="min-w-0 flex-1 border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
           />
-          <Link href={exportHref} className="h-7 px-2 text-[11px] border border-border rounded bg-surface hover:bg-surface-hover whitespace-nowrap">
+          <Link href={exportHref} className="ui-button whitespace-nowrap">
             Export
           </Link>
         </div>
@@ -224,7 +221,7 @@ export default function AuditLogPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading...</p>
       ) : logs.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No entries found.</p>
+        <EmptyState title="No entries found." />
       ) : (
         <div className="border border-border overflow-x-auto">
           <table className="w-full text-[13px]">
@@ -276,23 +273,15 @@ export default function AuditLogPage() {
       {/* Pagination */}
       {pages > 1 && (
         <div className="flex items-center gap-2 mt-4">
-          <button
-            disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="h-6 px-2 text-[11px] border border-border rounded bg-surface hover:bg-surface-hover disabled:opacity-40"
-          >
+          <Button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
             ← Prev
-          </button>
+          </Button>
           <span className="text-[12px] text-muted">Page {page} of {pages}</span>
-          <button
-            disabled={page >= pages}
-            onClick={() => setPage((p) => p + 1)}
-            className="h-6 px-2 text-[11px] border border-border rounded bg-surface hover:bg-surface-hover disabled:opacity-40"
-          >
+          <Button disabled={page >= pages} onClick={() => setPage((p) => p + 1)}>
             Next →
-          </button>
+          </Button>
         </div>
       )}
-    </div>
+    </Page>
   );
 }

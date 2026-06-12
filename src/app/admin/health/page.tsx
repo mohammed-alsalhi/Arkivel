@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSession, isAdmin } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -50,13 +51,8 @@ export default async function WikiHealthPage() {
   ];
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Wiki Health Score
-      </h1>
+    <Page>
+      <PageHeader title="Wiki Health Score" />
 
       <div className="flex items-center gap-6 mb-8">
         <div className="text-center">
@@ -98,6 +94,6 @@ export default async function WikiHealthPage() {
           );
         })}
       </div>
-    </div>
+    </Page>
   );
 }

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSession, isAdmin } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -24,48 +25,41 @@ export default async function SearchGapsPage() {
     .slice(0, 50);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Search Gap Dashboard
-      </h1>
-      <p className="text-sm text-muted mb-4">
-        Queries that returned zero results, sorted by frequency. Use these to prioritise new articles.
-      </p>
+    <Page>
+      <PageHeader
+        title="Search Gap Dashboard"
+        description="Queries that returned zero results, sorted by frequency. Use these to prioritise new articles."
+      />
 
       {rows.length === 0 ? (
-        <p className="text-muted text-sm">No zero-result searches recorded yet.</p>
+        <EmptyState title="No zero-result searches recorded yet." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="border-b border-border bg-surface-hover">
-                <th className="px-3 py-2 text-left font-medium">Query</th>
-                <th className="px-3 py-2 text-left font-medium w-24">Count</th>
-                <th className="px-3 py-2 text-left font-medium w-32">Action</th>
+        <DataTable>
+          <thead>
+            <tr>
+              <th>Query</th>
+              <th className="w-24">Count</th>
+              <th className="w-32">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([query, count]) => (
+              <tr key={query}>
+                <td className="font-mono text-xs">{query}</td>
+                <td className="text-muted">{count}</td>
+                <td>
+                  <Link
+                    href={`/admin?action=new&title=${encodeURIComponent(query)}`}
+                    className="text-xs text-wiki-link hover:underline"
+                  >
+                    Create article
+                  </Link>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {rows.map(([query, count]) => (
-                <tr key={query} className="border-b border-border hover:bg-surface-hover">
-                  <td className="px-3 py-2 font-mono text-xs">{query}</td>
-                  <td className="px-3 py-2 text-muted">{count}</td>
-                  <td className="px-3 py-2">
-                    <Link
-                      href={`/admin?action=new&title=${encodeURIComponent(query)}`}
-                      className="text-xs text-wiki-link hover:underline"
-                    >
-                      Create article
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }

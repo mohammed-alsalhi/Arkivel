@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -32,21 +33,20 @@ export default async function DiscussionsIndexPage({ searchParams }: Props) {
   });
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        All Discussions
-      </h1>
-      <p className="text-[13px] text-muted mb-5">
-        Open threads across all articles.{" "}
-        {articleFilter && <span>Filtered by article: <strong>{articleFilter}</strong>. </span>}
-        {authorFilter && <span>Filtered by author: <strong>{authorFilter}</strong>.</span>}
-      </p>
+    <Page>
+      <PageHeader
+        title="All Discussions"
+        description={
+          <>
+            Open threads across all articles.{" "}
+            {articleFilter && <span>Filtered by article: <strong>{articleFilter}</strong>. </span>}
+            {authorFilter && <span>Filtered by author: <strong>{authorFilter}</strong>.</span>}
+          </>
+        }
+      />
 
       {discussions.length === 0 ? (
-        <p className="text-muted italic">No discussions found.</p>
+        <EmptyState title="No discussions found." />
       ) : (
         <ul className="space-y-3">
           {discussions.map((d) => (
@@ -77,6 +77,6 @@ export default async function DiscussionsIndexPage({ searchParams }: Props) {
           ))}
         </ul>
       )}
-    </div>
+    </Page>
   );
 }

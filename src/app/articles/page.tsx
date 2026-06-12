@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAdmin } from "@/components/AdminContext";
 import ArticleStatusBadge from "@/components/ArticleStatusBadge";
+import { DataTable, EmptyState, LinkButton, Page, PageHeader, SectionPanel } from "@/components/ui";
 
 export default function ArticlesPageWrapper() {
   return (
@@ -204,27 +205,27 @@ function ArticlesPageContent() {
   }
 
   return (
-    <div>
-      <header className="ui-page-header">
-        <div>
-          <p className="ui-page-kicker">Browse</p>
-          <h1 className="ui-page-title">All articles</h1>
-          <p className="ui-page-dek">
+    <Page>
+      <PageHeader
+        kicker="Browse"
+        title="All articles"
+        description={
+          <>
             {total} article{total !== 1 ? "s" : ""} in the encyclopedia
             {category && <> - filtered by category</>}
             {tag && <> - filtered by tag</>}
-          </p>
-        </div>
-        <div className="ui-page-actions">
-          <Link href="/articles/new" className="ui-button ui-button-primary">Create article</Link>
-          <Link href="/recent-changes" className="ui-button">Recent changes</Link>
-        </div>
-      </header>
+          </>
+        }
+        actions={
+          <>
+            <LinkButton href="/articles/new" variant="primary">Create article</LinkButton>
+            <LinkButton href="/recent-changes">Recent changes</LinkButton>
+          </>
+        }
+      />
 
       {/* Filters */}
-      <div className="wiki-portal mb-3">
-        <div className="wiki-portal-header">Browse filters</div>
-        <div className="wiki-portal-body space-y-3">
+      <SectionPanel title="Browse filters" bodyClassName="space-y-3">
           <div>
             <p className="ui-label">Category</p>
             <div className="flex flex-wrap gap-1.5">
@@ -262,19 +263,17 @@ function ArticlesPageContent() {
               </div>
             </div>
           )}
-        </div>
-      </div>
+      </SectionPanel>
 
       {/* Article list */}
       {loading ? (
         <div className="py-8 text-center text-muted italic text-[13px]">Loading...</div>
       ) : articles.length === 0 ? (
-        <div className="ui-empty-state">
+        <EmptyState>
           No articles found. <Link href="/articles/new">Create one.</Link>
-        </div>
+        </EmptyState>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="ui-table">
+        <DataTable>
             <thead>
               <tr>
                 {isAdmin && (
@@ -331,8 +330,7 @@ function ArticlesPageContent() {
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
+        </DataTable>
       )}
 
       {/* Batch action bar */}
@@ -413,6 +411,6 @@ function ArticlesPageContent() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

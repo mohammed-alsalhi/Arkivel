@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { isAdmin } from "@/lib/auth";
+import { Page, PageHeader, Section, StatCard, StatGrid } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -55,29 +56,23 @@ export default async function ArticleAnalyticsPage({ params }: Props) {
         <span className="article-tab article-tab-active">Analytics</span>
       </nav>
 
-      <div className="border border-border bg-surface px-5 py-4">
-        <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4" style={{ fontFamily: "var(--font-serif)" }}>
-          Analytics: {article.title}
-        </h1>
+      <Page className="border border-border bg-surface px-5 py-4">
+        <PageHeader title={<>Analytics: {article.title}</>} />
 
         {/* Summary cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <StatGrid>
           {[
             { label: "Views (30d)", value: totalViews.toLocaleString() },
             { label: "Total reads", value: readCount.toLocaleString() },
             { label: "Reactions", value: reactionCount.toLocaleString() },
             { label: "Revisions", value: revisionCount.toLocaleString() },
           ].map((stat) => (
-            <div key={stat.label} className="border border-border bg-surface p-3 text-center">
-              <div className="text-[1.4rem] font-semibold text-heading">{stat.value}</div>
-              <div className="text-[11px] text-muted">{stat.label}</div>
-            </div>
+            <StatCard key={stat.label} label={stat.label} value={stat.value} />
           ))}
-        </div>
+        </StatGrid>
 
         {/* 30-day views bar chart */}
-        <div className="border border-border bg-surface p-4 mb-4">
-          <p className="text-[12px] font-bold text-heading mb-3">Page views — last 30 days</p>
+        <Section title="Page views — last 30 days">
           <div className="flex items-end gap-0.5 h-24">
             {days.map((day) => {
               const pct = (day.count / maxViews) * 100;
@@ -96,8 +91,8 @@ export default async function ArticleAnalyticsPage({ params }: Props) {
             <span>{days[0]?.date}</span>
             <span>{days[days.length - 1]?.date}</span>
           </div>
-        </div>
-      </div>
+        </Section>
+      </Page>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { DataTable, Page, PageHeader, StatCard, StatGrid } from "@/components/ui";
 
 type Row = {
   id: string;
@@ -67,7 +68,7 @@ export default function CategoryStatsPage() {
   function Th({ label, k }: { label: string; k: SortKey }) {
     return (
       <th
-        className="pb-1 pr-3 cursor-pointer hover:text-foreground select-none"
+        className="cursor-pointer hover:text-foreground select-none"
         onClick={() => toggleSort(k)}
       >
         {label}{sort === k ? (dir === "asc" ? " ↑" : " ↓") : ""}
@@ -76,52 +77,42 @@ export default function CategoryStatsPage() {
   }
 
   return (
-    <div>
-      <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4" style={{ fontFamily: "var(--font-serif)" }}>
-        Category Statistics
-      </h1>
+    <Page>
+      <PageHeader title="Category Statistics" />
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="wiki-portal">
-          <div className="wiki-portal-header">Total articles</div>
-          <div className="wiki-portal-body text-2xl font-bold text-heading">{fmt(totalArticles)}</div>
-        </div>
-        <div className="wiki-portal">
-          <div className="wiki-portal-header">Total words</div>
-          <div className="wiki-portal-body text-2xl font-bold text-heading">{fmt(totalWords)}</div>
-        </div>
-      </div>
+      <StatGrid>
+        <StatCard label="Total articles" value={fmt(totalArticles)} />
+        <StatCard label="Total words" value={fmt(totalWords)} />
+      </StatGrid>
 
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-[13px] border-collapse">
-            <thead>
-              <tr className="text-[11px] text-muted text-left border-b border-border">
-                <Th label="Category" k="name" />
-                <Th label="Articles" k="articleCount" />
-                <Th label="Total words" k="totalWords" />
-                <Th label="Avg words" k="avgWords" />
-                <Th label="Last edit" k="lastEdit" />
+        <DataTable>
+          <thead>
+            <tr>
+              <Th label="Category" k="name" />
+              <Th label="Articles" k="articleCount" />
+              <Th label="Total words" k="totalWords" />
+              <Th label="Avg words" k="avgWords" />
+              <Th label="Last edit" k="lastEdit" />
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map((r) => (
+              <tr key={r.id}>
+                <td className="font-medium">
+                  <Link href={`/categories/${r.slug}`} className="wiki-link hover:underline">{r.name}</Link>
+                </td>
+                <td>{r.articleCount}</td>
+                <td>{fmt(r.totalWords)}</td>
+                <td>{fmt(r.avgWords)}</td>
+                <td className="text-muted">{relDate(r.lastEdit)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {sorted.map((r) => (
-                <tr key={r.id} className="border-t border-border-light hover:bg-surface-hover">
-                  <td className="py-1.5 pr-3 font-medium">
-                    <Link href={`/categories/${r.slug}`} className="wiki-link hover:underline">{r.name}</Link>
-                  </td>
-                  <td className="py-1.5 pr-3">{r.articleCount}</td>
-                  <td className="py-1.5 pr-3">{fmt(r.totalWords)}</td>
-                  <td className="py-1.5 pr-3">{fmt(r.avgWords)}</td>
-                  <td className="py-1.5 pr-3 text-muted">{relDate(r.lastEdit)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }

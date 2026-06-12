@@ -2,6 +2,7 @@ import { isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -71,16 +72,11 @@ export default async function TagTrendsPage() {
   });
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Tag Usage Trends
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        New published articles per tag per month, last 12 months. Top 30 tags by total article count.
-      </p>
+    <Page>
+      <PageHeader
+        title="Tag Usage Trends"
+        description="New published articles per tag per month, last 12 months. Top 30 tags by total article count."
+      />
 
       <div className="overflow-x-auto">
         <table className="w-full text-[11px] border-collapse">
@@ -127,6 +123,6 @@ export default async function TagTrendsPage() {
           </tbody>
         </table>
       </div>
-    </div>
+    </Page>
   );
 }

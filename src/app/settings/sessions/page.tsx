@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type SessionInfo = {
   id: string;
@@ -53,12 +54,14 @@ export default function SessionsPage() {
   if (loading) return <p className="text-[13px] text-muted p-4">Loading…</p>;
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl font-semibold text-heading mb-1">Active Sessions</h1>
-      <p className="text-[13px] text-muted mb-4">These are devices currently logged in to your account. Revoke sessions you don&apos;t recognise.</p>
+    <Page width="narrow">
+      <PageHeader
+        title="Active Sessions"
+        description="These are devices currently logged in to your account. Revoke sessions you don't recognise."
+      />
 
       {sessions.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No active sessions found.</p>
+        <EmptyState title="No active sessions found." />
       ) : (
         <div className="space-y-2">
           {sessions.map((s, i) => (
@@ -78,28 +81,25 @@ export default function SessionsPage() {
                 </div>
               </div>
               {i !== 0 && (
-                <button
+                <Button
                   onClick={() => revoke(s.id)}
                   disabled={revoking === s.id}
-                  className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-red-500 hover:border-red-300 transition-colors flex-shrink-0"
+                  className="flex-shrink-0"
                 >
                   {revoking === s.id ? "Revoking…" : "Revoke"}
-                </button>
+                </Button>
               )}
             </div>
           ))}
 
           {sessions.length > 1 && (
-            <button
-              onClick={revokeAll}
-              className="h-6 px-2 text-[11px] border border-red-300 rounded text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 mt-2"
-            >
+            <Button variant="danger" onClick={revokeAll} className="mt-2">
               Revoke all other sessions
-            </button>
+            </Button>
           )}
         </div>
       )}
-    </div>
+    </Page>
   );
 }
 

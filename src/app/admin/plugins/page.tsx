@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 interface PluginManifest {
   id: string;
@@ -102,13 +103,8 @@ export default function PluginsPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Plugins
-      </h1>
+    <Page>
+      <PageHeader title="Plugins" />
 
       <div className="wiki-notice mb-4">
         Trusted local plugins are disabled unless{" "}
@@ -136,15 +132,18 @@ export default function PluginsPage() {
       </div>
 
       {plugins.length === 0 ? (
-        <div className="border border-border p-6 text-center">
-          <p className="text-[13px] text-muted">
-            No valid plugins discovered yet. Plugins can be registered in{" "}
-            <code className="bg-background px-1 py-0.5 text-[12px]">
-              src/lib/plugins/registry.ts
-            </code>{" "}
-            or declared with a trusted local <code className="bg-background px-1 py-0.5 text-[12px]">plugin.json</code>.
-          </p>
-        </div>
+        <EmptyState
+          title="No valid plugins discovered yet."
+          description={
+            <>
+              Plugins can be registered in{" "}
+              <code className="bg-background px-1 py-0.5 text-[12px]">
+                src/lib/plugins/registry.ts
+              </code>{" "}
+              or declared with a trusted local <code className="bg-background px-1 py-0.5 text-[12px]">plugin.json</code>.
+            </>
+          }
+        />
       ) : (
         <div className="space-y-2">
           {plugins.map((plugin) => (
@@ -225,20 +224,16 @@ export default function PluginsPage() {
                 )}
               </div>
 
-              <button
+              <Button
                 onClick={() => handleToggle(plugin.id, !plugin.enabled)}
-                className={`px-3 py-1 text-[12px] font-bold transition-colors ${
-                  plugin.enabled
-                    ? "border border-border text-foreground hover:bg-surface-hover"
-                    : "bg-accent text-white hover:bg-accent-hover"
-                }`}
+                variant={plugin.enabled ? "default" : "primary"}
               >
                 {plugin.enabled ? "Disable" : "Enable"}
-              </button>
+              </Button>
             </div>
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

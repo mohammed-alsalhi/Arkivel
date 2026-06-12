@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { DataTable, EmptyState, Page, PageHeader, Section } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -27,78 +28,63 @@ export default async function ContentGapsPage() {
   });
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Content gap analysis
-      </h1>
-      <p className="text-[13px] text-muted mb-6">
-        Search queries that returned zero or very few results — these represent gaps in your wiki&apos;s coverage.
-      </p>
+    <Page>
+      <PageHeader
+        title="Content gap analysis"
+        description={
+          <>Search queries that returned zero or very few results — these represent gaps in your wiki&apos;s coverage.</>
+        }
+      />
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Zero results */}
-        <div>
-          <h2 className="text-[14px] font-semibold text-heading mb-2">
-            Zero-result searches
-            <span className="ml-2 text-[11px] text-muted font-normal">({zeroResultSearches.length} unique queries)</span>
-          </h2>
+        <Section title={`Zero-result searches (${zeroResultSearches.length} unique queries)`}>
           {zeroResultSearches.length === 0 ? (
-            <p className="text-[13px] text-muted italic">No zero-result searches recorded.</p>
+            <EmptyState title="No zero-result searches recorded." />
           ) : (
-            <div className="border border-border rounded overflow-hidden overflow-x-auto">
-              <table className="w-full text-[12px]">
-                <thead>
-                  <tr className="bg-surface border-b border-border">
-                    <th className="text-left px-3 py-1.5 text-muted font-medium">Query</th>
-                    <th className="text-right px-3 py-1.5 text-muted font-medium">Searches</th>
+            <DataTable>
+              <thead>
+                <tr>
+                  <th>Query</th>
+                  <th className="text-right">Searches</th>
+                </tr>
+              </thead>
+              <tbody>
+                {zeroResultSearches.map((row, i) => (
+                  <tr key={i}>
+                    <td className="text-foreground">{row.query}</td>
+                    <td className="text-right text-muted">{row._count.query}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {zeroResultSearches.map((row, i) => (
-                    <tr key={i} className={i % 2 === 0 ? "" : "bg-surface"}>
-                      <td className="px-3 py-1.5 text-foreground">{row.query}</td>
-                      <td className="px-3 py-1.5 text-right text-muted">{row._count.query}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </DataTable>
           )}
-        </div>
+        </Section>
 
         {/* Low results */}
-        <div>
-          <h2 className="text-[14px] font-semibold text-heading mb-2">
-            Low-result searches (1–3)
-            <span className="ml-2 text-[11px] text-muted font-normal">({lowResultSearches.length} unique queries)</span>
-          </h2>
+        <Section title={`Low-result searches (1–3) (${lowResultSearches.length} unique queries)`}>
           {lowResultSearches.length === 0 ? (
-            <p className="text-[13px] text-muted italic">No low-result searches recorded.</p>
+            <EmptyState title="No low-result searches recorded." />
           ) : (
-            <div className="border border-border rounded overflow-hidden overflow-x-auto">
-              <table className="w-full text-[12px]">
-                <thead>
-                  <tr className="bg-surface border-b border-border">
-                    <th className="text-left px-3 py-1.5 text-muted font-medium">Query</th>
-                    <th className="text-right px-3 py-1.5 text-muted font-medium">Searches</th>
+            <DataTable>
+              <thead>
+                <tr>
+                  <th>Query</th>
+                  <th className="text-right">Searches</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lowResultSearches.map((row, i) => (
+                  <tr key={i}>
+                    <td className="text-foreground">{row.query}</td>
+                    <td className="text-right text-muted">{row._count.query}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {lowResultSearches.map((row, i) => (
-                    <tr key={i} className={i % 2 === 0 ? "" : "bg-surface"}>
-                      <td className="px-3 py-1.5 text-foreground">{row.query}</td>
-                      <td className="px-3 py-1.5 text-right text-muted">{row._count.query}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </DataTable>
           )}
-        </div>
+        </Section>
       </div>
-    </div>
+    </Page>
   );
 }

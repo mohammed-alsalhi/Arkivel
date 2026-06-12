@@ -2,6 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import CategoryManager from "@/components/CategoryManager";
 import TagManager from "@/components/TagManager";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 async function getCategoryTree() {
   try {
@@ -33,26 +34,28 @@ export default async function CategoriesPage() {
   const articleCount = countCategoryArticles(categories);
 
   return (
-    <div>
-      <header className="ui-page-header">
-        <div>
-          <p className="ui-page-kicker">Browse</p>
-          <h1 className="ui-page-title">Categories</h1>
-          <p className="ui-page-dek">
+    <Page>
+      <PageHeader
+        kicker="Browse"
+        title="Categories"
+        description={
+          <>
             {categoryCount.toLocaleString()} categor{categoryCount === 1 ? "y" : "ies"} organizing {articleCount.toLocaleString()} article{articleCount !== 1 ? "s" : ""}.
             Select a category to browse its articles.
-          </p>
-        </div>
-        <div className="ui-page-actions">
-          <Link href="/articles" className="ui-button">Article index</Link>
-          <Link href="/tags" className="ui-button">Tags</Link>
-        </div>
-      </header>
+          </>
+        }
+        actions={
+          <>
+            <LinkButton href="/articles">Article index</LinkButton>
+            <LinkButton href="/tags">Tags</LinkButton>
+          </>
+        }
+      />
 
       {categories.length === 0 ? (
-        <div className="wiki-notice">No categories have been created yet.</div>
+        <EmptyState title="No categories have been created yet." />
       ) : (
-        <div className="category-tree mb-6">
+        <div className="category-tree">
           {categories.map((cat) => (
             <CategoryTreeRow key={cat.id} category={cat} depth={0} />
           ))}
@@ -64,7 +67,7 @@ export default async function CategoriesPage() {
 
       {/* Admin-only tag management */}
       <TagManager />
-    </div>
+    </Page>
   );
 }
 

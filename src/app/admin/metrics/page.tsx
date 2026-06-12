@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Page, PageHeader, Section, StatCard, StatGrid } from "@/components/ui";
 
 interface MetricsSummary {
   totalArticles: number;
@@ -66,29 +67,23 @@ export default function MetricsPage() {
   const maxMonthCount = Math.max(...metrics.articlesByMonth.map((m) => m.count), 1);
 
   return (
-    <div>
-      <h1
-        className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Wiki Metrics
-      </h1>
-
-      <p className="text-[11px] text-muted mb-4">
-        Last updated: {new Date(metrics.timestamp).toLocaleString()}
-      </p>
+    <Page>
+      <PageHeader
+        title="Wiki Metrics"
+        description={<>Last updated: {new Date(metrics.timestamp).toLocaleString()}</>}
+      />
 
       {/* Summary cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <StatCard label="Total Articles" value={metrics.totalArticles} />
-        <StatCard label="Published" value={metrics.publishedArticles} />
-        <StatCard label="Drafts" value={metrics.draftArticles} />
-        <StatCard label="Categories" value={metrics.totalCategories} />
-        <StatCard label="Tags" value={metrics.totalTags} />
-        <StatCard label="Revisions" value={metrics.totalRevisions} />
-        <StatCard label="Discussions" value={metrics.totalDiscussions} />
-        <StatCard label="Edits (24h)" value={metrics.recentEdits24h} highlight />
-      </div>
+      <StatGrid>
+        <StatCard label="Total Articles" value={metrics.totalArticles.toLocaleString()} />
+        <StatCard label="Published" value={metrics.publishedArticles.toLocaleString()} />
+        <StatCard label="Drafts" value={metrics.draftArticles.toLocaleString()} />
+        <StatCard label="Categories" value={metrics.totalCategories.toLocaleString()} />
+        <StatCard label="Tags" value={metrics.totalTags.toLocaleString()} />
+        <StatCard label="Revisions" value={metrics.totalRevisions.toLocaleString()} />
+        <StatCard label="Discussions" value={metrics.totalDiscussions.toLocaleString()} />
+        <StatCard label="Edits (24h)" value={metrics.recentEdits24h.toLocaleString()} />
+      </StatGrid>
 
       {/* Recent activity */}
       <div className="wiki-notice mb-4">
@@ -97,13 +92,8 @@ export default function MetricsPage() {
       </div>
 
       {/* Top categories bar chart */}
-      <div className="border border-border mb-6">
-        <div className="bg-infobox-header px-3 py-1.5">
-          <h3 className="text-[12px] font-bold text-foreground uppercaser">
-            Top Categories by Article Count
-          </h3>
-        </div>
-        <div className="p-3 space-y-2">
+      <Section title="Top Categories by Article Count">
+        <div className="space-y-2">
           {metrics.topCategories.length === 0 && (
             <p className="text-[12px] text-muted italic">No categories yet.</p>
           )}
@@ -127,17 +117,12 @@ export default function MetricsPage() {
             </div>
           ))}
         </div>
-      </div>
+      </Section>
 
       {/* Articles by month chart */}
       {metrics.articlesByMonth.length > 0 && (
-        <div className="border border-border mb-6">
-          <div className="bg-infobox-header px-3 py-1.5">
-            <h3 className="text-[12px] font-bold text-foreground uppercaser">
-              Articles Created by Month
-            </h3>
-          </div>
-          <div className="p-3 space-y-2">
+        <Section title="Articles Created by Month">
+          <div className="space-y-2">
             {metrics.articlesByMonth.map((m) => (
               <div key={m.month} className="flex items-center gap-2">
                 <span className="w-20 text-[12px] text-foreground flex-shrink-0">
@@ -158,31 +143,8 @@ export default function MetricsPage() {
               </div>
             ))}
           </div>
-        </div>
+        </Section>
       )}
-    </div>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  highlight,
-}: {
-  label: string;
-  value: number;
-  highlight?: boolean;
-}) {
-  return (
-    <div className="border border-border bg-surface p-3 text-center">
-      <div
-        className={`text-xl font-bold ${
-          highlight ? "text-accent" : "text-heading"
-        }`}
-      >
-        {value.toLocaleString()}
-      </div>
-      <div className="text-[11px] text-muted mt-0.5">{label}</div>
-    </div>
+    </Page>
   );
 }

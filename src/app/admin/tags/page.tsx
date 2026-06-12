@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -77,13 +78,8 @@ export default function AdminTagsPage() {
   );
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Tag management
-      </h1>
+    <Page>
+      <PageHeader title="Tag management" />
 
       <div className="mb-4 flex items-center gap-2">
         <input
@@ -98,7 +94,7 @@ export default function AdminTagsPage() {
       {loading ? (
         <p className="text-muted text-[13px]">Loading…</p>
       ) : filtered.length === 0 ? (
-        <p className="text-muted text-[13px] italic">No tags found.</p>
+        <EmptyState title="No tags found." />
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-[13px] border-collapse">
@@ -148,19 +144,10 @@ export default function AdminTagsPage() {
                       <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
                       <td className="py-1.5">
                         <div className="flex items-center gap-1">
-                          <button
-                            onClick={saveEdit}
-                            disabled={saving}
-                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors disabled:opacity-40"
-                          >
+                          <Button onClick={saveEdit} disabled={saving}>
                             Save
-                          </button>
-                          <button
-                            onClick={cancelEdit}
-                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
-                          >
-                            Cancel
-                          </button>
+                          </Button>
+                          <Button onClick={cancelEdit}>Cancel</Button>
                         </div>
                       </td>
                     </>
@@ -182,18 +169,10 @@ export default function AdminTagsPage() {
                       <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
                       <td className="py-1.5">
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button
-                            onClick={() => startEdit(tag)}
-                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
-                          >
-                            Rename
-                          </button>
-                          <button
-                            onClick={() => deleteTag(tag)}
-                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-red-500 hover:bg-surface-hover transition-colors"
-                          >
+                          <Button onClick={() => startEdit(tag)}>Rename</Button>
+                          <Button variant="danger" onClick={() => deleteTag(tag)}>
                             Delete
-                          </button>
+                          </Button>
                         </div>
                       </td>
                     </>
@@ -204,6 +183,6 @@ export default function AdminTagsPage() {
           </table>
         </div>
       )}
-    </div>
+    </Page>
   );
 }

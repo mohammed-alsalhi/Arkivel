@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button, DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Term = { id: string; term: string; definition: string; aliases: string[] };
 
@@ -53,10 +54,8 @@ export default function AdminGlossaryPage() {
   }
 
   return (
-    <div>
-      <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4" style={{ fontFamily: "var(--font-serif)" }}>
-        Glossary Management
-      </h1>
+    <Page>
+      <PageHeader title="Glossary Management" />
 
       <form onSubmit={handleSave} className="wiki-portal mb-6">
         <div className="wiki-portal-header">{editId ? "Edit term" : "New term"}</div>
@@ -79,15 +78,13 @@ export default function AdminGlossaryPage() {
               className="w-full border border-border bg-background px-2 py-1.5 text-[13px] text-foreground focus:border-accent focus:outline-none resize-none" />
           </div>
           <div className="flex gap-2">
-            <button type="submit" disabled={saving}
-              className="h-6 px-3 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent-hover disabled:opacity-40">
+            <Button type="submit" variant="primary" disabled={saving}>
               {saving ? "Saving…" : editId ? "Update" : "Add term"}
-            </button>
+            </Button>
             {editId && (
-              <button type="button" onClick={() => { setEditId(null); setTerm(""); setDefinition(""); setAliases(""); }}
-                className="h-6 px-3 text-[11px] border border-border rounded hover:bg-surface-hover">
+              <Button onClick={() => { setEditId(null); setTerm(""); setDefinition(""); setAliases(""); }}>
                 Cancel
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -96,34 +93,32 @@ export default function AdminGlossaryPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : terms.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No terms yet.</p>
+        <EmptyState title="No terms yet." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-[13px] border-collapse">
-            <thead>
-              <tr className="text-[11px] text-muted text-left border-b border-border">
-                <th className="pb-1 pr-3">Term</th>
-                <th className="pb-1 pr-3">Aliases</th>
-                <th className="pb-1 pr-3">Definition</th>
-                <th className="pb-1" />
+        <DataTable>
+          <thead>
+            <tr>
+              <th>Term</th>
+              <th>Aliases</th>
+              <th>Definition</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {terms.map((t) => (
+              <tr key={t.id}>
+                <td className="font-medium">{t.term}</td>
+                <td className="text-muted text-[12px]">{t.aliases.join(", ") || "—"}</td>
+                <td className="max-w-xs line-clamp-2">{t.definition}</td>
+                <td className="text-right space-x-1">
+                  <Button onClick={() => startEdit(t)}>Edit</Button>
+                  <Button onClick={() => handleDelete(t.id)}>Delete</Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {terms.map((t) => (
-                <tr key={t.id} className="border-t border-border-light hover:bg-surface-hover">
-                  <td className="py-1.5 pr-3 font-medium">{t.term}</td>
-                  <td className="py-1.5 pr-3 text-muted text-[12px]">{t.aliases.join(", ") || "—"}</td>
-                  <td className="py-1.5 pr-3 max-w-xs line-clamp-2">{t.definition}</td>
-                  <td className="py-1.5 text-right space-x-1">
-                    <button onClick={() => startEdit(t)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">Edit</button>
-                    <button onClick={() => handleDelete(t.id)} className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover">Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }

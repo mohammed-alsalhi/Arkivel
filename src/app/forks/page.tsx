@@ -2,6 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession, isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export default async function ForksPage() {
   const user = await getSession();
@@ -17,17 +18,15 @@ export default async function ForksPage() {
   });
 
   return (
-    <div>
-      <div className="wiki-tabs">
-        <Link href="/admin" className="wiki-tab">Admin</Link>
-        <span className="wiki-tab wiki-tab-active">Proposed Forks</span>
-      </div>
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
-        <h1 className="text-xl font-normal text-heading mb-4">Proposed Article Forks</h1>
+    <Page>
+      <PageHeader
+        title="Proposed Article Forks"
+        actions={<LinkButton href="/admin">Admin</LinkButton>}
+      />
 
-        {forks.length === 0 ? (
-          <p className="text-sm text-muted">No proposed forks awaiting review.</p>
-        ) : (
+      {forks.length === 0 ? (
+        <EmptyState title="No proposed forks awaiting review." />
+      ) : (
           <div className="space-y-3">
             {forks.map((fork) => (
               <div key={fork.id} className="border border-border rounded p-3">
@@ -81,8 +80,7 @@ export default async function ForksPage() {
             ))}
           </div>
         )}
-      </div>
-    </div>
+    </Page>
   );
 }
 

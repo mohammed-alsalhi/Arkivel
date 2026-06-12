@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Peer = {
   id: string;
@@ -76,22 +77,18 @@ export default function FederatedPeersPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Federated search peers
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Configure external wiki instances to include in federated search results. Peer wikis must expose the public{" "}
-        <code className="bg-surface-hover px-1 rounded text-[12px]">/api/v1/articles</code> endpoint.
-        Results appear in the search page under &ldquo;Results from other wikis&rdquo;.
-      </p>
-
-      <button onClick={startCreate} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover mb-4">
-        + Add peer
-      </button>
+    <Page>
+      <PageHeader
+        title="Federated search peers"
+        description={
+          <>
+            Configure external wiki instances to include in federated search results. Peer wikis must expose the public{" "}
+            <code className="bg-surface-hover px-1 rounded text-[12px]">/api/v1/articles</code> endpoint.
+            Results appear in the search page under &ldquo;Results from other wikis&rdquo;.
+          </>
+        }
+        actions={<Button onClick={startCreate}>+ Add peer</Button>}
+      />
 
       {(creating || editing) && (
         <div className="wiki-portal mb-4">
@@ -118,12 +115,12 @@ export default function FederatedPeersPage() {
             </label>
             {error && <p className="text-[12px] text-red-600">{error}</p>}
             <div className="flex gap-2">
-              <button onClick={save} disabled={saving} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover disabled:opacity-50">
+              <Button variant="primary" onClick={save} disabled={saving}>
                 {saving ? "Saving…" : "Save"}
-              </button>
-              <button onClick={() => { setEditing(null); setCreating(false); }} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">
+              </Button>
+              <Button onClick={() => { setEditing(null); setCreating(false); }}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -132,7 +129,7 @@ export default function FederatedPeersPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : peers.length === 0 ? (
-        <div className="wiki-notice">No federated peers configured yet.</div>
+        <EmptyState title="No federated peers configured yet." />
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-border bg-surface text-[13px]">
@@ -157,8 +154,8 @@ export default function FederatedPeersPage() {
                   </td>
                   <td className="border border-border px-3 py-1.5">
                     <span className="flex gap-1">
-                      <button onClick={() => startEdit(p)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">Edit</button>
-                      <button onClick={() => deletePeer(p.id)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-red-600">Del</button>
+                      <Button onClick={() => startEdit(p)}>Edit</Button>
+                      <Button onClick={() => deletePeer(p.id)} className="text-red-600">Del</Button>
                     </span>
                   </td>
                 </tr>
@@ -167,7 +164,7 @@ export default function FederatedPeersPage() {
           </table>
         </div>
       )}
-    </div>
+    </Page>
   );
 }
 

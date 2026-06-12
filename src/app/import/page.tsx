@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/components/AdminContext";
+import { Page, PageHeader } from "@/components/ui";
 
 type ImportResult = {
   filename: string;
@@ -48,18 +49,13 @@ export default function ImportPage() {
 
   if (!isAdmin) {
     return (
-      <div>
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Import Articles
-        </h1>
+      <Page>
+        <PageHeader title="Import Articles" />
         <div className="wiki-notice">
           You must be{" "}
           <Link href="/admin">logged in as admin</Link> to import articles.
         </div>
-      </div>
+      </Page>
     );
   }
 
@@ -207,13 +203,8 @@ export default function ImportPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Import Articles
-      </h1>
+    <Page>
+      <PageHeader title="Import Articles" />
 
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Upload Files</div>
@@ -290,13 +281,13 @@ export default function ImportPage() {
                 <button
                   onClick={handleImport}
                   disabled={importing}
-                  className="border border-border bg-surface-hover px-4 py-1.5 text-[13px] font-medium hover:bg-surface transition-colors disabled:opacity-50"
+                  className="ui-button ui-button-primary"
                 >
                   {importing ? "Importing..." : `Import ${files.length} file${files.length !== 1 ? "s" : ""}`}
                 </button>
                 <button
                   onClick={() => setFiles([])}
-                  className="border border-border px-4 py-1.5 text-[13px] text-muted hover:text-foreground transition-colors"
+                  className="ui-button"
                 >
                   Clear
                 </button>
@@ -374,7 +365,7 @@ export default function ImportPage() {
             <button
               onClick={handleUrlImport}
               disabled={urlImporting || !urlInput.trim()}
-              className="px-4 py-1.5 text-[13px] bg-accent text-white hover:bg-accent-hover disabled:opacity-50 transition-colors"
+              className="ui-button ui-button-primary"
             >
               {urlImporting ? "Fetching…" : "Import"}
             </button>
@@ -407,13 +398,13 @@ export default function ImportPage() {
               <div className="flex gap-2">
                 <button
                   onClick={handleCreateFromUrl}
-                  className="bg-accent text-white px-4 py-1.5 text-[13px] font-medium hover:bg-accent-hover transition-colors"
+                  className="ui-button ui-button-primary"
                 >
                   Open in editor
                 </button>
                 <button
                   onClick={() => { setUrlResult(null); setUrlInput(""); }}
-                  className="px-4 py-1.5 text-[13px] border border-border hover:bg-surface-hover transition-colors"
+                  className="ui-button"
                 >
                   Clear
                 </button>
@@ -443,7 +434,7 @@ export default function ImportPage() {
             <button
               onClick={handleYouTubeImport}
               disabled={ytImporting || !ytUrl.trim()}
-              className="px-4 py-1.5 text-[13px] bg-accent text-white hover:bg-accent-hover disabled:opacity-50 transition-colors flex items-center gap-1.5"
+              className="ui-button ui-button-primary"
             >
               {ytImporting ? (
                 <>
@@ -478,10 +469,10 @@ export default function ImportPage() {
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={handleCreateFromYouTube} className="bg-accent text-white px-4 py-1.5 text-[13px] font-medium hover:bg-accent-hover transition-colors">
+                <button onClick={handleCreateFromYouTube} className="ui-button ui-button-primary">
                   Open in editor
                 </button>
-                <button onClick={() => { setYtResult(null); setYtUrl(""); }} className="px-4 py-1.5 text-[13px] border border-border hover:bg-surface-hover transition-colors">
+                <button onClick={() => { setYtResult(null); setYtUrl(""); }} className="ui-button">
                   Clear
                 </button>
               </div>
@@ -550,7 +541,7 @@ export default function ImportPage() {
             <button
               onClick={handleImageImport}
               disabled={imageImporting}
-              className="px-4 py-1.5 text-[13px] bg-accent text-white hover:bg-accent-hover disabled:opacity-50 transition-colors"
+              className="ui-button ui-button-primary"
             >
               {imageImporting ? (
                 <span className="flex items-center gap-2">
@@ -580,13 +571,13 @@ export default function ImportPage() {
               <div className="flex gap-2">
                 <button
                   onClick={handleCreateFromImage}
-                  className="bg-accent text-white px-4 py-1.5 text-[13px] font-medium hover:bg-accent-hover transition-colors"
+                  className="ui-button ui-button-primary"
                 >
                   Open in editor
                 </button>
                 <button
                   onClick={() => { setImageResult(null); setImageFile(null); }}
-                  className="px-4 py-1.5 text-[13px] border border-border hover:bg-surface-hover transition-colors"
+                  className="ui-button"
                 >
                   Clear
                 </button>
@@ -663,6 +654,6 @@ export default function ImportPage() {
           </li>
         </ul>
       </div>
-    </div>
+    </Page>
   );
 }

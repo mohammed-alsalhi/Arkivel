@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { config } from "@/lib/config";
+import { Page, PageHeader, Section } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "All tools",
@@ -78,18 +79,19 @@ const groups: DirectoryGroup[] = [
 
 export default function ToolsPage() {
   return (
-    <div className="wiki-responsive-guard">
-      <h1 className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1" style={{ fontFamily: "var(--font-serif)" }}>
-        All tools
-      </h1>
-      <p className="text-[13px] text-muted mb-5">
-        Every destination in one place. The sidebar keeps the daily essentials; everything else lives here
-        and in the command palette (Ctrl/Cmd&nbsp;+&nbsp;K).
-      </p>
+    <Page className="wiki-responsive-guard">
+      <PageHeader
+        title="All tools"
+        description={
+          <>
+            Every destination in one place. The sidebar keeps the daily essentials; everything else lives here
+            and in the command palette (Ctrl/Cmd&nbsp;+&nbsp;K).
+          </>
+        }
+      />
 
       {groups.map((group) => (
-        <section key={group.title} className="mb-6">
-          <h2 className="text-[12px] font-bold uppercase text-muted mb-2">{group.title}</h2>
+        <Section key={group.title} title={group.title}>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {group.entries.map((entry) => (
               <Link
@@ -102,12 +104,11 @@ export default function ToolsPage() {
               </Link>
             ))}
           </div>
-        </section>
+        </Section>
       ))}
 
       {config.mapEnabled && (
-        <section className="mb-6">
-          <h2 className="text-[12px] font-bold uppercase text-muted mb-2">World</h2>
+        <Section title="World">
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             <Link
               href="/map"
@@ -117,8 +118,8 @@ export default function ToolsPage() {
               <span className="mt-0.5 block text-[12px] leading-snug text-muted">Interactive world map with linked markers.</span>
             </Link>
           </div>
-        </section>
+        </Section>
       )}
-    </div>
+    </Page>
   );
 }

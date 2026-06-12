@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { Page, PageHeader } from "@/components/ui";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -35,18 +36,24 @@ export default async function LearningPathPage({ params }: Props) {
     : 0;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <Page width="narrow">
       <Link href="/learning-paths" className="text-sm text-muted hover:text-foreground">
         ← Learning Paths
       </Link>
 
-      <h1 className="text-2xl font-semibold text-heading mt-3 mb-1">{path.name}</h1>
-      {path.description && <p className="text-sm text-muted mb-4">{path.description}</p>}
-      {path.author && (
-        <p className="text-xs text-muted mb-4">
-          Created by {path.author.displayName || path.author.username}
-        </p>
-      )}
+      <PageHeader
+        title={path.name}
+        description={
+          <>
+            {path.description && <p>{path.description}</p>}
+            {path.author && (
+              <p className="text-xs">
+                Created by {path.author.displayName || path.author.username}
+              </p>
+            )}
+          </>
+        }
+      />
 
       {session && (
         <div className="mb-5">
@@ -79,7 +86,7 @@ export default async function LearningPathPage({ params }: Props) {
           </li>
         ))}
       </ol>
-    </div>
+    </Page>
   );
 }
 

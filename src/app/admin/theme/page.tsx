@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useToast } from "@/components/Toast";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 interface ThemeVariables {
   "--color-accent": string;
@@ -159,13 +160,8 @@ export default function ThemeBuilderPage() {
   ) as React.CSSProperties;
 
   return (
-    <div>
-      <h1
-        className="text-xl font-normal text-heading mb-4 pb-1 border-b border-border"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Theme Builder
-      </h1>
+    <Page>
+      <PageHeader title="Theme Builder" />
 
       <div className="flex gap-6 flex-wrap">
         {/* ── Controls panel ── */}
@@ -250,36 +246,25 @@ export default function ThemeBuilderPage() {
 
           {/* Actions */}
           <div className="space-y-2">
-            <button
+            <Button
               onClick={handleSave}
               disabled={saving}
-              className="home-action-btn home-action-btn-primary w-full disabled:opacity-50"
+              variant="primary"
+              className="w-full"
             >
               {saving ? "Saving…" : "Save theme"}
-            </button>
+            </Button>
             <div className="flex gap-2">
-              <button
-                onClick={handleExport}
-                className="home-action-btn flex-1 text-[12px]"
-                type="button"
-              >
+              <Button onClick={handleExport} className="flex-1">
                 Export JSON
-              </button>
-              <button
-                onClick={handleImportClick}
-                className="home-action-btn flex-1 text-[12px]"
-                type="button"
-              >
+              </Button>
+              <Button onClick={handleImportClick} className="flex-1">
                 Import JSON
-              </button>
+              </Button>
             </div>
-            <button
-              onClick={handleReset}
-              className="home-action-btn w-full text-[12px]"
-              type="button"
-            >
+            <Button onClick={handleReset} className="w-full">
               Reset to defaults
-            </button>
+            </Button>
           </div>
 
           {/* Hidden file input for import */}
@@ -483,6 +468,6 @@ export default function ThemeBuilderPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

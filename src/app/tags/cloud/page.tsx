@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -11,12 +12,10 @@ export default async function TagCloudPage() {
 
   if (tags.length === 0) {
     return (
-      <div>
-        <h1 className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3" style={{ fontFamily: "var(--font-serif)" }}>
-          Tag cloud
-        </h1>
-        <p className="text-[13px] text-muted italic">No tags yet.</p>
-      </div>
+      <Page>
+        <PageHeader title="Tag cloud" />
+        <EmptyState title="No tags yet." />
+      </Page>
     );
   }
 
@@ -37,15 +36,11 @@ export default async function TagCloudPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-3 border-b border-border pb-1 mb-4">
-        <h1 className="text-[1.7rem] font-normal text-heading flex-1" style={{ fontFamily: "var(--font-serif)" }}>
-          Tag cloud
-        </h1>
-        <Link href="/tags" className="text-[12px] text-accent hover:underline">
-          All tags
-        </Link>
-      </div>
+    <Page>
+      <PageHeader
+        title="Tag cloud"
+        actions={<LinkButton href="/tags">All tags</LinkButton>}
+      />
 
       <div className="flex flex-wrap gap-x-3 gap-y-2 leading-loose">
         {tags.filter((t) => t._count.articles > 0).map((tag) => (
@@ -68,6 +63,6 @@ export default async function TagCloudPage() {
       <p className="text-[11px] text-muted mt-6">
         {tags.filter((t) => t._count.articles > 0).length} tags · font size proportional to article count
       </p>
-    </div>
+    </Page>
   );
 }

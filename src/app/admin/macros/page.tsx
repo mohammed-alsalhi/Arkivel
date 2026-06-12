@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button, DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Macro = {
   id: string;
@@ -87,39 +88,30 @@ export default function MacrosPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Macros / Shortcodes
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Define reusable shortcodes that authors can embed in articles using{" "}
-        <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{macroName|arg1}}"}</code>{" "}
-        syntax. Template variables: <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{{body}}}"}</code>{" "}
-        (first arg), <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{{1}}}"}</code>,{" "}
-        <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{{2}}}"}</code>, etc.
-      </p>
-
-      <div className="flex items-center gap-2 mb-4 flex-wrap">
-        <button
-          onClick={() => startCreate()}
-          className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-        >
-          + New macro
-        </button>
-        <span className="text-[11px] text-muted">Quick-add preset:</span>
-        {Object.keys(DEFAULT_TEMPLATES).map((k) => (
-          <button
-            key={k}
-            onClick={() => startCreate(k)}
-            className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-          >
-            {k}
-          </button>
-        ))}
-      </div>
+    <Page>
+      <PageHeader
+        title="Macros / Shortcodes"
+        description={
+          <>
+            Define reusable shortcodes that authors can embed in articles using{" "}
+            <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{macroName|arg1}}"}</code>{" "}
+            syntax. Template variables: <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{{body}}}"}</code>{" "}
+            (first arg), <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{{1}}}"}</code>,{" "}
+            <code className="bg-surface-hover px-1 rounded text-[12px]">{"{{{2}}}"}</code>, etc.
+          </>
+        }
+        actions={
+          <>
+            <Button onClick={() => startCreate()}>+ New macro</Button>
+            <span className="text-[11px] text-muted">Quick-add preset:</span>
+            {Object.keys(DEFAULT_TEMPLATES).map((k) => (
+              <Button key={k} onClick={() => startCreate(k)}>
+                {k}
+              </Button>
+            ))}
+          </>
+        }
+      />
 
       {/* Form */}
       {(creating || editing) && (
@@ -172,19 +164,12 @@ export default function MacrosPage() {
             )}
             {error && <p className="text-[12px] text-red-600">{error}</p>}
             <div className="flex gap-2">
-              <button
-                onClick={save}
-                disabled={saving}
-                className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover disabled:opacity-50"
-              >
+              <Button onClick={save} disabled={saving}>
                 {saving ? "Saving…" : "Save"}
-              </button>
-              <button
-                onClick={() => { setEditing(null); setCreating(false); }}
-                className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-              >
+              </Button>
+              <Button onClick={() => { setEditing(null); setCreating(false); }}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -194,49 +179,39 @@ export default function MacrosPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : macros.length === 0 ? (
-        <div className="wiki-notice">No macros defined yet. Add one above.</div>
+        <EmptyState title="No macros defined yet." description="Add one above." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-            <thead>
-              <tr className="bg-surface-hover">
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Shortcode</th>
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Description</th>
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-32">Actions</th>
+        <DataTable>
+          <thead>
+            <tr>
+              <th>Shortcode</th>
+              <th>Description</th>
+              <th className="w-32">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {macros.map((m) => (
+              <tr key={m.id}>
+                <td>
+                  <code className="text-[12px] bg-surface-hover px-1 rounded">{`{{${m.name}|…}}`}</code>
+                </td>
+                <td className="text-muted text-[12px]">
+                  {m.description || <span className="italic">—</span>}
+                </td>
+                <td>
+                  <span className="flex gap-1">
+                    <Button onClick={() => startEdit(m)}>Edit</Button>
+                    <Button variant="danger" onClick={() => deleteMacro(m.id, m.name)}>
+                      Delete
+                    </Button>
+                  </span>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {macros.map((m) => (
-                <tr key={m.id} className="hover:bg-surface-hover">
-                  <td className="border border-border px-3 py-1.5">
-                    <code className="text-[12px] bg-surface-hover px-1 rounded">{`{{${m.name}|…}}`}</code>
-                  </td>
-                  <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                    {m.description || <span className="italic">—</span>}
-                  </td>
-                  <td className="border border-border px-3 py-1.5">
-                    <span className="flex gap-1">
-                      <button
-                        onClick={() => startEdit(m)}
-                        className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => deleteMacro(m.id, m.name)}
-                        className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-red-600"
-                      >
-                        Delete
-                      </button>
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }
 

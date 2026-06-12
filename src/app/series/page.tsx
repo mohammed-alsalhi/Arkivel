@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -17,15 +18,10 @@ export default async function SeriesIndexPage() {
   });
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Article Series
-      </h1>
+    <Page>
+      <PageHeader title="Article Series" />
       {allSeries.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No series yet.</p>
+        <EmptyState title="No series yet." />
       ) : (
         <div className="space-y-3">
           {allSeries.map((s) => (
@@ -47,6 +43,6 @@ export default async function SeriesIndexPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

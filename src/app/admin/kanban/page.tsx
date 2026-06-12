@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { LinkButton, Page, PageHeader } from "@/components/ui";
 
 type Article = {
   id: string;
@@ -75,18 +76,12 @@ export default function KanbanPage() {
   }, {});
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-xl font-semibold text-heading">Article Pipeline</h1>
-          <p className="text-[12px] text-muted mt-0.5">
-            Drag cards between columns to change status, or use the promote buttons.
-          </p>
-        </div>
-        <Link href="/admin" className="h-6 px-2 text-[11px] border border-border rounded bg-surface hover:bg-surface-hover">
-          ← Admin
-        </Link>
-      </div>
+    <Page>
+      <PageHeader
+        title="Article Pipeline"
+        description="Drag cards between columns to change status, or use the promote buttons."
+        actions={<LinkButton href="/admin">← Admin</LinkButton>}
+      />
 
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading...</p>
@@ -154,6 +149,6 @@ export default function KanbanPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

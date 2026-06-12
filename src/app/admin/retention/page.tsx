@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 type ArticleRetention = {
   articleId: string;
@@ -28,18 +29,16 @@ export default function RetentionPage() {
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
-      <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4" style={{ fontFamily: "var(--font-serif)" }}>
-        Reader Retention
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Scroll depth distribution per article — shows how far readers get through each article before leaving.
-      </p>
+    <Page>
+      <PageHeader
+        title="Reader Retention"
+        description="Scroll depth distribution per article — shows how far readers get through each article before leaving."
+      />
 
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : articles.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No scroll depth data yet.</p>
+        <EmptyState title="No scroll depth data yet." />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-4">
           {/* Article list */}
@@ -106,6 +105,6 @@ export default function RetentionPage() {
           )}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

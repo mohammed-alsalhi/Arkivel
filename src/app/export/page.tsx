@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button, Notice, Page, PageHeader } from "@/components/ui";
 
 type Category = {
   id: string;
@@ -62,18 +63,13 @@ export default function ExportPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Export Wiki
-      </h1>
+    <Page>
+      <PageHeader title="Export Wiki" />
 
-      <div className="wiki-notice mb-4">
+      <Notice>
         Export your wiki articles as a single downloadable file. Choose the scope
         and format below.
-      </div>
+      </Notice>
 
       <div className="max-w-lg space-y-4">
         {/* Scope selection */}
@@ -169,13 +165,13 @@ export default function ExportPage() {
         </fieldset>
 
         {/* Download button */}
-        <button
+        <Button
+          variant="primary"
           onClick={handleExport}
           disabled={loading || (scope === "category" && !categorySlug)}
-          className="bg-accent px-4 py-1.5 text-[13px] font-bold text-white hover:bg-accent-hover disabled:opacity-40"
         >
           {loading ? "Exporting..." : "Download"}
-        </button>
+        </Button>
 
         {loading && (
           <p className="text-[12px] text-muted italic">
@@ -183,6 +179,6 @@ export default function ExportPage() {
           </p>
         )}
       </div>
-    </div>
+    </Page>
   );
 }

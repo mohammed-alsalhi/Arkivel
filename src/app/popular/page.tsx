@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -32,17 +33,14 @@ export default async function PopularPage() {
     .slice(0, 50);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Popular Articles
-      </h1>
-      <p className="text-[13px] text-muted mb-5">Ranked by reads and reactions.</p>
+    <Page>
+      <PageHeader
+        title="Popular Articles"
+        description="Ranked by reads and reactions."
+      />
 
       {scored.length === 0 ? (
-        <p className="text-muted italic">No activity recorded yet.</p>
+        <EmptyState title="No activity recorded yet." />
       ) : (
         <ol className="space-y-3">
           {scored.map((article, i) => (
@@ -73,6 +71,6 @@ export default async function PopularPage() {
           ))}
         </ol>
       )}
-    </div>
+    </Page>
   );
 }

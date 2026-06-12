@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { DataTable, EmptyState, Page, PageHeader, Section } from "@/components/ui";
 
 type User = {
   id: string;
@@ -43,8 +44,8 @@ export default function UserActivityPage() {
   if (loading) return <p className="text-[13px] text-muted">Loading…</p>;
 
   return (
-    <div>
-      <h1 className="text-xl font-semibold text-heading mb-4">User Activity Log</h1>
+    <Page>
+      <PageHeader title="User Activity Log" />
 
       <div className="flex gap-4 items-start">
         {/* User list */}
@@ -72,45 +73,40 @@ export default function UserActivityPage() {
           ) : loadingRevisions ? (
             <p className="text-[13px] text-muted">Loading activity…</p>
           ) : revisions.length === 0 ? (
-            <p className="text-[13px] text-muted italic">No edits found for {selectedUser.displayName || selectedUser.username}.</p>
+            <EmptyState title={`No edits found for ${selectedUser.displayName || selectedUser.username}.`} />
           ) : (
-            <div>
-              <h2 className="text-[13px] font-semibold text-heading mb-2">
-                Activity for {selectedUser.displayName || selectedUser.username} ({revisions.length} most recent edits)
-              </h2>
-              <div className="overflow-x-auto">
-                <table className="w-full text-[12px] border-collapse">
-                  <thead>
-                    <tr className="text-[11px] text-muted text-left border-b border-border">
-                      <th className="pb-1 pr-3">Article</th>
-                      <th className="pb-1 pr-3">Summary</th>
-                      <th className="pb-1">Date</th>
+            <Section title={`Activity for ${selectedUser.displayName || selectedUser.username} (${revisions.length} most recent edits)`}>
+              <DataTable>
+                <thead>
+                  <tr>
+                    <th>Article</th>
+                    <th>Summary</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {revisions.map((r) => (
+                    <tr key={r.id}>
+                      <td>
+                        {r.article ? (
+                          <Link href={`/articles/${r.article.slug}`} className="text-wiki-link hover:underline">
+                            {r.article.title}
+                          </Link>
+                        ) : (
+                          <span className="text-muted italic">deleted</span>
+                        )}
+                      </td>
+                      <td className="text-muted">{r.editSummary || "—"}</td>
+                      <td className="text-muted whitespace-nowrap">{new Date(r.createdAt).toLocaleDateString()}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {revisions.map((r) => (
-                      <tr key={r.id} className="border-b border-border/50 hover:bg-surface-hover">
-                        <td className="py-1.5 pr-3">
-                          {r.article ? (
-                            <Link href={`/articles/${r.article.slug}`} className="text-wiki-link hover:underline">
-                              {r.article.title}
-                            </Link>
-                          ) : (
-                            <span className="text-muted italic">deleted</span>
-                          )}
-                        </td>
-                        <td className="py-1.5 pr-3 text-muted">{r.editSummary || "—"}</td>
-                        <td className="py-1.5 text-muted whitespace-nowrap">{new Date(r.createdAt).toLocaleDateString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                  ))}
+                </tbody>
+              </DataTable>
+            </Section>
           )}
         </div>
       </div>
-    </div>
+    </Page>
   );
 }
 

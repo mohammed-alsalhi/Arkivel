@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import SeriesManager from "./SeriesManager";
+import { Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -28,13 +29,12 @@ export default async function AdminSeriesPage() {
   ]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground">Admin</Link>
-        <span className="text-muted-foreground">/</span>
-        <h1 className="text-xl font-semibold">Article Series</h1>
-      </div>
+    <Page>
+      <PageHeader
+        kicker={<Link href="/admin" className="hover:text-foreground">Admin</Link>}
+        title="Article Series"
+      />
       <SeriesManager initialSeries={allSeries} articles={allArticles} />
-    </div>
+    </Page>
   );
 }

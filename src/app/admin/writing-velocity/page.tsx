@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Page, PageHeader, StatCard, StatGrid } from "@/components/ui";
 
 type Week = { week: string; words: number };
 
@@ -21,20 +22,16 @@ export default function WritingVelocityPage() {
   const avgWords = Math.round(totalWords / (data.length || 1));
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl font-semibold text-heading mb-1">Writing Velocity</h1>
-      <p className="text-[13px] text-muted mb-4">Words added to the wiki per week (last 12 weeks, from revision history).</p>
+    <Page>
+      <PageHeader
+        title="Writing Velocity"
+        description="Words added to the wiki per week (last 12 weeks, from revision history)."
+      />
 
-      <div className="flex gap-4 mb-4 text-[12px]">
-        <div className="border border-border rounded px-3 py-2 bg-surface">
-          <div className="text-muted">Total (12 weeks)</div>
-          <div className="text-lg font-semibold text-heading">{totalWords.toLocaleString()}</div>
-        </div>
-        <div className="border border-border rounded px-3 py-2 bg-surface">
-          <div className="text-muted">Weekly average</div>
-          <div className="text-lg font-semibold text-heading">{avgWords.toLocaleString()}</div>
-        </div>
-      </div>
+      <StatGrid className="mb-4">
+        <StatCard label="Total (12 weeks)" value={totalWords.toLocaleString()} />
+        <StatCard label="Weekly average" value={avgWords.toLocaleString()} />
+      </StatGrid>
 
       <div className="border border-border rounded p-4 bg-surface">
         <div className="flex items-end gap-1.5 h-32">
@@ -54,7 +51,7 @@ export default function WritingVelocityPage() {
         </div>
         <div className="mt-2 text-[11px] text-muted text-center">Each bar = one week</div>
       </div>
-    </div>
+    </Page>
   );
 }
 

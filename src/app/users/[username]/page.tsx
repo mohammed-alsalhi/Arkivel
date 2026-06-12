@@ -2,6 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
+import { EmptyState, Page, PageHeader, Section } from "@/components/ui";
 
 type Props = {
   params: Promise<{ username: string }>;
@@ -66,13 +67,8 @@ export default async function UserProfilePage({ params }: Props) {
   };
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        User: {user.displayName || user.username}
-      </h1>
+    <Page>
+      <PageHeader title={`User: ${user.displayName || user.username}`} />
 
       {/* User info */}
       <div className="wiki-portal max-w-lg mb-4">
@@ -115,13 +111,7 @@ export default async function UserProfilePage({ params }: Props) {
 
       {/* Articles created */}
       {articles.length > 0 && (
-        <div className="mb-4">
-          <h2
-            className="text-[1.3rem] font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Articles created
-          </h2>
+        <Section title="Articles created" className="mb-4">
           <ul className="text-[13px] space-y-1">
             {articles.map((article) => (
               <li key={article.id}>
@@ -139,18 +129,12 @@ export default async function UserProfilePage({ params }: Props) {
               </li>
             ))}
           </ul>
-        </div>
+        </Section>
       )}
 
       {/* Recent edits */}
       {revisions.length > 0 && (
-        <div className="mb-4">
-          <h2
-            className="text-[1.3rem] font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Recent edits
-          </h2>
+        <Section title="Recent edits" className="mb-4">
           <ul className="text-[13px] space-y-1">
             {revisions.map((rev) => (
               <li key={rev.id}>
@@ -173,18 +157,12 @@ export default async function UserProfilePage({ params }: Props) {
               </li>
             ))}
           </ul>
-        </div>
+        </Section>
       )}
 
       {/* Discussion contributions */}
       {discussions.length > 0 && (
-        <div>
-          <h2
-            className="text-[1.3rem] font-normal text-heading border-b border-border pb-1 mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Discussion contributions
-          </h2>
+        <Section title="Discussion contributions">
           <ul className="text-[13px] space-y-1">
             {discussions.map((disc) => (
               <li key={disc.id}>
@@ -209,15 +187,13 @@ export default async function UserProfilePage({ params }: Props) {
               </li>
             ))}
           </ul>
-        </div>
+        </Section>
       )}
 
       {articles.length === 0 && revisions.length === 0 && discussions.length === 0 && (
-        <div className="wiki-notice">
-          This user has not made any contributions yet.
-        </div>
+        <EmptyState description="This user has not made any contributions yet." />
       )}
-    </div>
+    </Page>
   );
 }
 

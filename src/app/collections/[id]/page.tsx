@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { formatDate } from "@/lib/utils";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -39,32 +40,29 @@ export default async function CollectionPage({ params }: Props) {
   });
 
   return (
-    <div>
-      <div className="wiki-tabs">
-        <Link href="/collections" className="wiki-tab">Collections</Link>
-        <span className="wiki-tab wiki-tab-active">{collection.name}</span>
-      </div>
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
-        <h1 className="text-xl font-normal text-heading mb-1">{collection.name}</h1>
-        <p className="text-xs text-muted mb-4">{articles.length} article{articles.length !== 1 ? "s" : ""} • auto-updates</p>
+    <Page>
+      <PageHeader
+        title={collection.name}
+        description={<>{articles.length} article{articles.length !== 1 ? "s" : ""} • auto-updates</>}
+        actions={<LinkButton href="/collections">Collections</LinkButton>}
+      />
 
-        {articles.length === 0 ? (
-          <p className="text-sm text-muted">No articles match this collection&apos;s criteria yet.</p>
-        ) : (
-          <ul className="space-y-2">
-            {articles.map((a) => (
-              <li key={a.id} className="border border-border rounded p-3">
-                <Link href={`/articles/${a.slug}`} className="text-wiki-link font-medium hover:underline">
-                  {a.title}
-                </Link>
-                {a.excerpt && <p className="text-xs text-muted mt-0.5 line-clamp-2">{a.excerpt}</p>}
-                <p className="text-[10px] text-muted mt-1">Updated {formatDate(a.updatedAt)}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
+      {articles.length === 0 ? (
+        <EmptyState description={<>No articles match this collection&apos;s criteria yet.</>} />
+      ) : (
+        <ul className="space-y-2">
+          {articles.map((a) => (
+            <li key={a.id} className="border border-border rounded p-3">
+              <Link href={`/articles/${a.slug}`} className="text-wiki-link font-medium hover:underline">
+                {a.title}
+              </Link>
+              {a.excerpt && <p className="text-xs text-muted mt-0.5 line-clamp-2">{a.excerpt}</p>}
+              <p className="text-[10px] text-muted mt-1">Updated {formatDate(a.updatedAt)}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Page>
   );
 }
 

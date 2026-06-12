@@ -9,6 +9,7 @@ import {
   getSearchSuggestions,
   getSemanticSearchResults,
 } from "@/lib/search-response";
+import { Page, PageHeader, Section } from "@/components/ui";
 
 type SearchResult = {
   id: string;
@@ -193,59 +194,59 @@ function SearchContent() {
 
   if (!q || q.length < 2) {
     return (
-      <div>
-        <header className="ui-page-header">
-          <div>
-            <p className="ui-page-kicker">Discovery</p>
-            <h1 className="ui-page-title">Search</h1>
-            <p className="ui-page-dek">
-              Enter at least 2 characters to search titles, excerpts, article bodies, and semantic matches.
-            </p>
-          </div>
-          <div className="ui-page-actions">
-            <Link href="/articles" className="ui-button">Article index</Link>
-            <Link href="/tags" className="ui-button">Tags</Link>
-          </div>
-        </header>
+      <Page>
+        <PageHeader
+          kicker="Discovery"
+          title="Search"
+          description="Enter at least 2 characters to search titles, excerpts, article bodies, and semantic matches."
+          actions={
+            <>
+              <Link href="/articles" className="ui-button">Article index</Link>
+              <Link href="/tags" className="ui-button">Tags</Link>
+            </>
+          }
+        />
         <SearchHistory currentQuery={q} />
-      </div>
+      </Page>
     );
   }
 
   return (
-    <div>
-      <header className="ui-page-header">
-        <div>
-          <p className="ui-page-kicker">Discovery</p>
-          <h1 className="ui-page-title">Search results</h1>
-          <p className="ui-page-dek">
+    <Page>
+      <PageHeader
+        kicker="Discovery"
+        title="Search results"
+        description={
+          <>
             {loading
               ? "Searching..."
               : `${resultCount} result${resultCount !== 1 ? "s" : ""} for "${q}"`}
             {hasFilters && " (filtered)"}
-          </p>
-        </div>
-        <div className="ui-page-actions">
-          <button
-            onClick={() => setSemanticMode((v) => !v)}
-            title="Semantic search uses AI vector embeddings to find conceptually related articles, not just keyword matches"
-            aria-pressed={semanticMode}
-            className="ui-button"
-          >
-            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-            </svg>
-            {semanticMode ? "Semantic on" : "Semantic"}
-          </button>
-          <button
-            onClick={() => setShowAdvanced(!showAdvanced)}
-            className="ui-button"
-            aria-pressed={showAdvanced}
-          >
-            {showAdvanced ? "Hide filters" : "Filters"}
-          </button>
-        </div>
-      </header>
+          </>
+        }
+        actions={
+          <>
+            <button
+              onClick={() => setSemanticMode((v) => !v)}
+              title="Semantic search uses AI vector embeddings to find conceptually related articles, not just keyword matches"
+              aria-pressed={semanticMode}
+              className="ui-button"
+            >
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+              </svg>
+              {semanticMode ? "Semantic on" : "Semantic"}
+            </button>
+            <button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="ui-button"
+              aria-pressed={showAdvanced}
+            >
+              {showAdvanced ? "Hide filters" : "Filters"}
+            </button>
+          </>
+        }
+      />
 
       {/* Q&A answer panel */}
       {(qaLoading || qaAnswer) && (
@@ -461,8 +462,7 @@ function SearchContent() {
           )}
 
           {semanticResults.length > 0 && (
-            <div className="mt-5">
-              <h2 className="ui-section-title">Semantic matches</h2>
+            <Section className="mt-5" title="Semantic matches">
               <ul className="space-y-2 text-[13px]">
                 {semanticResults.map((article) => (
                   <li key={article.id} className="border-b border-border pb-2">
@@ -491,19 +491,14 @@ function SearchContent() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Section>
           )}
         </div>
       </div>
 
       {/* Federated results */}
       {(federatedLoading || federatedResults.length > 0) && (
-        <div className="mt-6">
-          <h2
-            className="ui-section-title"
-          >
-            Results from other wikis
-          </h2>
+        <Section className="mt-6" title="Results from other wikis">
           {federatedLoading ? (
             <p className="text-[13px] text-muted italic">Searching federated wikis…</p>
           ) : (
@@ -529,9 +524,9 @@ function SearchContent() {
               ))}
             </ul>
           )}
-        </div>
+        </Section>
       )}
-    </div>
+    </Page>
   );
 }
 

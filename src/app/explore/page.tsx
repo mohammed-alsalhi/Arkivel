@@ -1,6 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { semanticSearch } from "@/lib/embeddings";
+import { LinkButton, Page, PageHeader } from "@/components/ui";
 
 type Props = { searchParams: Promise<{ from?: string }> };
 
@@ -52,31 +53,22 @@ export default async function ExplorePage({ searchParams }: Props) {
   }
 
   return (
-    <div>
-      <div className="wiki-tabs">
-        <span className="wiki-tab wiki-tab-active">Explore</span>
-      </div>
-      <div className="border border-t-0 border-border bg-surface px-5 py-4 text-center py-16">
-        <p className="text-xs text-muted uppercasest mb-6">Guided Explore</p>
+    <Page>
+      <PageHeader kicker="Guided Explore" title="Explore" />
+      <div className="border border-border bg-surface px-5 text-center py-16">
         {article ? (
           <>
-            <h1 className="text-2xl font-normal text-heading mb-2">{article.title}</h1>
+            <h2 className="text-2xl font-normal text-heading mb-2">{article.title}</h2>
             <p className="text-sm text-muted mb-6 max-w-lg mx-auto">
               {article.summaryShort || article.excerpt || "Discover something new."}
             </p>
             <div className="flex items-center justify-center gap-4">
-              <Link
-                href={`/articles/${article.slug}`}
-                className="px-5 py-2 bg-accent text-white rounded hover:bg-accent/90 transition-colors"
-              >
+              <LinkButton href={`/articles/${article.slug}`} variant="primary">
                 Read this article
-              </Link>
-              <Link
-                href={`/explore?from=${article.slug}`}
-                className="px-5 py-2 border border-border rounded hover:bg-surface transition-colors"
-              >
+              </LinkButton>
+              <LinkButton href={`/explore?from=${article.slug}`}>
                 Take me somewhere else →
-              </Link>
+              </LinkButton>
             </div>
             {from && (
               <p className="text-[11px] text-muted mt-6">
@@ -88,7 +80,7 @@ export default async function ExplorePage({ searchParams }: Props) {
           <p className="text-muted">No articles available to explore.</p>
         )}
       </div>
-    </div>
+    </Page>
   );
 }
 

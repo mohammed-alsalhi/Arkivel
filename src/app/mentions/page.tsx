@@ -3,6 +3,7 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { formatDate } from "@/lib/utils";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -24,19 +25,18 @@ export default async function MentionsPage() {
   });
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Mentions
-      </h1>
-      <p className="text-[12px] text-muted mb-4">
-        Discussions that mention <strong>@{username}</strong>
-      </p>
+    <Page>
+      <PageHeader
+        title="Mentions"
+        description={
+          <>
+            Discussions that mention <strong>@{username}</strong>
+          </>
+        }
+      />
 
       {mentions.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No mentions yet.</p>
+        <EmptyState title="No mentions yet." />
       ) : (
         <div className="space-y-3">
           {mentions.map((m) => (
@@ -68,6 +68,6 @@ export default async function MentionsPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -53,21 +54,16 @@ export default function BlamePage() {
         <span className="article-tab article-tab-active">Blame</span>
       </nav>
 
-      <div className="border border-border bg-surface px-5 py-4">
-        <h1
-          className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Blame view
-        </h1>
-        <p className="text-[12px] text-muted mb-4">
-          Each paragraph is colour-coded by the earliest revision that introduced it.
-        </p>
+      <Page className="border border-border bg-surface px-5 py-4">
+        <PageHeader
+          title="Blame view"
+          description="Each paragraph is colour-coded by the earliest revision that introduced it."
+        />
 
         {loading ? (
           <p className="text-muted text-[13px] italic">Loading…</p>
         ) : paragraphs.length === 0 ? (
-          <p className="text-muted text-[13px] italic">No paragraph data found.</p>
+          <EmptyState title="No paragraph data found." />
         ) : (
           <div className="space-y-1 text-[13px]">
             {paragraphs.map((p, i) => (
@@ -98,7 +94,7 @@ export default function BlamePage() {
             ))}
           </div>
         )}
-      </div>
+      </Page>
     </div>
   );
 }

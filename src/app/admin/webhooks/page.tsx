@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAdmin } from "@/components/AdminContext";
+import { Button, DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type WebhookDelivery = {
   id: string;
@@ -56,17 +57,12 @@ export default function WebhooksPage() {
 
   if (!isAdmin) {
     return (
-      <div>
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Webhooks
-        </h1>
+      <Page>
+        <PageHeader title="Webhooks" />
         <div className="wiki-notice">
           You must be <Link href="/admin">logged in as admin</Link> to manage webhooks.
         </div>
-      </div>
+      </Page>
     );
   }
 
@@ -114,25 +110,16 @@ export default function WebhooksPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Webhooks
-      </h1>
-
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-[13px] text-muted">
-          Webhooks send HTTP POST requests to external URLs when events occur.
-        </p>
-        <button
-          onClick={() => setShowCreate(!showCreate)}
-          className="border border-border bg-surface-hover px-3 py-1 text-[13px] font-medium hover:bg-surface transition-colors"
-        >
-          {showCreate ? "Cancel" : "Create webhook"}
-        </button>
-      </div>
+    <Page>
+      <PageHeader
+        title="Webhooks"
+        description="Webhooks send HTTP POST requests to external URLs when events occur."
+        actions={
+          <Button onClick={() => setShowCreate(!showCreate)}>
+            {showCreate ? "Cancel" : "Create webhook"}
+          </Button>
+        }
+      />
 
       {/* Create form */}
       {showCreate && (
@@ -180,13 +167,12 @@ export default function WebhooksPage() {
                 className="w-full border border-border px-2 py-1.5 text-[13px] bg-surface font-mono"
               />
             </div>
-            <button
+            <Button
               onClick={handleCreate}
               disabled={creating || !newUrl || newEvents.length === 0}
-              className="border border-border bg-surface-hover px-4 py-1.5 text-[13px] font-medium hover:bg-surface transition-colors disabled:opacity-50"
             >
               {creating ? "Creating..." : "Create"}
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -195,9 +181,10 @@ export default function WebhooksPage() {
       {loading ? (
         <p className="text-[13px] text-muted">Loading...</p>
       ) : webhooks.length === 0 ? (
-        <div className="wiki-notice">
-          No webhooks configured. Create one to start receiving event notifications.
-        </div>
+        <EmptyState
+          title="No webhooks configured."
+          description="Create one to start receiving event notifications."
+        />
       ) : (
         <div className="space-y-3">
           {webhooks.map((wh) => (
@@ -257,52 +244,38 @@ export default function WebhooksPage() {
                         : `Show recent deliveries (${wh.deliveries.length})`}
                     </button>
                     {expandedId === wh.id && (
-                      <div className="overflow-x-auto">
-                        <table className="w-full mt-2 text-[12px] border border-border">
-                          <thead>
-                            <tr className="bg-surface-hover">
-                              <th className="text-left px-2 py-1 border-b border-border">
-                                Event
-                              </th>
-                              <th className="text-left px-2 py-1 border-b border-border">
-                                Status
-                              </th>
-                              <th className="text-left px-2 py-1 border-b border-border">
-                                Code
-                              </th>
-                              <th className="text-left px-2 py-1 border-b border-border">
-                                Time
-                              </th>
+                      <DataTable className="mt-2">
+                        <thead>
+                          <tr>
+                            <th>Event</th>
+                            <th>Status</th>
+                            <th>Code</th>
+                            <th>Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {wh.deliveries.map((d) => (
+                            <tr key={d.id}>
+                              <td className="font-mono">{d.event}</td>
+                              <td>
+                                <span
+                                  className={
+                                    d.status === "success"
+                                      ? "text-green-600"
+                                      : "text-red-600"
+                                  }
+                                >
+                                  {d.status}
+                                </span>
+                              </td>
+                              <td>{d.responseCode || "-"}</td>
+                              <td className="text-muted">
+                                {new Date(d.createdAt).toLocaleString()}
+                              </td>
                             </tr>
-                          </thead>
-                          <tbody>
-                            {wh.deliveries.map((d) => (
-                              <tr key={d.id}>
-                                <td className="px-2 py-1 border-b border-border font-mono">
-                                  {d.event}
-                                </td>
-                                <td className="px-2 py-1 border-b border-border">
-                                  <span
-                                    className={
-                                      d.status === "success"
-                                        ? "text-green-600"
-                                        : "text-red-600"
-                                    }
-                                  >
-                                    {d.status}
-                                  </span>
-                                </td>
-                                <td className="px-2 py-1 border-b border-border">
-                                  {d.responseCode || "-"}
-                                </td>
-                                <td className="px-2 py-1 border-b border-border text-muted">
-                                  {new Date(d.createdAt).toLocaleString()}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                          ))}
+                        </tbody>
+                      </DataTable>
                     )}
                   </div>
                 )}
@@ -311,6 +284,6 @@ export default function WebhooksPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

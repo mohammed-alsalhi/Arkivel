@@ -1,6 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export default async function CollectionsPage() {
   const user = await getSession();
@@ -13,26 +14,14 @@ export default async function CollectionsPage() {
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between border-b border-border pb-1 mb-4">
-        <h1
-          className="text-[1.7rem] font-normal text-heading"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Smart Collections
-        </h1>
-        {user && (
-          <Link
-            href="/collections/new"
-            className="flex items-center gap-1 h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
-          >
-            New Collection
-          </Link>
-        )}
-      </div>
+    <Page>
+      <PageHeader
+        title="Smart Collections"
+        actions={user && <LinkButton href="/collections/new">New Collection</LinkButton>}
+      />
 
       {collections.length === 0 ? (
-        <p className="text-[13px] text-muted">No collections yet.</p>
+        <EmptyState title="No collections yet." />
       ) : (
         <div className="grid gap-3">
           {collections.map((col) => (
@@ -53,7 +42,7 @@ export default async function CollectionsPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }
 

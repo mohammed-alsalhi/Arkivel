@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { TabButton, Tabs } from "@/components/ui";
+import { Button, EmptyState, Page, PageHeader, TabButton, Tabs } from "@/components/ui";
 
 type Asset = {
   id: string;
@@ -60,23 +60,23 @@ export default function AssetsPage() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto py-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-heading">Asset Library</h1>
-          <p className="text-sm text-muted mt-1">Upload and manage images, PDFs, and other files.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleUpload} />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            className="h-6 px-2 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent/90 disabled:opacity-50"
-          >
-            {uploading ? "Uploading…" : "Upload files"}
-          </button>
-        </div>
-      </div>
+    <Page>
+      <PageHeader
+        title="Asset Library"
+        description="Upload and manage images, PDFs, and other files."
+        actions={
+          <>
+            <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleUpload} />
+            <Button
+              variant="primary"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading…" : "Upload files"}
+            </Button>
+          </>
+        }
+      />
 
       <Tabs label="Asset filters" className="mb-4">
         {filterOptions.map((opt) => (
@@ -93,15 +93,14 @@ export default function AssetsPage() {
       {loading && <div className="text-sm text-muted py-4">Loading…</div>}
 
       {!loading && assets.length === 0 && (
-        <div className="border border-border rounded-lg p-8 text-center text-muted">
-          <p className="text-sm">No assets yet.</p>
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="mt-3 text-[11px] border border-border rounded px-2 h-6 hover:bg-muted/30"
-          >
-            Upload your first file
-          </button>
-        </div>
+        <EmptyState
+          title="No assets yet."
+          actions={
+            <Button onClick={() => fileInputRef.current?.click()}>
+              Upload your first file
+            </Button>
+          }
+        />
       )}
 
       {/* Asset grid */}
@@ -128,6 +127,6 @@ export default function AssetsPage() {
           </div>
         ))}
       </div>
-    </div>
+    </Page>
   );
 }

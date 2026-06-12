@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button, DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Announcement = {
   id: string;
@@ -72,13 +73,8 @@ export default function AnnouncementsPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Announcements
-      </h1>
+    <Page>
+      <PageHeader title="Announcements" />
 
       {/* Create form */}
       <form onSubmit={handleCreate} className="wiki-portal mb-6">
@@ -126,13 +122,9 @@ export default function AnnouncementsPage() {
               />
             </div>
             <div className="self-end">
-              <button
-                type="submit"
-                disabled={saving || !message.trim()}
-                className="h-6 px-2 text-[11px] border border-border rounded bg-accent text-white hover:bg-accent-hover disabled:opacity-40"
-              >
+              <Button type="submit" variant="primary" disabled={saving || !message.trim()}>
                 {saving ? "Posting…" : "Post announcement"}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -142,59 +134,52 @@ export default function AnnouncementsPage() {
       {loading ? (
         <div className="text-muted text-[13px] italic">Loading…</div>
       ) : list.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No announcements yet.</p>
+        <EmptyState title="No announcements yet." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-[13px] border-collapse">
-            <thead>
-              <tr className="text-[11px] text-muted text-left border-b border-border">
-                <th className="pb-1 pr-3">Message</th>
-                <th className="pb-1 pr-3">Type</th>
-                <th className="pb-1 pr-3">Expires</th>
-                <th className="pb-1 pr-3">Status</th>
-                <th className="pb-1" />
+        <DataTable>
+          <thead>
+            <tr>
+              <th>Message</th>
+              <th>Type</th>
+              <th>Expires</th>
+              <th>Status</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {list.map((a) => (
+              <tr key={a.id}>
+                <td className="max-w-xs">
+                  <span className={a.active ? "" : "opacity-50 line-through"}>{a.message}</span>
+                </td>
+                <td>
+                  <span className={`px-1.5 py-0.5 rounded text-[11px] font-medium ${TYPE_BADGE[a.type] ?? ""}`}>
+                    {a.type}
+                  </span>
+                </td>
+                <td className="text-muted">
+                  {a.expiresAt ? new Date(a.expiresAt).toLocaleDateString() : "—"}
+                </td>
+                <td>
+                  <button
+                    onClick={() => toggleActive(a.id, a.active)}
+                    className={`h-6 px-2 text-[11px] border rounded transition-colors ${
+                      a.active
+                        ? "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
+                        : "border-border text-muted hover:bg-surface-hover"
+                    }`}
+                  >
+                    {a.active ? "Active" : "Inactive"}
+                  </button>
+                </td>
+                <td className="text-right">
+                  <Button onClick={() => handleDelete(a.id)}>Delete</Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {list.map((a) => (
-                <tr key={a.id} className="border-t border-border-light hover:bg-surface-hover">
-                  <td className="py-1.5 pr-3 max-w-xs">
-                    <span className={a.active ? "" : "opacity-50 line-through"}>{a.message}</span>
-                  </td>
-                  <td className="py-1.5 pr-3">
-                    <span className={`px-1.5 py-0.5 rounded text-[11px] font-medium ${TYPE_BADGE[a.type] ?? ""}`}>
-                      {a.type}
-                    </span>
-                  </td>
-                  <td className="py-1.5 pr-3 text-muted">
-                    {a.expiresAt ? new Date(a.expiresAt).toLocaleDateString() : "—"}
-                  </td>
-                  <td className="py-1.5 pr-3">
-                    <button
-                      onClick={() => toggleActive(a.id, a.active)}
-                      className={`h-6 px-2 text-[11px] border rounded transition-colors ${
-                        a.active
-                          ? "border-green-400 bg-green-50 text-green-700 hover:bg-green-100"
-                          : "border-border text-muted hover:bg-surface-hover"
-                      }`}
-                    >
-                      {a.active ? "Active" : "Inactive"}
-                    </button>
-                  </td>
-                  <td className="py-1.5 text-right">
-                    <button
-                      onClick={() => handleDelete(a.id)}
-                      className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }

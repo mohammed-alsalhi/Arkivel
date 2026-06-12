@@ -2,6 +2,7 @@ import { isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -46,19 +47,20 @@ export default async function AdminShortArticlesPage() {
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-2">
-        <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground">Admin</Link>
-        <span className="text-muted-foreground">/</span>
-        <h1 className="text-xl font-semibold">Short-Article Merger Suggestions</h1>
-      </div>
-      <p className="text-sm text-muted-foreground mb-6">
-        Articles under 100 words, each paired with potential merge targets from the same category.
-        {" "}{stubs.length} stub{stubs.length !== 1 ? "s" : ""} found.
-      </p>
+    <Page>
+      <PageHeader
+        kicker={<Link href="/admin" className="hover:text-foreground">Admin</Link>}
+        title="Short-Article Merger Suggestions"
+        description={
+          <>
+            Articles under 100 words, each paired with potential merge targets from the same category.
+            {" "}{stubs.length} stub{stubs.length !== 1 ? "s" : ""} found.
+          </>
+        }
+      />
 
       {stubs.length === 0 ? (
-        <p className="text-sm text-muted-foreground italic">No articles under 100 words found.</p>
+        <EmptyState title="No articles under 100 words found." />
       ) : (
         <div className="space-y-4">
           {stubsWithSuggestions.map((stub) => (
@@ -86,12 +88,7 @@ export default async function AdminShortArticlesPage() {
                   </p>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
-                  <Link
-                    href={`/articles/${stub.slug}/edit`}
-                    className="h-6 px-2 text-[11px] border border-border rounded hover:bg-muted transition-colors inline-flex items-center"
-                  >
-                    Expand
-                  </Link>
+                  <LinkButton href={`/articles/${stub.slug}/edit`}>Expand</LinkButton>
                 </div>
               </div>
 
@@ -128,6 +125,6 @@ export default async function AdminShortArticlesPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

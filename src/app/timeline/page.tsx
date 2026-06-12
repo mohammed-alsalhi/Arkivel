@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 type TimelineArticle = {
   id: string;
@@ -61,16 +62,11 @@ export default function TimelinePage() {
   const grouped = useMemo(() => groupByYear(filtered), [filtered]);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Timeline
-      </h1>
-      <p className="text-[12px] text-muted mb-4">
-        {articles.length} article{articles.length !== 1 ? "s" : ""} in chronological order
-      </p>
+    <Page>
+      <PageHeader
+        title="Timeline"
+        description={`${articles.length} article${articles.length !== 1 ? "s" : ""} in chronological order`}
+      />
 
       {/* Filters */}
       <div className="flex items-center gap-2 mb-6">
@@ -96,7 +92,7 @@ export default function TimelinePage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading...</p>
       ) : filtered.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No articles found.</p>
+        <EmptyState title="No articles found." />
       ) : (
         <div className="relative">
           {/* Vertical spine */}
@@ -153,6 +149,6 @@ export default function TimelinePage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

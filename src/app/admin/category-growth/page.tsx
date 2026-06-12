@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 const COLORS = [
   "#3b82f6", "#10b981", "#f59e0b", "#ef4444",
@@ -28,19 +29,21 @@ export default function CategoryGrowthPage() {
   if (loading) return <p className="text-[13px] text-muted">Loading…</p>;
   if (!data || data.categories.length === 0) {
     return (
-      <div className="max-w-2xl">
-        <h1 className="text-xl font-semibold text-heading mb-1">Category Growth</h1>
-        <p className="text-[13px] text-muted">No articles created in the last 12 months.</p>
-      </div>
+      <Page>
+        <PageHeader title="Category Growth" />
+        <EmptyState title="No articles created in the last 12 months." />
+      </Page>
     );
   }
 
   const maxVal = Math.max(...data.categories.flatMap((c) => c.months), 1);
 
   return (
-    <div className="max-w-3xl">
-      <h1 className="text-xl font-semibold text-heading mb-1">Category Growth</h1>
-      <p className="text-[13px] text-muted mb-4">New articles per category, by month (last 12 months). Top 8 categories shown.</p>
+    <Page>
+      <PageHeader
+        title="Category Growth"
+        description="New articles per category, by month (last 12 months). Top 8 categories shown."
+      />
 
       {/* Legend */}
       <div className="flex flex-wrap gap-3 mb-4">
@@ -81,6 +84,6 @@ export default function CategoryGrowthPage() {
           })}
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -18,41 +19,34 @@ export default function ExternalLinksPage() {
   }, []);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        External link clicks
-      </h1>
-      <p className="text-[12px] text-muted mb-4">
-        Top outbound links clicked by readers on article pages.
-      </p>
+    <Page>
+      <PageHeader
+        title="External link clicks"
+        description="Top outbound links clicked by readers on article pages."
+      />
 
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : stats.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No external link clicks recorded yet.</p>
+        <EmptyState title="No external link clicks recorded yet." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-[13px] border-collapse">
-            <thead>
-              <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
-                <th className="py-2 pr-4">URL</th>
-                <th className="py-2 w-24 text-right">Clicks</th>
+        <DataTable>
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th className="w-24 text-right">Clicks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stats.map((s) => (
+              <tr key={s.url}>
+                <td className="font-mono text-[12px] text-muted">{s.url}</td>
+                <td className="text-right font-semibold">{s.clicks.toLocaleString()}</td>
               </tr>
-            </thead>
-            <tbody>
-              {stats.map((s) => (
-                <tr key={s.url} className="border-b border-border hover:bg-surface-hover">
-                  <td className="py-1.5 pr-4 font-mono text-[12px] text-muted">{s.url}</td>
-                  <td className="py-1.5 text-right font-semibold">{s.clicks.toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }

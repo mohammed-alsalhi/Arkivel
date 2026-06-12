@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import ReviewStatusBadge from "@/components/ReviewStatusBadge";
 import SpecialBlocksRenderer from "@/components/SpecialBlocksRenderer";
 import { reviewStatusLabel } from "@/lib/reviews";
+import { LinkButton, Page, PageHeader, Section } from "@/components/ui";
 
 type ReviewUser = {
   id: string;
@@ -216,7 +217,8 @@ export default function ReviewDetailPage() {
     review.status === "changes_requested" && (isAuthor || isAdmin);
 
   return (
-    <div>
+    <Page>
+      <div>
       <nav className="article-tabbar" aria-label="Review sections">
         <Link href="/reviews" className="article-tab">
           Reviews
@@ -231,18 +233,16 @@ export default function ReviewDetailPage() {
       </nav>
 
       <div className="border border-border bg-surface px-5 py-4">
-        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-3">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1
-                className="text-[1.5rem] font-normal text-heading"
-                style={{ fontFamily: "var(--font-serif)" }}
-              >
-                {review.article.title}
-              </h1>
+        <PageHeader
+          className="border-b border-border pb-3"
+          title={
+            <span className="inline-flex flex-wrap items-center gap-2">
+              {review.article.title}
               <ReviewStatusBadge status={review.status} />
-            </div>
-            <p className="mt-1 text-[12px] text-muted">
+            </span>
+          }
+          description={
+            <>
               Requested by{" "}
               <strong className="text-foreground">
                 {displayName(review.author)}
@@ -257,16 +257,14 @@ export default function ReviewDetailPage() {
                 </>
               )}
               {" "}on {formatDate(review.createdAt)}
-            </p>
-          </div>
-
-          <Link
-            href={`/articles/${review.article.slug}`}
-            className="ui-button"
-          >
-            View article
-          </Link>
-        </div>
+            </>
+          }
+          actions={
+            <LinkButton href={`/articles/${review.article.slug}`}>
+              View article
+            </LinkButton>
+          }
+        />
 
         {review.message && (
           <div className="mt-4 border border-border bg-background px-3 py-2 text-[13px]">
@@ -278,26 +276,22 @@ export default function ReviewDetailPage() {
         )}
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px] mt-4">
-          <section className="min-w-0">
-            <div className="mb-2 flex items-center justify-between gap-2">
-              <h2 className="text-[14px] font-bold text-heading">
-                Draft preview
-              </h2>
+          <Section
+            className="min-w-0"
+            title="Draft preview"
+            actions={
               <span className="text-[11px] text-muted">
                 Current article content
               </span>
-            </div>
+            }
+          >
             <div className="max-h-[620px] overflow-y-auto border border-border bg-background px-4 py-3">
               <SpecialBlocksRenderer html={review.article.content} />
             </div>
-          </section>
+          </Section>
 
           <aside className="space-y-4">
-            <section>
-              <h2 className="mb-2 text-[14px] font-bold text-heading">
-                Decision
-              </h2>
-
+            <Section title="Decision">
               {canAssign && (
                 <button
                   type="button"
@@ -367,13 +361,9 @@ export default function ReviewDetailPage() {
               {error && (
                 <p className="mt-2 text-[12px] text-red-600">{error}</p>
               )}
-            </section>
+            </Section>
 
-            <section>
-              <h2 className="mb-2 text-[14px] font-bold text-heading">
-                Comments
-              </h2>
-
+            <Section title="Comments">
               <div className="space-y-2">
                 {review.comments.length === 0 ? (
                   <p className="text-[12px] text-muted italic">
@@ -415,10 +405,11 @@ export default function ReviewDetailPage() {
                   {actionLoading === "comment" ? "Posting..." : "Post comment"}
                 </button>
               </form>
-            </section>
+            </Section>
           </aside>
         </div>
       </div>
-    </div>
+      </div>
+    </Page>
   );
 }

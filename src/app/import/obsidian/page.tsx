@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { Page, PageHeader } from "@/components/ui";
 
 interface ImportResult {
   slug: string;
@@ -38,12 +39,16 @@ export default function ObsidianImportPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-2">Import from Obsidian</h1>
-      <p className="text-muted mb-6 text-sm">
-        Upload a single <code>.md</code> file or a <code>.zip</code> vault export. Front matter
-        (tags, title) is preserved. Wiki links (<code>[[Page Name]]</code>) are converted to internal links.
-      </p>
+    <Page width="narrow">
+      <PageHeader
+        title="Import from Obsidian"
+        description={
+          <>
+            Upload a single <code>.md</code> file or a <code>.zip</code> vault export. Front matter
+            (tags, title) is preserved. Wiki links (<code>[[Page Name]]</code>) are converted to internal links.
+          </>
+        }
+      />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
@@ -58,7 +63,7 @@ export default function ObsidianImportPage() {
         <button
           type="submit"
           disabled={loading}
-          className="self-start px-4 py-2 bg-primary text-white rounded hover:opacity-90 disabled:opacity-50"
+          className="ui-button ui-button-primary self-start"
         >
           {loading ? "Importing…" : "Import"}
         </button>
@@ -84,6 +89,6 @@ export default function ObsidianImportPage() {
           </ul>
         </div>
       )}
-    </div>
+    </Page>
   );
 }

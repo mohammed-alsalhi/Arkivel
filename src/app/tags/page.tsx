@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export default async function TagsPage() {
   const tags = await prisma.tag.findMany({
@@ -17,21 +18,15 @@ export default async function TagsPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-3 border-b border-border pb-1 mb-3">
-        <h1 className="text-[1.7rem] font-normal text-heading flex-1" style={{ fontFamily: "var(--font-serif)" }}>
-          All Tags
-        </h1>
-        <Link href="/tags/cloud" className="text-[12px] text-accent hover:underline">
-          Tag cloud
-        </Link>
-      </div>
-      <p className="text-[12px] text-muted mb-4">{tags.length} tags in the wiki</p>
+    <Page>
+      <PageHeader
+        title="All Tags"
+        description={`${tags.length} tags in the wiki`}
+        actions={<LinkButton href="/tags/cloud">Tag cloud</LinkButton>}
+      />
 
       {tags.length === 0 ? (
-        <div className="border border-border bg-surface p-8 text-center text-muted italic">
-          No tags yet.
-        </div>
+        <EmptyState title="No tags yet." />
       ) : (
         <div className="tag-cloud">
           {tags.map((tag) => (
@@ -47,7 +42,7 @@ export default async function TagsPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }
 

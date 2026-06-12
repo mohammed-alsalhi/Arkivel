@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Suggestion = {
   id: string;
@@ -70,27 +71,26 @@ export default function AdminSuggestionsPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
-      <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4" style={{ fontFamily: "var(--font-serif)" }}>
-        Edit Suggestions
-      </h1>
+    <Page>
+      <PageHeader title="Edit Suggestions" />
 
       <div className="flex gap-2 mb-4">
         {(["pending", "commented", "assigned", "accepted", "rejected", "converted", "all"] as const).map((s) => (
-          <button
+          <Button
             key={s}
             onClick={() => setStatusFilter(s)}
-            className={`h-6 px-2 text-[11px] border border-border rounded capitalize ${statusFilter === s ? "bg-accent text-white border-accent" : "text-muted hover:text-foreground hover:bg-surface-hover"}`}
+            variant={statusFilter === s ? "primary" : "default"}
+            className="capitalize"
           >
             {s}
-          </button>
+          </Button>
         ))}
       </div>
 
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : suggestions.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No {statusFilter === "all" ? "" : statusFilter + " "}suggestions.</p>
+        <EmptyState title={`No ${statusFilter === "all" ? "" : statusFilter + " "}suggestions.`} />
       ) : (
         <div className="space-y-3">
           {suggestions.map((s) => (
@@ -196,6 +196,6 @@ export default function AdminSuggestionsPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

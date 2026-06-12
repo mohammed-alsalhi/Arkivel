@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Page, PageHeader, StatCard, StatGrid } from "@/components/ui";
 
 type Bucket = { label: string; count: number };
 type ArticleEntry = { id: string; title: string; slug: string; wordCount: number };
@@ -27,12 +28,10 @@ export default function WordCountPage() {
 
   if (loading) {
     return (
-      <div>
-        <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4" style={{ fontFamily: "var(--font-serif)" }}>
-          Word Count Distribution
-        </h1>
+      <Page>
+        <PageHeader title="Word Count Distribution" />
         <p className="text-[13px] text-muted italic">Loading…</p>
-      </div>
+      </Page>
     );
   }
 
@@ -41,28 +40,20 @@ export default function WordCountPage() {
   const maxCount = Math.max(...data.distribution.map((b) => b.count), 1);
 
   return (
-    <div>
-      <h1
-        className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Word Count Distribution
-      </h1>
+    <Page>
+      <PageHeader title="Word Count Distribution" />
 
       {/* Summary stats */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
+      <StatGrid className="mb-6">
         {[
           { label: "Articles", value: data.stats.total },
           { label: "Average words", value: data.stats.avg.toLocaleString() },
           { label: "Longest", value: data.stats.max.toLocaleString() },
           { label: "Shortest", value: data.stats.min.toLocaleString() },
         ].map(({ label, value }) => (
-          <div key={label} className="border border-border bg-surface px-3 py-2">
-            <div className="text-[11px] text-muted uppercase">{label}</div>
-            <div className="text-[18px] font-bold text-heading mt-0.5">{value}</div>
-          </div>
+          <StatCard key={label} label={label} value={value} />
         ))}
-      </div>
+      </StatGrid>
 
       {/* Bar chart */}
       <div className="wiki-portal mb-6">
@@ -134,6 +125,6 @@ export default function WordCountPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

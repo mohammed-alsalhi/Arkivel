@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 type Event = {
   year: number;
@@ -98,31 +99,29 @@ export default function HistoricalTimelinePage() {
 
   if (!data || data.events.length === 0) {
     return (
-      <div>
-        <h1 className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3" style={{ fontFamily: "var(--font-serif)" }}>
-          Historical Timeline
-        </h1>
-        <p className="text-[13px] text-muted">No articles with historical dates found. Articles need to mention specific years to appear here.</p>
-      </div>
+      <Page>
+        <PageHeader title="Historical Timeline" />
+        <EmptyState description="No articles with historical dates found. Articles need to mention specific years to appear here." />
+      </Page>
     );
   }
 
   const rangeSpan = data.maxYear - data.minYear || 1;
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-1">
-        <h1 className="text-[1.7rem] font-normal text-heading" style={{ fontFamily: "var(--font-serif)" }}>
-          Historical Timeline
-        </h1>
-        <Link href="/timeline" className="text-[12px] text-muted hover:text-foreground hover:underline">
-          View by creation date →
-        </Link>
-      </div>
-      <p className="text-[13px] text-muted mb-4">
-        {data.events.length} articles with historical dates, spanning {data.minYear}–{data.maxYear}.
-        Dates are extracted from article content.
-      </p>
+    <Page>
+      <PageHeader
+        title="Historical Timeline"
+        description={
+          <>
+            {data.events.length} articles with historical dates, spanning {data.minYear}–{data.maxYear}.
+            Dates are extracted from article content.
+          </>
+        }
+        actions={
+          <LinkButton href="/timeline">View by creation date →</LinkButton>
+        }
+      />
 
       {/* Controls */}
       <div className="flex flex-wrap gap-2 mb-4">
@@ -146,7 +145,7 @@ export default function HistoricalTimelinePage() {
         {zoomed && (
           <button
             onClick={() => { setZoomRange([data.minYear, data.maxYear]); setZoomed(false); }}
-            className="h-8 px-3 text-[12px] border border-border hover:bg-surface-hover transition-colors"
+            className="ui-button"
           >
             Reset zoom
           </button>
@@ -245,6 +244,6 @@ export default function HistoricalTimelinePage() {
           <p className="text-[13px] text-muted ml-24 py-8">No articles match your filters.</p>
         )}
       </div>
-    </div>
+    </Page>
   );
 }

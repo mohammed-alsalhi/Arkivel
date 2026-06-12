@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Entry = { slug: string; title: string; visitedAt: number };
 
@@ -37,25 +38,16 @@ export default function HistoryPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between border-b border-border pb-1 mb-4">
-        <h1 className="text-[1.7rem] font-normal text-heading" style={{ fontFamily: "var(--font-serif)" }}>
-          Reading History
-        </h1>
-        {entries.length > 0 && (
-          <button
-            onClick={clear}
-            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover"
-          >
-            Clear history
-          </button>
-        )}
-      </div>
+    <Page>
+      <PageHeader
+        title="Reading History"
+        actions={entries.length > 0 && <Button onClick={clear}>Clear history</Button>}
+      />
 
       {!loaded ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : entries.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No reading history yet. Articles you view will appear here.</p>
+        <EmptyState description="No reading history yet. Articles you view will appear here." />
       ) : (
         <ol className="space-y-1">
           {entries.map((e, i) => (
@@ -71,6 +63,6 @@ export default function HistoryPage() {
           ))}
         </ol>
       )}
-    </div>
+    </Page>
   );
 }

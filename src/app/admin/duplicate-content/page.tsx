@@ -2,6 +2,7 @@ import { isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -52,23 +53,20 @@ export default async function DuplicateContentPage() {
   pairs.sort((a, b) => b.similarity - a.similarity);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Duplicate Content Detector
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Article pairs with Jaccard word similarity ≥ {Math.round(SIMILARITY_THRESHOLD * 100)}%.
-        High similarity may indicate duplicate or near-duplicate articles that could be merged.
-        Analysed first {Math.min(articles.length, 300)} published articles.
-      </p>
+    <Page>
+      <PageHeader
+        title="Duplicate Content Detector"
+        description={
+          <>
+            Article pairs with Jaccard word similarity ≥ {Math.round(SIMILARITY_THRESHOLD * 100)}%.
+            High similarity may indicate duplicate or near-duplicate articles that could be merged.
+            Analysed first {Math.min(articles.length, 300)} published articles.
+          </>
+        }
+      />
 
       {pairs.length === 0 ? (
-        <p className="text-[13px] text-green-600 dark:text-green-400">
-          ✓ No highly similar article pairs found.
-        </p>
+        <EmptyState title="✓ No highly similar article pairs found." />
       ) : (
         <div className="border border-border divide-y divide-border">
           {pairs.map(({ a, b, similarity }) => (
@@ -85,18 +83,14 @@ export default async function DuplicateContentPage() {
                   {b.title}
                 </Link>
                 <div className="flex gap-1 ml-auto shrink-0">
-                  <Link href={`/articles/${a.slug}/edit`} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-muted/50">
-                    Edit A
-                  </Link>
-                  <Link href={`/articles/${b.slug}/edit`} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-muted/50">
-                    Edit B
-                  </Link>
+                  <LinkButton href={`/articles/${a.slug}/edit`}>Edit A</LinkButton>
+                  <LinkButton href={`/articles/${b.slug}/edit`}>Edit B</LinkButton>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

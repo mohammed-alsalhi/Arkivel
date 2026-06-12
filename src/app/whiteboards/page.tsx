@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Board = { id: string; title: string; slug: string; updatedAt: string };
 
@@ -35,13 +36,8 @@ export default function WhiteboardsPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Whiteboards
-      </h1>
+    <Page>
+      <PageHeader title="Whiteboards" />
 
       <div className="flex gap-2 mb-4">
         {creating ? (
@@ -54,24 +50,24 @@ export default function WhiteboardsPage() {
               placeholder="Whiteboard title"
               className="border border-border bg-surface px-2 py-1 text-[12px] focus:border-accent focus:outline-none"
             />
-            <button onClick={create} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">
+            <Button variant="primary" onClick={create}>
               Create
-            </button>
-            <button onClick={() => setCreating(false)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">
+            </Button>
+            <Button onClick={() => setCreating(false)}>
               Cancel
-            </button>
+            </Button>
           </>
         ) : (
-          <button onClick={() => setCreating(true)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">
+          <Button onClick={() => setCreating(true)}>
             + New whiteboard
-          </button>
+          </Button>
         )}
       </div>
 
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : boards.length === 0 ? (
-        <div className="wiki-notice">No whiteboards yet. Create one above.</div>
+        <EmptyState title="No whiteboards yet." description="Create one above." />
       ) : (
         <ul className="space-y-1 text-[13px]">
           {boards.map((b) => (
@@ -86,7 +82,7 @@ export default function WhiteboardsPage() {
           ))}
         </ul>
       )}
-    </div>
+    </Page>
   );
 }
 

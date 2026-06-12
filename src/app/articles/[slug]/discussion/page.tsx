@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAdmin } from "@/components/AdminContext";
+import { Button, EmptyState, Page, PageHeader, Section } from "@/components/ui";
 
 type Discussion = {
   id: string;
@@ -68,13 +69,9 @@ function CommentForm({
         />
       </div>
       <div className="flex items-center gap-2">
-        <button
-          type="submit"
-          disabled={submitting || !content.trim()}
-          className="bg-accent px-4 py-1.5 text-[13px] font-bold text-white hover:bg-accent-hover disabled:opacity-50"
-        >
+        <Button type="submit" variant="primary" disabled={submitting || !content.trim()}>
           {submitting ? "Posting..." : submitLabel}
-        </button>
+        </Button>
         {onCancel && (
           <button
             type="button"
@@ -287,23 +284,24 @@ export default function DiscussionPage() {
         <span className="article-tab article-tab-active">Discussion</span>
       </nav>
 
-      <div className="border border-border bg-surface px-5 py-4">
-        <h1
-          className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Discussion: {article.title}
-          {totalCount(discussions) > 0 && (
-            <span className="ml-2 text-[1rem] text-muted font-normal">
-              ({totalCount(discussions)} comment{totalCount(discussions) !== 1 ? "s" : ""})
-            </span>
-          )}
-        </h1>
+      <Page className="border border-border bg-surface px-5 py-4">
+        <PageHeader
+          title={
+            <>
+              Discussion: {article.title}
+              {totalCount(discussions) > 0 && (
+                <span className="ml-2 text-[1rem] text-muted font-normal">
+                  ({totalCount(discussions)} comment{totalCount(discussions) !== 1 ? "s" : ""})
+                </span>
+              )}
+            </>
+          }
+        />
 
         {discussions.length === 0 ? (
-          <p className="text-[13px] text-muted italic mb-4">No comments yet. Be the first to start a discussion.</p>
+          <EmptyState description="No comments yet. Be the first to start a discussion." />
         ) : (
-          <div className="space-y-3 mb-4">
+          <div className="space-y-3">
             {discussions.map((d) => (
               <Comment
                 key={d.id}
@@ -317,16 +315,10 @@ export default function DiscussionPage() {
           </div>
         )}
 
-        <div className="border-t border-border pt-3">
-          <h2
-            className="text-base font-normal text-heading mb-2"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Add a comment
-          </h2>
+        <Section title="Add a comment">
           <CommentForm onSubmit={handlePost} />
-        </div>
-      </div>
+        </Section>
+      </Page>
     </div>
   );
 }

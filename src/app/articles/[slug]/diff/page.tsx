@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 type ArticleInfo = {
   id: string;
@@ -81,29 +82,20 @@ export default function DiffPage() {
         <Link href={`/articles/${slug}/discussion`} className="article-tab">Discussion</Link>
       </nav>
 
-      <div className="border border-border bg-surface px-5 py-4">
-        <div className="flex items-center justify-between mb-3">
-          <h1
-            className="text-[1.5rem] font-normal text-heading border-b border-border pb-1"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Difference between revisions of &ldquo;{article.title}&rdquo;
-          </h1>
-          <div className="flex gap-1 text-[11px]">
-            <button
-              onClick={() => setDiffMode("line")}
-              className={`px-2 py-0.5 border border-border ${diffMode === "line" ? "bg-accent text-white" : "bg-surface-hover"}`}
-            >
-              Line
-            </button>
-            <button
-              onClick={() => setDiffMode("inline")}
-              className={`px-2 py-0.5 border border-border ${diffMode === "inline" ? "bg-accent text-white" : "bg-surface-hover"}`}
-            >
-              Inline
-            </button>
-          </div>
-        </div>
+      <Page className="border border-border bg-surface px-5 py-4">
+        <PageHeader
+          title={<>Difference between revisions of &ldquo;{article.title}&rdquo;</>}
+          actions={
+            <>
+              <Button aria-pressed={diffMode === "line"} onClick={() => setDiffMode("line")}>
+                Line
+              </Button>
+              <Button aria-pressed={diffMode === "inline"} onClick={() => setDiffMode("inline")}>
+                Inline
+              </Button>
+            </>
+          }
+        />
 
         {diffMode === "line" ? (
           <div className="border border-border text-[13px] font-mono">
@@ -150,12 +142,12 @@ export default function DiffPage() {
           </div>
         )}
 
-        <div className="mt-3">
+        <div>
           <Link href={`/articles/${slug}/history`} className="text-[13px] text-wiki-link">
             &larr; Back to history
           </Link>
         </div>
-      </div>
+      </Page>
     </div>
   );
 }

@@ -1,11 +1,12 @@
 import { assistantPackDefaults, createAssistantPackReport } from "@/lib/assistant-packs";
+import { Page, PageHeader } from "@/components/ui";
 
 export default function AssistantPacksAdminPage() {
   const report = createAssistantPackReport(assistantPackDefaults);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Assistant Packs</h1>
+    <Page>
+      <PageHeader title="Assistant Packs" />
       <div className="wiki-portal mb-4">
         <div className="wiki-portal-header">Provider Status</div>
         <div className="wiki-portal-body text-[13px]">
@@ -43,6 +44,6 @@ export default function AssistantPacksAdminPage() {
           </ul>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

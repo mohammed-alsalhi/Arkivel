@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 // ─── Widget definitions ───────────────────────────────────────────────────────
 
@@ -283,27 +284,24 @@ export default function DashboardPage() {
   if (loading) return <div className="py-8 text-center text-muted italic text-[13px]">Loading dashboard…</div>;
 
   return (
-    <div>
-      <header className="ui-page-header">
-        <div>
-          <p className="ui-page-kicker">Personal</p>
-          <h1 className="ui-page-title">My dashboard</h1>
-          <p className="ui-page-dek">Your configurable reading, review, and contribution workspace.</p>
-        </div>
-        <div className="ui-page-actions">
-          {saving && <span className="text-[11px] text-muted">Saving…</span>}
-          <button
-            onClick={() => setEditMode(!editMode)}
-            className="ui-button"
-          >
-            {editMode ? "Done" : "Customize"}
-          </button>
-        </div>
-      </header>
+    <Page>
+      <PageHeader
+        kicker="Personal"
+        title="My dashboard"
+        description="Your configurable reading, review, and contribution workspace."
+        actions={
+          <>
+            {saving && <span className="text-[11px] text-muted">Saving…</span>}
+            <Button onClick={() => setEditMode(!editMode)}>
+              {editMode ? "Done" : "Customize"}
+            </Button>
+          </>
+        }
+      />
 
       {/* Widget picker in edit mode */}
       {editMode && (
-        <div className="wiki-portal mb-4">
+        <div className="wiki-portal">
           <div className="wiki-portal-header">Visible widgets (drag to reorder)</div>
           <div className="wiki-portal-body">
             <div className="flex flex-wrap gap-2">
@@ -362,7 +360,7 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
-    </div>
+    </Page>
   );
 }
 

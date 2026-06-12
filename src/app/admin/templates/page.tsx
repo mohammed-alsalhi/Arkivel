@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAdmin } from "@/components/AdminContext";
+import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Template = {
   id: string;
@@ -157,48 +158,36 @@ export default function TemplatesPage() {
 
   if (!isAdmin) {
     return (
-      <div>
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Article Templates
-        </h1>
+      <Page>
+        <PageHeader title="Article Templates" />
         <div className="wiki-notice">
           You must be <Link href="/admin">logged in as admin</Link> to manage templates.
         </div>
-      </div>
+      </Page>
     );
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Article Templates
-      </h1>
-
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-[13px] text-muted">
-          Templates provide starting structures when creating new articles.
-        </p>
-        <button
-          onClick={() => {
-            if (showCreate) {
-              resetForm();
-              setShowCreate(false);
-            } else {
-              resetForm();
-              setShowCreate(true);
-            }
-          }}
-          className="border border-border bg-surface-hover px-3 py-1 text-[13px] font-medium hover:bg-surface transition-colors"
-        >
-          {showCreate ? "Cancel" : "Create template"}
-        </button>
-      </div>
+    <Page>
+      <PageHeader
+        title="Article Templates"
+        description="Templates provide starting structures when creating new articles."
+        actions={
+          <Button
+            onClick={() => {
+              if (showCreate) {
+                resetForm();
+                setShowCreate(false);
+              } else {
+                resetForm();
+                setShowCreate(true);
+              }
+            }}
+          >
+            {showCreate ? "Cancel" : "Create template"}
+          </Button>
+        }
+      />
 
       {/* Create / Edit form */}
       {showCreate && (
@@ -275,13 +264,12 @@ export default function TemplatesPage() {
             {formError && (
               <p className="text-[12px] text-red-600">{formError}</p>
             )}
-            <button
+            <Button
               onClick={handleSave}
               disabled={saving || !formName.trim() || !formContent.trim()}
-              className="border border-border bg-surface-hover px-4 py-1.5 text-[13px] font-medium hover:bg-surface transition-colors disabled:opacity-50"
             >
               {saving ? "Saving..." : editId ? "Update Template" : "Create Template"}
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -290,9 +278,7 @@ export default function TemplatesPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading templates...</p>
       ) : templates.length === 0 ? (
-        <div className="wiki-notice">
-          No templates available.
-        </div>
+        <EmptyState title="No templates available." />
       ) : (
         <div className="space-y-3">
           {templates.map((template) => (
@@ -358,6 +344,6 @@ export default function TemplatesPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

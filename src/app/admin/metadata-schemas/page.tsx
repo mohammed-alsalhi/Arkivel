@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button, DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type FieldType = "text" | "number" | "date" | "boolean" | "select";
 
@@ -107,23 +108,12 @@ export default function MetadataSchemasPage() {
   const availableCategories = categories.filter((c) => !usedCategoryIds.has(c.id));
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Custom metadata schemas
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Define typed metadata fields per category. These appear in the article editor when an article belongs to that category, and values are stored in the article&apos;s metadata object.
-      </p>
-
-      <button
-        onClick={startCreate}
-        className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover mb-4"
-      >
-        + New schema
-      </button>
+    <Page>
+      <PageHeader
+        title="Custom metadata schemas"
+        description="Define typed metadata fields per category. These appear in the article editor when an article belongs to that category, and values are stored in the article's metadata object."
+        actions={<Button onClick={startCreate}>+ New schema</Button>}
+      />
 
       {/* Form */}
       {(creating || editing) && (
@@ -151,12 +141,7 @@ export default function MetadataSchemasPage() {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[11px] text-muted font-bold">Fields</span>
-                <button
-                  onClick={addField}
-                  className="h-5 px-2 text-[10px] border border-border rounded hover:bg-surface-hover"
-                >
-                  + Add field
-                </button>
+                <Button onClick={addField}>+ Add field</Button>
               </div>
               <div className="space-y-2">
                 {fields.map((f, i) => (
@@ -215,19 +200,12 @@ export default function MetadataSchemasPage() {
 
             {error && <p className="text-[12px] text-red-600">{error}</p>}
             <div className="flex gap-2">
-              <button
-                onClick={save}
-                disabled={saving}
-                className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover disabled:opacity-50"
-              >
+              <Button onClick={save} disabled={saving}>
                 {saving ? "Saving…" : "Save schema"}
-              </button>
-              <button
-                onClick={() => { setEditing(null); setCreating(false); }}
-                className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-              >
+              </Button>
+              <Button onClick={() => { setEditing(null); setCreating(false); }}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -237,39 +215,32 @@ export default function MetadataSchemasPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : schemas.length === 0 ? (
-        <div className="wiki-notice">No metadata schemas defined yet.</div>
+        <EmptyState title="No metadata schemas defined yet." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-            <thead>
-              <tr className="bg-surface-hover">
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Category</th>
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Fields</th>
-                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Actions</th>
+        <DataTable>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Fields</th>
+              <th className="w-20">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {schemas.map((s) => (
+              <tr key={s.id}>
+                <td className="font-medium">{s.category.name}</td>
+                <td className="text-muted text-[12px]">
+                  {(s.fields as FieldDef[]).map((f) => `${f.label} (${f.type})`).join(", ") || "—"}
+                </td>
+                <td>
+                  <Button onClick={() => startEdit(s)}>Edit</Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {schemas.map((s) => (
-                <tr key={s.id} className="hover:bg-surface-hover">
-                  <td className="border border-border px-3 py-1.5 font-medium">{s.category.name}</td>
-                  <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                    {(s.fields as FieldDef[]).map((f) => `${f.label} (${f.type})`).join(", ") || "—"}
-                  </td>
-                  <td className="border border-border px-3 py-1.5">
-                    <button
-                      onClick={() => startEdit(s)}
-                      className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
-    </div>
+    </Page>
   );
 }
 

@@ -2,6 +2,7 @@ import { isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -72,19 +73,16 @@ export default async function AdminCalendarPage({
   const nextYear = month === 11 ? year + 1 : year;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground">Admin</Link>
-        <span className="text-muted-foreground">/</span>
-        <h1 className="text-xl font-semibold">Content Calendar</h1>
-      </div>
+    <Page>
+      <PageHeader
+        title="Content Calendar"
+        actions={<LinkButton href="/admin">Admin</LinkButton>}
+      />
 
       <div className="flex items-center justify-between mb-4">
-        <Link href={`/admin/calendar?year=${prevYear}&month=${prevMonth}`}
-          className="text-sm border border-border rounded px-3 py-1 hover:bg-muted">← Prev</Link>
+        <LinkButton href={`/admin/calendar?year=${prevYear}&month=${prevMonth}`}>← Prev</LinkButton>
         <h2 className="text-lg font-medium">{monthName}</h2>
-        <Link href={`/admin/calendar?year=${nextYear}&month=${nextMonth}`}
-          className="text-sm border border-border rounded px-3 py-1 hover:bg-muted">Next →</Link>
+        <LinkButton href={`/admin/calendar?year=${nextYear}&month=${nextMonth}`}>Next →</LinkButton>
       </div>
 
       <div className="grid grid-cols-7 border-l border-t border-border">
@@ -138,6 +136,6 @@ export default async function AdminCalendarPage({
           Published
         </span>
       </div>
-    </div>
+    </Page>
   );
 }

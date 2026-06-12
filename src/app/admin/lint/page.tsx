@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAdmin } from "@/components/AdminContext";
-import { Button, TabButton, Tabs } from "@/components/ui";
+import { Button, Page, PageHeader, TabButton, Tabs } from "@/components/ui";
 
 type LintResult = {
   level: "error" | "warning" | "info";
@@ -73,17 +73,12 @@ export default function LintPage() {
 
   if (!isAdmin) {
     return (
-      <div>
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Content Linting
-        </h1>
+      <Page>
+        <PageHeader title="Content Linting" />
         <div className="wiki-notice">
           You must be <Link href="/admin">logged in as admin</Link> to view lint results.
         </div>
-      </div>
+      </Page>
     );
   }
 
@@ -101,17 +96,11 @@ export default function LintPage() {
   const filteredTotal = filteredReports.reduce((sum, r) => sum + r.results.length, 0);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Content Linting
-      </h1>
-
-      <p className="text-[13px] text-muted mb-4">
-        Automated content quality checks across all wiki articles.
-      </p>
+    <Page>
+      <PageHeader
+        title="Content Linting"
+        description="Automated content quality checks across all wiki articles."
+      />
 
       {loading ? (
         <p className="text-[13px] text-muted italic">Analyzing articles...</p>
@@ -231,6 +220,6 @@ export default function LintPage() {
           )}
         </>
       ) : null}
-    </div>
+    </Page>
   );
 }

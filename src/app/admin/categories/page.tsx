@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { Button, Page, PageHeader, Section } from "@/components/ui";
 
 type Category = {
   id: string;
@@ -236,15 +237,9 @@ export default function AdminCategoriesPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <Page>
+      <PageHeader title="Space Customization" />
       <section>
-        <h1
-          className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Space Customization
-        </h1>
-
         {loading ? (
           <p className="text-[13px] text-muted italic">Loading categories...</p>
         ) : (
@@ -275,22 +270,12 @@ export default function AdminCategoriesPage() {
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={resetToParent}
-                  disabled={saving || !selectedCategoryId}
-                  className="h-7 px-3 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover disabled:opacity-40"
-                >
+                <Button onClick={resetToParent} disabled={saving || !selectedCategoryId}>
                   Reset to parent
-                </button>
-                <button
-                  type="button"
-                  onClick={resetToGlobal}
-                  disabled={saving || !selectedCategoryId}
-                  className="h-7 px-3 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover disabled:opacity-40"
-                >
+                </Button>
+                <Button onClick={resetToGlobal} disabled={saving || !selectedCategoryId}>
                   Reset to global
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -358,13 +343,9 @@ export default function AdminCategoriesPage() {
               )}
 
               <div className="mt-4 flex flex-wrap items-center gap-2">
-                <button
-                  type="submit"
-                  disabled={saving || !selectedCategoryId}
-                  className="h-7 px-3 text-[11px] border border-accent rounded bg-accent/10 text-accent hover:bg-accent/15 disabled:opacity-40"
-                >
+                <Button type="submit" variant="primary" disabled={saving || !selectedCategoryId}>
                   {saving ? "Saving..." : "Save overrides"}
-                </button>
+                </Button>
                 <span className="text-[12px] text-muted">
                   Blank fields inherit from {parentName}; filled fields become explicit overrides.
                 </span>
@@ -424,14 +405,7 @@ export default function AdminCategoriesPage() {
         )}
       </section>
 
-      <section>
-        <h2
-          className="text-[1.2rem] font-normal text-heading border-b border-border pb-1 mb-4"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Category Merge
-        </h2>
-
+      <Section title="Category Merge">
         <div className="wiki-notice mb-4">
           Merging moves all articles and sub-categories from the source into the target, then permanently deletes the
           source category. This cannot be undone.
@@ -483,16 +457,12 @@ export default function AdminCategoriesPage() {
               </select>
             </div>
 
-            <button
-              type="submit"
-              disabled={merging || !sourceId || !targetId}
-              className="h-6 px-3 text-[11px] border border-red-400 rounded bg-red-50 text-red-700 hover:bg-red-100 disabled:opacity-40"
-            >
+            <Button type="submit" variant="danger" disabled={merging || !sourceId || !targetId}>
               {merging ? "Merging..." : "Merge categories"}
-            </button>
+            </Button>
           </form>
         )}
-      </section>
+      </Section>
 
       {result && (
         <p className="text-[13px] text-green-700 border border-green-200 bg-green-50 px-3 py-2 rounded">{result}</p>
@@ -500,7 +470,7 @@ export default function AdminCategoriesPage() {
       {error && (
         <p className="text-[13px] text-red-700 border border-red-200 bg-red-50 px-3 py-2 rounded">{error}</p>
       )}
-    </div>
+    </Page>
   );
 }
 

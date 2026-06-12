@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button, DataTable, EmptyState } from "@/components/ui";
 
 type RedirectRow = { id: string; fromSlug: string; toSlug: string; createdAt: Date | string };
 
@@ -76,51 +77,45 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
             className="h-8 px-2 text-sm border border-border rounded bg-background w-48"
           />
         </div>
-        <button
-          type="submit"
-          disabled={saving}
-          className="h-8 px-3 text-sm border border-border rounded hover:bg-muted disabled:opacity-50"
-        >
+        <Button type="submit" disabled={saving}>
           {saving ? "Saving…" : "Add redirect"}
-        </button>
+        </Button>
         {error && <span className="text-xs text-destructive">{error}</span>}
       </form>
 
       {/* Table */}
       {redirects.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No redirects yet.</p>
+        <EmptyState title="No redirects yet." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border border-border rounded overflow-hidden">
-            <thead className="bg-muted/50">
-              <tr>
-                <th className="text-left px-3 py-2 font-medium">From slug</th>
-                <th className="text-left px-3 py-2 font-medium">To slug</th>
-                <th className="text-left px-3 py-2 font-medium">Created</th>
-                <th className="px-3 py-2" />
+        <DataTable>
+          <thead>
+            <tr>
+              <th>From slug</th>
+              <th>To slug</th>
+              <th>Created</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {redirects.map((r) => (
+              <tr key={r.id}>
+                <td className="font-mono text-xs">{r.fromSlug}</td>
+                <td className="font-mono text-xs">{r.toSlug}</td>
+                <td className="text-muted-foreground">
+                  {new Date(r.createdAt).toLocaleDateString()}
+                </td>
+                <td className="text-right">
+                  <button
+                    onClick={() => handleDelete(r.id)}
+                    className="text-xs text-destructive hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {redirects.map((r) => (
-                <tr key={r.id} className="border-t border-border hover:bg-muted/30">
-                  <td className="px-3 py-2 font-mono text-xs">{r.fromSlug}</td>
-                  <td className="px-3 py-2 font-mono text-xs">{r.toSlug}</td>
-                  <td className="px-3 py-2 text-muted-foreground">
-                    {new Date(r.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    <button
-                      onClick={() => handleDelete(r.id)}
-                      className="text-xs text-destructive hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
     </div>
   );

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { computeQualityScore } from "@/app/api/articles/[id]/quality-score/route";
+import { DataTable, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -36,64 +37,58 @@ export default async function AdminQualityPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin" className="text-sm text-muted-foreground hover:text-foreground">Admin</Link>
-        <span className="text-muted-foreground">/</span>
-        <h1 className="text-xl font-semibold">Article Quality</h1>
-      </div>
+    <Page>
+      <PageHeader
+        kicker={<Link href="/admin" className="hover:text-foreground">Admin</Link>}
+        title="Article Quality"
+        description={`${scored.length} published articles sorted by quality score (worst first). Score is 0–100 based on word count, links, images, freshness, and excerpt.`}
+      />
 
-      <p className="text-sm text-muted-foreground mb-6">
-        {scored.length} published articles sorted by quality score (worst first). Score is 0–100 based on word count, links, images, freshness, and excerpt.
-      </p>
-
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm border border-border rounded overflow-hidden">
-          <thead className="bg-muted/50">
-            <tr>
-              <th className="text-left px-3 py-2 font-medium">Title</th>
-              <th className="text-left px-3 py-2 font-medium">Category</th>
-              <th className="text-center px-3 py-2 font-medium">Score</th>
-              <th className="text-right px-3 py-2 font-medium">Words</th>
-              <th className="text-right px-3 py-2 font-medium">Links</th>
-              <th className="text-right px-3 py-2 font-medium">Images</th>
-              <th className="px-3 py-2" />
-            </tr>
-          </thead>
-          <tbody>
-            {scored.map((a) => {
-              const wc = a.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().split(/\s+/).filter(Boolean).length;
-              const links = (a.content.match(/data-wiki-link=/g) || []).length;
-              const images = (a.content.match(/<img/g) || []).length;
-              return (
-                <tr key={a.id} className="border-t border-border hover:bg-muted/30">
-                  <td className="px-3 py-2">
-                    <Link href={`/articles/${a.slug}`} className="hover:underline font-medium">
-                      {a.title}
-                    </Link>
-                  </td>
-                  <td className="px-3 py-2 text-muted-foreground text-xs">
-                    {a.category?.name ?? "—"}
-                  </td>
-                  <td className="px-3 py-2 text-center">
-                    <span className={`inline-flex px-1.5 py-0.5 rounded text-[11px] font-medium ${colorMap[a.quality.label]}`}>
-                      {a.quality.score} · {a.quality.label}
-                    </span>
-                  </td>
-                  <td className="px-3 py-2 text-right tabular-nums text-xs">{wc}</td>
-                  <td className="px-3 py-2 text-right tabular-nums text-xs">{links}</td>
-                  <td className="px-3 py-2 text-right tabular-nums text-xs">{images}</td>
-                  <td className="px-3 py-2">
-                    <Link href={`/articles/${a.slug}/edit`} className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
-                      Edit
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <DataTable>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th className="text-center">Score</th>
+            <th className="text-right">Words</th>
+            <th className="text-right">Links</th>
+            <th className="text-right">Images</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {scored.map((a) => {
+            const wc = a.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().split(/\s+/).filter(Boolean).length;
+            const links = (a.content.match(/data-wiki-link=/g) || []).length;
+            const images = (a.content.match(/<img/g) || []).length;
+            return (
+              <tr key={a.id}>
+                <td>
+                  <Link href={`/articles/${a.slug}`} className="hover:underline font-medium">
+                    {a.title}
+                  </Link>
+                </td>
+                <td className="text-muted-foreground text-xs">
+                  {a.category?.name ?? "—"}
+                </td>
+                <td className="text-center">
+                  <span className={`inline-flex px-1.5 py-0.5 rounded text-[11px] font-medium ${colorMap[a.quality.label]}`}>
+                    {a.quality.score} · {a.quality.label}
+                  </span>
+                </td>
+                <td className="text-right tabular-nums text-xs">{wc}</td>
+                <td className="text-right tabular-nums text-xs">{links}</td>
+                <td className="text-right tabular-nums text-xs">{images}</td>
+                <td>
+                  <Link href={`/articles/${a.slug}/edit`} className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
+                    Edit
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </DataTable>
+    </Page>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Page, PageHeader } from "@/components/ui";
 
 export default function NewLearningPathPage() {
   const router = useRouter();
@@ -31,8 +32,8 @@ export default function NewLearningPathPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-8">
-      <h1 className="text-2xl font-semibold text-heading mb-6">New Learning Path</h1>
+    <Page width="narrow">
+      <PageHeader title="New Learning Path" />
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-1">Name</label>
@@ -57,11 +58,11 @@ export default function NewLearningPathPage() {
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit" disabled={saving}
-          className="px-4 py-2 bg-accent text-white rounded text-sm disabled:opacity-50"
+          className="ui-button ui-button-primary"
         >
           {saving ? "Creating…" : "Create Path"}
         </button>
       </form>
-    </div>
+    </Page>
   );
 }

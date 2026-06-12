@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 export default function PruneRevisionsPage() {
   const [keep, setKeep] = useState(50);
@@ -34,8 +35,8 @@ export default function PruneRevisionsPage() {
   }
 
   return (
-    <div className="max-w-lg">
-      <h1 className="text-xl font-semibold text-heading mb-4">Revision Pruning</h1>
+    <Page width="narrow">
+      <PageHeader title="Revision Pruning" />
 
       <div className="border border-border rounded p-4 bg-surface space-y-4">
         <p className="text-[13px] text-muted">
@@ -57,21 +58,13 @@ export default function PruneRevisionsPage() {
         </div>
 
         <div className="flex gap-2">
-          <button
-            onClick={handlePreview}
-            disabled={loading}
-            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground transition-colors"
-          >
+          <Button onClick={handlePreview} disabled={loading}>
             {loading ? "Calculating…" : "Preview"}
-          </button>
+          </Button>
           {preview && preview.totalWouldDelete > 0 && (
-            <button
-              onClick={handlePrune}
-              disabled={pruning}
-              className="h-6 px-2 text-[11px] border border-red-300 rounded text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-            >
+            <Button variant="danger" onClick={handlePrune} disabled={pruning}>
               {pruning ? "Pruning…" : `Delete ${preview.totalWouldDelete} revisions`}
-            </button>
+            </Button>
           )}
         </div>
 
@@ -89,7 +82,7 @@ export default function PruneRevisionsPage() {
           </div>
         )}
       </div>
-    </div>
+    </Page>
   );
 }
 

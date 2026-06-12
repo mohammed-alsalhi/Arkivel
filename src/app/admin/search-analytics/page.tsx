@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 type TopQuery = { query: string; count: number; avgResults: number };
 type ZeroQuery = { query: string; count: number };
@@ -31,32 +32,27 @@ export default function SearchAnalyticsPage() {
   const maxVolume = data ? Math.max(...data.dailyVolume.map((d) => d.count), 1) : 1;
 
   return (
-    <div>
-      <h1 className="text-[1.4rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}>
-        Search Analytics
-      </h1>
-
-      {/* Period selector */}
-      <div className="flex items-center gap-3 mb-5 text-[13px]">
-        <span className="text-muted">Period:</span>
-        {[7, 14, 30, 90].map((d) => (
-          <button
-            key={d}
-            onClick={() => setDays(d)}
-            className={`h-6 px-2 text-[11px] border rounded transition-colors ${
-              days === d
-                ? "border-accent bg-accent/10 text-accent"
-                : "border-border text-muted hover:text-foreground hover:bg-surface-hover"
-            }`}
-          >
-            {d}d
-          </button>
-        ))}
-        {data && !loading && (
-          <span className="text-muted ml-2">{data.totalCount.toLocaleString()} total searches</span>
-        )}
-      </div>
+    <Page>
+      <PageHeader
+        title="Search Analytics"
+        actions={
+          <>
+            <span className="text-[13px] text-muted">Period:</span>
+            {[7, 14, 30, 90].map((d) => (
+              <Button
+                key={d}
+                onClick={() => setDays(d)}
+                variant={days === d ? "primary" : "default"}
+              >
+                {d}d
+              </Button>
+            ))}
+            {data && !loading && (
+              <span className="text-[13px] text-muted ml-2">{data.totalCount.toLocaleString()} total searches</span>
+            )}
+          </>
+        }
+      />
 
       {loading && <div className="text-muted text-[13px] italic">Loading…</div>}
 
@@ -163,6 +159,6 @@ export default function SearchAnalyticsPage() {
           </div>
         </div>
       )}
-    </div>
+    </Page>
   );
 }

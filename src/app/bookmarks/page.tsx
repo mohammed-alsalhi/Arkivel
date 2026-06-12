@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { EmptyState, Input, Page, PageHeader } from "@/components/ui";
 
 interface Bookmark {
   id: string;
@@ -34,26 +35,23 @@ export default function BookmarksPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between border-b border-border pb-1 mb-4">
-        <h1
-          className="text-[1.7rem] font-normal text-heading"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Bookmarks
-        </h1>
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search bookmarks…"
-          className="border border-border rounded px-3 py-1 text-[12px] w-48 bg-transparent"
-        />
-      </div>
+    <Page>
+      <PageHeader
+        title="Bookmarks"
+        actions={
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search bookmarks…"
+            className="w-48"
+          />
+        }
+      />
 
       {loading ? (
         <p className="text-[13px] text-muted">Loading…</p>
       ) : filtered.length === 0 ? (
-        <p className="text-[13px] text-muted">No bookmarks yet.</p>
+        <EmptyState title="No bookmarks yet." />
       ) : (
           <ul className="space-y-2">
             {filtered.map((b) => (
@@ -77,6 +75,6 @@ export default function BookmarksPage() {
             ))}
           </ul>
         )}
-    </div>
+    </Page>
   );
 }

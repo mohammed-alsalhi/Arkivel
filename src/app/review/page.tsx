@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type ReviewArticle = {
   id: string;
@@ -94,18 +95,21 @@ export default function ReviewPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-1">
-        <h1 className="text-[1.7rem] font-normal text-heading border-b border-border pb-1" style={{ fontFamily: "var(--font-serif)" }}>
-          Review Queue
-        </h1>
-        <span className="text-[12px] text-muted">{dueItems.length} due today · {allItems.length} enrolled</span>
-      </div>
-      <p className="text-[13px] text-muted mb-4">
-        Spaced repetition surfaces articles at increasing intervals so knowledge stays fresh.
-        <Link href="/articles" className="ml-2 text-accent hover:underline">Enrol articles from their pages →</Link>
-      </p>
+    <Page>
+      <PageHeader
+        title="Review Queue"
+        description={
+          <>
+            Spaced repetition surfaces articles at increasing intervals so knowledge stays fresh.
+            <Link href="/articles" className="ml-2 text-accent hover:underline">Enrol articles from their pages →</Link>
+          </>
+        }
+        actions={
+          <span className="text-[12px] text-muted">{dueItems.length} due today · {allItems.length} enrolled</span>
+        }
+      />
 
+      <div>
       {/* Tabs */}
       <div className="wiki-tabs mb-0">
         <button
@@ -230,7 +234,7 @@ export default function ReviewPage() {
                 <p className="text-[13px] text-muted mt-1">Reviewed {reviewed} article{reviewed !== 1 ? "s" : ""}.</p>
                 <button
                   onClick={() => { load(); setCurrent(0); setDone(false); setRevealed(false); setReviewed(0); }}
-                  className="mt-4 h-8 px-4 text-[13px] bg-accent text-white rounded hover:bg-accent-hover transition-colors"
+                  className="ui-button ui-button-primary mt-4"
                 >
                   Start again
                 </button>
@@ -242,58 +246,61 @@ export default function ReviewPage() {
         {tab === "enrolled" && (
           <div>
             {allItems.length === 0 ? (
-              <p className="text-[13px] text-muted py-8 text-center">
-                No articles enrolled. Click <strong>+ Review later</strong> on any article page to start.
-              </p>
+              <EmptyState
+                description={
+                  <>
+                    No articles enrolled. Click <strong>+ Review later</strong> on any article page to start.
+                  </>
+                }
+              />
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-border text-[13px]">
-                  <thead>
-                    <tr className="bg-surface-hover">
-                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
-                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Reps</th>
-                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Next review</th>
-                      <th className="border border-border px-3 py-1.5 w-20"></th>
+              <DataTable>
+                <thead>
+                  <tr>
+                    <th>Article</th>
+                    <th className="w-20">Reps</th>
+                    <th className="w-28">Next review</th>
+                    <th className="w-20"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allItems.map((item) => (
+                    <tr key={item.id}>
+                      <td>
+                        <Link href={`/articles/${item.article.slug}`} className="font-medium hover:underline">
+                          {item.article.title}
+                        </Link>
+                        {item.article.category && (
+                          <span className="text-muted text-[11px] ml-1.5">· {item.article.category.name}</span>
+                        )}
+                      </td>
+                      <td className="text-muted">{item.repetitions}</td>
+                      <td>
+                        {item.isDue ? (
+                          <span className="text-orange-500 font-medium">Due now</span>
+                        ) : (
+                          <span className="text-muted">
+                            {item.daysUntilDue === 0 ? "Today" : `In ${item.daysUntilDue}d`}
+                          </span>
+                        )}
+                      </td>
+                      <td className="text-right">
+                        <button
+                          onClick={() => unenroll(item.articleId)}
+                          className="text-[11px] text-muted hover:text-red-500 transition-colors"
+                        >
+                          Remove
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {allItems.map((item) => (
-                      <tr key={item.id} className="hover:bg-surface-hover">
-                        <td className="border border-border px-3 py-1.5">
-                          <Link href={`/articles/${item.article.slug}`} className="font-medium hover:underline">
-                            {item.article.title}
-                          </Link>
-                          {item.article.category && (
-                            <span className="text-muted text-[11px] ml-1.5">· {item.article.category.name}</span>
-                          )}
-                        </td>
-                        <td className="border border-border px-3 py-1.5 text-muted">{item.repetitions}</td>
-                        <td className="border border-border px-3 py-1.5">
-                          {item.isDue ? (
-                            <span className="text-orange-500 font-medium">Due now</span>
-                          ) : (
-                            <span className="text-muted">
-                              {item.daysUntilDue === 0 ? "Today" : `In ${item.daysUntilDue}d`}
-                            </span>
-                          )}
-                        </td>
-                        <td className="border border-border px-3 py-1.5 text-right">
-                          <button
-                            onClick={() => unenroll(item.articleId)}
-                            className="text-[11px] text-muted hover:text-red-500 transition-colors"
-                          >
-                            Remove
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </DataTable>
             )}
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </Page>
   );
 }

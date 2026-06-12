@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { TabButton, Tabs } from "@/components/ui";
+import { Button, EmptyState, Page, PageHeader, TabButton, Tabs } from "@/components/ui";
 
 interface Bounty {
   id: string;
@@ -62,20 +62,16 @@ export default function BountiesPage() {
   };
 
   return (
-    <div>
-      <div className="wiki-tabs">
-        <span className="wiki-tab wiki-tab-active">Knowledge Bounties</span>
-      </div>
-      <div className="border border-t-0 border-border bg-surface px-5 py-4">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-normal text-heading">Knowledge Bounties</h1>
-          <button
-            onClick={() => setShowForm((s) => !s)}
-            className="px-3 py-1 text-sm bg-accent text-white rounded hover:bg-accent/90"
-          >
+    <Page>
+      <PageHeader
+        title="Knowledge Bounties"
+        actions={
+          <Button variant="primary" onClick={() => setShowForm((s) => !s)}>
             Request an article
-          </button>
-        </div>
+          </Button>
+        }
+      />
+      <div>
 
         {showForm && (
           <form onSubmit={submit} className="border border-border rounded p-3 mb-4 space-y-2">
@@ -94,8 +90,8 @@ export default function BountiesPage() {
               rows={2}
             />
             <div className="flex gap-2 justify-end">
-              <button type="button" onClick={() => setShowForm(false)} className="text-xs text-muted hover:text-foreground">Cancel</button>
-              <button type="submit" className="px-3 py-1 text-xs bg-accent text-white rounded">Submit Request</button>
+              <Button type="button" onClick={() => setShowForm(false)}>Cancel</Button>
+              <Button type="submit" variant="primary">Submit Request</Button>
             </div>
           </form>
         )}
@@ -116,7 +112,7 @@ export default function BountiesPage() {
         {loading ? (
           <p className="text-sm text-muted">Loading…</p>
         ) : bounties.length === 0 ? (
-          <p className="text-sm text-muted">No {filter} bounties.</p>
+          <EmptyState title={`No ${filter} bounties.`} />
         ) : (
           <div className="space-y-2">
             {bounties.map((b) => (
@@ -154,6 +150,6 @@ export default function BountiesPage() {
           </div>
         )}
       </div>
-    </div>
+    </Page>
   );
 }

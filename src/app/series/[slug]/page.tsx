@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -24,16 +25,8 @@ export default async function SeriesPage({ params }: Props) {
   if (!series) notFound();
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-2"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        {series.name}
-      </h1>
-      {series.description && (
-        <p className="text-[13px] text-muted mb-4">{series.description}</p>
-      )}
+    <Page>
+      <PageHeader title={series.name} description={series.description} />
 
       <ol className="space-y-3 mt-4">
         {series.members.map((m, i) => (
@@ -54,6 +47,6 @@ export default async function SeriesPage({ params }: Props) {
           </li>
         ))}
       </ol>
-    </div>
+    </Page>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
 type User = {
   id: string;
@@ -54,69 +55,60 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        User management
-      </h1>
+    <Page>
+      <PageHeader title="User management" />
 
       {error && <p className="text-[12px] text-wiki-link-broken mb-3">{error}</p>}
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-          <thead>
-            <tr className="bg-surface-hover">
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">User</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Email</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-24">Articles</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-24">Edits</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-32">Joined</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-36">Role</th>
+      <DataTable>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th className="w-24">Articles</th>
+            <th className="w-24">Edits</th>
+            <th className="w-32">Joined</th>
+            <th className="w-36">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>
+                <div className="font-medium">{user.displayName || user.username}</div>
+                <div className="text-[11px] text-muted">@{user.username}</div>
+              </td>
+              <td className="text-muted">{user.email}</td>
+              <td className="text-center">{user._count.articles}</td>
+              <td className="text-center">{user._count.revisions}</td>
+              <td className="text-muted text-[12px]">
+                {new Date(user.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </td>
+              <td>
+                <select
+                  value={user.role}
+                  disabled={saving === user.id}
+                  onChange={(e) => changeRole(user.id, e.target.value)}
+                  className="border border-border bg-surface px-2 py-0.5 text-[12px] text-foreground focus:outline-none focus:border-accent disabled:opacity-50 w-full"
+                >
+                  {ROLES.map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id} className="hover:bg-surface-hover">
-                <td className="border border-border px-3 py-1.5">
-                  <div className="font-medium">{user.displayName || user.username}</div>
-                  <div className="text-[11px] text-muted">@{user.username}</div>
-                </td>
-                <td className="border border-border px-3 py-1.5 text-muted">{user.email}</td>
-                <td className="border border-border px-3 py-1.5 text-center">{user._count.articles}</td>
-                <td className="border border-border px-3 py-1.5 text-center">{user._count.revisions}</td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                  {new Date(user.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </td>
-                <td className="border border-border px-3 py-1.5">
-                  <select
-                    value={user.role}
-                    disabled={saving === user.id}
-                    onChange={(e) => changeRole(user.id, e.target.value)}
-                    className="border border-border bg-surface px-2 py-0.5 text-[12px] text-foreground focus:outline-none focus:border-accent disabled:opacity-50 w-full"
-                  >
-                    {ROLES.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </DataTable>
 
-      {users.length === 0 && (
-        <p className="text-[13px] text-muted mt-4">No users found.</p>
-      )}
-    </div>
+      {users.length === 0 && <EmptyState title="No users found." />}
+    </Page>
   );
 }
 

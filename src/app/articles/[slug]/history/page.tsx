@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/utils";
 import AdminEditTab from "@/components/AdminEditTab";
 import RevisionSummaryButton from "@/components/RevisionSummaryButton";
 import RestoreRevisionButton from "@/components/RestoreRevisionButton";
+import { EmptyState, Page, PageHeader } from "@/components/ui";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -43,22 +44,15 @@ export default async function HistoryPage({ params }: Props) {
         </Link>
       </nav>
 
-      <div className="border border-border bg-surface px-5 py-4">
-        <h1
-          className="text-[1.5rem] font-normal text-heading border-b border-border pb-1 mb-3"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Revision history of &ldquo;{article.title}&rdquo;
-        </h1>
+      <Page className="border border-border bg-surface px-5 py-4">
+        <PageHeader title={<>Revision history of &ldquo;{article.title}&rdquo;</>} />
 
         {article.revisions.length === 0 ? (
-          <p className="text-[13px] text-muted italic">
-            No previous revisions. This article has not been edited since creation.
-          </p>
+          <EmptyState description="No previous revisions. This article has not been edited since creation." />
         ) : (
           <DiffForm slug={slug} articleId={article.id} revisions={article.revisions} />
         )}
-      </div>
+      </Page>
     </div>
   );
 }
@@ -75,10 +69,7 @@ function DiffForm({
   return (
     <form action={`/articles/${slug}/diff`} method="get">
       <div className="flex gap-2 mb-3">
-        <button
-          type="submit"
-          className="bg-accent px-3 py-1 text-[12px] font-bold text-white hover:bg-accent-hover"
-        >
+        <button type="submit" className="ui-button ui-button-primary">
           Compare selected revisions
         </button>
       </div>

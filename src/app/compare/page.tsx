@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { resolveWikiLinks } from "@/lib/wikilinks";
 import { expandMacros } from "@/lib/macros";
 import Link from "next/link";
+import { Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -13,20 +14,15 @@ export default async function CompareArticlesPage({ searchParams }: Props) {
 
   if (!a || !b) {
     return (
-      <div>
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Compare Articles
-        </h1>
-        <p className="text-[13px] text-muted mb-2">
-          Provide two article slugs to compare side by side.
-        </p>
+      <Page>
+        <PageHeader
+          title="Compare Articles"
+          description="Provide two article slugs to compare side by side."
+        />
         <p className="text-[12px] text-muted font-mono">
           /compare?a=first-article&b=second-article
         </p>
-      </div>
+      </Page>
     );
   }
 
@@ -43,13 +39,8 @@ export default async function CompareArticlesPage({ searchParams }: Props) {
   ]);
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-4"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Compare Articles
-      </h1>
+    <Page>
+      <PageHeader title="Compare Articles" />
       <div className="grid grid-cols-2 gap-4">
         {/* Header row */}
         {[{ art: artA, html: htmlA }, { art: artB, html: htmlB }].map(({ art }) => (
@@ -73,6 +64,6 @@ export default async function CompareArticlesPage({ searchParams }: Props) {
           />
         ))}
       </div>
-    </div>
+    </Page>
   );
 }

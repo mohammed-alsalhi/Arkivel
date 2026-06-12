@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Page, PageHeader } from "@/components/ui";
 
 type DigestArticle = { id: string; title: string; slug: string; excerpt: string | null };
 type WatchedArticle = DigestArticle & { updatedAt: string; category: { name: string } | null };
@@ -112,14 +113,9 @@ export default function DigestPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <Page>
       {/* Header */}
-      <div>
-        <h1 className="text-[1.7rem] font-normal text-heading" style={{ fontFamily: "var(--font-serif)" }}>
-          Your Daily Digest
-        </h1>
-        <p className="text-[13px] text-muted">{data.date}</p>
-      </div>
+      <PageHeader title="Your Daily Digest" description={data.date} />
 
       {/* Article of the Day */}
       {data.articleOfDay && (
@@ -255,6 +251,6 @@ export default function DigestPage() {
           </div>
         </Section>
       </div>
-    </div>
+    </Page>
   );
 }

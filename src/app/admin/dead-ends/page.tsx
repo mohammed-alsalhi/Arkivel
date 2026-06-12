@@ -2,6 +2,7 @@ import { isAdmin } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -19,24 +20,21 @@ export default async function DeadEndsPage() {
   const deadEnds = articles.filter((a) => !a.content.includes("data-wiki-link="));
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Dead-end Articles
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Published articles with no outgoing wiki links.
-        These are isolated — readers have no path forward from them.
-        Consider adding links to related articles.
-        <strong className="ml-2">{deadEnds.length}</strong> of {articles.length} published articles.
-      </p>
+    <Page>
+      <PageHeader
+        title="Dead-end Articles"
+        description={
+          <>
+            Published articles with no outgoing wiki links.
+            These are isolated — readers have no path forward from them.
+            Consider adding links to related articles.
+            <strong className="ml-2">{deadEnds.length}</strong> of {articles.length} published articles.
+          </>
+        }
+      />
 
       {deadEnds.length === 0 ? (
-        <p className="text-[13px] text-green-600 dark:text-green-400">
-          ✓ No dead-end articles found — all published articles have at least one outgoing wiki link.
-        </p>
+        <EmptyState title="✓ No dead-end articles found — all published articles have at least one outgoing wiki link." />
       ) : (
         <div className="border border-border divide-y divide-border">
           {deadEnds.map((a) => (
@@ -49,16 +47,13 @@ export default async function DeadEndsPage() {
                   Last edited {new Date(a.updatedAt).toLocaleDateString()}
                 </span>
               </div>
-              <Link
-                href={`/articles/${a.slug}/edit`}
-                className="h-6 px-2 text-[11px] border border-border rounded hover:bg-muted/50 transition-colors shrink-0"
-              >
+              <LinkButton href={`/articles/${a.slug}/edit`} className="shrink-0">
                 Edit
-              </Link>
+              </LinkButton>
             </div>
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

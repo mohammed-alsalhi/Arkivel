@@ -1,6 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
 
 export default async function LearningPathsPage() {
   const session = await getSession();
@@ -14,26 +15,21 @@ export default async function LearningPathsPage() {
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between border-b border-border pb-1 mb-4">
-        <h1
-          className="text-[1.7rem] font-normal text-heading"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Learning Paths
-        </h1>
-        {session && (
-          <Link
-            href="/learning-paths/new"
-            className="flex items-center gap-1 h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
-          >
-            Create Path
-          </Link>
-        )}
-      </div>
+    <Page>
+      <PageHeader
+        title="Learning Paths"
+        actions={
+          session && (
+            <LinkButton href="/learning-paths/new">Create Path</LinkButton>
+          )
+        }
+      />
 
       {paths.length === 0 ? (
-        <p className="text-[13px] text-muted italic">No learning paths yet. Create one to guide readers through a topic.</p>
+        <EmptyState
+          title="No learning paths yet."
+          description="Create one to guide readers through a topic."
+        />
       ) : (
         <div className="space-y-4">
           {paths.map((path) => (
@@ -54,7 +50,7 @@ export default async function LearningPathsPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }
 
