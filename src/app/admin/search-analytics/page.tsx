@@ -94,26 +94,28 @@ export default function SearchAnalyticsPage() {
                 {data.topQueries.length === 0 ? (
                   <p className="text-[13px] text-muted italic">No data yet.</p>
                 ) : (
-                  <table className="w-full text-[13px] border-collapse">
-                    <thead>
-                      <tr className="text-[11px] text-muted text-left">
-                        <th className="pb-1 pr-3">Query</th>
-                        <th className="pb-1 pr-3 text-right">Searches</th>
-                        <th className="pb-1 text-right">Avg results</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.topQueries.map((q) => (
-                        <tr key={q.query} className="border-t border-border-light hover:bg-surface-hover">
-                          <td className="py-1 pr-3 font-mono text-[12px]">{q.query}</td>
-                          <td className="py-1 pr-3 text-right text-muted">{q.count}</td>
-                          <td className={`py-1 text-right ${q.avgResults === 0 ? "text-wiki-link-broken" : "text-muted"}`}>
-                            {q.avgResults}
-                          </td>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-[13px] border-collapse">
+                      <thead>
+                        <tr className="text-[11px] text-muted text-left">
+                          <th className="pb-1 pr-3">Query</th>
+                          <th className="pb-1 pr-3 text-right">Searches</th>
+                          <th className="pb-1 text-right">Avg results</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {data.topQueries.map((q) => (
+                          <tr key={q.query} className="border-t border-border-light hover:bg-surface-hover">
+                            <td className="py-1 pr-3 font-mono text-[12px]">{q.query}</td>
+                            <td className="py-1 pr-3 text-right text-muted">{q.count}</td>
+                            <td className={`py-1 text-right ${q.avgResults === 0 ? "text-wiki-link-broken" : "text-muted"}`}>
+                              {q.avgResults}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
               </div>
             </div>
@@ -129,24 +131,26 @@ export default function SearchAnalyticsPage() {
                     <p className="text-[12px] text-muted mb-2">
                       These searches returned no results — consider creating articles for them.
                     </p>
-                    <table className="w-full text-[13px] border-collapse">
-                      <thead>
-                        <tr className="text-[11px] text-muted text-left">
-                          <th className="pb-1 pr-3">Query</th>
-                          <th className="pb-1 text-right">Searches</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data.zeroResultQueries.map((q) => (
-                          <tr key={q.query} className="border-t border-border-light hover:bg-surface-hover">
-                            <td className="py-1 pr-3">
-                              <span className="font-mono text-[12px] text-wiki-link-broken">{q.query}</span>
-                            </td>
-                            <td className="py-1 text-right text-muted">{q.count}</td>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-[13px] border-collapse">
+                        <thead>
+                          <tr className="text-[11px] text-muted text-left">
+                            <th className="pb-1 pr-3">Query</th>
+                            <th className="pb-1 text-right">Searches</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {data.zeroResultQueries.map((q) => (
+                            <tr key={q.query} className="border-t border-border-light hover:bg-surface-hover">
+                              <td className="py-1 pr-3">
+                                <span className="font-mono text-[12px] text-wiki-link-broken">{q.query}</span>
+                              </td>
+                              <td className="py-1 text-right text-muted">{q.count}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                     <div className="mt-2 text-[12px]">
                       <Link href="/admin/knowledge-gaps" className="text-muted hover:text-foreground">
                         Also see Knowledge Gaps →

@@ -173,58 +173,60 @@ export default function LintPage() {
                 Showing {filteredTotal} issue{filteredTotal !== 1 ? "s" : ""} across{" "}
                 {filteredReports.length} article{filteredReports.length !== 1 ? "s" : ""}
               </p>
-              <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-                <thead>
-                  <tr className="bg-surface-hover">
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-16">
-                      Level
-                    </th>
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">
-                      Article
-                    </th>
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-36">
-                      Rule
-                    </th>
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">
-                      Message
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredReports.flatMap((report) =>
-                    report.results.map((result, idx) => {
-                      const style = LEVEL_STYLES[result.level];
-                      return (
-                        <tr key={`${report.articleId}-${idx}`} className="hover:bg-surface-hover">
-                          <td className="border border-border px-3 py-1.5">
-                            <span
-                              className={`inline-block px-1.5 py-0.5 text-[11px] font-semibold ${style.bg} ${style.text}`}
-                            >
-                              {style.label}
-                            </span>
-                          </td>
-                          <td className="border border-border px-3 py-1.5">
-                            <Link
-                              href={`/articles/${report.articleSlug}`}
-                              className="text-wiki-link hover:underline font-medium"
-                            >
-                              {report.articleTitle}
-                            </Link>
-                          </td>
-                          <td className="border border-border px-3 py-1.5">
-                            <code className="text-[11px] bg-surface-hover px-1 py-0.5">
-                              {result.rule}
-                            </code>
-                          </td>
-                          <td className="border border-border px-3 py-1.5 text-muted">
-                            {result.message}
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-border bg-surface text-[13px]">
+                  <thead>
+                    <tr className="bg-surface-hover">
+                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-16">
+                        Level
+                      </th>
+                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">
+                        Article
+                      </th>
+                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-36">
+                        Rule
+                      </th>
+                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">
+                        Message
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredReports.flatMap((report) =>
+                      report.results.map((result, idx) => {
+                        const style = LEVEL_STYLES[result.level];
+                        return (
+                          <tr key={`${report.articleId}-${idx}`} className="hover:bg-surface-hover">
+                            <td className="border border-border px-3 py-1.5">
+                              <span
+                                className={`inline-block px-1.5 py-0.5 text-[11px] font-semibold ${style.bg} ${style.text}`}
+                              >
+                                {style.label}
+                              </span>
+                            </td>
+                            <td className="border border-border px-3 py-1.5">
+                              <Link
+                                href={`/articles/${report.articleSlug}`}
+                                className="text-wiki-link hover:underline font-medium"
+                              >
+                                {report.articleTitle}
+                              </Link>
+                            </td>
+                            <td className="border border-border px-3 py-1.5">
+                              <code className="text-[11px] bg-surface-hover px-1 py-0.5">
+                                {result.rule}
+                              </code>
+                            </td>
+                            <td className="border border-border px-3 py-1.5 text-muted">
+                              {result.message}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </>

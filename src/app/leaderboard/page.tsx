@@ -39,7 +39,7 @@ export default async function LeaderboardPage() {
       {rows.length === 0 ? (
         <p className="text-muted italic">No contributions recorded yet.</p>
       ) : (
-        <div className="border border-border rounded-lg overflow-hidden">
+        <div className="border border-border rounded-lg overflow-hidden overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-muted/30 border-b border-border">

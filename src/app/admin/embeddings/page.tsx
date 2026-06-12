@@ -104,24 +104,26 @@ export default function EmbeddingsAdminPage() {
                   : `Generate all missing (${stats.missing.length})`}
               </button>
 
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="border-b border-border text-left text-muted text-xs">
-                    <th className="py-2">Article</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.missing.map((a) => (
-                    <tr key={a.id} className="border-b border-border">
-                      <td className="py-1.5">
-                        <Link href={`/articles/${a.slug}`} className="text-wiki-link hover:underline">
-                          {a.title}
-                        </Link>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b border-border text-left text-muted text-xs">
+                      <th className="py-2">Article</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {stats.missing.map((a) => (
+                      <tr key={a.id} className="border-b border-border">
+                        <td className="py-1.5">
+                          <Link href={`/articles/${a.slug}`} className="text-wiki-link hover:underline">
+                            {a.title}
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </>
           )}
         </>

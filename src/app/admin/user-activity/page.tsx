@@ -78,32 +78,34 @@ export default function UserActivityPage() {
               <h2 className="text-[13px] font-semibold text-heading mb-2">
                 Activity for {selectedUser.displayName || selectedUser.username} ({revisions.length} most recent edits)
               </h2>
-              <table className="w-full text-[12px] border-collapse">
-                <thead>
-                  <tr className="text-[11px] text-muted text-left border-b border-border">
-                    <th className="pb-1 pr-3">Article</th>
-                    <th className="pb-1 pr-3">Summary</th>
-                    <th className="pb-1">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {revisions.map((r) => (
-                    <tr key={r.id} className="border-b border-border/50 hover:bg-surface-hover">
-                      <td className="py-1.5 pr-3">
-                        {r.article ? (
-                          <Link href={`/articles/${r.article.slug}`} className="text-wiki-link hover:underline">
-                            {r.article.title}
-                          </Link>
-                        ) : (
-                          <span className="text-muted italic">deleted</span>
-                        )}
-                      </td>
-                      <td className="py-1.5 pr-3 text-muted">{r.editSummary || "—"}</td>
-                      <td className="py-1.5 text-muted whitespace-nowrap">{new Date(r.createdAt).toLocaleDateString()}</td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-[12px] border-collapse">
+                  <thead>
+                    <tr className="text-[11px] text-muted text-left border-b border-border">
+                      <th className="pb-1 pr-3">Article</th>
+                      <th className="pb-1 pr-3">Summary</th>
+                      <th className="pb-1">Date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {revisions.map((r) => (
+                      <tr key={r.id} className="border-b border-border/50 hover:bg-surface-hover">
+                        <td className="py-1.5 pr-3">
+                          {r.article ? (
+                            <Link href={`/articles/${r.article.slug}`} className="text-wiki-link hover:underline">
+                              {r.article.title}
+                            </Link>
+                          ) : (
+                            <span className="text-muted italic">deleted</span>
+                          )}
+                        </td>
+                        <td className="py-1.5 pr-3 text-muted">{r.editSummary || "—"}</td>
+                        <td className="py-1.5 text-muted whitespace-nowrap">{new Date(r.createdAt).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>

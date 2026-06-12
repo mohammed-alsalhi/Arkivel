@@ -48,7 +48,7 @@ export default async function ContentGapsPage() {
           {zeroResultSearches.length === 0 ? (
             <p className="text-[13px] text-muted italic">No zero-result searches recorded.</p>
           ) : (
-            <div className="border border-border rounded overflow-hidden">
+            <div className="border border-border rounded overflow-hidden overflow-x-auto">
               <table className="w-full text-[12px]">
                 <thead>
                   <tr className="bg-surface border-b border-border">
@@ -78,7 +78,7 @@ export default async function ContentGapsPage() {
           {lowResultSearches.length === 0 ? (
             <p className="text-[13px] text-muted italic">No low-result searches recorded.</p>
           ) : (
-            <div className="border border-border rounded overflow-hidden">
+            <div className="border border-border rounded overflow-hidden overflow-x-auto">
               <table className="w-full text-[12px]">
                 <thead>
                   <tr className="bg-surface border-b border-border">

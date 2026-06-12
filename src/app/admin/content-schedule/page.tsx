@@ -71,19 +71,21 @@ function Section({
       {articles.length === 0 ? (
         <p className="px-4 py-3 text-[13px] text-muted italic">{emptyText}</p>
       ) : (
-        <table className="w-full text-[13px]">
-          <thead>
-            <tr className="border-b border-inherit bg-surface-hover">
-              <th className="text-left px-3 py-1.5 text-[11px] font-bold text-muted uppercase">Title</th>
-              <th className="text-left px-3 py-1.5 text-[11px] font-bold text-muted uppercase">Date</th>
-              <th className="text-left px-3 py-1.5 text-[11px] font-bold text-muted uppercase">Status</th>
-              <th className="px-3 py-1.5"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {articles.map((a) => <ArticleRow key={a.id} a={a} dateField={dateField} />)}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[13px]">
+            <thead>
+              <tr className="border-b border-inherit bg-surface-hover">
+                <th className="text-left px-3 py-1.5 text-[11px] font-bold text-muted uppercase">Title</th>
+                <th className="text-left px-3 py-1.5 text-[11px] font-bold text-muted uppercase">Date</th>
+                <th className="text-left px-3 py-1.5 text-[11px] font-bold text-muted uppercase">Status</th>
+                <th className="px-3 py-1.5"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {articles.map((a) => <ArticleRow key={a.id} a={a} dateField={dateField} />)}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -72,52 +72,54 @@ export default async function AdminStubsPage({
       {stubs.length === 0 ? (
         <p className="text-sm text-muted-foreground italic">No stub articles found.</p>
       ) : (
-        <table className="w-full text-sm border border-border rounded overflow-hidden">
-          <thead className="bg-muted/50">
-            <tr>
-              <th className="text-left px-3 py-2 font-medium">Title</th>
-              <th className="text-left px-3 py-2 font-medium">Category</th>
-              <th className="text-right px-3 py-2 font-medium">Words</th>
-              <th className="text-left px-3 py-2 font-medium">Last updated</th>
-              <th className="px-3 py-2" />
-            </tr>
-          </thead>
-          <tbody>
-            {stubs.map((a) => (
-              <tr key={a.id} className="border-t border-border hover:bg-muted/30">
-                <td className="px-3 py-2">
-                  <Link href={`/articles/${a.slug}`} className="hover:underline font-medium">
-                    {a.title}
-                  </Link>
-                  <span className="ml-2 text-[10px] px-1 py-0.5 rounded bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 font-medium">
-                    stub
-                  </span>
-                </td>
-                <td className="px-3 py-2 text-muted-foreground text-xs">
-                  {a.category ? (
-                    <Link href={`/categories/${a.category.slug}`} className="hover:underline">
-                      {a.category.name}
-                    </Link>
-                  ) : (
-                    "—"
-                  )}
-                </td>
-                <td className="px-3 py-2 text-right tabular-nums">{a.wc}</td>
-                <td className="px-3 py-2 text-muted-foreground text-xs">
-                  {new Date(a.updatedAt).toLocaleDateString()}
-                </td>
-                <td className="px-3 py-2">
-                  <Link
-                    href={`/articles/${a.slug}/edit`}
-                    className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                  >
-                    Expand
-                  </Link>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border border-border rounded overflow-hidden">
+            <thead className="bg-muted/50">
+              <tr>
+                <th className="text-left px-3 py-2 font-medium">Title</th>
+                <th className="text-left px-3 py-2 font-medium">Category</th>
+                <th className="text-right px-3 py-2 font-medium">Words</th>
+                <th className="text-left px-3 py-2 font-medium">Last updated</th>
+                <th className="px-3 py-2" />
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {stubs.map((a) => (
+                <tr key={a.id} className="border-t border-border hover:bg-muted/30">
+                  <td className="px-3 py-2">
+                    <Link href={`/articles/${a.slug}`} className="hover:underline font-medium">
+                      {a.title}
+                    </Link>
+                    <span className="ml-2 text-[10px] px-1 py-0.5 rounded bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 font-medium">
+                      stub
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 text-muted-foreground text-xs">
+                    {a.category ? (
+                      <Link href={`/categories/${a.category.slug}`} className="hover:underline">
+                        {a.category.name}
+                      </Link>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className="px-3 py-2 text-right tabular-nums">{a.wc}</td>
+                  <td className="px-3 py-2 text-muted-foreground text-xs">
+                    {new Date(a.updatedAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-3 py-2">
+                    <Link
+                      href={`/articles/${a.slug}/edit`}
+                      className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                    >
+                      Expand
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

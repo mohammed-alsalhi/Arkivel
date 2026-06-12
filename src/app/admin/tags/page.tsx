@@ -100,107 +100,109 @@ export default function AdminTagsPage() {
       ) : filtered.length === 0 ? (
         <p className="text-muted text-[13px] italic">No tags found.</p>
       ) : (
-        <table className="w-full text-[13px] border-collapse">
-          <thead>
-            <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
-              <th className="py-2 pr-3">Name</th>
-              <th className="py-2 pr-3">Slug</th>
-              <th className="py-2 pr-3">Color</th>
-              <th className="py-2 pr-3">Articles</th>
-              <th className="py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((tag) => (
-              <tr key={tag.id} className="border-b border-border hover:bg-surface-hover group">
-                {editId === tag.id ? (
-                  <>
-                    <td className="py-1.5 pr-3" colSpan={3}>
-                      <div className="flex items-center gap-2">
-                        <input
-                          autoFocus
-                          value={editName}
-                          onChange={(e) => setEditName(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") saveEdit();
-                            if (e.key === "Escape") cancelEdit();
-                          }}
-                          className="text-[13px] bg-transparent border border-border rounded px-2 py-0.5 outline-none focus:border-[var(--color-accent)] text-foreground w-40"
-                        />
-                        <input
-                          type="color"
-                          value={editColor || "#888888"}
-                          onChange={(e) => setEditColor(e.target.value)}
-                          title="Tag color"
-                          className="w-7 h-6 rounded border border-border cursor-pointer"
-                        />
-                        <button
-                          onClick={() => setEditColor("")}
-                          className="text-[11px] text-muted hover:text-foreground"
-                          title="Clear color"
-                        >
-                          Clear
-                        </button>
-                        {error && <span className="text-red-500 text-[11px]">{error}</span>}
-                      </div>
-                    </td>
-                    <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
-                    <td className="py-1.5">
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={saveEdit}
-                          disabled={saving}
-                          className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors disabled:opacity-40"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={cancelEdit}
-                          className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td className="py-1.5 pr-3 font-medium">
-                      <div className="flex items-center gap-2">
-                        {tag.color && (
-                          <span
-                            className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
-                            style={{ background: tag.color }}
-                          />
-                        )}
-                        {tag.name}
-                      </div>
-                    </td>
-                    <td className="py-1.5 pr-3 text-muted font-mono text-[11px]">{tag.slug}</td>
-                    <td className="py-1.5 pr-3 text-muted">{tag.color || <span className="opacity-40 italic">none</span>}</td>
-                    <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
-                    <td className="py-1.5">
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => startEdit(tag)}
-                          className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
-                        >
-                          Rename
-                        </button>
-                        <button
-                          onClick={() => deleteTag(tag)}
-                          className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-red-500 hover:bg-surface-hover transition-colors"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </>
-                )}
+        <div className="overflow-x-auto">
+          <table className="w-full text-[13px] border-collapse">
+            <thead>
+              <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
+                <th className="py-2 pr-3">Name</th>
+                <th className="py-2 pr-3">Slug</th>
+                <th className="py-2 pr-3">Color</th>
+                <th className="py-2 pr-3">Articles</th>
+                <th className="py-2">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.map((tag) => (
+                <tr key={tag.id} className="border-b border-border hover:bg-surface-hover group">
+                  {editId === tag.id ? (
+                    <>
+                      <td className="py-1.5 pr-3" colSpan={3}>
+                        <div className="flex items-center gap-2">
+                          <input
+                            autoFocus
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") saveEdit();
+                              if (e.key === "Escape") cancelEdit();
+                            }}
+                            className="text-[13px] bg-transparent border border-border rounded px-2 py-0.5 outline-none focus:border-[var(--color-accent)] text-foreground w-40"
+                          />
+                          <input
+                            type="color"
+                            value={editColor || "#888888"}
+                            onChange={(e) => setEditColor(e.target.value)}
+                            title="Tag color"
+                            className="w-7 h-6 rounded border border-border cursor-pointer"
+                          />
+                          <button
+                            onClick={() => setEditColor("")}
+                            className="text-[11px] text-muted hover:text-foreground"
+                            title="Clear color"
+                          >
+                            Clear
+                          </button>
+                          {error && <span className="text-red-500 text-[11px]">{error}</span>}
+                        </div>
+                      </td>
+                      <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
+                      <td className="py-1.5">
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={saveEdit}
+                            disabled={saving}
+                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors disabled:opacity-40"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className="py-1.5 pr-3 font-medium">
+                        <div className="flex items-center gap-2">
+                          {tag.color && (
+                            <span
+                              className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
+                              style={{ background: tag.color }}
+                            />
+                          )}
+                          {tag.name}
+                        </div>
+                      </td>
+                      <td className="py-1.5 pr-3 text-muted font-mono text-[11px]">{tag.slug}</td>
+                      <td className="py-1.5 pr-3 text-muted">{tag.color || <span className="opacity-40 italic">none</span>}</td>
+                      <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
+                      <td className="py-1.5">
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => startEdit(tag)}
+                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+                          >
+                            Rename
+                          </button>
+                          <button
+                            onClick={() => deleteTag(tag)}
+                            className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-red-500 hover:bg-surface-hover transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

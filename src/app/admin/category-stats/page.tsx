@@ -95,30 +95,32 @@ export default function CategoryStatsPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading…</p>
       ) : (
-        <table className="w-full text-[13px] border-collapse">
-          <thead>
-            <tr className="text-[11px] text-muted text-left border-b border-border">
-              <Th label="Category" k="name" />
-              <Th label="Articles" k="articleCount" />
-              <Th label="Total words" k="totalWords" />
-              <Th label="Avg words" k="avgWords" />
-              <Th label="Last edit" k="lastEdit" />
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map((r) => (
-              <tr key={r.id} className="border-t border-border-light hover:bg-surface-hover">
-                <td className="py-1.5 pr-3 font-medium">
-                  <Link href={`/categories/${r.slug}`} className="wiki-link hover:underline">{r.name}</Link>
-                </td>
-                <td className="py-1.5 pr-3">{r.articleCount}</td>
-                <td className="py-1.5 pr-3">{fmt(r.totalWords)}</td>
-                <td className="py-1.5 pr-3">{fmt(r.avgWords)}</td>
-                <td className="py-1.5 pr-3 text-muted">{relDate(r.lastEdit)}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[13px] border-collapse">
+            <thead>
+              <tr className="text-[11px] text-muted text-left border-b border-border">
+                <Th label="Category" k="name" />
+                <Th label="Articles" k="articleCount" />
+                <Th label="Total words" k="totalWords" />
+                <Th label="Avg words" k="avgWords" />
+                <Th label="Last edit" k="lastEdit" />
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sorted.map((r) => (
+                <tr key={r.id} className="border-t border-border-light hover:bg-surface-hover">
+                  <td className="py-1.5 pr-3 font-medium">
+                    <Link href={`/categories/${r.slug}`} className="wiki-link hover:underline">{r.name}</Link>
+                  </td>
+                  <td className="py-1.5 pr-3">{r.articleCount}</td>
+                  <td className="py-1.5 pr-3">{fmt(r.totalWords)}</td>
+                  <td className="py-1.5 pr-3">{fmt(r.avgWords)}</td>
+                  <td className="py-1.5 pr-3 text-muted">{relDate(r.lastEdit)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

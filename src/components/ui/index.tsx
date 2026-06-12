@@ -384,7 +384,11 @@ export function SectionPanel({
 type DataTableProps = TableHTMLAttributes<HTMLTableElement>;
 
 export function DataTable({ className, ...props }: DataTableProps) {
-  return <table className={clsx("ui-table", className)} {...props} />;
+  return (
+    <div className="overflow-x-auto">
+      <table className={clsx("ui-table", className)} {...props} />
+    </div>
+  );
 }
 
 type ListProps = HTMLAttributes<HTMLUListElement> & {

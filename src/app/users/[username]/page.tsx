@@ -78,36 +78,38 @@ export default async function UserProfilePage({ params }: Props) {
       <div className="wiki-portal max-w-lg mb-4">
         <div className="wiki-portal-header">User information</div>
         <div className="wiki-portal-body">
-          <table className="text-[13px]">
-            <tbody>
-              <tr>
-                <td className="pr-4 py-0.5 text-muted font-bold">Username</td>
-                <td className="py-0.5">{user.username}</td>
-              </tr>
-              <tr>
-                <td className="pr-4 py-0.5 text-muted font-bold">Display name</td>
-                <td className="py-0.5">{user.displayName || user.username}</td>
-              </tr>
-              <tr>
-                <td className="pr-4 py-0.5 text-muted font-bold">Role</td>
-                <td className={`py-0.5 font-bold ${roleColors[user.role] || "text-muted"}`}>
-                  {user.role}
-                </td>
-              </tr>
-              <tr>
-                <td className="pr-4 py-0.5 text-muted font-bold">Member since</td>
-                <td className="py-0.5">{formatDate(user.createdAt)}</td>
-              </tr>
-              <tr>
-                <td className="pr-4 py-0.5 text-muted font-bold">Contributions</td>
-                <td className="py-0.5">
-                  {revisions.length} edit{revisions.length !== 1 ? "s" : ""},
-                  {" "}{articles.length} article{articles.length !== 1 ? "s" : ""} created,
-                  {" "}{discussions.length} discussion{discussions.length !== 1 ? "s" : ""}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="text-[13px]">
+              <tbody>
+                <tr>
+                  <td className="pr-4 py-0.5 text-muted font-bold">Username</td>
+                  <td className="py-0.5">{user.username}</td>
+                </tr>
+                <tr>
+                  <td className="pr-4 py-0.5 text-muted font-bold">Display name</td>
+                  <td className="py-0.5">{user.displayName || user.username}</td>
+                </tr>
+                <tr>
+                  <td className="pr-4 py-0.5 text-muted font-bold">Role</td>
+                  <td className={`py-0.5 font-bold ${roleColors[user.role] || "text-muted"}`}>
+                    {user.role}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-4 py-0.5 text-muted font-bold">Member since</td>
+                  <td className="py-0.5">{formatDate(user.createdAt)}</td>
+                </tr>
+                <tr>
+                  <td className="pr-4 py-0.5 text-muted font-bold">Contributions</td>
+                  <td className="py-0.5">
+                    {revisions.length} edit{revisions.length !== 1 ? "s" : ""},
+                    {" "}{articles.length} article{articles.length !== 1 ? "s" : ""} created,
+                    {" "}{discussions.length} discussion{discussions.length !== 1 ? "s" : ""}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

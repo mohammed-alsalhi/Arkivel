@@ -196,43 +196,45 @@ export default function MacrosPage() {
       ) : macros.length === 0 ? (
         <div className="wiki-notice">No macros defined yet. Add one above.</div>
       ) : (
-        <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-          <thead>
-            <tr className="bg-surface-hover">
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Shortcode</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Description</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-32">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {macros.map((m) => (
-              <tr key={m.id} className="hover:bg-surface-hover">
-                <td className="border border-border px-3 py-1.5">
-                  <code className="text-[12px] bg-surface-hover px-1 rounded">{`{{${m.name}|…}}`}</code>
-                </td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                  {m.description || <span className="italic">—</span>}
-                </td>
-                <td className="border border-border px-3 py-1.5">
-                  <span className="flex gap-1">
-                    <button
-                      onClick={() => startEdit(m)}
-                      className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => deleteMacro(m.id, m.name)}
-                      className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-red-600"
-                    >
-                      Delete
-                    </button>
-                  </span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-border bg-surface text-[13px]">
+            <thead>
+              <tr className="bg-surface-hover">
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Shortcode</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Description</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-32">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {macros.map((m) => (
+                <tr key={m.id} className="hover:bg-surface-hover">
+                  <td className="border border-border px-3 py-1.5">
+                    <code className="text-[12px] bg-surface-hover px-1 rounded">{`{{${m.name}|…}}`}</code>
+                  </td>
+                  <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
+                    {m.description || <span className="italic">—</span>}
+                  </td>
+                  <td className="border border-border px-3 py-1.5">
+                    <span className="flex gap-1">
+                      <button
+                        onClick={() => startEdit(m)}
+                        className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => deleteMacro(m.id, m.name)}
+                        className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-red-600"
+                      >
+                        Delete
+                      </button>
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

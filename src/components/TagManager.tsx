@@ -155,63 +155,65 @@ export default function TagManager() {
       <div className="wiki-portal-header">Manage Tags</div>
       <div className="wiki-portal-body">
         {/* Tag list with edit/delete controls */}
-        <table className="w-full border-collapse text-[13px] mb-3">
-          <thead>
-            <tr className="text-left text-[11px] text-muted">
-              <th className="pb-1 pr-2">Tag</th>
-              <th className="pb-1 pr-2">Color</th>
-              <th className="pb-1 pr-2 text-center">Articles</th>
-              <th className="pb-1 w-24"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {flatTags.map(({ tag, depth }) => (
-              <tr key={tag.id} className="border-t border-border-light hover:bg-surface-hover">
-                <td className="py-1 pr-2" style={{ paddingLeft: `${depth * 16}px` }}>
-                  {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
-                  {tag.name}
-                </td>
-                <td className="py-1 pr-2">
-                  {tag.color ? (
-                    <span className="inline-flex items-center gap-1">
-                      <span
-                        className="inline-block w-3 h-3 rounded-full border border-border-light"
-                        style={{ backgroundColor: tag.color }}
-                      />
-                      <span className="text-[11px] text-muted">{tag.color}</span>
-                    </span>
-                  ) : (
-                    <span className="text-muted text-[12px]">{"\u2014"}</span>
-                  )}
-                </td>
-                <td className="py-1 pr-2 text-center text-muted">
-                  {tag._count?.articles ?? 0}
-                </td>
-                <td className="py-1 text-right">
-                  <button
-                    onClick={() => startEdit(tag)}
-                    className="text-[11px] text-accent hover:underline mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(tag)}
-                    className="text-[11px] text-wiki-link-broken hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-[13px] mb-3">
+            <thead>
+              <tr className="text-left text-[11px] text-muted">
+                <th className="pb-1 pr-2">Tag</th>
+                <th className="pb-1 pr-2">Color</th>
+                <th className="pb-1 pr-2 text-center">Articles</th>
+                <th className="pb-1 w-24"></th>
               </tr>
-            ))}
-            {flatTags.length === 0 && (
-              <tr>
-                <td colSpan={4} className="py-2 text-center text-muted text-[12px] italic">
-                  No tags yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {flatTags.map(({ tag, depth }) => (
+                <tr key={tag.id} className="border-t border-border-light hover:bg-surface-hover">
+                  <td className="py-1 pr-2" style={{ paddingLeft: `${depth * 16}px` }}>
+                    {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
+                    {tag.name}
+                  </td>
+                  <td className="py-1 pr-2">
+                    {tag.color ? (
+                      <span className="inline-flex items-center gap-1">
+                        <span
+                          className="inline-block w-3 h-3 rounded-full border border-border-light"
+                          style={{ backgroundColor: tag.color }}
+                        />
+                        <span className="text-[11px] text-muted">{tag.color}</span>
+                      </span>
+                    ) : (
+                      <span className="text-muted text-[12px]">{"\u2014"}</span>
+                    )}
+                  </td>
+                  <td className="py-1 pr-2 text-center text-muted">
+                    {tag._count?.articles ?? 0}
+                  </td>
+                  <td className="py-1 text-right">
+                    <button
+                      onClick={() => startEdit(tag)}
+                      className="text-[11px] text-accent hover:underline mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(tag)}
+                      className="text-[11px] text-wiki-link-broken hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {flatTags.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="py-2 text-center text-muted text-[12px] italic">
+                    No tags yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* Success/error messages */}
         {error && <p className="text-[12px] text-wiki-link-broken mb-2">{error}</p>}

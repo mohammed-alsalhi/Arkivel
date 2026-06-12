@@ -162,46 +162,48 @@ export default function CategoryManager() {
       <div className="wiki-portal-header">Manage Categories</div>
       <div className="wiki-portal-body">
         {/* Category list with edit/delete controls */}
-        <table className="w-full border-collapse text-[13px] mb-3">
-          <thead>
-            <tr className="text-left text-[11px] text-muted">
-              <th className="pb-1 pr-2">Category</th>
-              <th className="pb-1 pr-2">Description</th>
-              <th className="pb-1 pr-2 text-center">Articles</th>
-              <th className="pb-1 w-24"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {flatCategories.map(({ category, depth }) => (
-              <tr key={category.id} className="border-t border-border-light hover:bg-surface-hover">
-                <td className="py-1 pr-2" style={{ paddingLeft: `${depth * 16}px` }}>
-                  {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
-                  {category.name}
-                </td>
-                <td className="py-1 pr-2 text-muted text-[12px] max-w-48 truncate">
-                  {category.description || "\u2014"}
-                </td>
-                <td className="py-1 pr-2 text-center text-muted">
-                  {category._count?.articles ?? 0}
-                </td>
-                <td className="py-1 text-right">
-                  <button
-                    onClick={() => startEdit(category)}
-                    className="text-[11px] text-accent hover:underline mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(category)}
-                    className="text-[11px] text-wiki-link-broken hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-[13px] mb-3">
+            <thead>
+              <tr className="text-left text-[11px] text-muted">
+                <th className="pb-1 pr-2">Category</th>
+                <th className="pb-1 pr-2">Description</th>
+                <th className="pb-1 pr-2 text-center">Articles</th>
+                <th className="pb-1 w-24"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {flatCategories.map(({ category, depth }) => (
+                <tr key={category.id} className="border-t border-border-light hover:bg-surface-hover">
+                  <td className="py-1 pr-2" style={{ paddingLeft: `${depth * 16}px` }}>
+                    {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
+                    {category.name}
+                  </td>
+                  <td className="py-1 pr-2 text-muted text-[12px] max-w-48 truncate">
+                    {category.description || "\u2014"}
+                  </td>
+                  <td className="py-1 pr-2 text-center text-muted">
+                    {category._count?.articles ?? 0}
+                  </td>
+                  <td className="py-1 text-right">
+                    <button
+                      onClick={() => startEdit(category)}
+                      className="text-[11px] text-accent hover:underline mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(category)}
+                      className="text-[11px] text-wiki-link-broken hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         {/* Success/error messages */}
         {error && <p className="text-[12px] text-wiki-link-broken mb-2">{error}</p>}

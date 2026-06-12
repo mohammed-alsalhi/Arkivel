@@ -43,36 +43,38 @@ export default async function KnowledgeGapsPage() {
           No knowledge gaps found — all wiki links point to existing articles.
         </div>
       ) : (
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="border-b border-border text-left text-muted text-xs uppercase">
-              <th className="py-2 pr-4">Missing topic</th>
-              <th className="py-2 pr-4 text-center">References</th>
-              <th className="py-2">Referenced by</th>
-              <th className="py-2" />
-            </tr>
-          </thead>
-          <tbody>
-            {gaps.map((gap) => (
-              <tr key={gap.title} className="border-b border-border hover:bg-surface-hover">
-                <td className="py-2 pr-4 font-medium">{gap.title}</td>
-                <td className="py-2 pr-4 text-center text-muted">{gap.count}</td>
-                <td className="py-2 pr-4 text-muted text-xs">
-                  {gap.referencedBy.slice(0, 3).join(", ")}
-                  {gap.referencedBy.length > 3 && ` +${gap.referencedBy.length - 3} more`}
-                </td>
-                <td className="py-2">
-                  <Link
-                    href={`/admin/articles/new?title=${encodeURIComponent(gap.title)}&slug=${encodeURIComponent(generateSlug(gap.title))}`}
-                    className="text-accent hover:underline text-xs whitespace-nowrap"
-                  >
-                    Create article
-                  </Link>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border text-left text-muted text-xs uppercase">
+                <th className="py-2 pr-4">Missing topic</th>
+                <th className="py-2 pr-4 text-center">References</th>
+                <th className="py-2">Referenced by</th>
+                <th className="py-2" />
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {gaps.map((gap) => (
+                <tr key={gap.title} className="border-b border-border hover:bg-surface-hover">
+                  <td className="py-2 pr-4 font-medium">{gap.title}</td>
+                  <td className="py-2 pr-4 text-center text-muted">{gap.count}</td>
+                  <td className="py-2 pr-4 text-muted text-xs">
+                    {gap.referencedBy.slice(0, 3).join(", ")}
+                    {gap.referencedBy.length > 3 && ` +${gap.referencedBy.length - 3} more`}
+                  </td>
+                  <td className="py-2">
+                    <Link
+                      href={`/admin/articles/new?title=${encodeURIComponent(gap.title)}&slug=${encodeURIComponent(generateSlug(gap.title))}`}
+                      className="text-accent hover:underline text-xs whitespace-nowrap"
+                    >
+                      Create article
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

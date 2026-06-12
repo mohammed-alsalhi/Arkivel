@@ -257,50 +257,52 @@ export default function WebhooksPage() {
                         : `Show recent deliveries (${wh.deliveries.length})`}
                     </button>
                     {expandedId === wh.id && (
-                      <table className="w-full mt-2 text-[12px] border border-border">
-                        <thead>
-                          <tr className="bg-surface-hover">
-                            <th className="text-left px-2 py-1 border-b border-border">
-                              Event
-                            </th>
-                            <th className="text-left px-2 py-1 border-b border-border">
-                              Status
-                            </th>
-                            <th className="text-left px-2 py-1 border-b border-border">
-                              Code
-                            </th>
-                            <th className="text-left px-2 py-1 border-b border-border">
-                              Time
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {wh.deliveries.map((d) => (
-                            <tr key={d.id}>
-                              <td className="px-2 py-1 border-b border-border font-mono">
-                                {d.event}
-                              </td>
-                              <td className="px-2 py-1 border-b border-border">
-                                <span
-                                  className={
-                                    d.status === "success"
-                                      ? "text-green-600"
-                                      : "text-red-600"
-                                  }
-                                >
-                                  {d.status}
-                                </span>
-                              </td>
-                              <td className="px-2 py-1 border-b border-border">
-                                {d.responseCode || "-"}
-                              </td>
-                              <td className="px-2 py-1 border-b border-border text-muted">
-                                {new Date(d.createdAt).toLocaleString()}
-                              </td>
+                      <div className="overflow-x-auto">
+                        <table className="w-full mt-2 text-[12px] border border-border">
+                          <thead>
+                            <tr className="bg-surface-hover">
+                              <th className="text-left px-2 py-1 border-b border-border">
+                                Event
+                              </th>
+                              <th className="text-left px-2 py-1 border-b border-border">
+                                Status
+                              </th>
+                              <th className="text-left px-2 py-1 border-b border-border">
+                                Code
+                              </th>
+                              <th className="text-left px-2 py-1 border-b border-border">
+                                Time
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {wh.deliveries.map((d) => (
+                              <tr key={d.id}>
+                                <td className="px-2 py-1 border-b border-border font-mono">
+                                  {d.event}
+                                </td>
+                                <td className="px-2 py-1 border-b border-border">
+                                  <span
+                                    className={
+                                      d.status === "success"
+                                        ? "text-green-600"
+                                        : "text-red-600"
+                                    }
+                                  >
+                                    {d.status}
+                                  </span>
+                                </td>
+                                <td className="px-2 py-1 border-b border-border">
+                                  {d.responseCode || "-"}
+                                </td>
+                                <td className="px-2 py-1 border-b border-border text-muted">
+                                  {new Date(d.createdAt).toLocaleString()}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     )}
                   </div>
                 )}

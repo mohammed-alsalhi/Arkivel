@@ -38,31 +38,33 @@ export default async function SearchGapsPage() {
       {rows.length === 0 ? (
         <p className="text-muted text-sm">No zero-result searches recorded yet.</p>
       ) : (
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="border-b border-border bg-surface-hover">
-              <th className="px-3 py-2 text-left font-medium">Query</th>
-              <th className="px-3 py-2 text-left font-medium w-24">Count</th>
-              <th className="px-3 py-2 text-left font-medium w-32">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(([query, count]) => (
-              <tr key={query} className="border-b border-border hover:bg-surface-hover">
-                <td className="px-3 py-2 font-mono text-xs">{query}</td>
-                <td className="px-3 py-2 text-muted">{count}</td>
-                <td className="px-3 py-2">
-                  <Link
-                    href={`/admin?action=new&title=${encodeURIComponent(query)}`}
-                    className="text-xs text-wiki-link hover:underline"
-                  >
-                    Create article
-                  </Link>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border bg-surface-hover">
+                <th className="px-3 py-2 text-left font-medium">Query</th>
+                <th className="px-3 py-2 text-left font-medium w-24">Count</th>
+                <th className="px-3 py-2 text-left font-medium w-32">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map(([query, count]) => (
+                <tr key={query} className="border-b border-border hover:bg-surface-hover">
+                  <td className="px-3 py-2 font-mono text-xs">{query}</td>
+                  <td className="px-3 py-2 text-muted">{count}</td>
+                  <td className="px-3 py-2">
+                    <Link
+                      href={`/admin?action=new&title=${encodeURIComponent(query)}`}
+                      className="text-xs text-wiki-link hover:underline"
+                    >
+                      Create article
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -83,79 +83,81 @@ function DiffForm({
         </button>
       </div>
 
-      <table className="w-full text-[13px]">
-        <thead>
-          <tr className="border-b border-border text-left">
-            <th className="py-1.5 px-2 font-bold text-heading w-8">Old</th>
-            <th className="py-1.5 px-2 font-bold text-heading w-8">New</th>
-            <th className="py-1.5 px-2 font-bold text-heading">Date</th>
-            <th className="py-1.5 px-2 font-bold text-heading">Summary</th>
-            <th className="py-1.5 px-2 font-bold text-heading w-16"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Current version row */}
-          <tr className="border-b border-border-light bg-accent-soft">
-            <td className="py-1.5 px-2">
-              <input type="radio" name="from" value="current" />
-            </td>
-            <td className="py-1.5 px-2">
-              <input type="radio" name="to" value="current" defaultChecked />
-            </td>
-            <td className="py-1.5 px-2 text-muted">Current version</td>
-            <td className="py-1.5 px-2 italic text-muted">Latest</td>
-            <td className="py-1.5 px-2">
-              <Link href={`/articles/${slug}`} className="text-wiki-link text-[12px]">
-                view
-              </Link>
-            </td>
-          </tr>
-
-          {revisions.map((rev, i) => (
-            <tr key={rev.id} className="border-b border-border-light hover:bg-surface-hover">
+      <div className="overflow-x-auto">
+        <table className="w-full text-[13px]">
+          <thead>
+            <tr className="border-b border-border text-left">
+              <th className="py-1.5 px-2 font-bold text-heading w-8">Old</th>
+              <th className="py-1.5 px-2 font-bold text-heading w-8">New</th>
+              <th className="py-1.5 px-2 font-bold text-heading">Date</th>
+              <th className="py-1.5 px-2 font-bold text-heading">Summary</th>
+              <th className="py-1.5 px-2 font-bold text-heading w-16"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Current version row */}
+            <tr className="border-b border-border-light bg-accent-soft">
               <td className="py-1.5 px-2">
-                <input
-                  type="radio"
-                  name="from"
-                  value={rev.id}
-                  defaultChecked={i === 0}
-                />
+                <input type="radio" name="from" value="current" />
               </td>
               <td className="py-1.5 px-2">
-                <input type="radio" name="to" value={rev.id} />
+                <input type="radio" name="to" value="current" defaultChecked />
               </td>
-              <td className="py-1.5 px-2 text-muted">
-                {formatDate(rev.createdAt)}
-              </td>
+              <td className="py-1.5 px-2 text-muted">Current version</td>
+              <td className="py-1.5 px-2 italic text-muted">Latest</td>
               <td className="py-1.5 px-2">
-                {rev.editSummary ? (
-                  <span className="italic">{rev.editSummary}</span>
-                ) : (
-                  <span className="text-muted italic">No summary</span>
-                )}
-              </td>
-              <td className="py-1.5 px-2">
-                <div className="flex flex-col gap-1">
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/articles/${slug}/diff?from=${rev.id}&to=current`}
-                      className="text-wiki-link text-[12px]"
-                    >
-                      view
-                    </Link>
-                    <RestoreRevisionButton articleId={articleId} revisionId={rev.id} />
-                  </div>
-                  <RevisionSummaryButton
-                    articleId={articleId}
-                    revisionId={rev.id}
-                    compareToId={revisions[i + 1]?.id}
-                  />
-                </div>
+                <Link href={`/articles/${slug}`} className="text-wiki-link text-[12px]">
+                  view
+                </Link>
               </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
+
+            {revisions.map((rev, i) => (
+              <tr key={rev.id} className="border-b border-border-light hover:bg-surface-hover">
+                <td className="py-1.5 px-2">
+                  <input
+                    type="radio"
+                    name="from"
+                    value={rev.id}
+                    defaultChecked={i === 0}
+                  />
+                </td>
+                <td className="py-1.5 px-2">
+                  <input type="radio" name="to" value={rev.id} />
+                </td>
+                <td className="py-1.5 px-2 text-muted">
+                  {formatDate(rev.createdAt)}
+                </td>
+                <td className="py-1.5 px-2">
+                  {rev.editSummary ? (
+                    <span className="italic">{rev.editSummary}</span>
+                  ) : (
+                    <span className="text-muted italic">No summary</span>
+                  )}
+                </td>
+                <td className="py-1.5 px-2">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex gap-2">
+                      <Link
+                        href={`/articles/${slug}/diff?from=${rev.id}&to=current`}
+                        className="text-wiki-link text-[12px]"
+                      >
+                        view
+                      </Link>
+                      <RestoreRevisionButton articleId={articleId} revisionId={rev.id} />
+                    </div>
+                    <RevisionSummaryButton
+                      articleId={articleId}
+                      revisionId={rev.id}
+                      compareToId={revisions[i + 1]?.id}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </form>
   );
 }

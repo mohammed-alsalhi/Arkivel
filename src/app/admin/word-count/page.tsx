@@ -93,40 +93,44 @@ export default function WordCountPage() {
         <div className="wiki-portal">
           <div className="wiki-portal-header">Longest articles</div>
           <div className="wiki-portal-body">
-            <table className="w-full text-[13px]">
-              <tbody>
-                {data.topArticles.map((a) => (
-                  <tr key={a.id} className="border-t border-border-light">
-                    <td className="py-1 pr-2">
-                      <Link href={`/articles/${a.slug}`} className="text-accent hover:underline line-clamp-1">
-                        {a.title}
-                      </Link>
-                    </td>
-                    <td className="py-1 text-right text-muted whitespace-nowrap">{a.wordCount.toLocaleString()} w</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <table className="w-full text-[13px]">
+                <tbody>
+                  {data.topArticles.map((a) => (
+                    <tr key={a.id} className="border-t border-border-light">
+                      <td className="py-1 pr-2">
+                        <Link href={`/articles/${a.slug}`} className="text-accent hover:underline line-clamp-1">
+                          {a.title}
+                        </Link>
+                      </td>
+                      <td className="py-1 text-right text-muted whitespace-nowrap">{a.wordCount.toLocaleString()} w</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         <div className="wiki-portal">
           <div className="wiki-portal-header">Shortest articles</div>
           <div className="wiki-portal-body">
-            <table className="w-full text-[13px]">
-              <tbody>
-                {data.shortArticles.map((a) => (
-                  <tr key={a.id} className="border-t border-border-light">
-                    <td className="py-1 pr-2">
-                      <Link href={`/articles/${a.slug}`} className="text-accent hover:underline line-clamp-1">
-                        {a.title}
-                      </Link>
-                    </td>
-                    <td className="py-1 text-right text-muted whitespace-nowrap">{a.wordCount.toLocaleString()} w</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <table className="w-full text-[13px]">
+                <tbody>
+                  {data.shortArticles.map((a) => (
+                    <tr key={a.id} className="border-t border-border-light">
+                      <td className="py-1 pr-2">
+                        <Link href={`/articles/${a.slug}`} className="text-accent hover:underline line-clamp-1">
+                          {a.title}
+                        </Link>
+                      </td>
+                      <td className="py-1 text-right text-muted whitespace-nowrap">{a.wordCount.toLocaleString()} w</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

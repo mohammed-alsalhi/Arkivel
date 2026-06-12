@@ -42,38 +42,40 @@ export default async function TagPage({ params }: Props) {
           No articles have been tagged with &ldquo;{tag.name}&rdquo; yet.
         </div>
       ) : (
-        <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-          <thead>
-            <tr className="bg-surface-hover">
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-32">Category</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Last edited</th>
-            </tr>
-          </thead>
-          <tbody>
-            {articles.map((article) => (
-              <tr key={article.id} className="hover:bg-surface-hover">
-                <td className="border border-border px-3 py-1.5">
-                  <Link href={`/articles/${article.slug}`} className="font-medium">
-                    {article.title}
-                  </Link>
-                </td>
-                <td className="border border-border px-3 py-1.5 text-muted">
-                  {article.category ? (
-                    <Link href={`/categories/${article.category.slug}`}>
-                      {article.category.name}
-                    </Link>
-                  ) : (
-                    <span className="italic">None</span>
-                  )}
-                </td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                  {formatDate(article.updatedAt)}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-border bg-surface text-[13px]">
+            <thead>
+              <tr className="bg-surface-hover">
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-32">Category</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Last edited</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {articles.map((article) => (
+                <tr key={article.id} className="hover:bg-surface-hover">
+                  <td className="border border-border px-3 py-1.5">
+                    <Link href={`/articles/${article.slug}`} className="font-medium">
+                      {article.title}
+                    </Link>
+                  </td>
+                  <td className="border border-border px-3 py-1.5 text-muted">
+                    {article.category ? (
+                      <Link href={`/categories/${article.category.slug}`}>
+                        {article.category.name}
+                      </Link>
+                    ) : (
+                      <span className="italic">None</span>
+                    )}
+                  </td>
+                  <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
+                    {formatDate(article.updatedAt)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <p className="mt-4 text-[13px]">

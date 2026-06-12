@@ -246,48 +246,50 @@ export default function ReviewPage() {
                 No articles enrolled. Click <strong>+ Review later</strong> on any article page to start.
               </p>
             ) : (
-              <table className="w-full border-collapse border border-border text-[13px]">
-                <thead>
-                  <tr className="bg-surface-hover">
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Reps</th>
-                    <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Next review</th>
-                    <th className="border border-border px-3 py-1.5 w-20"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {allItems.map((item) => (
-                    <tr key={item.id} className="hover:bg-surface-hover">
-                      <td className="border border-border px-3 py-1.5">
-                        <Link href={`/articles/${item.article.slug}`} className="font-medium hover:underline">
-                          {item.article.title}
-                        </Link>
-                        {item.article.category && (
-                          <span className="text-muted text-[11px] ml-1.5">· {item.article.category.name}</span>
-                        )}
-                      </td>
-                      <td className="border border-border px-3 py-1.5 text-muted">{item.repetitions}</td>
-                      <td className="border border-border px-3 py-1.5">
-                        {item.isDue ? (
-                          <span className="text-orange-500 font-medium">Due now</span>
-                        ) : (
-                          <span className="text-muted">
-                            {item.daysUntilDue === 0 ? "Today" : `In ${item.daysUntilDue}d`}
-                          </span>
-                        )}
-                      </td>
-                      <td className="border border-border px-3 py-1.5 text-right">
-                        <button
-                          onClick={() => unenroll(item.articleId)}
-                          className="text-[11px] text-muted hover:text-red-500 transition-colors"
-                        >
-                          Remove
-                        </button>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-border text-[13px]">
+                  <thead>
+                    <tr className="bg-surface-hover">
+                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Article</th>
+                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Reps</th>
+                      <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Next review</th>
+                      <th className="border border-border px-3 py-1.5 w-20"></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {allItems.map((item) => (
+                      <tr key={item.id} className="hover:bg-surface-hover">
+                        <td className="border border-border px-3 py-1.5">
+                          <Link href={`/articles/${item.article.slug}`} className="font-medium hover:underline">
+                            {item.article.title}
+                          </Link>
+                          {item.article.category && (
+                            <span className="text-muted text-[11px] ml-1.5">· {item.article.category.name}</span>
+                          )}
+                        </td>
+                        <td className="border border-border px-3 py-1.5 text-muted">{item.repetitions}</td>
+                        <td className="border border-border px-3 py-1.5">
+                          {item.isDue ? (
+                            <span className="text-orange-500 font-medium">Due now</span>
+                          ) : (
+                            <span className="text-muted">
+                              {item.daysUntilDue === 0 ? "Today" : `In ${item.daysUntilDue}d`}
+                            </span>
+                          )}
+                        </td>
+                        <td className="border border-border px-3 py-1.5 text-right">
+                          <button
+                            onClick={() => unenroll(item.articleId)}
+                            className="text-[11px] text-muted hover:text-red-500 transition-colors"
+                          >
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}

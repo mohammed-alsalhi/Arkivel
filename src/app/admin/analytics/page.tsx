@@ -54,32 +54,34 @@ export default async function AdminAnalyticsPage() {
       {topPaths.length === 0 ? (
         <p className="text-muted text-sm">No navigation events recorded yet.</p>
       ) : (
-        <table className="w-full text-sm border-collapse mb-8">
-          <thead>
-            <tr className="border-b border-border bg-surface-hover">
-              <th className="px-3 py-2 text-left font-medium">From</th>
-              <th className="px-3 py-2 text-left font-medium">To</th>
-              <th className="px-3 py-2 text-left font-medium w-20">Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            {topPaths.map((p, i) => (
-              <tr key={i} className="border-b border-border hover:bg-surface-hover">
-                <td className="px-3 py-2">
-                  <Link href={`/articles/${p.fromSlug}`} className="text-wiki-link hover:underline text-xs">
-                    {p.fromSlug}
-                  </Link>
-                </td>
-                <td className="px-3 py-2">
-                  <Link href={`/articles/${p.toSlug}`} className="text-wiki-link hover:underline text-xs">
-                    {p.toSlug}
-                  </Link>
-                </td>
-                <td className="px-3 py-2 text-muted">{p._count.toSlug}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse mb-8">
+            <thead>
+              <tr className="border-b border-border bg-surface-hover">
+                <th className="px-3 py-2 text-left font-medium">From</th>
+                <th className="px-3 py-2 text-left font-medium">To</th>
+                <th className="px-3 py-2 text-left font-medium w-20">Count</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {topPaths.map((p, i) => (
+                <tr key={i} className="border-b border-border hover:bg-surface-hover">
+                  <td className="px-3 py-2">
+                    <Link href={`/articles/${p.fromSlug}`} className="text-wiki-link hover:underline text-xs">
+                      {p.fromSlug}
+                    </Link>
+                  </td>
+                  <td className="px-3 py-2">
+                    <Link href={`/articles/${p.toSlug}`} className="text-wiki-link hover:underline text-xs">
+                      {p.toSlug}
+                    </Link>
+                  </td>
+                  <td className="px-3 py-2 text-muted">{p._count.toSlug}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <div className="flex gap-4 flex-wrap">

@@ -239,33 +239,35 @@ export default function MetadataSchemasPage() {
       ) : schemas.length === 0 ? (
         <div className="wiki-notice">No metadata schemas defined yet.</div>
       ) : (
-        <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-          <thead>
-            <tr className="bg-surface-hover">
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Category</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Fields</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {schemas.map((s) => (
-              <tr key={s.id} className="hover:bg-surface-hover">
-                <td className="border border-border px-3 py-1.5 font-medium">{s.category.name}</td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
-                  {(s.fields as FieldDef[]).map((f) => `${f.label} (${f.type})`).join(", ") || "—"}
-                </td>
-                <td className="border border-border px-3 py-1.5">
-                  <button
-                    onClick={() => startEdit(s)}
-                    className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
-                  >
-                    Edit
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-border bg-surface text-[13px]">
+            <thead>
+              <tr className="bg-surface-hover">
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Category</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Fields</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {schemas.map((s) => (
+                <tr key={s.id} className="hover:bg-surface-hover">
+                  <td className="border border-border px-3 py-1.5 font-medium">{s.category.name}</td>
+                  <td className="border border-border px-3 py-1.5 text-muted text-[12px]">
+                    {(s.fields as FieldDef[]).map((f) => `${f.label} (${f.type})`).join(", ") || "—"}
+                  </td>
+                  <td className="border border-border px-3 py-1.5">
+                    <button
+                      onClick={() => startEdit(s)}
+                      className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover"
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

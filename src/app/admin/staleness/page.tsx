@@ -41,49 +41,51 @@ export default async function StalenessPage() {
       {articles.length === 0 ? (
         <p className="text-muted text-sm">No stale articles — great job keeping content fresh!</p>
       ) : (
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="border-b border-border bg-surface-hover">
-              <th className="px-3 py-2 text-left font-medium">Article</th>
-              <th className="px-3 py-2 text-left font-medium">Category</th>
-              <th className="px-3 py-2 text-left font-medium">Last Updated</th>
-              <th className="px-3 py-2 text-left font-medium w-24">Days Stale</th>
-              <th className="px-3 py-2 text-left font-medium w-20">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {articles.map((a) => {
-              // eslint-disable-next-line react-hooks/purity
-              const daysStale = Math.floor((Date.now() - a.updatedAt.getTime()) / 86400000);
-              return (
-                <tr key={a.id} className="border-b border-border hover:bg-surface-hover">
-                  <td className="px-3 py-2">
-                    <Link href={`/articles/${a.slug}`} className="text-wiki-link hover:underline">
-                      {a.title}
-                    </Link>
-                  </td>
-                  <td className="px-3 py-2 text-muted">{a.category?.name ?? "—"}</td>
-                  <td className="px-3 py-2 text-muted text-xs">{formatDate(a.updatedAt)}</td>
-                  <td className="px-3 py-2">
-                    <span
-                      className={`text-xs font-medium ${daysStale > 365 ? "text-red-500" : "text-yellow-600"}`}
-                    >
-                      {daysStale}d
-                    </span>
-                  </td>
-                  <td className="px-3 py-2">
-                    <Link
-                      href={`/admin/edit/${a.slug}`}
-                      className="text-xs text-wiki-link hover:underline"
-                    >
-                      Edit
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border bg-surface-hover">
+                <th className="px-3 py-2 text-left font-medium">Article</th>
+                <th className="px-3 py-2 text-left font-medium">Category</th>
+                <th className="px-3 py-2 text-left font-medium">Last Updated</th>
+                <th className="px-3 py-2 text-left font-medium w-24">Days Stale</th>
+                <th className="px-3 py-2 text-left font-medium w-20">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {articles.map((a) => {
+                // eslint-disable-next-line react-hooks/purity
+                const daysStale = Math.floor((Date.now() - a.updatedAt.getTime()) / 86400000);
+                return (
+                  <tr key={a.id} className="border-b border-border hover:bg-surface-hover">
+                    <td className="px-3 py-2">
+                      <Link href={`/articles/${a.slug}`} className="text-wiki-link hover:underline">
+                        {a.title}
+                      </Link>
+                    </td>
+                    <td className="px-3 py-2 text-muted">{a.category?.name ?? "—"}</td>
+                    <td className="px-3 py-2 text-muted text-xs">{formatDate(a.updatedAt)}</td>
+                    <td className="px-3 py-2">
+                      <span
+                        className={`text-xs font-medium ${daysStale > 365 ? "text-red-500" : "text-yellow-600"}`}
+                      >
+                        {daysStale}d
+                      </span>
+                    </td>
+                    <td className="px-3 py-2">
+                      <Link
+                        href={`/admin/edit/${a.slug}`}
+                        className="text-xs text-wiki-link hover:underline"
+                      >
+                        Edit
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

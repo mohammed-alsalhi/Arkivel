@@ -725,49 +725,53 @@ export default function HelpPage() {
         <div className="wiki-portal-header">Keyboard Shortcuts</div>
         <div className="wiki-portal-body text-[13px]">
           <p className="mb-1 font-bold text-heading">Global</p>
-          <table className="w-full mb-4">
-            <tbody>
-              {([
-                ["?", "Show keyboard shortcuts overlay (categorized modal)"],
-                ["/", "Focus search bar"],
-                ["R", "Toggle reading mode on article pages"],
-                ["g then h", "Go to home page"],
-                ["g then a", "All articles"],
-                ["g then n", "New article"],
-                ["g then s", "Search page"],
-                ["g then r", "Recent changes"],
-                ["g then g", "Article graph"],
-                ["Esc", "Close dialog / blur input"],
-              ] as [string, string][]).map(([key, desc]) => (
-                <tr key={key} className="border-b border-border-light">
-                  <td className="py-1 pr-4 w-36"><kbd>{key}</kbd></td>
-                  <td className="py-1">{desc}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full mb-4">
+              <tbody>
+                {([
+                  ["?", "Show keyboard shortcuts overlay (categorized modal)"],
+                  ["/", "Focus search bar"],
+                  ["R", "Toggle reading mode on article pages"],
+                  ["g then h", "Go to home page"],
+                  ["g then a", "All articles"],
+                  ["g then n", "New article"],
+                  ["g then s", "Search page"],
+                  ["g then r", "Recent changes"],
+                  ["g then g", "Article graph"],
+                  ["Esc", "Close dialog / blur input"],
+                ] as [string, string][]).map(([key, desc]) => (
+                  <tr key={key} className="border-b border-border-light">
+                    <td className="py-1 pr-4 w-36"><kbd>{key}</kbd></td>
+                    <td className="py-1">{desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <p className="mb-1 font-bold text-heading">In the editor (Ctrl = Cmd on Mac)</p>
-          <table className="w-full">
-            <tbody>
-              {([
-                ["Ctrl+B", "Bold"],
-                ["Ctrl+I", "Italic"],
-                ["Ctrl+Shift+X", "Strikethrough"],
-                ["Ctrl+Shift+L", "Insert wiki link"],
-                ["Ctrl+Shift+F", "Insert footnote"],
-                ["Ctrl+Shift+7", "Ordered list"],
-                ["Ctrl+Shift+8", "Bullet list"],
-                ["Ctrl+Shift+B", "Blockquote"],
-                ["Ctrl+Shift+E", "Code block"],
-                ["Ctrl+Z / Ctrl+Shift+Z", "Undo / Redo"],
-              ] as [string, string][]).map(([key, desc]) => (
-                <tr key={key} className="border-b border-border-light">
-                  <td className="py-1 pr-4"><code className="bg-surface-hover px-1 text-[12px]">{key}</code></td>
-                  <td className="py-1">{desc}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <tbody>
+                {([
+                  ["Ctrl+B", "Bold"],
+                  ["Ctrl+I", "Italic"],
+                  ["Ctrl+Shift+X", "Strikethrough"],
+                  ["Ctrl+Shift+L", "Insert wiki link"],
+                  ["Ctrl+Shift+F", "Insert footnote"],
+                  ["Ctrl+Shift+7", "Ordered list"],
+                  ["Ctrl+Shift+8", "Bullet list"],
+                  ["Ctrl+Shift+B", "Blockquote"],
+                  ["Ctrl+Shift+E", "Code block"],
+                  ["Ctrl+Z / Ctrl+Shift+Z", "Undo / Redo"],
+                ] as [string, string][]).map(([key, desc]) => (
+                  <tr key={key} className="border-b border-border-light">
+                    <td className="py-1 pr-4"><code className="bg-surface-hover px-1 text-[12px]">{key}</code></td>
+                    <td className="py-1">{desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

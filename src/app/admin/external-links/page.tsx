@@ -34,22 +34,24 @@ export default function ExternalLinksPage() {
       ) : stats.length === 0 ? (
         <p className="text-[13px] text-muted italic">No external link clicks recorded yet.</p>
       ) : (
-        <table className="w-full text-[13px] border-collapse">
-          <thead>
-            <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
-              <th className="py-2 pr-4">URL</th>
-              <th className="py-2 w-24 text-right">Clicks</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stats.map((s) => (
-              <tr key={s.url} className="border-b border-border hover:bg-surface-hover">
-                <td className="py-1.5 pr-4 font-mono text-[12px] text-muted">{s.url}</td>
-                <td className="py-1.5 text-right font-semibold">{s.clicks.toLocaleString()}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[13px] border-collapse">
+            <thead>
+              <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
+                <th className="py-2 pr-4">URL</th>
+                <th className="py-2 w-24 text-right">Clicks</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {stats.map((s) => (
+                <tr key={s.url} className="border-b border-border hover:bg-surface-hover">
+                  <td className="py-1.5 pr-4 font-mono text-[12px] text-muted">{s.url}</td>
+                  <td className="py-1.5 text-right font-semibold">{s.clicks.toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

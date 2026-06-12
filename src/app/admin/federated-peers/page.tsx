@@ -134,36 +134,38 @@ export default function FederatedPeersPage() {
       ) : peers.length === 0 ? (
         <div className="wiki-notice">No federated peers configured yet.</div>
       ) : (
-        <table className="w-full border-collapse border border-border bg-surface text-[13px]">
-          <thead>
-            <tr className="bg-surface-hover">
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Name</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">URL</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Status</th>
-              <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {peers.map((p) => (
-              <tr key={p.id} className="hover:bg-surface-hover">
-                <td className="border border-border px-3 py-1.5 font-medium">{p.name}</td>
-                <td className="border border-border px-3 py-1.5 text-muted text-[12px] font-mono">{p.baseUrl}</td>
-                <td className="border border-border px-3 py-1.5">
-                  <button onClick={() => toggleEnabled(p)}
-                    className={`h-5 px-1.5 text-[10px] rounded border ${p.enabled ? "border-green-500 text-green-600" : "border-border text-muted"}`}>
-                    {p.enabled ? "Active" : "Off"}
-                  </button>
-                </td>
-                <td className="border border-border px-3 py-1.5">
-                  <span className="flex gap-1">
-                    <button onClick={() => startEdit(p)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">Edit</button>
-                    <button onClick={() => deletePeer(p.id)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-red-600">Del</button>
-                  </span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-border bg-surface text-[13px]">
+            <thead>
+              <tr className="bg-surface-hover">
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">Name</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading">URL</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-20">Status</th>
+                <th className="border border-border px-3 py-1.5 text-left font-bold text-heading w-28">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {peers.map((p) => (
+                <tr key={p.id} className="hover:bg-surface-hover">
+                  <td className="border border-border px-3 py-1.5 font-medium">{p.name}</td>
+                  <td className="border border-border px-3 py-1.5 text-muted text-[12px] font-mono">{p.baseUrl}</td>
+                  <td className="border border-border px-3 py-1.5">
+                    <button onClick={() => toggleEnabled(p)}
+                      className={`h-5 px-1.5 text-[10px] rounded border ${p.enabled ? "border-green-500 text-green-600" : "border-border text-muted"}`}>
+                      {p.enabled ? "Active" : "Off"}
+                    </button>
+                  </td>
+                  <td className="border border-border px-3 py-1.5">
+                    <span className="flex gap-1">
+                      <button onClick={() => startEdit(p)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">Edit</button>
+                      <button onClick={() => deletePeer(p.id)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover text-red-600">Del</button>
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

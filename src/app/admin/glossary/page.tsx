@@ -98,29 +98,31 @@ export default function AdminGlossaryPage() {
       ) : terms.length === 0 ? (
         <p className="text-[13px] text-muted italic">No terms yet.</p>
       ) : (
-        <table className="w-full text-[13px] border-collapse">
-          <thead>
-            <tr className="text-[11px] text-muted text-left border-b border-border">
-              <th className="pb-1 pr-3">Term</th>
-              <th className="pb-1 pr-3">Aliases</th>
-              <th className="pb-1 pr-3">Definition</th>
-              <th className="pb-1" />
-            </tr>
-          </thead>
-          <tbody>
-            {terms.map((t) => (
-              <tr key={t.id} className="border-t border-border-light hover:bg-surface-hover">
-                <td className="py-1.5 pr-3 font-medium">{t.term}</td>
-                <td className="py-1.5 pr-3 text-muted text-[12px]">{t.aliases.join(", ") || "—"}</td>
-                <td className="py-1.5 pr-3 max-w-xs line-clamp-2">{t.definition}</td>
-                <td className="py-1.5 text-right space-x-1">
-                  <button onClick={() => startEdit(t)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">Edit</button>
-                  <button onClick={() => handleDelete(t.id)} className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover">Delete</button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[13px] border-collapse">
+            <thead>
+              <tr className="text-[11px] text-muted text-left border-b border-border">
+                <th className="pb-1 pr-3">Term</th>
+                <th className="pb-1 pr-3">Aliases</th>
+                <th className="pb-1 pr-3">Definition</th>
+                <th className="pb-1" />
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {terms.map((t) => (
+                <tr key={t.id} className="border-t border-border-light hover:bg-surface-hover">
+                  <td className="py-1.5 pr-3 font-medium">{t.term}</td>
+                  <td className="py-1.5 pr-3 text-muted text-[12px]">{t.aliases.join(", ") || "—"}</td>
+                  <td className="py-1.5 pr-3 max-w-xs line-clamp-2">{t.definition}</td>
+                  <td className="py-1.5 text-right space-x-1">
+                    <button onClick={() => startEdit(t)} className="h-6 px-2 text-[11px] border border-border rounded hover:bg-surface-hover">Edit</button>
+                    <button onClick={() => handleDelete(t.id)} className="h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover">Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

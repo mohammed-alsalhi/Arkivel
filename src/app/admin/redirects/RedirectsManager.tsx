@@ -90,35 +90,37 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
       {redirects.length === 0 ? (
         <p className="text-sm text-muted-foreground">No redirects yet.</p>
       ) : (
-        <table className="w-full text-sm border border-border rounded overflow-hidden">
-          <thead className="bg-muted/50">
-            <tr>
-              <th className="text-left px-3 py-2 font-medium">From slug</th>
-              <th className="text-left px-3 py-2 font-medium">To slug</th>
-              <th className="text-left px-3 py-2 font-medium">Created</th>
-              <th className="px-3 py-2" />
-            </tr>
-          </thead>
-          <tbody>
-            {redirects.map((r) => (
-              <tr key={r.id} className="border-t border-border hover:bg-muted/30">
-                <td className="px-3 py-2 font-mono text-xs">{r.fromSlug}</td>
-                <td className="px-3 py-2 font-mono text-xs">{r.toSlug}</td>
-                <td className="px-3 py-2 text-muted-foreground">
-                  {new Date(r.createdAt).toLocaleDateString()}
-                </td>
-                <td className="px-3 py-2 text-right">
-                  <button
-                    onClick={() => handleDelete(r.id)}
-                    className="text-xs text-destructive hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border border-border rounded overflow-hidden">
+            <thead className="bg-muted/50">
+              <tr>
+                <th className="text-left px-3 py-2 font-medium">From slug</th>
+                <th className="text-left px-3 py-2 font-medium">To slug</th>
+                <th className="text-left px-3 py-2 font-medium">Created</th>
+                <th className="px-3 py-2" />
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {redirects.map((r) => (
+                <tr key={r.id} className="border-t border-border hover:bg-muted/30">
+                  <td className="px-3 py-2 font-mono text-xs">{r.fromSlug}</td>
+                  <td className="px-3 py-2 font-mono text-xs">{r.toSlug}</td>
+                  <td className="px-3 py-2 text-muted-foreground">
+                    {new Date(r.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-3 py-2 text-right">
+                    <button
+                      onClick={() => handleDelete(r.id)}
+                      className="text-xs text-destructive hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
