@@ -23,6 +23,92 @@ type SpaceGovernanceSummary = {
   widgets: { id: string; label: string }[];
 };
 
+// Full directory of admin tools, grouped. The sidebar links only here;
+// every admin route must be reachable from this list.
+const ADMIN_DIRECTORY: { title: string; entries: { href: string; label: string }[] }[] = [
+  {
+    title: "Content quality",
+    entries: [
+      { href: "/admin/lint", label: "Content lint" },
+      { href: "/admin/quality", label: "Content quality" },
+      { href: "/admin/stubs", label: "Stubs" },
+      { href: "/admin/short-articles", label: "Short articles" },
+      { href: "/admin/long-articles", label: "Long articles" },
+      { href: "/admin/staleness", label: "Stale articles" },
+      { href: "/admin/orphans", label: "Orphaned articles" },
+      { href: "/admin/dead-ends", label: "Dead ends" },
+      { href: "/admin/duplicate-content", label: "Duplicate content" },
+      { href: "/admin/knowledge-gaps", label: "Knowledge gaps" },
+      { href: "/admin/content-gaps", label: "Content gaps" },
+      { href: "/admin/suggestions", label: "Suggestions" },
+      { href: "/admin/external-links", label: "External links" },
+    ],
+  },
+  {
+    title: "Authoring",
+    entries: [
+      { href: "/admin/templates", label: "Templates" },
+      { href: "/admin/macros", label: "Macros" },
+      { href: "/admin/glossary", label: "Glossary" },
+      { href: "/admin/metadata-schemas", label: "Metadata schemas" },
+      { href: "/admin/series", label: "Series" },
+      { href: "/admin/redirects", label: "Redirects" },
+      { href: "/admin/kanban", label: "Article pipeline" },
+      { href: "/admin/content-schedule", label: "Content schedule" },
+      { href: "/admin/calendar", label: "Calendar" },
+      { href: "/admin/assistants", label: "Assistants" },
+      { href: "/import", label: "Import articles" },
+    ],
+  },
+  {
+    title: "Insights",
+    entries: [
+      { href: "/admin/analytics", label: "Analytics" },
+      { href: "/admin/metrics", label: "Metrics" },
+      { href: "/admin/health", label: "Health" },
+      { href: "/admin/search-analytics", label: "Search analytics" },
+      { href: "/admin/search-gaps", label: "Search gaps" },
+      { href: "/admin/category-stats", label: "Category stats" },
+      { href: "/admin/category-growth", label: "Category growth" },
+      { href: "/admin/tag-trends", label: "Tag trends" },
+      { href: "/admin/user-activity", label: "User activity" },
+      { href: "/admin/retention", label: "Reader retention" },
+      { href: "/admin/referrers", label: "Referrers" },
+      { href: "/admin/word-count", label: "Word counts" },
+      { href: "/admin/writing-velocity", label: "Writing velocity" },
+    ],
+  },
+  {
+    title: "Organization",
+    entries: [
+      { href: "/admin/categories", label: "Category merge" },
+      { href: "/admin/tags", label: "Tag management" },
+      { href: "/admin/embeddings", label: "Embeddings" },
+      { href: "/admin/prune-revisions", label: "Prune revisions" },
+    ],
+  },
+  {
+    title: "System",
+    entries: [
+      { href: "/admin/users", label: "Users" },
+      { href: "/admin/plugins", label: "Plugins" },
+      { href: "/admin/marketplace", label: "Marketplace" },
+      { href: "/admin/webhooks", label: "Webhooks" },
+      { href: "/admin/theme", label: "Theme" },
+      { href: "/admin/customization", label: "Customization" },
+      { href: "/admin/announcements", label: "Announcements" },
+      { href: "/admin/cache", label: "Cache" },
+      { href: "/admin/performance", label: "Performance" },
+      { href: "/admin/observability", label: "Observability" },
+      { href: "/admin/operations", label: "Operations" },
+      { href: "/admin/audit-log", label: "Audit log" },
+      { href: "/admin/federated-peers", label: "Federated peers" },
+      { href: "/admin/maintenance", label: "Maintenance mode" },
+      { href: "/admin/read-only", label: "Read-only mode" },
+    ],
+  },
+];
+
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -156,6 +242,25 @@ export default function AdminPage() {
               actions={<LinkButton href="/articles" variant="primary">Browse articles</LinkButton>}
             />
           )}
+
+          <Section title="All admin tools">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {ADMIN_DIRECTORY.map((group) => (
+                <div key={group.title}>
+                  <h3 className="text-[11px] font-bold uppercase text-muted mb-1.5">{group.title}</h3>
+                  <ul className="space-y-0.5">
+                    {group.entries.map((entry) => (
+                      <li key={entry.href}>
+                        <Link href={entry.href} className="block py-1 text-[13px] text-wiki-link hover:bg-surface-hover px-1 -mx-1">
+                          {entry.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </Section>
         </>
       ) : (
         <EmptyState

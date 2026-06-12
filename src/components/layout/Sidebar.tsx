@@ -125,9 +125,10 @@ export default function Sidebar({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [mobileOpen]);
 
+  // Deliberately short: the sidebar carries daily essentials only.
+  // Everything else lives in /tools, /admin and the command palette.
   const mainItems: MenuItem[] = [
     { href: "/", label: "Main Page", active: (path) => path === "/" },
-    { href: "/studio", label: "Arkivel Studio" },
     {
       href: "/articles",
       label: `Articles${articleCount ? ` (${articleCount})` : ""}`,
@@ -139,80 +140,30 @@ export default function Sidebar({
   ];
 
   const discoverItems: MenuItem[] = [
-    { href: "/atlas", label: "Canon atlas" },
-    { href: "/trails", label: "Canon trails" },
-    { href: "/intelligence", label: "Knowledge cockpit" },
-    { href: "/graph", label: "Article graph" },
-    { href: "/ask", label: "Ask my wiki" },
     { href: "/categories", label: "Categories", active: (path) => path === "/categories" || path.startsWith("/categories/") },
     { href: "/tags", label: "Tags", active: (path) => path === "/tags" || path.startsWith("/tags/") },
+    { href: "/graph", label: "Article graph" },
     { href: "/random", label: "Random article" },
     ...(config.mapEnabled ? [{ href: "/map", label: config.mapLabel, active: (path: string) => path === "/map" || path.startsWith("/map/") }] : []),
   ];
 
   const workItems: MenuItem[] = [
     { href: "/dashboard", label: "Dashboard" },
-    { href: "/review", label: "Review queue" },
-    { href: "/canvas", label: "Canvas", active: (path) => path === "/canvas" || path.startsWith("/canvas/") },
-    { href: "/scratchpad", label: "Scratchpad" },
+    { href: "/studio", label: "Arkivel Studio" },
     { href: "/bookmarks", label: "Bookmarks" },
     { href: "/reading-lists", label: "Reading lists", active: (path) => path.startsWith("/reading-lists") },
     { href: "/watchlist", label: "Watchlist", active: (path) => path === "/watchlist" },
-    { href: "/daily", label: "Daily note" },
   ];
 
   const moreItems: MenuItem[] = [
-    { href: "/timeline", label: "Timeline" },
-    { href: "/timeline/historical", label: "Historical timeline" },
-    { href: "/popular", label: "Popular" },
-    { href: "/series", label: "Series", active: (path) => path === "/series" || path.startsWith("/series/") },
-    { href: "/digest", label: "Daily digest" },
-    { href: "/coverage", label: "Coverage map" },
-    { href: "/health", label: "Wiki health" },
-    { href: "/glossary", label: "Glossary" },
-    { href: "/explore", label: "Explore" },
-    { href: "/activity", label: "Activity" },
-    { href: "/discussions", label: "Discussions", active: (path) => path === "/discussions" || path.startsWith("/discussions/") },
-    { href: "/compare", label: "Compare revisions" },
-    { href: "/export", label: "Export" },
-    { href: "/split", label: "Split view" },
-    { href: "/present", label: "Present" },
-    { href: "/assets", label: "Asset library" },
-    { href: "/api-docs", label: "API docs" },
+    { href: "/tools", label: "All tools" },
     { href: "/help", label: "Help" },
-    { href: "/features", label: "Features" },
   ];
 
   const adminItems: MenuItem[] = [
-    { href: "/admin", label: "Dashboard", active: (path) => path === "/admin" },
-    { href: "/import", label: "Import articles" },
-    { href: "/import/obsidian", label: "From Obsidian", indent: true },
-    { href: "/import/notion", label: "From Notion", indent: true },
+    { href: "/admin", label: "Admin dashboard", active: (path) => path === "/admin" },
     { href: "/admin/users", label: "Users" },
     { href: "/admin/analytics", label: "Analytics" },
-    { href: "/admin/metrics", label: "Metrics" },
-    { href: "/admin/health", label: "Health" },
-    { href: "/admin/lint", label: "Content lint" },
-    { href: "/admin/quality", label: "Content quality" },
-    { href: "/admin/knowledge-gaps", label: "Knowledge gaps" },
-    { href: "/admin/embeddings", label: "Embeddings" },
-    { href: "/admin/search-analytics", label: "Search analytics" },
-    { href: "/admin/search-gaps", label: "Search gaps" },
-    { href: "/admin/plugins", label: "Plugins" },
-    { href: "/admin/customization", label: "Customization" },
-    { href: "/admin/marketplace", label: "Marketplace" },
-    { href: "/admin/webhooks", label: "Webhooks" },
-    { href: "/admin/templates", label: "Templates" },
-    { href: "/admin/theme", label: "Theme" },
-    { href: "/admin/announcements", label: "Announcements" },
-    { href: "/admin/categories", label: "Category merge" },
-    { href: "/admin/tags", label: "Tag management" },
-    { href: "/admin/redirects", label: "Redirects" },
-    { href: "/admin/kanban", label: "Article pipeline" },
-    { href: "/admin/content-schedule", label: "Content schedule" },
-    { href: "/admin/audit-log", label: "Audit log" },
-    { href: "/admin/maintenance", label: "Maintenance mode" },
-    { href: "/admin/read-only", label: "Read-only mode" },
   ];
 
   useEffect(() => {
@@ -295,10 +246,10 @@ export default function Sidebar({
         <MenuSection title="Main" items={mainItems} pathname={pathname} onNavigate={close} />
         <MenuSection title="Discover" items={discoverItems} pathname={pathname} onNavigate={close} />
         <MenuSection title="Work" items={workItems} pathname={pathname} onNavigate={close} />
-        <MenuSection title="More" items={moreItems} pathname={pathname} onNavigate={close} defaultOpen={false} />
+        <MenuSection title="More" items={moreItems} pathname={pathname} onNavigate={close} />
 
         {isAdmin && (
-          <MenuSection title="Admin" items={adminItems} pathname={pathname} onNavigate={close} defaultOpen={false} />
+          <MenuSection title="Admin" items={adminItems} pathname={pathname} onNavigate={close} />
         )}
 
         {/* Categories */}
