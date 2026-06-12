@@ -1068,7 +1068,7 @@ textarea:disabled {
   min-width: 0;
 }
 
-.wiki-layout[data-sidebar-side="right"] {
+html[data-sidebar-side="right"] .wiki-layout {
   flex-direction: row-reverse;
 }
 
@@ -1118,28 +1118,32 @@ textarea:disabled {
 }
 
 @media (min-width: 48rem) {
-  .wiki-layout[data-sidebar-side="right"] .wiki-sidebar {
+  html[data-sidebar-side="right"] .wiki-sidebar {
     border-right: 0;
     border-left: 1px solid var(--color-border);
   }
 
-  .wiki-layout[data-sidebar-side="right"] .wiki-content-shell {
+  html[data-sidebar-side="right"] .wiki-content-shell {
     border-right: 1px solid var(--color-border);
     border-left: 0;
   }
 
-  .wiki-layout[data-sidebar-open="false"] .wiki-content-shell {
+  html[data-sidebar-open="false"] .wiki-content-shell {
     border-left: 0;
     border-right: 0;
+  }
+
+  html[data-sidebar-open="false"] .wiki-sidebar {
+    display: none;
   }
 }
 
 @media (max-width: 47.999rem) {
-  .wiki-layout[data-sidebar-side="right"] {
+  html[data-sidebar-side="right"] .wiki-layout {
     flex-direction: row;
   }
 
-  .wiki-layout[data-sidebar-side="right"] .wiki-sidebar {
+  html[data-sidebar-side="right"] .wiki-sidebar {
     border-right: 1px solid var(--color-border);
     border-left: 0;
   }
@@ -1336,6 +1340,16 @@ textarea:disabled {
   right: 0;
   width: 18rem;
   max-width: calc(100vw - 1.5rem);
+}
+
+/* iOS Safari zooms the page when a focused form control is under 16px.
+   Keep every native control at 16px on phones so focus never zooms. */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }
 
 @media (max-width: 639px) {

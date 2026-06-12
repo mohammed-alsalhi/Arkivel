@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
 import { config } from "@/lib/config";
 import { generateSlug } from "@/lib/utils";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type Category = {
   id: string;
@@ -24,22 +25,6 @@ type MenuItem = {
 };
 
 type SidebarSide = "left" | "right";
-
-function getStoredSidebarSide(): SidebarSide {
-  try {
-    return localStorage.getItem("wiki_sidebar_position") === "right" ? "right" : "left";
-  } catch {
-    return "left";
-  }
-}
-
-function getStoredDesktopSidebarOpen(): boolean {
-  try {
-    return localStorage.getItem("wiki_sidebar_desktop_open") !== "false";
-  } catch {
-    return true;
-  }
-}
 
 function safePathSegment(value: string | null | undefined, fallback: string, id: string): string {
   const raw = (value?.trim() || generateSlug(fallback) || id).replace(/^\/+|\/+$/g, "");
@@ -115,10 +100,30 @@ export default function Sidebar({
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [desktopOpen, setDesktopOpen] = useState(getStoredDesktopSidebarOpen);
-  const [sidebarSide, setSidebarSide] = useState<SidebarSide>(getStoredSidebarSide);
+  // Defaults must match the server render; the bootstrap script in layout.tsx
+  // applies the persisted values to <html> pre-paint, and this effect syncs
+  // component state after mount without a hydration mismatch.
+  const [desktopOpen, setDesktopOpen] = useState(true);
+  const [sidebarSide, setSidebarSide] = useState<SidebarSide>("left");
   const isAdmin = useAdmin();
   const close = () => setMobileOpen(false);
+
+  useScrollLock(mobileOpen);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    setDesktopOpen(root.getAttribute("data-sidebar-open") !== "false");
+    setSidebarSide(root.getAttribute("data-sidebar-side") === "right" ? "right" : "left");
+  }, []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen]);
 
   const mainItems: MenuItem[] = [
     { href: "/", label: "Main Page", active: (path) => path === "/" },
@@ -236,10 +241,6 @@ export default function Sidebar({
     window.dispatchEvent(new CustomEvent("mobile-sidebar-state-change", { detail: mobileOpen }));
   }, [mobileOpen]);
 
-  useEffect(() => {
-    window.dispatchEvent(new CustomEvent("desktop-sidebar-state-change", { detail: desktopOpen }));
-  }, [desktopOpen]);
-
   function setDesktopSidebarVisibility(next: boolean) {
     setDesktopOpen(next);
     try {
@@ -275,16 +276,20 @@ export default function Sidebar({
         {desktopOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/40 md:hidden"
+          aria-hidden="true"
+          onClick={close}
+        />
+      )}
       <aside
-        data-side={sidebarSide}
-        data-desktop-open={desktopOpen}
         className={clsx(
           "wiki-sidebar fixed top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg transition-[transform,opacity,visibility] flex flex-col",
           mobileOpen
             ? "translate-x-0 opacity-100 visible pointer-events-auto"
             : "-translate-x-full max-md:opacity-0 max-md:invisible max-md:pointer-events-none",
-          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0 md:opacity-100 md:visible md:pointer-events-auto",
-          desktopOpen ? "md:flex" : "md:hidden"
+          "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0 md:opacity-100 md:visible md:pointer-events-auto md:flex"
         )}
       >
         <MenuSection title="Main" items={mainItems} pathname={pathname} onNavigate={close} />

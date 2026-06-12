@@ -1,68 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-function getStoredSidebarSide(): "left" | "right" {
-  try {
-    return localStorage.getItem("wiki_sidebar_position") === "right" ? "right" : "left";
-  } catch {
-    return "left";
-  }
-}
-
-function getStoredDesktopSidebarOpen(): boolean {
-  try {
-    return localStorage.getItem("wiki_sidebar_desktop_open") !== "false";
-  } catch {
-    return true;
-  }
-}
+import { useEffect } from "react";
 
 /**
- * Client wrapper that manages sidebar shell preferences.
- * Reads persisted sidebar side/open state and listens for custom events from
- * Sidebar so the content border and flex direction stay in sync.
+ * Client wrapper that keeps sidebar shell preferences in sync.
+ * The persisted side/open state is applied to <html> before first paint by the
+ * bootstrap script in layout.tsx; this component only updates those attributes
+ * when Sidebar dispatches preference-change events, so the server and client
+ * always render identical markup (no hydration mismatch).
  */
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
-  const [sidebarSide, setSidebarSide] = useState<"left" | "right">(getStoredSidebarSide);
-  const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(getStoredDesktopSidebarOpen);
-
   useEffect(() => {
     const root = document.documentElement;
-    root.setAttribute("data-sidebar-side", sidebarSide);
-    return () => root.removeAttribute("data-sidebar-side");
-  }, [sidebarSide]);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute("data-sidebar-open", desktopSidebarOpen ? "true" : "false");
-    return () => root.removeAttribute("data-sidebar-open");
-  }, [desktopSidebarOpen]);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
+    const onSideChange = (e: Event) => {
       const next = (e as CustomEvent<string>).detail === "right" ? "right" : "left";
-      setSidebarSide(next);
+      root.setAttribute("data-sidebar-side", next);
     };
-    window.addEventListener("sidebar-position-change", handler);
-    return () => window.removeEventListener("sidebar-position-change", handler);
+    const onOpenChange = (e: Event) => {
+      const open = (e as CustomEvent<boolean>).detail !== false;
+      root.setAttribute("data-sidebar-open", open ? "true" : "false");
+    };
+
+    window.addEventListener("sidebar-position-change", onSideChange);
+    window.addEventListener("desktop-sidebar-state-change", onOpenChange);
+    return () => {
+      window.removeEventListener("sidebar-position-change", onSideChange);
+      window.removeEventListener("desktop-sidebar-state-change", onOpenChange);
+    };
   }, []);
 
-  useEffect(() => {
-    const handler = (e: Event) => {
-      setDesktopSidebarOpen((e as CustomEvent<boolean>).detail !== false);
-    };
-    window.addEventListener("desktop-sidebar-state-change", handler);
-    return () => window.removeEventListener("desktop-sidebar-state-change", handler);
-  }, []);
-
-  return (
-    <div
-      className="wiki-layout flex min-h-[calc(100vh-40px)]"
-      data-sidebar-open={desktopSidebarOpen}
-      data-sidebar-side={sidebarSide}
-    >
-      {children}
-    </div>
-  );
+  return <div className="wiki-layout flex min-h-[calc(100vh-40px)]">{children}</div>;
 }

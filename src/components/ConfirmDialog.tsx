@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type Props = {
   open: boolean;
@@ -24,6 +25,8 @@ export default function ConfirmDialog({
   onCancel,
 }: Props) {
   const confirmRef = useRef<HTMLButtonElement>(null);
+
+  useScrollLock(open);
 
   useEffect(() => {
     if (open) confirmRef.current?.focus();

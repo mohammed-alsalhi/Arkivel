@@ -7,6 +7,7 @@ import {
   SHORTCUT_DESTINATIONS,
   type ShortcutMap,
 } from "@/lib/shortcuts";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 function buildNavMap(shortcuts: ShortcutMap): Record<string, string> {
   const map: Record<string, string> = {};
@@ -60,6 +61,8 @@ function buildShortcutGroups(shortcuts: ShortcutMap) {
 export default function KeyboardShortcuts() {
   const [open, setOpen] = useState(false);
   const [shortcuts, setShortcuts] = useState(loadShortcuts);
+
+  useScrollLock(open);
 
   useEffect(() => {
     setShortcuts(loadShortcuts());
@@ -125,23 +128,25 @@ export default function KeyboardShortcuts() {
                 <h3 className="text-[10px] font-semibold uppercasest text-muted mb-2">
                   {category}
                 </h3>
-                <table className="w-full text-[12px]">
-                  <tbody>
-                    {items.map((s, i) => (
-                      <tr key={i} className="border-b border-border-light last:border-0">
-                        <td className="py-1.5 pr-4 whitespace-nowrap">
-                          {s.keys.map((k, j) => (
-                            <span key={j}>
-                              {j > 0 && <span className="text-muted mx-1">then</span>}
-                              <kbd>{k}</kbd>
-                            </span>
-                          ))}
-                        </td>
-                        <td className="py-1.5 text-muted">{s.description}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-[12px]">
+                    <tbody>
+                      {items.map((s, i) => (
+                        <tr key={i} className="border-b border-border-light last:border-0">
+                          <td className="py-1.5 pr-4 whitespace-nowrap">
+                            {s.keys.map((k, j) => (
+                              <span key={j}>
+                                {j > 0 && <span className="text-muted mx-1">then</span>}
+                                <kbd>{k}</kbd>
+                              </span>
+                            ))}
+                          </td>
+                          <td className="py-1.5 text-muted">{s.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             ))}
           </div>

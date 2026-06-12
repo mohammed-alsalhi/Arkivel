@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import type { Editor } from "@tiptap/core";
 import { useRouter } from "next/navigation";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type Props = {
   editor: Editor | null;
@@ -15,6 +16,8 @@ export default function NoteComposer({ editor, articleId }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+
+  useScrollLock(open);
 
   const handleExtract = useCallback(async () => {
     if (!editor || !title.trim()) return;

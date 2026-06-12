@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 interface LightboxImage {
   src: string;
@@ -9,6 +10,8 @@ interface LightboxImage {
 
 export default function ImageLightbox() {
   const [image, setImage] = useState<LightboxImage | null>(null);
+
+  useScrollLock(image !== null);
 
   const handleImageClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;

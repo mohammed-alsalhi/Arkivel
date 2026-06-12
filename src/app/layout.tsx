@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -35,6 +35,20 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8f9fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#181a1b" },
+  ],
+};
+
+// Applies persisted theme and sidebar preferences before first paint so
+// dark-mode users don't get a white flash and the shell doesn't shift.
+const bootstrapScript = `(function(){try{var r=document.documentElement;var t=localStorage.getItem("theme");var d=t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches);r.setAttribute("data-theme",d?"dark":"light");r.setAttribute("data-sidebar-side",localStorage.getItem("wiki_sidebar_position")==="right"?"right":"left");r.setAttribute("data-sidebar-open",localStorage.getItem("wiki_sidebar_desktop_open")!=="false"?"true":"false");}catch(e){}})();`;
 
 export function generateMetadata(): Metadata {
   return {
@@ -108,6 +122,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: bootstrapScript }} />
         <link rel="alternate" type="application/rss+xml" title={`${config.name} RSS Feed`} href="/feed.xml" />
         <link rel="alternate" type="application/atom+xml" title={`${config.name} Atom Feed`} href="/feed/atom" />
       </head>

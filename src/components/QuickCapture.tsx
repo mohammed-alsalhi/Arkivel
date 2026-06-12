@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 export default function QuickCapture() {
   const [open, setOpen] = useState(false);
@@ -10,6 +11,8 @@ export default function QuickCapture() {
   const [saving, setSaving] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  useScrollLock(open);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {

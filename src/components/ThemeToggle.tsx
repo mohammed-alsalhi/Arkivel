@@ -7,11 +7,9 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = saved === "dark" || (!saved && prefersDark);
-    setDark(isDark);
-    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    // The bootstrap script in layout.tsx already applied the persisted theme
+    // before first paint; just read it back so the toggle reflects reality.
+    setDark(document.documentElement.getAttribute("data-theme") === "dark");
     setMounted(true);
   }, []);
 

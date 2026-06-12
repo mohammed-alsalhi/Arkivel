@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 const WPM_OPTIONS = [150, 250, 400, 600];
 
@@ -16,6 +17,8 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
   const [playing, setPlaying] = useState(false);
   const [wpm, setWpm] = useState(250);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useScrollLock(open);
 
   useEffect(() => {
     if (!open) return;

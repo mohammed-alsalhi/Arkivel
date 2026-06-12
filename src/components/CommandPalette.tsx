@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAdmin } from "@/components/AdminContext";
 import { getCommands, type Command } from "@/lib/commands";
 import { getSearchResults } from "@/lib/search-response";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type SearchResult = {
   id: string;
@@ -24,6 +25,8 @@ export default function CommandPalette() {
   const listRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const isAdminUser = useAdmin();
+
+  useScrollLock(open);
 
   const toggleTheme = useCallback(() => {
     const html = document.documentElement;
