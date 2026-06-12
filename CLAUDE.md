@@ -35,9 +35,32 @@ After changing `prisma/schema.prisma`, always run `npx prisma generate` and dele
 
 **Content Storage:** Articles store `content` (HTML from Tiptap) and `contentRaw` (optional Markdown). The HTML is what gets displayed; Markdown is for export.
 
-**Theming:** CSS variables defined in `src/app/globals.css` under `@theme` block. Dark mode via `html[data-theme="dark"]` overrides. Important: use `@theme` not `@theme inline` — the latter inlines hex values into Tailwind utilities, breaking CSS variable overrides.
+**Theming:** CSS variables defined in `src/app/globals.css` under `@theme` block. Dark mode via `html[data-theme="dark"]` overrides. Important: use `@theme` not `@theme inline` — the latter inlines hex values into Tailwind utilities, breaking CSS variable overrides. The persisted theme and sidebar prefs are applied to `<html>` by an inline bootstrap script in `src/app/layout.tsx` *before first paint* — never re-derive them in `useState` initializers (hydration mismatch); read the `data-*` attribute off `document.documentElement` in a `useEffect` instead. Charts use `--color-chart-1..6` (light + dark values); never hardcode hex colors in components or inline styles — use theme variables so dark mode works.
 
-**Map:** Disabled by default (`NEXT_PUBLIC_MAP_ENABLED`). Uses Leaflet with `CRS.Simple` (pixel coords, not geographic). Dynamically imported (no SSR). Markers stored in `MapMarker` table and optionally linked to articles.
+**Map:** Disabled by default (`NEXT_PUBLIC_MAP_ENABLED`). Uses Leaflet with `CRS.Simple` (pixel coords, not geographic). Dynamically imported (no SSR). Markers stored in `MapMarker` table and optionally linked to articles. Leaflet overlay controls use `z-[1000]` (they must beat Leaflet's internal panes) — this is the one sanctioned exception to the z-index scale.
+
+### UI Conventions (the design language)
+
+Every list/settings/info/admin page MUST use the shared primitives from `src/components/ui/index.tsx` as its scaffold — do not hand-roll headers, buttons, tables or empty states:
+
+- `<Page>` as the page root (`width="narrow"` for simple forms, `"wide"`/`"full"` for dashboards)
+- `<PageHeader title description actions kicker>` for the title row — never a raw `<h1>`
+- `<Section title>` for sub-headings; `<StatGrid>`/`<StatCard>` for stat tiles
+- `<DataTable>` for plain tables (it includes its own `overflow-x-auto` wrapper — never double-wrap); any other `<table>` must sit inside an `overflow-x-auto` container
+- `<EmptyState title description actions>` for "nothing here" placeholders
+- `<Button>`/`<LinkButton>`/`ui-button` classes for generic actions; `<IconButton>` for icon-only
+
+Exceptions that keep bespoke designs: home portal (`/`), article reading shell (`articles/[slug]`), the Tiptap editor, and the graph/map/atlas/trails/studio/intelligence/canvas/split/present workspaces, plus chromeless `embed/`/`share/` token views.
+
+**Breakpoints:** Tailwind boundaries only — sm 640 / md 768 / lg 1024 / xl 1280 (max-width queries use boundary − 1). Do not invent new breakpoints.
+
+**Z-index tiers** (documented at the top of `globals.css`): 1–30 in-page floating, 40 app chrome (drawer, bottom nav), 50 dropdowns/popovers, 60 full-width overlays, 70 modals, 80 toasts, 100 skip-link. Pick from the scale; never use arbitrary values like `z-[9999]`.
+
+**Mobile/touch rules:** native inputs stay ≥16px on phones (iOS zoom); interactive targets get ≥36–40px on coarse pointers via the `@media (pointer: coarse)` block in `globals.css` and Tailwind `pointer-coarse:` variants; body text is 16px on phones, 14px on desktop. Drag interactions must handle touch events, not just mouse.
+
+**Overlays:** anything that covers the page uses `useScrollLock` (`src/lib/useScrollLock.ts`), `role="dialog" aria-modal="true"` with a label, Escape-to-close, and a backdrop; trap focus with `useFocusTrap` (`src/lib/useFocusTrap.ts`) where the overlay is the only interactive surface.
+
+**Navigation:** the sidebar stays minimal (~20 links). New destinations go in `/tools` (`src/app/tools/page.tsx`), the admin directory on `/admin` (`ADMIN_DIRECTORY`), and the command palette (`COMMAND_DESTINATIONS` in `src/lib/navigation.ts`) — all three must be updated when adding a route.
 
 ### Data Flow for Articles
 

@@ -202,6 +202,9 @@ export default function CommandPalette() {
   return (
     <div className="command-palette-overlay" onClick={() => setOpen(false)}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
         className="command-palette"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}

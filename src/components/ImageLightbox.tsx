@@ -40,6 +40,9 @@ export default function ImageLightbox() {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={image.alt || "Image preview"}
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm"
       onClick={() => setImage(null)}
     >

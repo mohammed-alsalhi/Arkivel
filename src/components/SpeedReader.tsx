@@ -82,7 +82,7 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
 
       {open && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-surface border border-border rounded w-full max-w-md p-4 shadow-xl sm:p-6">
+          <div role="dialog" aria-modal="true" aria-label="Speed reader" className="bg-surface border border-border rounded w-full max-w-md p-4 shadow-xl sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
               <h2 className="text-[15px] font-semibold text-heading">Speed reader</h2>
               <button

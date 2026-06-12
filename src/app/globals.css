@@ -74,6 +74,14 @@
   --color-diff-added: #d4edda;
   --color-diff-removed: #f8d7da;
 
+  /* Chart palette (legends, bars, sparklines) */
+  --color-chart-1: #3366cc;
+  --color-chart-2: #14866d;
+  --color-chart-3: #c68b00;
+  --color-chart-4: #b32424;
+  --color-chart-5: #6b4ba1;
+  --color-chart-6: #2c7c8a;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: "Linux Libertine", "Georgia", "Times", serif;
@@ -122,6 +130,12 @@ html[data-theme="dark"] {
   --color-toc-border: #4b5358;
   --color-diff-added: #1a3a2a;
   --color-diff-removed: #3a1a1a;
+  --color-chart-1: #8ab4f8;
+  --color-chart-2: #7fd7bd;
+  --color-chart-3: #f0c56a;
+  --color-chart-4: #ff8b8b;
+  --color-chart-5: #c8b6ff;
+  --color-chart-6: #7fd0e0;
 }
 
 /* ── Built-in style preset: Atlas Modern ── */
@@ -756,6 +770,8 @@ textarea:disabled {
   margin-top: 0.25rem;
   min-width: 10rem;
   max-width: calc(100vw - 1rem);
+  max-height: min(60vh, 24rem);
+  overflow-y: auto;
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
   background: var(--color-surface);
@@ -6918,3 +6934,25 @@ html[data-theme="dark"] .callout-quote { --color-accent: #a78bfa; }
 }
 .query-block-table { border-collapse: collapse; }
 .query-block-table td, .query-block-table th { padding: 4px 8px; }
+
+/* ── Anchor targets clear the sticky chrome when jumped to ── */
+.wiki-content h1,
+.wiki-content h2,
+.wiki-content h3,
+.wiki-content h4,
+.wiki-content h5,
+.wiki-content h6 {
+  scroll-margin-top: 4.5rem;
+}
+
+/* ── Respect reduced-motion preference globally ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

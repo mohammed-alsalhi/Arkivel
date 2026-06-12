@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { useScrollLock } from "@/lib/useScrollLock";
+import { useFocusTrap } from "@/lib/useFocusTrap";
+import { Button } from "@/components/ui";
 
 type Props = {
   open: boolean;
@@ -25,8 +27,10 @@ export default function ConfirmDialog({
   onCancel,
 }: Props) {
   const confirmRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useScrollLock(open);
+  useFocusTrap(dialogRef, open);
 
   useEffect(() => {
     if (open) confirmRef.current?.focus();
@@ -44,22 +48,22 @@ export default function ConfirmDialog({
 
   return (
     <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className="modal"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="modal-header">{title}</div>
         <div className="modal-body">{message}</div>
         <div className="modal-footer">
-          <button
-            onClick={onCancel}
-            className="border border-border bg-surface-hover px-3 py-1.5 text-[13px] hover:bg-surface"
-          >
-            {cancelLabel}
-          </button>
+          <Button onClick={onCancel}>{cancelLabel}</Button>
           <button
             ref={confirmRef}
             onClick={onConfirm}
-            className={`px-3 py-1.5 text-[13px] font-bold text-white ${
-              danger ? "bg-red-600 hover:bg-red-700" : "bg-accent hover:bg-accent-hover"
-            }`}
+            className={danger ? "ui-button ui-button-danger" : "ui-button ui-button-primary"}
           >
             {confirmLabel}
           </button>

@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { EmptyState, Page, PageHeader } from "@/components/ui";
 
+// Theme-aware chart palette defined in globals.css (light + dark values)
 const COLORS = [
-  "#3b82f6", "#10b981", "#f59e0b", "#ef4444",
-  "#8b5cf6", "#ec4899", "#06b6d4", "#84cc16",
+  "var(--color-chart-1)", "var(--color-chart-2)", "var(--color-chart-3)",
+  "var(--color-chart-4)", "var(--color-chart-5)", "var(--color-chart-6)",
 ];
 
 type Category = { name: string; total: number; months: number[] };

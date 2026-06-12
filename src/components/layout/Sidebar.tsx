@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
 import { config } from "@/lib/config";
 import { generateSlug } from "@/lib/utils";
 import { useScrollLock } from "@/lib/useScrollLock";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 
 type Category = {
   id: string;
@@ -106,9 +107,13 @@ export default function Sidebar({
   const [desktopOpen, setDesktopOpen] = useState(true);
   const [sidebarSide, setSidebarSide] = useState<SidebarSide>("left");
   const isAdmin = useAdmin();
+  const asideRef = useRef<HTMLElement>(null);
   const close = () => setMobileOpen(false);
 
   useScrollLock(mobileOpen);
+  // mobileOpen can only become true via the md:hidden hamburger, so the trap
+  // never engages on desktop where the sidebar is part of the normal layout.
+  useFocusTrap(asideRef, mobileOpen);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -235,6 +240,7 @@ export default function Sidebar({
         />
       )}
       <aside
+        ref={asideRef}
         className={clsx(
           "wiki-sidebar fixed top-[40px] z-40 h-[calc(100vh-40px)] w-[212px] overflow-y-auto bg-sidebar-bg transition-[transform,opacity,visibility] flex flex-col",
           mobileOpen

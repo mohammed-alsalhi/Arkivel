@@ -14,15 +14,15 @@ type Macro = {
 const DEFAULT_TEMPLATES: Record<string, { description: string; template: string }> = {
   warning: {
     description: "Yellow warning box",
-    template: `<div class="macro-warning" style="border-left:4px solid #d97706;background:#fef9c3;padding:0.5rem 0.75rem;margin:0.75rem 0;font-size:13px;"><strong>Warning:</strong> {{{body}}}</div>`,
+    template: `<div class="macro-warning" style="border-left:4px solid var(--color-warning);background:var(--color-warning-soft);padding:0.5rem 0.75rem;margin:0.75rem 0;font-size:13px;"><strong>Warning:</strong> {{{body}}}</div>`,
   },
   note: {
     description: "Blue info box",
-    template: `<div class="macro-note" style="border-left:4px solid #3b82f6;background:#eff6ff;padding:0.5rem 0.75rem;margin:0.75rem 0;font-size:13px;"><strong>Note:</strong> {{{body}}}</div>`,
+    template: `<div class="macro-note" style="border-left:4px solid var(--color-info);background:var(--color-info-soft);padding:0.5rem 0.75rem;margin:0.75rem 0;font-size:13px;"><strong>Note:</strong> {{{body}}}</div>`,
   },
   tip: {
     description: "Green tip box",
-    template: `<div class="macro-tip" style="border-left:4px solid #22c55e;background:#f0fdf4;padding:0.5rem 0.75rem;margin:0.75rem 0;font-size:13px;"><strong>Tip:</strong> {{{body}}}</div>`,
+    template: `<div class="macro-tip" style="border-left:4px solid var(--color-success);background:var(--color-success-soft);padding:0.5rem 0.75rem;margin:0.75rem 0;font-size:13px;"><strong>Tip:</strong> {{{body}}}</div>`,
   },
 };
 

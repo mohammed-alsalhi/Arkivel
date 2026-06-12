@@ -116,6 +116,9 @@ export default function KeyboardShortcuts() {
   return (
     <div className="modal-overlay" onClick={() => setOpen(false)}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Keyboard shortcuts"
         className="modal"
         onClick={(e) => e.stopPropagation()}
         style={{ maxWidth: 640, maxHeight: "80vh", overflowY: "auto" }}

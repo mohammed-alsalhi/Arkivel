@@ -80,16 +80,27 @@ export default function SplitViewClient() {
   }, []);
 
   useEffect(() => {
-    function onMove(e: MouseEvent) {
+    function moveTo(clientX: number) {
       if (!dragging.current || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const pct = Math.min(80, Math.max(20, ((e.clientX - rect.left) / rect.width) * 100));
+      const pct = Math.min(80, Math.max(20, ((clientX - rect.left) / rect.width) * 100));
       setSplitPos(pct);
+    }
+    function onMove(e: MouseEvent) { moveTo(e.clientX); }
+    function onTouchMove(e: TouchEvent) {
+      if (e.touches.length > 0) moveTo(e.touches[0].clientX);
     }
     function onUp() { dragging.current = false; }
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
-    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+    window.addEventListener("touchmove", onTouchMove);
+    window.addEventListener("touchend", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onUp);
+    };
   }, []);
 
   return (
@@ -118,8 +129,9 @@ export default function SplitViewClient() {
 
         {/* Divider */}
         <div
-          className="w-1.5 bg-border hover:bg-accent/40 cursor-col-resize flex-shrink-0 transition-colors"
+          className="w-1.5 pointer-coarse:w-3 touch-none bg-border hover:bg-accent/40 cursor-col-resize flex-shrink-0 transition-colors"
           onMouseDown={onDividerMouseDown}
+          onTouchStart={() => { dragging.current = true; }}
         />
 
         {/* Right pane */}
