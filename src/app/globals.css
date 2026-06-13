@@ -6953,3 +6953,30 @@ html[data-theme="dark"] .callout-quote { --color-accent: #a78bfa; }
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Mobile readability floor ──
+   The desktop UI deliberately uses dense 9-11px meta text. On phones nothing
+   user-facing should render below 12px, so floor the arbitrary-size Tailwind
+   utilities (unlayered rules beat @layer utilities) and the highest-visibility
+   article meta classes instead of editing ~500 call sites. */
+@media (max-width: 767px) {
+  .text-\[9px\],
+  .text-\[10px\],
+  .text-\[11px\] {
+    font-size: 12px;
+  }
+
+  .article-hero-kicker,
+  .article-meta-line,
+  .article-coauthors,
+  .article-taxonomy,
+  .ui-card-meta {
+    font-size: 0.75rem;
+  }
+}
+
+/* Balanced wrapping for large headings */
+.ui-page-title,
+.article-title {
+  text-wrap: balance;
+}

@@ -42,7 +42,7 @@ export default async function SharePreviewPage({ params }: Props) {
         <strong>Draft preview</strong> — This is a private preview link. This article has not been published.
       </div>
 
-      <h1 className="text-[1.7rem] font-normal text-heading mb-1" style={{ fontFamily: "var(--font-serif)" }}>
+      <h1 className="ui-page-title mb-1">
         {article.title}
       </h1>
       <p className="text-[11px] text-muted mb-4">
