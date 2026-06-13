@@ -318,7 +318,8 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
   return (
     <svg
       ref={svgRef}
-      style={{ width: "100%", height: "100%", background: "var(--color-surface)" }}
+      // touch-action none lets d3-zoom own pinch/pan gestures on touch screens
+      style={{ width: "100%", height: "100%", background: "var(--color-surface)", touchAction: "none" }}
     />
   );
 }

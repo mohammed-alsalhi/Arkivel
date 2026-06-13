@@ -523,7 +523,7 @@ export default function WorldMap({ mapImage, editMode = false }: Props) {
 
       {/* New area form */}
       {showForm && (
-        <div className="absolute right-4 top-4 z-[1000] w-72 border border-border bg-surface p-4 shadow-md">
+        <div className="absolute right-4 top-4 z-[1000] w-72 max-w-[calc(100vw-2rem)] border border-border bg-surface p-4 shadow-md">
           <h3 className="mb-3 text-[13px] font-bold text-heading">New Area</h3>
           <form onSubmit={handleCreateArea} className="space-y-2">
             <input
@@ -577,7 +577,7 @@ export default function WorldMap({ mapImage, editMode = false }: Props) {
 
       {/* Edit area form */}
       {editingAreaId && !showForm && (
-        <div className="absolute right-4 top-4 z-[1000] w-72 border border-border bg-surface p-4 shadow-md">
+        <div className="absolute right-4 top-4 z-[1000] w-72 max-w-[calc(100vw-2rem)] border border-border bg-surface p-4 shadow-md">
           <h3 className="mb-3 text-[13px] font-bold text-heading">Edit Area</h3>
           <form onSubmit={handleUpdateArea} className="space-y-2">
             <input

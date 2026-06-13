@@ -126,15 +126,15 @@ export default function CanvasEditor({
     setSelectedNode(null);
   }
 
-  // Mouse drag for nodes
-  function onNodeMouseDown(e: React.MouseEvent, nodeId: string) {
+  // Pointer drag for nodes (works for mouse and touch)
+  function onNodePointerDown(e: React.PointerEvent, nodeId: string) {
     e.stopPropagation();
     setSelectedNode(nodeId);
     setDragging({ nodeId, offsetX: e.clientX, offsetY: e.clientY });
   }
 
   useEffect(() => {
-    function onMouseMove(e: MouseEvent) {
+    function onMouseMove(e: PointerEvent) {
       if (dragging) {
         const dx = e.clientX - dragging.offsetX;
         const dy = e.clientY - dragging.offsetY;
@@ -157,12 +157,17 @@ export default function CanvasEditor({
       }
       setPanDragging(false);
     }
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
-    return () => { window.removeEventListener("mousemove", onMouseMove); window.removeEventListener("mouseup", onMouseUp); };
+    window.addEventListener("pointermove", onMouseMove);
+    window.addEventListener("pointerup", onMouseUp);
+    window.addEventListener("pointercancel", onMouseUp);
+    return () => {
+      window.removeEventListener("pointermove", onMouseMove);
+      window.removeEventListener("pointerup", onMouseUp);
+      window.removeEventListener("pointercancel", onMouseUp);
+    };
   }, [dragging, panDragging, panStart, scheduleSave, name]);
 
-  function onCanvasMouseDown(e: React.MouseEvent) {
+  function onCanvasPointerDown(e: React.PointerEvent) {
     if ((e.target as Element).closest(".canvas-node")) return;
     setSelectedNode(null);
     setPanDragging(true);
@@ -218,9 +223,9 @@ export default function CanvasEditor({
 
       {/* Canvas area */}
       <div
-        className="flex-1 overflow-hidden bg-[var(--color-background)] relative cursor-grab active:cursor-grabbing"
+        className="flex-1 overflow-hidden touch-none bg-[var(--color-background)] relative cursor-grab active:cursor-grabbing"
         style={{ backgroundImage: "radial-gradient(circle, var(--color-border) 1px, transparent 1px)", backgroundSize: "24px 24px" }}
-        onMouseDown={onCanvasMouseDown}
+        onPointerDown={onCanvasPointerDown}
       >
         <div
           style={{ transform: `translate(${pan.x}px, ${pan.y}px)`, transformOrigin: "0 0", position: "absolute", inset: 0 }}
@@ -229,11 +234,11 @@ export default function CanvasEditor({
           {state.nodes.map((node) => (
             <div
               key={node.id}
-              className={`canvas-node absolute rounded-lg border shadow-sm select-none cursor-move ${
+              className={`canvas-node absolute touch-none rounded-lg border shadow-sm select-none cursor-move ${
                 selectedNode === node.id ? "ring-2 ring-accent" : ""
               } ${node.type === "article" ? "bg-surface border-border" : "bg-yellow-50 border-yellow-200"}`}
               style={{ left: node.x, top: node.y, width: node.width, minHeight: 80 }}
-              onMouseDown={(e) => onNodeMouseDown(e, node.id)}
+              onPointerDown={(e) => onNodePointerDown(e, node.id)}
             >
               {node.type === "article" && (
                 <div className="p-3">
@@ -241,7 +246,7 @@ export default function CanvasEditor({
                   <Link
                     href={`/articles/${node.articleSlug}`}
                     className="text-sm font-semibold text-heading hover:underline block"
-                    onMouseDown={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
                     onClick={(e) => e.stopPropagation()}
                   >
                     {node.articleTitle}
@@ -256,7 +261,7 @@ export default function CanvasEditor({
                   className="w-full p-3 text-sm bg-transparent resize-none border-none outline-none text-foreground"
                   value={node.text}
                   rows={3}
-                  onMouseDown={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
                   onChange={(e) => {
                     updateState((s) => ({
                       ...s,
