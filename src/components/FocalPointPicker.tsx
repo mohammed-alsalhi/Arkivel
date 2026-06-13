@@ -53,6 +53,8 @@ export default function FocalPointPicker({ imageUrl, focalX, focalY, onChange }:
           src={imageUrl}
           alt="Focal point preview"
           draggable={false}
+          loading="lazy"
+          decoding="async"
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${focalX}% ${focalY}%` }}
         />
         {/* Crosshair marker */}

@@ -69,6 +69,7 @@ import ArticleAdoptionBanner from "@/components/ArticleAdoptionBanner";
 import CopyPlainTextButton from "@/components/CopyPlainTextButton";
 import ArticleWidthPreference from "@/components/ArticleWidthPreference";
 import ImageLightbox from "@/components/ImageLightbox";
+import IdleMount from "@/components/IdleMount";
 import SeriesTableOfContents from "@/components/SeriesTableOfContents";
 import WordFrequencyCloud from "@/components/WordFrequencyCloud";
 import ArticleActionPanel from "@/components/article/ArticleActionPanel";
@@ -168,8 +169,9 @@ export default async function ArticlePage({ params }: Props) {
   const macroExpanded = await expandMacros(article.content);
   const transcluded = await resolveTransclusions(macroExpanded);
   const expandedContent = await resolveQueryBlocks(transcluded);
-  const glossaryTerms = await prisma.glossaryTerm.findMany({ select: { term: true, definition: true, aliases: true } });
-  const [resolvedContent, backlinks, allCategories, governanceCategories] = await Promise.all([
+  // glossaryTerms has no dependency on the content pipeline — fetch it in
+  // parallel with wiki-link resolution and the category queries.
+  const [resolvedContent, backlinks, allCategories, governanceCategories, glossaryTerms] = await Promise.all([
     resolveWikiLinks(expandedContent),
     getBacklinks(slug),
     prisma.category.findMany({
@@ -182,6 +184,7 @@ export default async function ArticlePage({ params }: Props) {
       },
     }),
     prisma.category.findMany({ include: { governance: true } }),
+    prisma.glossaryTerm.findMany({ select: { term: true, definition: true, aliases: true } }),
   ]);
   const governance = article.categoryId
     ? resolveArticleGovernance(governanceCategories, article.categoryId)
@@ -616,19 +619,25 @@ export default async function ArticlePage({ params }: Props) {
           </div>
         </details>
 
-        <SessionReadingTrail slug={article.slug} title={article.title} />
-        <ScrollDepthTracker articleId={article.id} />
-        <ReferrerTracker articleId={article.id} />
-        <ReaderPathTracker currentSlug={article.slug} />
-        <StreakTracker />
+        {/* Runs immediately: scroll restore, progress bar, lightbox, tab activation */}
         <ScrollPositionRestorer slug={article.slug} />
-        <ExternalLinkTracker articleId={article.id} />
-        <PrefetchArticleLinks />
-        <AnnotationLayer articleId={article.id} isLoggedIn={!!session} />
         <ReadingProgress />
         <ImageLightbox />
         <TabsActivator />
-        <WikiChatAssistant articleTitle={article.title} />
+
+        {/* Deferred until the browser is idle — analytics, prefetch and chat
+            assistant don't need to compete with content for first paint */}
+        <IdleMount>
+          <SessionReadingTrail slug={article.slug} title={article.title} />
+          <ScrollDepthTracker articleId={article.id} />
+          <ReferrerTracker articleId={article.id} />
+          <ReaderPathTracker currentSlug={article.slug} />
+          <StreakTracker />
+          <ExternalLinkTracker articleId={article.id} />
+          <PrefetchArticleLinks />
+          <AnnotationLayer articleId={article.id} isLoggedIn={!!session} />
+          <WikiChatAssistant articleTitle={article.title} />
+        </IdleMount>
       </article>
 
       {/* Right sidebar: outline + backlinks + local graph */}

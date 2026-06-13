@@ -194,6 +194,8 @@ export default function WikiLinkPreview() {
               <img
                 src={preview.coverImage}
                 alt={preview.title}
+                loading="lazy"
+                decoding="async"
               />
             </div>
           )}

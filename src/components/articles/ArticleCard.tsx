@@ -27,6 +27,8 @@ export default function ArticleCard({ article }: ArticleCardProps) {
             <img
               src={article.coverImage}
               alt={article.title}
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>
