@@ -24,6 +24,7 @@ import ReadOnlyBanner from "@/components/ReadOnlyBanner";
 import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
 import { getSession, isAdmin } from "@/lib/auth";
+import { unstable_cache } from "next/cache";
 import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
@@ -94,23 +95,43 @@ async function getCategories() {
   }
 }
 
+// These run on every request for every page; the data is global (not
+// per-user) and changes rarely, so cache it briefly across requests.
+const getShellData = unstable_cache(
+  async () => {
+    const [categories, articleCount, maintenanceRecord, readOnlyRecord] = await Promise.all([
+      getCategories(),
+      prisma.article.count({ where: { published: true } }).catch(() => 0),
+      prisma.pluginState.findUnique({ where: { id: "maintenance_mode" } }).catch(() => null),
+      prisma.pluginState.findUnique({ where: { id: "read_only_mode" } }).catch(() => null),
+    ]);
+    return {
+      categories,
+      articleCount,
+      maintenanceMode: maintenanceRecord?.enabled ?? false,
+      readOnlyMode: readOnlyRecord?.enabled ?? false,
+    };
+  },
+  ["layout-shell-data"],
+  { revalidate: 60 },
+);
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await getCategories();
-  const articleCount = await prisma.article.count({ where: { published: true } }).catch(() => 0);
-  const [maintenanceRecord, readOnlyRecord] = await Promise.all([
-    prisma.pluginState.findUnique({ where: { id: "maintenance_mode" } }).catch(() => null),
-    prisma.pluginState.findUnique({ where: { id: "read_only_mode" } }).catch(() => null),
-  ]);
-  const [initialAdmin, initialSession] = await Promise.all([
-    isAdmin().catch(() => false),
-    getSession().catch(() => null),
-  ]);
-  const maintenanceMode = maintenanceRecord?.enabled ?? false;
-  const readOnlyMode = readOnlyRecord?.enabled ?? false;
+  const [{ categories, articleCount, maintenanceMode, readOnlyMode }, initialAdmin, initialSession] =
+    await Promise.all([
+      getShellData().catch(() => ({
+        categories: [],
+        articleCount: 0,
+        maintenanceMode: false,
+        readOnlyMode: false,
+      })),
+      isAdmin().catch(() => false),
+      getSession().catch(() => null),
+    ]);
   const initialAuth = { admin: initialAdmin, loggedIn: Boolean(initialSession) };
 
   return (

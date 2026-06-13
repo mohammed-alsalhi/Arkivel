@@ -86,7 +86,7 @@ export default function KanbanPage() {
       {loading ? (
         <p className="text-[13px] text-muted italic">Loading...</p>
       ) : (
-        <div className="grid grid-cols-3 gap-4 items-start">
+        <div className="grid grid-cols-1 gap-4 items-start md:grid-cols-3">
           {COLUMNS.map((col, colIdx) => (
             <div
               key={col.key}
@@ -122,7 +122,7 @@ export default function KanbanPage() {
                       {colIdx > 0 && (
                         <button
                           onClick={() => promoteArticle(article.id, COLUMNS[colIdx - 1].key)}
-                          className="h-5 px-1.5 text-[10px] border border-border rounded bg-surface-hover hover:bg-surface text-muted"
+                          className="h-6 px-2 text-[11px] pointer-coarse:h-9 border border-border rounded bg-surface-hover hover:bg-surface text-muted"
                         >
                           ← {COLUMNS[colIdx - 1].label}
                         </button>
@@ -130,14 +130,14 @@ export default function KanbanPage() {
                       {colIdx < COLUMNS.length - 1 && (
                         <button
                           onClick={() => promoteArticle(article.id, COLUMNS[colIdx + 1].key)}
-                          className="h-5 px-1.5 text-[10px] border border-border rounded bg-surface-hover hover:bg-surface text-muted ml-auto"
+                          className="h-6 px-2 text-[11px] pointer-coarse:h-9 border border-border rounded bg-surface-hover hover:bg-surface text-muted ml-auto"
                         >
                           {COLUMNS[colIdx + 1].label} →
                         </button>
                       )}
                       <Link
                         href={`/articles/${article.slug}/edit`}
-                        className="h-5 px-1.5 text-[10px] border border-border rounded bg-surface-hover hover:bg-surface text-muted ml-auto"
+                        className="h-6 px-2 text-[11px] pointer-coarse:h-9 inline-flex items-center border border-border rounded bg-surface-hover hover:bg-surface text-muted ml-auto"
                       >
                         edit
                       </Link>
