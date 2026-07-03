@@ -4,7 +4,7 @@ Arkivel v4.93.1 adds cross-instance reference metadata without expanding live fe
 
 ## Metadata
 
-`GET /api/external-references` publishes the reference schema, example references, provenance labels, diagnostics, and public-index planning.
+The reference contract in `src/lib/external-references.ts` defines the reference schema, example references, provenance labels, diagnostics, and public-index planning.
 
 References can describe:
 

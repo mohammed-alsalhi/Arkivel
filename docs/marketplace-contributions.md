@@ -22,8 +22,6 @@ Each submission should include:
 
 Use the examples in `examples/marketplace/` as starting points.
 
-The authoring contract at `/api/marketplace/authoring` publishes local validation, metadata preview, screenshot checks, license checks, docs completeness, README generation, compatibility matrix output, and submission template references for pack authors.
-
 ## Naming and versions
 
 - Use lowercase kebab-case ids, for example `docs-portal-style` or `research-notebook-layout`.
@@ -44,6 +42,6 @@ The authoring contract at `/api/marketplace/authoring` publishes local validatio
 
 1. Start from a folder under `examples/marketplace/`.
 2. Draft docs from `examples/marketplace/pack-readme-template.md`.
-3. Validate the manifest through `/admin/marketplace` import preview or `/api/marketplace/authoring`.
+3. Validate the manifest through `/admin/marketplace` import preview.
 4. Open a marketplace submission issue from `examples/marketplace/submission-template.md` and attach the manifest, screenshots, and review checklist.
 5. Keep the contribution preview-only until a trusted local install flow exists.

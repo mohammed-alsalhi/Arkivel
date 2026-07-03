@@ -26,6 +26,15 @@ export default function SpeedReader({ articleId }: { articleId: string }) {
     if (el) setWords(extractWords(el.innerHTML));
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
   const advance = useCallback(() => {
     setIndex((i) => {
       if (i + 1 >= words.length) {

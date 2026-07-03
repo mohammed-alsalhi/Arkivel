@@ -1,11 +1,10 @@
 # Security Review
 
-Arkivel v4.89.0 starts the pre-v5 security review with conservative browser headers, a public review contract, abuse-case gates, dependency review guidance, and a threat-model draft.
+Arkivel v4.89.0 starts the pre-v5 security review with conservative browser headers, a review contract, abuse-case gates, dependency review guidance, and a threat-model draft.
 
 ## Surfaces
 
-- `/api/security/review` publishes the review checklist, security header set, abuse-case matrix, supply-chain checklist, and threat-model draft.
-- `securityReview` in `/api/customization` exposes the schema version, API route, reviewed surfaces, header names, and threat-model asset list.
+- `src/lib/security-review.ts` defines the review checklist, security header set, abuse-case matrix, supply-chain checklist, and threat-model draft.
 - `middleware.ts` adds browser security headers to app responses.
 
 ## Header Hardening

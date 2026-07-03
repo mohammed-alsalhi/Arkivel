@@ -6,8 +6,6 @@ Arkivel v4.87.2 adds observability plumbing on top of the existing `MetricLog` t
 
 - `/admin/observability` shows the operational event feed and privacy controls.
 - `/api/admin/observability` returns controls and recent structured events.
-- `/api/observability/metrics` accepts metric events.
-- `observability` in `/api/customization` publishes schema version, routes, structured log categories, metric types, privacy defaults, and event-feed metadata.
 
 ## Structured Logs
 
@@ -15,7 +13,7 @@ Structured events use these categories: config, auth, Prisma, migrations, assets
 
 ## Metrics
 
-Supported metric types are page latency, API latency, editor autosave, search response time, export duration, import duration, and webhook delivery. Search and webhook delivery metrics are recorded by first-party routes; external tools can post compatible JSON to `/api/observability/metrics`.
+Supported metric types are page latency, API latency, editor autosave, search response time, export duration, import duration, and webhook delivery. Search and webhook delivery metrics are recorded by first-party routes.
 
 ## Privacy Controls
 
@@ -23,4 +21,4 @@ Admins can enable or disable analytics ingestion, event feed visibility, IP anon
 
 ## External Tools
 
-External collectors can poll `/api/admin/observability` with admin credentials, or post sanitized client/server metrics to `/api/observability/metrics`. Keep payloads aggregate and avoid raw article content, secrets, session identifiers, or full request headers.
+External collectors can poll `/api/admin/observability` with admin credentials. Keep payloads aggregate and avoid raw article content, secrets, session identifiers, or full request headers.

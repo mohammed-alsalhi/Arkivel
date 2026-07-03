@@ -121,7 +121,7 @@ export default function WikiLinkSuggester({
         position: "fixed",
         top: position.top + 4,
         left: position.left,
-        zIndex: 9999,
+        zIndex: 50,
       }}
     >
       {results.length === 0 && query.trim().length > 0 && !loading && (

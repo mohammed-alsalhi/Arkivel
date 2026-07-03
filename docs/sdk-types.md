@@ -4,10 +4,9 @@ Arkivel v4.86.1 publishes SDK-ready TypeScript contracts for the frozen public A
 
 ## Contract Metadata
 
-Use these endpoints:
+Use this endpoint:
 
 - `GET /api/v1/sdk`
-- `sdkTypes` in `GET /api/customization`
 
 The SDK contract names stable TypeScript payloads for REST responses, webhook events, customization manifests, marketplace packs, plugin manifests, and export bundle manifests.
 

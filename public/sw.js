@@ -231,7 +231,6 @@ function isBypassPath(pathname) {
     "/api/auth",
     "/api/export",
     "/api/webhooks",
-    "/api/observability",
     "/api/upload",
     "/api/plugins",
   ].some((prefix) => pathname.startsWith(prefix));
@@ -239,7 +238,7 @@ function isBypassPath(pathname) {
 
 function shouldQueueMutation(pathname, method) {
   if (method === "GET" || isBypassPath(pathname)) return false;
-  return ["/api/articles", "/api/categories", "/api/tags", "/api/discussions"].some((prefix) => pathname.startsWith(prefix));
+  return ["/api/articles", "/api/categories", "/api/tags"].some((prefix) => pathname.startsWith(prefix));
 }
 
 /**

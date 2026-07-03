@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type Props = {
   categoryId: string;
@@ -15,6 +16,17 @@ export default function SynthesizeButton({ categoryId, categoryName, articleCoun
   const [result, setResult] = useState<{ title: string; html: string; articleTitles: string[] } | null>(null);
   const [error, setError] = useState("");
   const router = useRouter();
+
+  useScrollLock(open);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const handleSynthesize = async () => {
     setLoading(true);
@@ -65,8 +77,14 @@ export default function SynthesizeButton({ categoryId, categoryName, articleCoun
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="bg-surface border border-border rounded shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 px-4" onClick={() => setOpen(false)}>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Knowledge Synthesis"
+            className="bg-surface border border-border rounded shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex flex-wrap items-start justify-between gap-3 px-5 py-3 border-b border-border shrink-0">
               <div className="min-w-0">
                 <h2 className="text-[15px] font-semibold text-heading">Knowledge Synthesis</h2>

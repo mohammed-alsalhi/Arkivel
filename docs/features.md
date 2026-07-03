@@ -11,7 +11,6 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Editor feature trays** — Insert, Review, and Outline reveal advanced blocks, readiness signals, structure tools, grammar checks, and writing analysis only when needed
 - **Selection actions** — selected text exposes rewrite, expand, wiki-link, URL-link, and footnote actions inline
 - **Insert tray** — one-click scaffolds, reusable callout/metadata/timeline/infobox/decision/research/worldbuilding templates, tables, data tables, Mermaid diagrams, math, decision trees, collapsibles, and live query blocks
-- **Editor control contract** — `/api/customization` exposes reusable editor primitive metadata, extension points, block templates, and shortcut scopes for self-hosters and trusted plugins
 - **Contextual table lab** — row, column, merge, split, header, and delete-table controls appear only while editing a table
 - **Slash commands** — type `/` for Mermaid diagrams, math blocks, Excalidraw drawings, data tables, decision trees, headings, and more; includes user snippets via `/snippet`
 - **Inline AI rewrite** — select text and click "AI Rewrite" in the toolbar; optionally provide an instruction; requires `OPENAI_API_KEY`
@@ -43,9 +42,7 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Hierarchical categories** — tree-structured categories in the sidebar; each article belongs to one
 - **Hierarchical tags** — many-to-many; browse all at `/tags` with a size-scaled tag cloud
 - **Workspaces** — `Wiki` is the workspace boundary for v4.82+, with bootstrap profiles, visibility, default roles, invitations, settings, marketplace selections, and scoped article/search/category/tag APIs
-- **Sync manifests** — `/api/sync-manifests` and `docs/sync-manifests.md` define preview-safe space moves between Arkivel installs with source/target metadata, checksums, dry-run reports, signed snapshot planning, and private/public visibility rules
-- **External references** — `/api/external-references` and `docs/external-references.md` define imported/mirrored provenance, broken external reference diagnostics, and public index planning that excludes private content
-- **Archive mirrors** — `/api/archive-mirrors` and `docs/archive-mirror-workflows.md` define read-only archive snapshots, private mirrors, selected-space transfers, repeated-sync conflict notes, and the pre-v5 federation decision checkpoint
+- **External references** — `docs/external-references.md` defines imported/mirrored provenance, broken external reference diagnostics, and public index planning that excludes private content
 - **Role templates** — personal admin, team owner, docs maintainer, editor, reviewer, contributor, viewer, and public reader templates define the permission matrix for pages, APIs, exports, webhooks, plugins, customization, and marketplace actions
 - **Collaboration controls** — co-authors, edit locks, review assignments, comments, mentions, notifications, workspace digests, and contribution summaries follow workspace-aware policies
 - **Collaboration UX** — live editing exposes presence names, connection/reconnect/offline states, conflict warnings, last-saved indicators, notification routing metadata, mobile editor QA, and accessibility checkpoints
@@ -64,7 +61,6 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 ## Discovery & Navigation
 
 - **Full-text search** — AND-logic multi-word search with relevance v2 ranking, facets, synonym/stemming expansion, stale/review/verification signals, and admin explain mode
-- **Search API contract** — `/api/search/contract` publishes stable typed result shapes for articles, categories, tags, discussions, revisions, and marketplace items plus privacy, retention, and webhook planning metadata
 - **Unified search surfaces** — the header search, search page, command palette, wiki-link autocomplete, split view, and edit fallback all use the same search response contract
 - **Responsive app shell** — desktop/tablet users get the dense collapsible sidebar, while phone layouts get a safe-area-aware bottom nav for Home, Search, Create, Recent, and Browse; focused workspace pages keep their full-height canvas by using the compact top menu instead
 - **Main page front page** — `/` combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point
@@ -74,7 +70,6 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Canon Trails** — `/trails` turns live wiki links, backlinks, categories, freshness, depth, and engagement into guided reading routes for canon, recent work, deep pages, and repair paths
 - **Knowledge Command Center** — `/intelligence` runs 20 live engines for mission readiness, editorial pressure, graph health, broken links, stubs, taxonomy debt, featured canon, translation surface, reader demand, verification debt, and cleanup flags, then opens with a live article constellation, readiness radar, and impact simulator
 - **Command palette navigation** — `Cmd+K` / `Ctrl+K` opens grouped destinations across navigation, discovery, personal, reference, and admin surfaces
-- **Discovery engines** — `/api/discovery` reports duplicate-page, unresolved-question, canon-conflict, glossary-gap, orphan-topic, topic-cluster, continue-reading, admin-action, and dashboard-widget opportunities
 - **Word-count search filter** — advanced search includes min/max word count range to find articles by length
 - **Search analytics** — every query is logged; admin page at `/admin/search-analytics` shows daily volume, top queries, and zero-result queries to find content gaps
 - **30-day view sparkline** — article stats panel shows a mini bar chart of daily page views for the past 30 days
@@ -160,7 +155,6 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Knowledge synthesis** — "Synthesize" on category pages; AI reads all articles and synthesises a comprehensive overview; preview modal; "Create as new article" one-click
 - **Presentation mode** — every article has a "Present" button; `/present/[slug]` is a cinematic dark slideshow with reserved top/bottom chrome, a scrollable slide stage, animated transitions, slide overview, fullscreen, and dot navigation
 - **Bulk JSON export** — `/api/export/json`; downloads all articles as structured JSON (admin only)
-- **Per-article analytics** — `/articles/[slug]/analytics`; 30-day view chart + reads, reactions, revisions summary (admin only)
 - **Series progress tracker** — series navigation shows "X of N read" from browser reading history
 - **Series table of contents** — collapsible panel on article pages listing all entries in a series with read indicators and current position highlighted
 - **Vertical timeline blocks** — `/timeline` slash command inserts a CSS-driven chronological timeline with date labels and accent-coloured dot connectors
@@ -265,8 +259,6 @@ A personalizable homepage at `/dashboard` with a draggable widget grid.
 
 AI features degrade gracefully when API keys are absent.
 
-- **Assistant packs** — `/api/assistant-packs`, `/admin/assistants`, and `docs/assistant-packs.md` expose opt-in drafting, summarization, search, claim extraction, taxonomy, alt-text, import cleanup, and review packs with per-space availability, prompt/context previews, usage/cost metadata, permissions, safety, and fallback metadata
-- **Assistant governance** — `/api/assistant-packs/governance` and `docs/assistant-governance.md` publish privacy warnings, human-review requirements, citation prompts, confidence metadata, AI audit events, private/sensitive opt-outs, and the optional/non-blocking release gate
 - **Writing coach** — Review tray disclosure with Flesch-Kincaid score, passive-voice count, sentence-length stats, and AI suggestions
 - **Article summaries** — auto-generated on save; used as the page meta description
 - **Semantic search** — vector embeddings via OpenAI blend meaning-based results with keyword matches
@@ -322,51 +314,29 @@ Capture content from the web directly into the wiki without switching context.
 - **Webhook reliability** — timestamped signatures, retry metadata, delivery logs, redelivery, event schemas, replay protection, admin test sender, and local receiver docs
 - **Operations dashboard** — `/admin/operations` and `/api/admin/operations?bundle=1` expose admin-only service health, queue health, slow pages, failed webhooks/imports/exports/plugins, alerts, acknowledgements, and redacted support bundles
 - **Maintenance tooling** — `/admin/maintenance` and `/api/admin/maintenance/report` expose safe-upgrade checks, backup reminders, background task pausing, cleanup queues, and runbook metadata
-- **Observability** — `/admin/observability`, `/api/admin/observability`, and `/api/observability/metrics` expose structured events, metric ingestion, privacy controls, and external collector guidance
+- **Observability** — `/admin/observability` and `/api/admin/observability` expose structured events, metric ingestion, privacy controls, and external collector guidance
 - **Performance budgets** — `/admin/performance` and `/api/admin/performance` expose route p95, interaction, and bundle budgets, large-wiki fixtures, slow samples, and slow-query diagnostics
-- **Cache strategy** — `/admin/cache` and `/api/admin/cache` expose cache invalidation rules, manual invalidation, stale warnings, Redis status, and CDN/Vercel/Docker/reverse-proxy recipes
-- **Offline/PWA** — `/api/offline/contract`, `docs/offline-pwa.md`, `/sw.js`, and `/offline.html` define install metadata, offline cache rules, stale headers, retry queues, mobile QA, draft warnings, and privacy limits
-- **Mobile polish** — `/api/mobile-polish` and `docs/mobile-polish.md` publish phone, tablet, laptop, and wide desktop QA for navigation, article actions, editor trays, admin panels, marketplace pages, and customization previews
-- **Desktop research** — `/api/desktop-research` and `docs/desktop-app-research.md` document Electron, Tauri, browser PWA, and Docker Desktop packaging tradeoffs without committing desktop packaging to v5 scope
-- **Accessibility finish** — `/api/accessibility` and `docs/accessibility.md` publish keyboard/focus/dialog/dropdown/control audits, screen-reader summaries, high-contrast/reduced-motion checks, contribution checklist, and release blockers
-- **Migration readiness** — `/api/migration-readiness` and `docs/migration-readiness.md` publish blocking migration dry runs, backup prompts, schema compatibility reports, restore validation, representative v4 upgrade paths, and failure recovery guidance
-- **Backup and restore** — `/api/backup-restore` and `docs/backup-restore.md` publish admin backup wizard sections, restore rehearsal validation, scheduled backup planning, external storage notes, and disaster-recovery drill guidance
-- **Upgrade assistant** — `/api/upgrade-assistant` and `docs/v5-upgrade-planning.md` publish v5 readiness checks, pre-upgrade diagnostics, post-upgrade smoke checks, compatibility warnings, and release-note/migration doc links
-- **Test quality gates** — `/api/test-quality` and `docs/test-quality-gates.md` publish expanded test surfaces, stable QA fixtures, CI matrix planning, warning policy, and release-manager dashboard planning
-- **E2E smoke suite** — `/api/e2e-smoke-suite`, `e2e/smoke-suite.spec.ts`, and `docs/e2e-smoke-suite.md` publish product smoke flows, responsive smoke routes, fixture seeding, and failure screenshot/trace settings
-- **Release gates** — `/api/release-gates`, `scripts/verify-docs-sync.mjs`, and `docs/release-gate-automation.md` publish release candidate gates, docs sync verification, checklist metadata, known issues, and blocker labels
-- **Documentation onboarding** — `/api/documentation-onboarding`, `docs/index.md`, `docs/maintainer-guide.md`, `docs/setup-paths.md`, and `docs/troubleshooting.md` publish maintainer docs, setup paths, troubleshooting, docs IA, and practical link-test coverage
-- **In-app onboarding** — `/api/in-app-onboarding`, `docs/in-app-onboarding.md`, and `examples/onboarding/demo-content-pack.json` publish the first-run checklist, guided admin setup topics, contextual help panel plan, demo content pack, and screenshot checkpoints
-- **Example site recipes** — `/api/example-site-recipes`, `docs/example-site-recipes.md`, and `examples/recipes/site-recipes.json` publish setup recipes, env snippets, screenshot targets, pack recommendations, migration stories, and the v5 readiness checklist for self-host admins
-- **Feature freeze** — `/api/release-freeze`, `docs/feature-freeze.md`, and `docs/known-issues.md` publish freeze policy, full rehearsal matrix, blocker labels, v5 gate ownership, and release-note draft sections
-- **Release candidate one** — `/api/release-candidate-one`, `docs/release-candidate-one.md`, and `docs/rc-feedback-template.md` publish RC1 gates, deployment validation paths, starter/pack/import/export validation areas, review checklists, and feedback template
-- **Final release gates** — `/api/final-release-gates` and `docs/final-release-gates.md` publish RC fixes, final beta freeze contracts, gate evidence, compatibility targets, correction windows, and stable v5 release gates
-- **Security review** — `/api/security/review`, `docs/security-review.md`, and middleware headers define reviewed security surfaces, abuse-case gates, supply-chain checks, and the pre-v5 threat-model draft
-- **Privacy controls** — `/api/privacy/controls` and `docs/privacy-controls.md` define deployment-mode privacy controls, retention settings, user export/deletion planning, and AI/external integration warnings
-- **Marketplace security** — `/api/marketplace/security` and `docs/secure-marketplace-plugins.md` define unsafe pack rejection, blocked hooks/permissions, dangerous capability warnings, provenance requirements, and local-only installation guidance
-- **Marketplace beta** — `/api/marketplace/beta` and `docs/marketplace-beta.md` publish beta metrics, featured/recent/recommended packs, collections, compatibility badges, search facets, install-intent steps, and limitations
-- **Marketplace lifecycle** — `/api/marketplace/lifecycle` and `docs/marketplace-lifecycle.md` define pack states, transitions, local inventory, health checks, preview media validation, update metadata, compatibility warnings, and rollback guidance
-- **Marketplace authoring** — `/api/marketplace/authoring` and `docs/marketplace-authoring.md` define pack author dashboard metadata, README generator/checklist output, Arkivel compatibility matrix rows, author quality expectations, and submission templates
-- **Template marketplace** — `/api/marketplace/templates` and `docs/template-marketplace.md` define template-pack listings, included schema, category and article previews, compatibility notes, diff/merge contracts, and export-from-space fixture output
+- **Offline/PWA** — `/sw.js` and `/offline.html` define install metadata, offline cache rules, stale headers, retry queues, mobile QA, draft warnings, and privacy limits
+- **Upgrade assistant** — `docs/v5-upgrade-planning.md` publishes v5 readiness checks, pre-upgrade diagnostics, post-upgrade smoke checks, compatibility warnings, and release-note/migration doc links
+- **E2E smoke suite** — `e2e/smoke-suite.spec.ts` covers product smoke flows, responsive smoke routes, fixture seeding, and failure screenshot/trace settings
+- **Release gates** — `scripts/verify-docs-sync.mjs` covers docs sync verification
+- **Documentation onboarding** — `docs/index.md`, `docs/maintainer-guide.md`, `docs/setup-paths.md`, and `docs/troubleshooting.md` publish maintainer docs, setup paths, troubleshooting, docs IA, and practical link-test coverage
+- **Security review** — `docs/security-review.md` and middleware headers define reviewed security surfaces, abuse-case gates, supply-chain checks, and the pre-v5 threat-model draft
+- **Marketplace security** — `docs/secure-marketplace-plugins.md` defines unsafe pack rejection, blocked hooks/permissions, dangerous capability warnings, provenance requirements, and local-only installation guidance
 - **REST API v2** — pagination cursors, field selection
 - **GraphQL API** — `/api/graphql` powered by graphql-yoga; includes GraphiQL playground. Queries for articles, categories, tags, revisions, search, and stats.
-- **Customization manifest** — `/api/customization` exposes grouped brand, style preset, color theme, layout, feature flag, limit, map, reusable component, editor control, collaboration UX, public API v1, SDK type, webhook reliability, operations dashboard, maintenance tooling, observability, performance budgets, cache strategy, offline/PWA, mobile polish, accessibility finish, migration readiness, backup/restore, upgrade assistant, test quality gates, e2e smoke suite, release gate automation, documentation onboarding, in-app onboarding, example site recipes, feature freeze, release candidate one, final release gates, security review, privacy controls, marketplace security, marketplace beta, marketplace lifecycle, marketplace authoring, template marketplace, persisted space customization, marketplace registry/import-preview, plugin manifest schema/examples/compatibility matrix, plugin, theme-pack, template-pack, migration guidance, and theme-hook metadata for self-hosters, plugins, forks, and deployment dashboards.
+- **Customization manifest** — `/api/customization` exposes grouped brand customization config, supported env var options, style presets, color themes, layout presets, component packs, layout composition hooks, theme packs with a theme-pack schema, and marketplace registry, items, contract, and validation metadata for self-hosters, plugins, forks, and deployment dashboards.
 - **Trusted local plugins** — `/admin/plugins` reads registered plugins plus trusted local `plugin.json` manifests only when `ARKIVEL_ENABLE_TRUSTED_PLUGINS=true` and `ARKIVEL_TRUSTED_PLUGIN_DIR` points to an absolute local directory. It shows permissions, routes, widgets, hooks, compatibility, and load errors before enabling a plugin.
 - **Plugin permission review** — plugin manifests show permission prompts, risk labels, health status, last load/error metadata, routes, widgets, hooks, and version/source details. Enable/disable actions and hook failures are audit logged; remote arbitrary-code loading remains out of scope for v1.
 - **Plugin starter kit** — `examples/plugins/starter-plugin/`, `docs/plugin-authoring.md`, `examples/plugins/marketplace-listing-template.json`, and `npm run plugin:validate` give authors a manifest, route, widget, setting, hook, job, smoke-test checklist, compatibility notes, and validation workflow.
 - **Portable bundle contract** — `docs/portable-bundles.md` defines the pre-v5 full-site bundle manifest, checksums, source metadata, export scope, sessions/API-key/analytics exclusions, privacy filters, and import dry-run report shape for conflicts, missing assets, unsupported schemas, duplicate slugs, and permission gaps.
 - **Export hardening** — Markdown, HTML, JSON, and ZIP exports emit manifest/checksum headers and record admin export history when persistence is available. `/api/export/history?download=1` downloads reports with file counts, byte counts, omitted private data, warnings, status, and scope metadata.
-- **Import rehearsal** — `/api/import/rehearsal` exposes dry-run conflict categories, recommended actions, blocked changes, rollback plans, and fixture profiles for small wiki, large archive, docs portal, and worldbuilding atlas imports before any write-capable flow.
 - **Workspace model contract** — `docs/workspaces.md` documents personal, team, public docs, private archive, and demo bootstrap profiles, invitation APIs, `workspaceId`/`wikiId`/`X-Arkivel-Workspace` scoping, and single-workspace migration.
-- **Role template contract** — `docs/role-templates.md` documents role templates, API-key behavior, invitation expiration/resend/revoke actions, audit events, and self-host admin recovery guidance.
 - **Private team knowledge base** — `docs/private-team-knowledge-base.md` documents private workspace setup, collaboration routing, user preferences, and public-surface visibility rules for team deployments.
 - **Editorial governance API** — `/api/admin/editorial-governance/summary` reports release blockers, editorial risk, claim queues, verification renewals, and owner gaps; `docs/editorial-governance.md` documents the contract.
 - **Space customization API** — `/api/categories/:id/customization` and `/api/articles/:id/customization` resolve global, parent-space, space, and article overrides for style, color theme, layout, component pack, template pack, navigation, and metadata schema while hiding private draft config from public reads.
 - **Space customization editor** — `/admin/categories` lets admins edit category-space overrides, inspect inherited effective values and source badges, reset to parent/global values, preview article-list/metadata/navigation/theme outcomes, review conflict warnings, and check responsive QA notes.
-- **Space templates** — `/api/space-templates` exposes preview-safe personal wiki, product docs, team handbook, worldbuilding bible, research notebook, reading archive, project knowledge base, and public documentation templates, with preview pages, JSON validation, one-click local import previews, category trees, starter articles, sample metadata, tags, infobox fields, navigation, dashboards, layouts, and recommended packs.
-- **Domain workflows** — `/api/space-workflows` and `docs/domain-workflows.md` publish workflow controls, steps, starter template links, and release gates for docs portals, team handbooks, worldbuilding, research, and personal wiki products.
 - **Space governance hooks** — `/api/categories/:id/governance` persists category owner, reviewer, default visibility, review cadence, stale-page threshold, and health-signal preferences. Article pages show inherited governance badges, and the admin dashboard summarizes space health widgets for stale pages, unreviewed claims, orphaned content, and broken links.
-- **Component slot registry** — `/api/customization` exposes stable component slot contracts for article cards, article headers, metadata panels, infoboxes, dashboards, homepage sections, search results, editor panels, space navigation, and admin summaries with fallback, loading, error, permission, and data-boundary metadata.
 - **Built-in component packs** — The local registry includes default wiki, docs portal, team knowledge base, worldbuilding atlas, and research notebook packs with named slot components and recommended layout metadata.
 - **Layout composition hooks** — Built-in layouts publish shell density, homepage order, article column, right-rail, dashboard module, category landing, screenshot, and scoped `html[data-layout="..."]` hook metadata for previews and future runtime composition.
 - **Component-pack developer experience** — Pack authors can scaffold component packs, validate manifests locally, start from `examples/marketplace/component-pack`, and plan previews with typed article, category, dashboard, marketplace, and editor fixtures.
@@ -427,15 +397,6 @@ Optional feature. Enable with `NEXT_PUBLIC_MAP_ENABLED=true`.
 - **Maintenance tooling** — safe-upgrade checks, backup reminders, background task pausing, cleanup queues, and runbooks at `/admin/maintenance`
 - **Observability** — structured operational events, metric ingestion, privacy controls, and event feed at `/admin/observability`
 - **Performance budgets** — route budgets, large-wiki fixtures, slow samples, and Prisma query review guidance at `/admin/performance`
-- **Cache strategy** — invalidation rules, manual invalidation, stale warnings, Redis status, and deployment recipes at `/admin/cache`
-- **Offline/PWA** — install prompts, cached reading pages, stale indicators, retry queues, and mobile QA via `/api/offline/contract`
-- **Security review** — browser headers, review checklist, abuse cases, supply-chain gates, and threat model via `/api/security/review`
-- **Privacy controls** — deployment modes, retention keys, user data lifecycle, and integration warnings via `/api/privacy/controls`
-- **Marketplace security** — unsafe pack rejection, blocked hooks/permissions, dangerous warnings, and provenance checks via `/api/marketplace/security`
-- **Marketplace beta** — landing metrics, featured/recent/recommended packs, collections, facets, install intent, and limitations via `/api/marketplace/beta`
-- **Marketplace lifecycle** — pack states, transitions, inventory, health checks, preview media validation, and rollback guidance via `/api/marketplace/lifecycle`
-- **Marketplace authoring** — pack validation, metadata preview, screenshot/license/docs checks, README generation, compatibility matrix, and submission templates via `/api/marketplace/authoring`
-- **Template marketplace** — template-pack listings, previews, diff/merge metadata, and export-from-space fixture output via `/api/marketplace/templates`
 - **Embeddings coverage** — semantic search index per article at `/admin/embeddings`
 - **Plugins** — enable/disable wiki plugins at `/admin/plugins`
 - **Webhooks** — configure HTTP callbacks at `/admin/webhooks`

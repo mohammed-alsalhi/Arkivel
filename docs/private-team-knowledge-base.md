@@ -16,7 +16,7 @@ Workspace collaboration controls cover co-authors, edit locks, review assignment
 
 ## Public Surface Safety
 
-Anonymous RSS, Atom, sitemap, and `/api/sitemap` outputs include only:
+Anonymous RSS, Atom, and sitemap outputs include only:
 
 - Legacy unscoped published articles.
 - Published articles in public workspaces.

@@ -46,7 +46,7 @@ export default function GlossaryTooltipLayer() {
   return (
     <div
       data-glossary-card
-      style={{ position: "absolute", left: tip.x, top: tip.y - 8, transform: "translateY(-100%)", zIndex: 9999 }}
+      style={{ position: "absolute", left: tip.x, top: tip.y - 8, transform: "translateY(-100%)", zIndex: 50 }}
       className="w-64 rounded border border-border bg-surface shadow-lg text-[12px] p-2.5 pointer-events-auto"
       onMouseEnter={() => clearTimeout(hideTimer.current)}
       onMouseLeave={() => { hideTimer.current = setTimeout(() => setTip(null), 150); }}

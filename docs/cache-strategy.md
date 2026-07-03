@@ -1,12 +1,6 @@
 # Cache Strategy
 
-Arkivel v4.88.1 defines cache invalidation rules and admin cache tools for self-host installs.
-
-## Surfaces
-
-- `/admin/cache` shows Redis status, invalidation rules, manual invalidation buttons, stale warning metadata, and deployment recipes.
-- `/api/admin/cache` returns the same admin-only report and accepts manual invalidation requests.
-- `cacheStrategy` in `/api/customization` publishes the schema version, admin/API routes, invalidation rule ids, recipe ids, and stale-warning surfaces.
+Arkivel v4.88.1 defines cache invalidation rules for self-host installs.
 
 ## Invalidation Rules
 
@@ -23,4 +17,4 @@ Customization writes invalidate customization, marketplace metadata, plugin mani
 
 ## Stale Warnings
 
-Editors and admins should treat data loaded before a cache invalidation as potentially stale. Admins can use `/admin/cache` to manually invalidate a known rule after imports, migrations, or external writes.
+Editors and admins should treat data loaded before a cache invalidation as potentially stale.

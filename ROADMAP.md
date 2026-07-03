@@ -16,6 +16,15 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 
 ---
 
+## v5.2 - Post-stable cleanup
+
+#### v5.2.2 - Dead code and consistency audit
+
+- [x] Remove dead API routes, orphaned contract libraries, stub admin pages, and vaporware docs
+- [x] Slim `/api/customization` to the fields its consumers read
+- [x] Surface orphaned features (stats, leaderboard, flashcards, learning paths, change requests, reviews, forks, bounties, TIL, collections, mentions, history) in `/tools` and the command palette
+- [x] Fix theme, dialog, z-index, and breakpoint consistency violations
+
 ## Pre-5.0 Stable Release Roadmap
 
 Arkivel remains beta through the entire v4 line. The goal is to make the platform reusable, self-hostable, customizable, extension-ready, portable, and operable before tagging v5.0.0 as the first stable release. This ladder uses patch-level planning so each `v4.x.y` release can land a focused, reviewable batch with docs, tests, version metadata, commit, and push.

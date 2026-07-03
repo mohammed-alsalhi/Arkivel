@@ -43,7 +43,7 @@ Content-Type: application/json
 
 ## Event Schemas
 
-`webhookReliability.eventSchemas` in `GET /api/customization` groups events for:
+The webhook reliability contract in `src/lib/webhook-reliability.ts` groups event schemas for:
 
 - article
 - category

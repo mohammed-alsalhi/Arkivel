@@ -247,10 +247,6 @@ export default function ApiDocsPage() {
               <strong>Robots:</strong>{" "}
               <InlineCode>/robots.txt</InlineCode> &mdash; Crawler instructions
             </li>
-            <li>
-              <strong>API Sitemap:</strong>{" "}
-              <InlineCode>/api/sitemap</InlineCode> &mdash; XML sitemap via API route
-            </li>
           </ul>
         </Section>
 
@@ -276,7 +272,7 @@ export default function ApiDocsPage() {
               <InlineCode>GET /api/intelligence</InlineCode> — Knowledge cockpit score, radar, constellation, pressure model, engines, and action queue
             </li>
             <li>
-              <InlineCode>GET /api/customization</InlineCode> — Public self-host manifest for grouped customization, supported env vars, style presets, color themes, layouts, layout composition hooks, reusable UI components including editor primitives and accessibility primitives, collaboration UX metadata, offline/PWA metadata, mobile polish metadata, desktop research metadata, accessibility finish metadata, migration readiness metadata, backup/restore metadata, upgrade assistant metadata, test quality gates metadata, e2e smoke suite metadata, release gate automation metadata, documentation onboarding metadata, in-app onboarding metadata, example site recipe metadata, feature freeze metadata, release candidate one metadata, final release gate metadata, security review metadata, privacy controls metadata, marketplace security metadata, marketplace beta metadata, marketplace lifecycle metadata, marketplace authoring metadata, template marketplace metadata, sync manifest metadata, external reference metadata, archive mirror metadata, component slot contracts, plugin manifest schema/examples/compatibility matrix, trusted local plugin loader metadata, plugin manifests, theme packs, template packs, marketplace registry/import-preview metadata, status vocabulary, detail/copy metadata, validation summaries, persisted space customization contracts, migration guidance, and theme hooks
+              <InlineCode>GET /api/customization</InlineCode> — Public self-host manifest for grouped customization, supported env vars, style presets, color themes, layouts, layout composition hooks, component packs, theme packs and the theme-pack schema, and the marketplace registry with items, contract, and validation summaries
             </li>
             <li>
               <InlineCode>GET /api/plugins</InlineCode> / <InlineCode>PUT /api/plugins</InlineCode> — Admin-only plugin review and enablement API with loader status, permission prompts, health metadata, compatibility, routes, widgets, hooks, load errors, and audit-backed enable/disable changes
@@ -285,172 +281,49 @@ export default function ApiDocsPage() {
               <InlineCode>npm run plugin:validate</InlineCode> — Local plugin author CLI for validating <InlineCode>plugin.json</InlineCode> and listing supported permissions, hooks, webhook events, schema fields, and compatibility metadata
             </li>
             <li>
-              <InlineCode>portableBundle</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Pre-v5 full-site bundle contract with manifest fields, checksums, export scope, privacy filters, dry-run import report groups, and compatibility promises
-            </li>
-            <li>
               <InlineCode>GET /api/export/history</InlineCode> — Admin-only export history report with manifest, checksum, warning, omitted-data, file-count, byte-count, format, status, and scope metadata; add <InlineCode>?download=1</InlineCode> for a downloadable JSON report
-            </li>
-            <li>
-              <InlineCode>GET /api/import/rehearsal</InlineCode> / <InlineCode>POST /api/import/rehearsal</InlineCode> — No-write import rehearsal contract with conflict categories, recommended actions, blocked changes, rollback plans, and fixture profiles
             </li>
             <li>
               <InlineCode>GET /api/articles</InlineCode>, <InlineCode>GET /api/search</InlineCode>, <InlineCode>GET /api/categories</InlineCode>, and <InlineCode>GET /api/tags</InlineCode> — Accept <InlineCode>workspaceId</InlineCode>, <InlineCode>wikiId</InlineCode>, or <InlineCode>X-Arkivel-Workspace</InlineCode> scoping, plus <InlineCode>includeGlobal=1</InlineCode> during single-workspace migration
             </li>
             <li>
-              <InlineCode>GET /api/wikis/:id/invitations</InlineCode> / <InlineCode>POST /api/wikis/:id/invitations</InlineCode> — Workspace admin invitation review and creation for viewer/editor/admin roles
+              <InlineCode>GET /api/admin/editorial-governance/summary</InlineCode> — Review due dates, required reviewers, approval thresholds, claim queues, verification stamps, ownership paths, release blockers, and editorial risk summaries
             </li>
             <li>
-              <InlineCode>PATCH /api/wikis/:id/invitations</InlineCode> — Resend or revoke workspace invitations with 14-day expiration refreshes and audit events
+              <InlineCode>GET /api/admin/audit-log</InlineCode> — Actor, action, target, workspace, severity, success, and date filters plus downloadable JSON exports with summary, standard, strict, or full redaction
             </li>
             <li>
-              <InlineCode>roleTemplates</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Role template contract and permission matrix for pages, APIs, exports, webhooks, plugins, customization, marketplace actions, API-key behavior, and recovery guidance
+              <InlineCode>PATCH /api/articles/:id/discussions</InlineCode> and <InlineCode>PATCH /api/suggestions/:id</InlineCode> — Discussion reports/reviewer visibility plus suggestion accept, reject, comment, assign, and convert-to-task actions with anti-spam metadata
             </li>
             <li>
-              <InlineCode>collaborationControls</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Workspace-aware policy for co-authors, edit locks, review assignments, comments, mentions, notifications, activity digests, contribution summaries, and public visibility checks
+              <InlineCode>GET /api/search?explain=1</InlineCode> — Relevance v2 facets, weights, synonyms, aliases, redirects, stemming, stale/review/verification signals, and admin-only score explanations
             </li>
             <li>
-              <InlineCode>editorialGovernance</InlineCode> in <InlineCode>GET /api/customization</InlineCode> and <InlineCode>GET /api/admin/editorial-governance/summary</InlineCode> — Review due dates, required reviewers, approval thresholds, claim queues, verification stamps, ownership paths, release blockers, and editorial risk summaries
+              <InlineCode>GET</InlineCode> / <InlineCode>PUT</InlineCode> / <InlineCode>DELETE /api/articles/:id/snapshots</InlineCode> — Snapshot read/compare/restore/discard flows plus draft recovery, editor diagnostics, and large-document fixture metadata
             </li>
             <li>
-              <InlineCode>GET /api/admin/audit-log</InlineCode> and <InlineCode>auditTrail</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Actor, action, target, workspace, severity, success, and date filters plus downloadable JSON exports with summary, standard, strict, or full redaction
+              <InlineCode>GET /api/v1/contract</InlineCode> and <InlineCode>GET /api/v1/openapi.json</InlineCode> — Frozen pre-v5 endpoint metadata, OpenAPI schema, standard headers/errors, fixture responses, and migration guide references
             </li>
             <li>
-              <InlineCode>moderation</InlineCode> in <InlineCode>GET /api/customization</InlineCode>, <InlineCode>PATCH /api/articles/:id/discussions</InlineCode>, and <InlineCode>PATCH /api/suggestions/:id</InlineCode> — Discussion reports/reviewer visibility plus suggestion accept, reject, comment, assign, and convert-to-task actions with anti-spam metadata
+              <InlineCode>GET /api/v1/sdk</InlineCode> — SDK-ready TypeScript payload names, API key scopes, generated client snippets, and sample script metadata for every stable v1 surface
             </li>
             <li>
-              <InlineCode>GET /api/search?explain=1</InlineCode> and <InlineCode>searchRelevance</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Relevance v2 facets, weights, synonyms, aliases, redirects, stemming, stale/review/verification signals, and admin-only score explanations
+              <InlineCode>POST /api/webhooks/test</InlineCode> and <InlineCode>POST /api/webhooks/deliveries/:id/redeliver</InlineCode> — Timestamped signatures, retry policy, delivery logs, event schemas, replay protection, and local receiver guidance
             </li>
             <li>
-              <InlineCode>GET /api/search/contract</InlineCode> and <InlineCode>searchApi</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Stable typed result shapes for articles, categories, tags, discussions, revisions, and marketplace items plus query privacy, retention, and webhook event planning
+              <InlineCode>GET /api/admin/operations</InlineCode> and <InlineCode>GET /api/admin/operations?bundle=1</InlineCode> — Admin service health, queues, slow pages, failed webhooks/imports/exports/plugins, alerts, acknowledgements, and redacted diagnostic bundle metadata
             </li>
             <li>
-              <InlineCode>GET /api/discovery</InlineCode> and <InlineCode>discoveryEngines</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Duplicate-page, unresolved-question, canon-conflict, glossary-gap, orphan-topic, topic-cluster, continue-reading, admin-action, and dashboard-widget discovery reports
+              <InlineCode>GET /api/admin/maintenance/report</InlineCode> and <InlineCode>POST /api/admin/maintenance/report</InlineCode> — Safe-upgrade checks, backup reminders, background task pause state, cleanup queues, and runbook metadata
             </li>
             <li>
-              <InlineCode>GET</InlineCode> / <InlineCode>PUT</InlineCode> / <InlineCode>DELETE /api/articles/:id/snapshots</InlineCode> and <InlineCode>editorReliability</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Snapshot read/compare/restore/discard flows plus draft recovery, editor diagnostics, and large-document fixture metadata
+              <InlineCode>GET /api/admin/observability</InlineCode> and <InlineCode>POST /api/admin/observability</InlineCode> — Structured event feed, metric ingestion, privacy controls, and external collector metadata
             </li>
             <li>
-              <InlineCode>editorControls</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Reusable editor primitive metadata, plugin command/toolbar/slash/side-panel extension points, shared block templates, and shortcut scope registry
-            </li>
-            <li>
-              <InlineCode>collaborationUx</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Live editing connection states, presence-name requirements, conflict/reconnect copy, inline review planning, notification routing, mobile editor QA, and accessibility checkpoints
-            </li>
-            <li>
-              <InlineCode>GET /api/v1/contract</InlineCode>, <InlineCode>GET /api/v1/openapi.json</InlineCode>, and <InlineCode>publicApiV1</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Frozen pre-v5 endpoint metadata, OpenAPI schema, standard headers/errors, fixture responses, and migration guide references
-            </li>
-            <li>
-              <InlineCode>GET /api/v1/sdk</InlineCode> and <InlineCode>sdkTypes</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — SDK-ready TypeScript payload names, API key scopes, generated client snippets, and sample script metadata for every stable v1 surface
-            </li>
-            <li>
-              <InlineCode>POST /api/webhooks/test</InlineCode>, <InlineCode>POST /api/webhooks/deliveries/:id/redeliver</InlineCode>, and <InlineCode>webhookReliability</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Timestamped signatures, retry policy, delivery logs, event schemas, replay protection, and local receiver guidance
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/operations</InlineCode>, <InlineCode>GET /api/admin/operations?bundle=1</InlineCode>, and <InlineCode>operationsDashboard</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Admin service health, queues, slow pages, failed webhooks/imports/exports/plugins, alerts, acknowledgements, and redacted diagnostic bundle metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/maintenance/report</InlineCode>, <InlineCode>POST /api/admin/maintenance/report</InlineCode>, and <InlineCode>maintenanceTooling</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Safe-upgrade checks, backup reminders, background task pause state, cleanup queues, and runbook metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/observability</InlineCode>, <InlineCode>POST /api/admin/observability</InlineCode>, <InlineCode>POST /api/observability/metrics</InlineCode>, and <InlineCode>observability</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Structured event feed, metric ingestion, privacy controls, and external collector metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/performance</InlineCode> and <InlineCode>performanceBudgets</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Route p95, interaction, and bundle budgets, large-wiki fixtures, slow samples, and slow-query review metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/cache</InlineCode>, <InlineCode>POST /api/admin/cache</InlineCode>, and <InlineCode>cacheStrategy</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Cache invalidation rules, manual invalidation, stale warnings, Redis status, and deployment recipes
-            </li>
-            <li>
-              <InlineCode>GET /api/offline/contract</InlineCode> and <InlineCode>offlinePwa</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Install metadata, service-worker cache rules, offline reading fallback, stale headers, retry queue limits, mobile QA checkpoints, draft warnings, and privacy limits
-            </li>
-            <li>
-              <InlineCode>GET /api/mobile-polish</InlineCode> and <InlineCode>mobilePolish</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Phone, tablet, laptop, and wide desktop QA checkpoints, touch targets, safe-area checks, overflow/clipping guardrails, dialog bounds, and mobile screenshot slots
-            </li>
-            <li>
-              <InlineCode>GET /api/desktop-research</InlineCode> and <InlineCode>desktopResearch</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Electron, Tauri, browser PWA, and Docker Desktop research, local deployment recipes, filesystem import/export UX, and research-only desktop scope decision
-            </li>
-            <li>
-              <InlineCode>GET /api/accessibility</InlineCode> and <InlineCode>accessibilityFinish</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Keyboard/focus/dialog/dropdown/control audit matrix, graph/atlas/dashboard/marketplace/editor screen-reader summaries, high-contrast and reduced-motion checks, contribution checklist, and v5 blocker gate
-            </li>
-            <li>
-              <InlineCode>GET /api/migration-readiness</InlineCode> and <InlineCode>migrationReadiness</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Blocking migration dry runs, backup prompts, schema compatibility reports, data-integrity checks, restore validation, representative v4 upgrade paths, and failure recovery guidance
-            </li>
-            <li>
-              <InlineCode>GET /api/backup-restore</InlineCode> and <InlineCode>backupRestore</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Admin backup wizard sections, restore rehearsal manifest verification, conflict reports, scheduled backup planning, external storage notes, and disaster-recovery drill guidance
-            </li>
-            <li>
-              <InlineCode>GET /api/upgrade-assistant</InlineCode> and <InlineCode>upgradeAssistant</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — v5 readiness checklist, pre-upgrade diagnostics, post-upgrade smoke checks, compatibility warnings, and release-note/migration doc links
-            </li>
-            <li>
-              <InlineCode>GET /api/test-quality</InlineCode> and <InlineCode>testQualityGates</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Expanded test surfaces, stable QA fixtures, CI matrix planning, known-warning policy, and release-manager quality dashboard planning
-            </li>
-            <li>
-              <InlineCode>GET /api/e2e-smoke-suite</InlineCode>, <InlineCode>e2e/smoke-suite.spec.ts</InlineCode>, and <InlineCode>e2eSmokeSuite</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Product smoke flows, responsive smoke routes, repeatable fixture seeding, and Playwright screenshot/trace failure artifacts
-            </li>
-            <li>
-              <InlineCode>GET /api/release-gates</InlineCode>, <InlineCode>scripts/verify-docs-sync.mjs</InlineCode>, and <InlineCode>releaseGateAutomation</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Release candidate gates, docs sync verification, checklist metadata, known issues, and blocker labels
-            </li>
-            <li>
-              <InlineCode>GET /api/documentation-onboarding</InlineCode> and <InlineCode>documentationOnboarding</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Maintainer docs, setup paths, troubleshooting topics, docs IA review, and practical internal-link test metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/in-app-onboarding</InlineCode> and <InlineCode>inAppOnboarding</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — First-run checklist, guided admin setup topics, contextual help panel plan, demo content pack, and screenshot checkpoint metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/example-site-recipes</InlineCode> and <InlineCode>exampleSiteRecipes</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Example setup recipes, env snippets, screenshot targets, pack recommendations, migration stories, and v5 readiness checklist metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/release-freeze</InlineCode> and <InlineCode>featureFreeze</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Feature-freeze policy, full rehearsal matrix, blocker labels, v5 gate ownership, and release-note draft metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/release-candidate-one</InlineCode> and <InlineCode>releaseCandidateOne</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — RC1 gate evidence, deployment validation, starter and pack validation areas, review checklists, and feedback-template metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/final-release-gates</InlineCode> and <InlineCode>finalReleaseGates</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — RC fixes, final beta freeze contracts, gate evidence, compatibility targets, correction windows, and stable v5 release gates
-            </li>
-            <li>
-              <InlineCode>GET /api/security/review</InlineCode> and <InlineCode>securityReview</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Browser security headers, reviewed auth/API/plugin/export surfaces, abuse-case gates, supply-chain checklist, and pre-v5 threat-model draft
-            </li>
-            <li>
-              <InlineCode>GET /api/privacy/controls</InlineCode> and <InlineCode>privacyControls</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Deployment-mode privacy controls, retention settings, user data lifecycle planning, and AI/external integration warnings
-            </li>
-            <li>
-              <InlineCode>GET /api/marketplace/security</InlineCode> and <InlineCode>marketplaceSecurity</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Unsafe pack rejection metadata, blocked permissions/hooks, dangerous plugin capability warnings, provenance requirements, and local-only installation guidance
-            </li>
-            <li>
-              <InlineCode>GET /api/marketplace/beta</InlineCode> and <InlineCode>marketplaceBeta</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Local-first beta metrics, featured/recent/recommended packs, collections, compatibility badges, search facets, install-intent steps, and beta limitations
-            </li>
-            <li>
-              <InlineCode>GET /api/marketplace/lifecycle</InlineCode> and <InlineCode>marketplaceLifecycle</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Pack states, allowed transitions, inventory metadata, health checks, preview media validation, update metadata, compatibility warnings, and rollback guidance
-            </li>
-            <li>
-              <InlineCode>GET /api/marketplace/authoring</InlineCode> and <InlineCode>marketplaceAuthoring</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Pack author dashboard sections, local validation, metadata preview, screenshot checks, license checks, docs completeness, README generation, compatibility matrix rows, quality checklist, and submission templates
-            </li>
-            <li>
-              <InlineCode>GET /api/marketplace/templates</InlineCode> and <InlineCode>templateMarketplace</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Template-pack listings, included schema, category and article previews, compatibility notes, diff/merge contracts, and export-from-space fixture output
-            </li>
-            <li>
-              <InlineCode>GET /api/sync-manifests</InlineCode> and <InlineCode>syncManifests</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Source/target sync manifests, section checksums, dry-run reports, visibility rules, signed snapshot planning, staging promotion guidance, and the network-federation release gate
-            </li>
-            <li>
-              <InlineCode>GET /api/external-references</InlineCode> and <InlineCode>externalReferences</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — External Arkivel reference metadata, imported/mirrored provenance labels, diagnostics, and public index planning that excludes private content
-            </li>
-            <li>
-              <InlineCode>GET /api/archive-mirrors</InlineCode> and <InlineCode>archiveMirrors</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Read-only archive snapshots, private mirror setup, selected-space transfer workflows, repeated-sync conflict notes, and the pre-v5 federation decision checkpoint
+              <InlineCode>GET /api/admin/performance</InlineCode> — Route p95, interaction, and bundle budgets, large-wiki fixtures, slow samples, and slow-query review metadata
             </li>
             <li>
               <InlineCode>GET /api/categories/:id/customization</InlineCode> / <InlineCode>GET /api/articles/:id/customization</InlineCode> — Public resolved customization reads for space and article overrides; admin-only <InlineCode>PUT</InlineCode> requests validate and save overrides while public responses hide private draft config
-            </li>
-            <li>
-              <InlineCode>GET /api/space-templates</InlineCode> / <InlineCode>POST /api/space-templates</InlineCode> — Preview-safe starter space registry plus preview pages, JSON preview/import validation, one-click local import preview by template id, category trees, starter articles, sample metadata, tags, infobox fields, navigation, dashboards, layout, and recommended packs
-            </li>
-            <li>
-              <InlineCode>GET /api/space-workflows</InlineCode> and <InlineCode>domainWorkflows</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Docs portal, team handbook, worldbuilding, research, and personal wiki workflow controls, steps, starter template links, and release gates
-            </li>
-            <li>
-              <InlineCode>GET /api/assistant-packs</InlineCode> and <InlineCode>assistantPacks</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Opt-in built-in AI packs for drafting, summarization, search, claim extraction, taxonomy, alt-text, import cleanup, and review with per-space availability, prompt/context previews, usage logs, cost estimates, permissions, safety, admin route, and graceful fallback metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/assistant-packs/governance</InlineCode> and <InlineCode>assistantGovernance</InlineCode> in <InlineCode>GET /api/customization</InlineCode> — Privacy warnings, human-review requirements, citation prompts, confidence metadata, AI audit events, private/sensitive opt-outs, and optional/non-blocking release gate
             </li>
             <li>
               <InlineCode>GET /api/categories/:id/governance</InlineCode> / <InlineCode>PUT /api/categories/:id/governance</InlineCode> — Resolved space governance for owner, reviewer, visibility, review cadence, stale-page threshold, and health signals; writes are admin-only and audit logged

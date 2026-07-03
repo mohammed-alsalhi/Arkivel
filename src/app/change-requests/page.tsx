@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useAdmin } from "@/components/AdminContext";
-import { TabButton, Tabs } from "@/components/ui";
+import { Page, PageHeader, TabButton, Tabs } from "@/components/ui";
 
 type ChangeRequestArticle = {
   id: string;
@@ -133,13 +133,8 @@ export default function ChangeRequestsPage() {
   ];
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Change Requests
-      </h1>
+    <Page>
+      <PageHeader title="Change Requests" />
 
       <Tabs label="Change request status" className="mb-4">
         {tabs.map((tab) => (
@@ -279,6 +274,6 @@ export default function ChangeRequestsPage() {
           })}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

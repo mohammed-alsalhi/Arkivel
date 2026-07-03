@@ -1,6 +1,6 @@
 # Editor Troubleshooting
 
-Arkivel v4.85.0 publishes the `arkivel.editor-reliability.v1` contract through `/api/customization` as `editorReliability`.
+Arkivel v4.85.0 defines the `arkivel.editor-reliability.v1` contract in `src/lib/editor-reliability.ts`.
 
 ## Reliability Areas
 

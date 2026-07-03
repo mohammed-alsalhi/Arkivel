@@ -7,7 +7,6 @@ Arkivel v4.87.0 adds an admin operations dashboard for self-host production chec
 - `/admin/operations` shows service health, queues, jobs, slow pages, failed webhooks, imports, exports, plugin errors, database health, and admin alerts.
 - `/api/admin/operations` returns the same admin-only report as JSON.
 - `/api/admin/operations?bundle=1` downloads a redacted diagnostic bundle for support.
-- `operationsDashboard` in `/api/customization` publishes the route, schema version, service-card list, queue-card list, support-bundle redactions, and browser-local acknowledgement metadata.
 - `/admin/operations` also links to maintenance, read-only, export history, webhook retry, and production runbooks.
 
 ## Health Cards

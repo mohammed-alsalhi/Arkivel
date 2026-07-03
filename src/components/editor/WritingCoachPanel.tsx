@@ -28,13 +28,13 @@ interface WritingCoachPanelProps {
 }
 
 const severityColors = {
-  info: "text-blue-600 border-blue-200 bg-blue-50",
-  warning: "text-yellow-700 border-yellow-200 bg-yellow-50",
-  error: "text-red-700 border-red-200 bg-red-50",
+  info: "text-info border-info-border bg-info-soft",
+  warning: "text-warning border-warning-border bg-warning-soft",
+  error: "text-danger border-danger-border bg-danger-soft",
 };
 
 function ScoreMeter({ score }: { score: number }) {
-  const color = score >= 70 ? "#22c55e" : score >= 50 ? "#f59e0b" : "#ef4444";
+  const color = score >= 70 ? "var(--color-success)" : score >= 50 ? "var(--color-warning)" : "var(--color-danger)";
   return (
     <div className="flex items-center gap-2">
       <div className="flex-1 h-2 bg-surface-hover rounded-full overflow-hidden">

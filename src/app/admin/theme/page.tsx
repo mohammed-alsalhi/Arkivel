@@ -338,7 +338,7 @@ export default function ThemeBuilderPage() {
                   className="px-4 py-1.5 text-[13px] rounded font-medium"
                   style={{
                     backgroundColor: variables["--color-accent"],
-                    color: "#ffffff",
+                    color: "var(--color-accent-foreground)",
                   }}
                 >
                   Primary

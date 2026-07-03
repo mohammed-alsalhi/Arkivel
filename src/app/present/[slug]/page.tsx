@@ -707,7 +707,7 @@ function PresentStyles() {
         to { opacity: 1; transform: translateY(-0.25rem); }
       }
 
-      @media (max-width: 760px) {
+      @media (max-width: 767px) {
         .present-topbar {
           grid-template-columns: minmax(0, 1fr) auto;
           padding: 0.65rem 1rem;

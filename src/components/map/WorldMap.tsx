@@ -239,6 +239,13 @@ type Props = {
   editMode?: boolean;
 };
 
+// Leaflet writes pathOptions colors into SVG presentation attributes, which
+// cannot resolve var() — read the theme token off the root element instead.
+function resolvedThemeColor(token: string): string {
+  if (typeof window === "undefined") return "";
+  return getComputedStyle(document.documentElement).getPropertyValue(token).trim();
+}
+
 export default function WorldMap({ mapImage, editMode = false }: Props) {
   const [areas, setAreas] = useState<MapArea[]>([]);
   const [articles, setArticles] = useState<{ id: string; title: string }[]>([]);
@@ -404,7 +411,7 @@ export default function WorldMap({ mapImage, editMode = false }: Props) {
       <MapContainer
         crs={L.CRS.Simple}
         bounds={imageBounds}
-        style={{ height: "100%", width: "100%", background: "#f8f9fa" }}
+        style={{ height: "100%", width: "100%", background: "var(--color-background)" }}
         minZoom={-2}
         maxZoom={3}
         zoomControl={true}
@@ -443,7 +450,7 @@ export default function WorldMap({ mapImage, editMode = false }: Props) {
         {editMode && isDrawing && drawingPoints.length >= 2 && (
           <Polyline
             positions={drawingPoints}
-            pathOptions={{ color: "#3b82f6", weight: 2, dashArray: "6 4" }}
+            pathOptions={{ color: resolvedThemeColor("--color-accent"), weight: 2, dashArray: "6 4" }}
           />
         )}
 
@@ -455,8 +462,8 @@ export default function WorldMap({ mapImage, editMode = false }: Props) {
               center={pt}
               radius={4}
               pathOptions={{
-                color: "#3b82f6",
-                fillColor: "#fff",
+                color: resolvedThemeColor("--color-accent"),
+                fillColor: resolvedThemeColor("--color-surface"),
                 fillOpacity: 1,
                 weight: 2,
               }}

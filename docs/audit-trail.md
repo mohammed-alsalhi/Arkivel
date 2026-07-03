@@ -1,6 +1,6 @@
 # Audit Trail
 
-Arkivel's audit trail records sensitive operational changes in append-only `AuditLog` rows. The v4.83.1 contract is published as `auditTrail` from `/api/customization` so self-host dashboards and future plugins can discover supported filters, redaction modes, alert hooks, and retention defaults.
+Arkivel's audit trail records sensitive operational changes in append-only `AuditLog` rows. The v4.83.1 contract defines supported filters, redaction modes, alert hooks, and retention defaults for self-host dashboards and future plugins.
 
 ## Covered Events
 

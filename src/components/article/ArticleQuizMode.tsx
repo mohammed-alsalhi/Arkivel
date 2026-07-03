@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type Question = {
   q: string;
@@ -23,6 +24,17 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [error, setError] = useState("");
+
+  useScrollLock(open);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const startQuiz = useCallback(async () => {
     setLoading(true);
@@ -115,8 +127,14 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
       )}
 
       {open && !finished && q && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-surface border border-border rounded shadow-xl w-full max-w-lg p-4 sm:p-6">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 px-4" onClick={handleClose}>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Quiz: ${articleTitle}`}
+            className="bg-surface border border-border rounded shadow-xl w-full max-w-lg p-4 sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
               <span className="min-w-0 break-words text-[11px] text-muted font-medium uppercase">
                 {articleTitle} - Question {current + 1} / {questions.length}
@@ -186,8 +204,14 @@ export default function ArticleQuizMode({ articleId, articleTitle }: Props) {
       )}
 
       {open && finished && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-surface border border-border rounded shadow-xl w-full max-w-sm p-6 text-center">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 px-4" onClick={handleClose}>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Quiz results"
+            className="bg-surface border border-border rounded shadow-xl w-full max-w-sm p-6 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
             <p className="text-[28px] font-bold text-heading mb-1">
               {finalScore} / {questions.length}
             </p>

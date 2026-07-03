@@ -40,26 +40,6 @@ for (const file of requiredFiles) {
   }
 }
 
-const manifestRefs = [
-  "releaseGateAutomation",
-  "documentationOnboarding",
-  "inAppOnboarding",
-  "exampleSiteRecipes",
-  "featureFreeze",
-  "releaseCandidateOne",
-  "finalReleaseGates",
-  "e2eSmokeSuite",
-  "testQualityGates",
-  "upgradeAssistant",
-];
-
-for (const ref of manifestRefs) {
-  const manifest = fs.readFileSync(path.join(root, "src/app/api/customization/route.ts"), "utf8");
-  if (!manifest.includes(ref)) {
-    failures.push(`/api/customization is missing ${ref}`);
-  }
-}
-
 if (failures.length > 0) {
   console.error("Docs sync check failed:");
   for (const failure of failures) console.error(`- ${failure}`);

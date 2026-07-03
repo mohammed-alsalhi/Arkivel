@@ -1,6 +1,6 @@
 # Search Relevance
 
-Arkivel v4.84.0 introduces the `arkivel.search-relevance.v2` contract. The contract is published from `/api/customization` as `searchRelevance`.
+Arkivel v4.84.0 introduces the `arkivel.search-relevance.v2` contract. The contract is defined in `src/lib/search-relevance.ts`.
 
 ## Ranking Signals
 

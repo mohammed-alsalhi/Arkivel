@@ -1,6 +1,6 @@
 # Moderation And Suggestions
 
-Arkivel's v4.83.2 moderation contract covers public discussion threads, edit suggestions, public contribution requests, and reported content. The contract is exposed from `/api/customization` as `moderation`.
+Arkivel's v4.83.2 moderation contract covers public discussion threads, edit suggestions, public contribution requests, and reported content. The contract is defined in `src/lib/moderation.ts`.
 
 ## Discussion Moderation
 

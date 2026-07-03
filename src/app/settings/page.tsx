@@ -257,6 +257,24 @@ export default function SettingsPage() {
           </Link>
         </SectionPanel>
 
+        <SectionPanel title="Saved Searches" bodyClassName="text-[13px]">
+          <p className="text-muted mb-2">
+            Revisit and manage the searches you have saved from the search page.
+          </p>
+          <Link href="/settings/saved-searches" className="text-accent hover:underline text-[13px]">
+            Manage saved searches →
+          </Link>
+        </SectionPanel>
+
+        <SectionPanel title="Sessions" bodyClassName="text-[13px]">
+          <p className="text-muted mb-2">
+            Review devices signed in to your account and revoke old sessions.
+          </p>
+          <Link href="/settings/sessions" className="text-accent hover:underline text-[13px]">
+            Manage sessions →
+          </Link>
+        </SectionPanel>
+
         <div className="flex items-center gap-3 pt-2">
           <Button
             onClick={handleSave}

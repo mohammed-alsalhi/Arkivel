@@ -6,7 +6,6 @@ Arkivel v4.88.0 adds route budgets and admin performance diagnostics for self-ho
 
 - `/admin/performance` shows route budgets, recent observed p95 latency, large-wiki fixtures, and slow-query review guidance.
 - `/api/admin/performance` returns the same admin-only report as JSON.
-- `performanceBudgets` in `/api/customization` exposes the schema version, admin/API routes, profiled surfaces, fixture ids, and slow-query diagnostic ids.
 
 ## Profiled Surfaces
 
@@ -28,4 +27,4 @@ Review article list filters, fallback LIKE search, graph neighborhoods, and admi
 
 ## External Checks
 
-Pair `/admin/performance` with `/admin/observability` and browser/network tooling. External runners can post route latency samples to `/api/observability/metrics`; those samples feed the performance budget report through `MetricLog`.
+Pair `/admin/performance` with `/admin/observability` and browser/network tooling. Route latency samples recorded in `MetricLog` feed the performance budget report.

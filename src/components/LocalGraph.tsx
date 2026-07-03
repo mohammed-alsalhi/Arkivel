@@ -50,9 +50,10 @@ export default function LocalGraph({ slug }: { slug: string }) {
       positions[node.id] = { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) };
     });
 
-    // Draw edges
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-    ctx.strokeStyle = isDark ? "#374151" : "#e5e7eb";
+    // Draw edges — canvas can't resolve CSS variables, so read them off the root element
+    const rootStyle = getComputedStyle(document.documentElement);
+    const themeColor = (name: string) => rootStyle.getPropertyValue(name).trim();
+    ctx.strokeStyle = themeColor("--color-border-light");
     ctx.lineWidth = 1;
     for (const edge of data.edges) {
       const from = positions[edge.source];
@@ -71,7 +72,7 @@ export default function LocalGraph({ slug }: { slug: string }) {
       const isCenter = node.slug === slug;
       ctx.beginPath();
       ctx.arc(pos.x, pos.y, isCenter ? 7 : 4, 0, 2 * Math.PI);
-      ctx.fillStyle = isCenter ? (isDark ? "#60a5fa" : "#3b82f6") : (isDark ? "#6b7280" : "#9ca3af");
+      ctx.fillStyle = themeColor(isCenter ? "--color-accent" : "--color-muted");
       ctx.fill();
     }
   }, [data, slug]);

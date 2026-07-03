@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "highlight.js/styles/github.css";
 
+/* Bind Tailwind's dark: variant to the app theme toggle (html[data-theme="dark"]),
+   not the OS prefers-color-scheme default, so dark: utilities follow the in-app switch. */
+@custom-variant dark (&:where(html[data-theme="dark"], html[data-theme="dark"] *));
+
 /*
   Layout conventions (keep new code on these scales):
 

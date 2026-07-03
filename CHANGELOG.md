@@ -4,6 +4,39 @@
 
 All notable changes to this project are documented here.
 
+## [5.2.2] - 2026-07-03
+
+### Removed
+
+- **Dead API routes** — Deleted 38 unconsumed route directories: every milestone "contract report" endpoint (release-candidate-one, release-freeze, release-gates, final-release-gates, e2e-smoke-suite, test-quality, mobile-polish, migration-readiness, upgrade-assistant, documentation-onboarding, in-app-onboarding, example-site-recipes, sync-manifests, desktop-research, backup-restore, archive-mirrors, accessibility, external-references, assistant-packs, space-workflows, marketplace/*, offline/contract, privacy/controls, security/review, search/contract, discovery, observability/metrics, import/rehearsal) plus DB-backed routes with no consumers (wikis, achievements, leaderboard, on-this-day, smart-collections, reading-progress, search-history, expert-badges, permissions, discussions/:id/pin, sitemap, space-templates, admin/cache).
+- **Orphaned libraries** — Deleted 36 `src/lib` modules that only exported static "contract" objects, along with their tests; trimmed `security-review.ts` and `cache-strategy.ts` to their live exports.
+- **Stub pages** — Deleted `/admin/assistants`, `/admin/cache`, `/space-templates/:id`, and `/articles/:slug/analytics`.
+- **Vaporware docs** — Deleted 29 `docs/*.md` files describing removed contracts; pruned `README.md`, `ARCHITECTURE.md`, `/features`, `/help`, and `/api-docs` to match.
+
+### Changed
+
+- **`GET /api/customization`** — Slimmed from a 62-import aggregator (each contract repeated three times per response) to the fields its consumers actually read: `customization`, `options`, UI presets, and the marketplace registry.
+- **Navigation coverage** — Stats, leaderboard, mentions, reading history, flashcards, learning paths, TIL, smart collections, change requests, reviews, forks, bounties, the bookmarklet, and the web clipper are now reachable from `/tools` and the command palette; saved searches and sessions are linked from `/settings`; `/admin/import` joined the admin directory.
+
+### Fixed
+
+- **Theme correctness** — `dark:` utilities now follow the in-app theme toggle instead of the OS setting; replaced hardcoded hex/palette colors with theme tokens in the activity heatmap, article graph, local graph, coverage map, health dashboard, writing coach, KaTeX errors, and the map container.
+- **Dialog conventions** — Synthesize, quiz, tutor, review-request, and canvas article-picker overlays now use scroll lock, `role="dialog"`, Escape-to-close, and the modal z-tier; NoteComposer and SpeedReader gained Escape-to-close.
+- **Scale violations** — Removed `z-index: 9999` from the glossary tooltip and wiki-link suggester; fixed the 760px presentation breakpoint to the documented 767px.
+- **Broken links** — Knowledge-gaps "Create article" now points at `/articles/new`.
+
+## [5.2.1] - 2026-07-01
+
+- Defer non-critical article work and lazy-load images (see git history; 5.1.0–5.2.1 shipped without changelog entries).
+
+## [5.2.0] - 2026-07-01
+
+- Modularize `globals.css` into per-feature CSS modules under `src/styles/`.
+
+## [5.1.0 – 5.1.4] - 2026-06
+
+- Design-language normalization across every page, navigation triage (short sidebar, `/tools`, admin index), mobile type/tap-target floor, z-index and breakpoint scales, touch support for canvas/graph, route feedback and error boundary, full-width article text restore.
+
 ## [5.0.0] - 2026-05-25
 
 ### Added

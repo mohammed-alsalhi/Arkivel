@@ -16,7 +16,7 @@ export default function KaTeXBlock({ latex, block = false }: Props) {
       m.default.render(latex, ref.current!, {
         displayMode: block,
         throwOnError: false,
-        errorColor: "#cc0000",
+        errorColor: "var(--color-danger)",
       });
     }).catch(() => {
       if (ref.current) ref.current.textContent = latex;

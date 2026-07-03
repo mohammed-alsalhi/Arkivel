@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { Editor } from "@tiptap/core";
 import { useRouter } from "next/navigation";
 import { useScrollLock } from "@/lib/useScrollLock";
@@ -18,6 +18,15 @@ export default function NoteComposer({ editor, articleId }: Props) {
   const router = useRouter();
 
   useScrollLock(open);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const handleExtract = useCallback(async () => {
     if (!editor || !title.trim()) return;

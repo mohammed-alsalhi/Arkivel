@@ -6,33 +6,7 @@ Arkivel v4.82 hardens the existing `Wiki` model into the durable workspace bound
 
 Supported profiles are `personal`, `team`, `public-docs`, `private-archive`, and `demo`. Each profile defines starter spaces, starter tags, visibility, default role, navigation mode, and default marketplace selections.
 
-Create a workspace with:
-
-```http
-POST /api/wikis
-Content-Type: application/json
-
-{
-  "slug": "team-docs",
-  "name": "Team Docs",
-  "bootstrapProfile": "team"
-}
-```
-
-Admins can override `visibility`, `defaultRole`, `navigationMode`, `settings`, and `marketplaceSelections` during creation or with `PUT /api/wikis/:id`.
-
 ## Invitations
-
-Workspace admins can create and review invitations at `GET /api/wikis/:id/invitations` and `POST /api/wikis/:id/invitations`.
-
-Invitation bodies accept:
-
-```json
-{
-  "email": "editor@example.com",
-  "role": "editor"
-}
-```
 
 Roles remain `admin`, `editor`, and `viewer`. Invitations default to the workspace default role when no role is provided.
 
@@ -54,6 +28,4 @@ Use `includeGlobal=1` during migration to include legacy rows that still have `A
 3. Keep `includeGlobal=1` enabled only while old unscoped rows are being assigned.
 4. Review visibility, default role, navigation mode, settings, and marketplace selections.
 5. Invite members after the workspace boundary and private content have been checked.
-
-The workspace contract is exposed at `/api/customization` under `workspaces`.
 

@@ -8,7 +8,6 @@ Use these endpoints for contract metadata:
 
 - `GET /api/v1/contract`
 - `GET /api/v1/openapi.json`
-- `publicApiV1` in `GET /api/customization`
 
 The contract covers articles, categories, tags, revisions, search, customization, marketplace, plugins, webhooks, exports, and health surfaces.
 

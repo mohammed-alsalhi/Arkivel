@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -13,6 +14,17 @@ export default function TutorButton({ articleId, articleTitle }: Props) {
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useScrollLock(open);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   // Auto-scroll
   useEffect(() => {
@@ -67,9 +79,15 @@ export default function TutorButton({ articleId, articleTitle }: Props) {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+        <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />
-          <div className="relative z-10 w-full max-w-lg bg-background border border-border rounded shadow-2xl flex flex-col" style={{ maxHeight: "80vh" }}>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`AI tutor: ${articleTitle}`}
+            className="relative z-10 w-full max-w-lg bg-background border border-border rounded shadow-2xl flex flex-col"
+            style={{ maxHeight: "80vh" }}
+          >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
               <div>

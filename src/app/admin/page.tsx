@@ -56,7 +56,7 @@ const ADMIN_DIRECTORY: { title: string; entries: { href: string; label: string }
       { href: "/admin/kanban", label: "Article pipeline" },
       { href: "/admin/content-schedule", label: "Content schedule" },
       { href: "/admin/calendar", label: "Calendar" },
-      { href: "/admin/assistants", label: "Assistants" },
+      { href: "/admin/import", label: "Bulk import" },
       { href: "/import", label: "Import articles" },
     ],
   },
@@ -97,7 +97,6 @@ const ADMIN_DIRECTORY: { title: string; entries: { href: string; label: string }
       { href: "/admin/theme", label: "Theme" },
       { href: "/admin/customization", label: "Customization" },
       { href: "/admin/announcements", label: "Announcements" },
-      { href: "/admin/cache", label: "Cache" },
       { href: "/admin/performance", label: "Performance" },
       { href: "/admin/observability", label: "Observability" },
       { href: "/admin/operations", label: "Operations" },
@@ -163,7 +162,6 @@ export default function AdminPage() {
             <LinkButton href="/admin/operations">Operations</LinkButton>
             <LinkButton href="/admin/observability">Observability</LinkButton>
             <LinkButton href="/admin/performance">Performance</LinkButton>
-            <LinkButton href="/admin/cache">Cache</LinkButton>
             <LinkButton href="/admin/quality">Quality</LinkButton>
             <LinkButton href="/admin/plugins">Plugins</LinkButton>
           </>

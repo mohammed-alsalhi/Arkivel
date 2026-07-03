@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { TabButton, Tabs } from "@/components/ui";
+import { Page, PageHeader, StatCard, StatGrid, TabButton, Tabs } from "@/components/ui";
 
 type CoverageItem = {
   id: string;
@@ -24,19 +24,19 @@ type GapItem = {
 };
 
 const STATUS_COLOR: Record<CoverageItem["status"], string> = {
-  empty: "bg-red-100 border-red-200 dark:bg-red-900/20 dark:border-red-800",
-  sparse: "bg-orange-100 border-orange-200 dark:bg-orange-900/20 dark:border-orange-800",
-  growing: "bg-yellow-100 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800",
-  solid: "bg-blue-100 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800",
-  rich: "bg-green-100 border-green-200 dark:bg-green-900/20 dark:border-green-800",
+  empty: "bg-danger-soft border-danger-border",
+  sparse: "bg-warning-soft border-warning-border",
+  growing: "bg-chart-3/15 border-chart-3/40",
+  solid: "bg-info-soft border-info-border",
+  rich: "bg-success-soft border-success-border",
 };
 
 const STATUS_BAR: Record<CoverageItem["status"], string> = {
-  empty: "bg-red-400",
-  sparse: "bg-orange-400",
-  growing: "bg-yellow-400",
-  solid: "bg-blue-500",
-  rich: "bg-green-500",
+  empty: "bg-danger",
+  sparse: "bg-warning",
+  growing: "bg-chart-3",
+  solid: "bg-info",
+  rich: "bg-success",
 };
 
 const STATUS_LABEL: Record<CoverageItem["status"], string> = {
@@ -97,31 +97,27 @@ export default function CoverageMapPage() {
   }
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Knowledge Coverage Map
-      </h1>
-      <p className="text-[13px] text-muted mb-4">
-        Visual overview of how well each category is covered. Identify gaps, sparse areas, and where to write next.
-      </p>
+    <Page>
+      <PageHeader
+        title="Knowledge Coverage Map"
+        description="Visual overview of how well each category is covered. Identify gaps, sparse areas, and where to write next."
+      />
 
       {/* Summary stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <StatGrid className="mb-5">
         {[
           { label: "Categories", value: items.length },
           { label: "Total articles", value: totalArticles },
           { label: "Total words", value: totalWords > 1000 ? `${(totalWords / 1000).toFixed(1)}k` : totalWords },
           { label: "Need attention", value: emptyCount + sparseCount, highlight: emptyCount + sparseCount > 0 },
         ].map(({ label, value, highlight }) => (
-          <div key={label} className="border border-border rounded p-3 bg-surface">
-            <div className={`text-[1.4rem] font-bold ${highlight ? "text-orange-500" : "text-heading"}`}>{value}</div>
-            <div className="text-[11px] text-muted">{label}</div>
-          </div>
+          <StatCard
+            key={label}
+            label={label}
+            value={<span className={highlight ? "text-warning" : undefined}>{value}</span>}
+          />
         ))}
-      </div>
+      </StatGrid>
 
       {/* Filter + View toggle */}
       <div className="flex items-start justify-between mb-3 flex-wrap gap-2">
@@ -168,7 +164,7 @@ export default function CoverageMapPage() {
                 >
                   {item.name}
                 </Link>
-                <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${STATUS_BAR[item.status]} text-white ml-1 flex-shrink-0`}>
+                <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${STATUS_BAR[item.status]} text-background ml-1 flex-shrink-0`}>
                   {STATUS_LABEL[item.status]}
                 </span>
               </div>
@@ -222,7 +218,7 @@ export default function CoverageMapPage() {
                     </div>
                   </td>
                   <td className="border border-border px-3 py-1.5">
-                    <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${STATUS_BAR[item.status]} text-white`}>
+                    <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${STATUS_BAR[item.status]} text-background`}>
                       {STATUS_LABEL[item.status]}
                     </span>
                   </td>
@@ -308,6 +304,6 @@ export default function CoverageMapPage() {
           )}
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

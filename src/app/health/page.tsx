@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { TabButton, Tabs } from "@/components/ui";
+import { EmptyState, Page, PageHeader, StatCard, StatGrid, TabButton, Tabs } from "@/components/ui";
 
 type ArticleIssue = {
   slug: string;
@@ -27,10 +27,9 @@ type HealthData = {
 };
 
 const SCORE_COLOR = (score: number) => {
-  if (score >= 80) return "text-green-600";
-  if (score >= 60) return "text-yellow-600";
-  if (score >= 40) return "text-orange-500";
-  return "text-red-600";
+  if (score >= 80) return "text-success";
+  if (score >= 40) return "text-warning";
+  return "text-danger";
 };
 
 const SCORE_LABEL = (score: number) => {
@@ -69,13 +68,13 @@ export default function WikiHealthPage() {
   if (!data) return <p className="text-muted text-[13px]">Failed to load health data.</p>;
 
   const stats: Stat[] = [
-    { label: "Stubs", value: data.stubs, desc: "< 100 words", color: "text-red-500" },
-    { label: "Outdated", value: data.outdated, desc: "1+ year old", color: "text-orange-500" },
-    { label: "No excerpt", value: data.noExcerpt, desc: "Missing summary", color: "text-yellow-600" },
-    { label: "No category", value: data.noCategory, desc: "Uncategorized", color: "text-purple-500" },
-    { label: "No tags", value: data.noTags, desc: "Untagged", color: "text-blue-500" },
-    { label: "Broken links", value: data.brokenLinks, desc: "Dead wiki links", color: "text-red-600" },
-    { label: "Very long", value: data.longArticles, desc: "> 5000 words", color: "text-gray-500" },
+    { label: "Stubs", value: data.stubs, desc: "< 100 words", color: "text-danger" },
+    { label: "Outdated", value: data.outdated, desc: "1+ year old", color: "text-warning" },
+    { label: "No excerpt", value: data.noExcerpt, desc: "Missing summary", color: "text-warning" },
+    { label: "No category", value: data.noCategory, desc: "Uncategorized", color: "text-chart-5" },
+    { label: "No tags", value: data.noTags, desc: "Untagged", color: "text-chart-1" },
+    { label: "Broken links", value: data.brokenLinks, desc: "Dead wiki links", color: "text-danger" },
+    { label: "Very long", value: data.longArticles, desc: "> 5000 words", color: "text-muted" },
   ];
 
   const FILTERS = [
@@ -97,19 +96,11 @@ export default function WikiHealthPage() {
         );
 
   return (
-    <div>
-      {/* Header */}
-      <div className="mb-4">
-        <h1
-          className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-1"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Wiki Health Dashboard
-        </h1>
-        <p className="text-[13px] text-muted">
-          Quality audit across {data.total} articles. Fix issues to improve your wiki&apos;s health score.
-        </p>
-      </div>
+    <Page>
+      <PageHeader
+        title="Wiki Health Dashboard"
+        description={`Quality audit across ${data.total} articles. Fix issues to improve your wiki's health score.`}
+      />
 
       {/* Score */}
       <div className="flex items-center gap-6 mb-6 p-4 bg-surface border border-border rounded">
@@ -126,12 +117,10 @@ export default function WikiHealthPage() {
             <div
               className={`h-full rounded-full transition-all ${
                 data.healthScore >= 80
-                  ? "bg-green-500"
-                  : data.healthScore >= 60
-                  ? "bg-yellow-500"
+                  ? "bg-success"
                   : data.healthScore >= 40
-                  ? "bg-orange-500"
-                  : "bg-red-500"
+                  ? "bg-warning"
+                  : "bg-danger"
               }`}
               style={{ width: `${data.healthScore}%` }}
             />
@@ -143,15 +132,16 @@ export default function WikiHealthPage() {
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+      <StatGrid className="mb-6">
         {stats.map((s) => (
-          <div key={s.label} className="bg-surface border border-border rounded p-3">
-            <p className={`text-2xl font-bold tabular-nums ${s.color}`}>{s.value}</p>
-            <p className="text-[12px] font-medium text-foreground">{s.label}</p>
-            <p className="text-[10px] text-muted">{s.desc}</p>
-          </div>
+          <StatCard
+            key={s.label}
+            label={s.label}
+            value={<span className={s.color}>{s.value}</span>}
+            detail={s.desc}
+          />
         ))}
-      </div>
+      </StatGrid>
 
       {/* Filter */}
       <Tabs label="Health issue filters" className="mb-4">
@@ -168,7 +158,7 @@ export default function WikiHealthPage() {
 
       {/* Article list */}
       {filtered.length === 0 ? (
-        <p className="text-[13px] text-muted py-8 text-center">No issues found for this filter.</p>
+        <EmptyState title="No issues found" description="No issues found for this filter." />
       ) : (
         <div className="space-y-2">
           {filtered.map((a) => (
@@ -188,7 +178,7 @@ export default function WikiHealthPage() {
                       </span>
                     )}
                     {a.status !== "published" && (
-                      <span className="text-[10px] text-orange-500 bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded capitalize">
+                      <span className="text-[10px] text-warning bg-warning-soft border border-warning-border px-1.5 py-0.5 rounded capitalize">
                         {a.status}
                       </span>
                     )}
@@ -197,7 +187,7 @@ export default function WikiHealthPage() {
                     {a.issues.map((issue, i) => (
                       <span
                         key={i}
-                        className="text-[10px] bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 rounded"
+                        className="text-[10px] bg-danger-soft text-danger border border-danger-border px-1.5 py-0.5 rounded"
                       >
                         {issue}
                       </span>
@@ -215,6 +205,6 @@ export default function WikiHealthPage() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

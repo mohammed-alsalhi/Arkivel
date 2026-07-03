@@ -8,7 +8,7 @@ Install dependencies with `npm install`, configure `DATABASE_URL`, run `npx pris
 
 ## upgrade
 
-Before upgrading, read `CHANGELOG.md`, run `npm run release:docs-sync`, review `docs/migration-readiness.md`, rehearse restore with `docs/backup-restore.md`, and follow `docs/v5-upgrade-planning.md`.
+Before upgrading, read `CHANGELOG.md`, run `npm run release:docs-sync`, and follow `docs/v5-upgrade-planning.md`.
 
 ## deployment
 
@@ -20,7 +20,7 @@ Public customization lives in `src/lib/customization.ts` and `/api/customization
 
 ## marketplace
 
-Marketplace metadata lives in `src/lib/marketplace.ts`, import preview validation in `src/lib/marketplace-import.ts`, and authoring guidance in `docs/marketplace-authoring.md`.
+Marketplace metadata lives in `src/lib/marketplace.ts`, import preview validation in `src/lib/marketplace-import.ts`, and contribution guidance in `docs/marketplace-contributions.md`.
 
 ## plugin
 
@@ -36,7 +36,7 @@ Security review notes live in `docs/security-review.md`. Review auth, API keys, 
 
 ## backup
 
-Backup and restore planning lives in `docs/backup-restore.md`. Verify database dumps, assets, env vars, marketplace packs, plugin manifests, customization settings, and restore rehearsal results before upgrades.
+Verify database dumps, assets, env vars, marketplace packs, plugin manifests, customization settings, and restore rehearsal results before upgrades.
 
 ## contribution
 

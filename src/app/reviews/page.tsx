@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import ReviewStatusBadge from "@/components/ReviewStatusBadge";
-import { TabButton, Tabs } from "@/components/ui";
+import { Page, PageHeader, TabButton, Tabs } from "@/components/ui";
 
 type ReviewUser = {
   id: string;
@@ -140,13 +140,8 @@ export default function ReviewsPage() {
     currentUser?.role === "admin" || currentUser?.role === "editor";
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Review Dashboard
-      </h1>
+    <Page>
+      <PageHeader title="Review Dashboard" />
 
       <Tabs label="Review views" className="mb-4">
         {tabs.map((tab) => (
@@ -260,6 +255,6 @@ export default function ReviewsPage() {
           })}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

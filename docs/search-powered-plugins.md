@@ -4,8 +4,6 @@ Arkivel exposes a stable search API contract for plugins, widgets, dashboards, e
 
 ## Contract
 
-Use `GET /api/search/contract` or `GET /api/customization` and read `searchApi`.
-
 The contract version is `arkivel.search-api.v1`. Result kinds are:
 
 - `article`
@@ -32,7 +30,6 @@ Payload planning fields are `event`, `query`, `resultKind`, `resultId`, `workspa
 
 ## Plugin Guidance
 
-- Prefer `/api/search/contract` at startup and cache by `schemaVersion`.
 - Treat `score`, `highlights`, and explain metadata as additive.
 - Redact non-public discussion excerpts before showing results outside trusted admin surfaces.
 - Use `/api/search?explain=1` only for admin/debug tools.

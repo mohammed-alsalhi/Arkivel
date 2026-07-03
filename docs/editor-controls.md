@@ -4,7 +4,7 @@ Arkivel v4.85.1 promotes the main writing controls into reusable editor primitiv
 
 ## Contract
 
-`GET /api/customization` exposes `editorControls` with:
+The editor controls contract in `src/lib/editor-controls.ts` defines:
 
 - `primitives` for command palettes, insert trays, review trays, outline trays, table controls, selection actions, and inspector panels
 - `extensionPoints` for plugin commands, toolbar groups, slash commands, and side panels

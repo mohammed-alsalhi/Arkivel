@@ -56,7 +56,7 @@ export default async function KnowledgeGapsPage() {
                 </td>
                 <td>
                   <Link
-                    href={`/admin/articles/new?title=${encodeURIComponent(gap.title)}&slug=${encodeURIComponent(generateSlug(gap.title))}`}
+                    href={`/articles/new?title=${encodeURIComponent(gap.title)}&slug=${encodeURIComponent(generateSlug(gap.title))}`}
                     className="text-accent hover:underline text-xs whitespace-nowrap"
                   >
                     Create article

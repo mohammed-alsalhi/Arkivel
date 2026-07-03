@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useScrollLock } from "@/lib/useScrollLock";
 import Link from "next/link";
 
 type ArticleRef = { id: string; title: string; slug: string; excerpt?: string | null };
@@ -55,6 +56,17 @@ export default function CanvasEditor({
   const [panDragging, setPanDragging] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0, px: 0, py: 0 });
   const [pickerOpen, setPickerOpen] = useState(false);
+
+  useScrollLock(pickerOpen);
+
+  useEffect(() => {
+    if (!pickerOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setPickerOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [pickerOpen]);
   const [pickerQuery, setPickerQuery] = useState("");
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -277,8 +289,14 @@ export default function CanvasEditor({
 
       {/* Article picker modal */}
       {pickerOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-black/40" onClick={() => setPickerOpen(false)}>
-          <div className="bg-surface border border-border rounded shadow-2xl w-full max-w-md p-4" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[70] flex items-start justify-center pt-24 bg-black/40" onClick={() => setPickerOpen(false)}>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Add article card"
+            className="bg-surface border border-border rounded shadow-2xl w-full max-w-md p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="text-sm font-semibold text-heading mb-3">Add article card</div>
             <input
               type="text"

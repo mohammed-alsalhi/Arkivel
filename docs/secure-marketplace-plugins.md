@@ -4,8 +4,7 @@ Arkivel v4.89.2 tightens local-first marketplace and trusted plugin security bef
 
 ## Surfaces
 
-- `/api/marketplace/security` publishes blocked permissions, blocked hook prefixes, dangerous capability warnings, local-only installation guidance, and provenance requirements.
-- `marketplaceSecurity` in `/api/customization` exposes the same contract for self-host dashboards and tooling.
+- `src/lib/marketplace-security.ts` defines blocked permissions, blocked hook prefixes, dangerous capability warnings, local-only installation guidance, and provenance requirements.
 - Marketplace import previews reject unsafe packs before any future install intent can reuse the parser.
 
 ## Blocked Pack Inputs

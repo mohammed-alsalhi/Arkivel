@@ -29,7 +29,7 @@ Future inline notes should reference review or suggestion ids rather than embedd
 
 ## Notification Routing
 
-`collaborationUx.notificationRoutes` in `GET /api/customization` describes routing for:
+The collaboration UX contract describes notification routing for:
 
 - mentions
 - assignments

@@ -72,19 +72,28 @@ function detectClusters(nodes: GraphNode[], edges: GraphEdge[]): Map<string, num
   return clusterMap;
 }
 
+const CHART_COLORS = [
+  "var(--color-chart-1)",
+  "var(--color-chart-2)",
+  "var(--color-chart-3)",
+  "var(--color-chart-4)",
+  "var(--color-chart-5)",
+  "var(--color-chart-6)",
+] as const;
+
 const CATEGORY_COLORS: Record<string, string> = {
-  People: "#4e79a7",
-  Places: "#59a14f",
-  Organizations: "#f28e2b",
-  Events: "#e15759",
-  Things: "#76b7b2",
-  Concepts: "#b07aa1",
+  People: CHART_COLORS[0],
+  Places: CHART_COLORS[1],
+  Organizations: CHART_COLORS[2],
+  Events: CHART_COLORS[3],
+  Things: CHART_COLORS[4],
+  Concepts: CHART_COLORS[5],
 };
 
 function getCategoryColor(category: string | null): string {
-  if (!category) return "#999";
-  return CATEGORY_COLORS[category] || d3.schemeCategory10[
-    Math.abs(hashString(category)) % 10
+  if (!category) return "var(--color-muted)";
+  return CATEGORY_COLORS[category] || CHART_COLORS[
+    Math.abs(hashString(category)) % CHART_COLORS.length
   ];
 }
 
@@ -131,7 +140,7 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
 
     // Cluster detection
     const clusterMap = clusterMode ? detectClusters(nodeData, edgeData) : new Map<string, number>();
-    const clusterColors = d3.schemeTableau10 as readonly string[];
+    const clusterColors = CHART_COLORS as readonly string[];
 
     // Hull group (drawn below nodes)
     const hullGroup = g.append("g").attr("class", "hulls");
@@ -196,7 +205,7 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
       .data(edgeData)
       .enter()
       .append("line")
-      .attr("stroke", (d) => d.type === "semantic" ? "#e15759" : "#ccc")
+      .attr("stroke", (d) => d.type === "semantic" ? "var(--color-danger)" : "var(--color-border-light)")
       .attr("stroke-width", (d) => d.type === "semantic" ? 1.5 : 1)
       .attr("stroke-opacity", 0.6)
       .attr("stroke-dasharray", (d) => d.type === "semantic" ? "4,2" : "none");
@@ -213,7 +222,7 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
         ? clusterColors[(clusterMap.get(d.id) ?? 0) % clusterColors.length]
         : getCategoryColor(d.category)
       )
-      .attr("stroke", (d) => (d.slug === centerSlug ? "#000" : "#fff"))
+      .attr("stroke", (d) => (d.slug === centerSlug ? "var(--color-heading)" : "var(--color-surface)"))
       .attr("stroke-width", (d) => (d.slug === centerSlug ? 2 : 1))
       .attr("cursor", "pointer")
       .on("click", (_event, d) => {

@@ -9,6 +9,12 @@ function getIntensity(count: number, max: number): number {
   return Math.ceil((count / max) * 4); // 1–4
 }
 
+function intensityColor(level: number): string {
+  if (level === 0) return "var(--color-border)";
+  const strength = [30, 55, 78, 100][level - 1] ?? 100;
+  return `color-mix(in srgb, var(--color-success) ${strength}%, var(--color-surface))`;
+}
+
 export default function ActivityHeatmap() {
   const [data, setData] = useState<HeatmapData | null>(null);
 
@@ -56,15 +62,7 @@ export default function ActivityHeatmap() {
             <div key={wi} className="flex flex-col gap-[3px]">
               {week.map((cell, di) => {
                 const level = getIntensity(cell.count, max);
-                const bg = level === 0
-                  ? "var(--color-border)"
-                  : level === 1
-                  ? "#c6e48b"
-                  : level === 2
-                  ? "#7bc96f"
-                  : level === 3
-                  ? "#239a3b"
-                  : "#196127";
+                const bg = intensityColor(level);
                 return (
                   <div
                     key={di}
@@ -84,7 +82,7 @@ export default function ActivityHeatmap() {
             key={l}
             style={{
               width: 10, height: 10, borderRadius: 2, flexShrink: 0,
-              backgroundColor: l === 0 ? "var(--color-border)" : l === 1 ? "#c6e48b" : l === 2 ? "#7bc96f" : l === 3 ? "#239a3b" : "#196127",
+              backgroundColor: intensityColor(l),
             }}
           />
         ))}

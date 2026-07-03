@@ -7,7 +7,6 @@ Arkivel v4.87.1 expands maintenance and read-only mode into an operator readines
 - `/admin/maintenance` shows maintenance mode, background task pause state, safe-upgrade checks, cleanup queues, and runbook links.
 - `/admin/read-only` keeps the read-only toggle focused on write protection for non-admin users.
 - `/api/admin/maintenance/report` returns the maintenance report.
-- `maintenanceTooling` in `/api/customization` publishes mode keys, report routes, cleanup task ids, and safe-upgrade check ids.
 
 ## Safe Upgrade Checks
 

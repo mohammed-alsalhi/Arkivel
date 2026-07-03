@@ -35,10 +35,8 @@ test.describe("v5 smoke suite", () => {
   test("covers install, customization, marketplace, plugin manifest, import dry run, export, and admin health surfaces", async ({ page }) => {
     const checks = [
       { path: "/", text: /Arkivel|Wiki|Knowledge/i },
-      { path: "/api/customization", text: /customization|stylePresets|testQualityGates/i },
-      { path: "/api/marketplace", text: /marketplace|items|registry/i },
+      { path: "/api/customization", text: /customization|stylePresets|marketplace/i },
       { path: "/api/plugins", text: /plugins|manifests|enabled/i },
-      { path: "/api/import/rehearsal", text: /rehearsal|dry|conflict/i },
       { path: "/api/export/json", text: /manifest|articles|export/i },
       { path: "/api/admin/maintenance/report", text: /checks|maintenance|backup/i },
     ];

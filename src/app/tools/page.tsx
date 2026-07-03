@@ -40,6 +40,28 @@ const groups: DirectoryGroup[] = [
       { href: "/activity", label: "Activity", description: "Recent reading and editing activity." },
       { href: "/discussions", label: "Discussions", description: "Conversation threads on articles." },
       { href: "/digest", label: "Daily digest", description: "A daily summary of what changed." },
+      { href: "/stats", label: "Wiki stats", description: "Totals, trends and contributor numbers." },
+      { href: "/leaderboard", label: "Leaderboard", description: "Most active contributors." },
+      { href: "/mentions", label: "Mentions", description: "Places where you were mentioned." },
+      { href: "/history", label: "Reading history", description: "Articles you recently viewed." },
+    ],
+  },
+  {
+    title: "Learn & review",
+    entries: [
+      { href: "/flashcards", label: "Flashcards", description: "Spaced-repetition study decks." },
+      { href: "/learning-paths", label: "Learning paths", description: "Ordered courses through your articles." },
+      { href: "/til", label: "Today I learned", description: "Short daily learnings." },
+      { href: "/collections", label: "Smart collections", description: "Saved rule-based article collections." },
+    ],
+  },
+  {
+    title: "Collaborate",
+    entries: [
+      { href: "/change-requests", label: "Change requests", description: "Proposed edits waiting for review." },
+      { href: "/reviews", label: "Review requests", description: "Ask for and give article reviews." },
+      { href: "/forks", label: "Article forks", description: "Draft alternative versions of articles." },
+      { href: "/bounties", label: "Bounties", description: "Requests for articles that need writing." },
     ],
   },
   {
@@ -65,6 +87,8 @@ const groups: DirectoryGroup[] = [
       { href: "/export", label: "Export", description: "Download articles as Markdown or HTML." },
       { href: "/import", label: "Import", description: "Bring in content from Obsidian, Notion and more." },
       { href: "/assets", label: "Asset library", description: "Uploaded images and files." },
+      { href: "/bookmarklet", label: "Bookmarklet", description: "Save pages to the wiki from any browser." },
+      { href: "/clipper-extension", label: "Web clipper", description: "Browser extension for clipping content." },
     ],
   },
   {

@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  cacheRecipes,
-  cacheStrategyContract,
-  getCacheInvalidationPlan,
-  staleCacheWarning,
-} from "../cache-strategy";
+import { getCacheInvalidationPlan, invalidateCacheForEvent } from "../cache-strategy";
 
 describe("cache strategy", () => {
   it("defines invalidation rules for article, category, and tag writes", () => {
@@ -13,14 +8,20 @@ describe("cache strategy", () => {
     expect(getCacheInvalidationPlan("tag.write")?.keys).toEqual(expect.arrayContaining(["tags:*", "search:*"]));
   });
 
-  it("publishes admin contract and deployment recipes", () => {
-    expect(cacheStrategyContract.adminRoute).toBe("/admin/cache");
-    expect(cacheStrategyContract.staleWarningSurfaces).toEqual(["editors", "admins"]);
-    expect(cacheRecipes.map((recipe) => recipe.id)).toEqual(expect.arrayContaining(["cdn", "vercel", "docker", "reverse-proxy"]));
+  it("returns an empty plan for unknown events", async () => {
+    expect(getCacheInvalidationPlan("unknown.event")).toBeNull();
+    await expect(invalidateCacheForEvent("unknown.event")).resolves.toEqual({
+      event: "unknown.event",
+      invalidatedKeys: [],
+      revalidatePaths: [],
+      surfaces: [],
+    });
   });
 
-  it("creates stale warnings for editors and admins", () => {
-    expect(staleCacheWarning("editor", "2026-05-25T12:00:00.000Z").message).toContain("2026-05-25");
-    expect(staleCacheWarning("admin", null).surface).toBe("admin");
+  it("reports invalidated keys and revalidate paths for known events", async () => {
+    const result = await invalidateCacheForEvent("tag.write");
+    expect(result.invalidatedKeys).toEqual(expect.arrayContaining(["tags:*", "articles:*"]));
+    expect(result.revalidatePaths).toContain("/tags");
+    expect(result.surfaces).toContain("sitemap");
   });
 });

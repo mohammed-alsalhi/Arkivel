@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { reviewStatusLabel } from "@/lib/reviews";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 type Reviewer = {
   id: string;
@@ -47,6 +48,17 @@ export default function ReviewRequestButton({
   const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
   const [reviewers, setReviewers] = useState<Reviewer[]>([]);
   const [open, setOpen] = useState(false);
+
+  useScrollLock(open);
+
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
   const [reviewerId, setReviewerId] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -148,10 +160,14 @@ export default function ReviewRequestButton({
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/45 px-4" onClick={() => setOpen(false)}>
           <form
             onSubmit={submitReviewRequest}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Request review"
             className="w-full max-w-lg border border-border bg-surface p-4 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-3 border-b border-border pb-2">
               <div>

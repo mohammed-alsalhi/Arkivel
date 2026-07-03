@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import ActivityHeatmap from "@/components/ActivityHeatmap";
-import { TabButton, Tabs } from "@/components/ui";
+import { Page, PageHeader, TabButton, Tabs } from "@/components/ui";
 
 type ActivityUser = {
   id: string;
@@ -169,13 +169,8 @@ export default function ActivityPage() {
   ];
 
   return (
-    <div>
-      <h1
-        className="text-[1.7rem] font-normal text-heading border-b border-border pb-1 mb-3"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
-        Recent Activity
-      </h1>
+    <Page>
+      <PageHeader title="Recent Activity" />
 
       <ActivityHeatmap />
 
@@ -266,6 +261,6 @@ export default function ActivityPage() {
           </button>
         </div>
       )}
-    </div>
+    </Page>
   );
 }
