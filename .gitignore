@@ -47,3 +47,5 @@ next-env.d.ts
 !/public/uploads/.gitkeep
 
 /src/generated/prisma
+.env*
+!.env.example

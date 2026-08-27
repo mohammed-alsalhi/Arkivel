@@ -21,11 +21,10 @@ import { ToastProvider } from "@/components/Toast";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
 import ReadOnlyBanner from "@/components/ReadOnlyBanner";
-import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
-import { getSession, isAdmin } from "@/lib/auth";
 import { unstable_cache } from "next/cache";
 import { Analytics } from "@vercel/analytics/next";
+import ProductShell from "@/components/product/ProductShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,39 +73,28 @@ export function generateMetadata(): Metadata {
   };
 }
 
-async function getCategories() {
-  try {
-    const all = await prisma.category.findMany({
-      orderBy: { sortOrder: "asc" },
-      include: {
-        _count: { select: { articles: true } },
-        children: {
-          orderBy: { sortOrder: "asc" },
-          include: {
-            _count: { select: { articles: true } },
-          },
-        },
-      },
-    });
-    // Return only root categories (no parent) with children nested
-    return all.filter((c) => !c.parentId);
-  } catch {
-    return [];
-  }
-}
-
 // These run on every request for every page; the data is global (not
 // per-user) and changes rarely, so cache it briefly across requests.
 const getShellData = unstable_cache(
   async () => {
-    const [categories, articleCount, maintenanceRecord, readOnlyRecord] = await Promise.all([
-      getCategories(),
+    const { default: prisma } = await import("@/lib/prisma");
+    const [allCategories, articleCount, maintenanceRecord, readOnlyRecord] = await Promise.all([
+      prisma.category.findMany({
+        orderBy: { sortOrder: "asc" },
+        include: {
+          _count: { select: { articles: true } },
+          children: {
+            orderBy: { sortOrder: "asc" },
+            include: { _count: { select: { articles: true } } },
+          },
+        },
+      }).catch(() => []),
       prisma.article.count({ where: { published: true } }).catch(() => 0),
       prisma.pluginState.findUnique({ where: { id: "maintenance_mode" } }).catch(() => null),
       prisma.pluginState.findUnique({ where: { id: "read_only_mode" } }).catch(() => null),
     ]);
     return {
-      categories,
+      categories: allCategories.filter((category) => !category.parentId),
       articleCount,
       maintenanceMode: maintenanceRecord?.enabled ?? false,
       readOnlyMode: readOnlyRecord?.enabled ?? false,
@@ -121,6 +109,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (config.siteMode === "product") {
+    return (
+      <html lang="en" data-site-mode="product" data-scroll-behavior="smooth">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <a href="#main-content" className="skip-to-content">Skip to content</a>
+          <ProductShell>{children}</ProductShell>
+          <Analytics />
+        </body>
+      </html>
+    );
+  }
+
+  const { getSession, isAdmin } = await import("@/lib/auth");
   const [{ categories, articleCount, maintenanceMode, readOnlyMode }, initialAdmin, initialSession] =
     await Promise.all([
       getShellData().catch(() => ({

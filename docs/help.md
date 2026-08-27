@@ -513,6 +513,8 @@ Use `Cmd+K` / `Ctrl+K` to open the command palette from anywhere. It groups dest
 - **Marketplace security** — `docs/secure-marketplace-plugins.md` covers unsafe pack rejection, blocked permissions/hooks, dangerous plugin capabilities, provenance checks, and local-only installation
 - **Batch operations:** on `/articles`, bulk-assign category, publish/unpublish, or delete
 - **Customization:** name, tagline, welcome text, footer set via `NEXT_PUBLIC_*` environment variables
+- **Deployment modes:** omit `ARKIVEL_SITE_MODE` for the working wiki, or set it to `product` for the database-free product and documentation website
+- **Single source repository:** independent deployments can share the public Arkivel repository while keeping databases, storage, domains, and secrets isolated
 - **Customization manifest:** `/api/customization`, public grouped config, supported env vars, style presets, color themes, layout presets, component packs, layout composition hooks, theme packs with a theme-pack schema, and marketplace registry, items, contract, and validation metadata for self-hosters and plugins
 - **Trusted local plugins:** `/admin/plugins` discovers trusted local `plugin.json` manifests only when `ARKIVEL_ENABLE_TRUSTED_PLUGINS=true` and `ARKIVEL_TRUSTED_PLUGIN_DIR` points to an absolute local directory. Review permissions, routes, widgets, hooks, compatibility, source, and load errors before enabling a plugin.
 - **Plugin security boundary:** v1 plugins are trusted-local and manifest-first. Arkivel does not fetch remote plugin code or run arbitrary install scripts; admins review permission prompts, health metadata, routes, widgets, hooks, and audit-backed enable/disable changes before any future runtime sandbox work expands execution.

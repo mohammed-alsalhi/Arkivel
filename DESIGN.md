@@ -18,6 +18,12 @@ Show the minimum needed. Controls that are rarely used live in dropdowns. Second
 ### 4. Functional Consistency Over Novelty
 Every interactive element that performs a similar role looks and behaves identically. Do not vary padding, font size, border radius, or hover treatment between buttons in the same context just because they were added at different times.
 
+### Product site exception
+
+The wiki remains content-first and encyclopaedic. The separate `ARKIVEL_SITE_MODE=product` surface is the intentional marketing/documentation exception: true white and ink-black foundations, restrained cobalt actions, Geist typography, thin neutral rules, generous whitespace, and code-native product UI previews. Keep this styling scoped to `html[data-site-mode="product"]`; never leak the marketing shell, oversized type, or product-site spacing into a working wiki deployment.
+
+The product site uses one quiet header, one primary GitHub action, open editorial sections instead of default card grids, a black infrastructure band, and a typographic documentation index. It must not invent customer logos, testimonials, pricing, usage metrics, or unsupported product claims.
+
 ---
 
 ## Component Standards

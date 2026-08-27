@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.3.0 - Product site and single-repo deployments
+
+- Added a database-free `ARKIVEL_SITE_MODE=product` surface with the Arkivel product homepage, documentation index, responsive product navigation, and API reference.
+- Restricted product deployments to public product, documentation, metadata, and static-asset routes through the Next.js 16 proxy boundary.
+- Kept wiki mode as the safe default so independently configured deployments can share the public Arkivel repository without sharing data or secrets.
+- Removed the Vercel build-time `prisma db push --accept-data-loss`; schema changes now require a separate, reviewed operation after a verified backup.
+- Documented one public source repository with separate Vercel projects for Arkivel instances.
+
 > **Status: Beta** — All versions listed here are pre-release. The project is under active development and APIs, features, and data models may change without notice. A stable v5.0.0 will be tagged when core features are production-hardened and the auth/multi-user system is fully vetted.
 
 All notable changes to this project are documented here.

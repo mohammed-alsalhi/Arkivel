@@ -1,12 +1,21 @@
 import type { MetadataRoute } from "next";
-import prisma from "@/lib/prisma";
 import { createPublicWorkspaceArticleWhere } from "@/lib/workspaces";
+import { config } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://example.com";
 
+  if (config.siteMode === "product") {
+    return [
+      { url: `${baseUrl}/`, changeFrequency: "weekly", priority: 1 },
+      { url: `${baseUrl}/docs`, changeFrequency: "monthly", priority: 0.8 },
+      { url: `${baseUrl}/api-docs`, changeFrequency: "monthly", priority: 0.6 },
+    ];
+  }
+
+  const { default: prisma } = await import("@/lib/prisma");
   const articles = await prisma.article.findMany({
     where: { published: true, status: "published", ...createPublicWorkspaceArticleWhere() },
     select: { slug: true, updatedAt: true },

@@ -6,10 +6,10 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ```bash
 npm run dev          # Start dev server (Next.js 16 + Turbopack)
-npm run build        # prisma db push && next build
+npm run build        # Build the Next.js application
 npm run lint         # ESLint
 npx prisma generate  # Regenerate Prisma client after schema changes
-npx prisma db push   # Push schema changes to database
+npx prisma db push  # Explicitly sync a reviewed schema after backup
 node prisma/seed.mjs # Seed default categories
 ```
 
@@ -63,11 +63,11 @@ Follow the existing repository history when writing commit messages.
 
 **Stack:** Next.js 16 (App Router) + React 19 + TypeScript + Prisma 7 + PostgreSQL (Neon) + Tailwind CSS 4 + Tiptap editor
 
-**Two remotes:** `origin` (private personal wiki) and `public` (public product repo). The public repo has clean history without personal data.
+**One source repository:** `mohammed-alsalhi/arkivel` is the public source of truth. Independent deployments keep branding, domains, databases, storage, and secrets outside Git; do not create a private mirror for instance configuration.
 
 ### Key Patterns
 
-**Configuration:** Public self-host customization is centralized in `src/lib/customization.ts` and exposed through `/api/customization`. `src/lib/config.ts` keeps backward-compatible aliases for runtime callers. Defaults produce a generic wiki; branding, style presets, and color themes are selected through `NEXT_PUBLIC_*` env vars such as `NEXT_PUBLIC_ARKIVEL_STYLE` and `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`.
+**Configuration:** Public self-host customization is centralized in `src/lib/customization.ts` and exposed through `/api/customization`. `src/lib/config.ts` keeps backward-compatible aliases for runtime callers. Defaults produce a generic wiki; branding, style presets, and color themes are selected through `NEXT_PUBLIC_*` env vars such as `NEXT_PUBLIC_ARKIVEL_STYLE` and `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`. `ARKIVEL_SITE_MODE=product` selects the database-free product/docs shell; omission keeps wiki mode.
 
 **Marketplace metadata:** Built-in and planned style presets, color themes, layout presets, component packs, theme packs, and plugin listings live in `src/lib/marketplace.ts`. Treat these records as the local-first marketplace registry contract with version, schema, source, license, checksum, compatibility, and validation metadata. Preview-only import parsing and examples live in `src/lib/marketplace-import.ts`.
 

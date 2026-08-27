@@ -4,7 +4,11 @@ Use this page to choose an installation shape and the checks it needs before pro
 
 ## vercel
 
-Use Vercel for hosted Next.js deployment. Configure `DATABASE_URL`, public customization variables, blob/storage settings if used, and run smoke tests against the deployed `BASE_URL`.
+Use Vercel for hosted Next.js deployment. Configure `DATABASE_URL`, public customization variables, and blob/storage settings if used. Back up PostgreSQL, review and run `npx prisma db push` as an explicit release step, then run smoke tests against the deployed `BASE_URL`. The application build must not mutate the schema. The historical migration chain is incomplete, so `prisma migrate deploy` is not yet a safe replacement.
+
+Use one Vercel project per independent wiki so databases, storage, secrets, and domains stay isolated. Multiple projects may use the same public Arkivel repository.
+
+For the public product and documentation site, create a separate project with `ARKIVEL_SITE_MODE=product` and `NEXT_PUBLIC_BASE_URL=https://arkivel.com`. Product mode does not require a database.
 
 ## docker
 
