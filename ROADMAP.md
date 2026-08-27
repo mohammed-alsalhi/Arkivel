@@ -25,6 +25,15 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Surface orphaned features (stats, leaderboard, flashcards, learning paths, change requests, reviews, forks, bounties, TIL, collections, mentions, history) in `/tools` and the command palette
 - [x] Fix theme, dialog, z-index, and breakpoint consistency violations
 
+## v5.3 - Product site and deployment cleanup
+
+#### v5.3.0 - One public source, independent deployments
+
+- [x] Add a database-free product and documentation mode for `arkivel.com`
+- [x] Keep wiki mode as the default for self-hosted instances
+- [x] Remove destructive database mutation from the application build
+- [x] Document one public repository with separate deployment configuration and data
+
 ## Pre-5.0 Stable Release Roadmap
 
 Arkivel remains beta through the entire v4 line. The goal is to make the platform reusable, self-hostable, customizable, extension-ready, portable, and operable before tagging v5.0.0 as the first stable release. This ladder uses patch-level planning so each `v4.x.y` release can land a focused, reviewable batch with docs, tests, version metadata, commit, and push.

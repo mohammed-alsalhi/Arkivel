@@ -106,7 +106,19 @@ Open [http://localhost:3000](http://localhost:3000). If `ADMIN_SECRET` is empty 
 1. Create a PostgreSQL database on [Neon](https://neon.tech), Supabase, or another hosted Postgres provider.
 2. Click the Vercel button at the top of this README, or import the repository in Vercel.
 3. Add `DATABASE_URL` and `ADMIN_SECRET`.
-4. Deploy.
+4. Back up the database, review the proposed Prisma schema changes, then run `npx prisma db push` as an explicit release step.
+5. Deploy. Application builds run `npm run build` and never mutate the schema. The current historical migration chain is incomplete, so do not rely on `prisma migrate deploy` until a complete baseline is checked in and rehearsed.
+
+### Product website
+
+The same repository can serve a database-free Arkivel product and documentation website. Create a separate deployment project and set:
+
+```bash
+ARKIVEL_SITE_MODE=product
+NEXT_PUBLIC_BASE_URL=https://arkivel.com
+```
+
+Keep each working wiki in its own deployment project with its own database, storage, secrets, and domain. Product mode never reads the wiki database.
 
 ### Docker
 
@@ -132,7 +144,7 @@ Put the app behind Caddy, Nginx, or your platform's reverse proxy for TLS and cu
 
 ## Configuration
 
-A full template lives in [.env.example](.env.example). Only two variables are required.
+A full template lives in [.env.example](.env.example). Wiki mode requires `DATABASE_URL` and a production `ADMIN_SECRET`; product mode requires neither.
 
 | Variable | Required | Purpose |
 |---|---:|---|
@@ -166,7 +178,7 @@ Layout composition metadata is also exposed through `/api/customization`. Each b
 
 Component-pack authors can scaffold packs with `npm run marketplace:generate-component-pack -- my-pack`, validate manifests with `npm run marketplace:validate-pack -- path/to/manifest.json`, and use `docs/component-pack-preview-harness.md` plus `src/lib/component-pack-fixtures.ts` for route-based preview planning and fixture data.
 
-Space customization is persisted in v4.79.0. Public reads at `/api/categories/:id/customization` and `/api/articles/:id/customization` resolve global environment defaults, parent category overrides, category overrides, and article overrides while hiding private draft config. Admin-only `PUT` requests to the same endpoints validate style, color theme, layout, component pack, template pack, navigation, and metadata schema fields before saving. Self-host upgrades should run `npx prisma generate`, `npx prisma db push`, delete `.next/`, and restart after updating.
+Space customization is persisted in v4.79.0. Public reads at `/api/categories/:id/customization` and `/api/articles/:id/customization` resolve global environment defaults, parent category overrides, category overrides, and article overrides while hiding private draft config. Admin-only `PUT` requests to the same endpoints validate style, color theme, layout, component pack, template pack, navigation, and metadata schema fields before saving. Self-host upgrades should back up PostgreSQL, review and run `npx prisma db push` explicitly, run `npx prisma generate`, delete `.next/`, and restart after updating.
 
 The category admin page at `/admin/categories` includes the first space customization editor. It shows inherited effective values, explicit override markers, reset-to-parent/global controls, conflict warnings, article-list/metadata/navigation/theme previews, and responsive QA checkpoints for customized spaces.
 
@@ -240,12 +252,12 @@ Commit messages follow the project history: release commits use `vX.Y.Z: imperat
 
 ```bash
 npm run dev          # Start Next.js dev server
-npm run build        # prisma db push + next build
+npm run build        # Build the Next.js application
 npm run lint         # ESLint
 npm run test         # Vitest
 npm run test:e2e     # Playwright
 npx prisma generate  # Regenerate Prisma client
-npx prisma db push   # Push schema changes
+npx prisma db push  # Explicitly sync a reviewed schema after backup
 node prisma/seed.mjs # Seed default categories
 ```
 

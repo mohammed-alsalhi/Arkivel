@@ -1,3 +1,0 @@
-{
-  "buildCommand": "prisma db push --accept-data-loss && next build"
-}

@@ -108,6 +108,8 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed breakdown of the codebase,
 3. Run `npx prisma db push` to apply changes
 4. Delete `.next/` if you see stale client errors
 
+Production releases currently use the same command only as an explicit, reviewed operation after a verified backup. The historical migration chain is incomplete; do not rely on `prisma migrate deploy` until maintainers check in and rehearse a complete baseline. Database changes never run inside the application build.
+
 ### Adding an infobox field schema
 1. Edit `src/lib/infobox-schema.ts`
 2. Add fields to the relevant category in `INFOBOX_SCHEMAS`

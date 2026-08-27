@@ -64,6 +64,8 @@ A complete overview of everything the wiki can do. For step-by-step instructions
 - **Unified search surfaces** — the header search, search page, command palette, wiki-link autocomplete, split view, and edit fallback all use the same search response contract
 - **Responsive app shell** — desktop/tablet users get the dense collapsible sidebar, while phone layouts get a safe-area-aware bottom nav for Home, Search, Create, Recent, and Browse; focused workspace pages keep their full-height canvas by using the compact top menu instead
 - **Main page front page** — `/` combines live wiki stats, featured content, browse directory links, recent updates, and compact sidebar modules as the canonical wiki entry point
+- **Product site mode** — `ARKIVEL_SITE_MODE=product` replaces the database-backed wiki shell with the public Arkivel product homepage, `/docs`, and the API reference; omission keeps wiki mode
+- **Single-repo deployments** — multiple isolated deployment projects can use the public Arkivel repository while retaining separate databases, storage, secrets, branding, and domains
 - **Shared page headers** — browse, discovery, reference, and personal pages use the same responsive header/dek/action structure so downstream pages wrap consistently
 - **Brand mark and compact search** — the preliminary Arkivel mark appears in the sidebar/mobile header, while global search opens from a compact trigger so the top bar stays calm
 - **Canon Atlas** — `/atlas` turns the wiki into a live map with category territories, article signals, story threads, a flagship dossier, continuity pressure, atlas moves, and a JSON feed

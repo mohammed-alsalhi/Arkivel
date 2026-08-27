@@ -1,4 +1,5 @@
 import { customization } from "./customization";
+import { resolveSiteMode } from "./site-mode";
 
 export const config = {
   ...customization,
@@ -27,4 +28,5 @@ export const config = {
   maxUploadSize: customization.limits.maxUploadSize,
   registrationEnabled: customization.features.registrationEnabled,
   discussionsEnabled: customization.features.discussionsEnabled,
+  siteMode: resolveSiteMode(process.env.ARKIVEL_SITE_MODE),
 };

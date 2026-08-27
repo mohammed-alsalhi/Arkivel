@@ -6,10 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm run dev          # Start dev server (Next.js 16 + Turbopack)
-npm run build        # prisma db push && next build
+npm run build        # Build the Next.js application
 npm run lint         # ESLint
 npx prisma generate  # Regenerate Prisma client after schema changes
-npx prisma db push   # Push schema changes to database
+npx prisma db push  # Explicitly sync a reviewed schema after backup
 node prisma/seed.mjs # Seed default categories
 ```
 
@@ -19,11 +19,11 @@ After changing `prisma/schema.prisma`, always run `npx prisma generate` and dele
 
 **Stack:** Next.js 16 (App Router) + React 19 + TypeScript + Prisma 7 + PostgreSQL (Neon) + Tailwind CSS 4 + Tiptap editor
 
-**Two remotes:** `origin` (private personal wiki) and `public` (public product repo). The public repo has clean history without personal data.
+**One source repository:** `mohammed-alsalhi/arkivel` is the public source of truth. Independent deployments keep branding, domains, databases, storage, and secrets outside Git; do not create a private mirror for instance configuration.
 
 ### Key Patterns
 
-**Configuration:** All branding is driven by `NEXT_PUBLIC_*` env vars read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via Vercel env vars.
+**Configuration:** All branding is driven by `NEXT_PUBLIC_*` env vars read through `src/lib/config.ts`. Defaults produce a generic wiki; personal branding is set via deployment env vars. `ARKIVEL_SITE_MODE=product` selects the database-free product/docs shell; omission keeps wiki mode.
 
 **Auth:** Dual auth system. Legacy: single admin password via `ADMIN_SECRET` env var with cookie-based `admin_token`. Multi-user: bcrypt-hashed passwords in `User` table with session tokens. `getSession()` returns current user, `isAdmin()` checks both paths, `requireRole(user, role)` for granular permissions. Roles: admin, editor, viewer.
 
