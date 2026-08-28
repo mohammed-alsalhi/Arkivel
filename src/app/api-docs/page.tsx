@@ -1,9 +1,13 @@
 import { config } from "@/lib/config";
 import {
+  createPublicApiV1OpenApiSpec,
+  PUBLIC_API_V1_EXAMPLE_BASE_URL,
+} from "@/lib/public-api-v1";
+import {
+  Chip,
   CodeBlock,
   DataTable,
   InlineCode,
-  Notice,
   Page,
   PageHeader,
   Section,
@@ -11,377 +15,127 @@ import {
 
 export default function ApiDocsPage() {
   const baseUrl = config.siteMode === "product"
-    ? "https://your-arkivel.example"
+    ? PUBLIC_API_V1_EXAMPLE_BASE_URL
     : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const spec = createPublicApiV1OpenApiSpec(baseUrl);
+  const operations = Object.entries(spec.paths).flatMap(([path, pathItem]) =>
+    Object.entries(pathItem).map(([method, operation]) => ({
+      method: method.toUpperCase(),
+      path,
+      ...operation,
+    }))
+  );
 
   return (
-    <Page>
-      <PageHeader title={`${config.name} API Documentation`} />
+    <Page
+      className={config.siteMode === "product" ? "product-docs-page" : undefined}
+      width="wide"
+    >
+      <PageHeader
+        title="API reference"
+        description={
+          <>
+            <InlineCode>{spec.info.title}</InlineCode>{" "}
+            <InlineCode>{spec.info.version}</InlineCode>. {spec.info.description}
+          </>
+        }
+      />
 
-      <Notice className="mb-4">
-        <strong>Authentication:</strong> All API v1 endpoints require an API key
-        passed in the <InlineCode>X-API-Key</InlineCode> header.
-        API keys can be managed from your user account settings. The frozen v1 contract is available at
-        {" "}<InlineCode>/api/v1/contract</InlineCode> and the OpenAPI schema at{" "}
-        <InlineCode>/api/v1/openapi.json</InlineCode>.
-      </Notice>
-
-      <div className="text-[13px] space-y-6">
-        {/* Base URL */}
-        <Section title="Base URL">
-          <CodeBlock>{baseUrl}/api/v1</CodeBlock>
-          <p className="mt-2 text-muted">
-            v1 responses include <InlineCode>X-Arkivel-API-Version</InlineCode>,{" "}
-            <InlineCode>X-Arkivel-API-Schema</InlineCode>, and rate-limit compatibility headers.
-            See <InlineCode>docs/api-v1-migration.md</InlineCode> for pre-v5 client guidance and{" "}
-            <InlineCode>/api/v1/sdk</InlineCode> for SDK-ready type, scope, example, and script metadata.
+      <div className="space-y-8 text-[13px]">
+        <Section title="Schema">
+          <p className="text-muted">
+            This page is generated from the same OpenAPI document served at{" "}
+            <a href="/api/v1/openapi.json"><InlineCode>/api/v1/openapi.json</InlineCode></a>.
+            Contract metadata and SDK types are available at{" "}
+            <a href="/api/v1/contract"><InlineCode>/api/v1/contract</InlineCode></a>{" "}
+            and <a href="/api/v1/sdk"><InlineCode>/api/v1/sdk</InlineCode></a>.
+          </p>
+          <p className="font-semibold">Server</p>
+          <CodeBlock><code>{spec.servers[0].url}</code></CodeBlock>
+          <p className="text-muted">
+            OpenAPI <InlineCode>{spec.openapi}</InlineCode> · {operations.length} operations
           </p>
         </Section>
 
-        {/* Articles */}
-        <Section title="Articles">
+        <Section title="Operations">
+          <div className="divide-y divide-border">
+            {operations.map((operation) => {
+              const headingId = `operation-${operation.operationId}`;
 
-          <h3 className="font-semibold mt-3 mb-1">GET /api/v1/articles</h3>
-          <p className="text-muted mb-2">
-            List published articles with pagination and optional filters.
-          </p>
+              return (
+                <article
+                  aria-labelledby={headingId}
+                  className="space-y-3 py-6 first:pt-2 last:pb-2"
+                  key={operation.operationId}
+                >
+                  <header className="flex min-w-0 flex-wrap items-center gap-2">
+                    <InlineCode className="font-semibold">{operation.method}</InlineCode>
+                    <h3 id={headingId} className="min-w-0 font-semibold">
+                      <InlineCode className="break-all">{operation.path}</InlineCode>
+                    </h3>
+                  </header>
 
-          <DataTable className="mb-3 text-[12px]">
-            <thead>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="font-mono">page</td>
-                <td>integer</td>
-                <td>Page number (default: 1)</td>
-              </tr>
-              <tr>
-                <td className="font-mono">limit</td>
-                <td>integer</td>
-                <td>Items per page, max 100 (default: 20)</td>
-              </tr>
-              <tr>
-                <td className="font-mono">category</td>
-                <td>string</td>
-                <td>Filter by category slug</td>
-              </tr>
-              <tr>
-                <td className="font-mono">tag</td>
-                <td>string</td>
-                <td>Filter by tag slug</td>
-              </tr>
-            </tbody>
-          </DataTable>
+                  <div className="flex flex-wrap gap-2">
+                    {operation.tags.map((tag) => <Chip key={tag}>{tag}</Chip>)}
+                    <Chip className="font-mono">{operation["x-arkivel-auth"]}</Chip>
+                  </div>
 
-          <p className="font-semibold mb-1">Example:</p>
-          <CodeBlock>
-{`curl -H "X-API-Key: YOUR_KEY" \\
-  "${baseUrl}/api/v1/articles?page=1&limit=10&category=people"`}
-          </CodeBlock>
+                  <p className="text-muted">{operation.summary}</p>
 
-          <p className="font-semibold mt-3 mb-1">Response:</p>
-          <CodeBlock>
-{`{
-  "articles": [
-    {
-      "title": "Example Article",
-      "slug": "example-article",
-      "excerpt": "A brief description...",
-      "content": "<p>HTML content...</p>",
-      "category": { "name": "People", "slug": "people" },
-      "tags": [{ "name": "History", "slug": "history" }],
-      "createdAt": "2026-01-01T00:00:00.000Z",
-      "updatedAt": "2026-01-01T00:00:00.000Z"
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 42,
-    "totalPages": 5
-  }
-}`}
-          </CodeBlock>
-        </Section>
+                  {operation.parameters.length > 0 ? (
+                    <DataTable className="text-[12px]">
+                      <caption className="pb-2 text-left font-semibold">Parameters</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th scope="col">Location</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Requirement</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {operation.parameters.map((parameter) => (
+                          <tr key={`${parameter.in}-${parameter.name}`}>
+                            <td><InlineCode>{parameter.name}</InlineCode></td>
+                            <td>{parameter.in}</td>
+                            <td>{parameter.schema.type}</td>
+                            <td>{parameter.required ? "required" : "optional"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </DataTable>
+                  ) : null}
 
-        {/* Search */}
-        <Section title="Search">
-
-          <h3 className="font-semibold mt-3 mb-1">GET /api/v1/search</h3>
-          <p className="text-muted mb-2">
-            Search articles by title and content. Multi-word queries use AND logic.
-          </p>
-
-          <DataTable className="mb-3 text-[12px]">
-            <thead>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="font-mono">q</td>
-                <td>string</td>
-                <td>Search query (min 2 characters)</td>
-              </tr>
-              <tr>
-                <td className="font-mono">limit</td>
-                <td>integer</td>
-                <td>Max results, max 100 (default: 20)</td>
-              </tr>
-            </tbody>
-          </DataTable>
-
-          <p className="font-semibold mb-1">Example:</p>
-          <CodeBlock>
-{`curl -H "X-API-Key: YOUR_KEY" \\
-  "${baseUrl}/api/v1/search?q=kingdom&limit=5"`}
-          </CodeBlock>
-        </Section>
-
-        {/* Categories */}
-        <Section title="Categories">
-
-          <h3 className="font-semibold mt-3 mb-1">GET /api/v1/categories</h3>
-          <p className="text-muted mb-2">
-            List all categories with article counts and parent info.
-          </p>
-
-          <p className="font-semibold mb-1">Example:</p>
-          <CodeBlock>
-{`curl -H "X-API-Key: YOUR_KEY" \\
-  "${baseUrl}/api/v1/categories"`}
-          </CodeBlock>
-
-          <p className="font-semibold mt-3 mb-1">Response:</p>
-          <CodeBlock>
-{`{
-  "categories": [
-    {
-      "name": "People",
-      "slug": "people",
-      "description": null,
-      "icon": "person",
-      "sortOrder": 0,
-      "parent": null,
-      "articleCount": 15,
-      "childCount": 3
-    }
-  ]
-}`}
-          </CodeBlock>
-        </Section>
-
-        {/* Tags */}
-        <Section title="Tags">
-
-          <h3 className="font-semibold mt-3 mb-1">GET /api/v1/tags</h3>
-          <p className="text-muted mb-2">
-            List all tags with article counts.
-          </p>
-
-          <p className="font-semibold mb-1">Example:</p>
-          <CodeBlock>
-{`curl -H "X-API-Key: YOUR_KEY" \\
-  "${baseUrl}/api/v1/tags"`}
-          </CodeBlock>
-        </Section>
-
-        {/* Feeds */}
-        <Section title="RSS / Atom Feeds">
-          <p className="text-muted mb-2">
-            Public feeds are available without authentication:
-          </p>
-          <ul className="list-disc pl-6 space-y-1">
-            <li>
-              <strong>RSS 2.0:</strong>{" "}
-              <InlineCode>/feed.xml</InlineCode>
-            </li>
-            <li>
-              <strong>Atom:</strong>{" "}
-              <InlineCode>/feed/atom</InlineCode>
-            </li>
-          </ul>
-        </Section>
-
-        {/* Stats */}
-        <Section title="Statistics">
-
-          <h3 className="font-semibold mt-3 mb-1">GET /api/stats</h3>
-          <p className="text-muted mb-2">
-            Get wiki-wide statistics. No authentication required.
-          </p>
-
-          <p className="font-semibold mb-1">Example:</p>
-          <CodeBlock>
-{`curl "${baseUrl}/api/stats"`}
-          </CodeBlock>
-
-          <p className="font-semibold mt-3 mb-1">Response:</p>
-          <CodeBlock>
-{`{
-  "articles": 42,
-  "categories": 6,
-  "tags": 15,
-  "users": 3,
-  "revisions": 128,
-  "discussions": 24,
-  "recentEditsThisWeek": 12
-}`}
-          </CodeBlock>
-        </Section>
-
-        {/* Sitemap */}
-        <Section title="Sitemap & SEO">
-          <ul className="list-disc pl-6 space-y-1 text-muted">
-            <li>
-              <strong>Sitemap:</strong>{" "}
-              <InlineCode>/sitemap.xml</InlineCode> &mdash; Dynamic sitemap with all articles and categories
-            </li>
-            <li>
-              <strong>Robots:</strong>{" "}
-              <InlineCode>/robots.txt</InlineCode> &mdash; Crawler instructions
-            </li>
-          </ul>
-        </Section>
-
-        {/* Operational feeds */}
-        <Section title="Operational Feeds">
-          <p className="text-muted mb-2">
-            These app feeds are designed for dashboards, demos, and local automation.
-          </p>
-          <ul className="list-disc pl-6 space-y-1 text-muted">
-            <li>
-              <InlineCode>GET /api/studio</InlineCode> — Arkivel Studio summary, generated board nodes, graph edges, base views, and action queue
-            </li>
-            <li>
-              <InlineCode>GET /api/studio/canvas</InlineCode> — JSON Canvas export of the generated Studio board
-            </li>
-            <li>
-              <InlineCode>GET /api/atlas</InlineCode> — Canon Atlas territories, signals, threads, dossier, continuity pressure, and next moves
-            </li>
-            <li>
-              <InlineCode>GET /api/trails</InlineCode> — Canon Trails guided routes, stop reasons, reading estimates, word totals, and link totals
-            </li>
-            <li>
-              <InlineCode>GET /api/intelligence</InlineCode> — Knowledge cockpit score, radar, constellation, pressure model, engines, and action queue
-            </li>
-            <li>
-              <InlineCode>GET /api/customization</InlineCode> — Public self-host manifest for grouped customization, supported env vars, style presets, color themes, layouts, layout composition hooks, component packs, theme packs and the theme-pack schema, and the marketplace registry with items, contract, and validation summaries
-            </li>
-            <li>
-              <InlineCode>GET /api/plugins</InlineCode> / <InlineCode>PUT /api/plugins</InlineCode> — Admin-only plugin review and enablement API with loader status, permission prompts, health metadata, compatibility, routes, widgets, hooks, load errors, and audit-backed enable/disable changes
-            </li>
-            <li>
-              <InlineCode>npm run plugin:validate</InlineCode> — Local plugin author CLI for validating <InlineCode>plugin.json</InlineCode> and listing supported permissions, hooks, webhook events, schema fields, and compatibility metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/export/history</InlineCode> — Admin-only export history report with manifest, checksum, warning, omitted-data, file-count, byte-count, format, status, and scope metadata; add <InlineCode>?download=1</InlineCode> for a downloadable JSON report
-            </li>
-            <li>
-              <InlineCode>GET /api/articles</InlineCode>, <InlineCode>GET /api/search</InlineCode>, <InlineCode>GET /api/categories</InlineCode>, and <InlineCode>GET /api/tags</InlineCode> — Accept <InlineCode>workspaceId</InlineCode>, <InlineCode>wikiId</InlineCode>, or <InlineCode>X-Arkivel-Workspace</InlineCode> scoping, plus <InlineCode>includeGlobal=1</InlineCode> during single-workspace migration
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/editorial-governance/summary</InlineCode> — Review due dates, required reviewers, approval thresholds, claim queues, verification stamps, ownership paths, release blockers, and editorial risk summaries
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/audit-log</InlineCode> — Actor, action, target, workspace, severity, success, and date filters plus downloadable JSON exports with summary, standard, strict, or full redaction
-            </li>
-            <li>
-              <InlineCode>PATCH /api/articles/:id/discussions</InlineCode> and <InlineCode>PATCH /api/suggestions/:id</InlineCode> — Discussion reports/reviewer visibility plus suggestion accept, reject, comment, assign, and convert-to-task actions with anti-spam metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/search?explain=1</InlineCode> — Relevance v2 facets, weights, synonyms, aliases, redirects, stemming, stale/review/verification signals, and admin-only score explanations
-            </li>
-            <li>
-              <InlineCode>GET</InlineCode> / <InlineCode>PUT</InlineCode> / <InlineCode>DELETE /api/articles/:id/snapshots</InlineCode> — Snapshot read/compare/restore/discard flows plus draft recovery, editor diagnostics, and large-document fixture metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/v1/contract</InlineCode> and <InlineCode>GET /api/v1/openapi.json</InlineCode> — Frozen pre-v5 endpoint metadata, OpenAPI schema, standard headers/errors, fixture responses, and migration guide references
-            </li>
-            <li>
-              <InlineCode>GET /api/v1/sdk</InlineCode> — SDK-ready TypeScript payload names, API key scopes, generated client snippets, and sample script metadata for every stable v1 surface
-            </li>
-            <li>
-              <InlineCode>POST /api/webhooks/test</InlineCode> and <InlineCode>POST /api/webhooks/deliveries/:id/redeliver</InlineCode> — Timestamped signatures, retry policy, delivery logs, event schemas, replay protection, and local receiver guidance
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/operations</InlineCode> and <InlineCode>GET /api/admin/operations?bundle=1</InlineCode> — Admin service health, queues, slow pages, failed webhooks/imports/exports/plugins, alerts, acknowledgements, and redacted diagnostic bundle metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/maintenance/report</InlineCode> and <InlineCode>POST /api/admin/maintenance/report</InlineCode> — Safe-upgrade checks, backup reminders, background task pause state, cleanup queues, and runbook metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/observability</InlineCode> and <InlineCode>POST /api/admin/observability</InlineCode> — Structured event feed, metric ingestion, privacy controls, and external collector metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/performance</InlineCode> — Route p95, interaction, and bundle budgets, large-wiki fixtures, slow samples, and slow-query review metadata
-            </li>
-            <li>
-              <InlineCode>GET /api/categories/:id/customization</InlineCode> / <InlineCode>GET /api/articles/:id/customization</InlineCode> — Public resolved customization reads for space and article overrides; admin-only <InlineCode>PUT</InlineCode> requests validate and save overrides while public responses hide private draft config
-            </li>
-            <li>
-              <InlineCode>GET /api/categories/:id/governance</InlineCode> / <InlineCode>PUT /api/categories/:id/governance</InlineCode> — Resolved space governance for owner, reviewer, visibility, review cadence, stale-page threshold, and health signals; writes are admin-only and audit logged
-            </li>
-            <li>
-              <InlineCode>GET /api/admin/space-governance/summary</InlineCode> — Admin-only space governance dashboard summary with inherited badges and health widgets
-            </li>
-          </ul>
-        </Section>
-
-        {/* Errors */}
-        <Section title="Error Responses">
-          <p className="text-muted mb-2">
-            All errors return a JSON object with an <InlineCode>error</InlineCode> field:
-          </p>
-          <CodeBlock>
-{`// 401 Unauthorized
-{ "error": "Invalid or missing API key. Include X-API-Key header." }
-
-// 400 Bad Request
-{ "error": "Description of what went wrong" }
-
-// 404 Not Found
-{ "error": "Resource not found" }`}
-          </CodeBlock>
-
-          <DataTable className="mt-3 text-[12px]">
-            <thead>
-              <tr>
-                <th>Status Code</th>
-                <th>Meaning</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="font-mono">200</td>
-                <td>Success</td>
-              </tr>
-              <tr>
-                <td className="font-mono">400</td>
-                <td>Bad Request (missing or invalid parameters)</td>
-              </tr>
-              <tr>
-                <td className="font-mono">401</td>
-                <td>Unauthorized (missing or invalid API key)</td>
-              </tr>
-              <tr>
-                <td className="font-mono">404</td>
-                <td>Not Found</td>
-              </tr>
-              <tr>
-                <td className="font-mono">500</td>
-                <td>Internal Server Error</td>
-              </tr>
-            </tbody>
-          </DataTable>
+                  <details>
+                    <summary className="cursor-pointer font-semibold">
+                      Responses ({Object.keys(operation.responses).length})
+                    </summary>
+                    <div className="mt-3">
+                      <DataTable className="text-[12px]">
+                        <caption className="ui-sr-only">
+                          Responses for {operation.method} {operation.path}
+                        </caption>
+                        <thead>
+                          <tr>
+                            <th scope="col">Status</th>
+                            <th scope="col">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.entries(operation.responses).map(([status, response]) => (
+                            <tr key={status}>
+                              <td><InlineCode>{status}</InlineCode></td>
+                              <td>{response.description}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </DataTable>
+                    </div>
+                  </details>
+                </article>
+              );
+            })}
+          </div>
         </Section>
       </div>
     </Page>

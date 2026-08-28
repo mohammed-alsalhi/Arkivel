@@ -28,7 +28,7 @@ Plugins are trusted-local and manifest-first. Start with `docs/plugin-authoring.
 
 ## api
 
-Public REST API v1 is documented in `/api-docs`, `docs/api-v1-migration.md`, `/api/v1/contract`, and `/api/v1/openapi.json`. Do not change v1 behavior without tests and migration notes.
+Public REST API v1 is documented in `/api-docs`, `docs/api-v1-migration.md`, `/api/v1/contract`, and `/api/v1/openapi.json`. `/api-docs` renders the shared OpenAPI document, so update the contract source instead of maintaining endpoint copy in the page. Do not change v1 behavior without tests and migration notes.
 
 ## security
 

@@ -1,16 +1,9 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import BrandMark from "@/components/brand/BrandMark";
+import GitHubIcon from "@/components/product/GitHubIcon";
 
 const githubUrl = "https://github.com/mohammed-alsalhi/arkivel";
-
-function ExternalArrow() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M5 3h8v8M13 3 3 13" />
-    </svg>
-  );
-}
 
 export default function ProductShell({ children }: { children: ReactNode }) {
   return (
@@ -22,14 +15,10 @@ export default function ProductShell({ children }: { children: ReactNode }) {
             <span>Arkivel</span>
           </Link>
           <nav className="product-site-nav" aria-label="Product navigation">
-            <Link href="/#product">Product</Link>
+            <Link href="/#product">Overview</Link>
             <Link href="/docs">Docs</Link>
-            <a href={githubUrl}>GitHub</a>
+            <a className="product-github-link" href={githubUrl} aria-label="GitHub"><GitHubIcon /></a>
           </nav>
-          <a className="product-button product-button-primary product-header-cta" href={githubUrl}>
-            View on GitHub
-            <ExternalArrow />
-          </a>
         </div>
       </header>
       <main id="main-content" className="product-site-main">{children}</main>
@@ -40,10 +29,10 @@ export default function ProductShell({ children }: { children: ReactNode }) {
             <span>Arkivel</span>
           </Link>
           <nav aria-label="Footer navigation">
-            <Link href="/#product">Product</Link>
+            <Link href="/#product">Overview</Link>
             <Link href="/docs">Docs</Link>
-            <a href={githubUrl}>GitHub</a>
-            <a href={`${githubUrl}/blob/main/LICENSE`}>MIT License</a>
+            <a className="product-github-link" href={githubUrl} aria-label="GitHub"><GitHubIcon /></a>
+            <a className="product-github-link" href={`${githubUrl}/blob/main/LICENSE`}><GitHubIcon /> MIT License</a>
           </nav>
         </div>
       </footer>

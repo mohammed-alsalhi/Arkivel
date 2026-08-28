@@ -137,7 +137,7 @@ export const apiKeyScopes: Record<ArkivelApiKeyScope, {
   "revisions:read": { description: "Read permitted revision export metadata.", surfaces: ["/api/articles/:id/revisions/export"], write: false },
   "search:read": { description: "Run permitted search queries.", surfaces: ["/api/v1/search"], write: false },
   "customization:read": { description: "Read public customization and contract manifests.", surfaces: ["/api/customization"], write: false },
-  "marketplace:read": { description: "Read local marketplace registry metadata.", surfaces: ["/api/customization#marketplace"], write: false },
+  "marketplace:read": { description: "Read local marketplace registry metadata.", surfaces: ["/api/customization"], write: false },
   "plugins:read": { description: "Read plugin manifest and runtime metadata where authorized.", surfaces: ["/api/plugins"], write: false },
   "webhooks:read": { description: "Read webhook configuration where authorized.", surfaces: ["/api/webhooks"], write: false },
   "webhooks:write": { description: "Create, update, test, or delete webhook configuration where authorized.", surfaces: ["/api/webhooks"], write: true },

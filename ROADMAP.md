@@ -34,6 +34,12 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Remove destructive database mutation from the application build
 - [x] Document one public repository with separate deployment configuration and data
 
+#### v5.3.1 - Product presentation and API reference
+
+- [x] Tighten product copy and reduce repeated call-to-action chrome
+- [x] Use monochrome lowercase styling, GitHub marks, and an adaptive SVG favicon
+- [x] Generate `/api-docs` from the shared OpenAPI document
+
 ## Pre-5.0 Stable Release Roadmap
 
 Arkivel remains beta through the entire v4 line. The goal is to make the platform reusable, self-hostable, customizable, extension-ready, portable, and operable before tagging v5.0.0 as the first stable release. This ladder uses patch-level planning so each `v4.x.y` release can land a focused, reviewable batch with docs, tests, version metadata, commit, and push.

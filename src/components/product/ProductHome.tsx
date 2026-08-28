@@ -1,11 +1,13 @@
 import Link from "next/link";
+import BrandMark from "@/components/brand/BrandMark";
+import GitHubIcon from "@/components/product/GitHubIcon";
 
 const githubUrl = "https://github.com/mohammed-alsalhi/arkivel";
 
-function Arrow({ external = false }: { external?: boolean }) {
+function Arrow() {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true">
-      {external ? <path d="M7 4h9v9M16 4 5 15" /> : <path d="m4 10 12 0m-5-5 5 5-5 5" />}
+      <path d="m4 10 12 0m-5-5 5 5-5 5" />
     </svg>
   );
 }
@@ -58,18 +60,18 @@ export default function ProductHome() {
       <section className="product-hero" aria-labelledby="product-hero-title">
         <div className="product-hero-copy">
           <h1 id="product-hero-title">Knowledge that stays yours.</h1>
-          <p>Arkivel is the open-source, self-hosted knowledge platform for writing, linking, and exploring what matters.</p>
+          <p>Arkivel is an open-source, self-hosted knowledge base for writing, linking, and searching documentation.</p>
           <div className="product-hero-actions">
             <a className="product-button product-button-primary" href={githubUrl}>
-              View on GitHub <Arrow external />
+              <GitHubIcon /> Source code
             </a>
-            <Link className="product-button product-button-secondary" href="/docs">Read the docs</Link>
+            <Link className="product-text-link" href="/docs#installation">Installation <Arrow /></Link>
           </div>
         </div>
 
         <figure className="product-app-frame" role="img" aria-label="Arkivel article editor with a linked knowledge graph">
           <aside className="product-app-sidebar" aria-hidden="true">
-            <div className="product-app-mini-brand">A</div>
+            <BrandMark className="product-app-mini-brand" imageSize={28} />
             <div className="product-app-search">Search Arkivel…</div>
             <p>Library</p>
             <ul>
@@ -130,29 +132,29 @@ export default function ProductHome() {
       </section>
 
       <section className="product-proof-rail" aria-label="Arkivel platform summary">
-        <h2>Open source. Self-hosted.<br />Built to last.</h2>
-        <div><DatabaseIcon /><p><strong>PostgreSQL-backed</strong><span>Your knowledge uses a proven relational data model.</span></p></div>
+        <h2>Open source. Self-hosted.<br />PostgreSQL-backed.</h2>
+        <div><DatabaseIcon /><p><strong>PostgreSQL-backed</strong><span>Stores wiki data in PostgreSQL.</span></p></div>
         <div><LockIcon /><p><strong>Self-hosted by design</strong><span>Run Arkivel on infrastructure you control.</span></p></div>
         <div><CodeIcon /><p><strong>Open API</strong><span>Connect your tools through documented endpoints.</span></p></div>
       </section>
 
       <section id="product" className="product-workflow" aria-labelledby="workflow-title">
         <div className="product-section-heading">
-          <h2 id="workflow-title">From scattered notes to a living system.</h2>
-          <p>Write in a focused editor, connect ideas with wiki links, and explore the relationships that emerge.</p>
+          <h2 id="workflow-title">Write, link, and navigate.</h2>
+          <p>Use the editor for notes, wiki links for connections, and graph views for navigation.</p>
         </div>
         <div className="product-workflow-grid">
           <article className="product-workflow-step">
             <div className="product-step-heading"><span>01</span><h3>Write</h3></div>
             <div className="product-editor-fragment">
               <div className="product-outline"><small>Outline</small><span>1 Introduction</span><span>2 Core properties</span><span>3 Building in public</span></div>
-              <div className="product-editor-body"><small>Saved</small><h4>Introduction</h4><p>Arkivel is an open-source knowledge platform for capturing and connecting your ideas.</p><p>Your notes, your links, your system.</p></div>
+              <div className="product-editor-body"><small>Saved</small><h4>Introduction</h4><p>Arkivel is an open-source knowledge platform for capturing and connecting your ideas.</p><p>Use wiki links to connect related pages.</p></div>
             </div>
           </article>
           <article className="product-workflow-step">
             <div className="product-step-heading"><span>02</span><h3>Connect</h3></div>
             <div className="product-link-fragment">
-              <p>A knowledge system grows through small, atomic notes connected by meaningful <span>links.</span></p>
+              <p>Connect related pages with <span>wiki links.</span></p>
               <small>Link to page</small>
               <strong>Knowledge systems</strong>
               <span>/knowledge-systems</span>
@@ -163,7 +165,7 @@ export default function ProductHome() {
             </div>
           </article>
           <article className="product-workflow-step">
-            <div className="product-step-heading"><span>03</span><h3>Explore</h3></div>
+            <div className="product-step-heading"><span>03</span><h3>Navigate</h3></div>
             <div className="product-graph-fragment">
               <svg viewBox="0 0 440 290" role="img" aria-label="Knowledge systems graph">
                 <g className="graph-lines">
@@ -188,23 +190,29 @@ export default function ProductHome() {
 
       <section className="product-ownership" aria-labelledby="ownership-title">
         <div className="product-ownership-copy">
-          <h2 id="ownership-title">Own the stack.<br />Keep the context.</h2>
-          <p>Run Arkivel on your infrastructure, connect PostgreSQL and object storage, and keep portable exports within reach.</p>
+          <h2 id="ownership-title">Host Arkivel<br />yourself.</h2>
+          <p>Connect PostgreSQL and optional object storage, then export your data when needed.</p>
           <ul>
             <li><CodeIcon />Open-source code</li>
             <li><DatabaseIcon />Environment-driven configuration</li>
             <li><ExportIcon />Portable exports</li>
-            <li><span className="product-brace-icon">&#123; &#125;</span>Documented API</li>
+            <li><span className="product-brace-icon" aria-hidden="true">&#123;&#125;</span>Documented API</li>
           </ul>
           <div className="product-hero-actions">
-            <Link className="product-button product-button-blue" href="/docs#deployment">Deployment guide</Link>
-            <Link className="product-button product-button-dark" href="/api-docs">Explore the API</Link>
+            <Link className="product-button product-button-light" href="/docs#deployment">Deployment</Link>
+            <Link className="product-button product-button-dark" href="/api-docs">API reference</Link>
           </div>
         </div>
         <div className="product-system-diagram" role="img" aria-label="Browser connects to Arkivel, which connects to PostgreSQL, object storage, and portable exports">
           <div className="system-node system-browser">Browser</div>
           <span className="system-arrow system-arrow-one" aria-hidden="true">→</span>
-          <div className="system-node system-arkivel"><strong>A</strong><span>Arkivel</span><small>Web app</small><small>Search &amp; indexing</small><small>Export service</small></div>
+          <div className="system-node system-arkivel">
+            <BrandMark className="system-arkivel-mark" imageSize={72} />
+            <span className="system-arkivel-name">Arkivel</span>
+            <small>Web app</small>
+            <small>Search &amp; indexing</small>
+            <small>Export service</small>
+          </div>
           <span className="system-arrow system-arrow-two" aria-hidden="true">→</span>
           <div className="system-destinations">
             <div className="system-node">PostgreSQL</div>
@@ -216,11 +224,11 @@ export default function ProductHome() {
 
       <section className="product-docs-cta" aria-labelledby="docs-cta-title">
         <div className="product-docs-copy">
-          <h2 id="docs-cta-title">Start building with Arkivel.</h2>
-          <p>Use the guides to deploy, configure, customize, and extend your own knowledge space.</p>
+          <h2 id="docs-cta-title">Install and configure Arkivel.</h2>
+          <p>Follow the guides for installation, configuration, authentication, and deployment.</p>
           <div className="product-hero-actions">
-            <Link className="product-button product-button-primary" href="/docs">Read the docs</Link>
-            <a className="product-text-link" href={githubUrl}>View source on GitHub <Arrow /></a>
+            <Link className="product-button product-button-primary" href="/docs#installation">Installation</Link>
+            <a className="product-text-link" href={githubUrl}><GitHubIcon /> Source code</a>
           </div>
         </div>
         <div className="product-docs-index">

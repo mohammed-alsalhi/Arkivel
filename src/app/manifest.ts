@@ -10,9 +10,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: "/",
     display: "standalone",
-    // Matches --color-background / --color-accent in globals.css (light theme)
-    background_color: "#f8f9fa",
-    theme_color: "#3366cc",
+    background_color: config.siteMode === "product" ? "#ffffff" : "#f8f9fa",
+    theme_color: config.siteMode === "product" ? "#0b0b0c" : "#3366cc",
     orientation: "any",
     icons: [
       {
@@ -20,11 +19,6 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
-      },
-      {
-        src: "/favicon.ico",
-        sizes: "any",
-        type: "image/x-icon",
       },
     ],
     categories: ["reference", "education"],

@@ -12,6 +12,9 @@ describe("resolveSiteMode", () => {
 
   it("keeps operational wiki routes out of the product deployment", () => {
     expect(isProductRouteAllowed("/docs")).toBe(true);
+    expect(isProductRouteAllowed("/api/v1/contract")).toBe(true);
+    expect(isProductRouteAllowed("/api/v1/openapi.json")).toBe(true);
+    expect(isProductRouteAllowed("/api/v1/sdk")).toBe(true);
     expect(isProductRouteAllowed("/_next/static/app.js")).toBe(true);
     expect(isProductRouteAllowed("/features")).toBe(false);
     expect(isProductRouteAllowed("/admin")).toBe(false);
@@ -24,6 +27,22 @@ describe("resolveSiteMode", () => {
     try {
       expect(proxy(new NextRequest("https://arkivel.com/admin")).status).toBe(404);
       expect(proxy(new NextRequest("https://arkivel.com/docs")).status).toBe(200);
+      expect(proxy(new NextRequest("https://arkivel.com/api/v1/openapi.json")).status).toBe(200);
+    } finally {
+      if (previousMode === undefined) delete process.env.ARKIVEL_SITE_MODE;
+      else process.env.ARKIVEL_SITE_MODE = previousMode;
+    }
+  });
+
+  it("uses the self-host example server in the product OpenAPI document", async () => {
+    const previousMode = process.env.ARKIVEL_SITE_MODE;
+    process.env.ARKIVEL_SITE_MODE = "product";
+
+    try {
+      const { GET } = await import("../../app/api/v1/openapi.json/route");
+      const response = await GET(new NextRequest("https://arkivel.com/api/v1/openapi.json"));
+      const spec = await response.json();
+      expect(spec.servers).toEqual([{ url: "https://your-arkivel.example" }]);
     } finally {
       if (previousMode === undefined) delete process.env.ARKIVEL_SITE_MODE;
       else process.env.ARKIVEL_SITE_MODE = previousMode;

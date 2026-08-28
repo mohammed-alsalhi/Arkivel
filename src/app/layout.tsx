@@ -59,10 +59,7 @@ export function generateMetadata(): Metadata {
     },
     description: config.description,
     icons: {
-      icon: [
-        { url: config.appIcon, sizes: "512x512", type: "image/png" },
-        { url: "/favicon.ico", sizes: "any" },
-      ],
+      icon: [{ url: "/brand/arkivel-favicon.svg", sizes: "any", type: "image/svg+xml" }],
       apple: [{ url: config.appIcon, sizes: "512x512", type: "image/png" }],
     },
     openGraph: {
