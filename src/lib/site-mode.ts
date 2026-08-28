@@ -7,6 +7,9 @@ export function resolveSiteMode(value: string | undefined): SiteMode {
 const PRODUCT_ROUTES = new Set([
   "/",
   "/api-docs",
+  "/api/v1/contract",
+  "/api/v1/openapi.json",
+  "/api/v1/sdk",
   "/docs",
   "/manifest.webmanifest",
   "/robots.txt",

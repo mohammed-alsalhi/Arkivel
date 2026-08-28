@@ -1,4 +1,5 @@
-export const PUBLIC_API_V1_SCHEMA_VERSION = "2026-05-25.v4.86.0";
+export const PUBLIC_API_V1_SCHEMA_VERSION = "2026-08-27.v5.3.1";
+export const PUBLIC_API_V1_EXAMPLE_BASE_URL = "https://your-arkivel.example";
 
 export type ApiV1Surface =
   | "articles"
@@ -86,16 +87,6 @@ export const apiV1Endpoints: ApiV1Endpoint[] = [
     responseEnvelope: "{ customization, options, ui, marketplace }",
   },
   {
-    id: "v1.marketplace.read",
-    surface: "marketplace",
-    method: "GET",
-    path: "/api/customization#marketplace",
-    auth: "public",
-    stable: true,
-    pagination: "none",
-    responseEnvelope: "{ marketplace }",
-  },
-  {
     id: "v1.plugins.list",
     surface: "plugins",
     method: "GET",
@@ -103,7 +94,7 @@ export const apiV1Endpoints: ApiV1Endpoint[] = [
     auth: "admin-session",
     stable: true,
     pagination: "none",
-    responseEnvelope: "{ plugins, runtime }",
+    responseEnvelope: "{ errors, loader, plugins }",
   },
   {
     id: "v1.webhooks.manage",
@@ -113,7 +104,7 @@ export const apiV1Endpoints: ApiV1Endpoint[] = [
     auth: "admin-session",
     stable: true,
     pagination: "none",
-    responseEnvelope: "{ webhooks }",
+    responseEnvelope: "[webhooks]",
   },
   {
     id: "v1.exports.history",
@@ -125,7 +116,7 @@ export const apiV1Endpoints: ApiV1Endpoint[] = [
     pagination: "page",
     sorting: ["createdAt:desc"],
     filtering: ["format", "status", "scope"],
-    responseEnvelope: "{ exports, pagination }",
+    responseEnvelope: "{ contract, history }",
   },
   {
     id: "v1.revisions.export",
@@ -135,7 +126,7 @@ export const apiV1Endpoints: ApiV1Endpoint[] = [
     auth: "admin-session",
     stable: true,
     pagination: "none",
-    responseEnvelope: "{ article, revisions }",
+    responseEnvelope: "text/csv revision export",
   },
   {
     id: "v1.health.read",
@@ -257,24 +248,66 @@ export function createPublicApiV1OpenApiSpec(baseUrl = "http://localhost:3000") 
   const paths = Object.fromEntries(
     apiV1Endpoints
       .filter((endpoint) => endpoint.path.startsWith("/api/"))
-      .map((endpoint) => [
-        endpoint.path.replace(/:([A-Za-z0-9_]+)/g, "{$1}"),
-        {
-          [endpoint.method.toLowerCase()]: {
-            operationId: endpoint.id.replace(/\./g, "_"),
-            tags: [endpoint.surface],
-            summary: endpoint.responseEnvelope,
-            security: endpoint.auth === "api-key" ? [{ ApiKeyAuth: [] }] : [],
-            responses: {
-              200: { description: endpoint.responseEnvelope },
-              400: { description: apiV1ErrorContract.statuses[400] },
-              401: { description: apiV1ErrorContract.statuses[401] },
-              403: { description: apiV1ErrorContract.statuses[403] },
-              429: { description: apiV1ErrorContract.statuses[429] },
+      .map((endpoint) => {
+        const path = endpoint.path.replace(/:([A-Za-z0-9_]+)/g, "{$1}");
+        const pathParameters = Array.from(path.matchAll(/\{([A-Za-z0-9_]+)\}/g), ([, name]) => ({
+          name,
+          in: "path",
+          required: true,
+          schema: { type: "string" },
+        }));
+        const paginationParameters = endpoint.path.startsWith("/api/v1/")
+          ? endpoint.pagination === "page"
+            ? apiV1PaginationContract.page.params
+            : endpoint.pagination === "cursor"
+              ? apiV1PaginationContract.cursor.params
+              : []
+          : [];
+        const queryParameterNames = endpoint.path.startsWith("/api/v1/")
+          ? Array.from(new Set([...paginationParameters, ...(endpoint.filtering ?? [])]))
+          : [];
+        const queryParameters = queryParameterNames.map((name) => ({
+          name,
+          in: "query",
+          required: false,
+          schema: name === "page"
+            ? { type: "integer", minimum: 1, default: 1 }
+            : name === "limit"
+              ? { type: "integer", minimum: 1, maximum: 100, default: 20 }
+              : name === "includeGlobal"
+                ? { type: "string", enum: ["0", "1"], default: "0" }
+                : { type: "string" },
+        }));
+        const parameters = [...pathParameters, ...queryParameters];
+        const security = endpoint.auth === "api-key"
+          ? [{ ApiKeyAuth: [] }]
+          : endpoint.auth === "admin-session"
+            ? [{ AdminSession: [] }]
+            : endpoint.auth === "mixed"
+              ? [{ ApiKeyAuth: [] }, { AdminSession: [] }]
+              : [];
+
+        return [
+          path,
+          {
+            [endpoint.method.toLowerCase()]: {
+              operationId: endpoint.id.replace(/\./g, "_"),
+              tags: [endpoint.surface],
+              summary: endpoint.responseEnvelope,
+              security,
+              "x-arkivel-auth": endpoint.auth,
+              parameters,
+              responses: {
+                200: { description: endpoint.responseEnvelope },
+                400: { description: apiV1ErrorContract.statuses[400] },
+                401: { description: apiV1ErrorContract.statuses[401] },
+                403: { description: apiV1ErrorContract.statuses[403] },
+                429: { description: apiV1ErrorContract.statuses[429] },
+              },
             },
           },
-        },
-      ])
+        ];
+      })
   );
 
   return {
@@ -291,6 +324,11 @@ export function createPublicApiV1OpenApiSpec(baseUrl = "http://localhost:3000") 
           type: "apiKey",
           in: "header",
           name: "X-API-Key",
+        },
+        AdminSession: {
+          type: "apiKey",
+          in: "cookie",
+          name: "session_token",
         },
       },
     },

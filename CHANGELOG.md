@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.3.1 - Tighter product copy and adaptive favicon
+
+- Replaced repeated marketing-style product copy and CTA labels with shorter, factual language.
+- Removed the duplicate header CTA and reduced button chrome across the public product site.
+- Switched the product site to monochrome lowercase styling with GitHub marks on source links.
+- Switched the browser favicon to a transparent SVG that adapts to light and dark tabs.
+- Generated the API reference from the shared OpenAPI document, added its accepted v1 query parameters, and exposed its metadata routes in product mode.
+
 ## 5.3.0 - Product site and single-repo deployments
 
 - Added a database-free `ARKIVEL_SITE_MODE=product` surface with the Arkivel product homepage, documentation index, responsive product navigation, and API reference.
