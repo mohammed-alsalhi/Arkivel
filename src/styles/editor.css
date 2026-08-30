@@ -1,0 +1,146 @@
+.tiptap {
+  outline: none;
+  min-height: 300px;
+  padding: 1rem 1.25rem;
+  line-height: 1.6;
+  background: var(--color-surface);
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--color-border);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-style: italic;
+}
+
+.tiptap h1 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--color-heading);
+  margin: 1.2rem 0 0.4rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.tiptap h2 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-heading);
+  margin: 1rem 0 0.3rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.tiptap h3 {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin: 0.8rem 0 0.3rem;
+}
+.tiptap p { margin: 0.4rem 0; line-height: 1.65; }
+.tiptap ul, .tiptap ol { padding-left: 1.75rem; margin: 0.4rem 0; }
+.tiptap ul { list-style: disc; }
+.tiptap ol { list-style: decimal; }
+.tiptap blockquote {
+  border-left: 3px solid var(--color-border-light);
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+  color: var(--color-muted);
+  font-style: italic;
+}
+.tiptap pre {
+  background: var(--color-background);
+  border: 1px solid var(--color-border-light);
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+}
+.tiptap code {
+  background: var(--color-background);
+  padding: 0.1rem 0.3rem;
+  font-size: 0.875em;
+}
+.tiptap pre code { background: none; padding: 0; color: inherit; }
+.tiptap img { max-width: 100%; border: 1px solid var(--color-border-light); margin: 0.5rem 0; }
+.tiptap hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1rem 0;
+}
+.tiptap a { color: var(--color-wiki-link); text-decoration: none; }
+.tiptap a:hover { text-decoration: underline; }
+
+/* ── Tables (editor + display) ── */
+.tiptap table, .wiki-content table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+  width: 100%;
+  max-width: 100%;
+  margin: 0.5rem 0;
+}
+.tiptap th, .tiptap td,
+.wiki-content th, .wiki-content td {
+  border: 1px solid var(--color-border);
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+  font-size: 0.85rem;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.tiptap th > :first-child,
+.tiptap td > :first-child,
+.wiki-content th > :first-child,
+.wiki-content td > :first-child {
+  margin-top: 0;
+}
+.tiptap th > :last-child,
+.tiptap td > :last-child,
+.wiki-content th > :last-child,
+.wiki-content td > :last-child {
+  margin-bottom: 0;
+}
+.tiptap th, .wiki-content th {
+  background: var(--color-surface-hover);
+  font-weight: 700;
+}
+.tiptap .selectedCell {
+  background: var(--color-accent-soft);
+}
+.tiptap .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--color-accent);
+  cursor: col-resize;
+  z-index: 20;
+}
+.tiptap table .grip-column,
+.tiptap table .grip-row {
+  background: var(--color-surface-hover);
+  cursor: pointer;
+}
+.tiptap table .grip-column:hover,
+.tiptap table .grip-row:hover {
+  background: var(--color-accent-soft);
+}
+.tiptap td.has-focus,
+.tiptap th.has-focus {
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-background); }
+::-webkit-scrollbar-thumb { background: var(--color-border-light); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-border); }
+
+/* ── Selection ── */
+::selection {
+  background: var(--color-accent-soft);
+}

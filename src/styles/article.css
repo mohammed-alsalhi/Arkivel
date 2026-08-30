@@ -1,0 +1,933 @@
+/* ── Article page shell ── */
+.article-page {
+  min-width: 0;
+}
+
+.article-tabbar {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.2rem;
+  border: 1px solid var(--color-border);
+  border-bottom: 0;
+  background: var(--color-background);
+  padding: 0.35rem 0.45rem 0;
+}
+
+.article-tab {
+  display: inline-flex;
+  min-width: 0;
+  min-height: 1.85rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -1px;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid transparent;
+  border-bottom-color: var(--color-border);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.article-tab:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-foreground);
+  text-decoration: none;
+}
+
+.article-tab-active {
+  border-color: var(--color-border);
+  border-bottom-color: var(--color-surface);
+  background: var(--color-surface);
+  color: var(--color-heading);
+}
+
+.article-shell {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+/* Article prose spans the full shell by default; ArticleWidthPreference
+   injects #wiki-width-pref-style to opt into narrow/reading measures. */
+
+/* Collapsed end-of-article sections (stats, community widgets, …) */
+.article-extras {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.article-extras > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.article-extras > summary::-webkit-details-marker {
+  display: none;
+}
+
+.article-extras > summary::after {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.article-extras[open] > summary::after {
+  transform: rotate(225deg);
+}
+
+.article-extras > summary:hover {
+  color: var(--color-foreground);
+}
+
+.article-extras-body {
+  padding-bottom: 0.75rem;
+}
+
+.article-hero {
+  margin: 0.35rem 0 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.article-hero-kicker,
+.article-meta-line,
+.article-coauthors {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+.article-hero-kicker {
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.article-dot {
+  width: 0.2rem;
+  height: 0.2rem;
+  border-radius: 999px;
+  background: var(--color-border);
+}
+
+.article-title-row {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.article-title {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1.95rem;
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+.article-title-badges,
+.article-stat-strip {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.article-title-badges {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+  padding-top: 0.2rem;
+}
+
+.article-dek {
+  max-width: min(100%, 96ch);
+  margin: 0.45rem 0 0;
+  color: var(--color-foreground);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+.article-meta-line {
+  margin-top: 0.55rem;
+}
+
+.article-stat-strip {
+  margin-top: 0.45rem;
+}
+
+.article-coauthors {
+  margin-top: 0.45rem;
+}
+
+.article-action-panel {
+  position: relative;
+  margin: 0.6rem 0 0.85rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.35rem 0.45rem;
+}
+
+.article-action-primary {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.45rem;
+}
+
+.article-action-group {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding-right: 0.45rem;
+  border-right: 1px solid var(--color-border);
+  background: transparent;
+}
+
+.article-action-group-header {
+  margin: 0 0.1rem 0 0;
+}
+
+.article-action-label {
+  color: var(--color-heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  text-transform: uppercase;
+}
+
+.article-action-controls {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.article-action-menu {
+  position: relative;
+  min-width: 0;
+}
+
+.article-action-menu[open] {
+  width: 100%;
+  z-index: 30;
+}
+
+.article-action-menu-summary {
+  display: inline-flex;
+  height: 1.5rem;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-muted);
+  padding: 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.article-action-menu-summary::-webkit-details-marker {
+  display: none;
+}
+
+.article-action-menu-summary:hover,
+.article-action-menu[open] .article-action-menu-summary {
+  background: var(--color-surface-hover);
+  color: var(--color-foreground);
+}
+
+.article-action-menu-summary svg {
+  transition: transform 0.15s;
+}
+
+.article-action-menu[open] .article-action-menu-summary svg {
+  transform: rotate(180deg);
+}
+
+.article-action-menu-content {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0.35rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.5rem;
+}
+
+.article-action-controls .ui-select {
+  width: auto;
+  min-width: 5.5rem;
+  max-width: 10rem;
+}
+
+#article-content .wiki-content {
+  font-family: var(--font-serif);
+}
+
+.article-notice-stack {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.article-notice-stack:empty {
+  display: none;
+}
+
+.article-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.article-status-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.article-status-notice-warning {
+  border-left: 3px solid var(--color-warning);
+  background: var(--color-warning-soft);
+}
+
+.article-status-notice-info {
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.article-soft-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+}
+
+.article-prelude {
+  display: flow-root;
+  min-width: 0;
+}
+
+.article-in-brief {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.article-in-brief-label {
+  color: var(--color-heading);
+  font-weight: 700;
+}
+
+.article-taxonomy {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.article-taxonomy-group {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.article-taxonomy-label {
+  color: var(--color-heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.article-taxonomy-chips {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.article-taxonomy-chip:hover {
+  text-decoration: none;
+}
+
+.article-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.article-link-section {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.75rem;
+}
+
+.article-link-section-header {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.article-link-section-header h2 {
+  color: var(--color-heading);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.article-link-section-header span {
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+}
+
+.article-link-list {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.75rem;
+}
+
+.article-link-list a {
+  display: inline-flex;
+  max-width: 18rem;
+  min-height: 1.35rem;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid var(--color-border);
+  padding: 0 0.4rem;
+  color: var(--color-wiki-link);
+}
+
+.article-link-list a:hover {
+  background: var(--color-surface-hover);
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .article-shell {
+    padding: 0.75rem 0.85rem 1rem;
+  }
+
+  .article-title-row {
+    display: block;
+  }
+
+  .article-title {
+    font-size: 1.55rem;
+    line-height: 1.16;
+  }
+
+  .article-title-badges {
+    justify-content: flex-start;
+    margin-top: 0.4rem;
+  }
+
+  .article-tabbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: thin;
+  }
+
+  .article-tab {
+    padding-inline: 0.7rem;
+  }
+
+  .article-action-group {
+    border-right: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .article-action-menu {
+    position: static;
+  }
+}
+
+@media (max-width: 767px) {
+  .article-in-brief,
+  .article-taxonomy-group {
+    grid-template-columns: 1fr;
+  }
+
+  .article-taxonomy-label {
+    margin-bottom: -0.25rem;
+  }
+}
+
+/* The floated 280px infobox leaves too little room for prose below lg,
+   not just on phones — stack it on tablets too. */
+@media (max-width: 1023px) {
+  .wiki-infobox {
+    float: none;
+    width: 100%;
+    margin: 0.75rem 0 1rem;
+  }
+
+  .wiki-toc {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* ── Category bar at bottom of articles ── */
+.wiki-categories {
+  border-top: 1px solid var(--color-border);
+  padding: 0.5rem 0;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+.wiki-categories a {
+  color: var(--color-wiki-link);
+}
+
+/* ── Focused article reader and context rail ── */
+.wiki-main-content:has(> .article-page) {
+  padding: 0 !important;
+}
+
+.article-page,
+.article-reader-grid {
+  min-height: 100%;
+}
+
+.article-reader-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(20rem, 28vw, 27.5rem);
+  align-items: stretch;
+}
+
+.article-shell.article-reader {
+  min-width: 0;
+  min-height: 100%;
+  border: 0;
+  background: var(--color-surface);
+  padding: clamp(3.25rem, 5.5vw, 6rem) clamp(2.25rem, 3.5vw, 3.75rem) 5rem;
+}
+
+.article-reader > .focused-breadcrumb,
+.article-reader-header,
+.article-reader-notice,
+.article-reader-content,
+.article-reader > .article-taxonomy,
+.article-reader > .article-reader-details,
+.article-reader > [class] > .article-reader-content,
+.article-reader > [class] > .article-taxonomy,
+.article-reader > [class] > .article-reader-details {
+  width: min(100%, 52rem);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.article-reader-header {
+  margin-top: clamp(3.6rem, 5vw, 4.5rem);
+  margin-bottom: 3.5rem;
+}
+
+.article-reader-header h1 {
+  min-width: 0;
+  color: var(--color-heading);
+  font-family: var(--font-sans);
+  font-size: clamp(2.9rem, 4vw, 3.6rem);
+  font-weight: 450;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+  overflow-wrap: anywhere;
+}
+
+.article-reader-notice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  border-left: 2px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.article-reader-content {
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.72;
+}
+
+.article-reader-content > :first-child {
+  margin-top: 0;
+}
+
+.article-reader-content h1,
+.article-reader-content h2,
+.article-reader-content h3,
+.article-reader-content h4 {
+  color: var(--color-heading);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.article-reader-content h2 {
+  margin-top: 3.25rem;
+  margin-bottom: 1rem;
+  border: 0;
+  font-size: 1.6rem;
+}
+
+.article-reader-content h3 {
+  margin-top: 2.4rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.article-reader-content p,
+.article-reader-content ul,
+.article-reader-content ol,
+.article-reader-content blockquote,
+.article-reader-content pre,
+.article-reader-content table {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.article-reader .article-taxonomy {
+  margin-top: 3.5rem;
+}
+
+.article-reader-details {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: 0.9rem;
+}
+
+.article-reader-details > summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 650;
+  list-style-position: inside;
+}
+
+.article-reader-details[open] > summary {
+  margin-bottom: 1rem;
+  color: var(--color-heading);
+}
+
+.article-reader-detail-actions {
+  display: flex;
+  gap: 1rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.78rem;
+}
+
+.article-reader-details .wiki-infobox {
+  float: none;
+  width: 100%;
+  margin: 0;
+}
+
+.wiki-right-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  min-width: 0;
+  height: calc(100dvh - (var(--wiki-frame-inset, 0rem) * 2));
+  max-height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid var(--color-border);
+  background: var(--color-sidebar-bg);
+}
+
+.article-context-tabs {
+  display: flex;
+  min-height: 5.8rem;
+  align-items: end;
+  gap: 2.6rem;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 2.2rem 1.55rem;
+}
+
+.article-context-tabs button {
+  position: relative;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 1rem;
+  font-weight: 450;
+  line-height: 1;
+}
+
+.article-context-tabs button:hover,
+.article-context-tabs button:focus-visible,
+.article-context-tabs .article-context-tab-active {
+  color: var(--color-heading);
+}
+
+.article-context-tabs button:focus-visible::after,
+.article-context-tabs .article-context-tab-active::after {
+  position: absolute;
+  right: 0;
+  bottom: -1.58rem;
+  left: 0;
+  height: 2px;
+  background: var(--color-heading);
+  content: "";
+}
+
+.article-context-panel {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.article-context-graph {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.article-local-graph {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  justify-items: center;
+}
+
+.article-local-graph-canvas {
+  display: block;
+  width: 100%;
+  height: min(30rem, calc(100dvh - 15rem));
+  min-height: 20rem;
+}
+
+.article-local-graph-open {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.article-local-graph-open:hover,
+.article-local-graph-open:focus-visible {
+  color: var(--color-heading);
+  text-decoration: underline;
+}
+
+.article-context-outline ol,
+.article-context-outline ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article-context-outline a {
+  display: block;
+  border-radius: 0.35rem;
+  color: var(--color-muted);
+  padding: 0.45rem 0.55rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.article-context-outline a:hover,
+.article-context-outline a:focus-visible,
+.article-context-outline a[aria-current="location"] {
+  background: var(--color-surface-hover);
+  color: var(--color-heading);
+  outline: none;
+}
+
+.article-context-backlinks {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--color-border-light);
+  padding-top: 1.25rem;
+}
+
+.article-context-backlinks h2 {
+  margin: 0 0 0.75rem 0.55rem;
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.article-context-empty {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.article-context-toggle,
+.article-context-backdrop {
+  display: none;
+}
+
+@media (max-width: 74.999rem) {
+  .article-reader-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wiki-right-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 70;
+    width: min(24rem, 90vw);
+    height: 100dvh;
+    max-height: none;
+    transform: translateX(102%);
+    border-left: 1px solid var(--color-border);
+    box-shadow: -1.25rem 0 3rem rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease;
+  }
+
+  .wiki-right-sidebar-open {
+    transform: translateX(0);
+  }
+
+  .article-context-toggle {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 60;
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-heading);
+    box-shadow: 0 0.4rem 1.25rem rgba(0, 0, 0, 0.1);
+  }
+
+  .article-context-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 65;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: rgba(0, 0, 0, 0.38);
+  }
+}
+
+@media (max-width: 63.999rem) {
+  .wiki-main-content:has(> .article-page) {
+    padding: 0 !important;
+  }
+
+  .article-shell.article-reader {
+    padding-top: 5.5rem;
+  }
+}
+
+@media (max-width: 39.999rem) {
+  .article-shell.article-reader {
+    padding: 5rem 1.25rem 4rem;
+  }
+
+  .article-reader-header {
+    margin-top: 3rem;
+  }
+
+  .article-reader-title-row {
+    display: block;
+  }
+
+  .article-reader-title-row h1 {
+    font-size: clamp(2.6rem, 14vw, 3.75rem);
+  }
+
+  .article-reader-actions {
+    padding-top: 1rem;
+  }
+
+  .article-reader-dek {
+    margin-top: 1.75rem;
+  }
+
+  .article-context-tabs {
+    min-height: 4.75rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .article-context-panel {
+    padding: 1.5rem;
+  }
+}

@@ -1,0 +1,163 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  InlineCode,
+  LinkButton,
+  Notice,
+  Page,
+  PageHeader,
+  SectionPanel,
+} from "@/components/ui";
+
+export const metadata: Metadata = {
+  title: "help",
+  description: "a practical guide to the focused arkivel wiki.",
+};
+
+export default function HelpPage() {
+  return (
+    <Page>
+      <PageHeader
+        kicker="guide"
+        title="help"
+        description="the shortest path through the retained arkivel wiki."
+        actions={
+          <>
+            <LinkButton href="/features">features</LinkButton>
+            <LinkButton href="/api-docs">api reference</LinkButton>
+          </>
+        }
+      />
+
+      <div className="space-y-4 text-[13px]">
+        <SectionPanel title="browse and search" bodyClassName="space-y-3">
+          <ol className="list-decimal space-y-2 pl-5">
+            <li>
+              open <Link href="/">home</Link> for recently updated pages or{" "}
+              <Link href="/articles">all pages</Link> for the complete index.
+            </li>
+            <li>
+              use the search field in the left rail. the full <Link href="/search">search page</Link>{" "}
+              accepts the same query and shows matching pages.
+            </li>
+            <li>
+              browse the category tree from <Link href="/categories">categories</Link>, browse labels
+              from <Link href="/tags">tags</Link>, or open the <Link href="/graph">graph</Link> to
+              follow wiki-link relationships.
+            </li>
+          </ol>
+        </SectionPanel>
+
+        <SectionPanel title="write a page" bodyClassName="space-y-3">
+          <ol className="list-decimal space-y-2 pl-5">
+            <li>
+              <Link href="/login">log in</Link> with an administrator account when authentication is enabled.
+            </li>
+            <li>
+              open <Link href="/articles/new">new page</Link>, add a title, and write with the simple editor.
+            </li>
+            <li>
+              use headings, lists, links, wiki links, tables, code blocks, and images as needed.
+            </li>
+            <li>
+              choose one category, any useful tags, and a draft, review, or published status, then save.
+            </li>
+          </ol>
+          <Notice>
+            the editor keeps an in-browser draft while you work. saving an edit records the previous
+            page as a revision.
+          </Notice>
+        </SectionPanel>
+
+        <SectionPanel title="history, diff, and blame" bodyClassName="space-y-3">
+          <ol className="list-decimal space-y-2 pl-5">
+            <li>
+              open a page&apos;s history at <InlineCode>/articles/:slug/history</InlineCode>.
+            </li>
+            <li>
+              select an old and new revision, then compare them. the diff supports line and inline views.
+            </li>
+            <li>
+              open <InlineCode>/articles/:slug/blame</InlineCode> to see which revision introduced each paragraph.
+            </li>
+          </ol>
+        </SectionPanel>
+
+        <SectionPanel title="import" bodyClassName="space-y-3">
+          <ol className="list-decimal space-y-2 pl-5">
+            <li>
+              as an administrator, open <Link href="/import">import</Link> and select one or more local files.
+            </li>
+            <li>
+              use markdown (<InlineCode>.md</InlineCode>), text (<InlineCode>.txt</InlineCode>), html{" "}
+              (<InlineCode>.html</InlineCode>), json (<InlineCode>.json</InlineCode>), or mediawiki xml{" "}
+              (<InlineCode>.xml</InlineCode>). the form posts them to{" "}
+              <InlineCode>/api/articles/import</InlineCode>.
+            </li>
+            <li>
+              for notion, open <Link href="/import/notion">the notion importer</Link> and provide an
+              integration token plus page id. it creates one draft page.
+            </li>
+            <li>
+              for obsidian, open <Link href="/import/obsidian">the obsidian importer</Link> and upload
+              one markdown file or a zipped vault. front matter and wiki links are preserved in draft pages.
+            </li>
+          </ol>
+          <p className="text-muted">
+            json may contain one article object or an array. a mediawiki xml export may create more than
+            one page, so the results list can be longer than the uploaded file list.
+          </p>
+        </SectionPanel>
+
+        <SectionPanel title="assets and export" bodyClassName="space-y-3">
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              use the <Link href="/assets">asset library</Link> to upload, filter, inspect, and reuse files.
+            </li>
+            <li>
+              use <Link href="/export">export</Link> to download the whole wiki or one category as
+              markdown or a zip archive.
+            </li>
+          </ul>
+        </SectionPanel>
+
+        <SectionPanel title="accounts and admin" bodyClassName="space-y-3">
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              create an account at <Link href="/register">register</Link> or return through{" "}
+              <Link href="/login">log in</Link>.
+            </li>
+            <li>
+              administrator sessions unlock page creation, editing, imports, assets, exports, and
+              the focused <Link href="/admin">admin area</Link>.
+            </li>
+            <li>
+              admin retains users, categories, tags, redirects, import, maintenance, read-only mode,
+              and audit-log controls.
+            </li>
+          </ul>
+        </SectionPanel>
+
+        <SectionPanel title="api v1" bodyClassName="space-y-3">
+          <p>
+            the public read-only v1 endpoints expose published content for{" "}
+            <InlineCode>/api/v1/articles</InlineCode>, <InlineCode>/api/v1/categories</InlineCode>,{" "}
+            <InlineCode>/api/v1/tags</InlineCode>, and <InlineCode>/api/v1/search</InlineCode>.
+          </p>
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              read the generated <Link href="/api-docs">api reference</Link> for parameters and responses.
+            </li>
+            <li>
+              inspect the live <Link href="/api/v1/contract">contract</Link> or{" "}
+              <Link href="/api/v1/openapi.json">openapi json</Link> for machine-readable details.
+            </li>
+            <li>
+              use <Link href="/api/v1/sdk">client metadata</Link> for resource paths and request examples.
+            </li>
+          </ul>
+        </SectionPanel>
+      </div>
+    </Page>
+  );
+}

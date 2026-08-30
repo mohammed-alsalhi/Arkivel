@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run lint
+      - run: npx tsc --noEmit
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint-and-type-check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: lint-and-type-check
+    env:
+      DATABASE_URL: postgresql://fake:fake@localhost:5432/fake
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: arkivel_e2e
+          POSTGRES_PASSWORD: arkivel
+          POSTGRES_USER: arkivel
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U arkivel -d arkivel_e2e"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      ARKIVEL_SITE_MODE: wiki
+      BASE_URL: http://127.0.0.1:3000
+      DATABASE_URL: postgresql://arkivel:arkivel@127.0.0.1:5432/arkivel_e2e
+      NEXT_PUBLIC_BASE_URL: http://127.0.0.1:3000
+      SMOKE_ADMIN_PASSWORD: arkivel-smoke-admin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - name: Create the empty test schema
+        run: npx prisma db push
+      - name: Seed focused smoke fixtures
+        run: npm run qa:seed-smoke
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Start Arkivel
+        run: |
+          npm run start > /tmp/arkivel-next.log 2>&1 &
+          echo $! > /tmp/arkivel-next.pid
+      - name: Wait for Arkivel
+        run: npx wait-on --timeout 60000 tcp:127.0.0.1:3000 || (cat /tmp/arkivel-next.log && exit 1)
+      - run: npx playwright test
+      - name: Print server log after failure
+        if: failure()
+        run: cat /tmp/arkivel-next.log || true
