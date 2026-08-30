@@ -172,7 +172,13 @@ export default async function RootLayout({
 
           <LayoutShell>
             {/* Sidebar */}
-            <Sidebar categories={categories} articleCount={articleCount} />
+            <Sidebar
+              articleCount={articleCount}
+              brandName={config.name}
+              categories={categories}
+              logoMark={config.logoMark}
+              styleId={config.styleId}
+            />
 
             {/* Content area */}
             <div className="wiki-content-shell flex-1 min-w-0 bg-surface border-l border-border">

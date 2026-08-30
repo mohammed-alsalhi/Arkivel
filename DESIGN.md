@@ -38,7 +38,7 @@ The public `/api/customization` endpoint publishes the component catalog and the
 
 ### Style presets, color themes, and marketplace skins
 
-The default skin is `classic-wiki`, selected through `NEXT_PUBLIC_ARKIVEL_STYLE`. `atlas-modern` is the first alternate built-in skin and demonstrates how a self-hosted instance can change the product feel through CSS variables and the `html[data-style="..."]` hook without forking routes or components.
+The default skin is `classic-wiki`, selected through `NEXT_PUBLIC_ARKIVEL_STYLE`. `atlas-modern` provides a softer editorial treatment. `simplesque` carries the public product site's monochrome, lowercase, sans-serif language into the working wiki, including its real Arkivel sidebar mark. All three use CSS variables and the `[data-style="..."]` hook, which also powers nested Customization Studio previews without forking routes.
 
 Color themes are selected independently through `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`. `standard`, `forest`, and `ember` are built in today and use the `html[data-color-theme="..."]` hook, so self-hosters can combine layout feel and palette separately. Layout presets are selected through `NEXT_PUBLIC_ARKIVEL_LAYOUT` and exposed as metadata plus the `html[data-layout="..."]` hook.
 

@@ -40,6 +40,15 @@ Have an idea? Open a [GitHub Issue](https://github.com/mohammed-alsalhi/arkivel/
 - [x] Use monochrome lowercase styling, GitHub marks, and an adaptive SVG favicon
 - [x] Generate `/api-docs` from the shared OpenAPI document
 
+## v5.4 - Usable alternate wiki design
+
+#### v5.4.0 - Simplesque skin
+
+- [x] Turn the product site's monochrome lowercase design into a selectable working wiki skin
+- [x] Use the real Arkivel mark in the Simplesque sidebar
+- [x] Make style and color-theme selections render inside Customization Studio previews
+- [x] Keep the responsive sidebar reachable through one breakpoint-correct menu control
+
 ## Pre-5.0 Stable Release Roadmap
 
 Arkivel remains beta through the entire v4 line. The goal is to make the platform reusable, self-hostable, customizable, extension-ready, portable, and operable before tagging v5.0.0 as the first stable release. This ladder uses patch-level planning so each `v4.x.y` release can land a focused, reviewable batch with docs, tests, version metadata, commit, and push.

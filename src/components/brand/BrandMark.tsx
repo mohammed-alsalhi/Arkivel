@@ -9,16 +9,18 @@ const DEFAULT_LOGO_MARKS = new Set([
 type BrandMarkProps = {
   className?: string;
   imageSize: number;
+  logoMark?: string;
   priority?: boolean;
 };
 
 export default function BrandMark({
   className,
   imageSize,
+  logoMark = config.logoMark,
   priority = false,
 }: BrandMarkProps) {
   const classNames = ["wiki-brand-mark", className].filter(Boolean).join(" ");
-  const usesDefaultMark = DEFAULT_LOGO_MARKS.has(config.logoMark);
+  const usesDefaultMark = DEFAULT_LOGO_MARKS.has(logoMark);
 
   return (
     <span className={classNames} aria-hidden="true">
@@ -37,7 +39,7 @@ export default function BrandMark({
         </svg>
       ) : (
         <Image
-          src={config.logoMark}
+          src={logoMark}
           alt=""
           width={imageSize}
           height={imageSize}

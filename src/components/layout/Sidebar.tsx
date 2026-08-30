@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { useAdmin } from "@/components/AdminContext";
+import BrandMark from "@/components/brand/BrandMark";
 import { config } from "@/lib/config";
 import { generateSlug } from "@/lib/utils";
 import { useScrollLock } from "@/lib/useScrollLock";
@@ -93,11 +94,17 @@ function CloseIcon() {
 // ── Main sidebar ──────────────────────────────────────────────────────────────
 
 export default function Sidebar({
+  brandName,
   categories,
   articleCount,
+  logoMark,
+  styleId,
 }: {
+  brandName: string;
   categories: Category[];
   articleCount?: number;
+  logoMark: string;
+  styleId: string;
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -219,7 +226,7 @@ export default function Sidebar({
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label="Toggle main menu"
         aria-pressed={mobileOpen}
-        className="wiki-main-menu-button ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground md:!hidden"
+        className="wiki-main-menu-button wiki-main-menu-button-mobile ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground"
       >
         {mobileOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
@@ -227,7 +234,7 @@ export default function Sidebar({
         onClick={() => setDesktopSidebarVisibility(!desktopOpen)}
         aria-label="Toggle main menu"
         aria-pressed={desktopOpen}
-        className="wiki-main-menu-button ui-icon-button fixed top-1.5 left-2 z-50 hidden bg-surface border-border text-foreground md:inline-flex"
+        className="wiki-main-menu-button wiki-main-menu-button-desktop ui-icon-button fixed top-1.5 left-2 z-50 bg-surface border-border text-foreground"
       >
         {desktopOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
@@ -249,6 +256,13 @@ export default function Sidebar({
           "md:sticky md:top-0 md:translate-x-0 md:h-auto md:min-h-[calc(100vh-40px)] md:flex-shrink-0 md:opacity-100 md:visible md:pointer-events-auto md:flex"
         )}
       >
+        {styleId === "simplesque" && (
+          <Link href="/" className="wiki-sidebar-brand border-b border-border px-3 py-4" aria-label={`${brandName} home`}>
+            <BrandMark className="wiki-sidebar-brand-mark" imageSize={36} logoMark={logoMark} priority />
+            <span className="wiki-sidebar-brand-name">{brandName}</span>
+          </Link>
+        )}
+
         <MenuSection title="Main" items={mainItems} pathname={pathname} onNavigate={close} />
         <MenuSection title="Discover" items={discoverItems} pathname={pathname} onNavigate={close} />
         <MenuSection title="Work" items={workItems} pathname={pathname} onNavigate={close} />

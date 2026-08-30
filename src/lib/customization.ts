@@ -124,7 +124,7 @@ export const customizationOptions = [
     env: "NEXT_PUBLIC_ARKIVEL_STYLE",
     section: "style",
     defaultValue: "classic-wiki",
-    description: "Built-in style preset id. Supported today: classic-wiki, atlas-modern.",
+    description: "Built-in style preset id. Supported today: classic-wiki, atlas-modern, simplesque.",
   },
   {
     env: "NEXT_PUBLIC_ARKIVEL_COLOR_THEME",

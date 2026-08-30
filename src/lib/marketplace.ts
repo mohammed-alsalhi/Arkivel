@@ -280,6 +280,18 @@ export const stylePresets = [
     tags: ["modern", "editorial", "self-hosted", "soft"],
     themeAttribute: "atlas-modern",
   },
+  {
+    ...registryMetadata({ id: "simplesque", kind: "style" }),
+    id: "simplesque",
+    kind: "style",
+    name: "Simplesque",
+    description: "A monochrome lowercase skin based on Arkivel's public product site.",
+    author: "Arkivel",
+    compatibility: ">=5.4.0",
+    status: "built-in",
+    tags: ["monochrome", "lowercase", "sans-serif", "minimal"],
+    themeAttribute: "simplesque",
+  },
 ] satisfies StylePreset[];
 
 export const colorThemePresets = [

@@ -38,6 +38,14 @@ html[data-sidebar-side="right"] .wiki-layout {
   color: var(--color-heading);
 }
 
+.wiki-main-menu-button-mobile {
+  display: inline-flex;
+}
+
+.wiki-main-menu-button-desktop {
+  display: none;
+}
+
 .wiki-main-menu-button:hover,
 .wiki-main-menu-button:focus-visible {
   border-color: var(--color-accent);
@@ -71,6 +79,14 @@ html[data-sidebar-side="right"] .wiki-layout {
 }
 
 @media (min-width: 48rem) {
+  .wiki-main-menu-button-mobile {
+    display: none;
+  }
+
+  .wiki-main-menu-button-desktop {
+    display: inline-flex;
+  }
+
   html[data-sidebar-side="right"] .wiki-sidebar {
     border-right: 0;
     border-left: 1px solid var(--color-border);

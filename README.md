@@ -156,7 +156,7 @@ A full template lives in [.env.example](.env.example). Wiki mode requires `DATAB
 | `NEXT_PUBLIC_ARKIVEL_LOGO` | No | Full square logo, default `/brand/arkivel-logo.png`. |
 | `NEXT_PUBLIC_ARKIVEL_LOGO_MARK` | No | Compact sidebar/mobile mark, default `/brand/arkivel-logo.svg`. |
 | `NEXT_PUBLIC_ARKIVEL_APP_ICON` | No | Manifest/app icon, default `/brand/arkivel-icon-512.png`. |
-| `NEXT_PUBLIC_ARKIVEL_STYLE` | No | Built-in style preset, currently `classic-wiki` or `atlas-modern`. |
+| `NEXT_PUBLIC_ARKIVEL_STYLE` | No | Built-in style preset: `classic-wiki`, `atlas-modern`, or `simplesque`. |
 | `NEXT_PUBLIC_ARKIVEL_COLOR_THEME` | No | Built-in color theme, currently `standard`, `forest`, or `ember`. |
 | `NEXT_PUBLIC_ARKIVEL_LAYOUT` | No | Built-in layout preset, currently `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, or `research-notebook`. |
 | `NEXT_PUBLIC_MAP_ENABLED` | No | Set `true` to enable the interactive map. |

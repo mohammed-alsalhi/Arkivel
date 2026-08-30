@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.4.0 - Simplesque wiki skin
+
+- Added `simplesque` as a working built-in wiki style with monochrome light and dark palettes, lowercase chrome, Geist headings, and the Arkivel sidebar mark.
+- Reused the existing style registry and `NEXT_PUBLIC_ARKIVEL_STYLE` runtime path instead of adding a separate page or marketplace loader.
+- Fixed style and color-theme token scopes so Customization Studio previews render the selected appearance instead of only updating metadata.
+- Fixed the overlapping mobile/desktop menu controls so the responsive sidebar opens from a single reachable button.
+
 ## 5.3.1 - Tighter product copy and adaptive favicon
 
 - Replaced repeated marketing-style product copy and CTA labels with shorter, factual language.

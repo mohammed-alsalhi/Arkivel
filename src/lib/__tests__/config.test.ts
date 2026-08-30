@@ -39,7 +39,7 @@ describe("config", () => {
   it("parses self-host customization from env-like objects", () => {
     const custom = createCustomization({
       NEXT_PUBLIC_ARKIVEL_NAME: "My Wiki",
-      NEXT_PUBLIC_ARKIVEL_STYLE: "atlas-modern",
+      NEXT_PUBLIC_ARKIVEL_STYLE: "simplesque",
       NEXT_PUBLIC_ARKIVEL_COLOR_THEME: "forest",
       NEXT_PUBLIC_ARKIVEL_LAYOUT: "research-notebook",
       NEXT_PUBLIC_ARTICLES_PER_PAGE: "42",
@@ -48,8 +48,8 @@ describe("config", () => {
     });
 
     expect(custom.brand.name).toBe("My Wiki");
-    expect(custom.style.id).toBe("atlas-modern");
-    expect(custom.style.preset.themeAttribute).toBe("atlas-modern");
+    expect(custom.style.id).toBe("simplesque");
+    expect(custom.style.preset.themeAttribute).toBe("simplesque");
     expect(custom.style.colorThemeId).toBe("forest");
     expect(custom.style.colorTheme.themeAttribute).toBe("forest");
     expect(custom.style.layoutId).toBe("research-notebook");

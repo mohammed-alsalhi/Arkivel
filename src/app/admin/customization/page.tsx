@@ -989,7 +989,7 @@ function PreviewFrame({ children, draft, title }: { children: ReactNode; draft: 
   return (
     <div
       aria-label={`${title} preview`}
-      className="border border-border bg-surface p-4"
+      className="wiki-customization-preview border border-border bg-surface p-4"
       data-color-theme={draft.colorThemeId}
       data-layout={draft.layoutId}
       data-style={draft.styleId}
