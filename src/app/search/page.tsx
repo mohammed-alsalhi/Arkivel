@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Breadcrumbs, Button, EmptyState, Input, Page, PageHeader, Section } from "@/components/ui";
 import { getSearchResults } from "@/lib/search-response";
 
 type SearchResult = {
@@ -51,18 +52,18 @@ function SearchContent() {
   }
 
   return (
-    <div className="wiki-index-page">
-      <nav className="wiki-breadcrumbs" aria-label="Breadcrumb">
+    <Page width="narrow">
+      <Breadcrumbs>
         <Link href="/articles">library</Link>
         <span aria-hidden="true">/</span>
-        <span>search</span>
-      </nav>
+        <span aria-current="page">search</span>
+      </Breadcrumbs>
 
-      <h1 className="wiki-page-title">search</h1>
+      <PageHeader title="search" />
 
-      <form onSubmit={submit} role="search" className="wiki-search-page-form">
+      <form onSubmit={submit} role="search" className="flex gap-2">
         <label htmlFor="search-page-query" className="sr-only">Search Arkivel</label>
-        <input
+        <Input
           id="search-page-query"
           type="search"
           value={draft}
@@ -70,42 +71,44 @@ function SearchContent() {
           placeholder="search arkivel..."
           autoFocus
         />
-        <button type="submit">search</button>
+        <Button type="submit" variant="primary">search</Button>
       </form>
 
       {query.length < 2 ? (
-        <p className="wiki-empty-copy">enter at least two characters.</p>
+        <EmptyState title="enter at least two characters." />
       ) : loading ? (
-        <p className="wiki-empty-copy" aria-live="polite">searching...</p>
+        <p className="ui-muted" aria-live="polite">searching...</p>
       ) : results.length === 0 ? (
-        <p className="wiki-empty-copy">no pages found for “{query}”.</p>
+        <EmptyState title={`no pages found for “${query}”.`} />
       ) : (
-        <ol className="wiki-search-results" aria-label={`Search results for ${query}`}>
-          {results.map((result) => (
-            <li key={result.id}>
-              <Link href={`/articles/${result.slug}`} className="wiki-search-result-title">
-                {result.title}
-              </Link>
-              {result.highlightedExcerpt && <p>{result.highlightedExcerpt}</p>}
-              <div className="wiki-search-result-meta">
-                {result.category && (
-                  <Link href={`/categories/${result.category.slug}`}>{result.category.name}</Link>
-                )}
-                {result.tags.map(({ tag }) => (
-                  <Link key={tag.id} href={`/tags/${tag.slug}`}>#{tag.name}</Link>
-                ))}
-              </div>
-            </li>
-          ))}
-        </ol>
+        <Section title={`${results.length} ${results.length === 1 ? "result" : "results"}`}>
+          <ol className="wiki-compact-list" aria-label={`Search results for ${query}`}>
+            {results.map((result) => (
+              <li key={result.id} className="wiki-compact-list-item">
+                <Link href={`/articles/${result.slug}`} className="wiki-compact-list-title">
+                  {result.title}
+                </Link>
+                {result.highlightedExcerpt && <p>{result.highlightedExcerpt}</p>}
+                <div className="flex flex-wrap gap-2 text-[11px] text-muted">
+                  {result.category && (
+                    <Link href={`/categories/${result.category.slug}`}>{result.category.name}</Link>
+                  )}
+                  {result.tags.map(({ tag }) => (
+                    <Link key={tag.id} href={`/tags/${tag.slug}`}>#{tag.name}</Link>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Section>
       )}
-    </div>
+    </Page>
   );
 }
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<p className="wiki-empty-copy">loading...</p>}>
+    <Suspense fallback={<p className="ui-muted">loading...</p>}>
       <SearchContent />
     </Suspense>
   );

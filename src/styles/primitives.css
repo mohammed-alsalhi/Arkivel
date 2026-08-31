@@ -552,6 +552,28 @@
   margin-bottom: 0;
 }
 
+.ui-breadcrumbs {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.ui-breadcrumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ui-breadcrumbs a:hover,
+.ui-breadcrumbs a:focus-visible {
+  color: var(--color-heading);
+  text-decoration: underline;
+}
+
 .ui-page-narrow {
   max-width: 42rem;
   margin-inline: auto;

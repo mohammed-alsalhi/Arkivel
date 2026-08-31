@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { EmptyState, Page, PageHeader } from "@/components/ui";
+import { ArticleWorkflowShell } from "@/components/ArticleWorkflowShell";
+import { EmptyState } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -47,19 +48,12 @@ export default function BlamePage() {
   }
 
   return (
-    <div>
-      <nav className="article-tabbar" aria-label="Article sections">
-        <Link href={`/articles/${params.slug}`} className="article-tab">Article</Link>
-        <Link href={`/articles/${params.slug}/history`} className="article-tab">History</Link>
-        <span className="article-tab article-tab-active">Blame</span>
-      </nav>
-
-      <Page className="border border-border bg-surface px-5 py-4">
-        <PageHeader
-          title="Blame view"
-          description="Each paragraph is colour-coded by the earliest revision that introduced it."
-        />
-
+    <ArticleWorkflowShell
+      active="blame"
+      description="Each paragraph is colour-coded by the earliest revision that introduced it."
+      slug={params.slug}
+      title="Blame view"
+    >
         {loading ? (
           <p className="text-muted text-[13px] italic">Loading…</p>
         ) : paragraphs.length === 0 ? (
@@ -94,7 +88,6 @@ export default function BlamePage() {
             ))}
           </div>
         )}
-      </Page>
-    </div>
+    </ArticleWorkflowShell>
   );
 }

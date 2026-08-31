@@ -29,6 +29,7 @@ services:
       DATABASE_URL: "postgresql://wiki:wiki_password@db:5432/wiki"
       ADMIN_SECRET: "${ADMIN_SECRET:-}"
       NEXT_PUBLIC_ARKIVEL_NAME: "${NEXT_PUBLIC_ARKIVEL_NAME:-Arkivel}"
+      NEXT_PUBLIC_ARKIVEL_SKIN: "${NEXT_PUBLIC_ARKIVEL_SKIN:-folio}"
       NEXT_PUBLIC_ARKIVEL_TAGLINE: "${NEXT_PUBLIC_ARKIVEL_TAGLINE:-The self-hosted knowledge platform}"
     depends_on:
       db:

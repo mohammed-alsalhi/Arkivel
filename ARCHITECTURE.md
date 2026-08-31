@@ -10,6 +10,8 @@ Product mode serves the public Arkivel website, documentation, and API reference
 
 Wiki mode renders the three-pane knowledge interface and the retained API routes. Server components and route handlers access PostgreSQL through the singleton in `src/lib/prisma.ts`. Vercel Blob is the only supported upload backend.
 
+`NEXT_PUBLIC_ARKIVEL_SKIN` selects the wiki presentation without changing routes or data. `folio` is the full-viewport default; `wiki` preserves the classic framed skin on the same shared page components.
+
 The core data graph is deliberately small:
 
 - users, OAuth accounts, sessions, API keys, and preferences

@@ -118,7 +118,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      data-style="simplesque"
+      data-skin={config.wikiSkin}
       suppressHydrationWarning
     >
       <head>

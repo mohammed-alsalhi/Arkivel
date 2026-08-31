@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Button, Page, PageHeader } from "@/components/ui";
+import { ArticleWorkflowShell } from "@/components/ArticleWorkflowShell";
+import { Button } from "@/components/ui";
 
 type ArticleInfo = {
   id: string;
@@ -74,28 +75,21 @@ export default function DiffPage() {
   );
 
   return (
-    <div>
-      <nav className="article-tabbar" aria-label="Article sections">
-        <Link href={`/articles/${slug}`} className="article-tab">Article</Link>
-        <Link href={`/articles/${slug}/history`} className="article-tab">History</Link>
-        <span className="article-tab article-tab-active">Diff</span>
-      </nav>
-
-      <Page className="border border-border bg-surface px-5 py-4">
-        <PageHeader
-          title={<>Difference between revisions of &ldquo;{article.title}&rdquo;</>}
-          actions={
-            <>
-              <Button aria-pressed={diffMode === "line"} onClick={() => setDiffMode("line")}>
-                Line
-              </Button>
-              <Button aria-pressed={diffMode === "inline"} onClick={() => setDiffMode("inline")}>
-                Inline
-              </Button>
-            </>
-          }
-        />
-
+    <ArticleWorkflowShell
+      active="diff"
+      actions={
+        <>
+          <Button aria-pressed={diffMode === "line"} onClick={() => setDiffMode("line")}>
+            Line
+          </Button>
+          <Button aria-pressed={diffMode === "inline"} onClick={() => setDiffMode("inline")}>
+            Inline
+          </Button>
+        </>
+      }
+      slug={slug}
+      title={<>Difference between revisions of &ldquo;{article.title}&rdquo;</>}
+    >
         {diffMode === "line" ? (
           <div className="border border-border text-[13px] font-mono">
             {diffLines.map((line, i) => (
@@ -146,8 +140,7 @@ export default function DiffPage() {
             &larr; Back to history
           </Link>
         </div>
-      </Page>
-    </div>
+    </ArticleWorkflowShell>
   );
 }
 

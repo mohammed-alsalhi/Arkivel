@@ -110,28 +110,6 @@
   margin: 0 auto;
 }
 
-.focused-breadcrumb {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--color-muted);
-  font-size: 0.82rem;
-  line-height: 1.5;
-}
-
-.focused-breadcrumb a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.focused-breadcrumb a:hover,
-.focused-breadcrumb a:focus-visible {
-  color: var(--color-heading);
-  text-decoration: underline;
-}
-
 .focused-home-header {
   margin-top: clamp(3rem, 7vw, 6rem);
 }

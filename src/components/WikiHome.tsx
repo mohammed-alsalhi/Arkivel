@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/ui";
 import { config } from "@/lib/config";
 import { formatDate } from "@/lib/utils";
 
@@ -26,11 +27,11 @@ export default async function WikiHome() {
 
   return (
     <div className="focused-home">
-      <nav className="focused-breadcrumb" aria-label="Breadcrumb">
+      <Breadcrumbs>
         <span>library</span>
         <span aria-hidden="true">/</span>
         <span aria-current="page">all pages</span>
-      </nav>
+      </Breadcrumbs>
 
       <header className="focused-home-header">
         <p className="focused-home-count">
