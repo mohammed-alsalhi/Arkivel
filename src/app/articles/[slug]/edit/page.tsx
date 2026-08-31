@@ -3,10 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import TiptapEditor, { type TiptapEditorHandle } from "@/components/editor/TiptapEditor";
-import TagPicker from "@/components/TagPicker";
-import CategorySelect from "@/components/CategorySelect";
+import ArticleEditorForm, { type ArticleEditorAutoSaveStatus } from "@/components/ArticleEditorForm";
 import { useAdmin } from "@/components/AdminContext";
+import type { TiptapEditorHandle } from "@/components/editor/TiptapEditor";
 
 type CategoryItem = {
   id: string;
@@ -60,7 +59,7 @@ export default function EditArticlePage() {
   const [loading, setLoading] = useState(true);
   const [draftReady, setDraftReady] = useState(false);
   const [editorRevision, setEditorRevision] = useState(0);
-  const [autoSaveStatus, setAutoSaveStatus] = useState<"clean" | "unsaved" | "saved" | "restored">("clean");
+  const [autoSaveStatus, setAutoSaveStatus] = useState<ArticleEditorAutoSaveStatus>("clean");
 
   const routeSlug = typeof params.slug === "string" ? params.slug : "";
 
@@ -238,143 +237,35 @@ export default function EditArticlePage() {
         <Link href={`/articles/${article.slug}/history`} className="article-tab">History</Link>
       </nav>
 
-      <div className="border border-border bg-surface px-5 py-4">
-        <h1
-          className="mb-3 border-b border-border pb-1 text-[1.5rem] font-normal text-heading"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          Editing: {article.title}
-        </h1>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="mb-1 block text-[13px] font-bold text-heading" htmlFor="article-title">
-              Title:
-            </label>
-            <input
-              id="article-title"
-              type="text"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              required
-              className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground focus:border-accent focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block text-[13px] font-bold text-heading" htmlFor="article-slug">
-              Slug (URL path):
-            </label>
-            <div className="flex items-center gap-1 text-[13px] text-muted">
-              <span>/articles/</span>
-              <input
-                id="article-slug"
-                type="text"
-                value={slug}
-                onChange={(event) => setSlug(event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))}
-                required
-                className="flex-1 border border-border bg-surface px-3 py-1.5 font-mono text-[14px] text-foreground focus:border-accent focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-[13px] font-bold text-heading">Category:</label>
-              <CategorySelect value={categoryId} onChange={setCategoryId} categories={categories} />
-            </div>
-            <div>
-              <label className="mb-1 block text-[13px] font-bold text-heading">Tags:</label>
-              <TagPicker selectedTagIds={tagIds} onChange={setTagIds} />
-            </div>
-          </div>
-
-          <div>
-            <div className="mb-1 flex items-center justify-between gap-2">
-              <label className="text-[13px] font-bold text-heading">Content:</label>
-              <span className="text-[11px] text-muted" aria-live="polite">
-                {autoSaveStatus === "restored" && "Draft restored"}
-                {autoSaveStatus === "unsaved" && "Saving draft..."}
-                {autoSaveStatus === "saved" && "Draft saved"}
-              </span>
-            </div>
-            <TiptapEditor
-              ref={editorRef}
-              content={initialContent}
-              placeholder="Begin writing your article... Use [[Article Name]] to create wiki links."
-              articleTitle={title}
-              onUpdate={() => setEditorRevision((revision) => revision + 1)}
-            />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-[13px] font-bold text-heading" htmlFor="article-status">
-                Status:
-              </label>
-              <select
-                id="article-status"
-                value={status}
-                onChange={(event) => setStatus(event.target.value)}
-                className="w-full border border-border bg-surface px-3 py-1.5 text-[14px] text-foreground focus:border-accent focus:outline-none"
-              >
-                <option value="draft">Draft</option>
-                <option value="review">Review</option>
-                <option value="published">Published</option>
-              </select>
-            </div>
-            <label className="flex items-end gap-2 pb-2 text-[13px]">
-              <input
-                type="checkbox"
-                checked={isPinned}
-                onChange={(event) => setIsPinned(event.target.checked)}
-              />
-              <span className="font-bold text-heading">Pin to category page</span>
-            </label>
-          </div>
-
-          <div>
-            <label className="mb-1 block text-[13px] font-bold text-heading" htmlFor="edit-summary">
-              Edit summary:
-            </label>
-            <input
-              id="edit-summary"
-              type="text"
-              value={editSummary}
-              onChange={(event) => setEditSummary(event.target.value)}
-              placeholder="Briefly describe your changes..."
-              className="w-full border border-border bg-surface px-3 py-1.5 text-[13px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
-            />
-          </div>
-
-          <div className="flex items-center justify-between border-t border-border pt-3">
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                disabled={saving}
-                className="bg-accent px-4 py-1.5 text-[13px] font-bold text-white hover:bg-accent-hover disabled:opacity-50"
-              >
-                {saving ? "Saving..." : "Save changes"}
-              </button>
-              <button
-                type="button"
-                onClick={() => router.back()}
-                className="border border-border bg-surface-hover px-4 py-1.5 text-[13px] text-foreground hover:bg-surface"
-              >
-                Cancel
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={handleDelete}
-              disabled={deleting}
-              className="border border-red-300 bg-surface px-4 py-1.5 text-[13px] text-red-600 hover:bg-red-50 disabled:opacity-50"
-            >
-              {deleting ? "Deleting..." : "Delete article"}
-            </button>
-          </div>
-        </form>
-      </div>
+      <ArticleEditorForm
+        heading={`Editing: ${article.title}`}
+        onSubmit={handleSubmit}
+        title={title}
+        onTitleChange={setTitle}
+        slugField={{
+          value: slug,
+          onChange: (value) => setSlug(value.toLowerCase().replace(/[^a-z0-9-]/g, "-")),
+        }}
+        categories={categories}
+        categoryId={categoryId}
+        onCategoryChange={setCategoryId}
+        tagIds={tagIds}
+        onTagChange={setTagIds}
+        editorRef={editorRef}
+        initialContent={initialContent}
+        onEditorUpdate={() => setEditorRevision((revision) => revision + 1)}
+        autoSaveStatus={autoSaveStatus}
+        status={status}
+        onStatusChange={setStatus}
+        isPinned={isPinned}
+        onPinnedChange={setIsPinned}
+        editSummaryField={{ value: editSummary, onChange: setEditSummary }}
+        saving={saving}
+        submitLabel="Save changes"
+        savingLabel="Saving..."
+        onCancel={() => router.back()}
+        deleteAction={{ deleting, onDelete: handleDelete }}
+      />
     </div>
   );
 }

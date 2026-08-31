@@ -33,6 +33,18 @@ export function Page({ children, className, width = "default", ...props }: PageP
   );
 }
 
+type BreadcrumbsProps = HTMLAttributes<HTMLElement> & {
+  label?: string;
+};
+
+export function Breadcrumbs({ children, className, label = "Breadcrumb", ...props }: BreadcrumbsProps) {
+  return (
+    <nav aria-label={label} className={clsx("ui-breadcrumbs", className)} {...props}>
+      {children}
+    </nav>
+  );
+}
+
 type PageHeaderProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   actions?: ReactNode;
   description?: ReactNode;

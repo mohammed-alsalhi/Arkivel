@@ -8,6 +8,7 @@ describe("config", () => {
     expect(config.name).toBe("Arkivel");
     expect(config.logoMark).toBe("/brand/arkivel-logo.svg");
     expect(config.siteMode).toBe("wiki");
+    expect(config.wikiSkin).toBe("folio");
   });
 
   it("reads Arkivel branding without legacy aliases", () => {
@@ -15,10 +16,16 @@ describe("config", () => {
       ARKIVEL_SITE_MODE: "product",
       NEXT_PUBLIC_ARKIVEL_NAME: "my arkivel",
       NEXT_PUBLIC_ARKIVEL_LOGO_MARK: "/brand/custom.svg",
+      NEXT_PUBLIC_ARKIVEL_SKIN: "wiki",
     });
 
     expect(config.name).toBe("my arkivel");
     expect(config.logoMark).toBe("/brand/custom.svg");
     expect(config.siteMode).toBe("product");
+    expect(config.wikiSkin).toBe("wiki");
+  });
+
+  it("falls back to the folio skin", () => {
+    expect(createConfig({ NEXT_PUBLIC_ARKIVEL_SKIN: "unknown" }).wikiSkin).toBe("folio");
   });
 });

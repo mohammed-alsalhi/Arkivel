@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import ArticleContent from "@/components/ArticleContent";
 import ArticlePasswordWrapper from "@/components/ArticlePasswordWrapper";
 import ArticleRightSidebar from "@/components/ArticleRightSidebar";
 import InfoboxDisplay from "@/components/InfoboxDisplay";
-import { addHeadingIds } from "@/components/TableOfContents";
+import { Breadcrumbs } from "@/components/ui";
 import { isAdmin } from "@/lib/auth";
 import { canViewArticle } from "@/lib/article-visibility";
 import { config } from "@/lib/config";
@@ -59,24 +60,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function appendFootnoteSection(html: string): string {
-  const footnotes: string[] = [];
-  const regex = /data-footnote="([^"]*)"/g;
-  let match;
-
-  while ((match = regex.exec(html)) !== null) footnotes.push(match[1]);
-  if (footnotes.length === 0) return html;
-
-  const items = footnotes
-    .map(
-      (note, index) =>
-        `<div class="footnote-item" style="padding-left:1.5rem"><sup style="position:absolute;left:0;font-weight:700;color:var(--color-accent)">[${index + 1}]</sup> ${note}</div>`,
-    )
-    .join("");
-
-  return `${html}<div class="footnote-section"><div class="footnote-section-title">Notes</div>${items}</div>`;
-}
-
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
 
@@ -119,7 +102,6 @@ export default async function ArticlePage({ params }: Props) {
     }),
   ]);
 
-  const renderedContent = addHeadingIds(appendFootnoteSection(resolvedContent));
   const categoryPath = [article.category?.parent?.parent, article.category?.parent, article.category].filter(
     (category) => category !== null && category !== undefined,
   );
@@ -147,7 +129,7 @@ export default async function ArticlePage({ params }: Props) {
 
       <div className="article-reader-grid">
         <article className="article-shell article-reader" data-article-id={article.id}>
-          <nav className="focused-breadcrumb" aria-label="Breadcrumb">
+          <Breadcrumbs>
             {categoryPath.map((category, index) => (
               <span key={category.id}>
                 {index > 0 && <span aria-hidden="true"> / </span>}
@@ -156,7 +138,7 @@ export default async function ArticlePage({ params }: Props) {
             ))}
             {categoryPath.length > 0 && <span aria-hidden="true"> / </span>}
             <span aria-current="page">{article.title}</span>
-          </nav>
+          </Breadcrumbs>
 
           <header className="article-reader-header">
             <h1>{article.title}</h1>
@@ -177,11 +159,10 @@ export default async function ArticlePage({ params }: Props) {
           )}
 
           <ArticlePasswordWrapper articleId={article.id} hasPassword={Boolean(article.accessPassword && !adminFlag)}>
-            <div
-              id="article-content"
-              className="wiki-content article-reader-content"
+            <ArticleContent
+              className="article-reader-content"
               dir={article.dir === "rtl" ? "rtl" : "ltr"}
-              dangerouslySetInnerHTML={{ __html: renderedContent }}
+              html={resolvedContent}
             />
 
             {hasPageDetails && (

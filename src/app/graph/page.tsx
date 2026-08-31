@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import GraphControls from "@/components/graph/GraphControls";
+import { Page } from "@/components/ui";
 
 const ArticleGraph = dynamic(() => import("@/components/graph/ArticleGraph"), {
   ssr: false,
@@ -105,7 +106,7 @@ function GraphPageContent() {
   }
 
   return (
-    <div style={{ height: "calc(100vh - 120px)", position: "relative" }}>
+    <Page width="full" style={{ height: "calc(100dvh - 10rem)", position: "relative" }}>
       <GraphControls
         categories={categories}
         selectedCategory={selectedCategory}
@@ -137,6 +138,6 @@ function GraphPageContent() {
           clusterMode={clusterMode}
         />
       )}
-    </div>
+    </Page>
   );
 }

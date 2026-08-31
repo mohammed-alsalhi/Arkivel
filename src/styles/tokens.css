@@ -118,8 +118,8 @@ html[data-theme="dark"] {
   --color-chart-6: #7fd0e0;
 }
 
-/* ── Built-in style preset: Simplesque ── */
-[data-style="simplesque"] {
+/* ── Built-in wiki skin: Folio ── */
+[data-skin="folio"] {
   --color-background: #f6f7f9;
   --color-foreground: #171719;
   --color-surface: #ffffff;
@@ -160,12 +160,12 @@ html[data-theme="dark"] {
   text-transform: lowercase;
 }
 
-[data-style="simplesque"] :where(.wiki-content, code, pre, kbd, input, textarea, select, option) {
+[data-skin="folio"] :where(.wiki-content, code, pre, kbd, input, textarea, select, option) {
   text-transform: none;
 }
 
-html[data-style="simplesque"][data-theme="dark"],
-html[data-theme="dark"] [data-style="simplesque"] {
+html[data-skin="folio"][data-theme="dark"],
+html[data-theme="dark"] [data-skin="folio"] {
   --color-background: #0b0b0c;
   --color-foreground: #e8e8ea;
   --color-surface: #111113;

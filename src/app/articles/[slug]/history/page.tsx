@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
-import AdminEditTab from "@/components/AdminEditTab";
+import { ArticleWorkflowShell } from "@/components/ArticleWorkflowShell";
 import RestoreRevisionButton from "@/components/RestoreRevisionButton";
-import { EmptyState, Page, PageHeader } from "@/components/ui";
+import { EmptyState } from "@/components/ui";
 import { canViewArticle } from "@/lib/article-visibility";
 import { isAdmin } from "@/lib/auth";
 
@@ -36,25 +36,18 @@ export default async function HistoryPage({ params }: Props) {
   if (!article || !canViewArticle(article, canViewDrafts)) notFound();
 
   return (
-    <div>
-      <nav className="article-tabbar" aria-label="Article sections">
-        <Link href={`/articles/${slug}`} className="article-tab">
-          Article
-        </Link>
-        <AdminEditTab slug={slug} className="article-tab" />
-        <span className="article-tab article-tab-active">History</span>
-      </nav>
-
-      <Page className="border border-border bg-surface px-5 py-4">
-        <PageHeader title={<>Revision history of &ldquo;{article.title}&rdquo;</>} />
-
+    <ArticleWorkflowShell
+      active="history"
+      showEditTab
+      slug={slug}
+      title={<>Revision history of &ldquo;{article.title}&rdquo;</>}
+    >
         {article.revisions.length === 0 ? (
           <EmptyState description="No previous revisions. This article has not been edited since creation." />
         ) : (
           <DiffForm slug={slug} articleId={article.id} revisions={article.revisions} />
         )}
-      </Page>
-    </div>
+    </ArticleWorkflowShell>
   );
 }
 

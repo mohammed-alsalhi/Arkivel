@@ -569,7 +569,7 @@
   padding: clamp(3.25rem, 5.5vw, 6rem) clamp(2.25rem, 3.5vw, 3.75rem) 5rem;
 }
 
-.article-reader > .focused-breadcrumb,
+.article-reader > .ui-breadcrumbs,
 .article-reader-header,
 .article-reader-notice,
 .article-reader-content,

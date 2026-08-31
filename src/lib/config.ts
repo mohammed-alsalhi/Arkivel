@@ -3,6 +3,12 @@ import { resolveSiteMode } from "./site-mode";
 
 type Env = Record<string, string | undefined>;
 
+export type WikiSkin = "wiki" | "folio";
+
+export function resolveWikiSkin(value: string | undefined): WikiSkin {
+  return value === "wiki" ? "wiki" : "folio";
+}
+
 function read(env: Env, key: string, fallback: string): string {
   return env[key]?.trim() || fallback;
 }
@@ -20,6 +26,7 @@ export function createConfig(env: Env = process.env) {
     appIcon: read(env, "NEXT_PUBLIC_ARKIVEL_APP_ICON", "/brand/arkivel-icon-512.png"),
     baseUrl: read(env, "NEXT_PUBLIC_BASE_URL", "http://localhost:3000"),
     siteMode: resolveSiteMode(env.ARKIVEL_SITE_MODE),
+    wikiSkin: resolveWikiSkin(env.NEXT_PUBLIC_ARKIVEL_SKIN),
   };
 }
 
