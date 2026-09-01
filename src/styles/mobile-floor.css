@@ -32,17 +32,12 @@
     font-size: 12px;
   }
 
-  .article-hero-kicker,
-  .article-meta-line,
-  .article-coauthors,
-  .article-taxonomy,
   .ui-card-meta {
     font-size: 0.75rem;
   }
 }
 
 /* Balanced wrapping for large headings */
-.ui-page-title,
-.article-title {
+.ui-page-title {
   text-wrap: balance;
 }

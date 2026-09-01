@@ -1,8 +1,16 @@
 html[data-site-mode="product"] {
+  --product-bg: #fff;
   --product-ink: #0a0a0a;
+  --product-ink-soft: #333;
+  --product-ink-body: #444;
   --product-muted: #5b5b5b;
   --product-line: #dedede;
+  --product-line-strong: #ccc;
   --product-soft: #f7f7f7;
+  --product-code-bg: #eee;
+  --product-code-ink: #222;
+  --product-pre-bg: #0b0b0b;
+  --product-pre-ink: #f3f3f3;
   --color-accent: #111;
   --color-accent-hover: #333;
   --color-accent-foreground: #fff;
@@ -13,20 +21,20 @@ html[data-site-mode="product"] {
   --color-wiki-link: #111;
   --color-wiki-link-visited: #555;
   --color-brand-mark: #111;
-  background: #fff;
+  background: var(--product-bg);
   color: var(--product-ink);
   scroll-behavior: smooth;
 }
 
 html[data-site-mode="product"] body {
-  background: #fff;
+  background: var(--product-bg);
   color: var(--product-ink);
   font-family: var(--font-geist-sans), Arial, sans-serif;
 }
 
 .product-site-shell {
   min-height: 100vh;
-  background: #fff;
+  background: var(--product-bg);
   text-transform: lowercase;
 }
 
@@ -159,7 +167,7 @@ html[data-site-mode="product"] body {
 .product-hero-copy > p {
   max-width: 500px;
   margin: 28px 0 0;
-  color: #333;
+  color: var(--product-ink-soft);
   font-size: clamp(18px, 1.5vw, 22px);
   letter-spacing: -0.02em;
   line-height: 1.55;
@@ -177,7 +185,7 @@ html[data-site-mode="product"] body {
   min-width: 0;
   margin: 0;
   overflow: hidden;
-  border: 1px solid #ccc;
+  border: 1px solid var(--product-line-strong);
   border-radius: 10px;
   background: var(--product-soft);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.11);
@@ -240,7 +248,7 @@ html[data-site-mode="product"] body {
 .product-docs-copy > p {
   max-width: 500px;
   margin: 28px 0 0;
-  color: #444;
+  color: var(--product-ink-body);
   font-size: 18px;
   line-height: 1.6;
 }
@@ -277,7 +285,7 @@ html[data-site-mode="product"] body {
 
 .product-site-footer {
   border-top: 1px solid var(--product-line);
-  background: #fff;
+  background: var(--product-bg);
   color: var(--product-ink);
 }
 
@@ -311,7 +319,7 @@ html[data-site-mode="product"] body {
 .product-docs-hero p {
   max-width: 700px;
   margin: 28px 0 0;
-  color: #444;
+  color: var(--product-ink-body);
   font-size: 20px;
   line-height: 1.55;
 }
@@ -374,7 +382,7 @@ html[data-site-mode="product"] body {
 .product-docs-content p {
   max-width: 740px;
   margin: 0 0 16px;
-  color: #444;
+  color: var(--product-ink-body);
   font-size: 16px;
   line-height: 1.7;
 }
@@ -387,8 +395,8 @@ html[data-site-mode="product"] body {
 .product-docs-content p code {
   padding: 2px 5px;
   border-radius: 4px;
-  background: #eee;
-  color: #222;
+  background: var(--product-code-bg);
+  color: var(--product-code-ink);
 }
 
 .product-docs-content pre {
@@ -396,8 +404,8 @@ html[data-site-mode="product"] body {
   overflow-x: auto;
   border-radius: 7px;
   padding: 22px;
-  background: #0b0b0b;
-  color: #f3f3f3;
+  background: var(--product-pre-bg);
+  color: var(--product-pre-ink);
   font-size: 13px;
   line-height: 1.7;
 }

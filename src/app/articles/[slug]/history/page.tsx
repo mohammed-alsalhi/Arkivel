@@ -82,11 +82,17 @@ function DiffForm({
           <tbody>
             {/* Current version row */}
             <tr className="border-b border-border-light bg-accent-soft">
-              <td className="py-1.5 px-2">
-                <input type="radio" name="from" value="current" />
+              <td className="py-1.5 px-2 pointer-coarse:py-3">
+                <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
+                  <span className="sr-only">Compare from current version</span>
+                  <input type="radio" name="from" value="current" className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5" />
+                </label>
               </td>
-              <td className="py-1.5 px-2">
-                <input type="radio" name="to" value="current" defaultChecked />
+              <td className="py-1.5 px-2 pointer-coarse:py-3">
+                <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
+                  <span className="sr-only">Compare to current version</span>
+                  <input type="radio" name="to" value="current" defaultChecked className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5" />
+                </label>
               </td>
               <td className="py-1.5 px-2 text-muted">Current version</td>
               <td className="py-1.5 px-2 italic text-muted">Latest</td>
@@ -99,16 +105,23 @@ function DiffForm({
 
             {revisions.map((rev, index) => (
               <tr key={rev.id} className="border-b border-border-light hover:bg-surface-hover">
-                <td className="py-1.5 px-2">
-                  <input
-                    type="radio"
-                    name="from"
-                    value={rev.id}
-                    defaultChecked={index === 0}
-                  />
+                <td className="py-1.5 px-2 pointer-coarse:py-3">
+                  <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
+                    <span className="sr-only">Compare from revision of {formatDate(rev.createdAt)}</span>
+                    <input
+                      type="radio"
+                      name="from"
+                      value={rev.id}
+                      defaultChecked={index === 0}
+                      className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5"
+                    />
+                  </label>
                 </td>
-                <td className="py-1.5 px-2">
-                  <input type="radio" name="to" value={rev.id} />
+                <td className="py-1.5 px-2 pointer-coarse:py-3">
+                  <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
+                    <span className="sr-only">Compare to revision of {formatDate(rev.createdAt)}</span>
+                    <input type="radio" name="to" value={rev.id} className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5" />
+                  </label>
                 </td>
                 <td className="py-1.5 px-2 text-muted">
                   {formatDate(rev.createdAt)}

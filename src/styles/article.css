@@ -59,430 +59,13 @@
 /* Article prose spans the full shell by default; ArticleWidthPreference
    injects #wiki-width-pref-style to opt into narrow/reading measures. */
 
-/* Collapsed end-of-article sections (stats, community widgets, …) */
-.article-extras {
-  margin-top: 1.25rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.article-extras > summary {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  min-height: 2.25rem;
-  cursor: pointer;
-  list-style: none;
-  color: var(--color-muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.article-extras > summary::-webkit-details-marker {
-  display: none;
-}
-
-.article-extras > summary::after {
-  content: "";
-  width: 0.4rem;
-  height: 0.4rem;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(45deg);
-  transition: transform 0.15s ease;
-}
-
-.article-extras[open] > summary::after {
-  transform: rotate(225deg);
-}
-
-.article-extras > summary:hover {
-  color: var(--color-foreground);
-}
-
-.article-extras-body {
-  padding-bottom: 0.75rem;
-}
-
-.article-hero {
-  margin: 0.35rem 0 0.85rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.article-hero-kicker,
-.article-meta-line,
-.article-coauthors {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem 0.5rem;
-  color: var(--color-muted);
-  font-size: 0.6875rem;
-  line-height: 1.4;
-}
-
-.article-hero-kicker {
-  margin-bottom: 0.25rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.article-dot {
-  width: 0.2rem;
-  height: 0.2rem;
-  border-radius: 999px;
-  background: var(--color-border);
-}
-
-.article-title-row {
-  display: flex;
-  min-width: 0;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.article-title {
-  min-width: 0;
-  flex: 1 1 auto;
-  overflow-wrap: anywhere;
-  color: var(--color-heading);
-  font-family: var(--font-serif);
-  font-size: 1.95rem;
-  font-weight: 400;
-  line-height: 1.12;
-}
-
-.article-title-badges,
-.article-stat-strip {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.article-title-badges {
-  flex: 0 1 auto;
-  justify-content: flex-end;
-  padding-top: 0.2rem;
-}
-
-.article-dek {
-  max-width: min(100%, 96ch);
-  margin: 0.45rem 0 0;
-  color: var(--color-foreground);
-  font-size: 0.875rem;
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-  text-wrap: pretty;
-}
-
-.article-meta-line {
-  margin-top: 0.55rem;
-}
-
-.article-stat-strip {
-  margin-top: 0.45rem;
-}
-
-.article-coauthors {
-  margin-top: 0.45rem;
-}
-
-.article-action-panel {
-  position: relative;
-  margin: 0.6rem 0 0.85rem;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  padding: 0.35rem 0.45rem;
-}
-
-.article-action-primary {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.3rem 0.45rem;
-}
-
-.article-action-group {
-  display: flex;
-  min-width: 0;
-  max-width: 100%;
-  flex: 0 1 auto;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem;
-  padding-right: 0.45rem;
-  border-right: 1px solid var(--color-border);
-  background: transparent;
-}
-
-.article-action-group-header {
-  margin: 0 0.1rem 0 0;
-}
-
-.article-action-label {
-  color: var(--color-heading);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  line-height: 1.5rem;
-  text-transform: uppercase;
-}
-
-.article-action-controls {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.article-action-menu {
-  position: relative;
-  min-width: 0;
-}
-
-.article-action-menu[open] {
-  width: 100%;
-  z-index: 30;
-}
-
-.article-action-menu-summary {
-  display: inline-flex;
-  height: 1.5rem;
-  cursor: pointer;
-  list-style: none;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  border: 1px solid var(--color-border);
-  background: transparent;
-  color: var(--color-muted);
-  padding: 0 0.5rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
-}
-
-.article-action-menu-summary::-webkit-details-marker {
-  display: none;
-}
-
-.article-action-menu-summary:hover,
-.article-action-menu[open] .article-action-menu-summary {
-  background: var(--color-surface-hover);
-  color: var(--color-foreground);
-}
-
-.article-action-menu-summary svg {
-  transition: transform 0.15s;
-}
-
-.article-action-menu[open] .article-action-menu-summary svg {
-  transform: rotate(180deg);
-}
-
-.article-action-menu-content {
-  width: 100%;
-  max-width: 100%;
-  margin-top: 0.35rem;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  padding: 0.5rem;
-}
-
-.article-action-controls .ui-select {
-  width: auto;
-  min-width: 5.5rem;
-  max-width: 10rem;
-}
-
 #article-content .wiki-content {
   font-family: var(--font-serif);
-}
-
-.article-notice-stack {
-  display: grid;
-  gap: 0.5rem;
-  margin-bottom: 0.85rem;
-}
-
-.article-notice-stack:empty {
-  display: none;
-}
-
-.article-flags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin: 0;
-}
-
-.article-status-notice {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  margin: 0;
-  line-height: 1.45;
-}
-
-.article-status-notice-warning {
-  border-left: 3px solid var(--color-warning);
-  background: var(--color-warning-soft);
-}
-
-.article-status-notice-info {
-  border-left: 3px solid var(--color-accent);
-  background: var(--color-accent-soft);
-}
-
-.article-soft-banner {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--color-muted);
-  font-size: 0.6875rem;
-}
-
-.article-prelude {
-  display: flow-root;
-  min-width: 0;
-}
-
-.article-in-brief {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.5rem;
-  align-items: start;
-}
-
-.article-in-brief-label {
-  color: var(--color-heading);
-  font-weight: 700;
-}
-
-.article-taxonomy {
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  padding: 0.75rem 0;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border-light);
-  color: var(--color-muted);
-  font-size: 0.75rem;
-}
-
-.article-taxonomy-group {
-  display: grid;
-  grid-template-columns: 5rem minmax(0, 1fr);
-  gap: 0.5rem;
-  align-items: start;
-}
-
-.article-taxonomy-label {
-  color: var(--color-heading);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.article-taxonomy-chips {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.article-taxonomy-chip:hover {
-  text-decoration: none;
-}
-
-.article-footer-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.75rem;
-}
-
-.article-link-section {
-  margin-top: 1.25rem;
-  border-top: 1px solid var(--color-border);
-  padding-top: 0.75rem;
-}
-
-.article-link-section-header {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.45rem;
-}
-
-.article-link-section-header h2 {
-  color: var(--color-heading);
-  font-family: var(--font-serif);
-  font-size: 1rem;
-  font-weight: 400;
-}
-
-.article-link-section-header span {
-  color: var(--color-muted);
-  font-size: 0.6875rem;
-}
-
-.article-link-list {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.75rem;
-}
-
-.article-link-list a {
-  display: inline-flex;
-  max-width: 18rem;
-  min-height: 1.35rem;
-  align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border: 1px solid var(--color-border);
-  padding: 0 0.4rem;
-  color: var(--color-wiki-link);
-}
-
-.article-link-list a:hover {
-  background: var(--color-surface-hover);
-  text-decoration: none;
 }
 
 @media (max-width: 767px) {
   .article-shell {
     padding: 0.75rem 0.85rem 1rem;
-  }
-
-  .article-title-row {
-    display: block;
-  }
-
-  .article-title {
-    font-size: 1.55rem;
-    line-height: 1.16;
-  }
-
-  .article-title-badges {
-    justify-content: flex-start;
-    margin-top: 0.4rem;
   }
 
   .article-tabbar {
@@ -493,28 +76,6 @@
 
   .article-tab {
     padding-inline: 0.7rem;
-  }
-
-  .article-action-group {
-    border-right: 0;
-    padding-right: 0;
-  }
-}
-
-@media (max-width: 1023px) {
-  .article-action-menu {
-    position: static;
-  }
-}
-
-@media (max-width: 767px) {
-  .article-in-brief,
-  .article-taxonomy-group {
-    grid-template-columns: 1fr;
-  }
-
-  .article-taxonomy-label {
-    margin-bottom: -0.25rem;
   }
 }
 
@@ -531,18 +92,6 @@
     width: 100%;
     max-width: 100%;
   }
-}
-
-/* ── Category bar at bottom of articles ── */
-.wiki-categories {
-  border-top: 1px solid var(--color-border);
-  padding: 0.5rem 0;
-  margin-top: 1.5rem;
-  font-size: 0.8rem;
-  color: var(--color-muted);
-}
-.wiki-categories a {
-  color: var(--color-wiki-link);
 }
 
 /* ── Focused article reader and context rail ── */
@@ -573,10 +122,8 @@
 .article-reader-header,
 .article-reader-notice,
 .article-reader-content,
-.article-reader > .article-taxonomy,
 .article-reader > .article-reader-details,
 .article-reader > [class] > .article-reader-content,
-.article-reader > [class] > .article-taxonomy,
 .article-reader > [class] > .article-reader-details {
   width: min(100%, 52rem);
   margin-right: auto;
@@ -653,10 +200,6 @@
   margin-bottom: 1rem;
 }
 
-.article-reader .article-taxonomy {
-  margin-top: 3.5rem;
-}
-
 .article-reader-details {
   margin-top: 1.5rem;
   border-top: 1px solid var(--color-border-light);
@@ -699,6 +242,7 @@
   max-height: 100%;
   flex-direction: column;
   overflow: hidden;
+  overscroll-behavior: contain;
   border-left: 1px solid var(--color-border);
   background: var(--color-sidebar-bg);
 }
@@ -808,6 +352,20 @@
   outline: none;
 }
 
+/* Touch ergonomics for the context drawer. These selectors live here (not in
+   shell.css's coarse block) so they win the cascade over the base rules above. */
+@media (pointer: coarse) {
+  .article-context-tabs button {
+    /* Tabs align to the container's bottom edge, so min-height grows the tap
+       area upward and the active-tab underline stays anchored on the border. */
+    min-height: 2.75rem;
+  }
+
+  .article-context-outline a {
+    padding-block: 0.65rem;
+  }
+}
+
 .article-context-backlinks {
   margin-top: 2.5rem;
   border-top: 1px solid var(--color-border-light);
@@ -833,6 +391,8 @@
   display: none;
 }
 
+/* 74.999rem is the sanctioned three-pane collapse breakpoint (deliberate
+   layout constant, intentionally off the Tailwind scale). */
 @media (max-width: 74.999rem) {
   .article-reader-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -860,8 +420,8 @@
   .article-context-toggle {
     position: fixed;
     right: 1.25rem;
-    bottom: 1.25rem;
-    z-index: 60;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom));
+    z-index: 30;
     display: inline-flex;
     width: 2.75rem;
     height: 2.75rem;
@@ -877,7 +437,7 @@
   .article-context-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 65;
+    z-index: 60;
     display: block;
     width: 100%;
     height: 100%;
@@ -886,7 +446,7 @@
   }
 }
 
-@media (max-width: 63.999rem) {
+@media (max-width: 1023px) {
   .wiki-main-content:has(> .article-page) {
     padding: 0 !important;
   }
@@ -896,7 +456,7 @@
   }
 }
 
-@media (max-width: 39.999rem) {
+@media (max-width: 639px) {
   .article-shell.article-reader {
     padding: 5rem 1.25rem 4rem;
   }
@@ -905,20 +465,8 @@
     margin-top: 3rem;
   }
 
-  .article-reader-title-row {
-    display: block;
-  }
-
-  .article-reader-title-row h1 {
+  .article-reader-header h1 {
     font-size: clamp(2.6rem, 14vw, 3.75rem);
-  }
-
-  .article-reader-actions {
-    padding-top: 1rem;
-  }
-
-  .article-reader-dek {
-    margin-top: 1.75rem;
   }
 
   .article-context-tabs {

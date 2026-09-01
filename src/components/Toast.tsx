@@ -32,7 +32,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      <div className="toast-container">
+      <div className="toast-container" role="status" aria-live="polite">
         {toasts.map((toast) => (
           <ToastItem key={toast.id} toast={toast} onDismiss={removeToast} />
         ))}
@@ -48,8 +48,13 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: number)
   }, [toast.id, onDismiss]);
 
   return (
-    <div className={`toast toast-${toast.type}`} onClick={() => onDismiss(toast.id)}>
+    <button
+      type="button"
+      className={`toast toast-${toast.type}`}
+      onClick={() => onDismiss(toast.id)}
+      title="Dismiss notification"
+    >
       {toast.message}
-    </div>
+    </button>
   );
 }

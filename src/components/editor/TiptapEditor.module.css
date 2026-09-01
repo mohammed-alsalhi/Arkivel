@@ -454,7 +454,7 @@
   padding: 0.1rem 0.35rem;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .header {
     align-items: stretch;
     flex-direction: column;
@@ -480,10 +480,28 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 639px) {
   .commandSections,
   .traySplit,
   .reviewStrip {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Touch ergonomics: these CSS-module classes can't be reached from the global
+   coarse-pointer block in shell.css, so they get their own. */
+@media (pointer: coarse) {
+  .trayToggle {
+    min-height: 2.25rem;
+    padding: 0 0.6rem;
+  }
+
+  .commandButton {
+    min-height: 2.5rem;
+  }
+
+  .selectionActions button {
+    min-height: 2.25rem;
+    padding: 0 0.6rem;
   }
 }

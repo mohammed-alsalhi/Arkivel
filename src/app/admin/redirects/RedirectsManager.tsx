@@ -56,31 +56,31 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
   return (
     <div className="space-y-6">
       {/* Add form */}
-      <form onSubmit={handleAdd} className="flex gap-2 items-end">
-        <div className="flex flex-col gap-1">
+      <form onSubmit={handleAdd} className="flex flex-wrap gap-2 items-end">
+        <div className="flex flex-col gap-1 min-w-0 flex-1 sm:flex-none">
           <label className="text-xs text-muted-foreground">From slug (old)</label>
           <input
             value={fromSlug}
             onChange={(e) => setFromSlug(e.target.value)}
             placeholder="old-article-slug"
             required
-            className="h-8 px-2 text-sm border border-border rounded bg-background w-48"
+            className="h-8 px-2 text-sm border border-border rounded bg-background w-full sm:w-48"
           />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 min-w-0 flex-1 sm:flex-none">
           <label className="text-xs text-muted-foreground">To slug (new)</label>
           <input
             value={toSlug}
             onChange={(e) => setToSlug(e.target.value)}
             placeholder="new-article-slug"
             required
-            className="h-8 px-2 text-sm border border-border rounded bg-background w-48"
+            className="h-8 px-2 text-sm border border-border rounded bg-background w-full sm:w-48"
           />
         </div>
         <Button type="submit" disabled={saving}>
           {saving ? "Saving…" : "Add redirect"}
         </Button>
-        {error && <span className="text-xs text-destructive">{error}</span>}
+        {error && <span className="text-xs text-danger">{error}</span>}
       </form>
 
       {/* Table */}

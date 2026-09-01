@@ -210,7 +210,7 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
       .attr("stroke-opacity", 0.6)
       .attr("stroke-dasharray", (d) => d.type === "semantic" ? "4,2" : "none");
 
-    // Draw nodes
+    // Draw nodes (purely visual — interaction lives on the larger hit circles)
     const node = g
       .append("g")
       .selectAll<SVGCircleElement, GraphNode>("circle")
@@ -224,9 +224,68 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
       )
       .attr("stroke", (d) => (d.slug === centerSlug ? "var(--color-heading)" : "var(--color-surface)"))
       .attr("stroke-width", (d) => (d.slug === centerSlug ? 2 : 1))
+      .attr("pointer-events", "none");
+
+    // Tooltip
+    const tooltip = d3
+      .select(container)
+      .append("div")
+      .attr(
+        "style",
+        "position:absolute;pointer-events:none;background:var(--color-surface);border:1px solid var(--color-border);padding:4px 8px;font-size:12px;display:none;z-index:20;white-space:nowrap;"
+      );
+
+    const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    let tooltipNodeId: string | null = null;
+
+    const showTooltip = (d: GraphNode) => {
+      tooltip
+        .style("display", "block")
+        .html(
+          `<strong>${d.title}</strong>${d.category ? `<br/><span style="color:var(--color-muted)">${d.category}</span>` : ""}`
+        );
+    };
+    const moveTooltip = (clientX: number, clientY: number) => {
+      const rect = container.getBoundingClientRect();
+      tooltip
+        .style("left", `${clientX - rect.left + 12}px`)
+        .style("top", `${clientY - rect.top - 10}px`);
+    };
+    const hideTooltip = () => {
+      tooltip.style("display", "none");
+      tooltipNodeId = null;
+    };
+
+    // Invisible, larger hit targets on top of the r=6 dots so taps land.
+    const hit = g
+      .append("g")
+      .selectAll<SVGCircleElement, GraphNode>("circle")
+      .data(nodeData)
+      .enter()
+      .append("circle")
+      .attr("r", (d) => (d.slug === centerSlug ? 16 : 14))
+      .attr("fill", "transparent")
+      .attr("pointer-events", "all")
       .attr("cursor", "pointer")
-      .on("click", (_event, d) => {
+      .on("click", (event: MouseEvent, d) => {
+        if (coarsePointer && tooltipNodeId !== d.id) {
+          // First tap reveals the tooltip; a second tap follows the node.
+          showTooltip(d);
+          moveTooltip(event.clientX, event.clientY);
+          tooltipNodeId = d.id;
+          return;
+        }
+        hideTooltip();
         onNodeClick(d.slug);
+      })
+      .on("mouseenter", (_event, d) => {
+        if (!coarsePointer) showTooltip(d);
+      })
+      .on("mousemove", (event: MouseEvent) => {
+        if (!coarsePointer) moveTooltip(event.clientX, event.clientY);
+      })
+      .on("mouseleave", () => {
+        if (!coarsePointer) hideTooltip();
       })
       .call(
         d3
@@ -247,32 +306,10 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
           })
       );
 
-    // Tooltip
-    const tooltip = d3
-      .select(container)
-      .append("div")
-      .attr(
-        "style",
-        "position:absolute;pointer-events:none;background:var(--color-surface);border:1px solid var(--color-border);padding:4px 8px;font-size:12px;display:none;z-index:20;white-space:nowrap;"
-      );
-
-    node
-      .on("mouseenter", (event, d) => {
-        tooltip
-          .style("display", "block")
-          .html(
-            `<strong>${d.title}</strong>${d.category ? `<br/><span style="color:var(--color-muted)">${d.category}</span>` : ""}`
-          );
-      })
-      .on("mousemove", (event) => {
-        const rect = container.getBoundingClientRect();
-        tooltip
-          .style("left", `${event.clientX - rect.left + 12}px`)
-          .style("top", `${event.clientY - rect.top - 10}px`);
-      })
-      .on("mouseleave", () => {
-        tooltip.style("display", "none");
-      });
+    // Tapping empty canvas, an edge, or a hull dismisses a tap-opened tooltip.
+    svg.on("click", (event: MouseEvent) => {
+      if ((event.target as Element | null)?.tagName !== "circle") hideTooltip();
+    });
 
     // Labels for larger graphs (only show if few nodes)
     if (nodeData.length <= 50) {
@@ -282,7 +319,7 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
         .enter()
         .append("text")
         .text((d) => d.title.length > 20 ? d.title.slice(0, 18) + "..." : d.title)
-        .attr("font-size", "9px")
+        .attr("font-size", "11px")
         .attr("dx", 10)
         .attr("dy", 3)
         .attr("fill", "var(--color-foreground)")
@@ -299,6 +336,7 @@ export default function ArticleGraph({ nodes, edges, onNodeClick, centerSlug, cl
         .attr("y2", (d) => ((d.target as GraphNode).y ?? 0));
 
       node.attr("cx", (d) => d.x ?? 0).attr("cy", (d) => d.y ?? 0);
+      hit.attr("cx", (d) => d.x ?? 0).attr("cy", (d) => d.y ?? 0);
 
       if (nodeData.length <= 50) {
         g.selectAll<SVGTextElement, GraphNode>("text")

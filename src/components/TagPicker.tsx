@@ -50,9 +50,9 @@ export default function TagPicker({ selectedTagIds, onChange }: Props) {
             key={tag.id}
             type="button"
             onClick={() => toggle(tag.id)}
-            className={`border px-2 py-0.5 text-[12px] transition-colors ${
+            className={`border px-2 py-0.5 text-[12px] transition-colors pointer-coarse:py-2 ${
               selectedTagIds.includes(tag.id)
-                ? "border-accent bg-accent text-white"
+                ? "border-accent bg-accent text-accent-foreground"
                 : "border-border bg-surface-hover text-foreground hover:border-accent"
             }`}
           >
@@ -72,7 +72,7 @@ export default function TagPicker({ selectedTagIds, onChange }: Props) {
         <button
           type="button"
           onClick={createTag}
-          className="border border-border bg-surface-hover px-2 py-0.5 text-[12px] text-foreground hover:bg-surface"
+          className="border border-border bg-surface-hover px-2 py-0.5 text-[12px] text-foreground hover:bg-surface pointer-coarse:py-2 pointer-coarse:px-3"
         >
           Add
         </button>

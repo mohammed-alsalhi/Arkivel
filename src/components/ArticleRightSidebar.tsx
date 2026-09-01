@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LocalGraph from "@/components/LocalGraph";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import { useScrollLock } from "@/lib/useScrollLock";
 
 type BacklinkItem = { id: string; title: string; slug: string };
@@ -20,8 +21,10 @@ export default function ArticleRightSidebar({
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const asideRef = useRef<HTMLElement>(null);
 
   useScrollLock(mobileOpen);
+  useFocusTrap(asideRef, mobileOpen);
 
   useEffect(() => {
     const article = document.querySelector(".article-reader-content");
@@ -96,9 +99,13 @@ export default function ArticleRightSidebar({
       )}
 
       <aside
+        ref={asideRef}
         id="article-context"
         className={`wiki-right-sidebar${mobileOpen ? " wiki-right-sidebar-open" : ""}`}
         aria-label="Page context"
+        // As a mobile drawer this covers the page, so it becomes a modal dialog.
+        role={mobileOpen ? "dialog" : undefined}
+        aria-modal={mobileOpen ? true : undefined}
       >
         <div className="article-context-tabs" role="tablist" aria-label="Page context views">
           <button

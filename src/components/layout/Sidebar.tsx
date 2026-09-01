@@ -113,6 +113,9 @@ export default function Sidebar({
         id="wiki-navigation"
         className={clsx("wiki-sidebar", mobileOpen && "wiki-sidebar-open")}
         aria-label="Wiki navigation"
+        // As a mobile drawer this covers the page, so it becomes a modal dialog.
+        role={mobileOpen ? "dialog" : undefined}
+        aria-modal={mobileOpen ? true : undefined}
       >
         <Link href="/" className="wiki-sidebar-brand" aria-label={`${brandName} home`} onClick={close}>
           <BrandMark className="wiki-sidebar-brand-mark" imageSize={42} logoMark={logoMark} priority />

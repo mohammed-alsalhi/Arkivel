@@ -91,7 +91,7 @@ export default function GraphControls({
               max={5}
               value={depth}
               onChange={(e) => onDepthChange(parseInt(e.target.value))}
-              className="w-full"
+              className="w-full pointer-coarse:py-3"
             />
           </div>
 
@@ -102,8 +102,10 @@ export default function GraphControls({
               <div className="flex items-center gap-1">
                 <span className="font-mono truncate flex-1">{centerSlug}</span>
                 <button
+                  type="button"
                   onClick={() => onCenterChange("")}
-                  className="text-muted hover:text-foreground"
+                  className="flex h-6 w-6 flex-shrink-0 items-center justify-center text-muted hover:text-foreground pointer-coarse:h-9 pointer-coarse:w-9"
+                  aria-label="Clear center"
                   title="Clear center"
                 >
                   x
@@ -114,11 +116,12 @@ export default function GraphControls({
 
           {/* Cluster mode */}
           <div>
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer pointer-coarse:py-2">
               <input
                 type="checkbox"
                 checked={clusterMode}
                 onChange={(e) => onClusterModeChange(e.target.checked)}
+                className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5"
               />
               <span className="text-muted">Show clusters</span>
             </label>

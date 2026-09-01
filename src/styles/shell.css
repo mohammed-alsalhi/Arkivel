@@ -1,4 +1,3 @@
-.wiki-top-brand,
 .wiki-sidebar-brand {
   display: inline-flex;
   min-width: 0;
@@ -6,23 +5,8 @@
   color: var(--color-heading);
 }
 
-.wiki-topbar-inner {
-  padding: 0.375rem 0.75rem 0.375rem 3rem;
-}
-
-@media (min-width: 48rem) {
-  .wiki-topbar-inner {
-    padding-left: 3rem;
-    padding-right: 1.5rem;
-  }
-}
-
 .wiki-layout {
   min-width: 0;
-}
-
-html[data-sidebar-side="right"] .wiki-layout {
-  flex-direction: row-reverse;
 }
 
 .wiki-sidebar {
@@ -38,98 +22,16 @@ html[data-sidebar-side="right"] .wiki-layout {
   color: var(--color-heading);
 }
 
-.wiki-main-menu-button-mobile {
-  display: inline-flex;
-}
-
-.wiki-main-menu-button-desktop {
-  display: none;
-}
-
 .wiki-main-menu-button:hover,
 .wiki-main-menu-button:focus-visible {
   border-color: var(--color-accent);
   background: var(--color-surface-hover);
 }
 
-.wiki-sidebar-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.wiki-sidebar-dock-button {
-  display: inline-flex;
-  min-width: 0;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--color-muted);
-  font-size: 0.625rem;
-  font-weight: 800;
-  line-height: 1;
-  text-transform: uppercase;
-  transition: color 0.15s ease;
-}
-
-.wiki-sidebar-dock-button:hover,
-.wiki-sidebar-dock-button:focus-visible {
-  color: var(--color-foreground);
-  outline: none;
-}
-
-@media (min-width: 48rem) {
-  .wiki-main-menu-button-mobile {
-    display: none;
-  }
-
-  .wiki-main-menu-button-desktop {
-    display: inline-flex;
-  }
-
-  html[data-sidebar-side="right"] .wiki-sidebar {
-    border-right: 0;
-    border-left: 1px solid var(--color-border);
-  }
-
-  html[data-sidebar-side="right"] .wiki-content-shell {
-    border-right: 1px solid var(--color-border);
-    border-left: 0;
-  }
-
-  html[data-sidebar-open="false"] .wiki-content-shell {
-    border-left: 0;
-    border-right: 0;
-  }
-
-  html[data-sidebar-open="false"] .wiki-sidebar {
-    display: none;
-  }
-}
-
-@media (max-width: 47.999rem) {
-  html[data-sidebar-side="right"] .wiki-layout {
-    flex-direction: row;
-  }
-
-  html[data-sidebar-side="right"] .wiki-sidebar {
-    border-right: 1px solid var(--color-border);
-    border-left: 0;
-  }
-}
-
-.wiki-top-brand {
-  gap: 0.45rem;
-  font-size: 0.8125rem;
-  font-weight: 800;
-}
-
-.wiki-top-brand:hover,
 .wiki-sidebar-brand:hover {
   text-decoration: none;
 }
 
-.wiki-top-brand-mark,
 .wiki-sidebar-brand-mark {
   display: inline-flex;
   flex: 0 0 auto;
@@ -141,7 +43,6 @@ html[data-sidebar-side="right"] .wiki-layout {
   transition: color 0.15s ease, transform 0.15s ease;
 }
 
-.wiki-top-brand:hover .wiki-brand-mark,
 .wiki-sidebar-brand:hover .wiki-brand-mark {
   color: var(--color-accent);
   transform: translateY(-0.5px);
@@ -158,11 +59,6 @@ html[data-sidebar-side="right"] .wiki-layout {
   filter: invert(1);
 }
 
-.wiki-top-brand-mark {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
 .wiki-sidebar-brand {
   width: 100%;
   gap: 0.6rem;
@@ -172,133 +68,6 @@ html[data-sidebar-side="right"] .wiki-layout {
 .wiki-sidebar-brand-mark {
   width: 2.25rem;
   height: 2.25rem;
-}
-
-.wiki-sidebar-brand-name {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--color-heading);
-  font-size: 1.125rem;
-  font-weight: 800;
-  line-height: 1.1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.wiki-header-search-shell {
-  position: relative;
-  flex: 0 0 auto;
-  min-width: 0;
-}
-
-.wiki-search-trigger {
-  display: inline-flex;
-  height: 1.75rem;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.25rem;
-  background: var(--color-surface);
-  color: var(--color-muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1;
-  padding: 0 0.45rem;
-  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
-  white-space: nowrap;
-}
-
-.wiki-search-trigger:hover,
-.wiki-search-trigger:focus-visible {
-  border-color: var(--color-accent);
-  background: var(--color-surface-hover);
-  color: var(--color-foreground);
-  outline: none;
-}
-
-.wiki-search-shortcut {
-  display: inline-flex;
-  min-width: 1.05rem;
-  height: 1.05rem;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--color-border-light);
-  border-radius: 0.2rem;
-  color: var(--color-muted);
-  font-size: 0.625rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.wiki-search-form {
-  width: min(17rem, calc(100vw - 10rem));
-}
-
-.wiki-header-search {
-  width: 100%;
-  min-width: 0;
-}
-
-.wiki-search-close {
-  position: absolute;
-  top: 50%;
-  right: 0.35rem;
-  display: inline-flex;
-  width: 1.25rem;
-  height: 1.25rem;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(-50%);
-  border-radius: 0.2rem;
-  color: var(--color-muted);
-}
-
-.wiki-search-close:hover,
-.wiki-search-close:focus-visible {
-  background: var(--color-surface-hover);
-  color: var(--color-foreground);
-  outline: none;
-}
-
-.wiki-mobile-nav {
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-
-.wiki-mobile-nav a,
-.wiki-touch-target,
-.wiki-article-actions button,
-.wiki-article-actions a,
-.wiki-editor-tray button,
-.wiki-admin-panel button,
-.wiki-admin-panel a {
-  min-height: 44px;
-}
-
-.wiki-responsive-guard,
-.wiki-article-actions,
-.wiki-editor-tray,
-.wiki-admin-panel {
-  min-width: 0;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
-.wiki-dialog,
-.wiki-popover {
-  max-width: min(100%, calc(100vw - 1.5rem));
-}
-
-.wiki-notification-dropdown {
-  width: 18rem;
-}
-
-.wiki-search-dropdown {
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  right: 0;
-  width: 18rem;
-  max-width: calc(100vw - 1.5rem);
 }
 
 /* iOS Safari zooms the page when a focused form control is under 16px.
@@ -348,8 +117,13 @@ html[data-sidebar-side="right"] .wiki-layout {
     min-height: 2.5rem;
   }
 
-  .article-action-menu-summary {
-    min-height: 2.25rem;
+  /* Grow the switch's tap area to ~37px without growing the visual track.
+     (.ui-toggle-switch is position: relative, so the pseudo-element covers
+     the touch strip above and below the pill and stays part of the button.) */
+  .ui-toggle-switch::after {
+    content: "";
+    position: absolute;
+    inset: -0.4rem 0;
   }
 }
 
@@ -379,14 +153,6 @@ html[data-sidebar-side="right"] .wiki-layout {
     justify-content: flex-start;
   }
 
-  .wiki-article-actions,
-  .wiki-editor-tray,
-  .wiki-admin-panel {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
   .ui-table {
     display: block;
     overflow-x: auto;
@@ -400,69 +166,6 @@ html[data-sidebar-side="right"] .wiki-layout {
 
   .category-tree-description {
     flex-basis: 100%;
-  }
-
-  .wiki-notification-dropdown {
-    position: fixed;
-    top: 2.5rem;
-    right: 0.75rem;
-    left: 0.75rem;
-    width: auto;
-    min-width: 0;
-  }
-
-  .wiki-search-dropdown {
-    position: fixed;
-    top: 2.5rem;
-    right: 0.75rem;
-    left: 0.75rem;
-    width: auto;
-    min-width: 0;
-  }
-
-  .wiki-search-trigger {
-    width: 1.75rem;
-    padding: 0;
-  }
-
-  .wiki-search-trigger-label,
-  .wiki-search-shortcut {
-    display: none;
-  }
-
-  .wiki-header-search-shell-open {
-    position: fixed;
-    top: 0.35rem;
-    right: 0.75rem;
-    left: 0.75rem;
-    z-index: 60;
-  }
-
-  .wiki-header-search-shell-open .wiki-search-form {
-    width: 100%;
-  }
-}
-
-@media (max-width: 767px) {
-  .wiki-main-content {
-    padding-bottom: max(5rem, calc(4rem + env(safe-area-inset-bottom, 0))) !important;
-  }
-
-  .wiki-footer {
-    padding-bottom: max(4.75rem, calc(3.75rem + env(safe-area-inset-bottom, 0))) !important;
-  }
-
-}
-
-@media (min-width: 640px) {
-  .wiki-search-form {
-    width: 15.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .wiki-search-form {
-    width: 18rem;
   }
 }
 
@@ -524,6 +227,7 @@ html[data-skin="folio"] .wiki-layout {
   flex: 0 0 clamp(17rem, 22vw, 21.5rem);
   flex-direction: column;
   overflow-y: auto;
+  overscroll-behavior: contain;
   border-right: 1px solid var(--color-border);
   background: var(--color-sidebar-bg);
   transition: none;
@@ -664,10 +368,15 @@ html[data-skin="folio"] .wiki-layout {
 }
 
 .wiki-sidebar-footer-actions .ui-icon-button {
-  width: 2rem;
-  height: 2rem;
   border-color: transparent;
   background: transparent;
+}
+
+@media (pointer: fine) {
+  .wiki-sidebar-footer-actions .ui-icon-button {
+    width: 2rem;
+    height: 2rem;
+  }
 }
 
 .wiki-sidebar-footer-actions .ui-dropdown {
@@ -682,7 +391,7 @@ html[data-skin="folio"] .wiki-layout {
   display: none;
 }
 
-@media (max-width: 63.999rem) {
+@media (max-width: 1023px) {
   .wiki-layout {
     --wiki-frame-inset: 0rem;
     width: 100%;
@@ -707,7 +416,7 @@ html[data-skin="folio"] .wiki-layout {
     top: 0;
     bottom: 0;
     left: 0;
-    z-index: 50;
+    z-index: 70;
     width: min(22rem, 88vw);
     height: 100dvh;
     min-height: 0;
@@ -741,7 +450,7 @@ html[data-skin="folio"] .wiki-layout {
   .wiki-sidebar-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 40;
+    z-index: 60;
     display: block;
     width: 100%;
     height: 100%;
@@ -750,7 +459,7 @@ html[data-skin="folio"] .wiki-layout {
   }
 }
 
-@media (max-width: 39.999rem) {
+@media (max-width: 639px) {
   .wiki-sidebar-brand {
     margin-top: 2rem;
   }

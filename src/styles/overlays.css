@@ -3,11 +3,8 @@
   /* Hide all chrome */
   header, aside, footer, nav,
   .wiki-tabs,
-  .article-action-panel,
   button,
-  [data-print-hide],
-  .notification-bell,
-  .wiki-float-toc { display: none !important; }
+  [data-print-hide] { display: none !important; }
 
   /* Full-width content */
   body { background: white !important; color: #000 !important; font-size: 12pt; margin: 0; }
@@ -39,8 +36,6 @@
   .wiki-portal { page-break-inside: avoid; }
   img { max-width: 100% !important; page-break-inside: avoid; }
 
-  /* Remove reaction bars, footer widgets */
-  .wiki-reaction-bar, .wiki-categories, .article-taxonomy, .article-stats-panel, .changelog-panel { display: none !important; }
 }
 
 /* ── #22: Focus-visible styles for keyboard nav ── */
@@ -71,21 +66,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* ── #24: Toast notification styles ── */
 .toast-container {
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  right: max(1rem, env(safe-area-inset-right, 0px));
   z-index: 80;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 0.5rem;
 }
 .toast {
   padding: 0.6rem 1rem;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
+  color: var(--color-foreground);
   font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   animation: toast-in 0.3s ease-out;
-  max-width: 360px;
+  max-width: min(360px, calc(100vw - 2rem));
 }
 .toast-success { border-left: 3px solid var(--color-success); }
 .toast-error { border-left: 3px solid var(--color-danger); }
