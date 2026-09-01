@@ -225,7 +225,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             onChange={(event) => setBlock(event.target.value)}
             disabled={!editor}
             aria-label="Block style"
-            className="border border-border bg-surface px-2 py-1 text-[12px] text-foreground focus:border-accent focus:outline-none"
+            className="ui-select w-auto"
           >
             <option value="paragraph">Paragraph</option>
             <option value="h1">Heading 1</option>

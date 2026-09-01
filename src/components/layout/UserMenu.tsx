@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { clsx } from "clsx";
+import { Dropdown, DropdownItem, DropdownLink, IconButton } from "@/components/ui";
 
 type User = {
   id: string;
@@ -42,15 +41,23 @@ export default function UserMenu() {
       .catch(() => setLoaded(true));
   }, [pathname]);
 
-  // Close on outside click
+  // Close on outside click or Escape
   useEffect(() => {
+    if (!open) return;
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
       }
     }
-    if (open) document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [open]);
 
   async function handleLogout() {
@@ -69,11 +76,10 @@ export default function UserMenu() {
 
   return (
     <div ref={ref} className="relative">
-      <button
+      <IconButton
+        label="User menu"
         onClick={() => setOpen(!open)}
-        aria-label="User menu"
         aria-expanded={open}
-        className={clsx("ui-icon-button", open && "bg-surface-hover text-foreground")}
       >
         {loaded && initials ? (
           <span className="flex items-center justify-center w-5 h-5 rounded-full bg-heading text-surface text-[9px] font-bold leading-none">
@@ -82,10 +88,10 @@ export default function UserMenu() {
         ) : (
           <UserIcon />
         )}
-      </button>
+      </IconButton>
 
       {open && (
-        <div className="ui-dropdown w-44 py-1">
+        <Dropdown className="w-44 py-1">
           {user ? (
             <>
               {/* Logged-in user info */}
@@ -99,59 +105,36 @@ export default function UserMenu() {
                 )}
               </div>
 
-              <MenuItem href="/settings" onClick={() => setOpen(false)}>
+              <DropdownLink href="/settings" className="text-wiki-link" onClick={() => setOpen(false)}>
                 Settings
-              </MenuItem>
+              </DropdownLink>
 
               {isAdmin && (
                 <>
                   <div className="border-t border-border my-1" />
-                  <MenuItem href="/admin" onClick={() => setOpen(false)}>
+                  <DropdownLink href="/admin" className="text-wiki-link" onClick={() => setOpen(false)}>
                     Admin panel
-                  </MenuItem>
+                  </DropdownLink>
                 </>
               )}
 
               <div className="border-t border-border my-1" />
-              <button
-                onClick={handleLogout}
-                className="ui-dropdown-item text-wiki-link"
-              >
+              <DropdownItem onClick={handleLogout} className="text-wiki-link">
                 Log out
-              </button>
+              </DropdownItem>
             </>
           ) : (
             <>
-              <MenuItem href="/login" onClick={() => setOpen(false)}>
+              <DropdownLink href="/login" className="text-wiki-link" onClick={() => setOpen(false)}>
                 Log in
-              </MenuItem>
-              <MenuItem href="/register" onClick={() => setOpen(false)}>
+              </DropdownLink>
+              <DropdownLink href="/register" className="text-wiki-link" onClick={() => setOpen(false)}>
                 Sign up
-              </MenuItem>
+              </DropdownLink>
             </>
           )}
-        </div>
+        </Dropdown>
       )}
     </div>
-  );
-}
-
-function MenuItem({
-  href,
-  onClick,
-  children,
-}: {
-  href: string;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className="ui-dropdown-item text-wiki-link"
-    >
-      {children}
-    </Link>
   );
 }

@@ -215,7 +215,7 @@ export default function ImportPage() {
                 className="flex flex-wrap items-center justify-between gap-3 px-3 py-2"
               >
                 <span>
-                  <span className={result.success ? "text-green-600" : "text-red-600"}>
+                  <span className={result.success ? "text-success" : "text-danger"}>
                     {result.success ? "saved" : "failed"}
                   </span>{" "}
                   <span className="text-muted">{result.filename}</span>
@@ -224,7 +224,7 @@ export default function ImportPage() {
                 {result.success && result.slug ? (
                   <Link href={"/articles/" + result.slug}>open page</Link>
                 ) : (
-                  <span className="text-[12px] text-red-600">{result.error}</span>
+                  <span className="text-[12px] text-danger">{result.error}</span>
                 )}
               </li>
             ))}

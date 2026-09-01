@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
   Chip,
   DataTable,
@@ -213,9 +212,9 @@ export default function MaintenancePage() {
           <Section title="Runbooks">
             <div className="flex flex-wrap gap-2">
               {report.runbooks.map((runbook) => (
-                <Link key={runbook.id} href={runbook.href} className="ui-button">
+                <LinkButton key={runbook.id} href={runbook.href}>
                   {runbook.label}
-                </Link>
+                </LinkButton>
               ))}
             </div>
           </Section>

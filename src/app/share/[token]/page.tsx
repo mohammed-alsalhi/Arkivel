@@ -24,8 +24,8 @@ export default async function SharePreviewPage({ params }: Props) {
   const resolved = await resolveWikiLinks(article.content);
 
   return (
-    <Page className="max-w-3xl mx-auto px-4 py-8">
-      <Notice className="border-l-4 border-l-orange-500 mb-6">
+    <Page width="narrow" className="py-8">
+      <Notice className="border-l-4 border-l-warning-border mb-6">
         <strong>Draft preview</strong> — This is a private preview link. This article has not been published.
       </Notice>
 

@@ -6,8 +6,7 @@ import DocumentTitle from "@/components/layout/DocumentTitle";
 import LayoutShell from "@/components/layout/LayoutShell";
 import { AdminProvider } from "@/components/AdminContext";
 import { ToastProvider } from "@/components/Toast";
-import MaintenanceBanner from "@/components/MaintenanceBanner";
-import ReadOnlyBanner from "@/components/ReadOnlyBanner";
+import { MaintenanceBanner, ReadOnlyBanner } from "@/components/SiteBanner";
 import { config } from "@/lib/config";
 import { unstable_cache } from "next/cache";
 import ProductShell from "@/components/product/ProductShell";
@@ -26,10 +25,14 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8f9fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#181a1b" },
-  ],
+  // The product site is always light (white); the wiki follows the color scheme.
+  themeColor:
+    config.siteMode === "product"
+      ? "#ffffff"
+      : [
+          { media: "(prefers-color-scheme: light)", color: "#f8f9fa" },
+          { media: "(prefers-color-scheme: dark)", color: "#181a1b" },
+        ],
 };
 
 // Apply the persisted theme before first paint so dark-mode readers do not get

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { IconButton } from "@/components/ui";
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false);
@@ -32,11 +33,10 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button
+    <IconButton
       onClick={toggle}
-      className="ui-icon-button"
+      label="Toggle theme"
       title={dark ? "Switch to light mode" : "Switch to dark mode"}
-      aria-label="Toggle theme"
       aria-pressed={dark}
     >
       {dark ? (
@@ -49,6 +49,6 @@ export default function ThemeToggle() {
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
-    </button>
+    </IconButton>
   );
 }

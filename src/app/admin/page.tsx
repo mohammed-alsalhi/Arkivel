@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { EmptyState, Page, PageHeader, Section } from "@/components/ui";
+import { EmptyState, LinkButton, Page, PageHeader, Section } from "@/components/ui";
 
 const tools = [
   ["users", "/admin/users"],
@@ -35,7 +35,7 @@ export default function AdminPage() {
         <EmptyState
           title="Admin access required"
           description="Log in as an administrator to continue."
-          actions={<Link href="/login" className="ui-button ui-button-primary">log in</Link>}
+          actions={<LinkButton href="/login" variant="primary">log in</LinkButton>}
         />
       ) : (
         <Section title="Operations">

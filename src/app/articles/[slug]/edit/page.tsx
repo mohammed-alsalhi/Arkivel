@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import ArticleEditorForm, { type ArticleEditorAutoSaveStatus } from "@/components/ArticleEditorForm";
 import { useAdmin } from "@/components/AdminContext";
+import { LoadingState } from "@/components/ui";
 import type { TiptapEditorHandle } from "@/components/editor/TiptapEditor";
 
 type CategoryItem = {
@@ -222,11 +223,11 @@ export default function EditArticlePage() {
   }
 
   if (loading) {
-    return <div className="py-8 text-center text-[13px] italic text-muted">Loading...</div>;
+    return <LoadingState />;
   }
 
   if (!article) {
-    return <div className="py-8 text-center text-[13px] italic text-muted">Article not found.</div>;
+    return <LoadingState label="Article not found." />;
   }
 
   return (

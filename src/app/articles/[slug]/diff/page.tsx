@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArticleWorkflowShell } from "@/components/ArticleWorkflowShell";
-import { Button } from "@/components/ui";
+import { Button, LoadingState } from "@/components/ui";
 
 type ArticleInfo = {
   id: string;
@@ -59,11 +59,11 @@ export default function DiffPage() {
   }, [slug, fromId, toId]);
 
   if (loading) {
-    return <div className="py-8 text-center text-muted italic text-[13px]">Loading diff...</div>;
+    return <LoadingState label="Loading diff..." />;
   }
 
   if (!fromData || !toData || !article) {
-    return <div className="py-8 text-center text-muted italic text-[13px]">Could not load revisions.</div>;
+    return <LoadingState label="Could not load revisions." />;
   }
 
   const fromLines = stripHtml(fromData.content).split("\n");
@@ -91,7 +91,7 @@ export default function DiffPage() {
       title={<>Difference between revisions of &ldquo;{article.title}&rdquo;</>}
     >
         {diffMode === "line" ? (
-          <div className="border border-border text-[13px] font-mono">
+          <div className="border border-border text-[13px] font-mono whitespace-pre-wrap break-words">
             {diffLines.map((line, i) => (
               <div
                 key={i}

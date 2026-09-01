@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Button, EmptyState, Page, PageHeader, TabButton, Tabs } from "@/components/ui";
+import { Button, Card, CardGrid, EmptyState, LoadingState, Page, PageHeader, TabButton, Tabs } from "@/components/ui";
 
 type Asset = {
   id: string;
@@ -89,7 +89,7 @@ export default function AssetsPage() {
         ))}
       </Tabs>
 
-      {loading && <div className="text-sm text-muted py-4">Loading…</div>}
+      {loading && <LoadingState label="Loading…" />}
 
       {!loading && assets.length === 0 && (
         <EmptyState
@@ -103,29 +103,32 @@ export default function AssetsPage() {
       )}
 
       {/* Asset grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <CardGrid>
         {assets.map((asset) => (
-          <div key={asset.id} className="border border-border rounded-lg overflow-hidden group">
-            {asset.mimeType.startsWith("image/") ? (
-              <div className="aspect-square bg-muted/20 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={asset.url} alt={asset.filename} className="w-full h-full object-cover" loading="lazy" />
-              </div>
-            ) : (
-              <div className="aspect-square bg-muted/20 flex items-center justify-center">
-                <span className="text-2xl text-muted">{asset.mimeType.startsWith("application/pdf") ? "PDF" : "FILE"}</span>
-              </div>
-            )}
-            <div className="p-2">
-              <div className="text-[11px] text-heading font-medium truncate" title={asset.filename}>{asset.filename}</div>
-              <div className="text-[10px] text-muted">{formatSize(asset.size)}</div>
-              <a href={asset.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-accent hover:underline">
+          <Card
+            key={asset.id}
+            media={
+              asset.mimeType.startsWith("image/") ? (
+                <div className="aspect-square overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={asset.url} alt={asset.filename} className="h-full w-full object-cover" loading="lazy" />
+                </div>
+              ) : (
+                <div className="aspect-square flex items-center justify-center">
+                  <span className="text-2xl text-muted">{asset.mimeType.startsWith("application/pdf") ? "PDF" : "FILE"}</span>
+                </div>
+              )
+            }
+            title={<span className="block truncate" title={asset.filename}>{asset.filename}</span>}
+            description={formatSize(asset.size)}
+            meta={
+              <a href={asset.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
                 Open
               </a>
-            </div>
-          </div>
+            }
+          />
         ))}
-      </div>
+      </CardGrid>
     </Page>
   );
 }

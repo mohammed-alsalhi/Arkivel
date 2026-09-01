@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/components/AdminContext";
+import { DataTable, Input, Select } from "@/components/ui";
 
 type Category = {
   id: string;
@@ -162,48 +163,48 @@ export default function CategoryManager() {
       <div className="wiki-portal-header">Manage Categories</div>
       <div className="wiki-portal-body">
         {/* Category list with edit/delete controls */}
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-[13px] mb-3">
-            <thead>
-              <tr className="text-left text-[11px] text-muted">
-                <th className="pb-1 pr-2">Category</th>
-                <th className="pb-1 pr-2">Description</th>
-                <th className="pb-1 pr-2 text-center">Articles</th>
-                <th className="pb-1 w-24"></th>
+        <DataTable className="mb-3">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Description</th>
+              <th className="text-center">Articles</th>
+              <th className="w-24"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {flatCategories.map(({ category, depth }) => (
+              <tr key={category.id}>
+                <td style={{ paddingLeft: `${12 + depth * 16}px` }}>
+                  {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
+                  {category.name}
+                </td>
+                <td className="text-muted text-[12px] max-w-48 truncate">
+                  {category.description || "\u2014"}
+                </td>
+                <td className="text-center text-muted">
+                  {category._count?.articles ?? 0}
+                </td>
+                <td className="text-right">
+                  <button
+                    type="button"
+                    onClick={() => startEdit(category)}
+                    className="text-[11px] text-accent hover:underline mr-2"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(category)}
+                    className="text-[11px] text-wiki-link-broken hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {flatCategories.map(({ category, depth }) => (
-                <tr key={category.id} className="border-t border-border-light hover:bg-surface-hover">
-                  <td className="py-1 pr-2" style={{ paddingLeft: `${depth * 16}px` }}>
-                    {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
-                    {category.name}
-                  </td>
-                  <td className="py-1 pr-2 text-muted text-[12px] max-w-48 truncate">
-                    {category.description || "\u2014"}
-                  </td>
-                  <td className="py-1 pr-2 text-center text-muted">
-                    {category._count?.articles ?? 0}
-                  </td>
-                  <td className="py-1 text-right">
-                    <button
-                      onClick={() => startEdit(category)}
-                      className="text-[11px] text-accent hover:underline mr-2"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(category)}
-                      className="text-[11px] text-wiki-link-broken hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
 
         {/* Success/error messages */}
         {error && <p className="text-[12px] text-wiki-link-broken mb-2">{error}</p>}
@@ -220,20 +221,18 @@ export default function CategoryManager() {
             <div className="flex gap-2">
               <div className="flex-1">
                 <label className="block text-[11px] text-muted mb-0.5">Name *</label>
-                <input
+                <Input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
                 />
               </div>
               <div className="flex-1">
                 <label className="block text-[11px] text-muted mb-0.5">Parent</label>
-                <select
+                <Select
                   value={parentId}
                   onChange={(e) => setParentId(e.target.value)}
-                  className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
                 >
                   <option value="">None (top-level)</option>
                   {flatCategories
@@ -245,26 +244,24 @@ export default function CategoryManager() {
                         {category.name}
                       </option>
                     ))}
-                </select>
+                </Select>
               </div>
             </div>
             <div>
               <label className="block text-[11px] text-muted mb-0.5">Description</label>
-              <input
+              <Input
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
               />
             </div>
             <div>
               <label className="block text-[11px] text-muted mb-0.5">Cover image URL (optional banner)</label>
-              <input
+              <Input
                 type="url"
                 value={coverImage}
                 onChange={(e) => setCoverImage(e.target.value)}
                 placeholder="https://…"
-                className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
               />
             </div>
             {error && (showCreate || editingId) && (
@@ -273,7 +270,7 @@ export default function CategoryManager() {
             <div className="flex gap-2">
               <button
                 type="submit"
-                className="bg-accent px-3 py-1 text-[13px] font-bold text-white hover:bg-accent-hover"
+                className="bg-accent px-3 py-1 text-[13px] font-bold text-accent-foreground hover:bg-accent-hover"
               >
                 {editingId ? "Save" : "Create"}
               </button>
@@ -289,7 +286,7 @@ export default function CategoryManager() {
         ) : (
           <button
             onClick={startCreate}
-            className="bg-accent px-3 py-1 text-[13px] font-bold text-white hover:bg-accent-hover"
+            className="bg-accent px-3 py-1 text-[13px] font-bold text-accent-foreground hover:bg-accent-hover"
           >
             + New Category
           </button>

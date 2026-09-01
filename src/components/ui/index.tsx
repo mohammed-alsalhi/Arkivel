@@ -9,7 +9,6 @@ import {
   type ReactNode,
   type SelectHTMLAttributes,
   type TableHTMLAttributes,
-  type TextareaHTMLAttributes,
 } from "react";
 
 type PageWidth = "default" | "narrow" | "wide" | "full";
@@ -75,7 +74,7 @@ export function PageHeader({
 type ButtonVariant = "default" | "primary" | "danger";
 type Tone = "default" | "success" | "warning" | "danger" | "info";
 
-export function buttonClassName(variant: ButtonVariant = "default", className?: string) {
+function buttonClassName(variant: ButtonVariant = "default", className?: string) {
   return clsx(
     "ui-button",
     variant === "primary" && "ui-button-primary",
@@ -90,14 +89,6 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function Button({ className, type = "button", variant = "default", ...props }: ButtonProps) {
   return <button className={buttonClassName(variant, className)} type={type} {...props} />;
-}
-
-type AnchorButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
-  variant?: ButtonVariant;
-};
-
-export function AnchorButton({ className, variant = "default", ...props }: AnchorButtonProps) {
-  return <a className={buttonClassName(variant, className)} {...props} />;
 }
 
 type LinkButtonProps = LinkProps &
@@ -174,12 +165,6 @@ export function Select({ className, ...props }: SelectProps) {
   return <select className={clsx("ui-select", className)} {...props} />;
 }
 
-type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
-
-export function Textarea({ className, ...props }: TextareaProps) {
-  return <textarea className={clsx("ui-textarea", className)} {...props} />;
-}
-
 type InlineCodeProps = HTMLAttributes<HTMLElement>;
 
 export function InlineCode({ className, ...props }: InlineCodeProps) {
@@ -190,12 +175,6 @@ type CodeBlockProps = HTMLAttributes<HTMLPreElement>;
 
 export function CodeBlock({ className, ...props }: CodeBlockProps) {
   return <pre className={clsx("ui-code-block", className)} {...props} />;
-}
-
-type KeyboardKeyProps = HTMLAttributes<HTMLElement>;
-
-export function KeyboardKey({ className, ...props }: KeyboardKeyProps) {
-  return <kbd className={clsx("ui-kbd", className)} {...props} />;
 }
 
 type ScreenReaderOnlyProps = HTMLAttributes<HTMLSpanElement>;
@@ -264,48 +243,6 @@ export const TabButton = forwardRef<HTMLButtonElement, TabButtonProps>(function 
   );
 });
 
-type TabLinkProps = LinkProps &
-  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> & {
-    active?: boolean;
-  };
-
-export function TabLink({ active = false, className, ...props }: TabLinkProps) {
-  return (
-    <Link
-      aria-current={active ? "page" : undefined}
-      aria-selected={active}
-      className={clsx("article-tab", active && "article-tab-active", className)}
-      role="tab"
-      {...props}
-    />
-  );
-}
-
-type ToolbarProps = HTMLAttributes<HTMLDivElement>;
-
-export function Toolbar({ className, ...props }: ToolbarProps) {
-  return <div className={clsx("ui-toolbar", className)} {...props} />;
-}
-
-type ToolbarGroupProps = HTMLAttributes<HTMLDivElement> & {
-  label?: ReactNode;
-};
-
-export function ToolbarGroup({ children, className, label, ...props }: ToolbarGroupProps) {
-  return (
-    <div className={clsx("ui-toolbar-group", className)} {...props}>
-      {label && <span className="ui-toolbar-label">{label}</span>}
-      {children}
-    </div>
-  );
-}
-
-type ToolbarDividerProps = HTMLAttributes<HTMLSpanElement>;
-
-export function ToolbarDivider({ className, ...props }: ToolbarDividerProps) {
-  return <span aria-hidden="true" className={clsx("ui-toolbar-divider", className)} {...props} />;
-}
-
 type ChipProps = HTMLAttributes<HTMLSpanElement> & {
   tone?: Tone;
 };
@@ -331,20 +268,6 @@ type DropdownLinkProps = LinkProps &
 
 export function DropdownLink({ className, ...props }: DropdownLinkProps) {
   return <Link className={clsx("ui-dropdown-item", className)} {...props} />;
-}
-
-type PanelProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
-  bodyClassName?: string;
-  title?: ReactNode;
-};
-
-export function Panel({ bodyClassName, children, className, title, ...props }: PanelProps) {
-  return (
-    <div className={clsx("ui-panel", className)} {...props}>
-      {title && <div className="ui-panel-header">{title}</div>}
-      <div className={clsx("ui-panel-body", bodyClassName)}>{children}</div>
-    </div>
-  );
 }
 
 type SectionPanelProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
@@ -403,23 +326,6 @@ export function DataTable({ className, ...props }: DataTableProps) {
   );
 }
 
-type ListProps = HTMLAttributes<HTMLUListElement> & {
-  density?: "default" | "compact";
-};
-
-export function List({ className, density = "default", ...props }: ListProps) {
-  return (
-    <ul
-      className={clsx(
-        "ui-list",
-        density === "compact" && "ui-list-compact",
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
 type FeatureItemProps = Omit<HTMLAttributes<HTMLLIElement>, "title"> & {
   title?: ReactNode;
 };
@@ -439,22 +345,14 @@ export function FeatureItem({ children, className, title, ...props }: FeatureIte
   );
 }
 
-type DefinitionGridProps = HTMLAttributes<HTMLDListElement>;
-
-export function DefinitionGrid({ className, ...props }: DefinitionGridProps) {
-  return <dl className={clsx("ui-definition-grid", className)} {...props} />;
-}
-
-type DefinitionItemProps = HTMLAttributes<HTMLDivElement> & {
-  label: ReactNode;
-  value: ReactNode;
+type LoadingStateProps = HTMLAttributes<HTMLDivElement> & {
+  label?: ReactNode;
 };
 
-export function DefinitionItem({ className, label, value, ...props }: DefinitionItemProps) {
+export function LoadingState({ className, label = "Loading...", ...props }: LoadingStateProps) {
   return (
-    <div className={clsx("ui-definition-item", className)} {...props}>
-      <dt>{label}</dt>
-      <dd>{value}</dd>
+    <div className={clsx("ui-loading-state", className)} {...props}>
+      {label}
     </div>
   );
 }

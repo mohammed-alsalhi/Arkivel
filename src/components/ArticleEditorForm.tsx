@@ -195,7 +195,7 @@ export default function ArticleEditorForm({
             <button
               type="submit"
               disabled={saving}
-              className="bg-accent px-4 py-1.5 text-[13px] font-bold text-white hover:bg-accent-hover disabled:opacity-50"
+              className="bg-accent px-4 py-1.5 text-[13px] font-bold text-accent-foreground hover:bg-accent-hover disabled:opacity-50"
             >
               {saving ? savingLabel : submitLabel}
             </button>
@@ -212,7 +212,7 @@ export default function ArticleEditorForm({
               type="button"
               onClick={deleteAction.onDelete}
               disabled={deleteAction.deleting}
-              className="border border-red-300 bg-surface px-4 py-1.5 text-[13px] text-red-600 hover:bg-red-50 disabled:opacity-50"
+              className="border border-danger-border bg-surface px-4 py-1.5 text-[13px] text-danger hover:bg-danger-soft disabled:opacity-50"
             >
               {deleteAction.deleting ? "Deleting..." : "Delete article"}
             </button>

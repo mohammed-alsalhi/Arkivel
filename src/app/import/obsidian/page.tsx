@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Page, PageHeader } from "@/components/ui";
+import { Button, Page, PageHeader } from "@/components/ui";
 
 interface ImportResult {
   slug: string;
@@ -60,16 +60,12 @@ export default function ObsidianImportPage() {
             className="block w-full text-sm border border-border rounded px-3 py-2 bg-surface"
           />
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="ui-button ui-button-primary self-start"
-        >
+        <Button type="submit" variant="primary" disabled={loading} className="self-start">
           {loading ? "Importing…" : "Import"}
-        </button>
+        </Button>
       </form>
 
-      {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
+      {error && <p className="mt-4 text-danger text-sm">{error}</p>}
 
       {results && (
         <div className="mt-6">
@@ -81,7 +77,7 @@ export default function ObsidianImportPage() {
             {results.map((r) => (
               <li key={r.slug} className="flex items-center justify-between px-3 py-2 text-sm">
                 <span>{r.title}</span>
-                <span className={r.created ? "text-green-600" : "text-muted"}>
+                <span className={r.created ? "text-success" : "text-muted"}>
                   {r.created ? "Created" : "Skipped"}
                 </span>
               </li>

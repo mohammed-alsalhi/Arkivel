@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/components/AdminContext";
+import { DataTable, Input, Select } from "@/components/ui";
 
 type Tag = {
   id: string;
@@ -155,65 +156,65 @@ export default function TagManager() {
       <div className="wiki-portal-header">Manage Tags</div>
       <div className="wiki-portal-body">
         {/* Tag list with edit/delete controls */}
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-[13px] mb-3">
-            <thead>
-              <tr className="text-left text-[11px] text-muted">
-                <th className="pb-1 pr-2">Tag</th>
-                <th className="pb-1 pr-2">Color</th>
-                <th className="pb-1 pr-2 text-center">Articles</th>
-                <th className="pb-1 w-24"></th>
+        <DataTable className="mb-3">
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Color</th>
+              <th className="text-center">Articles</th>
+              <th className="w-24"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {flatTags.map(({ tag, depth }) => (
+              <tr key={tag.id}>
+                <td style={{ paddingLeft: `${12 + depth * 16}px` }}>
+                  {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
+                  {tag.name}
+                </td>
+                <td>
+                  {tag.color ? (
+                    <span className="inline-flex items-center gap-1">
+                      <span
+                        className="inline-block w-3 h-3 rounded-full border border-border-light"
+                        style={{ backgroundColor: tag.color }}
+                      />
+                      <span className="text-[11px] text-muted">{tag.color}</span>
+                    </span>
+                  ) : (
+                    <span className="text-muted text-[12px]">{"\u2014"}</span>
+                  )}
+                </td>
+                <td className="text-center text-muted">
+                  {tag._count?.articles ?? 0}
+                </td>
+                <td className="text-right">
+                  <button
+                    type="button"
+                    onClick={() => startEdit(tag)}
+                    className="text-[11px] text-accent hover:underline mr-2"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(tag)}
+                    className="text-[11px] text-wiki-link-broken hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {flatTags.map(({ tag, depth }) => (
-                <tr key={tag.id} className="border-t border-border-light hover:bg-surface-hover">
-                  <td className="py-1 pr-2" style={{ paddingLeft: `${depth * 16}px` }}>
-                    {depth > 0 && <span className="text-muted text-[11px] mr-1">{"\u2514"}</span>}
-                    {tag.name}
-                  </td>
-                  <td className="py-1 pr-2">
-                    {tag.color ? (
-                      <span className="inline-flex items-center gap-1">
-                        <span
-                          className="inline-block w-3 h-3 rounded-full border border-border-light"
-                          style={{ backgroundColor: tag.color }}
-                        />
-                        <span className="text-[11px] text-muted">{tag.color}</span>
-                      </span>
-                    ) : (
-                      <span className="text-muted text-[12px]">{"\u2014"}</span>
-                    )}
-                  </td>
-                  <td className="py-1 pr-2 text-center text-muted">
-                    {tag._count?.articles ?? 0}
-                  </td>
-                  <td className="py-1 text-right">
-                    <button
-                      onClick={() => startEdit(tag)}
-                      className="text-[11px] text-accent hover:underline mr-2"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(tag)}
-                      className="text-[11px] text-wiki-link-broken hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {flatTags.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="py-2 text-center text-muted text-[12px] italic">
-                    No tags yet.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+            ))}
+            {flatTags.length === 0 && (
+              <tr>
+                <td colSpan={4} className="text-center text-muted text-[12px] italic">
+                  No tags yet.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </DataTable>
 
         {/* Success/error messages */}
         {error && <p className="text-[12px] text-wiki-link-broken mb-2">{error}</p>}
@@ -230,20 +231,18 @@ export default function TagManager() {
             <div className="flex gap-2">
               <div className="flex-1">
                 <label className="block text-[11px] text-muted mb-0.5">Name *</label>
-                <input
+                <Input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
                 />
               </div>
               <div className="flex-1">
                 <label className="block text-[11px] text-muted mb-0.5">Parent</label>
-                <select
+                <Select
                   value={parentId}
                   onChange={(e) => setParentId(e.target.value)}
-                  className="w-full border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
                 >
                   <option value="">None (top-level)</option>
                   {flatTags
@@ -255,18 +254,18 @@ export default function TagManager() {
                         {tag.name}
                       </option>
                     ))}
-                </select>
+                </Select>
               </div>
             </div>
             <div>
               <label className="block text-[11px] text-muted mb-0.5">Color</label>
               <div className="flex items-center gap-2">
-                <input
+                <Input
                   type="text"
                   value={color}
                   onChange={(e) => setColor(e.target.value)}
                   placeholder="#36c"
-                  className="w-24 border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+                  className="w-24"
                 />
                 <div className="flex gap-1">
                   {presetColors.map((c) => (
@@ -294,7 +293,7 @@ export default function TagManager() {
             <div className="flex gap-2">
               <button
                 type="submit"
-                className="bg-accent px-3 py-1 text-[13px] font-bold text-white hover:bg-accent-hover"
+                className="bg-accent px-3 py-1 text-[13px] font-bold text-accent-foreground hover:bg-accent-hover"
               >
                 {editingId ? "Save" : "Create"}
               </button>
@@ -310,7 +309,7 @@ export default function TagManager() {
         ) : (
           <button
             onClick={startCreate}
-            className="bg-accent px-3 py-1 text-[13px] font-bold text-white hover:bg-accent-hover"
+            className="bg-accent px-3 py-1 text-[13px] font-bold text-accent-foreground hover:bg-accent-hover"
           >
             + New Tag
           </button>

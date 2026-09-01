@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
-import { Button, EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
+import { Button, DataTable, EmptyState, Input, LinkButton, Page, PageHeader, Select } from "@/components/ui";
 
 type AuditEntry = {
   id: string;
@@ -34,22 +33,22 @@ const ACTION_LABELS: Record<string, string> = {
 };
 
 const ACTION_COLOURS: Record<string, string> = {
-  "article.delete": "text-red-500",
-  "category.delete": "text-red-500",
-  "user.delete": "text-red-500",
-  "revision.revert": "text-amber-500",
-  "user.role_change": "text-amber-500",
-  "export.create": "text-amber-500",
-  "admin.failed_operation": "text-red-500",
-  "article.create": "text-green-600",
-  "category.create": "text-green-600",
+  "article.delete": "text-danger",
+  "category.delete": "text-danger",
+  "user.delete": "text-danger",
+  "revision.revert": "text-warning",
+  "user.role_change": "text-warning",
+  "export.create": "text-warning",
+  "admin.failed_operation": "text-danger",
+  "article.create": "text-success",
+  "category.create": "text-success",
 };
 
 const SEVERITY_COLOURS: Record<string, string> = {
   info: "text-muted",
-  warning: "text-amber-600",
-  high: "text-orange-600",
-  critical: "text-red-600",
+  warning: "text-warning",
+  high: "text-warning",
+  critical: "text-danger",
 };
 
 export default function AuditLogPage() {
@@ -115,64 +114,58 @@ export default function AuditLogPage() {
 
       {/* Filters */}
       <div className="grid grid-cols-1 gap-2 mb-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
-        <select
+        <Select
           value={actionFilter}
           onChange={(e) => resetPage(setActionFilter)(e.target.value)}
-          className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
         >
           <option value="">All actions</option>
           {Object.entries(ACTION_LABELS).map(([k, v]) => (
             <option key={k} value={k}>{v}</option>
           ))}
-        </select>
-        <input
+        </Select>
+        <Input
           value={actorFilter}
           onChange={(e) => resetPage(setActorFilter)(e.target.value)}
           placeholder="Actor"
-          className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
         />
-        <input
+        <Input
           value={targetFilter}
           onChange={(e) => resetPage(setTargetFilter)(e.target.value)}
           placeholder="Target"
-          className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
         />
-        <select
+        <Select
           value={severityFilter}
           onChange={(e) => resetPage(setSeverityFilter)(e.target.value)}
-          className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
         >
           <option value="">All severities</option>
           <option value="info">Info</option>
           <option value="warning">Warning</option>
           <option value="high">High</option>
           <option value="critical">Critical</option>
-        </select>
-        <select
+        </Select>
+        <Select
           value={successFilter}
           onChange={(e) => resetPage(setSuccessFilter)(e.target.value)}
-          className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
         >
           <option value="">All outcomes</option>
           <option value="true">Succeeded</option>
           <option value="false">Failed</option>
-        </select>
-        <input
+        </Select>
+        <Input
           type="date"
           value={dateFromFilter}
           onChange={(e) => resetPage(setDateFromFilter)(e.target.value)}
-          className="border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
         />
         <div className="flex gap-2">
-          <input
+          <Input
             type="date"
             value={dateToFilter}
             onChange={(e) => resetPage(setDateToFilter)(e.target.value)}
-            className="min-w-0 flex-1 border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+            className="min-w-0 flex-1"
           />
-          <Link href={exportHref} className="ui-button whitespace-nowrap">
+          <LinkButton href={exportHref} prefetch={false} className="whitespace-nowrap">
             Export
-          </Link>
+          </LinkButton>
         </div>
       </div>
 
@@ -182,47 +175,45 @@ export default function AuditLogPage() {
       ) : logs.length === 0 ? (
         <EmptyState title="No entries found." />
       ) : (
-        <div className="border border-border overflow-x-auto">
-          <table className="w-full text-[13px]">
-            <thead>
-              <tr className="bg-surface-hover border-b border-border">
-                <th className="text-left px-3 py-2 text-[11px] font-bold text-muted uppercase">Time</th>
-                <th className="text-left px-3 py-2 text-[11px] font-bold text-muted uppercase">User</th>
-                <th className="text-left px-3 py-2 text-[11px] font-bold text-muted uppercase">Action</th>
-                <th className="text-left px-3 py-2 text-[11px] font-bold text-muted uppercase">Severity</th>
-                <th className="text-left px-3 py-2 text-[11px] font-bold text-muted uppercase">Target</th>
-                <th className="text-left px-3 py-2 text-[11px] font-bold text-muted uppercase">Details</th>
+        <DataTable>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Severity</th>
+              <th>Target</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((entry) => (
+              <tr key={entry.id}>
+                <td className="text-muted whitespace-nowrap">
+                  {new Date(entry.createdAt).toLocaleString("en-US", {
+                    month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
+                  })}
+                </td>
+                <td className="font-medium text-heading">
+                  {entry.username ?? <span className="text-muted italic">system</span>}
+                </td>
+                <td className={`font-medium ${ACTION_COLOURS[entry.action] ?? "text-foreground"}`}>
+                  {ACTION_LABELS[entry.action] ?? entry.action}
+                </td>
+                <td className={`font-medium ${SEVERITY_COLOURS[entry.severity] ?? "text-muted"}`}>
+                  {entry.success ? entry.severity : `${entry.severity} / failed`}
+                </td>
+                <td className="text-foreground">
+                  <span className="text-muted text-[11px] mr-1">{entry.entityType}</span>
+                  {entry.entityLabel ?? entry.entityId ?? "—"}
+                </td>
+                <td className="text-muted text-[11px] max-w-[200px] truncate">
+                  {entry.metadata ? JSON.stringify(entry.metadata) : "—"}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {logs.map((entry, i) => (
-                <tr key={entry.id} className={i % 2 === 0 ? "bg-surface" : "bg-surface-hover"}>
-                  <td className="px-3 py-2 text-muted whitespace-nowrap">
-                    {new Date(entry.createdAt).toLocaleString("en-US", {
-                      month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
-                    })}
-                  </td>
-                  <td className="px-3 py-2 font-medium text-heading">
-                    {entry.username ?? <span className="text-muted italic">system</span>}
-                  </td>
-                  <td className={`px-3 py-2 font-medium ${ACTION_COLOURS[entry.action] ?? "text-foreground"}`}>
-                    {ACTION_LABELS[entry.action] ?? entry.action}
-                  </td>
-                  <td className={`px-3 py-2 font-medium ${SEVERITY_COLOURS[entry.severity] ?? "text-muted"}`}>
-                    {entry.success ? entry.severity : `${entry.severity} / failed`}
-                  </td>
-                  <td className="px-3 py-2 text-foreground">
-                    <span className="text-muted text-[11px] mr-1">{entry.entityType}</span>
-                    {entry.entityLabel ?? entry.entityId ?? "—"}
-                  </td>
-                  <td className="px-3 py-2 text-muted text-[11px] max-w-[200px] truncate">
-                    {entry.metadata ? JSON.stringify(entry.metadata) : "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </DataTable>
       )}
 
       {/* Pagination */}

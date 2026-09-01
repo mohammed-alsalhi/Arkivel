@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Notice, Page, PageHeader } from "@/components/ui";
+import { Button, Notice, Page, PageHeader, Select } from "@/components/ui";
 
 type Category = {
   id: string;
@@ -95,10 +95,10 @@ export default function ExportPage() {
             </label>
 
             {scope === "category" && (
-              <select
+              <Select
                 value={categorySlug}
                 onChange={(e) => setCategorySlug(e.target.value)}
-                className="ml-6 w-full max-w-xs border border-border bg-surface px-2 py-1 text-[13px] text-foreground focus:border-accent focus:outline-none"
+                className="ml-6 max-w-xs"
               >
                 <option value="">select a category...</option>
                 {categories.map((cat) => (
@@ -106,7 +106,7 @@ export default function ExportPage() {
                     {cat.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             )}
           </div>
         </fieldset>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Select } from "@/components/ui";
 
 type Category = {
   id: string;
@@ -34,14 +35,13 @@ export default function CategorySelect({ value, onChange, categories: externalCa
   const roots = categories.filter((c) => !c.parentId);
 
   return (
-    <select
+    <Select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full border border-border bg-surface px-2 py-1.5 text-[13px] text-foreground focus:border-accent focus:outline-none"
     >
       <option value="">No category</option>
       {renderOptions(roots, 0)}
-    </select>
+    </Select>
   );
 }
 

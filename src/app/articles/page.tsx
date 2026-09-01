@@ -6,12 +6,14 @@ import { articleVisibilityFilter } from "@/lib/article-visibility";
 import { isAdmin } from "@/lib/auth";
 import { formatDate } from "@/lib/utils";
 import {
+  Button,
   DataTable,
   EmptyState,
   LinkButton,
   Page,
   PageHeader,
   SectionPanel,
+  Select,
 } from "@/components/ui";
 
 const PAGE_SIZE = 20;
@@ -130,44 +132,44 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
         >
           {canViewDrafts ? <label className="grid gap-1 text-[12px] text-muted">
             <span>category</span>
-            <select className="ui-select" defaultValue={category} name="category">
+            <Select defaultValue={category} name="category">
               <option value="">all categories</option>
               {categories.map((item) => (
                 <option key={item.id} value={item.slug}>
                   {item.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </label> : null}
 
           <label className="grid gap-1 text-[12px] text-muted">
             <span>tag</span>
-            <select className="ui-select" defaultValue={tag} name="tag">
+            <Select defaultValue={tag} name="tag">
               <option value="">all tags</option>
               {tags.map((item) => (
                 <option key={item.id} value={item.slug}>
                   {item.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
 
           <label className="grid gap-1 text-[12px] text-muted">
             <span>status</span>
-            <select className="ui-select" defaultValue={status} name="status">
+            <Select defaultValue={status} name="status">
               <option value="">all statuses</option>
               {ARTICLE_STATUSES.map((item) => (
                 <option key={item} value={item}>
                   {item}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
 
           <div className="flex items-end gap-2">
-            <button className="ui-button ui-button-primary" type="submit">
+            <Button type="submit" variant="primary">
               filter
-            </button>
+            </Button>
             <LinkButton href="/articles">clear</LinkButton>
           </div>
         </form>

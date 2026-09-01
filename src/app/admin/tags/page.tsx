@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
+import { Button, DataTable, EmptyState, Input, Page, PageHeader } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -82,11 +82,11 @@ export default function AdminTagsPage() {
       <PageHeader title="Tag management" />
 
       <div className="mb-4 flex items-center gap-2">
-        <input
+        <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Filter tags…"
-          className="text-[13px] bg-transparent border border-border rounded px-2 py-1 outline-none focus:border-[var(--color-accent)] text-foreground placeholder:text-muted w-64"
+          className="w-64"
         />
         <span className="text-[12px] text-muted">{filtered.length} tag{filtered.length !== 1 ? "s" : ""}</span>
       </div>
@@ -96,25 +96,24 @@ export default function AdminTagsPage() {
       ) : filtered.length === 0 ? (
         <EmptyState title="No tags found." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-[13px] border-collapse">
-            <thead>
-              <tr className="border-b border-border text-left text-muted text-[11px] uppercase">
-                <th className="py-2 pr-3">Name</th>
-                <th className="py-2 pr-3">Slug</th>
-                <th className="py-2 pr-3">Color</th>
-                <th className="py-2 pr-3">Articles</th>
-                <th className="py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+        <DataTable>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Slug</th>
+              <th>Color</th>
+              <th>Articles</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
               {filtered.map((tag) => (
-                <tr key={tag.id} className="border-b border-border hover:bg-surface-hover group">
+                <tr key={tag.id} className="group">
                   {editId === tag.id ? (
                     <>
-                      <td className="py-1.5 pr-3" colSpan={3}>
+                      <td colSpan={3}>
                         <div className="flex items-center gap-2">
-                          <input
+                          <Input
                             autoFocus
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
@@ -122,7 +121,7 @@ export default function AdminTagsPage() {
                               if (e.key === "Enter") saveEdit();
                               if (e.key === "Escape") cancelEdit();
                             }}
-                            className="text-[13px] bg-transparent border border-border rounded px-2 py-0.5 outline-none focus:border-[var(--color-accent)] text-foreground w-40"
+                            className="w-40"
                           />
                           <input
                             type="color"
@@ -138,11 +137,11 @@ export default function AdminTagsPage() {
                           >
                             Clear
                           </button>
-                          {error && <span className="text-red-500 text-[11px]">{error}</span>}
+                          {error && <span className="text-danger text-[11px]">{error}</span>}
                         </div>
                       </td>
-                      <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
-                      <td className="py-1.5">
+                      <td className="text-muted">{tag._count?.articles ?? "—"}</td>
+                      <td>
                         <div className="flex items-center gap-1">
                           <Button onClick={saveEdit} disabled={saving}>
                             Save
@@ -153,7 +152,7 @@ export default function AdminTagsPage() {
                     </>
                   ) : (
                     <>
-                      <td className="py-1.5 pr-3 font-medium">
+                      <td className="font-medium">
                         <div className="flex items-center gap-2">
                           {tag.color && (
                             <span
@@ -164,10 +163,10 @@ export default function AdminTagsPage() {
                           {tag.name}
                         </div>
                       </td>
-                      <td className="py-1.5 pr-3 text-muted font-mono text-[11px]">{tag.slug}</td>
-                      <td className="py-1.5 pr-3 text-muted">{tag.color || <span className="opacity-40 italic">none</span>}</td>
-                      <td className="py-1.5 pr-3 text-muted">{tag._count?.articles ?? "—"}</td>
-                      <td className="py-1.5">
+                      <td className="text-muted font-mono text-[11px]">{tag.slug}</td>
+                      <td className="text-muted">{tag.color || <span className="opacity-40 italic">none</span>}</td>
+                      <td className="text-muted">{tag._count?.articles ?? "—"}</td>
+                      <td>
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <Button onClick={() => startEdit(tag)}>Rename</Button>
                           <Button variant="danger" onClick={() => deleteTag(tag)}>
@@ -179,9 +178,8 @@ export default function AdminTagsPage() {
                   )}
                 </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </DataTable>
       )}
     </Page>
   );
