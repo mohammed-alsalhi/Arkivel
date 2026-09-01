@@ -39,6 +39,8 @@ npm run dev
 
 Use `prisma db push` only for a new, empty local database. For an existing database, review the schema difference, take a verified backup, and use explicit SQL after a restore rehearsal.
 
+To populate a fresh local database with a realistic demo dataset (categories, tags, cross-linked articles, and semantic relations), run `npm run seed:demo`. The seed is idempotent — it upserts by slug and name, so re-running it is safe.
+
 The wiki opens at `http://localhost:3000`. To preview the database-free product site:
 
 ```bash
@@ -64,6 +66,7 @@ npm test
 npm run test:e2e
 npm run build
 npm run release:docs-sync
+npm run seed:demo
 ```
 
 ## documentation

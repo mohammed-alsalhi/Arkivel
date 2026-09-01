@@ -15,6 +15,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "qa:seed-smoke": "node scripts/seed-smoke-fixtures.mjs",
+    "seed:demo": "node prisma/seed-demo.mjs",
     "release:docs-sync": "node scripts/verify-docs-sync.mjs",
     "import": "tsx scripts/import-articles.ts"
   },
