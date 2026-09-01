@@ -430,6 +430,11 @@ html[data-skin="folio"] .wiki-layout {
     transform: translateX(0);
   }
 
+  /* Clear the fixed menu button so banner text isn't covered by it. */
+  .wiki-site-banner {
+    padding-inline: 4.25rem;
+  }
+
   .wiki-main-menu-button {
     position: fixed;
     top: 1rem;

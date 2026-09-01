@@ -19,7 +19,7 @@ export default function SiteBanner({ children, icon, tone = "info" }: SiteBanner
     <div
       role="status"
       className={clsx(
-        "flex items-center justify-center gap-2 border-b px-4 py-2 text-center text-[12px]",
+        "wiki-site-banner flex items-center justify-center gap-2 border-b px-4 py-2 text-center text-[12px]",
         toneClasses[tone],
       )}
     >
