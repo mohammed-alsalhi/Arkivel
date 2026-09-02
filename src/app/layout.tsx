@@ -7,8 +7,11 @@ import LayoutShell from "@/components/layout/LayoutShell";
 import { AdminProvider } from "@/components/AdminContext";
 import { ToastProvider } from "@/components/Toast";
 import { MaintenanceBanner, ReadOnlyBanner } from "@/components/SiteBanner";
-import { config } from "@/lib/config";
+import { config, type WikiSkin } from "@/lib/config";
+import { SKIN_COOKIE, isWikiSkin } from "@/lib/skin";
 import { unstable_cache } from "next/cache";
+import { cookies } from "next/headers";
+import { cache } from "react";
 import ProductShell from "@/components/product/ProductShell";
 
 const geistSans = Geist({
@@ -21,19 +24,56 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  viewportFit: "cover",
-  // The product site is always light (white); the wiki follows the color scheme.
-  themeColor:
-    config.siteMode === "product"
-      ? "#ffffff"
-      : [
-          { media: "(prefers-color-scheme: light)", color: "#f8f9fa" },
-          { media: "(prefers-color-scheme: dark)", color: "#181a1b" },
-        ],
+// Page backgrounds per skin (see styles/tokens.css) for the browser chrome color.
+const SKIN_THEME_COLORS: Record<WikiSkin, { light: string; dark: string }> = {
+  wiki: { light: "#f8f9fa", dark: "#181a1b" },
+  folio: { light: "#f6f7f9", dark: "#0b0b0c" },
 };
+
+// One session lookup per request, shared by the layout and the skin resolver.
+const getRequestSession = cache(async () => {
+  const { getSession } = await import("@/lib/auth");
+  return getSession().catch(() => null);
+});
+
+// Wiki skin resolution order: the skin cookie (set when a reader picks a skin
+// in settings), else the signed-in user's saved preference, else the env
+// default. Cached per request so generateViewport and the layout agree.
+const resolveRequestSkin = cache(async (): Promise<WikiSkin> => {
+  const cookieSkin = (await cookies()).get(SKIN_COOKIE)?.value;
+  if (isWikiSkin(cookieSkin)) return cookieSkin;
+
+  const session = await getRequestSession();
+  if (session) {
+    const { default: prisma } = await import("@/lib/prisma");
+    const pref = await prisma.userPreference
+      .findUnique({ where: { userId: session.id }, select: { data: true } })
+      .catch(() => null);
+    const saved =
+      pref && typeof pref.data === "object" && pref.data !== null
+        ? (pref.data as Record<string, unknown>).skin
+        : undefined;
+    if (isWikiSkin(saved)) return saved;
+  }
+
+  return config.wikiSkin;
+});
+
+export async function generateViewport(): Promise<Viewport> {
+  const base: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
+  // The product site is always light (white); the wiki follows the color scheme.
+  if (config.siteMode === "product") {
+    return { ...base, themeColor: "#ffffff" };
+  }
+  const colors = SKIN_THEME_COLORS[await resolveRequestSkin().catch(() => config.wikiSkin)];
+  return {
+    ...base,
+    themeColor: [
+      { media: "(prefers-color-scheme: light)", color: colors.light },
+      { media: "(prefers-color-scheme: dark)", color: colors.dark },
+    ],
+  };
+}
 
 // Apply the persisted theme before first paint so dark-mode readers do not get
 // a white flash. The focused shell itself has no persisted layout state.
@@ -104,8 +144,8 @@ export default async function RootLayout({
     );
   }
 
-  const { getSession, isAdmin } = await import("@/lib/auth");
-  const [{ categories, articleCount, maintenanceMode, readOnlyMode }, initialAdmin, initialSession] =
+  const { isAdmin } = await import("@/lib/auth");
+  const [{ categories, articleCount, maintenanceMode, readOnlyMode }, initialAdmin, initialSession, skin] =
     await Promise.all([
       getShellData().catch(() => ({
         categories: [],
@@ -114,14 +154,15 @@ export default async function RootLayout({
         readOnlyMode: false,
       })),
       isAdmin().catch(() => false),
-      getSession().catch(() => null),
+      getRequestSession(),
+      resolveRequestSkin().catch(() => config.wikiSkin),
     ]);
   const initialAuth = { admin: initialAdmin, loggedIn: Boolean(initialSession) };
 
   return (
     <html
       lang="en"
-      data-skin={config.wikiSkin}
+      data-skin={skin}
       suppressHydrationWarning
     >
       <head>

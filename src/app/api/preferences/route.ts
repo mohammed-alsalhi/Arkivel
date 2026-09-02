@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { getSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { DEFAULT_PREFERENCES, mergePreferences } from "@/lib/preferences";
+import { isWikiSkin } from "@/lib/skin";
 
 export async function GET() {
   const session = await getSession();
@@ -54,9 +55,13 @@ export async function PUT(request: NextRequest) {
     const allowedKeys = new Set(Object.keys(DEFAULT_PREFERENCES));
     const sanitized: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(body)) {
-      if (allowedKeys.has(key)) {
-        sanitized[key] = value;
+      if (!allowedKeys.has(key)) continue;
+      if (key === "skin") {
+        // "" follows the site default; anything else must be a known skin
+        if (value === "" || isWikiSkin(value)) sanitized.skin = value;
+        continue;
       }
+      sanitized[key] = value;
     }
 
     // Fetch existing preferences to merge with update

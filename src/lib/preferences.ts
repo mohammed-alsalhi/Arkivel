@@ -1,4 +1,8 @@
+import { isWikiSkin } from "./skin";
+
 export const DEFAULT_PREFERENCES = {
+  // "" = follow the site default (config.wikiSkin); otherwise a named skin.
+  skin: "" as "" | "folio" | "wiki",
   dashboardWidgets: [
     "welcome",
     "featured",
@@ -38,6 +42,8 @@ export function mergePreferences(
   return {
     ...DEFAULT_PREFERENCES,
     ...saved,
+    // Unknown skins fall back to the site default
+    skin: isWikiSkin(saved.skin) ? saved.skin : "",
     // Ensure dashboardWidgets is always an array even if saved value is malformed
     dashboardWidgets:
       Array.isArray(saved.dashboardWidgets) && saved.dashboardWidgets.length > 0

@@ -13,7 +13,30 @@ import {
   Select,
 } from "@/components/ui";
 import { useToast } from "@/components/Toast";
+import { config, type WikiSkin } from "@/lib/config";
 import { DEFAULT_PREFERENCES, type UserPreferences } from "@/lib/preferences";
+import { SKINS, SKIN_COOKIE, SKIN_LABELS, applySkin } from "@/lib/skin";
+
+type SkinChoice = UserPreferences["skin"];
+
+const SKIN_OPTIONS: { value: SkinChoice; name: string; description: string }[] = [
+  {
+    value: "",
+    name: `site default (${SKIN_LABELS[config.wikiSkin].name})`,
+    description: "follow whichever skin this site is configured to use",
+  },
+  ...SKINS.map((skin: WikiSkin) => ({ value: skin, ...SKIN_LABELS[skin] })),
+];
+
+/** Apply a skin choice to the live document; "" clears the cookie and restores the site default. */
+function applySkinChoice(skin: SkinChoice) {
+  if (skin) {
+    applySkin(skin);
+    return;
+  }
+  document.cookie = `${SKIN_COOKIE}=; path=/; max-age=0; samesite=lax`;
+  document.documentElement.setAttribute("data-skin", config.wikiSkin);
+}
 
 const LOCALES = [
   { value: "en", label: "english" },
@@ -83,13 +106,23 @@ export default function SettingsPage() {
     }
   }
 
+  function selectSkin(skin: SkinChoice) {
+    setPrefs((p) => ({ ...p, skin }));
+    applySkinChoice(skin);
+    // Re-render server chrome (sidebar, viewport color) with the new skin
+    router.refresh();
+  }
+
   function handleReset() {
     setPrefs((current) => ({
       ...current,
+      skin: DEFAULT_PREFERENCES.skin,
       editorMode: DEFAULT_PREFERENCES.editorMode,
       articlesPerPage: DEFAULT_PREFERENCES.articlesPerPage,
       locale: DEFAULT_PREFERENCES.locale,
     }));
+    applySkinChoice(DEFAULT_PREFERENCES.skin);
+    router.refresh();
   }
 
   if (!authenticated) {
@@ -115,6 +148,35 @@ export default function SettingsPage() {
       <PageHeader title="settings" />
 
       <div className="max-w-xl space-y-6">
+        <SectionPanel title="appearance" bodyClassName="space-y-3">
+          <fieldset>
+            <legend className="block text-[13px] font-medium text-heading mb-1.5">
+              skin
+            </legend>
+            <div className="space-y-2">
+              {SKIN_OPTIONS.map((option) => (
+                <label
+                  key={option.value || "default"}
+                  className="flex items-start gap-2 text-[13px] cursor-pointer"
+                >
+                  <input
+                    type="radio"
+                    name="skin"
+                    value={option.value}
+                    checked={prefs.skin === option.value}
+                    onChange={() => selectSkin(option.value)}
+                    className="accent-accent mt-0.5"
+                  />
+                  <span>
+                    <span className="block">{option.name}</span>
+                    <span className="block text-muted">{option.description}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </SectionPanel>
+
         <SectionPanel title="editor" bodyClassName="space-y-3">
           <div>
             <label className="block text-[13px] font-medium text-heading mb-1.5">
