@@ -135,10 +135,8 @@
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--color-background); }
-::-webkit-scrollbar-thumb { background: var(--color-border-light); }
-::-webkit-scrollbar-thumb:hover { background: var(--color-border); }
+/* Scrollbars: native bars are hidden and src/lib/overlayScrollbar.ts draws
+   hover-only overlay thumbs — see primitives.css. */
 
 /* ── Selection ── */
 ::selection {

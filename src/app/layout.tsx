@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
 import DocumentTitle from "@/components/layout/DocumentTitle";
 import LayoutShell from "@/components/layout/LayoutShell";
+import OverlayScrollbar from "@/components/OverlayScrollbar";
 import { AdminProvider } from "@/components/AdminContext";
 import { ToastProvider } from "@/components/Toast";
 import { MaintenanceBanner, ReadOnlyBanner } from "@/components/SiteBanner";
@@ -139,6 +140,7 @@ export default async function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <a href="#main-content" className="skip-to-content">Skip to content</a>
           <ProductShell>{children}</ProductShell>
+          <OverlayScrollbar />
         </body>
       </html>
     );
@@ -193,6 +195,7 @@ export default async function RootLayout({
             </div>
           </LayoutShell>
           <DocumentTitle appName={config.name} />
+          <OverlayScrollbar />
         </ToastProvider>
         </AdminProvider>
       </body>
