@@ -11,7 +11,7 @@ One repository serves two independent deployments:
 
 Each deployment keeps its own domains, environment variables, database, and blob credentials.
 
-Wiki deployments default to the lowercase, full-viewport `folio` skin. Set `NEXT_PUBLIC_ARKIVEL_SKIN=wiki` to keep the classic framed wiki skin without changing the supported feature set.
+Wiki deployments default to the lowercase, full-viewport `folio` skin. Set `NEXT_PUBLIC_ARKIVEL_SKIN=wiki` to make the classic framed wiki skin the site default; signed-in readers can override either default from the appearance section in settings. Press `⌘K` / `Ctrl+K` anywhere for the command palette.
 
 ## core
 

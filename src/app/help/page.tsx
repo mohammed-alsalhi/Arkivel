@@ -37,7 +37,9 @@ export default function HelpPage() {
               <Link href="/articles">all pages</Link> for the complete index.
             </li>
             <li>
-              use the search field in the left rail. the full <Link href="/search">search page</Link>{" "}
+              press <InlineCode>⌘K</InlineCode> (<InlineCode>ctrl K</InlineCode> on windows and linux) or
+              click the search field in the left rail to open the command palette: find pages, jump to
+              any section, or toggle the theme and skin. the full <Link href="/search">search page</Link>{" "}
               accepts the same query and shows matching pages.
             </li>
             <li>

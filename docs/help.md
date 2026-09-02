@@ -10,7 +10,11 @@ Type `[[Page title]]` to link another article. Article pages show backlinks and 
 
 ## find
 
-Use the sidebar search or `/search`. Multi-word searches require every word and rank title matches first. Browse all pages, categories, tags, the graph, or recent changes when the exact title is unknown.
+Press `⌘K` (`Ctrl+K` on Windows and Linux) or click the sidebar search to open the command palette: type to find pages, jump to all pages, tags, the graph, or settings, and run actions like toggling dark mode. The full `/search` page accepts the same query. Multi-word searches require every word and rank title matches first. Browse all pages, categories, tags, the graph, or recent changes when the exact title is unknown.
+
+## personalize
+
+Settings has an appearance section with two skins: **folio**, a flat document interface, and **wiki**, the classic framed layout. Pick one or follow the site default; the choice is remembered in your browser and on your account. The theme toggle in the sidebar switches light and dark mode.
 
 ## revise
 

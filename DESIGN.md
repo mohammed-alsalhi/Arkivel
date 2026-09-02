@@ -6,7 +6,9 @@ Arkivel should feel like a durable document tool, not a dashboard.
 - neutral surfaces, thin borders, restrained radius, and no blue accent system
 - the supplied Arkivel SVG mark for product identity and a theme-aware SVG favicon
 - a three-pane wiki shell: navigation, document, and graph/outline context
-- two named skins on the same components: `folio` for the full-viewport interface and `wiki` for the classic framed layout and palette
+- two named skins on the same components: `folio` is a flat, document-first interface (hairline dividers, soft hover fills, a centered document column, compact icon navigation — closer to a notes app than a wiki) and `wiki` is the classic framed layout with bordered tables, portals, and the traditional palette; readers pick either in settings
+- the folio skin lowercases interface copy but never user-authored text (page titles, table cells, card titles)
+- one command palette (`⌘K` / `Ctrl+K`) for search, navigation, and the few global actions, instead of scattered toolbars
 - text links and native controls before decorative buttons
 - visible focus, semantic headings, keyboard access, reduced motion, and responsive single-column fallbacks
 

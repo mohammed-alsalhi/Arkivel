@@ -47,7 +47,12 @@ export default function FeaturesPage() {
         <SectionPanel title="find and connect" bodyClassName="text-[13px]">
           <ul className="list-disc space-y-2 pl-5">
             <FeatureItem title="search">
-              search page titles and content from the sidebar or the full <Link href="/search">search page</Link>.
+              search page titles and content from the <InlineCode>⌘K</InlineCode> command palette or the full{" "}
+              <Link href="/search">search page</Link>.
+            </FeatureItem>
+            <FeatureItem title="skins">
+              choose the flat <em>folio</em> interface or the classic framed <em>wiki</em> skin in{" "}
+              <Link href="/settings">settings</Link>, in light or dark mode.
             </FeatureItem>
             <FeatureItem title="categories and tags">
               organize pages in hierarchical <Link href="/categories">categories</Link> and browse

@@ -1,5 +1,14 @@
 # changelog
 
+## 6.1.0
+
+- added a command palette (`⌘K` / `Ctrl+K`) that searches pages, jumps to sections, and runs theme and skin actions; the sidebar search field opens it
+- made the skin a per-user choice: settings offers site default, `folio`, or `wiki`, resolved from a cookie, then the saved preference, then `NEXT_PUBLIC_ARKIVEL_SKIN`
+- redesigned `folio` as a flat, document-first skin — hairline dividers instead of boxed panels and bordered tables, soft hover fills, a centered document column, and compact icon navigation — while `wiki` keeps the classic framed palette on the same components
+- fixed folio-dark contrast bugs (skip link, primary buttons, toggle thumb), unified the drawer z-tiers, made drawers proper dialogs with focus traps, and extended coarse-pointer sizing across the editor, graph, and context rail
+- routed hand-rolled inputs, tables, menus, and banners through the shared ui primitives and removed unused primitives and orphaned pre-6.0 css
+- added `npm run seed:demo`, an idempotent demo dataset with resolving wiki links and semantic relations
+
 ## 6.0.0
 
 - consolidated Arkivel and WorldWiki source into one public repository with independent deployments

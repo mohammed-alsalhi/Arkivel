@@ -7,6 +7,8 @@ Arkivel has one public source repository and two Vercel deployments:
 
 Keep the repository focused on the knowledge-base core: articles, wiki links, search, categories, tags, graph navigation, revisions, import/export, assets, authentication, users, audit, and maintenance. Do not reintroduce AI assistants, collaboration, marketplaces, plugins, workspaces, gamification, social feeds, or personal dashboards without an explicit product decision.
 
+Product decisions on record: the two built-in skins (`folio`, `wiki`) with a per-user choice in settings and the `⌘K` command palette are part of the core retrieval path (6.1.0). A theme editor, custom color presets, or a theme marketplace are not — keep appearance to the two skins plus light/dark.
+
 ## Safety
 
 - Never run `prisma db push`, `--accept-data-loss`, `DROP ... CASCADE`, or a destructive migration against an existing database.
