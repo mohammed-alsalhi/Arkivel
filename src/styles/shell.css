@@ -323,6 +323,11 @@ html[data-skin="folio"] .wiki-layout {
   font-weight: 550;
 }
 
+/* The classic wiki skin keeps a text-only navigation list. */
+html[data-skin="wiki"] .wiki-sidebar-link-icon {
+  display: none;
+}
+
 .wiki-sidebar-empty {
   padding: 0.5rem 1rem;
   color: var(--color-muted);
