@@ -10,10 +10,8 @@ html[data-skin="folio"] {
   --folio-hover: rgba(55, 53, 47, 0.06);
   --folio-active: rgba(55, 53, 47, 0.11);
   --folio-hairline: rgba(55, 53, 47, 0.1);
-  --folio-shadow:
-    0 0 0 1px rgba(15, 15, 15, 0.04),
-    0 3px 6px rgba(15, 15, 15, 0.08),
-    0 9px 24px rgba(15, 15, 15, 0.14);
+  /* Overlays only: the admin's shadow-md. Nothing in the flow casts a shadow. */
+  --folio-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --color-sidebar-bg: #f7f7f5;
   --color-border-light: #e6e6e3;
 }
@@ -22,10 +20,7 @@ html[data-skin="folio"][data-theme="dark"] {
   --folio-hover: rgba(255, 255, 255, 0.06);
   --folio-active: rgba(255, 255, 255, 0.11);
   --folio-hairline: rgba(255, 255, 255, 0.1);
-  --folio-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 3px 6px rgba(0, 0, 0, 0.3),
-    0 9px 24px rgba(0, 0, 0, 0.45);
+  --folio-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
   --color-sidebar-bg: #151517;
   --color-border-light: #2b2b30;
 }
@@ -42,24 +37,53 @@ html[data-skin="folio"] :where(
 }
 
 /* ── Shell ── */
+/* Sidebar geometry mirrors the admin reference rail: 14rem wide (4rem when
+   collapsed), 36px rows with a 20px icon slot, 32px section headers, flat
+   fills, hairline dividers, and no shadows anywhere. */
 html[data-skin="folio"] .wiki-sidebar {
+  --sidebar-width: 14rem;
   border-right: 1px solid var(--folio-hairline);
 }
 
-/* Workspace row: a compact 32px mark + name row, like a workspace switcher. */
+@media (min-width: 1024px) {
+  html[data-skin="folio"] .wiki-sidebar {
+    width: var(--sidebar-width);
+    flex-basis: var(--sidebar-width);
+    transition: width 150ms ease, flex-basis 150ms ease;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  html[data-skin="folio"] .wiki-sidebar {
+    transition: none;
+  }
+}
+
+/* Collapsed: an icon rail. Overflow opens so the footer menus can pop out
+   beside it (the scroll area still clips the navigation itself). */
+html[data-skin="folio"] .wiki-sidebar-collapsed {
+  --sidebar-width: 4rem;
+  overflow: visible;
+}
+
+/* Workspace row: a 36px mark + name row, like a workspace switcher. */
 html[data-skin="folio"] .wiki-sidebar-brand {
-  height: 2rem;
+  height: 2.25rem;
   max-width: calc(100% - 1.5rem);
   gap: 0.5rem;
-  margin: 0.6rem 0.75rem 0.5rem;
+  margin: 0.5rem 0.75rem 0;
   border-radius: var(--folio-radius);
-  padding: 0 0.35rem;
+  padding: 0 0.625rem;
 }
 
 html[data-skin="folio"] .wiki-sidebar-brand:hover,
 html[data-skin="folio"] .wiki-sidebar-brand:focus-visible {
-  background: var(--folio-hover);
+  background: var(--color-surface-hover);
   outline: none;
+}
+
+html[data-skin="folio"] .wiki-sidebar-brand:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-accent);
 }
 
 html[data-skin="folio"] .wiki-sidebar-brand:hover .wiki-brand-mark {
@@ -77,53 +101,112 @@ html[data-skin="folio"] .wiki-sidebar-brand-name {
   font-weight: 600;
 }
 
-html[data-skin="folio"] .wiki-sidebar-navigation {
-  gap: 1.25rem;
-  padding: 0 0.5rem 1.25rem;
+/* Collapsed, the row is the mark alone, centred in the rail. */
+html[data-skin="folio"] .wiki-sidebar-collapsed .wiki-sidebar-brand {
+  width: 2.5rem;
+  max-width: none;
+  justify-content: center;
+  padding: 0;
 }
 
+/* Scroll area (px-3 py-2), sections 0.5rem apart, rows 0.25rem apart. */
+html[data-skin="folio"] .wiki-sidebar-scroll {
+  padding: 0.5rem 0.75rem;
+}
+
+html[data-skin="folio"] .wiki-sidebar-navigation {
+  gap: 0.5rem;
+  padding: 0;
+}
+
+html[data-skin="folio"] .wiki-sidebar-section-header {
+  height: 2rem;
+  padding-inline: 0.5rem;
+}
+
+/* Folio lowercases interface copy globally; section labels are the one
+   place the reference sets small caps, so restate uppercase explicitly. */
 html[data-skin="folio"] .wiki-sidebar-section-title {
-  margin: 0 0 0.2rem 0.6rem;
-  color: var(--color-muted);
-  font-size: 0.72rem;
+  margin: 0;
+  color: color-mix(in srgb, var(--color-muted) 55%, transparent);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Collapsed, the label goes screen-reader-only and a hairline stands in. */
+html[data-skin="folio"] .wiki-sidebar-section-divider {
+  position: absolute;
+  top: 50%;
+  right: 0.25rem;
+  left: 0.25rem;
+  height: 1px;
+  transform: translateY(-50%);
+  background: var(--folio-hairline);
 }
 
 html[data-skin="folio"] .wiki-sidebar-section-links {
-  gap: 0.05rem;
+  gap: 0.25rem;
 }
 
-/* Rows: 28px, muted text that becomes the heading colour on hover. */
+/* Rows: 36px, muted text that becomes the heading colour on hover; the
+   active row takes the soft accent fill and semibold weight, no shadow. */
 html[data-skin="folio"] .wiki-sidebar-link {
-  min-height: 1.75rem;
+  height: 2.25rem;
+  min-height: 0;
   justify-content: flex-start;
   gap: 0.5rem;
   border-radius: var(--folio-radius);
-  padding: 0.2rem 0.6rem;
+  padding: 0 0.625rem;
   color: var(--color-muted);
   font-size: 0.875rem;
   font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: normal;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
 html[data-skin="folio"] .wiki-sidebar-link:hover,
 html[data-skin="folio"] .wiki-sidebar-link:focus-visible {
-  background: var(--folio-hover);
+  background: var(--color-surface-hover);
   color: var(--color-heading);
 }
 
 html[data-skin="folio"] .wiki-sidebar-link-active {
-  background: var(--folio-active);
+  background: var(--color-accent-soft);
   color: var(--color-heading);
   font-weight: 600;
+  box-shadow: none;
 }
 
+html[data-skin="folio"] .wiki-sidebar-link:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+}
+
+/* Icon slot 20px with a 16px glyph at 60%, full strength on the active row. */
 html[data-skin="folio"] .wiki-sidebar-link-icon {
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
   align-items: center;
   justify-content: center;
-  opacity: 0.75;
+  opacity: 0.6;
+}
+
+html[data-skin="folio"] .wiki-sidebar-link-icon > svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+html[data-skin="folio"] .wiki-sidebar-link-active .wiki-sidebar-link-icon {
+  opacity: 1;
+}
+
+html[data-skin="folio"] .wiki-sidebar-link-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 html[data-skin="folio"] .wiki-sidebar-search-trigger kbd {
@@ -133,23 +216,24 @@ html[data-skin="folio"] .wiki-sidebar-search-trigger kbd {
 /* Space rows: the whole row (chevron + link) takes the hover and active
    fills so the chevron reads as part of the row, not a separate control. */
 html[data-skin="folio"] .wiki-sidebar-row {
+  min-height: 2.25rem;
   border-radius: var(--folio-radius);
-  padding-left: calc(0.25rem + var(--depth) * 0.9rem);
+  padding-left: calc(0.375rem + var(--depth) * 0.875rem);
 }
 
 html[data-skin="folio"] .wiki-sidebar-row:hover,
 html[data-skin="folio"] .wiki-sidebar-row:focus-within {
-  background: var(--folio-hover);
+  background: var(--color-surface-hover);
 }
 
 html[data-skin="folio"] .wiki-sidebar-row-active {
-  background: var(--folio-active);
+  background: var(--color-accent-soft);
 }
 
 html[data-skin="folio"] .wiki-sidebar-row > .wiki-sidebar-link {
   border-radius: 0;
   background: transparent;
-  padding-left: 0.2rem;
+  padding-left: 0.25rem;
 }
 
 html[data-skin="folio"] .wiki-sidebar-row:hover > .wiki-sidebar-link,
@@ -158,7 +242,7 @@ html[data-skin="folio"] .wiki-sidebar-row:focus-within > .wiki-sidebar-link {
 }
 
 html[data-skin="folio"] .wiki-sidebar-row > .wiki-sidebar-link:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--color-accent-soft);
+  box-shadow: inset 0 0 0 2px var(--color-accent);
 }
 
 html[data-skin="folio"] .wiki-sidebar-chevron,
@@ -174,25 +258,30 @@ html[data-skin="folio"] .wiki-sidebar-chevron {
 
 html[data-skin="folio"] .wiki-sidebar-chevron:hover,
 html[data-skin="folio"] .wiki-sidebar-chevron:focus-visible {
-  background: var(--folio-active);
+  background: var(--color-accent-soft);
   color: var(--color-heading);
   opacity: 1;
 }
 
 html[data-skin="folio"] .wiki-sidebar-empty {
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem 0.625rem;
   font-size: 0.8125rem;
 }
 
-/* Footer: settings row on top, then the compact meta + controls row. */
+/* Footer (px-3 py-3): settings row, then meta + theme/user on one 36px row,
+   then the collapse toggle; each row is a flat 36px nav row. */
 html[data-skin="folio"] .wiki-sidebar-footer {
+  display: flex;
+  flex-direction: column;
   gap: 0.25rem;
   border-top: 1px solid var(--folio-hairline);
-  padding: 0.5rem 0.5rem 0.6rem;
+  padding: 0.75rem;
 }
 
 html[data-skin="folio"] .wiki-sidebar-footer-row {
-  padding-left: 0.6rem;
+  height: 2.25rem;
+  gap: 0.5rem;
+  padding-inline: 0.625rem 0;
 }
 
 html[data-skin="folio"] .wiki-sidebar-footer-copy {
@@ -200,18 +289,54 @@ html[data-skin="folio"] .wiki-sidebar-footer-copy {
 }
 
 html[data-skin="folio"] .wiki-sidebar-footer-actions .ui-icon-button {
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: var(--folio-radius);
   color: var(--color-muted);
 }
 
 html[data-skin="folio"] .wiki-sidebar-footer-actions .ui-icon-button:hover {
-  background: var(--folio-hover);
+  background: var(--color-surface-hover);
   color: var(--color-heading);
 }
 
+html[data-skin="folio"] .wiki-sidebar-footer-actions .ui-dropdown {
+  box-shadow: none;
+}
+
+/* Collapsed footer: theme and user stack as icon rows; the user menu opens
+   to the right of the rail instead of under it. */
+html[data-skin="folio"] .wiki-sidebar-collapsed .wiki-sidebar-footer-row {
+  height: auto;
+  align-items: stretch;
+  padding: 0;
+}
+
+html[data-skin="folio"] .wiki-sidebar-collapsed .wiki-sidebar-footer-actions {
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+html[data-skin="folio"] .wiki-sidebar-collapsed .wiki-sidebar-footer-actions .ui-icon-button {
+  width: 100%;
+}
+
+html[data-skin="folio"] .wiki-sidebar-collapsed .wiki-sidebar-footer-actions .ui-dropdown {
+  right: auto;
+  left: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="folio"] .wiki-sidebar-link {
+    transition: none;
+  }
+}
+
 html[data-skin="folio"] .wiki-main-menu-button {
-  border-color: var(--folio-hairline);
-  box-shadow: var(--folio-shadow);
+  border-color: var(--color-border-light);
+  box-shadow: none;
 }
 
 /* Document column: pages sit in a centered measure like a notes app. */
@@ -221,10 +346,15 @@ html[data-skin="folio"] .wiki-main-content {
   --page-pad-bottom: 4rem;
 }
 
+/* Content is left-aligned and fills the surface; only reading measures cap. */
 html[data-skin="folio"] .ui-page-body:not(.ui-page-wide):not(.ui-page-full) {
-  max-width: 56rem;
-  margin-inline: auto;
-  box-sizing: content-box;
+  max-width: none;
+  margin-inline: 0;
+}
+
+html[data-skin="folio"] .ui-page-narrow {
+  max-width: 48rem;
+  margin-inline: 0;
 }
 
 html[data-skin="folio"] .ui-page-body {
@@ -373,26 +503,33 @@ html[data-skin="folio"] .wiki-compact-list-title {
   font-size: 0.875rem;
 }
 
-/* ── Tables: database-style rows, no outer frame ── */
+/* ── Tables: fixed 2.25rem rows, pinned whisper-tint header, no frame ── */
 html[data-skin="folio"] .ui-table {
   border: 0;
   background: transparent;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 html[data-skin="folio"] .ui-table th,
 html[data-skin="folio"] .ui-table td {
-  border: 0;
+  border-right: 0;
   border-bottom: 1px solid var(--folio-hairline);
-  padding: 0.5rem 0.6rem;
-  vertical-align: middle;
+  padding: 0 0.625rem;
 }
 
 html[data-skin="folio"] .ui-table th {
-  background: transparent;
+  height: 2rem;
+  border-bottom-color: var(--color-border-light);
+  background: color-mix(in srgb, var(--color-surface-hover) 35%, var(--color-surface));
   color: var(--color-muted);
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+html[data-skin="folio"] .ui-table tr:last-child td {
+  border-bottom: 1px solid var(--folio-hairline);
 }
 
 html[data-skin="folio"] .ui-table tr:hover td {
@@ -412,15 +549,27 @@ html[data-skin="folio"] .tiptap th {
   font-weight: 600;
 }
 
-/* ── Controls ── */
+/* ── Controls: the scope admin scale — 2rem buttons, 2.25rem inputs ── */
 html[data-skin="folio"] .ui-button {
-  height: 1.75rem;
-  padding: 0 0.65rem;
-  border-color: var(--color-border-light);
+  height: 2rem;
+  padding: 0 0.75rem;
+  border-color: var(--color-border);
   border-radius: var(--folio-radius);
+  background: var(--color-surface);
   color: var(--color-foreground);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
+}
+
+html[data-skin="folio"] .ui-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+html[data-skin="folio"] .ui-section-title {
+  font-size: 0.875rem;
 }
 
 html[data-skin="folio"] .ui-button:hover {
@@ -480,8 +629,8 @@ html[data-skin="folio"] .ui-textarea {
 
 html[data-skin="folio"] .ui-input,
 html[data-skin="folio"] .ui-select {
-  height: 2rem;
-  padding: 0 0.6rem;
+  height: 2.25rem;
+  padding: 0 0.75rem;
 }
 
 html[data-skin="folio"] .ui-textarea {
@@ -567,9 +716,9 @@ html[data-skin="folio"] .ui-card-link {
 }
 
 html[data-skin="folio"] .ui-card-link:hover {
-  border-color: var(--color-border-light);
-  background: var(--color-surface);
-  box-shadow: 0 2px 6px rgba(15, 15, 15, 0.08);
+  border-color: var(--color-border);
+  background: var(--folio-hover);
+  box-shadow: none;
 }
 
 html[data-skin="folio"] .ui-card-body {
@@ -652,34 +801,40 @@ html[data-skin="folio"] .tag-cloud-item {
 }
 
 /* ── Article workflow shell (edit / history / diff) ── */
+/* Tab strips: underline tabs on a single hairline, like the admin's tab strip */
 html[data-skin="folio"] .article-tabbar,
 html[data-skin="folio"] .wiki-tabs:not([data-tabs]) {
   gap: 0.25rem;
   border: 0;
+  border-bottom: 1px solid var(--color-border-light);
   background: transparent;
   padding: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 html[data-skin="folio"] .article-tab,
 html[data-skin="folio"] .wiki-tab {
-  margin-bottom: 0;
+  margin-bottom: -1px;
   border: 0;
-  border-radius: var(--folio-radius);
-  padding: 0.4rem 0.7rem;
-  font-size: 0.8125rem;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.875rem;
   font-weight: 500;
 }
 
 html[data-skin="folio"] .article-tab:hover,
 html[data-skin="folio"] .wiki-tab:hover {
-  background: var(--folio-hover);
+  border-bottom-color: var(--color-border);
+  background: transparent;
+  color: var(--color-heading);
 }
 
 html[data-skin="folio"] .article-tab-active,
 html[data-skin="folio"] .wiki-tab-active {
   border: 0;
-  background: var(--folio-active);
+  border-bottom: 2px solid var(--color-heading);
+  background: transparent;
   color: var(--color-heading);
 }
 
@@ -694,14 +849,15 @@ html[data-skin="folio"] .article-shell.article-reader {
   padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.5rem, 5vw, 5rem) 6rem;
 }
 
-html[data-skin="folio"] .article-reader > .ui-breadcrumbs,
+html[data-skin="folio"] .article-reader > .ui-page-footer,
 html[data-skin="folio"] .article-reader-header,
 html[data-skin="folio"] .article-reader-notice,
 html[data-skin="folio"] .article-reader-content,
 html[data-skin="folio"] .article-reader > .article-reader-details,
 html[data-skin="folio"] .article-reader > [class] > .article-reader-content,
 html[data-skin="folio"] .article-reader > [class] > .article-reader-details {
-  width: min(100%, 46rem);
+  width: min(100%, 48rem);
+  margin-left: 0;
 }
 
 html[data-skin="folio"] .article-reader-header {
@@ -892,8 +1048,8 @@ html[data-skin="folio"] .article-context-backlinks h2 {
 }
 
 html[data-skin="folio"] .article-context-toggle {
-  border-color: var(--folio-hairline);
-  box-shadow: var(--folio-shadow);
+  border-color: var(--color-border-light);
+  box-shadow: none;
 }
 
 /* ── Home: the all-pages index reads as a list view ── */

@@ -45,7 +45,6 @@
 
 .wiki-sidebar-brand:hover .wiki-brand-mark {
   color: var(--color-accent);
-  transform: translateY(-0.5px);
 }
 
 .wiki-brand-mark-image {
@@ -242,11 +241,20 @@ html[data-skin="folio"] .wiki-layout {
   min-height: 0;
   flex: 0 0 clamp(17rem, 22vw, 21.5rem);
   flex-direction: column;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  overflow: hidden;
   border-right: 1px solid var(--color-border);
   background: var(--color-sidebar-bg);
   transition: none;
+}
+
+/* Only the navigation scrolls; the workspace row and footer stay pinned. */
+.wiki-sidebar-scroll {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* Workspace row: mark + wiki name. The wiki skin keeps its larger mark. */
@@ -281,6 +289,13 @@ html[data-skin="folio"] .wiki-layout {
   display: grid;
   gap: 2rem;
   padding: 0 1.7rem 2rem;
+}
+
+/* Header row: the title, or a hairline divider once the folio rail collapses. */
+.wiki-sidebar-section-header {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .wiki-sidebar-section-title {
@@ -495,6 +510,43 @@ html[data-skin="wiki"] .wiki-sidebar-chevron-open::before {
   margin-top: 0;
 }
 
+/* Collapse toggle: a navigation row that happens to be a button. Only the
+   folio skin has a collapse mode; the classic skin never shows it. */
+.wiki-sidebar-collapse-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+html[data-skin="wiki"] .wiki-sidebar-collapse-toggle {
+  display: none;
+}
+
+/* Collapsed-rail tooltip: portalled to <body>, anchored beside the hovered
+   or focused row. Tier 50 (above content, below dialogs); flat, no shadow. */
+.wiki-sidebar-tooltip {
+  position: fixed;
+  z-index: 50;
+  transform: translateY(-50%);
+  pointer-events: none;
+  border: 1px solid var(--color-border-light);
+  border-radius: 0.375rem;
+  background: var(--color-popover);
+  padding: 0.25rem 0.5rem;
+  color: var(--color-heading);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  /* The brand name is operator-authored; keep its casing. */
+  text-transform: none;
+}
+
 .wiki-main-menu-button,
 .wiki-sidebar-backdrop {
   display: none;
@@ -546,6 +598,11 @@ html[data-skin="wiki"] .wiki-sidebar-chevron-open::before {
 
   .wiki-sidebar-open {
     transform: translateX(0);
+  }
+
+  /* The drawer never collapses; the toggle only belongs to the desktop rail. */
+  .wiki-sidebar-collapse-toggle {
+    display: none;
   }
 
   /* Clear the fixed menu button so banner text isn't covered by it. */

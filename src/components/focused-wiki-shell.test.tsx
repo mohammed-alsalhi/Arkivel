@@ -58,8 +58,24 @@ describe("focused wiki shell", () => {
     expect(html).toContain("all pages");
     expect(html).toContain("engineering");
     expect(html).toContain("decisions");
+    expect(html).toContain("wiki-sidebar-section-title");
     expect(html).not.toContain("command center");
     expect(html).not.toContain("marketplace");
+  });
+
+  it("renders the sidebar expanded on the server with a collapse toggle", () => {
+    const html = renderToStaticMarkup(
+      <Sidebar brandName="Arkivel" logoMark="/brand/arkivel-logo.svg" categories={[]} />,
+    );
+
+    // The persisted collapse state is only read after mount, so the markup
+    // never carries the collapsed class or the tooltip.
+    expect(html).not.toContain("wiki-sidebar-collapsed");
+    expect(html).not.toContain("wiki-sidebar-tooltip");
+    expect(html).toContain("wiki-sidebar-collapse-toggle");
+    expect(html).toContain('aria-keyshortcuts="Meta+B Control+B"');
+    expect(html).toContain('aria-label="collapse sidebar"');
+    expect(html).toContain("no spaces yet");
   });
 
   it("keeps the article context rail to graph and outline", () => {

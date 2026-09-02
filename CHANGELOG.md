@@ -3,7 +3,9 @@
 ## 6.2.0
 
 - gave every page the same chrome: a sticky top bar with the full `space / parent / page` trail, edited-time, and page actions, plus one footer with a back link to the parent crumb and last-edited metadata; article routes share their title and category path through a route layout so edit, history, diff, and blame get a complete trail on first paint
-- rebuilt the folio sidebar after notion: workspace row, search / inbox / new page rows, library and spaces sections, collapsible spaces with persisted open state, and a settings row in the footer
+- rebuilt the folio sidebar on the scope admin sidebar design: 2.25rem rounded nav rows with icon slots, uppercase section labels, a collapsible 4rem icon-only mode (`⌘B` / `Ctrl+B`, persisted) with tooltips, collapsible spaces with persisted open state, search / inbox / new page rows, and a settings row in the footer
+- ported the bespoke overlay scrollbar: native bars are hidden (no gutter, so nothing reflows) and hover-only floating thumbs track every scrollable container
+- tables now use a fixed layout with 2.25rem single-line rows, truncated cells, and a pinned header; folio content is left-aligned instead of centered, and nothing in the flow casts a shadow or lifts on hover
 - normalized interface copy to lowercase and page titles to their subject (`spaces`, `inbox`, `all pages`, `tags`, `home`) so the sidebar, trail, and heading agree
 - kept the content scrollbar's width reserved while an overlay locks scrolling, and forced a cache-free build after a stale css chunk shipped without the palette and folio stylesheets
 

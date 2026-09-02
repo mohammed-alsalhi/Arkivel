@@ -1,3 +1,40 @@
+/* ── Bespoke overlay scrollbars ──
+   Native bars are fully hidden (no gutter, so "show scroll bars: always" can
+   never reflow tables) and src/lib/overlayScrollbar.ts draws floating
+   hover-only thumbs instead. The standard scrollbar-width property is
+   Firefox-only here: setting it in Chromium would override ::-webkit-scrollbar. */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: none;
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.overlay-scrollbar-thumb {
+  position: fixed;
+  z-index: 35;
+  border-radius: 9999px;
+  background-color: color-mix(in srgb, var(--color-foreground) 32%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease, background-color 150ms ease;
+}
+
+.overlay-scrollbar-thumb.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-scrollbar-thumb.visible:hover,
+.overlay-scrollbar-thumb.dragging {
+  background-color: color-mix(in srgb, var(--color-foreground) 55%, transparent);
+}
+
 /* ── Standard UI primitives ── */
 .ui-page-title {
   min-width: 0;
@@ -394,10 +431,12 @@
   color: var(--color-info);
 }
 
+/* Tables: fixed layout, one line per row at a fixed height, pinned header. */
 .ui-table {
   width: 100%;
   max-width: 100%;
-  border-collapse: collapse;
+  table-layout: fixed;
+  border-collapse: separate;
   border-spacing: 0;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
@@ -406,10 +445,44 @@
 
 .ui-table th,
 .ui-table td {
-  border: 1px solid var(--color-border);
-  padding: 0.375rem 0.75rem;
+  height: 2.25rem;
+  overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  padding: 0 0.625rem;
+  line-height: 1.25;
   text-align: left;
-  vertical-align: top;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.ui-table th:last-child,
+.ui-table td:last-child {
+  border-right: 0;
+}
+
+.ui-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.ui-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Cells with stacked block children keep only their first line. */
+.ui-table td > p,
+.ui-table td > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-table td > * + p {
+  display: none;
 }
 
 .ui-table th {
@@ -696,7 +769,7 @@
 }
 
 .ui-card-link:hover {
-  border-color: var(--color-border-light);
+  border-color: var(--color-border);
   background: var(--color-surface-hover);
   text-decoration: none;
 }
