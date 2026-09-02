@@ -1,6 +1,8 @@
 # supported features
 
-Arkivel 6.1 supports:
+Arkivel 6.2 supports:
+
+- one page chrome on every route: a sticky trail (`spaces / parent / page`) with edited-time and actions, and a footer that always leads back to the parent
 
 - rich-text articles with images, tables, code blocks, and wiki links
 - backlinks, local/global graph views, categories, tags, search, and recent changes

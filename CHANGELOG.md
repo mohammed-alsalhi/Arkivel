@@ -1,5 +1,12 @@
 # changelog
 
+## 6.2.0
+
+- gave every page the same chrome: a sticky top bar with the full `space / parent / page` trail, edited-time, and page actions, plus one footer with a back link to the parent crumb and last-edited metadata; article routes share their title and category path through a route layout so edit, history, diff, and blame get a complete trail on first paint
+- rebuilt the folio sidebar after notion: workspace row, search / inbox / new page rows, library and spaces sections, collapsible spaces with persisted open state, and a settings row in the footer
+- normalized interface copy to lowercase and page titles to their subject (`spaces`, `inbox`, `all pages`, `tags`, `home`) so the sidebar, trail, and heading agree
+- kept the content scrollbar's width reserved while an overlay locks scrolling, and forced a cache-free build after a stale css chunk shipped without the palette and folio stylesheets
+
 ## 6.1.0
 
 - added a command palette (`⌘K` / `Ctrl+K`) that searches pages, jumps to sections, and runs theme and skin actions; the sidebar search field opens it

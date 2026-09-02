@@ -10,7 +10,7 @@ Product mode serves the public Arkivel website, documentation, and API reference
 
 Wiki mode renders the three-pane knowledge interface and the retained API routes. Server components and route handlers access PostgreSQL through the singleton in `src/lib/prisma.ts`. Vercel Blob is the only supported upload backend.
 
-`NEXT_PUBLIC_ARKIVEL_SKIN` selects the default wiki presentation without changing routes or data. `folio` is the full-viewport default; `wiki` preserves the classic framed skin on the same shared page components. The root layout resolves the effective skin per request as `arkivel-skin` cookie → the signed-in user's saved `skin` preference → the env default, and stamps it as `data-skin` on `<html>`; `src/styles/folio.css` holds every folio-only override so the wiki skin's rules stay untouched.
+`NEXT_PUBLIC_ARKIVEL_SKIN` selects the default wiki presentation without changing routes or data. `folio` is the full-viewport default; `wiki` preserves the classic framed skin on the same shared page components. The root layout resolves the effective skin per request as `arkivel-skin` cookie → the signed-in user's saved `skin` preference → the env default, and stamps it as `data-skin` on `<html>`; `src/styles/folio.css` holds every folio-only override so the wiki skin's rules stay untouched. Page chrome is a `Page` concern: it takes a `trail` (`src/lib/trail.ts`) and renders the sticky `PageTopbar` and `PageFooter`; `src/lib/trail-server.ts` walks category ancestors, and `src/app/articles/[slug]/layout.tsx` shares an article's title and category path with every article-workflow route through `ArticleTrailContext`.
 
 The core data graph is deliberately small:
 

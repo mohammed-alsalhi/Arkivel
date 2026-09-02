@@ -1,6 +1,6 @@
 # roadmap
 
-Arkivel 6.0.0 is the focused baseline; 6.1.0 added the command palette and per-user skin choice without widening the product boundary.
+Arkivel 6.0.0 is the focused baseline; 6.1.0 added the command palette and per-user skin choice, and 6.2.0 unified the page chrome and the notion-style folio sidebar, without widening the product boundary.
 
 Near-term work is maintenance, not feature expansion:
 

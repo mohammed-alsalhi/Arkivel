@@ -9,6 +9,8 @@ Arkivel should feel like a durable document tool, not a dashboard.
 - two named skins on the same components: `folio` is a flat, document-first interface (hairline dividers, soft hover fills, a centered document column, compact icon navigation — closer to a notes app than a wiki) and `wiki` is the classic framed layout with bordered tables, portals, and the traditional palette; readers pick either in settings
 - the folio skin lowercases interface copy but never user-authored text (page titles, table cells, card titles)
 - one command palette (`⌘K` / `Ctrl+K`) for search, navigation, and the few global actions, instead of scattered toolbars
+- one page chrome everywhere: a sticky top bar carrying the full trail (`spaces / parent / page`), edited-time, and page actions; one footer with a back link to the parent crumb. Pages pass a `trail` to `Page`; nothing hand-rolls breadcrumbs or back links
+- the folio sidebar follows notion: workspace row, search / inbox / new page, then library and collapsible spaces, settings in the footer; the wiki sidebar is the same tree as plain text
 - text links and native controls before decorative buttons
 - visible focus, semantic headings, keyboard access, reduced motion, and responsive single-column fallbacks
 
