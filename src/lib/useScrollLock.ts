@@ -4,8 +4,22 @@ import { useEffect } from "react";
 
 let lockCount = 0;
 let previousOverflow = "";
+let previousPaddingRight = "";
 let lockedShell: HTMLElement | null = null;
 let previousShellOverflow = "";
+let previousShellPaddingRight = "";
+
+/** Hiding a scrollbar reflows the content; reserve its width so nothing jumps. */
+function lock(element: HTMLElement): { overflow: string; paddingRight: string } {
+  const previous = { overflow: element.style.overflow, paddingRight: element.style.paddingRight };
+  const scrollbarWidth = element.offsetWidth - element.clientWidth;
+  if (scrollbarWidth > 0) {
+    const current = Number.parseFloat(getComputedStyle(element).paddingRight) || 0;
+    element.style.paddingRight = `${current + scrollbarWidth}px`;
+  }
+  element.style.overflow = "hidden";
+  return previous;
+}
 
 /**
  * Locks page scrolling while `locked` is true. Reference-counted so nested
@@ -19,13 +33,15 @@ export function useScrollLock(locked: boolean) {
   useEffect(() => {
     if (!locked) return;
     if (lockCount === 0) {
-      previousOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
+      const bodyLock = lock(document.body);
+      previousOverflow = bodyLock.overflow;
+      previousPaddingRight = bodyLock.paddingRight;
       const shell = document.querySelector<HTMLElement>(".wiki-content-shell");
       if (shell) {
         lockedShell = shell;
-        previousShellOverflow = shell.style.overflow;
-        shell.style.overflow = "hidden";
+        const shellLock = lock(shell);
+        previousShellOverflow = shellLock.overflow;
+        previousShellPaddingRight = shellLock.paddingRight;
       }
     }
     lockCount += 1;
@@ -33,8 +49,10 @@ export function useScrollLock(locked: boolean) {
       lockCount -= 1;
       if (lockCount === 0) {
         document.body.style.overflow = previousOverflow;
+        document.body.style.paddingRight = previousPaddingRight;
         if (lockedShell) {
           lockedShell.style.overflow = previousShellOverflow;
+          lockedShell.style.paddingRight = previousShellPaddingRight;
           lockedShell = null;
         }
       }
