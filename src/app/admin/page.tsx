@@ -3,10 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { EmptyState, LinkButton, Page, PageHeader, Section } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.admin];
 
 const tools = [
   ["users", "/admin/users"],
-  ["categories", "/admin/categories"],
+  ["spaces", "/admin/categories"],
   ["tags", "/admin/tags"],
   ["redirects", "/admin/redirects"],
   ["import", "/import"],
@@ -26,19 +29,19 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <Page>
-      <PageHeader title="Admin" description="The small set of controls required to operate this wiki." />
+    <Page trail={TRAIL}>
+      <PageHeader title="admin" description="the small set of controls required to operate this wiki." />
 
       {admin === null ? (
         <p className="text-[13px] text-muted">loading...</p>
       ) : !admin ? (
         <EmptyState
-          title="Admin access required"
-          description="Log in as an administrator to continue."
+          title="admin access required"
+          description="log in as an administrator to continue."
           actions={<LinkButton href="/login" variant="primary">log in</LinkButton>}
         />
       ) : (
-        <Section title="Operations">
+        <Section title="operations">
           <ul className="grid gap-px border border-border bg-border sm:grid-cols-2">
             {tools.map(([label, href]) => (
               <li key={href} className="bg-surface">

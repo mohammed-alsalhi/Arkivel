@@ -92,7 +92,8 @@ describe("focused wiki shell", () => {
 
     const html = renderToStaticMarkup(await WikiHome());
 
-    expect(html).toContain("all pages");
+    expect(html).toContain("<h1>home</h1>");
+    expect(html).toContain('aria-label="Breadcrumb"');
     expect(html).toContain("recently updated");
     expect(html).toContain("architecture decisions");
     expect(html).toContain('/articles/architecture-decisions');

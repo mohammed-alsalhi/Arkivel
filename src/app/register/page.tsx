@@ -19,7 +19,7 @@ export default function RegisterPage() {
     setError("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("passwords do not match");
       return;
     }
 
@@ -49,10 +49,10 @@ export default function RegisterPage() {
           router.push("/login");
         }
       } else {
-        setError(data.error || "Registration failed");
+        setError(data.error || "registration failed");
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError("network error. please try again.");
     } finally {
       setLoading(false);
     }
@@ -60,17 +60,17 @@ export default function RegisterPage() {
 
   return (
     <AuthFormShell
-      title="Create account"
+      mode="register"
       onSubmit={handleSubmit}
       error={error}
       loading={loading}
-      submitLabel="Create account"
-      loadingLabel="Creating account…"
-      alternateText="Already have an account?"
+      submitLabel="create account"
+      loadingLabel="creating account…"
+      alternateText="already have an account?"
       alternateHref="/login"
-      alternateLabel="Log in"
+      alternateLabel="log in"
     >
-      <Field htmlFor="register-username" label="Username *">
+      <Field htmlFor="register-username" label="username *">
         <Input
           id="register-username"
           type="text"
@@ -78,11 +78,11 @@ export default function RegisterPage() {
           onChange={(e) => setUsername(e.target.value)}
           required
           minLength={3}
-          placeholder="Choose a username"
+          placeholder="choose a username"
         />
       </Field>
 
-      <Field htmlFor="register-email" label="Email *">
+      <Field htmlFor="register-email" label="email *">
         <Input
           id="register-email"
           type="email"
@@ -93,7 +93,7 @@ export default function RegisterPage() {
         />
       </Field>
 
-      <Field htmlFor="register-password" label="Password *">
+      <Field htmlFor="register-password" label="password *">
         <Input
           id="register-password"
           type="password"
@@ -101,11 +101,11 @@ export default function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={6}
-          placeholder="At least 6 characters"
+          placeholder="at least 6 characters"
         />
       </Field>
 
-      <Field htmlFor="register-confirm-password" label="Confirm password *">
+      <Field htmlFor="register-confirm-password" label="confirm password *">
         <Input
           id="register-confirm-password"
           type="password"
@@ -113,7 +113,7 @@ export default function RegisterPage() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           minLength={6}
-          placeholder="Re-enter password"
+          placeholder="re-enter password"
         />
       </Field>
     </AuthFormShell>

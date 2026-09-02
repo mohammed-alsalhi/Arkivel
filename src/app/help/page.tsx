@@ -8,6 +8,7 @@ import {
   PageHeader,
   SectionPanel,
 } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 export const metadata: Metadata = {
   title: "help",
@@ -16,9 +17,9 @@ export const metadata: Metadata = {
 
 export default function HelpPage() {
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.reference, { label: "help" }]}>
       <PageHeader
-        kicker="guide"
+        kicker="reference"
         title="help"
         description="the shortest path through the retained arkivel wiki."
         actions={

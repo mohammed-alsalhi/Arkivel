@@ -30,10 +30,10 @@ export default function LoginPage() {
         router.push("/");
         router.refresh();
       } else {
-        setError(data.error || "Invalid credentials");
+        setError(data.error || "invalid credentials");
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError("network error. please try again.");
     } finally {
       setLoading(false);
     }
@@ -41,35 +41,35 @@ export default function LoginPage() {
 
   return (
     <AuthFormShell
-      title="Log in"
+      mode="login"
       onSubmit={handleSubmit}
       error={error}
       loading={loading}
-      submitLabel="Log in"
-      loadingLabel="Logging in…"
-      alternateText="Don't have an account?"
+      submitLabel="log in"
+      loadingLabel="logging in…"
+      alternateText="don't have an account?"
       alternateHref="/register"
-      alternateLabel="Create account"
+      alternateLabel="register"
     >
-      <Field htmlFor="login-username" label="Username">
+      <Field htmlFor="login-username" label="username">
         <Input
           id="login-username"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          placeholder="Username"
+          placeholder="username"
         />
       </Field>
 
-      <Field htmlFor="login-password" label="Password">
+      <Field htmlFor="login-password" label="password">
         <Input
           id="login-password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          placeholder="Password"
+          placeholder="password"
         />
       </Field>
     </AuthFormShell>

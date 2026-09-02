@@ -106,8 +106,9 @@
 
 /* ── Focused all-pages home ── */
 .focused-home {
-  width: min(100%, 58rem);
+  width: min(100%, calc(58rem + var(--page-pad-x, 2.5rem) * 2));
   margin: 0 auto;
+  padding: var(--page-pad-top, 2.5rem) var(--page-pad-x, 2.5rem) var(--page-pad-bottom, 2.5rem);
 }
 
 .focused-home-header {

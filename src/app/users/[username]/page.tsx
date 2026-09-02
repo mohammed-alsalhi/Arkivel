@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { TRAIL_ROOTS } from "@/lib/trail";
 import { formatDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import { DataTable, EmptyState, Page, PageHeader, Section } from "@/components/ui";
@@ -59,36 +60,38 @@ export default async function UserProfilePage({ params }: Props) {
     viewer: "text-muted",
   };
 
+  const displayName = user.displayName || user.username;
+
   return (
-    <Page>
-      <PageHeader title={`User: ${user.displayName || user.username}`} />
+    <Page trail={[TRAIL_ROOTS.people, { label: displayName }]}>
+      <PageHeader kicker="member" title={displayName} />
 
       {/* User info */}
       <div className="wiki-portal max-w-lg mb-4">
-        <div className="wiki-portal-header">User information</div>
+        <div className="wiki-portal-header">user information</div>
         <div className="wiki-portal-body">
           <DataTable>
             <tbody>
               <tr>
-                <td className="text-muted font-bold">Username</td>
+                <td className="text-muted font-bold">username</td>
                 <td>{user.username}</td>
               </tr>
               <tr>
-                <td className="text-muted font-bold">Display name</td>
-                <td>{user.displayName || user.username}</td>
+                <td className="text-muted font-bold">display name</td>
+                <td>{displayName}</td>
               </tr>
               <tr>
-                <td className="text-muted font-bold">Role</td>
+                <td className="text-muted font-bold">role</td>
                 <td className={`font-bold ${roleColors[user.role] || "text-muted"}`}>
                   {user.role}
                 </td>
               </tr>
               <tr>
-                <td className="text-muted font-bold">Member since</td>
+                <td className="text-muted font-bold">member since</td>
                 <td>{formatDate(user.createdAt)}</td>
               </tr>
               <tr>
-                <td className="text-muted font-bold">Contributions</td>
+                <td className="text-muted font-bold">contributions</td>
                 <td>
                   {revisions.length} edit{revisions.length !== 1 ? "s" : ""},
                   {" "}{articles.length} article{articles.length !== 1 ? "s" : ""} created
@@ -101,7 +104,7 @@ export default async function UserProfilePage({ params }: Props) {
 
       {/* Articles created */}
       {articles.length > 0 && (
-        <Section title="Articles created" className="mb-4">
+        <Section title="articles created" className="mb-4">
           <ul className="text-[13px] space-y-1">
             {articles.map((article) => (
               <li key={article.id}>
@@ -124,7 +127,7 @@ export default async function UserProfilePage({ params }: Props) {
 
       {/* Recent edits */}
       {revisions.length > 0 && (
-        <Section title="Recent edits" className="mb-4">
+        <Section title="recent edits" className="mb-4">
           <ul className="text-[13px] space-y-1">
             {revisions.map((rev) => (
               <li key={rev.id}>
@@ -151,7 +154,7 @@ export default async function UserProfilePage({ params }: Props) {
       )}
 
       {articles.length === 0 && revisions.length === 0 && (
-        <EmptyState description="This user has not made any contributions yet." />
+        <EmptyState description="this member has not made any contributions yet." />
       )}
     </Page>
   );

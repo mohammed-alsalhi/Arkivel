@@ -1,9 +1,17 @@
 import Link from "next/link";
 import type { FormEventHandler, ReactNode } from "react";
 import { Button, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS, type TrailItem } from "@/lib/trail";
+
+type AuthMode = "login" | "register";
+
+const AUTH_PAGES: Record<AuthMode, { title: string; trail: TrailItem[] }> = {
+  login: { title: "log in", trail: [TRAIL_ROOTS.account, { label: "log in" }] },
+  register: { title: "register", trail: [TRAIL_ROOTS.account, { label: "register" }] },
+};
 
 type AuthFormShellProps = {
-  title: string;
+  mode: AuthMode;
   onSubmit: FormEventHandler<HTMLFormElement>;
   children: ReactNode;
   error: string;
@@ -16,7 +24,7 @@ type AuthFormShellProps = {
 };
 
 export function AuthFormShell({
-  title,
+  mode,
   onSubmit,
   children,
   error,
@@ -27,8 +35,9 @@ export function AuthFormShell({
   alternateHref,
   alternateLabel,
 }: AuthFormShellProps) {
+  const { title, trail } = AUTH_PAGES[mode];
   return (
-    <Page>
+    <Page trail={trail}>
       <PageHeader title={title} />
       <div className="max-w-sm">
         <form onSubmit={onSubmit} className="space-y-3">

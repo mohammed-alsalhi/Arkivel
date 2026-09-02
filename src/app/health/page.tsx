@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { EmptyState, Page, PageHeader, StatCard, StatGrid, TabButton, Tabs } from "@/components/ui";
+import { EmptyState, LoadingState, Page, PageHeader, StatCard, StatGrid, TabButton, Tabs } from "@/components/ui";
+import { TRAIL_ROOTS, type TrailItem } from "@/lib/trail";
+
+const trail: TrailItem[] = [TRAIL_ROOTS.reference, { label: "health" }];
 
 type ArticleIssue = {
   slug: string;
@@ -33,10 +36,10 @@ const SCORE_COLOR = (score: number) => {
 };
 
 const SCORE_LABEL = (score: number) => {
-  if (score >= 80) return "Healthy";
-  if (score >= 60) return "Fair";
-  if (score >= 40) return "Needs work";
-  return "Critical";
+  if (score >= 80) return "healthy";
+  if (score >= 60) return "fair";
+  if (score >= 40) return "needs work";
+  return "critical";
 };
 
 type Stat = { label: string; value: number; desc: string; color: string };
@@ -57,35 +60,41 @@ export default function WikiHealthPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 gap-1.5">
-        <span className="w-2 h-2 bg-accent rounded-full animate-bounce [animation-delay:0ms]" />
-        <span className="w-2 h-2 bg-accent rounded-full animate-bounce [animation-delay:150ms]" />
-        <span className="w-2 h-2 bg-accent rounded-full animate-bounce [animation-delay:300ms]" />
-      </div>
+      <Page trail={trail}>
+        <PageHeader kicker="reference" title="wiki health" />
+        <LoadingState label="loading…" />
+      </Page>
     );
   }
 
-  if (!data) return <p className="text-muted text-[13px]">Failed to load health data.</p>;
+  if (!data) {
+    return (
+      <Page trail={trail}>
+        <PageHeader kicker="reference" title="wiki health" />
+        <EmptyState title="failed to load health data." />
+      </Page>
+    );
+  }
 
   const stats: Stat[] = [
-    { label: "Stubs", value: data.stubs, desc: "< 100 words", color: "text-danger" },
-    { label: "Outdated", value: data.outdated, desc: "1+ year old", color: "text-warning" },
-    { label: "No excerpt", value: data.noExcerpt, desc: "Missing summary", color: "text-warning" },
-    { label: "No category", value: data.noCategory, desc: "Uncategorized", color: "text-chart-5" },
-    { label: "No tags", value: data.noTags, desc: "Untagged", color: "text-chart-1" },
-    { label: "Broken links", value: data.brokenLinks, desc: "Dead wiki links", color: "text-danger" },
-    { label: "Very long", value: data.longArticles, desc: "> 5000 words", color: "text-muted" },
+    { label: "stubs", value: data.stubs, desc: "< 100 words", color: "text-danger" },
+    { label: "outdated", value: data.outdated, desc: "1+ year old", color: "text-warning" },
+    { label: "no excerpt", value: data.noExcerpt, desc: "missing summary", color: "text-warning" },
+    { label: "no category", value: data.noCategory, desc: "uncategorized", color: "text-chart-5" },
+    { label: "no tags", value: data.noTags, desc: "untagged", color: "text-chart-1" },
+    { label: "broken links", value: data.brokenLinks, desc: "dead wiki links", color: "text-danger" },
+    { label: "very long", value: data.longArticles, desc: "> 5000 words", color: "text-muted" },
   ];
 
   const FILTERS = [
-    { value: "all", label: "All issues" },
-    { value: "Stub", label: "Stubs" },
-    { value: "Outdated", label: "Outdated" },
-    { value: "excerpt", label: "No excerpt" },
-    { value: "category", label: "No category" },
-    { value: "tags", label: "No tags" },
-    { value: "broken", label: "Broken links" },
-    { value: "long", label: "Very long" },
+    { value: "all", label: "all issues" },
+    { value: "Stub", label: "stubs" },
+    { value: "Outdated", label: "outdated" },
+    { value: "excerpt", label: "no excerpt" },
+    { value: "category", label: "no category" },
+    { value: "tags", label: "no tags" },
+    { value: "broken", label: "broken links" },
+    { value: "long", label: "very long" },
   ];
 
   const filtered =
@@ -96,10 +105,11 @@ export default function WikiHealthPage() {
         );
 
   return (
-    <Page>
+    <Page trail={trail}>
       <PageHeader
-        title="Wiki Health Dashboard"
-        description={`Quality audit across ${data.total} articles. Fix issues to improve your wiki's health score.`}
+        kicker="reference"
+        title="wiki health"
+        description={`quality audit across ${data.total} articles. fix issues to improve your wiki's health score.`}
       />
 
       {/* Score */}
@@ -144,7 +154,7 @@ export default function WikiHealthPage() {
       </StatGrid>
 
       {/* Filter */}
-      <Tabs label="Health issue filters" className="mb-4">
+      <Tabs label="health issue filters" className="mb-4">
         {FILTERS.map((f) => (
           <TabButton
             key={f.value}
@@ -158,7 +168,7 @@ export default function WikiHealthPage() {
 
       {/* Article list */}
       {filtered.length === 0 ? (
-        <EmptyState title="No issues found" description="No issues found for this filter." />
+        <EmptyState title="no issues found" description="no issues found for this filter." />
       ) : (
         <div className="space-y-2">
           {filtered.map((a) => (
@@ -198,7 +208,7 @@ export default function WikiHealthPage() {
                   href={`/articles/${a.slug}/edit`}
                   className="inline-flex flex-shrink-0 items-center h-6 px-2 text-[11px] border border-border rounded text-muted hover:text-foreground hover:bg-surface-hover transition-colors pointer-coarse:h-9 pointer-coarse:px-3"
                 >
-                  Fix
+                  fix
                 </Link>
               </div>
             </div>

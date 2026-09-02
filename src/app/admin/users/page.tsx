@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { DataTable, EmptyState, LoadingState, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.admin, { label: "users" }];
 
 type User = {
   id: string;
@@ -45,30 +48,39 @@ export default function AdminUsersPage() {
         prev.map((u) => (u.id === updated.id ? { ...u, role: updated.role } : u))
       );
     } else {
-      setError("Failed to update role");
+      setError("failed to update role");
     }
     setSaving(null);
   }
 
+  const header = (
+    <PageHeader title="users" description="everyone with an account and the role they hold." />
+  );
+
   if (loading) {
-    return <LoadingState label="Loading…" />;
+    return (
+      <Page trail={TRAIL}>
+        {header}
+        <LoadingState label="loading…" />
+      </Page>
+    );
   }
 
   return (
-    <Page>
-      <PageHeader title="User management" />
+    <Page trail={TRAIL}>
+      {header}
 
       {error && <p className="text-[12px] text-wiki-link-broken mb-3">{error}</p>}
 
       <DataTable>
         <thead>
           <tr>
-            <th>User</th>
-            <th>Email</th>
-            <th className="w-24">Articles</th>
-            <th className="w-24">Edits</th>
-            <th className="w-32">Joined</th>
-            <th className="w-36">Role</th>
+            <th>user</th>
+            <th>email</th>
+            <th className="w-24">articles</th>
+            <th className="w-24">edits</th>
+            <th className="w-32">joined</th>
+            <th className="w-36">role</th>
           </tr>
         </thead>
         <tbody>
@@ -107,7 +119,7 @@ export default function AdminUsersPage() {
         </tbody>
       </DataTable>
 
-      {users.length === 0 && <EmptyState title="No users found." />}
+      {users.length === 0 && <EmptyState title="no users found." />}
     </Page>
   );
 }

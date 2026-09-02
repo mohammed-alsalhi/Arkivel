@@ -5,6 +5,7 @@ import {
   Chip,
   DataTable,
   LinkButton,
+  LoadingState,
   Notice,
   Page,
   PageHeader,
@@ -13,6 +14,9 @@ import {
   ToggleSwitch,
 } from "@/components/ui";
 import type { MaintenanceReport, MaintenanceSeverity } from "@/lib/maintenance-tooling";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.admin, { label: "maintenance" }];
 
 export default function MaintenancePage() {
   const [enabled, setEnabled] = useState(false);
@@ -40,7 +44,7 @@ export default function MaintenancePage() {
           setError("");
         }
       } catch {
-        if (!cancelled) setError("Could not load maintenance readiness.");
+        if (!cancelled) setError("could not load maintenance readiness.");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -73,7 +77,7 @@ export default function MaintenancePage() {
       setTimeout(() => setSaved(false), 2000);
       await refreshReport();
     } catch {
-      setError("Could not update maintenance mode.");
+      setError("could not update maintenance mode.");
     } finally {
       setSaving(false);
     }
@@ -95,80 +99,89 @@ export default function MaintenancePage() {
       if (!res.ok) throw new Error("Background task update failed");
       await refreshReport();
     } catch {
-      setError("Could not update background task pause state.");
+      setError("could not update background task pause state.");
     } finally {
       setSaving(false);
     }
   }
 
-  if (loading) return <p className="text-[13px] text-muted p-4">Loading...</p>;
+  const header = (
+    <PageHeader
+      title="maintenance"
+      description="prepare upgrades, constrain write traffic, pause background work, and review cleanup queues."
+      actions={<LinkButton href="/api/export/history">export history</LinkButton>}
+    />
+  );
+
+  if (loading) {
+    return (
+      <Page width="wide" trail={TRAIL}>
+        {header}
+        <LoadingState label="loading..." />
+      </Page>
+    );
+  }
 
   return (
-    <Page width="wide">
-      <PageHeader
-        title="Maintenance"
-        description="Prepare upgrades, constrain write traffic, pause background work, and review cleanup queues."
-        actions={
-          <LinkButton href="/api/export/history">Export history</LinkButton>
-        }
-      />
+    <Page width="wide" trail={TRAIL}>
+      {header}
 
       {error && <Notice className="mb-4 border-danger-border bg-danger-soft text-danger">{error}</Notice>}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <SectionPanel title="Maintenance mode" bodyClassName="space-y-3">
+        <SectionPanel title="maintenance mode" bodyClassName="space-y-3">
           <p className="text-[13px] text-muted">
-            Shows a site-wide maintenance banner while operators investigate, upgrade, or move infrastructure.
+            shows a site-wide maintenance banner while operators investigate, upgrade, or move infrastructure.
           </p>
           <div className="flex items-center gap-3">
             <ToggleSwitch
-              aria-label="Toggle maintenance mode"
+              aria-label="toggle maintenance mode"
               checked={enabled}
               disabled={saving}
               onClick={toggle}
             />
             <span className="text-[13px] text-foreground">
-              {enabled ? "Maintenance mode is ON" : "Maintenance mode is OFF"}
+              {enabled ? "maintenance mode is on" : "maintenance mode is off"}
             </span>
-            {saved && <span className="text-[11px] text-accent">Saved</span>}
+            {saved && <span className="text-[11px] text-accent">saved</span>}
           </div>
           {enabled && (
             <Notice className="border-warning-border bg-warning-soft text-warning">
-              Visitors are currently seeing the maintenance banner.
+              visitors are currently seeing the maintenance banner.
             </Notice>
           )}
         </SectionPanel>
 
-        <SectionPanel title="Background tasks" bodyClassName="space-y-3">
+        <SectionPanel title="background tasks" bodyClassName="space-y-3">
           <p className="text-[13px] text-muted">
-            Pause non-critical background activity during high-risk upgrades or database maintenance windows.
+            pause non-critical background activity during high-risk upgrades or database maintenance windows.
           </p>
           <div className="flex items-center gap-3">
             <ToggleSwitch
-              aria-label="Toggle background task pause"
+              aria-label="toggle background task pause"
               checked={Boolean(report?.modes.backgroundTasksPaused)}
               disabled={saving || !report}
               onClick={toggleBackgroundTasks}
             />
             <span className="text-[13px] text-foreground">
-              {report?.modes.backgroundTasksPaused ? "Background tasks are paused" : "Background tasks are active"}
+              {report?.modes.backgroundTasksPaused ? "background tasks are paused" : "background tasks are active"}
             </span>
           </div>
           <p className="text-[12px] text-muted">
-            The pause flag is exposed for background workers to honor before running scheduled jobs.
+            the pause flag is exposed for background workers to honor before running scheduled jobs.
           </p>
         </SectionPanel>
       </div>
 
       {report && (
         <>
-          <Section title="Upgrade readiness">
+          <Section title="upgrade readiness">
             <DataTable>
               <thead>
                 <tr>
-                  <th>Check</th>
-                  <th>Status</th>
-                  <th>Detail</th>
+                  <th>check</th>
+                  <th>status</th>
+                  <th>detail</th>
                 </tr>
               </thead>
               <tbody>
@@ -183,14 +196,14 @@ export default function MaintenancePage() {
             </DataTable>
           </Section>
 
-          <Section title="Cleanup queues">
+          <Section title="cleanup queues">
             <DataTable>
               <thead>
                 <tr>
-                  <th>Task</th>
-                  <th>Records</th>
-                  <th>Safe</th>
-                  <th>Notes</th>
+                  <th>task</th>
+                  <th>records</th>
+                  <th>safe</th>
+                  <th>notes</th>
                 </tr>
               </thead>
               <tbody>
@@ -198,18 +211,18 @@ export default function MaintenancePage() {
                   <tr key={task.id}>
                     <td className="font-medium text-heading">{task.label}</td>
                     <td>{task.count}</td>
-                    <td>{task.safeToRun ? "Yes" : "Review"}</td>
+                    <td>{task.safeToRun ? "yes" : "review"}</td>
                     <td className="text-muted">{task.description}</td>
                   </tr>
                 ))}
               </tbody>
             </DataTable>
             <Notice className="mt-3">
-              Cleanup execution is available through <code className="bg-background px-1">POST /api/admin/maintenance/report</code> with a task id and explicit <code className="bg-background px-1">dryRun: false</code>.
+              cleanup execution is available through <code className="bg-background px-1">POST /api/admin/maintenance/report</code> with a task id and explicit <code className="bg-background px-1">dryRun: false</code>.
             </Notice>
           </Section>
 
-          <Section title="Runbooks">
+          <Section title="runbooks">
             <div className="flex flex-wrap gap-2">
               {report.runbooks.map((runbook) => (
                 <LinkButton key={runbook.id} href={runbook.href}>

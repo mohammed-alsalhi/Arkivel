@@ -13,6 +13,9 @@ import {
   PageHeader,
   SectionPanel,
 } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.library, { label: "import" }];
 
 type ImportResult = {
   filename: string;
@@ -64,7 +67,7 @@ export default function ImportPage() {
 
   if (!isAdmin) {
     return (
-      <Page>
+      <Page trail={TRAIL}>
         <PageHeader title="import" />
         <Notice>
           <Link href="/login">log in as an administrator</Link> to import pages.
@@ -121,9 +124,8 @@ export default function ImportPage() {
   }
 
   return (
-    <Page>
+    <Page trail={TRAIL}>
       <PageHeader
-        kicker="library"
         title="import"
         description="bring local documents into arkivel, or continue with a dedicated notion or obsidian importer."
       />

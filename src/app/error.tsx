@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Button, EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 export default function ErrorPage({
   error,
@@ -15,27 +16,27 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <Page>
-      <PageHeader title="Something went wrong" />
+    <Page trail={[TRAIL_ROOTS.library, { label: "error" }]}>
+      <PageHeader title="something went wrong" />
       <EmptyState
-        title="This page hit an unexpected error."
+        title="this page hit an unexpected error."
         description={
           error.digest ? (
             <>
-              The error has been logged
+              the error has been logged
               {" "}
               (reference <code className="ui-inline-code">{error.digest}</code>).
             </>
           ) : (
-            "The error has been logged."
+            "the error has been logged."
           )
         }
         actions={
           <>
             <Button variant="primary" onClick={reset}>
-              Try again
+              try again
             </Button>
-            <LinkButton href="/">Go to the main page</LinkButton>
+            <LinkButton href="/">go to the main page</LinkButton>
           </>
         }
       />

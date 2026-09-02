@@ -16,6 +16,10 @@ import { useToast } from "@/components/Toast";
 import { config, type WikiSkin } from "@/lib/config";
 import { DEFAULT_PREFERENCES, type UserPreferences } from "@/lib/preferences";
 import { SKINS, SKIN_COOKIE, SKIN_LABELS, applySkin } from "@/lib/skin";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.settings];
+const SETTINGS_DESCRIPTION = "preferences for your account and how the wiki looks.";
 
 type SkinChoice = UserPreferences["skin"];
 
@@ -131,8 +135,8 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <Page>
-        <PageHeader title="settings" />
+      <Page trail={TRAIL}>
+        <PageHeader title="settings" description={SETTINGS_DESCRIPTION} />
         <div className="space-y-4">
           <div className="skeleton skeleton-title" />
           <div className="skeleton skeleton-text w-3/4" />
@@ -144,8 +148,8 @@ export default function SettingsPage() {
   }
 
   return (
-    <Page>
-      <PageHeader title="settings" />
+    <Page trail={TRAIL}>
+      <PageHeader title="settings" description={SETTINGS_DESCRIPTION} />
 
       <div className="max-w-xl space-y-6">
         <SectionPanel title="appearance" bodyClassName="space-y-3">

@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Button, DataTable, EmptyState, Input, LinkButton, Page, PageHeader, Select } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.admin, { label: "audit log" }];
 
 type AuditEntry = {
   id: string;
@@ -105,12 +108,8 @@ export default function AuditLogPage() {
   };
 
   return (
-    <Page>
-      <PageHeader
-        title="audit log"
-        description={`${total} entries total`}
-        actions={<LinkButton href="/admin">← Admin</LinkButton>}
-      />
+    <Page trail={TRAIL}>
+      <PageHeader title="audit log" description={`${total} entries total`} />
 
       {/* Filters */}
       <div className="grid grid-cols-1 gap-2 mb-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
@@ -118,7 +117,7 @@ export default function AuditLogPage() {
           value={actionFilter}
           onChange={(e) => resetPage(setActionFilter)(e.target.value)}
         >
-          <option value="">All actions</option>
+          <option value="">all actions</option>
           {Object.entries(ACTION_LABELS).map(([k, v]) => (
             <option key={k} value={k}>{v}</option>
           ))}
@@ -126,30 +125,30 @@ export default function AuditLogPage() {
         <Input
           value={actorFilter}
           onChange={(e) => resetPage(setActorFilter)(e.target.value)}
-          placeholder="Actor"
+          placeholder="actor"
         />
         <Input
           value={targetFilter}
           onChange={(e) => resetPage(setTargetFilter)(e.target.value)}
-          placeholder="Target"
+          placeholder="target"
         />
         <Select
           value={severityFilter}
           onChange={(e) => resetPage(setSeverityFilter)(e.target.value)}
         >
-          <option value="">All severities</option>
-          <option value="info">Info</option>
-          <option value="warning">Warning</option>
-          <option value="high">High</option>
-          <option value="critical">Critical</option>
+          <option value="">all severities</option>
+          <option value="info">info</option>
+          <option value="warning">warning</option>
+          <option value="high">high</option>
+          <option value="critical">critical</option>
         </Select>
         <Select
           value={successFilter}
           onChange={(e) => resetPage(setSuccessFilter)(e.target.value)}
         >
-          <option value="">All outcomes</option>
-          <option value="true">Succeeded</option>
-          <option value="false">Failed</option>
+          <option value="">all outcomes</option>
+          <option value="true">succeeded</option>
+          <option value="false">failed</option>
         </Select>
         <Input
           type="date"
@@ -164,26 +163,26 @@ export default function AuditLogPage() {
             className="min-w-0 flex-1"
           />
           <LinkButton href={exportHref} prefetch={false} className="whitespace-nowrap">
-            Export
+            export
           </LinkButton>
         </div>
       </div>
 
       {/* Table */}
       {loading ? (
-        <p className="text-[13px] text-muted italic">Loading...</p>
+        <p className="text-[13px] text-muted italic">loading...</p>
       ) : logs.length === 0 ? (
-        <EmptyState title="No entries found." />
+        <EmptyState title="no entries found." />
       ) : (
         <DataTable>
           <thead>
             <tr>
-              <th>Time</th>
-              <th>User</th>
-              <th>Action</th>
-              <th>Severity</th>
-              <th>Target</th>
-              <th>Details</th>
+              <th>time</th>
+              <th>user</th>
+              <th>action</th>
+              <th>severity</th>
+              <th>target</th>
+              <th>details</th>
             </tr>
           </thead>
           <tbody>
@@ -220,11 +219,11 @@ export default function AuditLogPage() {
       {pages > 1 && (
         <div className="flex items-center gap-2 mt-4">
           <Button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-            ← Prev
+            ← prev
           </Button>
-          <span className="text-[12px] text-muted">Page {page} of {pages}</span>
+          <span className="text-[12px] text-muted">page {page} of {pages}</span>
           <Button disabled={page >= pages} onClick={() => setPage((p) => p + 1)}>
-            Next →
+            next →
           </Button>
         </div>
       )}

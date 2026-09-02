@@ -2,6 +2,9 @@
 
 import { useState, useRef } from "react";
 import { Button, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.library, { label: "import", href: "/import" }, { label: "obsidian" }];
 
 interface ImportResult {
   slug: string;
@@ -20,7 +23,7 @@ export default function ObsidianImportPage() {
     setError(null);
     setResults(null);
     const file = fileRef.current?.files?.[0];
-    if (!file) { setError("Select a .md or .zip file."); return; }
+    if (!file) { setError("select a .md or .zip file."); return; }
 
     const formData = new FormData();
     formData.append("file", file);
@@ -29,30 +32,30 @@ export default function ObsidianImportPage() {
     try {
       const res = await fetch("/api/import/obsidian", { method: "POST", body: formData });
       const data = await res.json();
-      if (!res.ok) { setError(data.error ?? "Import failed"); return; }
+      if (!res.ok) { setError(data.error ?? "import failed"); return; }
       setResults(data.results);
     } catch {
-      setError("Network error");
+      setError("network error");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <Page width="narrow">
+    <Page width="narrow" trail={TRAIL}>
       <PageHeader
-        title="Import from Obsidian"
+        title="import from obsidian"
         description={
           <>
-            Upload a single <code>.md</code> file or a <code>.zip</code> vault export. Front matter
-            (tags, title) is preserved. Wiki links (<code>[[Page Name]]</code>) are converted to internal links.
+            upload a single <code>.md</code> file or a <code>.zip</code> vault export. front matter
+            (tags, title) is preserved. wiki links (<code>[[Page Name]]</code>) are converted to internal links.
           </>
         }
       />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Vault file (.md or .zip)</label>
+          <label className="block text-sm font-medium mb-1">vault file (.md or .zip)</label>
           <input
             ref={fileRef}
             type="file"
@@ -61,7 +64,7 @@ export default function ObsidianImportPage() {
           />
         </div>
         <Button type="submit" variant="primary" disabled={loading} className="self-start">
-          {loading ? "Importing…" : "Import"}
+          {loading ? "importing…" : "import"}
         </Button>
       </form>
 
@@ -78,7 +81,7 @@ export default function ObsidianImportPage() {
               <li key={r.slug} className="flex items-center justify-between px-3 py-2 text-sm">
                 <span>{r.title}</span>
                 <span className={r.created ? "text-success" : "text-muted"}>
-                  {r.created ? "Created" : "Skipped"}
+                  {r.created ? "created" : "skipped"}
                 </span>
               </li>
             ))}

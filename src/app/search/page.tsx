@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Breadcrumbs, Button, EmptyState, Input, Page, PageHeader, Section } from "@/components/ui";
+import { Button, EmptyState, Input, Page, PageHeader, Section } from "@/components/ui";
 import { getSearchResults } from "@/lib/search-response";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 type SearchResult = {
   id: string;
@@ -52,13 +53,7 @@ function SearchContent() {
   }
 
   return (
-    <Page width="narrow">
-      <Breadcrumbs>
-        <Link href="/articles">library</Link>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">search</span>
-      </Breadcrumbs>
-
+    <Page trail={[TRAIL_ROOTS.library, { label: "search" }]} width="narrow">
       <PageHeader title="search" />
 
       <form onSubmit={submit} role="search" className="flex gap-2">

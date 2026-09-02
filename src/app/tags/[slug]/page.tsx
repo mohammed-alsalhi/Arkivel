@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { TRAIL_ROOTS } from "@/lib/trail";
 import { formatDate } from "@/lib/utils";
 import { DataTable, EmptyState, Page, PageHeader } from "@/components/ui";
 
@@ -31,9 +32,10 @@ export default async function TagPage({ params }: Props) {
   });
 
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.library, TRAIL_ROOTS.tags, { label: tag.name }]}>
       <PageHeader
-        title={`Tag: ${tag.name}`}
+        kicker="tag"
+        title={tag.name}
         description={
           <>
             {articles.length} article{articles.length !== 1 ? "s" : ""} tagged with &ldquo;{tag.name}&rdquo;
@@ -44,16 +46,16 @@ export default async function TagPage({ params }: Props) {
       {articles.length === 0 ? (
         <EmptyState
           description={
-            <>No articles have been tagged with &ldquo;{tag.name}&rdquo; yet.</>
+            <>no articles have been tagged with &ldquo;{tag.name}&rdquo; yet.</>
           }
         />
       ) : (
         <DataTable>
           <thead>
             <tr>
-              <th>Article</th>
-              <th className="w-32">Category</th>
-              <th className="w-28">Last edited</th>
+              <th>article</th>
+              <th className="w-32">category</th>
+              <th className="w-28">last edited</th>
             </tr>
           </thead>
           <tbody>
@@ -70,7 +72,7 @@ export default async function TagPage({ params }: Props) {
                       {article.category.name}
                     </Link>
                   ) : (
-                    <span className="italic">None</span>
+                    <span className="italic">none</span>
                   )}
                 </td>
                 <td className="text-muted text-[12px]">
@@ -81,10 +83,6 @@ export default async function TagPage({ params }: Props) {
           </tbody>
         </DataTable>
       )}
-
-      <p className="mt-4 text-[13px]">
-        <Link href="/articles">&larr; All articles</Link>
-      </p>
     </Page>
   );
 }

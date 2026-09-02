@@ -4,6 +4,7 @@ import {
   createPublicApiV1OpenApiSpec,
   PUBLIC_API_V1_EXAMPLE_BASE_URL,
 } from "@/lib/public-api-v1";
+import { TRAIL_ROOTS } from "@/lib/trail";
 import {
   Chip,
   CodeBlock,
@@ -15,8 +16,8 @@ import {
 } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "API reference",
-  description: "The generated Arkivel public API v1 reference.",
+  title: "api reference",
+  description: "the generated arkivel public api v1 reference.",
 };
 
 export default function ApiDocsPage() {
@@ -35,10 +36,12 @@ export default function ApiDocsPage() {
   return (
     <Page
       className={config.siteMode === "product" ? "product-docs-page" : undefined}
+      trail={[TRAIL_ROOTS.reference, { label: "api reference" }]}
       width="wide"
     >
       <PageHeader
-        title="API reference"
+        kicker="reference"
+        title="api reference"
         description={
           <>
             <InlineCode>{spec.info.title}</InlineCode>{" "}
@@ -48,22 +51,22 @@ export default function ApiDocsPage() {
       />
 
       <div className="space-y-8 text-[13px]">
-        <Section title="Schema">
+        <Section title="schema">
           <p className="text-muted">
-            This page is generated from the same OpenAPI document served at{" "}
+            this page is generated from the same OpenAPI document served at{" "}
             <a href="/api/v1/openapi.json"><InlineCode>/api/v1/openapi.json</InlineCode></a>.
-            Contract and client metadata are available at{" "}
+            contract and client metadata are available at{" "}
             <a href="/api/v1/contract"><InlineCode>/api/v1/contract</InlineCode></a>{" "}
             and <a href="/api/v1/sdk"><InlineCode>/api/v1/sdk</InlineCode></a>.
           </p>
-          <p className="font-semibold">Server</p>
+          <p className="font-semibold">server</p>
           <CodeBlock><code>{spec.servers[0].url}</code></CodeBlock>
           <p className="text-muted">
             OpenAPI <InlineCode>{spec.openapi}</InlineCode> · {operations.length} operations
           </p>
         </Section>
 
-        <Section title="Operations">
+        <Section title="operations">
           <div className="divide-y divide-border">
             {operations.map((operation) => {
               const headingId = `operation-${operation.operationId}`;
@@ -90,13 +93,13 @@ export default function ApiDocsPage() {
 
                   {operation.parameters.length > 0 ? (
                     <DataTable className="text-[12px]">
-                      <caption className="pb-2 text-left font-semibold">Parameters</caption>
+                      <caption className="pb-2 text-left font-semibold">parameters</caption>
                       <thead>
                         <tr>
-                          <th scope="col">Name</th>
-                          <th scope="col">Location</th>
-                          <th scope="col">Type</th>
-                          <th scope="col">Requirement</th>
+                          <th scope="col">name</th>
+                          <th scope="col">location</th>
+                          <th scope="col">type</th>
+                          <th scope="col">requirement</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -114,17 +117,17 @@ export default function ApiDocsPage() {
 
                   <details>
                     <summary className="cursor-pointer font-semibold">
-                      Responses ({Object.keys(operation.responses).length})
+                      responses ({Object.keys(operation.responses).length})
                     </summary>
                     <div className="mt-3">
                       <DataTable className="text-[12px]">
                         <caption className="ui-sr-only">
-                          Responses for {operation.method} {operation.path}
+                          responses for {operation.method} {operation.path}
                         </caption>
                         <thead>
                           <tr>
-                            <th scope="col">Status</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">status</th>
+                            <th scope="col">description</th>
                           </tr>
                         </thead>
                         <tbody>

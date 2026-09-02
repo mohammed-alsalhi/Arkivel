@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { Button, Input, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.library, { label: "import", href: "/import" }, { label: "notion" }];
 
 export default function NotionImportPage() {
   const [accessToken, setAccessToken] = useState("");
@@ -22,22 +25,22 @@ export default function NotionImportPage() {
       const data = await res.json();
       setResult(data);
     } catch {
-      setResult({ error: "Network error" });
+      setResult({ error: "network error" });
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <Page width="narrow">
+    <Page width="narrow" trail={TRAIL}>
       <PageHeader
-        title="Import from Notion"
-        description="Enter your Notion integration token and the page ID to import. The page will be created as a draft article."
+        title="import from notion"
+        description="enter your notion integration token and the page id to import. the page will be created as a draft article."
       />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Integration token</label>
+          <label className="block text-sm font-medium mb-1">integration token</label>
           <Input
             type="password"
             value={accessToken}
@@ -47,24 +50,24 @@ export default function NotionImportPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Page ID</label>
+          <label className="block text-sm font-medium mb-1">page id</label>
           <Input
             type="text"
             value={pageId}
             onChange={(e) => setPageId(e.target.value)}
-            placeholder="32-character page ID from the URL"
+            placeholder="32-character page id from the url"
             required
           />
         </div>
         <Button type="submit" variant="primary" disabled={loading} className="self-start">
-          {loading ? "Importing…" : "Import page"}
+          {loading ? "importing…" : "import page"}
         </Button>
       </form>
 
       {result?.error && <p className="mt-4 text-danger text-sm">{result.error}</p>}
       {result?.slug && (
         <p className="mt-4 text-success text-sm">
-          Imported as draft:{" "}
+          imported as draft:{" "}
           <a href={`/articles/${result.slug}`} className="underline">
             {result.title}
           </a>

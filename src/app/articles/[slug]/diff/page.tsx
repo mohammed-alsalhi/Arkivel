@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { ArticleWorkflowShell } from "@/components/ArticleWorkflowShell";
 import { Button, LoadingState } from "@/components/ui";
 
@@ -59,11 +58,11 @@ export default function DiffPage() {
   }, [slug, fromId, toId]);
 
   if (loading) {
-    return <LoadingState label="Loading diff..." />;
+    return <LoadingState label="loading diff..." />;
   }
 
   if (!fromData || !toData || !article) {
-    return <LoadingState label="Could not load revisions." />;
+    return <LoadingState label="could not load revisions." />;
   }
 
   const fromLines = stripHtml(fromData.content).split("\n");
@@ -80,15 +79,15 @@ export default function DiffPage() {
       actions={
         <>
           <Button aria-pressed={diffMode === "line"} onClick={() => setDiffMode("line")}>
-            Line
+            line
           </Button>
           <Button aria-pressed={diffMode === "inline"} onClick={() => setDiffMode("inline")}>
-            Inline
+            inline
           </Button>
         </>
       }
       slug={slug}
-      title={<>Difference between revisions of &ldquo;{article.title}&rdquo;</>}
+      title={<>difference between revisions of &ldquo;{article.title}&rdquo;</>}
     >
         {diffMode === "line" ? (
           <div className="border border-border text-[13px] font-mono whitespace-pre-wrap break-words">
@@ -110,7 +109,7 @@ export default function DiffPage() {
               </div>
             ))}
             {diffLines.length === 0 && (
-              <div className="px-3 py-2 text-muted italic">No differences found.</div>
+              <div className="px-3 py-2 text-muted italic">no differences found.</div>
             )}
           </div>
         ) : (
@@ -130,16 +129,10 @@ export default function DiffPage() {
               </span>
             ))}
             {inlineParts.length === 0 && (
-              <span className="text-muted italic">No differences found.</span>
+              <span className="text-muted italic">no differences found.</span>
             )}
           </div>
         )}
-
-        <div>
-          <Link href={`/articles/${slug}/history`} className="text-[13px] text-wiki-link">
-            &larr; Back to history
-          </Link>
-        </div>
     </ArticleWorkflowShell>
   );
 }

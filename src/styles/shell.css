@@ -210,10 +210,26 @@ html[data-skin="folio"] .wiki-layout {
   background: var(--color-surface);
 }
 
+/* Pages own their padding (via --page-pad-*) so the sticky topbar can sit
+   flush at the top of the scroll area. */
 .wiki-main-content {
+  --page-pad-top: clamp(2.5rem, 5vw, 5rem);
+  --page-pad-x: clamp(2.5rem, 5vw, 5rem);
+  --page-pad-bottom: clamp(2.5rem, 5vw, 5rem);
+  display: flex;
   width: 100%;
   min-height: 100%;
-  padding: clamp(2.5rem, 5vw, 5rem);
+  flex-direction: column;
+  padding: 0;
+}
+
+.wiki-main-content > * {
+  min-width: 0;
+}
+
+.wiki-main-content > .ui-page,
+.wiki-main-content > .article-page {
+  flex: 1 0 auto;
 }
 
 .wiki-sidebar {
@@ -233,10 +249,12 @@ html[data-skin="folio"] .wiki-layout {
   transition: none;
 }
 
+/* Workspace row: mark + wiki name. The wiki skin keeps its larger mark. */
 .wiki-sidebar-brand {
   display: inline-flex;
   width: fit-content;
-  margin: 2.8rem 0 2.1rem 3.25rem;
+  max-width: calc(100% - 3.4rem);
+  margin: 2.8rem 0 2.1rem 1.7rem;
   padding: 0;
   border: 0;
 }
@@ -246,32 +264,17 @@ html[data-skin="folio"] .wiki-layout {
   height: 2.2rem;
 }
 
-.wiki-sidebar-search {
-  margin: 0 1.7rem 2.2rem;
-}
-
-.wiki-sidebar-search-input {
-  width: 100%;
-  height: 4.4rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.65rem;
-  outline: none;
-  background: var(--color-surface);
-  color: var(--color-foreground);
-  padding: 0 1.2rem;
-  font-size: 1rem;
-  line-height: 1;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.wiki-sidebar-search-input::placeholder {
-  color: var(--color-muted);
-  opacity: 0.78;
-}
-
-.wiki-sidebar-search-input:focus-visible {
-  border-color: var(--color-heading);
-  box-shadow: 0 0 0 2px var(--color-accent-soft);
+/* The wiki's name is operator-authored; keep its casing in both skins. */
+.wiki-sidebar-brand-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
 }
 
 .wiki-sidebar-navigation {
@@ -323,9 +326,112 @@ html[data-skin="folio"] .wiki-layout {
   font-weight: 550;
 }
 
+.wiki-sidebar-link-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
 /* The classic wiki skin keeps a text-only navigation list. */
 html[data-skin="wiki"] .wiki-sidebar-link-icon {
   display: none;
+}
+
+/* Space rows: [chevron | spacer] + link. The chevron is its own button so no
+   interactive element nests inside the link; depth indents via --depth. */
+.wiki-sidebar-row {
+  --depth: 0;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  border-radius: 0.55rem;
+  padding-left: calc(var(--depth) * 1.1rem);
+}
+
+.wiki-sidebar-row:hover,
+.wiki-sidebar-row:focus-within,
+.wiki-sidebar-row-active {
+  background: var(--color-surface-hover);
+}
+
+/* The row carries the fill, so the link inside stays flat. */
+.wiki-sidebar-row > .wiki-sidebar-link {
+  min-width: 0;
+  flex: 1 1 auto;
+  border-radius: 0;
+  background: transparent;
+  padding-left: 0.35rem;
+}
+
+.wiki-sidebar-row:hover > .wiki-sidebar-link,
+.wiki-sidebar-row-active > .wiki-sidebar-link {
+  color: var(--color-heading);
+}
+
+.wiki-sidebar-chevron,
+.wiki-sidebar-chevron-spacer {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.wiki-sidebar-chevron {
+  border: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--color-muted);
+  padding: 0;
+  line-height: 0;
+  cursor: pointer;
+}
+
+.wiki-sidebar-chevron:hover,
+.wiki-sidebar-chevron:focus-visible {
+  background: var(--color-surface-hover);
+  color: var(--color-heading);
+}
+
+.wiki-sidebar-chevron > svg {
+  transition: transform 120ms ease;
+}
+
+.wiki-sidebar-chevron-open > svg {
+  transform: rotate(90deg);
+}
+
+/* The classic skin draws the chevron as a small text triangle instead. */
+html[data-skin="wiki"] .wiki-sidebar-chevron > svg {
+  display: none;
+}
+
+html[data-skin="wiki"] .wiki-sidebar-chevron::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 0.8rem;
+  line-height: 1;
+  transition: transform 120ms ease;
+}
+
+html[data-skin="wiki"] .wiki-sidebar-chevron-open::before {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wiki-sidebar-chevron > svg,
+  html[data-skin="wiki"] .wiki-sidebar-chevron::before {
+    transition: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .wiki-sidebar-chevron,
+  .wiki-sidebar-chevron-spacer {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
 }
 
 .wiki-sidebar-empty {
@@ -336,12 +442,13 @@ html[data-skin="wiki"] .wiki-sidebar-link-icon {
 
 .wiki-sidebar-footer {
   display: grid;
-  gap: 0.65rem;
+  gap: 0.35rem;
   margin-top: auto;
   border-top: 1px solid var(--color-border-light);
-  padding: 1rem 1.7rem;
+  padding: 0.75rem 1.7rem 1rem;
 }
 
+.wiki-sidebar-footer-row,
 .wiki-sidebar-footer-copy,
 .wiki-sidebar-footer-actions {
   display: flex;
@@ -349,27 +456,24 @@ html[data-skin="wiki"] .wiki-sidebar-link-icon {
   align-items: center;
 }
 
+.wiki-sidebar-footer-row {
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-left: 1rem;
+}
+
 .wiki-sidebar-footer-copy {
+  min-width: 0;
   gap: 0.35rem;
+  overflow: hidden;
   color: var(--color-muted);
   font-size: 0.68rem;
+  white-space: nowrap;
 }
 
 .wiki-sidebar-footer-actions {
-  justify-content: space-between;
-  gap: 0.45rem;
-}
-
-.wiki-sidebar-new-page {
-  margin-right: auto;
-  color: var(--color-foreground);
-  font-size: 0.78rem;
-  font-weight: 650;
-  text-decoration: none;
-}
-
-.wiki-sidebar-new-page:hover {
-  text-decoration: underline;
+  flex: 0 0 auto;
+  gap: 0.25rem;
 }
 
 .wiki-sidebar-footer-actions .ui-icon-button {
@@ -413,7 +517,16 @@ html[data-skin="wiki"] .wiki-sidebar-link-icon {
   }
 
   .wiki-main-content {
-    padding: 4.75rem 1.25rem 2.5rem !important;
+    --page-pad-top: 1.25rem;
+    --page-pad-x: 1.25rem;
+    --page-pad-bottom: 2.5rem;
+    --ui-topbar-height: 4.75rem;
+  }
+
+  /* The fixed menu button sits over the topbar's left edge; keep the trail
+     clear of it and vertically centered on the button. */
+  .ui-topbar {
+    padding-left: 4.25rem;
   }
 
   .wiki-sidebar {
@@ -474,7 +587,12 @@ html[data-skin="wiki"] .wiki-sidebar-link-icon {
     margin-top: 2rem;
   }
 
-  .wiki-sidebar-search-input {
-    height: 3.75rem;
+  /* Phones show only the parent and current crumb. */
+  .ui-trail li:not(:nth-last-child(-n + 2)) {
+    display: none;
+  }
+
+  .ui-topbar-meta {
+    display: none;
   }
 }

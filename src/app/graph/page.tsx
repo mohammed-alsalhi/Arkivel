@@ -5,12 +5,19 @@ import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import GraphControls from "@/components/graph/GraphControls";
 import { LoadingState, Page } from "@/components/ui";
+import { TRAIL_ROOTS, type TrailItem } from "@/lib/trail";
+
+const trail: TrailItem[] = [TRAIL_ROOTS.library, { label: "graph" }];
+
+/** The canvas fills the scroll area under the sticky topbar without scrolling. */
+const canvasHeight =
+  "calc(100dvh - var(--ui-topbar-height) - var(--page-pad-top, 2.5rem) - var(--page-pad-bottom, 2.5rem))";
 
 const ArticleGraph = dynamic(() => import("@/components/graph/ArticleGraph"), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-full text-muted text-[13px]">
-      Loading graph...
+      loading graph...
     </div>
   ),
 });
@@ -106,38 +113,40 @@ function GraphPageContent() {
   }
 
   return (
-    <Page width="full" style={{ height: "calc(100dvh - 10rem)", position: "relative" }}>
-      <GraphControls
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-        depth={depth}
-        onDepthChange={setDepth}
-        centerSlug={centerSlug}
-        onCenterChange={handleCenterChange}
-        nodeCount={filteredNodes.length}
-        edgeCount={filteredEdges.length}
-        clusterMode={clusterMode}
-        onClusterModeChange={setClusterMode}
-      />
-
-      {loading ? (
-        <div className="flex items-center justify-center h-full text-muted text-[13px]">
-          Loading graph data...
-        </div>
-      ) : filteredNodes.length === 0 ? (
-        <div className="flex items-center justify-center h-full text-muted text-[13px]">
-          No articles to display. Create some articles first.
-        </div>
-      ) : (
-        <ArticleGraph
-          nodes={filteredNodes}
-          edges={filteredEdges}
-          onNodeClick={handleNodeClick}
+    <Page footer={false} trail={trail} width="full">
+      <div style={{ height: canvasHeight, position: "relative" }}>
+        <GraphControls
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          depth={depth}
+          onDepthChange={setDepth}
           centerSlug={centerSlug}
+          onCenterChange={handleCenterChange}
+          nodeCount={filteredNodes.length}
+          edgeCount={filteredEdges.length}
           clusterMode={clusterMode}
+          onClusterModeChange={setClusterMode}
         />
-      )}
+
+        {loading ? (
+          <div className="flex items-center justify-center h-full text-muted text-[13px]">
+            loading graph data...
+          </div>
+        ) : filteredNodes.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-muted text-[13px]">
+            no articles to display. create some articles first.
+          </div>
+        ) : (
+          <ArticleGraph
+            nodes={filteredNodes}
+            edges={filteredEdges}
+            onNodeClick={handleNodeClick}
+            centerSlug={centerSlug}
+            clusterMode={clusterMode}
+          />
+        )}
+      </div>
     </Page>
   );
 }

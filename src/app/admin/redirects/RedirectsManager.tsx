@@ -24,7 +24,7 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Failed to save");
+        setError(data.error || "failed to save");
       } else {
         const newRedirect = await res.json();
         setRedirects((prev) => {
@@ -58,7 +58,7 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
       {/* Add form */}
       <form onSubmit={handleAdd} className="flex flex-wrap gap-2 items-end">
         <div className="flex flex-col gap-1 min-w-0 flex-1 sm:flex-none">
-          <label className="text-xs text-muted-foreground">From slug (old)</label>
+          <label className="text-xs text-muted-foreground">from slug (old)</label>
           <input
             value={fromSlug}
             onChange={(e) => setFromSlug(e.target.value)}
@@ -68,7 +68,7 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
           />
         </div>
         <div className="flex flex-col gap-1 min-w-0 flex-1 sm:flex-none">
-          <label className="text-xs text-muted-foreground">To slug (new)</label>
+          <label className="text-xs text-muted-foreground">to slug (new)</label>
           <input
             value={toSlug}
             onChange={(e) => setToSlug(e.target.value)}
@@ -78,21 +78,21 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
           />
         </div>
         <Button type="submit" disabled={saving}>
-          {saving ? "Saving…" : "Add redirect"}
+          {saving ? "saving…" : "add redirect"}
         </Button>
         {error && <span className="text-xs text-danger">{error}</span>}
       </form>
 
       {/* Table */}
       {redirects.length === 0 ? (
-        <EmptyState title="No redirects yet." />
+        <EmptyState title="no redirects yet." />
       ) : (
         <DataTable>
           <thead>
             <tr>
-              <th>From slug</th>
-              <th>To slug</th>
-              <th>Created</th>
+              <th>from slug</th>
+              <th>to slug</th>
+              <th>created</th>
               <th />
             </tr>
           </thead>
@@ -109,7 +109,7 @@ export default function RedirectsManager({ initialRedirects }: { initialRedirect
                     onClick={() => handleDelete(r.id)}
                     className="text-xs text-destructive hover:underline"
                   >
-                    Delete
+                    delete
                   </button>
                 </td>
               </tr>

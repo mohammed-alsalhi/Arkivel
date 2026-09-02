@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { TRAIL_ROOTS } from "@/lib/trail";
 import { formatDate } from "@/lib/utils";
 import { EmptyState, LinkButton, Page, PageHeader, Section } from "@/components/ui";
 
@@ -79,14 +80,14 @@ export default async function RecentChangesPage() {
   }
 
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.library, { label: "inbox" }]}>
       <PageHeader
-        title="Recent changes"
-        description="Track the most recent edits and new articles across the wiki."
-        actions={<LinkButton href="/articles">Browse articles</LinkButton>}
+        title="inbox"
+        description="recent changes across the wiki"
+        actions={<LinkButton href="/articles">all pages</LinkButton>}
       />
       {timeline.length === 0 ? (
-        <EmptyState title="No recent changes" description="Edits and newly created articles will appear here." />
+        <EmptyState title="no recent changes" description="edits and newly created articles will appear here." />
       ) : (
         <div className="space-y-3">
           {Object.entries(grouped).map(([date, changes]) => (
@@ -102,7 +103,7 @@ export default async function RecentChangesPage() {
                             : ""
                         }`}
                       >
-                        {entry.type === "create" ? "New" : "Edit"}
+                        {entry.type === "create" ? "new" : "edit"}
                       </span>
                       <div className="min-w-0">
                         <Link href={`/articles/${entry.articleSlug}`} className="font-medium">
@@ -121,7 +122,7 @@ export default async function RecentChangesPage() {
                           </span>
                         )}
                         {entry.type === "create" && (
-                          <span className="text-muted italic ml-1">- Created</span>
+                          <span className="text-muted italic ml-1">- created</span>
                         )}
                       </div>
                     </div>

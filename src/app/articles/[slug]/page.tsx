@@ -5,12 +5,14 @@ import ArticleContent from "@/components/ArticleContent";
 import ArticlePasswordWrapper from "@/components/ArticlePasswordWrapper";
 import ArticleRightSidebar from "@/components/ArticleRightSidebar";
 import InfoboxDisplay from "@/components/InfoboxDisplay";
-import { Breadcrumbs } from "@/components/ui";
+import { LinkButton, PageFooter, PageTopbar } from "@/components/ui";
 import { isAdmin } from "@/lib/auth";
 import { canViewArticle } from "@/lib/article-visibility";
 import { config } from "@/lib/config";
 import prisma from "@/lib/prisma";
 import { resolveQueryBlocks } from "@/lib/queryblocks";
+import { TRAIL_ROOTS, type TrailItem } from "@/lib/trail";
+import { categoryTrail } from "@/lib/trail-server";
 import { getBacklinks, resolveTransclusions, resolveWikiLinks } from "@/lib/wikilinks";
 
 export const revalidate = 300;
@@ -67,11 +69,7 @@ export default async function ArticlePage({ params }: Props) {
     prisma.article.findUnique({
       where: { slug },
       include: {
-        category: {
-          include: {
-            parent: { include: { parent: true } },
-          },
-        },
+        category: true,
         tags: { include: { tag: true } },
       },
     }),
@@ -88,7 +86,7 @@ export default async function ArticlePage({ params }: Props) {
   const transcluded = await resolveTransclusions(article.content);
   const expandedContent = await resolveQueryBlocks(transcluded);
 
-  const [resolvedContent, backlinks, allCategories] = await Promise.all([
+  const [resolvedContent, backlinks, allCategories, spaceTrail] = await Promise.all([
     resolveWikiLinks(expandedContent),
     getBacklinks(slug),
     prisma.category.findMany({
@@ -100,17 +98,30 @@ export default async function ArticlePage({ params }: Props) {
         },
       },
     }),
+    article.categoryId ? categoryTrail(article.categoryId) : null,
   ]);
 
-  const categoryPath = [article.category?.parent?.parent, article.category?.parent, article.category].filter(
-    (category) => category !== null && category !== undefined,
-  );
+  const trail: TrailItem[] = [
+    ...(spaceTrail ?? [TRAIL_ROOTS.library, { label: "all pages", href: "/articles" }]),
+    { label: article.title },
+  ];
   const hasPageDetails = Boolean(
     adminFlag || article.coverImage || article.infobox || article.tags.length > 0,
   );
 
   return (
     <div id="top" className="article-page">
+      <PageTopbar
+        trail={trail}
+        updatedAt={article.updatedAt}
+        actions={
+          <>
+            {adminFlag && <LinkButton href={`/articles/${slug}/edit`}>edit</LinkButton>}
+            <LinkButton href={`/articles/${slug}/history`}>history</LinkButton>
+          </>
+        }
+      />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -129,17 +140,6 @@ export default async function ArticlePage({ params }: Props) {
 
       <div className="article-reader-grid">
         <article className="article-shell article-reader" data-article-id={article.id}>
-          <Breadcrumbs>
-            {categoryPath.map((category, index) => (
-              <span key={category.id}>
-                {index > 0 && <span aria-hidden="true"> / </span>}
-                <Link href={`/categories/${category.slug}`}>{category.name}</Link>
-              </span>
-            ))}
-            {categoryPath.length > 0 && <span aria-hidden="true"> / </span>}
-            <span aria-current="page">{article.title}</span>
-          </Breadcrumbs>
-
           <header className="article-reader-header">
             <h1>{article.title}</h1>
           </header>
@@ -187,6 +187,8 @@ export default async function ArticlePage({ params }: Props) {
               </details>
             )}
           </ArticlePasswordWrapper>
+
+          <PageFooter trail={trail} updatedAt={article.updatedAt} />
         </article>
 
         <ArticleRightSidebar slug={slug} backlinks={backlinks} />

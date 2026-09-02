@@ -40,10 +40,10 @@ export default async function HistoryPage({ params }: Props) {
       active="history"
       showEditTab
       slug={slug}
-      title={<>Revision history of &ldquo;{article.title}&rdquo;</>}
+      title={<>revision history of &ldquo;{article.title}&rdquo;</>}
     >
         {article.revisions.length === 0 ? (
-          <EmptyState description="No previous revisions. This article has not been edited since creation." />
+          <EmptyState description="no previous revisions. this article has not been edited since creation." />
         ) : (
           <DiffForm slug={slug} articleId={article.id} revisions={article.revisions} />
         )}
@@ -64,7 +64,7 @@ function DiffForm({
     <form action={`/articles/${slug}/diff`} method="get">
       <div className="flex gap-2 mb-3">
         <button type="submit" className="ui-button ui-button-primary">
-          Compare selected revisions
+          compare selected revisions
         </button>
       </div>
 
@@ -72,10 +72,10 @@ function DiffForm({
         <table className="w-full text-[13px]">
           <thead>
             <tr className="border-b border-border text-left">
-              <th className="py-1.5 px-2 font-bold text-heading w-8">Old</th>
-              <th className="py-1.5 px-2 font-bold text-heading w-8">New</th>
-              <th className="py-1.5 px-2 font-bold text-heading">Date</th>
-              <th className="py-1.5 px-2 font-bold text-heading">Summary</th>
+              <th className="py-1.5 px-2 font-bold text-heading w-8">old</th>
+              <th className="py-1.5 px-2 font-bold text-heading w-8">new</th>
+              <th className="py-1.5 px-2 font-bold text-heading">date</th>
+              <th className="py-1.5 px-2 font-bold text-heading">summary</th>
               <th className="py-1.5 px-2 font-bold text-heading w-16"></th>
             </tr>
           </thead>
@@ -84,18 +84,18 @@ function DiffForm({
             <tr className="border-b border-border-light bg-accent-soft">
               <td className="py-1.5 px-2 pointer-coarse:py-3">
                 <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
-                  <span className="sr-only">Compare from current version</span>
+                  <span className="sr-only">compare from current version</span>
                   <input type="radio" name="from" value="current" className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5" />
                 </label>
               </td>
               <td className="py-1.5 px-2 pointer-coarse:py-3">
                 <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
-                  <span className="sr-only">Compare to current version</span>
+                  <span className="sr-only">compare to current version</span>
                   <input type="radio" name="to" value="current" defaultChecked className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5" />
                 </label>
               </td>
-              <td className="py-1.5 px-2 text-muted">Current version</td>
-              <td className="py-1.5 px-2 italic text-muted">Latest</td>
+              <td className="py-1.5 px-2 text-muted">current version</td>
+              <td className="py-1.5 px-2 italic text-muted">latest</td>
               <td className="py-1.5 px-2">
                 <Link href={`/articles/${slug}`} className="text-wiki-link text-[12px]">
                   view
@@ -107,7 +107,7 @@ function DiffForm({
               <tr key={rev.id} className="border-b border-border-light hover:bg-surface-hover">
                 <td className="py-1.5 px-2 pointer-coarse:py-3">
                   <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
-                    <span className="sr-only">Compare from revision of {formatDate(rev.createdAt)}</span>
+                    <span className="sr-only">compare from revision of {formatDate(rev.createdAt)}</span>
                     <input
                       type="radio"
                       name="from"
@@ -119,7 +119,7 @@ function DiffForm({
                 </td>
                 <td className="py-1.5 px-2 pointer-coarse:py-3">
                   <label className="flex min-h-6 items-center justify-center pointer-coarse:min-h-9">
-                    <span className="sr-only">Compare to revision of {formatDate(rev.createdAt)}</span>
+                    <span className="sr-only">compare to revision of {formatDate(rev.createdAt)}</span>
                     <input type="radio" name="to" value={rev.id} className="h-4 w-4 pointer-coarse:h-5 pointer-coarse:w-5" />
                   </label>
                 </td>
@@ -130,7 +130,7 @@ function DiffForm({
                   {rev.editSummary ? (
                     <span className="italic">{rev.editSummary}</span>
                   ) : (
-                    <span className="text-muted italic">No summary</span>
+                    <span className="text-muted italic">no summary</span>
                   )}
                 </td>
                 <td className="py-1.5 px-2">

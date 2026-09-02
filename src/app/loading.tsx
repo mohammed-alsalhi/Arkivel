@@ -1,15 +1,19 @@
 import { SkeletonText, SkeletonTable } from "@/components/LoadingSkeleton";
-import { Page } from "@/components/ui";
 
 export default function Loading() {
   return (
-    <Page aria-busy="true" aria-label="Loading page">
-      <div className="ui-page-header">
-        <div className="ui-page-header-copy w-full max-w-md">
-          <SkeletonText lines={2} />
-        </div>
+    <div className="ui-page" aria-busy="true" aria-label="Loading page">
+      <div className="ui-topbar" aria-hidden="true">
+        <div className="skeleton skeleton-text-sm w-48" />
       </div>
-      <SkeletonTable rows={6} />
-    </Page>
+      <div className="ui-page-body">
+        <div className="ui-page-header">
+          <div className="ui-page-header-copy w-full max-w-md">
+            <SkeletonText lines={2} />
+          </div>
+        </div>
+        <SkeletonTable rows={6} />
+      </div>
+    </div>
   );
 }

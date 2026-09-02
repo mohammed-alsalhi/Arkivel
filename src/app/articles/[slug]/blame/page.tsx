@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArticleWorkflowShell } from "@/components/ArticleWorkflowShell";
 import { EmptyState } from "@/components/ui";
+import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -50,14 +51,14 @@ export default function BlamePage() {
   return (
     <ArticleWorkflowShell
       active="blame"
-      description="Each paragraph is colour-coded by the earliest revision that introduced it."
+      description="each paragraph is colour-coded by the earliest revision that introduced it."
       slug={params.slug}
-      title="Blame view"
+      title="blame"
     >
         {loading ? (
-          <p className="text-muted text-[13px] italic">Loading…</p>
+          <p className="text-muted text-[13px] italic">loading…</p>
         ) : paragraphs.length === 0 ? (
-          <EmptyState title="No paragraph data found." />
+          <EmptyState title="no paragraph data found." />
         ) : (
           <div className="space-y-1 text-[13px]">
             {paragraphs.map((p, i) => (
@@ -70,15 +71,15 @@ export default function BlamePage() {
                   className="w-40 shrink-0 rounded px-2 py-1 text-[10px] leading-snug"
                   style={{ background: revisionColor(p.revisionId) }}
                 >
-                  <div className="font-semibold truncate">{p.editor ?? "Unknown"}</div>
-                  <div className="opacity-70">{new Date(p.editedAt).toLocaleDateString()}</div>
+                  <div className="font-semibold truncate">{p.editor ?? "unknown"}</div>
+                  <div className="opacity-70">{formatDate(p.editedAt)}</div>
                   {p.editSummary && <div className="opacity-60 truncate italic">{p.editSummary}</div>}
                   {p.revisionId !== "current" && articleId && (
                     <Link
                       href={`/articles/${params.slug}/history#${p.revisionId}`}
                       className="underline opacity-70"
                     >
-                      View revision
+                      view revision
                     </Link>
                   )}
                 </div>

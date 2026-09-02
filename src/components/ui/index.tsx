@@ -1,5 +1,7 @@
 import Link, { type LinkProps } from "next/link";
 import clsx from "clsx";
+import RelativeTime from "@/components/RelativeTime";
+import { trailParent, type TrailItem } from "@/lib/trail";
 import {
   forwardRef,
   type AnchorHTMLAttributes,
@@ -13,21 +15,123 @@ import {
 
 type PageWidth = "default" | "narrow" | "wide" | "full";
 
+const pageWidthClasses: Record<PageWidth, string> = {
+  default: "ui-page-body",
+  narrow: "ui-page-body ui-page-narrow",
+  wide: "ui-page-body ui-page-wide",
+  full: "ui-page-body ui-page-full",
+};
+
+type TrailProps = HTMLAttributes<HTMLElement> & {
+  items: TrailItem[];
+};
+
+/** `space / parent / page` — links for every crumb but the last, which is the current page. */
+export function Trail({ className, items, ...props }: TrailProps) {
+  return (
+    <nav aria-label="Breadcrumb" className={clsx("ui-trail", className)} {...props}>
+      <ol>
+        {items.map((item, index) => {
+          const current = index === items.length - 1;
+          return (
+            <li key={index} className={clsx(current && "ui-trail-current")}>
+              {index > 0 && (
+                <span aria-hidden="true" className="ui-trail-separator">
+                  /
+                </span>
+              )}
+              {item.href && !current ? (
+                <Link href={item.href}>{item.label}</Link>
+              ) : (
+                <span aria-current={current ? "page" : undefined}>{item.label}</span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+type PageTopbarProps = HTMLAttributes<HTMLDivElement> & {
+  actions?: ReactNode;
+  trail: TrailItem[];
+  updatedAt?: Date | string | null;
+};
+
+/** Sticky page chrome: the trail on the left, edited-time and page actions on the right. */
+export function PageTopbar({ actions, className, trail, updatedAt, ...props }: PageTopbarProps) {
+  return (
+    <div className={clsx("ui-topbar", className)} {...props}>
+      <Trail items={trail} />
+      {(updatedAt || actions) && (
+        <div className="ui-topbar-side">
+          {updatedAt && <RelativeTime className="ui-topbar-meta" date={updatedAt} prefix="edited " />}
+          {actions}
+        </div>
+      )}
+    </div>
+  );
+}
+
+type PageFooterProps = HTMLAttributes<HTMLElement> & {
+  trail?: TrailItem[];
+  updatedAt?: Date | string | null;
+};
+
+/** One footer for every page: back to the parent crumb, extra links, last edited. */
+export function PageFooter({ children, className, trail, updatedAt, ...props }: PageFooterProps) {
+  const parent = trailParent(trail);
+  return (
+    <footer className={clsx("ui-page-footer", className)} {...props}>
+      <div className="ui-page-footer-links">
+        {parent?.href && (
+          <Link href={parent.href} className="ui-page-footer-back">
+            ← {parent.label}
+          </Link>
+        )}
+        {children}
+      </div>
+      <div className="ui-page-footer-meta">
+        {updatedAt && <RelativeTime date={updatedAt} prefix="last edited " />}
+        <a href="#main-content" className="ui-page-footer-top">
+          top ↑
+        </a>
+      </div>
+    </footer>
+  );
+}
+
 type PageProps = HTMLAttributes<HTMLDivElement> & {
+  /** Right-hand topbar actions (edit, history, share…). */
+  chromeActions?: ReactNode;
+  /** Extra footer links; pass `false` to omit the footer entirely. */
+  footer?: ReactNode | false;
+  /** The page's full trail; when given, the page renders the sticky topbar and footer. */
+  trail?: TrailItem[];
+  updatedAt?: Date | string | null;
   width?: PageWidth;
 };
 
-const pageWidthClasses: Record<PageWidth, string> = {
-  default: "ui-page",
-  narrow: "ui-page ui-page-narrow",
-  wide: "ui-page ui-page-wide",
-  full: "ui-page ui-page-full",
-};
-
-export function Page({ children, className, width = "default", ...props }: PageProps) {
+export function Page({
+  children,
+  chromeActions,
+  className,
+  footer,
+  trail,
+  updatedAt,
+  width = "default",
+  ...props
+}: PageProps) {
   return (
-    <div className={clsx(pageWidthClasses[width], className)} {...props}>
-      {children}
+    <div className={clsx("ui-page", className)} {...props}>
+      {trail && <PageTopbar actions={chromeActions} trail={trail} updatedAt={updatedAt} />}
+      <div className={pageWidthClasses[width]}>{children}</div>
+      {trail && footer !== false && (
+        <PageFooter trail={trail} updatedAt={updatedAt}>
+          {footer}
+        </PageFooter>
+      )}
     </div>
   );
 }

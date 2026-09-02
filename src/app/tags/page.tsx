@@ -1,6 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { EmptyState, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 export default async function TagsPage() {
   const tags = await prisma.tag.findMany({
@@ -18,14 +19,14 @@ export default async function TagsPage() {
   }
 
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.library, { label: "tags" }]}>
       <PageHeader
-        title="all tags"
+        title="tags"
         description={`${tags.length} tags in the wiki`}
       />
 
       {tags.length === 0 ? (
-        <EmptyState title="No tags yet." />
+        <EmptyState title="no tags yet." />
       ) : (
         <div className="tag-cloud">
           {tags.map((tag) => (

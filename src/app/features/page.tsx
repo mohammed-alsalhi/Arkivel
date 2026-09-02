@@ -8,6 +8,7 @@ import {
   PageHeader,
   SectionPanel,
 } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 export const metadata: Metadata = {
   title: "features",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function FeaturesPage() {
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.reference, { label: "features" }]}>
       <PageHeader
         kicker="reference"
         title="features"

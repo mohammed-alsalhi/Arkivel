@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { ARTICLE_STATUSES, type ArticleStatus } from "@/lib/article-status";
 import { articleVisibilityFilter } from "@/lib/article-visibility";
 import { isAdmin } from "@/lib/auth";
+import { TRAIL_ROOTS } from "@/lib/trail";
 import { formatDate } from "@/lib/utils";
 import {
   Button,
@@ -107,10 +108,10 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
     articlesHref({ category, page: targetPage, status, tag });
 
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.library, { label: "all pages" }]}>
       <PageHeader
-        kicker="browse"
-        title="articles"
+        kicker="library"
+        title="all pages"
         description={`${total.toLocaleString()} article${total === 1 ? "" : "s"}${
           category || tag || status ? " matching these filters" : " in the index"
         }.`}

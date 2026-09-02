@@ -111,14 +111,16 @@
 }
 
 .article-shell.article-reader {
+  display: flex;
   min-width: 0;
   min-height: 100%;
+  flex-direction: column;
   border: 0;
   background: var(--color-surface);
   padding: clamp(3.25rem, 5.5vw, 6rem) clamp(2.25rem, 3.5vw, 3.75rem) 5rem;
 }
 
-.article-reader > .ui-breadcrumbs,
+.article-reader > .ui-page-footer,
 .article-reader-header,
 .article-reader-notice,
 .article-reader-content,
@@ -231,6 +233,24 @@
   float: none;
   width: 100%;
   margin: 0;
+}
+
+/* The reader's footer lives inside the document column, which already pads
+   itself, so the footer keeps only its top rule and vertical spacing. */
+.article-reader > .ui-page-footer {
+  margin-top: auto;
+  padding-top: 3rem;
+  padding-inline: 0;
+}
+
+/* The section switcher (edit / history / diff / blame) now sits flat under
+   the sticky topbar instead of capping a framed box: keep a single bottom
+   rule for the tabs to hang from. */
+.ui-page-body > .article-tabbar {
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  background: transparent;
+  padding: 0;
 }
 
 .wiki-right-sidebar {
@@ -389,6 +409,15 @@
 .article-context-toggle,
 .article-context-backdrop {
   display: none;
+}
+
+/* With a sticky topbar above the reader grid, the context rail starts
+   below it on the three-pane layout (the drawer form below resets this). */
+@media (min-width: 75rem) {
+  .article-page > .ui-topbar ~ .article-reader-grid .wiki-right-sidebar {
+    top: var(--ui-topbar-height);
+    height: calc(100dvh - (var(--wiki-frame-inset, 0rem) * 2) - var(--ui-topbar-height));
+  }
 }
 
 /* 74.999rem is the sanctioned three-pane collapse breakpoint (deliberate

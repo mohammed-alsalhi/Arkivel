@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, EmptyState, Page, PageHeader } from "@/components/ui";
+import { Button, EmptyState, LoadingState, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.settings, { label: "sessions" }];
 
 type SessionInfo = {
   id: string;
@@ -12,7 +15,7 @@ type SessionInfo = {
 };
 
 function parseUA(ua: string | null): string {
-  if (!ua) return "Unknown device";
+  if (!ua) return "unknown device";
   if (/iPhone|iPad|iPod/i.test(ua)) return "iOS device";
   if (/Android/i.test(ua)) return "Android device";
   if (/Windows/i.test(ua)) return "Windows";
@@ -42,7 +45,7 @@ export default function SessionsPage() {
   }
 
   async function revokeAll() {
-    if (!confirm("Revoke all other sessions? You will need to log in again on those devices.")) return;
+    if (!confirm("revoke all other sessions? you will need to log in again on those devices.")) return;
     // Revoke all except first (most recent = current session)
     const others = sessions.slice(1);
     for (const s of others) {
@@ -51,17 +54,28 @@ export default function SessionsPage() {
     setSessions((s) => s.slice(0, 1));
   }
 
-  if (loading) return <p className="text-[13px] text-muted p-4">Loading…</p>;
+  const header = (
+    <PageHeader
+      title="sessions"
+      description="devices currently logged in to your account. revoke any you don't recognise."
+    />
+  );
+
+  if (loading) {
+    return (
+      <Page width="narrow" trail={TRAIL}>
+        {header}
+        <LoadingState label="loading…" />
+      </Page>
+    );
+  }
 
   return (
-    <Page width="narrow">
-      <PageHeader
-        title="Active Sessions"
-        description="These are devices currently logged in to your account. Revoke sessions you don't recognise."
-      />
+    <Page width="narrow" trail={TRAIL}>
+      {header}
 
       {sessions.length === 0 ? (
-        <EmptyState title="No active sessions found." />
+        <EmptyState title="no active sessions found." />
       ) : (
         <div className="space-y-2">
           {sessions.map((s, i) => (
@@ -70,14 +84,14 @@ export default function SessionsPage() {
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="text-[13px] font-medium text-foreground">{parseUA(s.userAgent)}</span>
                   {i === 0 && (
-                    <span className="text-[10px] bg-accent/15 text-accent px-1.5 py-0.5 rounded">Current</span>
+                    <span className="text-[10px] bg-accent/15 text-accent px-1.5 py-0.5 rounded">current</span>
                   )}
                 </div>
                 <div className="text-[11px] text-muted">
-                  {s.ipAddress && <span className="mr-3">IP: {s.ipAddress}</span>}
-                  <span>Signed in {new Date(s.createdAt).toLocaleDateString()}</span>
+                  {s.ipAddress && <span className="mr-3">ip: {s.ipAddress}</span>}
+                  <span>signed in {new Date(s.createdAt).toLocaleDateString()}</span>
                   <span className="mx-1.5">·</span>
-                  <span>Expires {new Date(s.expiresAt).toLocaleDateString()}</span>
+                  <span>expires {new Date(s.expiresAt).toLocaleDateString()}</span>
                 </div>
               </div>
               {i !== 0 && (
@@ -86,7 +100,7 @@ export default function SessionsPage() {
                   disabled={revoking === s.id}
                   className="flex-shrink-0"
                 >
-                  {revoking === s.id ? "Revoking…" : "Revoke"}
+                  {revoking === s.id ? "revoking…" : "revoke"}
                 </Button>
               )}
             </div>
@@ -94,7 +108,7 @@ export default function SessionsPage() {
 
           {sessions.length > 1 && (
             <Button variant="danger" onClick={revokeAll} className="mt-2">
-              Revoke all other sessions
+              revoke all other sessions
             </Button>
           )}
         </div>

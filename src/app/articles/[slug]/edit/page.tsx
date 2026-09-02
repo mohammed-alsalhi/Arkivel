@@ -5,7 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import ArticleEditorForm, { type ArticleEditorAutoSaveStatus } from "@/components/ArticleEditorForm";
 import { useAdmin } from "@/components/AdminContext";
-import { LoadingState } from "@/components/ui";
+import { useArticleTrail } from "@/components/ArticleTrailContext";
+import { LoadingState, Page } from "@/components/ui";
 import type { TiptapEditorHandle } from "@/components/editor/TiptapEditor";
 
 type CategoryItem = {
@@ -44,6 +45,7 @@ export default function EditArticlePage() {
   const isAdmin = useAdmin();
   const router = useRouter();
   const params = useParams();
+  const { trail } = useArticleTrail("edit");
   const editorRef = useRef<TiptapEditorHandle>(null);
   const [article, setArticle] = useState<Article | null>(null);
   const [title, setTitle] = useState("");
@@ -187,7 +189,7 @@ export default function EditArticlePage() {
 
       if (!response.ok) {
         const error = await response.json().catch(() => null);
-        throw new Error(error?.error || "Failed to update article");
+        throw new Error(error?.error || "failed to update article");
       }
 
       const updated = await response.json();
@@ -195,12 +197,12 @@ export default function EditArticlePage() {
       router.push(`/articles/${updated.slug}`);
     } catch (error) {
       setSaving(false);
-      window.alert(error instanceof Error ? error.message : "Failed to update article");
+      window.alert(error instanceof Error ? error.message : "failed to update article");
     }
   }
 
   async function handleDelete() {
-    if (!article || !window.confirm(`Delete "${article.title}"? This cannot be undone.`)) return;
+    if (!article || !window.confirm(`delete "${article.title}"? this cannot be undone.`)) return;
 
     setDeleting(true);
     const response = await fetch(`/api/articles/${article.id}`, { method: "DELETE" });
@@ -211,35 +213,45 @@ export default function EditArticlePage() {
     }
 
     setDeleting(false);
-    window.alert("Failed to delete article");
+    window.alert("failed to delete article");
   }
 
   if (!isAdmin) {
     return (
-      <div className="wiki-notice">
-        You must be <a href="/admin">logged in as admin</a> to edit articles.
-      </div>
+      <Page trail={trail} footer={false}>
+        <div className="wiki-notice">
+          you must be <a href="/admin">logged in as admin</a> to edit articles.
+        </div>
+      </Page>
     );
   }
 
   if (loading) {
-    return <LoadingState />;
+    return (
+      <Page trail={trail} footer={false}>
+        <LoadingState label="loading..." />
+      </Page>
+    );
   }
 
   if (!article) {
-    return <LoadingState label="Article not found." />;
+    return (
+      <Page trail={trail} footer={false}>
+        <LoadingState label="article not found." />
+      </Page>
+    );
   }
 
   return (
-    <div>
+    <Page trail={trail} footer={false}>
       <nav className="article-tabbar" aria-label="Article sections">
-        <Link href={`/articles/${article.slug}`} className="article-tab">Article</Link>
-        <span className="article-tab article-tab-active">Editing</span>
-        <Link href={`/articles/${article.slug}/history`} className="article-tab">History</Link>
+        <Link href={`/articles/${article.slug}`} className="article-tab">article</Link>
+        <span aria-current="page" className="article-tab article-tab-active">edit</span>
+        <Link href={`/articles/${article.slug}/history`} className="article-tab">history</Link>
       </nav>
 
       <ArticleEditorForm
-        heading={`Editing: ${article.title}`}
+        heading={<>editing: {article.title}</>}
         onSubmit={handleSubmit}
         title={title}
         onTitleChange={setTitle}
@@ -262,11 +274,11 @@ export default function EditArticlePage() {
         onPinnedChange={setIsPinned}
         editSummaryField={{ value: editSummary, onChange: setEditSummary }}
         saving={saving}
-        submitLabel="Save changes"
-        savingLabel="Saving..."
+        submitLabel="save changes"
+        savingLabel="saving..."
         onCancel={() => router.back()}
         deleteAction={{ deleting, onDelete: handleDelete }}
       />
-    </div>
+    </Page>
   );
 }

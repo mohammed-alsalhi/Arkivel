@@ -1,22 +1,19 @@
 import Link from "next/link";
 import { Notice, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 export default function NotFound() {
   return (
-    <Page>
-      <PageHeader title="Page not found" />
+    <Page trail={[TRAIL_ROOTS.library, { label: "not found" }]}>
+      <PageHeader title="page not found" />
 
       <Notice>
         <p>
-          There is currently no article with this name. You can{" "}
+          there is currently no article with this name. you can{" "}
           <Link href="/articles/new">create this page</Link>, or{" "}
           <Link href="/search">search the wiki</Link> for an existing article.
         </p>
       </Notice>
-
-      <p className="mt-4 text-[13px]">
-        <Link href="/">&larr; Return to Main Page</Link>
-      </p>
     </Page>
   );
 }

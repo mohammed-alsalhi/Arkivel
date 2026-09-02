@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button, Card, CardGrid, EmptyState, LoadingState, Page, PageHeader, TabButton, Tabs } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 type Asset = {
   id: string;
@@ -51,18 +52,18 @@ export default function AssetsPage() {
   }
 
   const filterOptions = [
-    { value: "all", label: "All" },
-    { value: "image/", label: "Images" },
-    { value: "application/pdf", label: "PDFs" },
-    { value: "audio/", label: "Audio" },
-    { value: "video/", label: "Video" },
+    { value: "all", label: "all" },
+    { value: "image/", label: "images" },
+    { value: "application/pdf", label: "pdfs" },
+    { value: "audio/", label: "audio" },
+    { value: "video/", label: "video" },
   ];
 
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.library, { label: "assets" }]}>
       <PageHeader
-        title="Asset Library"
-        description="Upload and manage images, PDFs, and other files."
+        title="asset library"
+        description="upload and manage images, pdfs, and other files."
         actions={
           <>
             <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleUpload} />
@@ -71,13 +72,13 @@ export default function AssetsPage() {
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
             >
-              {uploading ? "Uploading…" : "Upload files"}
+              {uploading ? "uploading…" : "upload files"}
             </Button>
           </>
         }
       />
 
-      <Tabs label="Asset filters" className="mb-4">
+      <Tabs label="asset filters" className="mb-4">
         {filterOptions.map((opt) => (
           <TabButton
             key={opt.value}
@@ -89,14 +90,14 @@ export default function AssetsPage() {
         ))}
       </Tabs>
 
-      {loading && <LoadingState label="Loading…" />}
+      {loading && <LoadingState label="loading…" />}
 
       {!loading && assets.length === 0 && (
         <EmptyState
-          title="No assets yet."
+          title="no assets yet."
           actions={
             <Button onClick={() => fileInputRef.current?.click()}>
-              Upload your first file
+              upload your first file
             </Button>
           }
         />
@@ -123,7 +124,7 @@ export default function AssetsPage() {
             description={formatSize(asset.size)}
             meta={
               <a href={asset.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-                Open
+                open
               </a>
             }
           />

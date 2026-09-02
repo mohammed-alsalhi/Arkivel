@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import ArticleEditorForm, { type ArticleEditorAutoSaveStatus } from "@/components/ArticleEditorForm";
 import { useAdmin } from "@/components/AdminContext";
 import type { TiptapEditorHandle } from "@/components/editor/TiptapEditor";
+import { Page } from "@/components/ui";
+import { TRAIL_ROOTS, type TrailItem } from "@/lib/trail";
 
 type CategoryItem = {
   id: string;
@@ -25,6 +27,12 @@ type NewArticleDraft = {
 };
 
 const DRAFT_KEY = "wiki_draft_new";
+
+const NEW_PAGE_TRAIL: TrailItem[] = [
+  TRAIL_ROOTS.library,
+  { label: "all pages", href: "/articles" },
+  { label: "new page" },
+];
 
 export default function NewArticlePage() {
   const isAdmin = useAdmin();
@@ -142,7 +150,7 @@ export default function NewArticlePage() {
 
       if (!response.ok) {
         const error = await response.json().catch(() => null);
-        throw new Error(error?.error || "Failed to create article");
+        throw new Error(error?.error || "failed to create article");
       }
 
       const article = await response.json();
@@ -150,30 +158,28 @@ export default function NewArticlePage() {
       router.push(`/articles/${article.slug}`);
     } catch (error) {
       setSaving(false);
-      window.alert(error instanceof Error ? error.message : "Failed to create article");
+      window.alert(error instanceof Error ? error.message : "failed to create article");
     }
   }
 
   if (!isAdmin) {
     return (
-      <div className="wiki-notice">
-        You must be <a href="/admin">logged in as admin</a> to create articles.
-      </div>
+      <Page trail={NEW_PAGE_TRAIL} footer={false}>
+        <div className="wiki-notice">
+          you must be <a href="/admin">logged in as admin</a> to create articles.
+        </div>
+      </Page>
     );
   }
 
   return (
-    <div>
-      <nav className="article-tabbar" aria-label="Article sections">
-        <span className="article-tab article-tab-active">Creating</span>
-      </nav>
-
+    <Page trail={NEW_PAGE_TRAIL} footer={false}>
       <ArticleEditorForm
-        heading="Create new article"
+        heading="new page"
         onSubmit={handleSubmit}
         title={title}
         onTitleChange={setTitle}
-        titlePlaceholder="Article title..."
+        titlePlaceholder="page title..."
         categories={categories}
         categoryId={categoryId}
         onCategoryChange={setCategoryId}
@@ -188,10 +194,10 @@ export default function NewArticlePage() {
         isPinned={isPinned}
         onPinnedChange={setIsPinned}
         saving={saving}
-        submitLabel="Create article"
-        savingLabel="Saving..."
+        submitLabel="create page"
+        savingLabel="saving..."
         onCancel={() => router.back()}
       />
-    </div>
+    </Page>
   );
 }

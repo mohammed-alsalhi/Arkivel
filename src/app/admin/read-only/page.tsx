@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Notice, Page, PageHeader, SectionPanel, ToggleSwitch } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.admin, { label: "read-only mode" }];
 
 export default function ReadOnlyPage() {
   const [enabled, setEnabled] = useState(false);
@@ -24,7 +27,7 @@ export default function ReadOnlyPage() {
         }
       } catch {
         if (!cancelled) {
-          setError("Could not load read-only mode status.");
+          setError("could not load read-only mode status.");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -52,36 +55,36 @@ export default function ReadOnlyPage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch {
-      setError("Could not update read-only mode.");
+      setError("could not update read-only mode.");
     } finally {
       setSaving(false);
     }
   }
 
   return (
-    <Page width="narrow">
-      <PageHeader title="Read-Only Mode" />
-      <SectionPanel title="Editing controls" bodyClassName="space-y-3">
+    <Page width="narrow" trail={TRAIL}>
+      <PageHeader title="read-only mode" description="pause editing for everyone except admins." />
+      <SectionPanel title="editing controls" bodyClassName="space-y-3">
         <p className="text-[13px] text-muted">
-          When read-only mode is enabled, non-admin users cannot create, edit, or delete articles.
-          A blue banner is shown at the top of every page. Admins are not affected.
+          when read-only mode is enabled, non-admin users cannot create, edit, or delete articles.
+          a banner is shown at the top of every page. admins are not affected.
         </p>
 
         <div className="flex items-center gap-3">
           <ToggleSwitch
-            aria-label="Toggle read-only mode"
+            aria-label="toggle read-only mode"
             checked={enabled}
             onClick={toggle}
             disabled={loading || saving}
           />
           <span className="text-[13px] text-foreground">
             {loading
-              ? "Checking read-only mode status…"
+              ? "checking read-only mode status…"
               : enabled
-                ? "Read-only mode is ON"
-                : "Read-only mode is OFF"}
+                ? "read-only mode is on"
+                : "read-only mode is off"}
           </span>
-          {saved && <span className="text-[11px] text-accent">Saved</span>}
+          {saved && <span className="text-[11px] text-accent">saved</span>}
         </div>
 
         {error && (
@@ -90,7 +93,7 @@ export default function ReadOnlyPage() {
 
         {enabled && (
           <Notice className="border-info-border bg-info-soft text-info">
-            Visitors cannot edit articles. Only admins can make changes.
+            visitors cannot edit articles. only admins can make changes.
           </Notice>
         )}
       </SectionPanel>

@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Notice, Page, PageHeader, Select } from "@/components/ui";
+import { Button, Page, PageHeader, Select } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.library, { label: "export" }];
 
 type Category = {
   id: string;
@@ -58,13 +61,11 @@ export default function ExportPage() {
   }
 
   return (
-    <Page>
-      <PageHeader title="export" />
-
-      <Notice>
-        export your wiki pages as a single downloadable file. choose the scope
-        and format below.
-      </Notice>
+    <Page trail={TRAIL}>
+      <PageHeader
+        title="export"
+        description="export your wiki pages as a single downloadable file. choose the scope and format below."
+      />
 
       <div className="max-w-lg space-y-4">
         {/* Scope selection */}

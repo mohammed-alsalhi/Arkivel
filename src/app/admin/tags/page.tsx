@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Button, DataTable, EmptyState, Input, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 export const dynamic = "force-dynamic";
+
+const TRAIL = [TRAIL_ROOTS.admin, { label: "tags" }];
 
 type Tag = { id: string; name: string; slug: string; color: string | null; _count?: { articles: number } };
 
@@ -57,19 +60,19 @@ export default function AdminTagsPage() {
       cancelEdit();
     } else {
       const body = await res.json().catch(() => ({}));
-      setError(body.error ?? "Failed to save");
+      setError(body.error ?? "failed to save");
     }
     setSaving(false);
   }
 
   async function deleteTag(tag: Tag) {
-    if (!confirm(`Delete tag "${tag.name}"? This will remove it from all articles.`)) return;
+    if (!confirm(`delete tag "${tag.name}"? this will remove it from all articles.`)) return;
     const res = await fetch(`/api/tags/${tag.id}`, { method: "DELETE" });
     if (res.ok) {
       setTags((prev) => prev.filter((t) => t.id !== tag.id));
     } else {
       const body = await res.json().catch(() => ({}));
-      alert(body.error ?? "Failed to delete tag");
+      alert(body.error ?? "failed to delete tag");
     }
   }
 
@@ -78,32 +81,32 @@ export default function AdminTagsPage() {
   );
 
   return (
-    <Page>
-      <PageHeader title="Tag management" />
+    <Page trail={TRAIL}>
+      <PageHeader title="tags" description="rename, recolor, or delete the tags used across articles." />
 
       <div className="mb-4 flex items-center gap-2">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Filter tags…"
+          placeholder="filter tags…"
           className="w-64"
         />
         <span className="text-[12px] text-muted">{filtered.length} tag{filtered.length !== 1 ? "s" : ""}</span>
       </div>
 
       {loading ? (
-        <p className="text-muted text-[13px]">Loading…</p>
+        <p className="text-muted text-[13px]">loading…</p>
       ) : filtered.length === 0 ? (
-        <EmptyState title="No tags found." />
+        <EmptyState title="no tags found." />
       ) : (
         <DataTable>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Slug</th>
-              <th>Color</th>
-              <th>Articles</th>
-              <th>Actions</th>
+              <th>name</th>
+              <th>slug</th>
+              <th>color</th>
+              <th>articles</th>
+              <th>actions</th>
             </tr>
           </thead>
           <tbody>
@@ -127,15 +130,15 @@ export default function AdminTagsPage() {
                             type="color"
                             value={editColor || "#888888"}
                             onChange={(e) => setEditColor(e.target.value)}
-                            title="Tag color"
+                            title="tag color"
                             className="w-7 h-6 rounded border border-border cursor-pointer"
                           />
                           <button
                             onClick={() => setEditColor("")}
                             className="text-[11px] text-muted hover:text-foreground"
-                            title="Clear color"
+                            title="clear color"
                           >
-                            Clear
+                            clear
                           </button>
                           {error && <span className="text-danger text-[11px]">{error}</span>}
                         </div>
@@ -144,9 +147,9 @@ export default function AdminTagsPage() {
                       <td>
                         <div className="flex items-center gap-1">
                           <Button onClick={saveEdit} disabled={saving}>
-                            Save
+                            save
                           </Button>
-                          <Button onClick={cancelEdit}>Cancel</Button>
+                          <Button onClick={cancelEdit}>cancel</Button>
                         </div>
                       </td>
                     </>
@@ -168,9 +171,9 @@ export default function AdminTagsPage() {
                       <td className="text-muted">{tag._count?.articles ?? "—"}</td>
                       <td>
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button onClick={() => startEdit(tag)}>Rename</Button>
+                          <Button onClick={() => startEdit(tag)}>rename</Button>
                           <Button variant="danger" onClick={() => deleteTag(tag)}>
-                            Delete
+                            delete
                           </Button>
                         </div>
                       </td>

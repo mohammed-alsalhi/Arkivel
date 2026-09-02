@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import CategoryManager from "@/components/CategoryManager";
 import TagManager from "@/components/TagManager";
 import { EmptyState, LinkButton, Page, PageHeader } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
 
 async function getCategoryTree() {
   try {
@@ -34,26 +35,26 @@ export default async function CategoriesPage() {
   const articleCount = countCategoryArticles(categories);
 
   return (
-    <Page>
+    <Page trail={[TRAIL_ROOTS.library, { label: "spaces" }]}>
       <PageHeader
-        kicker="Browse"
-        title="Categories"
+        kicker="library"
+        title="spaces"
         description={
           <>
             {categoryCount.toLocaleString()} categor{categoryCount === 1 ? "y" : "ies"} organizing {articleCount.toLocaleString()} article{articleCount !== 1 ? "s" : ""}.
-            Select a category to browse its articles.
+            select a category to browse its articles.
           </>
         }
         actions={
           <>
-            <LinkButton href="/articles">Article index</LinkButton>
-            <LinkButton href="/tags">Tags</LinkButton>
+            <LinkButton href="/articles">all pages</LinkButton>
+            <LinkButton href="/tags">tags</LinkButton>
           </>
         }
       />
 
       {categories.length === 0 ? (
-        <EmptyState title="No categories have been created yet." />
+        <EmptyState title="no categories have been created yet." />
       ) : (
         <div className="category-tree">
           {categories.map((cat) => (

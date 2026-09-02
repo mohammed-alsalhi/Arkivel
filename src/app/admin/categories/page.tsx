@@ -3,6 +3,9 @@
 import { FormEvent, useEffect, useState } from "react";
 import CategoryManager from "@/components/CategoryManager";
 import { Page, PageHeader, Section } from "@/components/ui";
+import { TRAIL_ROOTS } from "@/lib/trail";
+
+const TRAIL = [TRAIL_ROOTS.admin, { label: "spaces" }];
 
 type Category = {
   id: string;
@@ -38,7 +41,7 @@ export default function AdminCategoriesPage() {
 
     const source = categories.find((category) => category.id === sourceId);
     const target = categories.find((category) => category.id === targetId);
-    if (!confirm(`Merge “${source?.name}” into “${target?.name}”? The source category will be deleted.`)) return;
+    if (!confirm(`merge “${source?.name}” into “${target?.name}”? the source space will be deleted.`)) return;
 
     setMerging(true);
     setMessage("");
@@ -51,35 +54,35 @@ export default function AdminCategoriesPage() {
     setMerging(false);
 
     if (!response.ok) {
-      setMessage(result.error ?? "Merge failed.");
+      setMessage(result.error ?? "merge failed.");
       return;
     }
 
-    setMessage(`Merged ${result.sourceName} into ${result.targetName}.`);
+    setMessage(`merged ${result.sourceName} into ${result.targetName}.`);
     setSourceId("");
     setTargetId("");
     await loadCategories();
   }
 
   return (
-    <Page>
-      <PageHeader title="Categories" description="Manage the spaces shown in the library tree." />
+    <Page trail={TRAIL}>
+      <PageHeader title="spaces" description="manage the spaces shown in the library tree." />
 
       <CategoryManager />
 
-      <Section title="Merge categories">
+      <Section title="merge spaces">
         <form onSubmit={merge} className="grid gap-3 border border-border bg-surface p-4 sm:grid-cols-[1fr_1fr_auto]">
           <label className="text-[12px] text-muted">
-            Source
+            source
             <select value={sourceId} onChange={(event) => setSourceId(event.target.value)} className="mt-1 block w-full border border-border bg-background px-2 py-1.5 text-foreground">
-              <option value="">Choose a category</option>
+              <option value="">choose a space</option>
               {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
             </select>
           </label>
           <label className="text-[12px] text-muted">
-            Destination
+            destination
             <select value={targetId} onChange={(event) => setTargetId(event.target.value)} className="mt-1 block w-full border border-border bg-background px-2 py-1.5 text-foreground">
-              <option value="">Choose a category</option>
+              <option value="">choose a space</option>
               {categories.filter((category) => category.id !== sourceId).map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
             </select>
           </label>
