@@ -32,5 +32,7 @@
 @import "../styles/misc.css";
 @import "../styles/overlays.css";
 @import "../styles/modes.css";
+@import "../styles/command-palette.css";
+@import "../styles/folio.css";
 @import "../styles/mobile-floor.css";
 @import "../styles/product-site.css";

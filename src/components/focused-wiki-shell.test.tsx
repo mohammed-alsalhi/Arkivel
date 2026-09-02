@@ -52,7 +52,8 @@ describe("focused wiki shell", () => {
     );
 
     expect(html).toContain('src="/brand/arkivel-logo.svg"');
-    expect(html).toContain('placeholder="search arkivel..."');
+    expect(html).toContain('aria-label="Search Arkivel"');
+    expect(html).toContain("wiki-sidebar-search-trigger");
     expect(html).toContain('aria-current="page"');
     expect(html).toContain("all pages");
     expect(html).toContain("engineering");

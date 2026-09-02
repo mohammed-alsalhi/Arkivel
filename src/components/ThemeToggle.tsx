@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { IconButton } from "@/components/ui";
+import { getTheme, toggleTheme } from "@/lib/theme";
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false);
@@ -10,21 +11,18 @@ export default function ThemeToggle() {
   useEffect(() => {
     // The bootstrap script in layout.tsx already applied the persisted theme
     // before first paint; just read it back so the toggle reflects reality.
-    setDark(document.documentElement.getAttribute("data-theme") === "dark");
+    setDark(getTheme() === "dark");
     setMounted(true);
+
+    // Other controls (the command palette) can flip the theme too; keep the
+    // icon honest by watching the attribute instead of owning the state.
+    const observer = new MutationObserver(() => setDark(getTheme() === "dark"));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
   }, []);
 
   function toggle() {
-    const newDark = !dark;
-    setDark(newDark);
-    localStorage.setItem("theme", newDark ? "dark" : "light");
-
-    // Add global transition so all elements change at the same rate
-    document.documentElement.classList.add("theme-transitioning");
-    document.documentElement.setAttribute("data-theme", newDark ? "dark" : "light");
-    setTimeout(() => {
-      document.documentElement.classList.remove("theme-transitioning");
-    }, 300);
+    setDark(toggleTheme() === "dark");
   }
 
   if (!mounted) {
