@@ -3,7 +3,8 @@
 import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useLoggedIn } from "@/components/AdminContext";
 import BrandMark from "@/components/brand/BrandMark";
 import ThemeToggle from "@/components/ThemeToggle";
 import CommandPalette, { openCommandPalette } from "@/components/layout/CommandPalette";
@@ -37,6 +38,11 @@ function isPathActive(pathname: string, href: string): boolean {
   } catch {
     return pathname === href || pathname.startsWith(`${href}/`);
   }
+}
+
+/** localStorage key for a space's open/closed state. */
+function openStateKey(id: string): string {
+  return `sidebar:open:${id}`;
 }
 
 function MenuIcon() {
@@ -88,6 +94,15 @@ function InboxIcon() {
   );
 }
 
+function PlusIcon() {
+  return (
+    <svg {...navIconProps}>
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
+
 function PagesIcon() {
   return (
     <svg {...navIconProps}>
@@ -126,6 +141,23 @@ function FolderIcon() {
   );
 }
 
+function GearIcon() {
+  return (
+    <svg {...navIconProps}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
+    </svg>
+  );
+}
+
+function ChevronIcon() {
+  return (
+    <svg {...navIconProps} width={14} height={14} strokeWidth={2}>
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  );
+}
+
 const subscribeToNothing = () => () => {};
 const isApplePlatform = () => /mac|iphone|ipad|ipod/i.test(navigator.platform || navigator.userAgent);
 
@@ -141,6 +173,7 @@ export default function Sidebar({
   logoMark: string;
 }) {
   const pathname = usePathname();
+  const loggedIn = useLoggedIn();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
   const asideRef = useRef<HTMLElement>(null);
@@ -199,32 +232,40 @@ export default function Sidebar({
         role={mobileOpen ? "dialog" : undefined}
         aria-modal={mobileOpen ? true : undefined}
       >
+        {/* Workspace row: mark + name, like a workspace switcher without the menu. */}
         <Link href="/" className="wiki-sidebar-brand" aria-label={`${brandName} home`} onClick={close}>
           <BrandMark className="wiki-sidebar-brand-mark" imageSize={42} logoMark={logoMark} priority />
+          <span className="wiki-sidebar-brand-name">{brandName}</span>
         </Link>
 
-        <button
-          type="button"
-          className="wiki-sidebar-search-trigger"
-          aria-label={`Search ${brandName}`}
-          aria-keyshortcuts="Meta+K Control+K"
-          onClick={openCommandPalette}
-        >
-          <span className="wiki-sidebar-search-trigger-icon">
-            <SearchIcon />
-          </span>
-          <span className="wiki-sidebar-search-trigger-label">search…</span>
-          {isMac !== null && <kbd aria-hidden="true">{isMac ? "⌘K" : "ctrl K"}</kbd>}
-        </button>
-
         <nav className="wiki-sidebar-navigation">
-          <SidebarSection title="library">
+          {/* Top group: search, inbox, new page (no section header). */}
+          <div className="wiki-sidebar-section-links wiki-sidebar-top-group">
+            <button
+              type="button"
+              className="wiki-sidebar-link wiki-sidebar-search-trigger"
+              aria-label={`Search ${brandName}`}
+              aria-keyshortcuts="Meta+K Control+K"
+              onClick={openCommandPalette}
+            >
+              <span className="wiki-sidebar-link-icon">
+                <SearchIcon />
+              </span>
+              <span className="wiki-sidebar-link-label">search</span>
+              {isMac !== null && <kbd aria-hidden="true">{isMac ? "⌘K" : "ctrl K"}</kbd>}
+            </button>
             <SidebarLink href="/recent-changes" active={pathname === "/recent-changes"} onClick={close} icon={<InboxIcon />}>
               inbox
             </SidebarLink>
+            <SidebarLink href="/articles/new" active={pathname === "/articles/new"} onClick={close} icon={<PlusIcon />}>
+              new page
+            </SidebarLink>
+          </div>
+
+          <SidebarSection title="library">
             <SidebarLink
               href="/articles"
-              active={pathname === "/articles" || pathname.startsWith("/articles/")}
+              active={pathname === "/articles" || (pathname.startsWith("/articles/") && pathname !== "/articles/new")}
               onClick={close}
               icon={<PagesIcon />}
             >
@@ -255,17 +296,21 @@ export default function Sidebar({
         </nav>
 
         <div className="wiki-sidebar-footer">
-          <div className="wiki-sidebar-footer-copy">
-            <span>{articleCount.toLocaleString()} pages</span>
-            <span aria-hidden="true">·</span>
-            <span>v{config.version}</span>
-          </div>
-          <div className="wiki-sidebar-footer-actions">
-            <Link href="/articles/new" className="wiki-sidebar-new-page" onClick={close}>
-              new page
-            </Link>
-            <ThemeToggle />
-            <UserMenu />
+          {loggedIn && (
+            <SidebarLink href="/settings" active={isPathActive(pathname, "/settings")} onClick={close} icon={<GearIcon />}>
+              settings
+            </SidebarLink>
+          )}
+          <div className="wiki-sidebar-footer-row">
+            <div className="wiki-sidebar-footer-copy">
+              <span>{articleCount.toLocaleString()} pages</span>
+              <span aria-hidden="true">·</span>
+              <span>v{config.version}</span>
+            </div>
+            <div className="wiki-sidebar-footer-actions">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
         </div>
       </aside>
@@ -286,6 +331,40 @@ function SidebarSection({ title, children }: { title: string; children: React.Re
   );
 }
 
+/**
+ * Open/closed state for a space, persisted per category id. The default is
+ * rendered on the server (top level open, deeper levels closed); the stored
+ * value is read only after mount so hydration never mismatches.
+ */
+function usePersistedOpen(id: string, defaultOpen: boolean): [boolean, () => void] {
+  const [open, setOpen] = useState(defaultOpen);
+  const key = openStateKey(id);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(key);
+      if (stored === "1") setOpen(true);
+      else if (stored === "0") setOpen(false);
+    } catch {
+      // Storage may be unavailable (private mode, blocked); keep the default.
+    }
+  }, [key]);
+
+  const toggle = () => {
+    setOpen((current) => {
+      const next = !current;
+      try {
+        localStorage.setItem(key, next ? "1" : "0");
+      } catch {
+        // Ignore quota or availability errors; the state still toggles.
+      }
+      return next;
+    });
+  };
+
+  return [open, toggle];
+}
+
 function SidebarCategory({
   category,
   pathname,
@@ -298,27 +377,49 @@ function SidebarCategory({
   depth?: number;
 }) {
   const href = categoryPath(category);
+  const children = category.children ?? [];
+  const hasChildren = children.length > 0;
+  const [open, toggle] = usePersistedOpen(category.id, depth === 0);
+  const childrenId = `sidebar-space-${category.id}-children`;
+  const active = isPathActive(pathname, href);
 
   return (
     <div className="wiki-sidebar-category">
-      <SidebarLink
-        href={href}
-        active={isPathActive(pathname, href)}
-        onClick={onNavigate}
-        depth={depth}
-        icon={<FolderIcon />}
+      <div
+        className={clsx("wiki-sidebar-row", active && "wiki-sidebar-row-active")}
+        style={{ "--depth": depth } as CSSProperties}
       >
-        <span>{category.name}</span>
-      </SidebarLink>
-      {category.children?.map((child) => (
-        <SidebarCategory
-          key={child.id}
-          category={child}
-          pathname={pathname}
-          onNavigate={onNavigate}
-          depth={depth + 1}
-        />
-      ))}
+        {hasChildren ? (
+          <button
+            type="button"
+            className={clsx("wiki-sidebar-chevron", open && "wiki-sidebar-chevron-open")}
+            aria-expanded={open}
+            aria-controls={childrenId}
+            aria-label={`${open ? "collapse" : "expand"} ${category.name}`}
+            onClick={toggle}
+          >
+            <ChevronIcon />
+          </button>
+        ) : (
+          <span className="wiki-sidebar-chevron-spacer" aria-hidden="true" />
+        )}
+        <SidebarLink href={href} active={active} onClick={onNavigate} icon={<FolderIcon />}>
+          {category.name}
+        </SidebarLink>
+      </div>
+      {hasChildren && open && (
+        <div id={childrenId} className="wiki-sidebar-category-children">
+          {children.map((child) => (
+            <SidebarCategory
+              key={child.id}
+              category={child}
+              pathname={pathname}
+              onNavigate={onNavigate}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -328,14 +429,12 @@ function SidebarLink({
   active,
   onClick,
   children,
-  depth = 0,
   icon,
 }: {
   href: string;
   active?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
-  depth?: number;
   icon?: React.ReactNode;
 }) {
   return (
@@ -344,7 +443,6 @@ function SidebarLink({
       onClick={onClick}
       aria-current={active ? "page" : undefined}
       className={clsx("wiki-sidebar-link", active && "wiki-sidebar-link-active")}
-      style={{ paddingLeft: `${1 + depth * 1.2}rem` }}
     >
       {icon && <span className="wiki-sidebar-link-icon">{icon}</span>}
       <span className="wiki-sidebar-link-label">{children}</span>
