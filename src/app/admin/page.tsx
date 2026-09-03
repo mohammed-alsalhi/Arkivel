@@ -12,6 +12,8 @@ const tools = [
   ["spaces", "/admin/categories"],
   ["tags", "/admin/tags"],
   ["redirects", "/admin/redirects"],
+  ["modules", "/admin/modules"],
+  ["starter kits", "/admin/kits"],
   ["import", "/import"],
   ["maintenance", "/admin/maintenance"],
   ["read-only mode", "/admin/read-only"],

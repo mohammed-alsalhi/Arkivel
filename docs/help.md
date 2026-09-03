@@ -27,3 +27,5 @@ The import page accepts Markdown, text, HTML, JSON, and MediaWiki XML, with dedi
 ## operate
 
 Administrators manage users, categories, tags, redirects, imports, audit logs, maintenance mode, and read-only mode. Review active sessions in settings. The health page reports application and database status.
+
+Starter kits (**admin → starter kits**) apply a preset in one step: a module list plus seeded collections such as a tasks board or a reading list. Applying a kit is safe to repeat — existing collections are left alone.

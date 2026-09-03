@@ -13,5 +13,6 @@ Arkivel 6.2 supports:
 - users, roles, sessions, local credentials, and optional OAuth
 - assets, audit logs, health checks, maintenance mode, and read-only mode
 - a documented `/api/v1` contract and OpenAPI document
+- starter kits (`wiki`, `notes and tasks`, `team knowledge base`) applied from `/admin/kits`: a module preset plus seeded collections, idempotent by collection slug
 
 It intentionally does not include AI assistants, live collaboration, marketplaces, plugins, workspaces, social feeds, learning systems, gamification, personal dashboards, maps, canvases, or presentation tools.
