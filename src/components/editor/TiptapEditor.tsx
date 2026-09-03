@@ -7,8 +7,12 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { TableKit } from "@tiptap/extension-table";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { common, createLowlight } from "lowlight";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import clsx from "clsx";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import EditorBubbleMenu from "./EditorBubbleMenu";
 import ImageCaption from "./ImageCaptionExtension";
+import SlashMenu, { type SlashKeyHandler } from "./SlashMenu";
+import type { SlashCommandId } from "./slashCommands";
 import { WikiLink } from "./WikiLinkExtension";
 import styles from "./TiptapEditor.module.css";
 
@@ -16,13 +20,19 @@ export type TiptapEditorHandle = {
   getHTML: () => string;
   getMarkdown: () => string;
   setContent: (content: string) => void;
+  focus: (position?: "start" | "end") => void;
 };
+
+export type TiptapEditorVariant = "form" | "document";
 
 type Props = {
   content?: string;
   placeholder?: string;
   articleTitle?: string;
   onUpdate?: () => void;
+  /** `form` is the framed editor with a toolbar; `document` is the bare
+   *  Notion-style page where the `/` menu and selection toolbar do the work. */
+  variant?: TiptapEditorVariant;
 };
 
 type ToolButtonProps = {
@@ -73,12 +83,14 @@ function getBlockValue(editor: Editor): string {
 
 const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
   function TiptapEditor(
-    { content = "", placeholder = "Start writing...", articleTitle = "", onUpdate },
+    { content = "", placeholder = "Start writing...", articleTitle = "", onUpdate, variant = "form" },
     ref,
   ) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const shellRef = useRef<HTMLDivElement>(null);
     const currentContentRef = useRef(content);
     const onUpdateRef = useRef(onUpdate);
+    const keyHandlerRef = useRef<SlashKeyHandler | null>(null);
 
     useEffect(() => {
       onUpdateRef.current = onUpdate;
@@ -95,7 +107,13 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             return [{ tag: "a[href]:not([data-wiki-link])" }];
           },
         }),
-        Placeholder.configure({ placeholder }),
+        Placeholder.configure({
+          placeholder: ({ editor: current, node }) => {
+            if (node.type.name === "heading") return `heading ${node.attrs.level}`;
+            if (current.isEmpty) return placeholder;
+            return "type '/' for blocks";
+          },
+        }),
         TableKit,
         WikiLink,
       ],
@@ -104,6 +122,10 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       editorProps: {
         attributes: {
           class: "tiptap max-w-none",
+        },
+        // The slash menu borrows the keyboard while it is open.
+        handleKeyDown(_view, event) {
+          return keyHandlerRef.current?.(event) ?? false;
         },
         handleDrop(view, event) {
           const image = Array.from(event.dataTransfer?.files ?? []).find((file) => file.type.startsWith("image/"));
@@ -151,6 +173,13 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         currentContentRef.current = nextContent;
         editor?.commands.setContent(nextContent);
       },
+      focus: (position = "start") => {
+        if (!editor) return;
+        // Tiptap defers its own focus to the next animation frame; focus the
+        // view now so the caret leaves the title even when frames are paused.
+        editor.view.focus();
+        editor.commands.focus(position);
+      },
     }), [editor]);
 
     function setBlock(value: string) {
@@ -163,7 +192,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       if (value === "code") editor.chain().focus().toggleCodeBlock().run();
     }
 
-    function editLink() {
+    const editLink = useCallback(() => {
       if (!editor) return;
       const currentUrl = editor.getAttributes("link").href as string | undefined;
       const url = window.prompt("URL:", currentUrl ?? "https://");
@@ -173,9 +202,9 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
         return;
       }
       editor.chain().focus().extendMarkRange("link").setLink({ href: url.trim() }).run();
-    }
+    }, [editor]);
 
-    function insertWikiLink() {
+    const insertWikiLink = useCallback(() => {
       if (!editor) return;
       const { from, to } = editor.state.selection;
       const selectedText = editor.state.doc.textBetween(from, to);
@@ -194,7 +223,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
           },
         })
         .run();
-    }
+    }, [editor]);
 
     async function handleImageFile(event: React.ChangeEvent<HTMLInputElement>) {
       const file = event.target.files?.[0];
@@ -208,12 +237,43 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
       }
     }
 
+    /** Replace the typed `/query` with the chosen block. */
+    const runSlashCommand = useCallback((id: SlashCommandId, range: { from: number; to: number }) => {
+      if (!editor) return;
+      const chain = editor.chain().focus().deleteRange(range);
+      switch (id) {
+        case "text": chain.setParagraph().run(); break;
+        case "heading1": chain.setHeading({ level: 1 }).run(); break;
+        case "heading2": chain.setHeading({ level: 2 }).run(); break;
+        case "heading3": chain.setHeading({ level: 3 }).run(); break;
+        case "bulletList": chain.toggleBulletList().run(); break;
+        case "orderedList": chain.toggleOrderedList().run(); break;
+        case "quote": chain.setBlockquote().run(); break;
+        case "codeBlock": chain.setCodeBlock().run(); break;
+        case "divider": chain.setHorizontalRule().run(); break;
+        case "table": chain.insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(); break;
+        case "image":
+          chain.run();
+          fileInputRef.current?.click();
+          break;
+        case "wikiLink":
+          chain.run();
+          insertWikiLink();
+          break;
+      }
+    }, [editor, insertWikiLink]);
+
+    const isDocument = variant === "document";
+
     return (
       <div
-        className={styles.shell}
+        ref={shellRef}
+        className={clsx(isDocument ? "editor-document" : styles.shell)}
         data-testid="editor-shell"
+        data-variant={variant}
         aria-label={`${articleTitle || "Article"} editor`}
       >
+        {!isDocument && (
         <div
           className="flex flex-wrap items-center gap-1 border-b border-border bg-surface p-2"
           data-testid="editor-toolbar"
@@ -252,9 +312,16 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
             disabled={!editor}
           />
         </div>
+        )}
 
         {editor?.isActive("table") && (
-          <div className="flex flex-wrap items-center gap-1 border-b border-border bg-surface-hover p-2" aria-label="Table controls">
+          <div
+            className={isDocument
+              ? "editor-table-controls"
+              : "flex flex-wrap items-center gap-1 border-b border-border bg-surface-hover p-2"}
+            role="toolbar"
+            aria-label="Table controls"
+          >
             <ToolButton label="Add row" onClick={() => editor.chain().focus().addRowAfter().run()} />
             <ToolButton label="Add column" onClick={() => editor.chain().focus().addColumnAfter().run()} />
             <ToolButton label="Delete row" onClick={() => editor.chain().focus().deleteRow().run()} />
@@ -263,9 +330,12 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, Props>(
           </div>
         )}
 
-        <div className={styles.canvas}>
+        <div className={isDocument ? "editor-document-canvas" : styles.canvas}>
           <EditorContent editor={editor} />
         </div>
+
+        <EditorBubbleMenu editor={editor} onLink={editLink} onWikiLink={insertWikiLink} />
+        <SlashMenu editor={editor} containerRef={shellRef} keyHandlerRef={keyHandlerRef} onRun={runSlashCommand} />
 
         <input
           ref={fileInputRef}

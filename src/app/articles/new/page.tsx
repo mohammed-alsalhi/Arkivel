@@ -173,9 +173,9 @@ export default function NewArticlePage() {
   }
 
   return (
-    <Page trail={NEW_PAGE_TRAIL} footer={false}>
       <ArticleEditorForm
         heading="new page"
+        trail={NEW_PAGE_TRAIL}
         onSubmit={handleSubmit}
         title={title}
         onTitleChange={setTitle}
@@ -198,6 +198,5 @@ export default function NewArticlePage() {
         savingLabel="saving..."
         onCancel={() => router.back()}
       />
-    </Page>
   );
 }

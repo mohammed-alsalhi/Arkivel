@@ -4,7 +4,7 @@ Arkivel 6.2 supports:
 
 - one page chrome on every route: a sticky trail (`spaces / parent / page`) with edited-time and actions, and a footer that always leads back to the parent
 
-- rich-text articles with images, tables, code blocks, and wiki links
+- rich-text articles with images, tables, code blocks, and wiki links, written in place in folio with a `/` block menu and a selection toolbar
 - backlinks, local/global graph views, categories, tags, search, and recent changes
 - a `⌘K` / `Ctrl+K` command palette that searches pages, jumps to any section, and toggles the theme or skin
 - two skins on the same components — the flat, document-first `folio` and the classic framed `wiki` — chosen per user in settings, plus light and dark modes

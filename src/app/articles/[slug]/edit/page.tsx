@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import ArticleEditorForm, { type ArticleEditorAutoSaveStatus } from "@/components/ArticleEditorForm";
 import { useAdmin } from "@/components/AdminContext";
 import { useArticleTrail } from "@/components/ArticleTrailContext";
@@ -243,15 +242,10 @@ export default function EditArticlePage() {
   }
 
   return (
-    <Page trail={trail} footer={false}>
-      <nav className="article-tabbar" aria-label="Article sections">
-        <Link href={`/articles/${article.slug}`} className="article-tab">article</Link>
-        <span aria-current="page" className="article-tab article-tab-active">edit</span>
-        <Link href={`/articles/${article.slug}/history`} className="article-tab">history</Link>
-      </nav>
-
       <ArticleEditorForm
         heading={<>editing: {article.title}</>}
+        trail={trail}
+        articleLinks={{ article: `/articles/${article.slug}`, history: `/articles/${article.slug}/history` }}
         onSubmit={handleSubmit}
         title={title}
         onTitleChange={setTitle}
@@ -279,6 +273,5 @@ export default function EditArticlePage() {
         onCancel={() => router.back()}
         deleteAction={{ deleting, onDelete: handleDelete }}
       />
-    </Page>
   );
 }

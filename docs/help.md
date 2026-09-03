@@ -2,7 +2,7 @@
 
 ## write
 
-Create a page from **new page**. Add a title, body, optional category and tags, then save. The editor supports standard formatting, lists, links, wiki links, images, tables, code blocks, undo, and redo. Local draft recovery protects unsaved work.
+Create a page from **new page**. Add a title, body, optional space and tags, then save (`⌘S` / `Ctrl+S` also saves). In the folio skin the page is the editor: type `/` on an empty line to insert a block (headings, lists, quote, code, divider, table, image, page link), select text for the formatting toolbar, and set status, tags, or the url in the property list under the title. The wiki skin shows the same fields as a framed form with a toolbar. Both support standard formatting, lists, links, wiki links, images, tables, code blocks, undo, and redo. Local draft recovery protects unsaved work.
 
 ## connect
 

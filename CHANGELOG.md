@@ -1,5 +1,11 @@
 # changelog
 
+## 6.4.0
+
+- gave folio a notion-style editor: the edit page is the page itself — a large editable title, a label / value property list (space, tags, status, pinned, url, edit summary), and a bare body with no frame or toolbar; save and cancel live in the top bar and `⌘S` / `Ctrl+S` saves
+- added a `/` block menu (text, headings, lists, quote, code, divider, table, image, page link) that opens where you type, narrows as you keep typing, and a selection toolbar with turn-into, marks, and links; both skins get them, the wiki skin keeps its framed form and toolbar
+- empty blocks now hint `type '/' for blocks`, and the active skin is available to client components through `useSkin`
+
 ## 6.3.0
 
 - introduced prisma migrations: `prisma/migrations/0_baseline` reproduces the 6.0 schema, the docker image runs `prisma migrate deploy` on start instead of `db push`, and `npm run db:migrate` / `db:deploy` / `db:status` wrap the workflow

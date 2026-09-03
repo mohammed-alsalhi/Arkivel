@@ -6,6 +6,7 @@ import DocumentTitle from "@/components/layout/DocumentTitle";
 import LayoutShell from "@/components/layout/LayoutShell";
 import OverlayScrollbar from "@/components/OverlayScrollbar";
 import { AdminProvider } from "@/components/AdminContext";
+import { SkinProvider } from "@/components/SkinContext";
 import { ToastProvider } from "@/components/Toast";
 import { MaintenanceBanner, ReadOnlyBanner } from "@/components/SiteBanner";
 import { config, type WikiSkin } from "@/lib/config";
@@ -198,6 +199,7 @@ export default async function RootLayout({
       >
         <a href="#main-content" className="skip-to-content">Skip to content</a>
         <EnabledModulesProvider modules={modules}>
+        <SkinProvider skin={skin}>
         <AdminProvider initialAuth={initialAuth}>
         <ToastProvider>
           <LayoutShell>
@@ -221,6 +223,7 @@ export default async function RootLayout({
           <OverlayScrollbar />
         </ToastProvider>
         </AdminProvider>
+        </SkinProvider>
         </EnabledModulesProvider>
       </body>
     </html>

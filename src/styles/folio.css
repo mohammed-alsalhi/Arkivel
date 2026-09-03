@@ -29,6 +29,7 @@ html[data-skin="folio"][data-theme="dark"] {
 html[data-skin="folio"] :where(
   .article-reader-header h1,
   .focused-page-list-title,
+  .tiptap,
   .ui-card-title,
   .ui-table td,
   .wiki-compact-list-title
@@ -1205,5 +1206,51 @@ html[data-skin="folio"] .focused-page-list-meta a {
   html[data-skin="folio"] .focused-page-list > li {
     margin-inline: 0;
     padding-inline: 0.35rem;
+  }
+}
+
+/* ── Document editor: the folio edit page mirrors the folio reader ── */
+html[data-skin="folio"] .editor-page > .ui-page-body {
+  padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1.5rem, 5vw, 5rem) 6rem;
+}
+
+html[data-skin="folio"] .editor-document-title {
+  margin-top: 1.5rem;
+}
+
+html[data-skin="folio"] .editor-props,
+html[data-skin="folio"] .editor-document-foot,
+html[data-skin="folio"] .editor-slash-group + .editor-slash-group {
+  border-color: var(--folio-hairline);
+}
+
+html[data-skin="folio"] .editor-slash-menu,
+html[data-skin="folio"] .editor-bubble {
+  border-color: var(--folio-hairline);
+  box-shadow: var(--folio-shadow);
+}
+
+html[data-skin="folio"] .editor-slash-item[aria-selected="true"],
+html[data-skin="folio"] .editor-bubble-select:hover,
+html[data-skin="folio"] .editor-bubble-button:hover {
+  background: var(--folio-hover);
+}
+
+html[data-skin="folio"] .editor-document .tiptap code {
+  background: var(--folio-hover);
+}
+
+html[data-skin="folio"] .editor-table-controls {
+  border-color: var(--folio-hairline);
+  background: transparent;
+}
+
+@media (max-width: 767px) {
+  html[data-skin="folio"] .editor-page > .ui-page-body {
+    padding: 1.25rem 1rem 4rem;
+  }
+
+  html[data-skin="folio"] .editor-document-title {
+    margin-top: 0.5rem;
   }
 }

@@ -44,10 +44,10 @@ export default async function FeaturesPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <SectionPanel title="write" bodyClassName="text-[13px]">
           <ul className="list-disc space-y-2 pl-5">
-            <FeatureItem title="simple editor">
-              create and edit pages with focused formatting, headings, lists, links, wiki links,
-              tables, code blocks, and images. choose a category, tags, and publication status
-              alongside the page.
+            <FeatureItem title="in-place editor">
+              in folio the page is the editor: a big title, a property list, and a bare body with a{" "}
+              <InlineCode>/</InlineCode> block menu and a selection toolbar for headings, lists, links,
+              wiki links, tables, code blocks, and images. the wiki skin keeps a framed form with a toolbar.
             </FeatureItem>
             <FeatureItem title="page reader">
               read in the three-pane shell with navigation on the left and the local graph,

@@ -71,7 +71,9 @@ export default async function HelpPage() {
               <Link href="/login">log in</Link> with an administrator account when authentication is enabled.
             </li>
             <li>
-              open <Link href="/articles/new">new page</Link>, add a title, and write with the simple editor.
+              open <Link href="/articles/new">new page</Link>, add a title, and write. in folio the page is the editor:
+              type <InlineCode>/</InlineCode> on an empty line for blocks and select text to format; the wiki
+              skin shows a framed form with a toolbar. <InlineCode>⌘S</InlineCode> saves.
             </li>
             <li>
               use headings, lists, links, wiki links, tables, code blocks, and images as needed.
