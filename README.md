@@ -33,11 +33,13 @@ git clone https://github.com/mohammed-alsalhi/arkivel.git
 cd arkivel
 npm install
 cp .env.example .env
-npx prisma db push
+npm run db:deploy
 npm run dev
 ```
 
-Use `prisma db push` only for a new, empty local database. For an existing database, review the schema difference, take a verified backup, and use explicit SQL after a restore rehearsal.
+`npm run db:deploy` applies the migrations under `prisma/migrations` (a fresh database gets the full schema; an existing one gets only what is pending). Never `prisma db push` against an existing database — change `prisma/schema.prisma`, generate a migration with `npm run db:migrate` against a branch database, review the SQL, and ship it with the code.
+
+Pick which modules a deployment runs with `ARKIVEL_MODULES` (for example `graph,collections,api`) or from `/admin/modules`; see `docs/modules-and-collections.md`.
 
 To populate a fresh local database with a realistic demo dataset (categories, tags, cross-linked articles, and semantic relations), run `npm run seed:demo`. The seed is idempotent — it upserts by slug and name, so re-running it is safe.
 

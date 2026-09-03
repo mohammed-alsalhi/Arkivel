@@ -22,7 +22,7 @@ export default function ProductDocs() {
           <section id="installation">
             <span>01</span><h2>Installation</h2>
             <p>Arkivel requires Node.js and PostgreSQL. Object storage is only required for file uploads.</p>
-            <pre><code>{`git clone https://github.com/mohammed-alsalhi/arkivel.git\ncd arkivel\nnpm install\ncp .env.example .env\nnpx prisma db push\nnpm run dev`}</code></pre>
+            <pre><code>{`git clone https://github.com/mohammed-alsalhi/arkivel.git\ncd arkivel\nnpm install\ncp .env.example .env\nnpm run db:deploy\nnpm run dev`}</code></pre>
           </section>
           <section id="configuration">
             <span>02</span><h2>Configuration</h2>
@@ -36,7 +36,7 @@ export default function ProductDocs() {
           </section>
           <section id="deployment">
             <span>04</span><h2>Deployment</h2>
-            <p>Deploy the Next.js app on Vercel. Use <code>npx prisma db push</code> only for a new, empty database; existing databases need a reviewed migration and backup.</p>
+            <p>Deploy the Next.js app on Vercel. Apply schema changes with <code>npm run db:deploy</code> (Prisma migrations under <code>prisma/migrations</code>); never <code>prisma db push</code> against an existing database.</p>
             <p>Use one deployment project and database per Arkivel instance. Multiple projects can deploy from the same repository.</p>
           </section>
           <section id="reference">

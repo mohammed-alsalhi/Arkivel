@@ -1,6 +1,6 @@
 {
   "name": "arkivel",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "private": true,
   "engines": {
     "node": "20.x"
@@ -16,6 +16,9 @@
     "test:e2e": "playwright test",
     "qa:seed-smoke": "node scripts/seed-smoke-fixtures.mjs",
     "seed:demo": "node prisma/seed-demo.mjs",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
     "release:docs-sync": "node scripts/verify-docs-sync.mjs",
     "import": "tsx scripts/import-articles.ts"
   },

@@ -1,5 +1,13 @@
 # changelog
 
+## 6.3.0
+
+- introduced prisma migrations: `prisma/migrations/0_baseline` reproduces the 6.0 schema, the docker image runs `prisma migrate deploy` on start instead of `db push`, and `npm run db:migrate` / `db:deploy` / `db:status` wrap the workflow
+- added per-deployment modules: graph, assets, import, export, api, feeds, and share are now modules enabled through `ARKIVEL_MODULES` or `/admin/modules`; the sidebar, command palette, help, and features pages compose from the module registry
+- added collections, the generic database engine: a collection with a typed property schema, items (optionally backed by a page), and views; the first view is the shared fixed-row table with inline editing
+- added the notes-and-tasks starter kit: a tasks collection (status / due / priority / assignee) with table and board views, applied from `/admin/kits`
+- recorded the configurability model in `docs/modules-and-collections.md` and AGENTS.md
+
 ## 6.2.0
 
 - gave every page the same chrome: a sticky top bar with the full `space / parent / page` trail, edited-time, and page actions, plus one footer with a back link to the parent crumb and last-edited metadata; article routes share their title and category path through a route layout so edit, history, diff, and blame get a complete trail on first paint

@@ -17,6 +17,15 @@ Before schema or infrastructure work:
 
 Never use `--accept-data-loss` or `DROP ... CASCADE`. Extra legacy tables are harmless while absent from the application Prisma schema; deleting them can wait.
 
+## migrations
+
+The schema is managed by Prisma Migrate. `prisma/migrations/0_baseline` reproduces the 6.0 application schema and is recorded as applied on the production database; later migrations are additive and reviewed.
+
+- change `prisma/schema.prisma`, then `npm run db:migrate` against a branch database to generate and apply the migration locally
+- review the generated SQL, commit it with the code
+- `npm run db:status` shows what a database is missing; `npm run db:deploy` applies pending migrations (the Docker image runs it on start; Vercel builds only generate the client)
+- a migration that drops tables or columns needs a verified backup and a restore rehearsal first
+
 ## checks
 
 ```bash
