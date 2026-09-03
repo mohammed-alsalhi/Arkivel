@@ -57,7 +57,7 @@ function getExtension(filename: string) {
   return filename.split(".").pop()?.toLowerCase() ?? "";
 }
 
-export default function ImportPage() {
+export default function ImportForm() {
   const isAdmin = useAdmin();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);

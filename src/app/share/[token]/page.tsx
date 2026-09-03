@@ -6,12 +6,14 @@ import { resolveWikiLinks } from "@/lib/wikilinks";
 import { formatDate } from "@/lib/utils";
 import { config } from "@/lib/config";
 import { Notice, Page, PageHeader } from "@/components/ui";
+import { requireModule } from "@/modules/enabled";
 
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ token: string }> };
 
 export default async function SharePreviewPage({ params }: Props) {
+  await requireModule("share");
   const { token } = await params;
 
   const article = await prisma.article.findUnique({

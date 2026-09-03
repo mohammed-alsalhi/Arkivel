@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import prisma from "@/lib/prisma";
 import { generateSlug } from "@/lib/utils";
 
@@ -18,6 +19,9 @@ type GraphEdge = {
 };
 
 export async function GET(request: NextRequest) {
+  const disabled = await moduleDisabledResponse("graph");
+  if (disabled) return disabled;
+
   const centerSlug = request.nextUrl.searchParams.get("center") || undefined;
   const depth = Math.min(
     5,

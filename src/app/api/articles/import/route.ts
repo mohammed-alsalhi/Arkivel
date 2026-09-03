@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import { isAdmin, requireAdmin } from "@/lib/auth";
 import { parseImportFileAll, detectFormat } from "@/lib/import";
 import type { ImportResult } from "@/lib/import";
@@ -6,6 +7,9 @@ import { generateSlug } from "@/lib/utils";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
+  const disabled = await moduleDisabledResponse("import");
+  if (disabled) return disabled;
+
   const denied = requireAdmin(await isAdmin());
   if (denied) return denied;
 

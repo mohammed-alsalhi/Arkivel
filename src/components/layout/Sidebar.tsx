@@ -14,8 +14,9 @@ import {
   type MouseEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import { useLoggedIn } from "@/components/AdminContext";
+import { useAdmin, useLoggedIn } from "@/components/AdminContext";
 import BrandMark from "@/components/brand/BrandMark";
+import { FolderIcon, NavIcon, SearchIcon } from "@/components/icons";
 import ThemeToggle from "@/components/ThemeToggle";
 import CommandPalette, { openCommandPalette } from "@/components/layout/CommandPalette";
 import UserMenu from "@/components/layout/UserMenu";
@@ -24,6 +25,11 @@ import { currentSkin } from "@/lib/skin";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { generateSlug } from "@/lib/utils";
 import { useScrollLock } from "@/lib/useScrollLock";
+import { useEnabledModules } from "@/modules/client";
+import { composeNav } from "@/modules/navigation";
+
+export type SidebarCollection = { id: string; name: string; slug: string; categoryId: string | null };
+import type { NavEntry } from "@/modules/types";
 
 type Category = {
   id: string;
@@ -56,6 +62,14 @@ function isPathActive(pathname: string, href: string): boolean {
   } catch {
     return pathname === href || pathname.startsWith(`${href}/`);
   }
+}
+
+/** Whether a nav row is the current page; "all pages" also covers article pages but not the editor. */
+function isNavActive(pathname: string, href: string): boolean {
+  if (href === "/articles") {
+    return pathname === "/articles" || (pathname.startsWith("/articles/") && pathname !== "/articles/new");
+  }
+  return isPathActive(pathname, href);
 }
 
 /** localStorage key for a space's open/closed state. */
@@ -100,80 +114,6 @@ const navIconProps = {
   strokeLinejoin: "round" as const,
   "aria-hidden": true,
 };
-
-function SearchIcon() {
-  return (
-    <svg {...navIconProps}>
-      <circle cx="11" cy="11" r="7" />
-      <line x1="16.5" y1="16.5" x2="21" y2="21" />
-    </svg>
-  );
-}
-
-function InboxIcon() {
-  return (
-    <svg {...navIconProps}>
-      <path d="M4 5h16v14H4z" />
-      <path d="M4 14h5l1.5 2.5h3L15 14h5" />
-    </svg>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg {...navIconProps}>
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  );
-}
-
-function PagesIcon() {
-  return (
-    <svg {...navIconProps}>
-      <path d="M8 3h7l4 4v12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
-      <path d="M15 3v4h4" />
-      <path d="M4 7v13a1 1 0 0 0 1 1h10" />
-    </svg>
-  );
-}
-
-function TagIcon() {
-  return (
-    <svg {...navIconProps}>
-      <path d="M3 12V4h8l9 9-8 8-9-9z" />
-      <circle cx="7.5" cy="8.5" r="1.25" />
-    </svg>
-  );
-}
-
-function GraphIcon() {
-  return (
-    <svg {...navIconProps}>
-      <circle cx="6" cy="6" r="2.5" />
-      <circle cx="18" cy="8" r="2.5" />
-      <circle cx="10" cy="18" r="2.5" />
-      <path d="M8.2 7.2 15.6 8.1M7.2 8.3l1.9 7.3M12.3 16.8l4.4-6.6" />
-    </svg>
-  );
-}
-
-function FolderIcon() {
-  return (
-    <svg {...navIconProps}>
-      <path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6z" />
-    </svg>
-  );
-}
-
-function GearIcon() {
-  return (
-    <svg {...navIconProps}>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
-    </svg>
-  );
-}
 
 function ChevronIcon() {
   return (
@@ -260,16 +200,20 @@ type TooltipHandlers = {
 export default function Sidebar({
   brandName,
   categories,
+  collections = [],
   articleCount = 0,
   logoMark,
 }: {
   brandName: string;
   categories: Category[];
+  collections?: SidebarCollection[];
   articleCount?: number;
   logoMark: string;
 }) {
   const pathname = usePathname();
   const loggedIn = useLoggedIn();
+  const admin = useAdmin();
+  const enabledModules = useEnabledModules();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
@@ -330,6 +274,14 @@ export default function Sidebar({
 
   const close = () => setMobileOpen(false);
 
+  // Navigation composes from the core list plus the enabled modules' entries,
+  // filtered by what the reader may see (member / admin rows).
+  const auth = { admin, loggedIn };
+  const topEntries = composeNav("top", enabledModules, auth);
+  const libraryEntries = composeNav("library", enabledModules, auth);
+  const spaceEntries = composeNav("spaces", enabledModules, auth);
+  const footerEntries = composeNav("footer", enabledModules, auth);
+
   /** Collapsed rows have no visible label, so they describe themselves on hover/focus. */
   const tooltipProps = (label: string): TooltipHandlers => {
     if (!collapsed) return {};
@@ -341,6 +293,20 @@ export default function Sidebar({
       onBlur: hideTooltip,
     };
   };
+
+  const renderEntry = (entry: NavEntry) => (
+    <SidebarLink
+      key={entry.href}
+      href={entry.href}
+      active={isNavActive(pathname, entry.href)}
+      onClick={close}
+      icon={<NavIcon name={entry.icon} />}
+      collapsed={collapsed}
+      tooltip={tooltipProps(entry.label)}
+    >
+      {entry.label}
+    </SidebarLink>
+  );
 
   const onToggleCollapse = (event: MouseEvent<HTMLButtonElement>) => {
     const button = event.currentTarget;
@@ -429,69 +395,23 @@ export default function Sidebar({
                 <span className={clsx("wiki-sidebar-link-label", collapsed && "ui-sr-only")}>search</span>
                 {!collapsed && isMac !== null && <kbd aria-hidden="true">{isMac ? "⌘K" : "ctrl K"}</kbd>}
               </button>
-              <SidebarLink
-                href="/recent-changes"
-                active={pathname === "/recent-changes"}
-                onClick={close}
-                icon={<InboxIcon />}
-                collapsed={collapsed}
-                tooltip={tooltipProps("inbox")}
-              >
-                inbox
-              </SidebarLink>
-              <SidebarLink
-                href="/articles/new"
-                active={pathname === "/articles/new"}
-                onClick={close}
-                icon={<PlusIcon />}
-                collapsed={collapsed}
-                tooltip={tooltipProps("new page")}
-              >
-                new page
-              </SidebarLink>
+              {topEntries.map(renderEntry)}
             </div>
 
             <SidebarSection title="library" collapsed={collapsed}>
-              <SidebarLink
-                href="/articles"
-                active={pathname === "/articles" || (pathname.startsWith("/articles/") && pathname !== "/articles/new")}
-                onClick={close}
-                icon={<PagesIcon />}
-                collapsed={collapsed}
-                tooltip={tooltipProps("all pages")}
-              >
-                all pages
-              </SidebarLink>
-              <SidebarLink
-                href="/tags"
-                active={isPathActive(pathname, "/tags")}
-                onClick={close}
-                icon={<TagIcon />}
-                collapsed={collapsed}
-                tooltip={tooltipProps("tags")}
-              >
-                tags
-              </SidebarLink>
-              <SidebarLink
-                href="/graph"
-                active={pathname === "/graph"}
-                onClick={close}
-                icon={<GraphIcon />}
-                collapsed={collapsed}
-                tooltip={tooltipProps("graph")}
-              >
-                graph
-              </SidebarLink>
+              {libraryEntries.map(renderEntry)}
             </SidebarSection>
 
             {/* Collapsed, the spaces tree has no icon-only form: only its
                 divider remains, like the reference's collapsed section labels. */}
             <SidebarSection title="spaces" collapsed={collapsed}>
+              {spaceEntries.map(renderEntry)}
               {collapsed ? null : categories.length > 0 ? (
                 categories.map((category) => (
                   <SidebarCategory
                     key={category.id}
                     category={category}
+                    collections={collections}
                     pathname={pathname}
                     onNavigate={close}
                   />
@@ -499,23 +419,23 @@ export default function Sidebar({
               ) : (
                 <p className="wiki-sidebar-empty">no spaces yet</p>
               )}
+              {!collapsed &&
+                collections
+                  .filter((collection) => collection.categoryId === null)
+                  .map((collection) => (
+                    <SidebarCollectionRow
+                      key={collection.id}
+                      collection={collection}
+                      pathname={pathname}
+                      onNavigate={close}
+                    />
+                  ))}
             </SidebarSection>
           </nav>
         </div>
 
         <div className="wiki-sidebar-footer">
-          {loggedIn && (
-            <SidebarLink
-              href="/settings"
-              active={isPathActive(pathname, "/settings")}
-              onClick={close}
-              icon={<GearIcon />}
-              collapsed={collapsed}
-              tooltip={tooltipProps("settings")}
-            >
-              settings
-            </SidebarLink>
-          )}
+          {footerEntries.map(renderEntry)}
           <div className="wiki-sidebar-footer-row">
             {!collapsed && (
               <div className="wiki-sidebar-footer-copy">
@@ -623,20 +543,50 @@ function usePersistedOpen(id: string, defaultOpen: boolean): [boolean, () => voi
   return [open, toggle];
 }
 
+/** A collection row inside the spaces tree, aligned with the category rows. */
+function SidebarCollectionRow({
+  collection,
+  pathname,
+  onNavigate,
+  depth = 0,
+}: {
+  collection: SidebarCollection;
+  pathname: string;
+  onNavigate: () => void;
+  depth?: number;
+}) {
+  const href = `/collections/${encodeURIComponent(collection.slug)}`;
+  const active = isPathActive(pathname, href);
+  return (
+    <div
+      className={clsx("wiki-sidebar-row", active && "wiki-sidebar-row-active")}
+      style={{ "--depth": depth } as CSSProperties}
+    >
+      <span className="wiki-sidebar-chevron-spacer" aria-hidden="true" />
+      <SidebarLink href={href} active={active} onClick={onNavigate} icon={<NavIcon name="table" />}>
+        {collection.name}
+      </SidebarLink>
+    </div>
+  );
+}
+
 function SidebarCategory({
   category,
+  collections = [],
   pathname,
   onNavigate,
   depth = 0,
 }: {
   category: Category;
+  collections?: SidebarCollection[];
   pathname: string;
   onNavigate: () => void;
   depth?: number;
 }) {
   const href = categoryPath(category);
   const children = category.children ?? [];
-  const hasChildren = children.length > 0;
+  const ownCollections = collections.filter((collection) => collection.categoryId === category.id);
+  const hasChildren = children.length > 0 || ownCollections.length > 0;
   const [open, toggle] = usePersistedOpen(category.id, depth === 0);
   const childrenId = `sidebar-space-${category.id}-children`;
   const active = isPathActive(pathname, href);
@@ -671,6 +621,16 @@ function SidebarCategory({
             <SidebarCategory
               key={child.id}
               category={child}
+              collections={collections}
+              pathname={pathname}
+              onNavigate={onNavigate}
+              depth={depth + 1}
+            />
+          ))}
+          {ownCollections.map((collection) => (
+            <SidebarCollectionRow
+              key={collection.id}
+              collection={collection}
               pathname={pathname}
               onNavigate={onNavigate}
               depth={depth + 1}

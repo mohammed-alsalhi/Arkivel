@@ -5,6 +5,7 @@ import {
   PUBLIC_API_V1_EXAMPLE_BASE_URL,
 } from "@/lib/public-api-v1";
 import { TRAIL_ROOTS } from "@/lib/trail";
+import { requireModule } from "@/modules/enabled";
 import {
   Chip,
   CodeBlock,
@@ -15,12 +16,15 @@ import {
   Section,
 } from "@/components/ui";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "api reference",
   description: "the generated arkivel public api v1 reference.",
 };
 
-export default function ApiDocsPage() {
+export default async function ApiDocsPage() {
+  await requireModule("api");
   const baseUrl = config.siteMode === "product"
     ? PUBLIC_API_V1_EXAMPLE_BASE_URL
     : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";

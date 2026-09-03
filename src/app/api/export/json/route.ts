@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import prisma from "@/lib/prisma";
 import { requireAdmin, isAdmin } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
@@ -7,6 +8,9 @@ import { createExportManifest, recordExportHistory, sha256 } from "@/lib/export-
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const disabled = await moduleDisabledResponse("export");
+  if (disabled) return disabled;
+
   const denied = requireAdmin(await isAdmin());
   if (denied) return denied;
 

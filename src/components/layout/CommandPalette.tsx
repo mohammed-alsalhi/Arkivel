@@ -3,11 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
+import { useAdmin, useLoggedIn } from "@/components/AdminContext";
 import { applySkin, currentSkin } from "@/lib/skin";
 import { toggleTheme } from "@/lib/theme";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { useScrollLock } from "@/lib/useScrollLock";
 import type { WikiSkin } from "@/lib/config";
+import { useEnabledModules } from "@/modules/client";
+import { composeCommands } from "@/modules/navigation";
 
 export const OPEN_PALETTE_EVENT = "arkivel:open-palette";
 
@@ -33,19 +36,6 @@ type PaletteItem = {
   run: () => void;
 };
 
-type StaticEntry = { label: string; href: string; keywords: string[] };
-
-const GO_TO: StaticEntry[] = [
-  { label: "all pages", href: "/", keywords: ["home", "index", "articles"] },
-  { label: "inbox", href: "/recent-changes", keywords: ["recent changes", "updates", "activity"] },
-  { label: "tags", href: "/tags", keywords: ["labels"] },
-  { label: "graph", href: "/graph", keywords: ["map", "links", "network"] },
-  { label: "search", href: "/search", keywords: ["find"] },
-  { label: "new page", href: "/articles/new", keywords: ["create", "write", "add"] },
-  { label: "settings", href: "/settings", keywords: ["preferences", "account", "profile"] },
-  { label: "admin", href: "/admin", keywords: ["administration", "users", "manage"] },
-];
-
 const SEARCH_DEBOUNCE_MS = 150;
 const SEARCH_LIMIT = 8;
 const MIN_QUERY_LENGTH = 2;
@@ -68,6 +58,9 @@ function optionId(index: number) {
 
 export default function CommandPalette() {
   const router = useRouter();
+  const admin = useAdmin();
+  const loggedIn = useLoggedIn();
+  const enabledModules = useEnabledModules();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -146,6 +139,13 @@ export default function CommandPalette() {
     };
   }, [open, trimmedQuery]);
 
+  // "go to" composes from the core destinations plus the enabled modules'
+  // commands, filtered by what this reader may open.
+  const goTo = useMemo(
+    () => composeCommands(enabledModules, { admin, loggedIn }),
+    [admin, enabledModules, loggedIn],
+  );
+
   const items = useMemo<PaletteItem[]>(() => {
     const q = trimmedQuery.toLowerCase();
     const list: PaletteItem[] = [];
@@ -168,7 +168,7 @@ export default function CommandPalette() {
       });
     }
 
-    for (const entry of GO_TO) {
+    for (const entry of goTo) {
       if (!matches(q, entry.label, entry.keywords)) continue;
       list.push({
         id: `goto:${entry.href}`,
@@ -212,7 +212,7 @@ export default function CommandPalette() {
     }
 
     return list;
-  }, [results, router, skin, trimmedQuery]);
+  }, [goTo, results, router, skin, trimmedQuery]);
 
   const highlighted = items.length === 0 ? -1 : Math.min(activeIndex, items.length - 1);
 

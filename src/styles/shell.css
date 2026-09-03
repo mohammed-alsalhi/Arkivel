@@ -649,6 +649,10 @@ html[data-skin="wiki"] .wiki-sidebar-collapse-toggle {
     display: none;
   }
 
+  .ui-trail li:nth-last-child(2) > .ui-trail-separator {
+    display: none;
+  }
+
   .ui-topbar-meta {
     display: none;
   }

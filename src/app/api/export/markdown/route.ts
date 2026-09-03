@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import prisma from "@/lib/prisma";
 import { logAudit } from "@/lib/audit";
 import { config } from "@/lib/config";
 import { createExportManifest, recordExportHistory, sha256 } from "@/lib/export-hardening";
 
 export async function GET(request: NextRequest) {
+  const disabled = await moduleDisabledResponse("export");
+  if (disabled) return disabled;
+
   const { searchParams } = request.nextUrl;
   const categorySlug = searchParams.get("category");
 

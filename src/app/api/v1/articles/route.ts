@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import prisma from "@/lib/prisma";
 import { apiV1Headers, createApiV1Error, parseApiV1Integer } from "@/lib/public-api-v1";
 
 export async function GET(request: NextRequest) {
+  const disabled = await moduleDisabledResponse("api");
+  if (disabled) return disabled;
+
   const { searchParams } = request.nextUrl;
   const page = parseApiV1Integer(searchParams.get("page"), 1, 10_000);
   const limit = parseApiV1Integer(searchParams.get("limit"), 20, 100);

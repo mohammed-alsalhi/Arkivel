@@ -12,7 +12,7 @@ type Category = {
   slug: string;
 };
 
-export default function ExportPage() {
+export default function ExportForm() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [scope, setScope] = useState<"all" | "category">("all");
   const [categorySlug, setCategorySlug] = useState("");

@@ -37,7 +37,7 @@ type GraphEdge = {
   relation?: string;
 };
 
-export default function GraphPage() {
+export default function GraphExplorer() {
   return (
     <Suspense fallback={<LoadingState />}>
       <GraphPageContent />

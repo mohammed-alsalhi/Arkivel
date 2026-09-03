@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import { isAdmin } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { randomBytes } from "crypto";
@@ -9,6 +10,9 @@ type Params = { params: Promise<{ id: string }> };
 
 // POST — generate a share token for a draft article
 export async function POST(_req: NextRequest, { params }: Params) {
+  const disabled = await moduleDisabledResponse("share");
+  if (disabled) return disabled;
+
   const admin = await isAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -26,6 +30,9 @@ export async function POST(_req: NextRequest, { params }: Params) {
 
 // DELETE — revoke the share token
 export async function DELETE(_req: NextRequest, { params }: Params) {
+  const disabled = await moduleDisabledResponse("share");
+  if (disabled) return disabled;
+
   const admin = await isAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

@@ -12,7 +12,7 @@ interface ImportResult {
   created: boolean;
 }
 
-export default function ObsidianImportPage() {
+export default function ObsidianImportForm() {
   const [results, setResults] = useState<ImportResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

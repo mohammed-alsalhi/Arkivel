@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import JSZip from "jszip";
 import prisma from "@/lib/prisma";
 import { isAdmin, requireAdmin } from "@/lib/auth";
@@ -64,6 +65,9 @@ function articleToMarkdown(article: {
 }
 
 export async function GET(request: NextRequest) {
+  const disabled = await moduleDisabledResponse("export");
+  if (disabled) return disabled;
+
   const denied = requireAdmin(await isAdmin());
   if (denied) return denied;
 

@@ -6,7 +6,7 @@ import { TRAIL_ROOTS } from "@/lib/trail";
 
 const TRAIL = [TRAIL_ROOTS.library, { label: "import", href: "/import" }, { label: "notion" }];
 
-export default function NotionImportPage() {
+export default function NotionImportForm() {
   const [accessToken, setAccessToken] = useState("");
   const [pageId, setPageId] = useState("");
   const [loading, setLoading] = useState(false);

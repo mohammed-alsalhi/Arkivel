@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import prisma from "@/lib/prisma";
 import { getSession, isAdmin } from "@/lib/auth";
 import { fetchNotionPage } from "@/lib/import/notion";
 
 export async function POST(request: Request) {
+  const disabled = await moduleDisabledResponse("import");
+  if (disabled) return disabled;
+
   const user = await getSession();
   if (!user || !await isAdmin()) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 

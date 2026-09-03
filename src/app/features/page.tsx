@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DocsText, splitFeature } from "@/components/DocsText";
 import {
   FeatureItem,
   InlineCode,
@@ -9,13 +10,23 @@ import {
   SectionPanel,
 } from "@/components/ui";
 import { TRAIL_ROOTS } from "@/lib/trail";
+import { getEnabledModules } from "@/modules/enabled";
+import { MODULES } from "@/modules/registry";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "features",
   description: "the focused arkivel wiki feature set.",
 };
 
-export default function FeaturesPage() {
+export default async function FeaturesPage() {
+  const enabled = new Set(await getEnabledModules());
+  // "find and connect" composes from the registry: each enabled module's feature lines follow the core's.
+  const moduleFeatures = MODULES.filter((module) => enabled.has(module.id)).flatMap((module) =>
+    module.docs.features.map((feature, index) => ({ key: `${module.id}-${index}`, ...splitFeature(feature) })),
+  );
+
   return (
     <Page trail={[TRAIL_ROOTS.reference, { label: "features" }]}>
       <PageHeader
@@ -25,7 +36,7 @@ export default function FeaturesPage() {
         actions={
           <>
             <LinkButton href="/help">help</LinkButton>
-            <LinkButton href="/api-docs">api reference</LinkButton>
+            {enabled.has("api") && <LinkButton href="/api-docs">api reference</LinkButton>}
           </>
         }
       />
@@ -59,10 +70,11 @@ export default function FeaturesPage() {
               organize pages in hierarchical <Link href="/categories">categories</Link> and browse
               reusable <Link href="/tags">tags</Link>.
             </FeatureItem>
-            <FeatureItem title="graph">
-              follow wiki-link relationships in each page&apos;s context rail or across the full{" "}
-              <Link href="/graph">article graph</Link>.
-            </FeatureItem>
+            {moduleFeatures.map((feature) => (
+              <FeatureItem key={feature.key} title={feature.title}>
+                {feature.body && <DocsText text={feature.body} />}
+              </FeatureItem>
+            ))}
           </ul>
         </SectionPanel>
 
@@ -81,40 +93,17 @@ export default function FeaturesPage() {
           </ul>
         </SectionPanel>
 
-        <SectionPanel title="files and portability" bodyClassName="text-[13px]">
-          <ul className="list-disc space-y-2 pl-5">
-            <FeatureItem title="local import">
-              upload markdown, text, html, json, or mediawiki xml through{" "}
-              <Link href="/import">the importer</Link>, backed by{" "}
-              <InlineCode>/api/articles/import</InlineCode>.
-            </FeatureItem>
-            <FeatureItem title="notion and obsidian">
-              continue through the dedicated <Link href="/import/notion">notion</Link> or{" "}
-              <Link href="/import/obsidian">obsidian</Link> importer.
-            </FeatureItem>
-            <FeatureItem title="assets">
-              upload and browse images, pdfs, audio, video, and other files in the{" "}
-              <Link href="/assets">asset library</Link>.
-            </FeatureItem>
-            <FeatureItem title="export">
-              download the full wiki or one category as markdown or a zip archive from{" "}
-              <Link href="/export">export</Link>.
-            </FeatureItem>
-          </ul>
-        </SectionPanel>
-
-        <SectionPanel title="access and api" bodyClassName="text-[13px] lg:col-span-2">
+        <SectionPanel title="access" bodyClassName="text-[13px]">
           <ul className="list-disc space-y-2 pl-5">
             <FeatureItem title="accounts and admin">
               account sessions protect write operations. administrators manage users, categories,
-              tags, redirects, imports, maintenance, read-only mode, and the audit log from{" "}
+              tags, redirects, modules, imports, maintenance, read-only mode, and the audit log from{" "}
               <Link href="/admin">admin</Link>.
             </FeatureItem>
-            <FeatureItem title="api v1">
-              read published articles, categories, tags, and search results. the generated{" "}
-              <Link href="/api-docs">api reference</Link>,{" "}
-              <Link href="/api/v1/contract">contract</Link>, and{" "}
-              <Link href="/api/v1/openapi.json">openapi document</Link> describe the live surface.
+            <FeatureItem title="modules">
+              optional features — graph, assets, import, export, api, feeds, share — are enabled per
+              deployment with <InlineCode>ARKIVEL_MODULES</InlineCode> or from{" "}
+              <Link href="/admin/modules">admin › modules</Link>.
             </FeatureItem>
           </ul>
         </SectionPanel>

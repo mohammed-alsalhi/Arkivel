@@ -9,6 +9,12 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ push, refresh }),
 }));
 
+// An administrator sees every "go to" destination, member and admin rows included.
+vi.mock("@/components/AdminContext", () => ({
+  useAdmin: () => true,
+  useLoggedIn: () => true,
+}));
+
 import CommandPalette, { openCommandPalette } from "@/components/layout/CommandPalette";
 
 declare global {
@@ -104,15 +110,22 @@ describe("CommandPalette", () => {
     expect(panel?.getAttribute("aria-modal")).toBe("true");
     expect(document.activeElement).toBe(input());
     expect(input()?.getAttribute("placeholder")).toBe("search pages, jump to, or run a command…");
+    // Core destinations first, then the enabled modules' commands in registry order.
     expect(options().map((option) => option.textContent)).toEqual([
       "all pages",
       "inbox",
       "tags",
-      "graph",
       "search",
       "new page",
       "settings",
       "admin",
+      "collections",
+      "new collection",
+      "graph",
+      "assets",
+      "import",
+      "export",
+      "api reference",
       "toggle dark mode",
       "use wiki skin",
       "copy page link",
@@ -216,10 +229,11 @@ describe("CommandPalette", () => {
       "all pages",
       "inbox",
       "tags",
-      "graph",
       "new page",
       "settings",
       "admin",
+      "graph",
+      "assets",
       "toggle dark mode",
       "copy page link",
     ]);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import crypto from "crypto";
 import path from "path";
 import prisma from "@/lib/prisma";
@@ -8,6 +9,9 @@ import { getStorage } from "@/lib/storage";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  const disabled = await moduleDisabledResponse("assets");
+  if (disabled) return disabled;
+
   const session = await getSession();
   if (!session) return NextResponse.json([], { status: 401 });
   const admin = await isAdmin();
@@ -28,6 +32,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const disabled = await moduleDisabledResponse("assets");
+  if (disabled) return disabled;
+
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

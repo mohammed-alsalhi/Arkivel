@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import LocalGraph from "@/components/LocalGraph";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { useScrollLock } from "@/lib/useScrollLock";
+import { useModuleEnabled } from "@/modules/client";
 
 type BacklinkItem = { id: string; title: string; slug: string };
 type HeadingItem = { id: string; text: string; level: number };
@@ -17,7 +18,10 @@ export default function ArticleRightSidebar({
   slug: string;
   backlinks: BacklinkItem[];
 }) {
-  const [panel, setPanel] = useState<Panel>("graph");
+  // The graph tab belongs to the graph module; without it the rail is outline-only.
+  const graphEnabled = useModuleEnabled("graph");
+  const [panel, setPanel] = useState<Panel>(graphEnabled ? "graph" : "outline");
+  const showGraph = graphEnabled && panel === "graph";
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -108,31 +112,33 @@ export default function ArticleRightSidebar({
         aria-modal={mobileOpen ? true : undefined}
       >
         <div className="article-context-tabs" role="tablist" aria-label="Page context views">
-          <button
-            type="button"
-            id="article-context-graph-tab"
-            role="tab"
-            aria-selected={panel === "graph"}
-            aria-controls="article-context-graph"
-            className={panel === "graph" ? "article-context-tab-active" : undefined}
-            onClick={() => setPanel("graph")}
-          >
-            graph
-          </button>
+          {graphEnabled && (
+            <button
+              type="button"
+              id="article-context-graph-tab"
+              role="tab"
+              aria-selected={showGraph}
+              aria-controls="article-context-graph"
+              className={showGraph ? "article-context-tab-active" : undefined}
+              onClick={() => setPanel("graph")}
+            >
+              graph
+            </button>
+          )}
           <button
             type="button"
             id="article-context-outline-tab"
             role="tab"
-            aria-selected={panel === "outline"}
+            aria-selected={!showGraph}
             aria-controls="article-context-outline"
-            className={panel === "outline" ? "article-context-tab-active" : undefined}
+            className={!showGraph ? "article-context-tab-active" : undefined}
             onClick={() => setPanel("outline")}
           >
             outline
           </button>
         </div>
 
-        {panel === "graph" ? (
+        {showGraph ? (
           <div
             id="article-context-graph"
             role="tabpanel"

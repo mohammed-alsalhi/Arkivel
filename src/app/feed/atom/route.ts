@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { moduleDisabledResponse } from "@/modules/enabled";
 import prisma from "@/lib/prisma";
 import { config } from "@/lib/config";
 
@@ -16,6 +17,9 @@ function stripHtml(html: string): string {
 }
 
 export async function GET() {
+  const disabled = await moduleDisabledResponse("feeds");
+  if (disabled) return disabled;
+
   const articles = await prisma.article.findMany({
     where: { published: true, status: "published" },
     orderBy: { updatedAt: "desc" },
