@@ -10,6 +10,8 @@ import { ToastProvider } from "@/components/Toast";
 import { MaintenanceBanner, ReadOnlyBanner } from "@/components/SiteBanner";
 import { config, type WikiSkin } from "@/lib/config";
 import { SKIN_COOKIE, isWikiSkin } from "@/lib/skin";
+import { EnabledModulesProvider } from "@/modules/client";
+import { getEnabledModules } from "@/modules/enabled";
 import { unstable_cache } from "next/cache";
 import { cookies } from "next/headers";
 import { cache } from "react";
@@ -147,7 +149,7 @@ export default async function RootLayout({
   }
 
   const { isAdmin } = await import("@/lib/auth");
-  const [{ categories, articleCount, maintenanceMode, readOnlyMode }, initialAdmin, initialSession, skin] =
+  const [{ categories, articleCount, maintenanceMode, readOnlyMode }, initialAdmin, initialSession, skin, modules] =
     await Promise.all([
       getShellData().catch(() => ({
         categories: [],
@@ -158,8 +160,23 @@ export default async function RootLayout({
       isAdmin().catch(() => false),
       getRequestSession(),
       resolveRequestSkin().catch(() => config.wikiSkin),
+      getEnabledModules(),
     ]);
   const initialAuth = { admin: initialAdmin, loggedIn: Boolean(initialSession) };
+  const feedsEnabled = modules.includes("feeds");
+  const collections = modules.includes("collections")
+    ? await import("@/modules/collections/queries")
+        .then(({ listCollections }) => listCollections())
+        .then((list) =>
+          list.map((collection) => ({
+            id: collection.id,
+            name: collection.name,
+            slug: collection.slug,
+            categoryId: collection.category?.id ?? null,
+          })),
+        )
+        .catch(() => [])
+    : [];
 
   return (
     <html
@@ -169,13 +186,18 @@ export default async function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootstrapScript }} />
-        <link rel="alternate" type="application/rss+xml" title={`${config.name} RSS Feed`} href="/feed.xml" />
-        <link rel="alternate" type="application/atom+xml" title={`${config.name} Atom Feed`} href="/feed/atom" />
+        {feedsEnabled && (
+          <>
+            <link rel="alternate" type="application/rss+xml" title={`${config.name} RSS Feed`} href="/feed.xml" />
+            <link rel="alternate" type="application/atom+xml" title={`${config.name} Atom Feed`} href="/feed/atom" />
+          </>
+        )}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <a href="#main-content" className="skip-to-content">Skip to content</a>
+        <EnabledModulesProvider modules={modules}>
         <AdminProvider initialAuth={initialAuth}>
         <ToastProvider>
           <LayoutShell>
@@ -183,6 +205,7 @@ export default async function RootLayout({
               articleCount={articleCount}
               brandName={config.name}
               categories={categories}
+              collections={collections}
               logoMark={config.logoMark}
             />
 
@@ -198,6 +221,7 @@ export default async function RootLayout({
           <OverlayScrollbar />
         </ToastProvider>
         </AdminProvider>
+        </EnabledModulesProvider>
       </body>
     </html>
   );

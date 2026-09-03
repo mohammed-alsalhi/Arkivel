@@ -39,6 +39,7 @@ model Article {
   revisions       ArticleRevision[]
   outgoingLinks   ArticleLink[]     @relation("OutgoingLinks")
   aliases         Alias[]
+  collectionItem  CollectionItem?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 
@@ -50,17 +51,18 @@ model Article {
 }
 
 model Category {
-  id          String     @id @default(cuid())
-  name        String     @unique
-  slug        String     @unique
+  id          String       @id @default(cuid())
+  name        String       @unique
+  slug        String       @unique
   description String?
   coverImage  String?
-  sortOrder   Int        @default(0)
+  sortOrder   Int          @default(0)
   parentId    String?
-  parent      Category?  @relation("CategoryTree", fields: [parentId], references: [id])
-  children    Category[] @relation("CategoryTree")
+  parent      Category?    @relation("CategoryTree", fields: [parentId], references: [id])
+  children    Category[]   @relation("CategoryTree")
   articles    Article[]
-  createdAt   DateTime   @default(now())
+  collections Collection[]
+  createdAt   DateTime     @default(now())
 
   @@index([parentId])
 }
@@ -261,4 +263,52 @@ model ExportHistory {
   @@index([format])
   @@index([status])
   @@index([userId])
+}
+
+// ── Collections: the generic database engine (docs/modules-and-collections.md) ──
+model Collection {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  name        String
+  icon        String?
+  description String?
+  categoryId  String?
+  category    Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  schema      Json
+  items       CollectionItem[]
+  views       CollectionView[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([categoryId])
+}
+
+model CollectionItem {
+  id           String     @id @default(cuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  articleId    String?    @unique
+  article      Article?   @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  title        String
+  properties   Json
+  sortOrder    Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([collectionId, sortOrder])
+  @@index([collectionId, updatedAt])
+}
+
+model CollectionView {
+  id           String     @id @default(cuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  slug         String
+  name         String
+  kind         String
+  config       Json
+  isDefault    Boolean    @default(false)
+  sortOrder    Int        @default(0)
+
+  @@unique([collectionId, slug])
 }
