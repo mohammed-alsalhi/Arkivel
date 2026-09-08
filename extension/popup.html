@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wiki Clipper</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 320px;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    header {
+      padding: 10px 12px 8px;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h1 { font-size: 14px; font-weight: 600; }
+    .body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    label { font-size: 11px; font-weight: 600; color: #666; display: block; margin-bottom: 2px; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 3px;
+      padding: 5px 7px;
+      font-size: 12px;
+      font-family: inherit;
+      background: #fff;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #2563eb; }
+    textarea { resize: vertical; }
+    .row { display: flex; gap: 6px; }
+    button {
+      flex: 1;
+      height: 28px;
+      border: 1px solid #d1d5db;
+      border-radius: 3px;
+      font-size: 12px;
+      cursor: pointer;
+      background: #fff;
+    }
+    button.primary { background: #2563eb; color: #fff; border-color: #2563eb; font-weight: 600; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .status { font-size: 11px; color: #059669; }
+    .error { font-size: 11px; color: #dc2626; }
+    .settings { padding: 8px 12px; border-top: 1px solid #e5e5e5; }
+    .settings summary { font-size: 11px; color: #666; cursor: pointer; user-select: none; }
+    .settings-body { margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+    .badge {
+      font-size: 10px;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 3px;
+      padding: 1px 5px;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Wiki Clipper</h1>
+    <span id="statusBadge" class="badge">ready</span>
+  </header>
+
+  <div class="body">
+    <div>
+      <label>Title</label>
+      <input id="titleInput" type="text" placeholder="Article title" />
+    </div>
+    <div>
+      <label>Selected text / note <span style="font-weight:400;color:#999">(optional)</span></label>
+      <textarea id="selectedText" rows="4" placeholder="Leave blank to clip the full page URL only"></textarea>
+    </div>
+    <div id="statusMsg" class="status" style="display:none"></div>
+    <div id="errorMsg" class="error" style="display:none"></div>
+    <div class="row">
+      <button id="clipBtn" class="primary">Save as draft</button>
+      <button id="openBtn" style="display:none">Open editor</button>
+    </div>
+  </div>
+
+  <details class="settings">
+    <summary>Settings</summary>
+    <div class="settings-body">
+      <div>
+        <label>Wiki URL</label>
+        <input id="wikiUrl" type="url" placeholder="https://your-wiki.example.com" />
+      </div>
+      <button id="saveSettings">Save settings</button>
+    </div>
+  </details>
+
+  <script src="popup.js"></script>
+</body>
+</html>

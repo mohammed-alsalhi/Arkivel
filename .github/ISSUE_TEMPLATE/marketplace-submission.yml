@@ -1,0 +1,62 @@
+name: Marketplace pack submission
+description: Propose a style, theme, layout, component, plugin, or template pack for the local marketplace.
+title: "Marketplace submission: "
+labels: ["marketplace", "submission"]
+body:
+  - type: input
+    id: pack-id
+    attributes:
+      label: Pack id
+      description: Use lowercase kebab-case, for example docs-portal-theme.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Pack kind
+      options:
+        - style
+        - color-theme
+        - layout
+        - component-pack
+        - plugin
+        - theme-pack
+        - template-pack
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Use semantic versioning.
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the audience, use case, and included surfaces.
+    validations:
+      required: true
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Review checklist
+      description: Confirm security, accessibility, performance, compatibility, docs, and validation checks.
+      value: |
+        - [ ] No executable payloads, remote code references, path traversal, or install scripts
+        - [ ] Accessibility and contrast reviewed
+        - [ ] Asset size and performance reviewed
+        - [ ] Compatibility and status declared
+        - [ ] README, screenshots, and changelog notes included
+        - [ ] Manifest accepted by `/admin/marketplace` import preview or warnings are explained
+    validations:
+      required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Artifacts
+      description: Attach manifest JSON, screenshots, docs links, and test notes.
+    validations:
+      required: true

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "arkivel.marketplace.import.v1",
+  "id": "example-component-pack",
+  "kind": "component-pack",
+  "name": "Example Component Pack",
+  "version": "0.1.0",
+  "compatibility": ">=4.78.3",
+  "author": "Example Author",
+  "license": "MIT",
+  "requiredFiles": ["component-pack.json", "slots.json", "README.md"],
+  "requiredEnvVars": [],
+  "slots": ["article-card", "metadata-panel", "dashboard-widget", "homepage-section", "editor-panel"],
+  "widgets": ["example-dashboard-widget"]
+}

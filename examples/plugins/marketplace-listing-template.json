@@ -1,0 +1,29 @@
+{
+  "id": "example-plugin-listing",
+  "kind": "plugin",
+  "name": "Example Plugin Listing",
+  "version": "0.1.0",
+  "compatibility": ">=4.80.0 <5.0.0",
+  "author": "Example Author",
+  "license": "MIT",
+  "status": "experimental",
+  "source": {
+    "type": "local",
+    "path": "examples/plugins/starter-plugin",
+    "remote": false,
+    "label": "Local plugin folder"
+  },
+  "screenshots": [
+    "/marketplace/plugin/example-plugin-listing.png"
+  ],
+  "checksums": {
+    "manifest": "replace-with-local-checksum",
+    "screenshots": {}
+  },
+  "tags": ["plugin", "starter", "trusted-local"],
+  "permissions": ["article:read", "category:read"],
+  "routes": ["/plugins/example-plugin"],
+  "settings": ["defaultStatus"],
+  "widgets": ["example-dashboard"],
+  "hooks": ["article.render"]
+}

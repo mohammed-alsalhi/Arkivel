@@ -1,0 +1,3207 @@
+# Changelog
+
+> **Status: Beta** — All versions listed here are pre-release. The project is under active development and APIs, features, and data models may change without notice. A stable v5.0.0 will be tagged when core features are production-hardened and the auth/multi-user system is fully vetted.
+
+All notable changes to this project are documented here.
+
+## [5.2.2] - 2026-07-03
+
+### Removed
+
+- **Dead API routes** — Deleted 38 unconsumed route directories: every milestone "contract report" endpoint (release-candidate-one, release-freeze, release-gates, final-release-gates, e2e-smoke-suite, test-quality, mobile-polish, migration-readiness, upgrade-assistant, documentation-onboarding, in-app-onboarding, example-site-recipes, sync-manifests, desktop-research, backup-restore, archive-mirrors, accessibility, external-references, assistant-packs, space-workflows, marketplace/*, offline/contract, privacy/controls, security/review, search/contract, discovery, observability/metrics, import/rehearsal) plus DB-backed routes with no consumers (wikis, achievements, leaderboard, on-this-day, smart-collections, reading-progress, search-history, expert-badges, permissions, discussions/:id/pin, sitemap, space-templates, admin/cache).
+- **Orphaned libraries** — Deleted 36 `src/lib` modules that only exported static "contract" objects, along with their tests; trimmed `security-review.ts` and `cache-strategy.ts` to their live exports.
+- **Stub pages** — Deleted `/admin/assistants`, `/admin/cache`, `/space-templates/:id`, and `/articles/:slug/analytics`.
+- **Vaporware docs** — Deleted 29 `docs/*.md` files describing removed contracts; pruned `README.md`, `ARCHITECTURE.md`, `/features`, `/help`, and `/api-docs` to match.
+
+### Changed
+
+- **`GET /api/customization`** — Slimmed from a 62-import aggregator (each contract repeated three times per response) to the fields its consumers actually read: `customization`, `options`, UI presets, and the marketplace registry.
+- **Navigation coverage** — Stats, leaderboard, mentions, reading history, flashcards, learning paths, TIL, smart collections, change requests, reviews, forks, bounties, the bookmarklet, and the web clipper are now reachable from `/tools` and the command palette; saved searches and sessions are linked from `/settings`; `/admin/import` joined the admin directory.
+
+### Fixed
+
+- **Theme correctness** — `dark:` utilities now follow the in-app theme toggle instead of the OS setting; replaced hardcoded hex/palette colors with theme tokens in the activity heatmap, article graph, local graph, coverage map, health dashboard, writing coach, KaTeX errors, and the map container.
+- **Dialog conventions** — Synthesize, quiz, tutor, review-request, and canvas article-picker overlays now use scroll lock, `role="dialog"`, Escape-to-close, and the modal z-tier; NoteComposer and SpeedReader gained Escape-to-close.
+- **Scale violations** — Removed `z-index: 9999` from the glossary tooltip and wiki-link suggester; fixed the 760px presentation breakpoint to the documented 767px.
+- **Broken links** — Knowledge-gaps "Create article" now points at `/articles/new`.
+
+## [5.2.1] - 2026-07-01
+
+- Defer non-critical article work and lazy-load images (see git history; 5.1.0–5.2.1 shipped without changelog entries).
+
+## [5.2.0] - 2026-07-01
+
+- Modularize `globals.css` into per-feature CSS modules under `src/styles/`.
+
+## [5.1.0 – 5.1.4] - 2026-06
+
+- Design-language normalization across every page, navigation triage (short sidebar, `/tools`, admin index), mobile type/tap-target floor, z-index and breakpoint scales, touch support for canvas/graph, route feedback and error boundary, full-width article text restore.
+
+## [5.0.0] - 2026-05-25
+
+### Added
+
+- **Final release gate contract** - Added `src/lib/final-release-gates.ts`, `GET /api/final-release-gates`, and `finalReleaseGates` metadata in `/api/customization`.
+- **Stable release evidence** - Added final gate metadata for RC fixes, final beta freeze contracts, gate evidence, compatibility targets, correction windows, and v5 stable-release signoff.
+- **Final release docs** - Added `docs/final-release-gates.md` and tests for final release gate coverage.
+
+## [4.99.99] - 2026-05-25
+
+### Added
+
+- **Last beta candidate metadata** - Captured last-beta requirements for lint, typecheck, tests, build, migration dry run, smoke suite, docs sync, security review, privacy review, release notes, and maintainer signoff.
+
+## [4.99.95] - 2026-05-25
+
+### Added
+
+- **Final security and migration correction metadata** - Captured security, migration, backup, restore, permission, and privacy correction windows in the final release gate contract.
+
+## [4.99.90] - 2026-05-25
+
+### Added
+
+- **Final documentation correction metadata** - Captured final documentation, screenshot, recipe, migration guide, and release-note correction expectations.
+
+## [4.99.2] - 2026-05-25
+
+### Added
+
+- **Compatibility pass metadata** - Captured Node, Next.js, Prisma, PostgreSQL, Vercel, Docker, local Node, plugin manifest, marketplace pack, and export bundle compatibility targets.
+
+## [4.99.1] - 2026-05-25
+
+### Added
+
+- **Gate evidence pass metadata** - Captured stable gate evidence types for tests, docs, screenshots, migration reports, security notes, and deployment checks.
+
+## [4.99.0] - 2026-05-25
+
+### Added
+
+- **Final beta freeze metadata** - Captured final beta freeze contracts for public API v1, plugin manifests, marketplace packs, theme packs, export bundles, and stable env vars.
+
+## [4.98.2] - 2026-05-25
+
+### Added
+
+- **Release candidate fix metadata** - Captured RC blocker areas, compatibility updates, gate rerun expectations, copy freeze rules, and final migration guide preparation in the final release gate contract.
+
+## [4.98.1] - 2026-05-25
+
+### Added
+
+- **Release candidate one contract** - Added `src/lib/release-candidate-one.ts`, `GET /api/release-candidate-one`, and `releaseCandidateOne` metadata in `/api/customization`.
+- **RC1 gate evidence** - Added required gate metadata for lint, typecheck, tests, build, migration dry run, smoke suite, and docs sync.
+- **Deployment validation matrix** - Added Vercel, Docker, local Node, and managed Postgres validation tracking.
+- **Release validation areas** - Added starter spaces, marketplace packs, plugin examples, exports, imports, backups, and restores validation metadata.
+- **RC feedback template** - Added `docs/rc-feedback-template.md` plus accessibility, performance, security, and privacy checklist metadata.
+
+## [4.98.0] - 2026-05-25
+
+### Added
+
+- **Feature freeze contract** - Added `src/lib/feature-freeze.ts`, `GET /api/release-freeze`, and `featureFreeze` metadata in `/api/customization`.
+- **Freeze policy** - Added allowed change classes for release blockers, documentation gaps, migration fixes, security issues, and broken tests.
+- **Release rehearsal matrix** - Added install, upgrade, import/export, marketplace, plugin, customization, auth, API, webhook, backup, restore, and smoke rehearsal metadata.
+- **Gate ownership and blocker report** - Added v5 gate ownership metadata and known-issue blocker label checks.
+- **Release notes draft plan** - Added draft sections for stable scope, upgrade notes, risky changes, self-host checklist, known issues, and verification evidence.
+
+## [4.97.2] - 2026-05-25
+
+### Added
+
+- **Example site recipe contract** - Added `src/lib/example-site-recipes.ts`, `GET /api/example-site-recipes`, and `exampleSiteRecipes` metadata in `/api/customization`.
+- **Configuration recipes** - Added personal wiki, team handbook, public docs, worldbuilding atlas, research library, read-only archive, and product knowledge base recipes.
+- **Recipe evidence metadata** - Added environment snippets, screenshot targets, template recommendations, and marketplace pack recommendations per recipe.
+- **Migration stories** - Added Notion, Obsidian, MediaWiki, Markdown folder, and docs-site migration story metadata.
+- **v5 readiness checklist** - Added release-blocking self-host readiness checks and `examples/recipes/site-recipes.json`.
+
+## [4.97.1] - 2026-05-25
+
+### Added
+
+- **In-app onboarding contract** - Added `src/lib/in-app-onboarding.ts`, `GET /api/in-app-onboarding`, and `inAppOnboarding` metadata in `/api/customization`.
+- **First-run checklist** - Added ordered setup metadata for database, admin account, branding, style, theme, layout, first space, first article, backup, and security.
+- **Guided admin onboarding** - Added admin guide metadata for customization, marketplace, templates, plugins, imports, and users.
+- **Contextual help planning** - Added collapsed-by-default contextual help panel metadata for key admin and setup routes.
+- **Demo content pack** - Added `examples/onboarding/demo-content-pack.json` and `docs/in-app-onboarding.md` with screenshot checkpoints for onboarding evidence.
+
+## [4.97.0] - 2026-05-25
+
+### Added
+
+- **Documentation onboarding contract** - Added `src/lib/documentation-onboarding.ts`, `GET /api/documentation-onboarding`, and `documentationOnboarding` metadata in `/api/customization`.
+- **Maintainer documentation rewrite** - Added `docs/maintainer-guide.md` covering install, upgrade, deployment, customization, marketplace, plugin, API, security, backup, and contribution guidance.
+- **Setup paths and troubleshooting** - Added `docs/setup-paths.md` for Vercel, Docker, local Node, managed Postgres, private team, public docs, personal wiki, and demo instances plus `docs/troubleshooting.md` for common maintainer issues.
+- **Docs information architecture** - Added `docs/index.md` and docs IA metadata connecting README, help, features, API docs, architecture, design, and roadmap.
+- **Docs link tests** - Added practical docs link and slug coverage tests for the new documentation index.
+
+## [4.96.2] - 2026-05-25
+
+### Added
+
+- **Release gate automation contract** - Added `src/lib/release-gate-automation.ts`, `GET /api/release-gates`, and `releaseGateAutomation` metadata in `/api/customization`.
+- **Release docs sync script** - Added `scripts/verify-docs-sync.mjs` and `npm run release:docs-sync` to verify package, changelog, roadmap, docs, in-app docs, and manifest alignment.
+- **Release checklist metadata** - Added gate metadata for lint, typecheck, unit tests, API tests, e2e smoke tests, build, migration dry run, and docs sync.
+- **Known issues and blocker labels** - Added `docs/known-issues.md` with release, security, migration, docs, and smoke failure labels.
+- **Release manager docs** - Added `docs/release-gate-automation.md` for release candidate gate evidence and blocker handling.
+
+## [4.96.1] - 2026-05-25
+
+### Added
+
+- **End-to-end smoke suite contract** - Added `src/lib/e2e-smoke-suite.ts`, `GET /api/e2e-smoke-suite`, and `e2eSmokeSuite` metadata in `/api/customization`.
+- **Product smoke tests** - Added `e2e/smoke-suite.spec.ts` coverage for install, login, create/edit article, wiki links, search, customization, marketplace, export, import dry run, plugin manifest, and admin health surfaces.
+- **Responsive smoke tests** - Added smoke coverage for homepage, article, editor, dashboard, marketplace, customization, and help pages across phone, tablet, and desktop viewports.
+- **Repeatable smoke fixtures** - Added `scripts/seed-smoke-fixtures.mjs` and `npm run qa:seed-smoke` for idempotent smoke QA setup.
+- **Failure artifacts and docs** - Added failure screenshots in Playwright config and `docs/e2e-smoke-suite.md` for local/CI smoke runs.
+
+## [4.96.0] - 2026-05-25
+
+### Added
+
+- **Test quality gates contract** - Added `src/lib/test-quality-gates.ts`, `GET /api/test-quality`, and `testQualityGates` metadata in `/api/customization`.
+- **Expanded test surface planning** - Added unit, integration, API, permission, import/export, customization, marketplace, plugin, editor, and responsive test coverage metadata.
+- **Stable QA fixtures** - Added small wiki, team wiki, public docs, worldbuilding atlas, research notebook, large archive, and plugin-heavy install fixture planning.
+- **CI matrix planning** - Added Node version, database mode, and feature-flag matrix metadata.
+- **Known-warning and dashboard planning** - Added warning policy and release-manager quality dashboard sections.
+
+## [4.95.2] - 2026-05-25
+
+### Added
+
+- **Upgrade assistant contract** - Added `src/lib/upgrade-assistant.ts`, `GET /api/upgrade-assistant`, and `upgradeAssistant` metadata in `/api/customization`.
+- **Upgrade readiness checklist** - Added version, Node, Prisma, database, env vars, plugins, marketplace packs, and migrations readiness checks.
+- **Diagnostics and smoke checks** - Added pre-upgrade diagnostics and post-upgrade smoke-check metadata.
+- **Compatibility warnings** - Added deprecated env var, deprecated API, plugin permission, and pack schema warning metadata.
+- **v5 planning guide** - Added `docs/v5-upgrade-planning.md` with release-note, migration, backup/restore, and post-upgrade verification guidance.
+
+## [4.95.1] - 2026-05-25
+
+### Added
+
+- **Backup and restore contract** - Added `src/lib/backup-restore.ts`, `GET /api/backup-restore`, and `backupRestore` metadata in `/api/customization`.
+- **Admin backup wizard metadata** - Added required backup sections for database, assets, env vars, marketplace packs, plugin manifests, and customization settings.
+- **Restore rehearsal validation** - Added manifest verification with missing-section, checksum, unsupported-schema, version, slug, and plugin-permission conflict classes.
+- **Scheduled backup planning** - Added daily, weekly, before-upgrade, and manual cadence planning plus local disk, S3-compatible, and offsite-drive storage notes.
+- **Disaster-recovery drill docs** - Added `docs/backup-restore.md` and tests for restore manifest validation.
+
+## [4.95.0] - 2026-05-25
+
+### Added
+
+- **Migration readiness contract** - Added `src/lib/migration-readiness.ts`, `GET /api/migration-readiness`, and `migrationReadiness` metadata in `/api/customization`.
+- **Blocking migration dry runs** - Added backup prompts, schema compatibility checks, data-integrity checks, restore validation, and failure recovery guidance.
+- **Representative upgrade matrix** - Added v4.80 personal wiki, v4.82 team workspace, v4.86 public docs, v4.90 marketplace-heavy, and v4.92 plugin-enabled upgrade path metadata.
+- **Schema compatibility gate** - Added admin-operations schema report metadata and Prisma freeze decisions for v5-breaking migration review.
+- **Migration coverage tests** - Added tests for customization, marketplace, plugins, spaces, and templates migration coverage.
+
+## [4.94.2] - 2026-05-25
+
+### Added
+
+- **Accessibility finish contract** - Added `src/lib/accessibility-finish.ts`, `GET /api/accessibility`, and `accessibilityFinish` metadata in `/api/customization`.
+- **Release audit matrix** - Added keyboard, focus, dialog, dropdown, table-control, editor-control, admin-form, marketplace-filter, and customization-preview audit metadata.
+- **Widget summaries** - Added screen-reader summary requirements for graph, atlas, dashboard, marketplace, and editor widgets.
+- **Contrast and motion checks** - Added high-contrast and reduced-motion release checks.
+- **Accessibility docs and gate** - Added `docs/accessibility.md`, contribution checklist, tests, and v5 release-blocker metadata for known accessibility issues.
+
+## [4.94.1] - 2026-05-25
+
+### Added
+
+- **Desktop app research contract** - Added `src/lib/desktop-research.ts`, `GET /api/desktop-research`, and `desktopResearch` metadata in `/api/customization`.
+- **Packaging research** - Added Electron, Tauri, browser PWA, and Docker Desktop notes covering storage, updates, backups, plugin safety, strengths, and risks.
+- **Local deployment planning** - Added Docker Desktop, local Node/Postgres, and trusted local-network PWA recipe metadata.
+- **Filesystem UX planning** - Added import/export UX notes for folder selection, manifests, checksums, privacy omissions, dry-run conflicts, and restore points.
+- **Desktop scope decision record** - Documented that desktop packaging remains research-only before v5 until backup/restore, signed updates, plugin safety, and local database support are proven.
+
+## [4.94.0] - 2026-05-25
+
+### Added
+
+- **Mobile polish contract** - Added `src/lib/mobile-polish.ts`, `GET /api/mobile-polish`, and `mobilePolish` metadata in `/api/customization`.
+- **Responsive QA checkpoints** - Added phone, tablet, laptop, and wide desktop QA coverage for mobile navigation, article actions, editor trays, admin panels, marketplace pages, and customization previews.
+- **Mobile regression checklist** - Added release checks for overflow, clipping, touch targets, safe areas, dialogs, popovers, and wrapping.
+- **Mobile docs** - Added `docs/mobile-polish.md` with mobile-first screenshot slots and release-candidate checklist guidance.
+
+### Changed
+
+- **Mobile layout guardrails** - Added shared CSS guardrails for 44px touch targets, safe-area-aware surfaces, overflow wrapping, dialog bounds, and phone-width horizontal overflow prevention.
+
+## [4.93.2] - 2026-05-25
+
+### Added
+
+- **Archive and mirror workflow contract** - Added `src/lib/archive-mirrors.ts`, `GET /api/archive-mirrors`, and `archiveMirrors` metadata in `/api/customization`.
+- **Read-only archive snapshots** - Added immutable archive snapshot planning that preserves revisions, assets, categories, and metadata.
+- **Private mirror guidance** - Added team and personal-wiki mirror setup checklists.
+- **Selected-space transfers** - Added export/import workflow metadata for moving selected spaces between installs with sync manifests, signed snapshots, and external provenance.
+- **Repeated-sync conflict notes** - Added source-wins, target-wins, manual-merge, and skip-and-report guidance plus a pre-v5 federation release decision checkpoint.
+
+## [4.93.1] - 2026-05-25
+
+### Added
+
+- **External reference contract** - Added `src/lib/external-references.ts`, `GET /api/external-references`, and `externalReferences` metadata in `/api/customization`.
+- **Provenance UI helper** - Added article provenance rendering for imported-from and mirrored-from external Arkivel references.
+- **Reference diagnostics** - Added broken external reference diagnostics for missing URLs, stale instances, checksum drift planning, and private public-index leaks.
+- **Privacy-safe public index planning** - Added public-index metadata that excludes authenticated, private, and sensitive references from centralized listings.
+- **External reference docs and tests** - Added `docs/external-references.md` and tests for reference metadata, provenance labels, diagnostics, and privacy filtering.
+
+## [4.93.0] - 2026-05-25
+
+### Added
+
+- **Sync manifest contract** - Added `src/lib/sync-manifests.ts`, `GET /api/sync-manifests`, and `syncManifests` metadata in `/api/customization`.
+- **Dry-run sync reports** - Added section-level dry-run reports for categories, articles, tags, assets, revisions, comments, and customizations.
+- **Signed snapshot planning** - Added public read replica and private mirror snapshot plans with Ed25519 manifest-signature requirements.
+- **Promotion guidance** - Added `docs/sync-manifests.md` with staging-to-production checks, conflict classes, visibility rules, and the network-federation release gate.
+
+## [4.92.2] - 2026-05-25
+
+### Added
+
+- **Assistant governance contract** - Added `src/lib/assistant-governance.ts`, `GET /api/assistant-packs/governance`, and `assistantGovernance` metadata in `/api/customization`.
+- **AI output governance** - Added privacy warnings, human-review requirements, citation prompts, and confidence metadata requirements for AI outputs.
+- **AI audit events** - Added audit actions for generated content, rewrites, summaries, and taxonomy changes.
+- **AI opt-out controls** - Added private-space and sensitive-article opt-out metadata plus release-gate checks requiring AI to remain optional and non-blocking.
+- **Responsible AI docs and tests** - Added `docs/assistant-governance.md` and tests for governance report coverage, audit severity, human review, and opt-out helpers.
+
+## [4.92.1] - 2026-05-25
+
+### Added
+
+- **Built-in assistant packs** - Added disabled-by-default drafting, summarization, search, claim extraction, taxonomy, alt-text, import cleanup, and review assistant pack metadata.
+- **Per-space assistant controls** - Added personal, team, public-docs, research, and worldbuilding availability rules with data access scopes and sensitive-article opt-out flags.
+- **Prompt and context previews** - Added prompt preview, context source, redaction, output, and limit metadata for admin review.
+- **Usage and cost metadata** - Added assistant preview/run usage log fields and cost estimate descriptions without storing prompt bodies.
+- **Assistant tests** - Added tests for built-in pack coverage, disabled-provider defaults, prompt previews, usage logs, and permission boundaries.
+
+## [4.92.0] - 2026-05-25
+
+### Added
+
+- **Assistant pack contract** - Added `src/lib/assistant-packs.ts`, `GET /api/assistant-packs`, `/admin/assistants`, and `assistantPacks` metadata in `/api/customization`.
+- **Opt-in AI manifest fields** - Added provider, model, privacy, cost, data-retention, prompt scope, permission, tool, prompt, context source, output type, limit, and safety-note metadata.
+- **Graceful AI degradation** - Added disabled/default assistant pack metadata for local, offline-friendly, and privacy-first deployments when no AI provider is configured.
+- **Assistant docs and tests** - Added `docs/assistant-packs.md` and tests for manifest coverage, fallback metadata, and validation warnings.
+
+## [4.91.2] - 2026-05-25
+
+### Added
+
+- **Domain workflow contract** - Added `src/lib/domain-workflows.ts`, `GET /api/space-workflows`, and `domainWorkflows` metadata in `/api/customization`.
+- **Space-product workflows** - Added docs portal, team handbook, worldbuilding, research, and personal wiki workflow metadata tied to starter templates.
+- **Workflow release gates** - Added domain-specific controls, workflow steps, and release-gate checklist metadata for future dashboards.
+- **Workflow docs and tests** - Added `docs/domain-workflows.md` and tests for workflow coverage, controls, starter template links, and matrix output.
+
+## [4.91.1] - 2026-05-25
+
+### Added
+
+- **Template marketplace kind** - Added `template-pack` to the local marketplace registry with starter-space pack metadata, screenshots, included schema, category previews, article previews, and compatibility notes.
+- **Template marketplace report** - Added `src/lib/template-marketplace.ts`, `GET /api/marketplace/templates`, and `templateMarketplace` metadata in `/api/customization`.
+- **Template diff and merge contracts** - Added preview-only diff metadata plus append-only, replace-empty, skip-conflicts, and metadata-only merge options.
+- **Template export contract** - Added export-from-space fixture generation for future space product sharing.
+- **Template marketplace docs and tests** - Added `docs/template-marketplace.md` and tests for template packs, previews, diffs, merge options, imports, and exports.
+
+## [4.91.0] - 2026-05-25
+
+### Added
+
+- **Starter spaces refresh** - Expanded built-in space templates to include personal wiki, product docs, team handbook, worldbuilding bible, research notebook, reading archive, project knowledge base, and public documentation.
+- **Richer starter fixtures** - Added sample metadata, article excerpts, navigation metadata, dashboard widgets, preview routes, and recommended packs to starter templates.
+- **Preview pages and import previews** - Added `/space-templates/:id` preview pages plus one-click local import preview support through `POST /api/space-templates` with a `templateId`.
+- **Template validation coverage** - Extended template validation and tests for navigation, dashboards, sample metadata, preview pages, and fixture import previews.
+
+## [4.90.2] - 2026-05-25
+
+### Added
+
+- **Marketplace authoring contract** - Added `src/lib/marketplace-authoring.ts`, `GET /api/marketplace/authoring`, and `marketplaceAuthoring` metadata in `/api/customization`.
+- **Pack author dashboard metadata** - Added local validation, metadata preview, screenshot checks, license checks, docs completeness, and compatibility matrix sections.
+- **README and checklist generator** - Added pack README generation plus author quality checklist coverage for docs, screenshots, accessibility, performance, security, compatibility, and rollback planning.
+- **Submission templates** - Added `examples/marketplace/submission-template.md` and `examples/marketplace/pack-readme-template.md`.
+- **Authoring docs and tests** - Added `docs/marketplace-authoring.md` and tests for dashboard metadata, health data, README generation, and compatibility matrix output.
+
+## [4.90.1] - 2026-05-25
+
+### Added
+
+- **Pack lifecycle contract** - Added `src/lib/marketplace-lifecycle.ts`, `GET /api/marketplace/lifecycle`, and `marketplaceLifecycle` metadata in `/api/customization`.
+- **Lifecycle states and transitions** - Added draft, previewed, installed-local, enabled, disabled, deprecated, incompatible, blocked, and removed states with allowed transition rules.
+- **Inventory and health checks** - Added local pack inventory metadata plus preview media health counts.
+- **Preview media validation** - Added local screenshot path, image extension, and checksum validation planning.
+- **Lifecycle docs and tests** - Added `docs/marketplace-lifecycle.md` and tests for state transitions, inventory health, and preview media validation.
+
+## [4.90.0] - 2026-05-25
+
+### Added
+
+- **Marketplace beta report** - Added `src/lib/marketplace-beta.ts`, `GET /api/marketplace/beta`, and `marketplaceBeta` metadata in `/api/customization`.
+- **Marketplace landing metadata** - Added total item, author, kind-count, registry-health, screenshot-coverage, featured, recently updated, recommended, and collection metadata.
+- **Compatibility badges and search facets** - Added derived compatibility badges plus kind, tag, author, slot, layout, permission, and compatibility facets for local registry browsing.
+- **Install intent planning** - Added review steps for required files, env vars, permissions/data access, compatibility, checksums, and manual verification.
+- **Beta docs and limitations** - Added `docs/marketplace-beta.md` and tests for metrics, collections, search facets, install intent, compatibility badges, and limitations.
+
+## [4.89.2] - 2026-05-25
+
+### Added
+
+- **Marketplace security contract** - Added `src/lib/marketplace-security.ts`, `GET /api/marketplace/security`, and `marketplaceSecurity` metadata in `/api/customization`.
+- **Unsafe pack rejection** - Marketplace import previews now reject unsafe hooks and excessive permission sets in addition to remote URLs, executable fields, path traversal, unsupported kinds, and unsupported schema versions.
+- **Dangerous capability warnings** - Added warnings for `file:read`, `job:execute`, `settings:write`, and `webhook:send` plugin capabilities.
+- **Provenance planning** - Added source, checksum, license, author, and compatibility metadata requirements for future local install intent flows.
+- **Local-only security docs** - Added `docs/secure-marketplace-plugins.md` and tests for blocked permissions, unsafe hooks, excessive permissions, provenance metadata, and dangerous capability warnings.
+
+## [4.89.1] - 2026-05-25
+
+### Added
+
+- **Privacy controls contract** - Added `src/lib/privacy-controls.ts`, `GET /api/privacy/controls`, and `privacyControls` metadata in `/api/customization` for spaces, indexing, feeds, exports, analytics, AI features, webhooks, and user profiles.
+- **Retention planning** - Added defaults and bounds for activity, audit logs, query analytics, notifications, sessions, and webhook deliveries.
+- **User data lifecycle** - Added export scope, deletion/anonymization modes, and admin checklist for self-host user data requests.
+- **AI and integration warnings** - Added privacy warnings for AI providers, webhook receivers, export downloads, and public feed/indexing exposure.
+- **Privacy docs and tests** - Added `docs/privacy-controls.md` plus regression coverage for surface coverage, retention normalization, lifecycle planning, and warnings.
+
+## [4.89.0] - 2026-05-25
+
+### Added
+
+- **Security review contract** - Added `src/lib/security-review.ts`, `GET /api/security/review`, and `securityReview` metadata in `/api/customization` for auth, session, API key, CSRF, webhook, import, upload, plugin, marketplace, admin route, and export review surfaces.
+- **Browser header hardening** - Added middleware-managed security headers plus report-only CSP for pre-v5 validation.
+- **Abuse-case gates** - Added regression metadata and tests for admin route access, draft visibility, API key requirements, and plugin permission grants.
+- **Supply-chain checklist** - Added dependency review guidance for release candidates, lockfile discipline, advisory review, marketplace/plugin payload rejection, and accepted-vulnerability notes.
+- **Threat model draft** - Added `docs/security-review.md` with reviewed assets, primary threats, trust boundaries, header behavior, and release-gate expectations.
+
+## [4.88.2] - 2026-05-25
+
+### Added
+
+- **Offline/PWA contract** - Added `src/lib/offline-pwa.ts`, `GET /api/offline/contract`, and `offlinePwa` metadata in `/api/customization` for install, cache, stale-header, retry-queue, mobile QA, draft-warning, and privacy-limit details.
+- **Service worker registration** - Added an app-shell service worker manager with install prompts, offline/reconnect messages, manual retry, and queued-save replay triggers.
+- **Offline cache strategy** - Updated `/sw.js` to cache static assets, public reading pages, article lists, and read-only APIs while excluding admin, auth, export, upload, webhook, observability, and plugin routes.
+- **PWA docs** - Added `docs/offline-pwa.md` with offline reading behavior, stale indicators, retry queue limits, mobile QA, and privacy guidance.
+- **Offline tests** - Added regression coverage for route cache classification, retry queue eligibility, stale headers, install metadata, and mobile QA checkpoints.
+
+## [4.88.1] - 2026-05-25
+
+### Added
+
+- **Cache strategy contract** - Added invalidation rules for articles, categories, feeds, sitemap, customization, marketplace metadata, plugin manifests, search, dashboards, and tags.
+- **Admin cache tools** - Added `/admin/cache` and `GET/POST /api/admin/cache` for cache status, manual invalidation, stale warnings, and deployment recipes.
+- **Write invalidation hooks** - Article, category, and tag create routes now run shared cache invalidation.
+- **Caching recipes** - Added CDN, Vercel, Docker, and reverse-proxy cache guidance.
+- **Cache tests** - Added regression coverage for article/category/tag invalidation rules and stale warning metadata.
+
+## [4.88.0] - 2026-05-25
+
+### Added
+
+- **Performance budgets** - Added route p95, interaction, and bundle-size budgets for article pages, graph, Studio, Atlas, Trails, search, editor startup, admin dashboards, and marketplace.
+- **Performance admin report** - Added `/admin/performance` and `GET /api/admin/performance` with budget status, recent slow samples, large-wiki fixtures, and slow-query review guidance.
+- **Large-wiki fixtures** - Added small-team, large-archive, and public-docs fixture profiles for local performance checks.
+- **Slow-query diagnostics** - Added Prisma/query review metadata for article lists, fallback search, graph neighborhoods, and admin operation aggregates.
+- **Performance docs and contract** - Added `docs/performance-tuning.md` and exposed `performanceBudgets` through `/api/customization`.
+
+## [4.87.2] - 2026-05-25
+
+### Added
+
+- **Observability contract** - Added structured log categories for config, auth, Prisma, migrations, assets, search, customization, marketplace, plugins, and webhooks.
+- **Metric ingestion** - Added `POST /api/observability/metrics` for page latency, API latency, editor autosave, search response time, export/import duration, and webhook delivery metrics.
+- **Operational event feed** - Added `/admin/observability` and `GET /api/admin/observability` for recent operational events derived from `MetricLog`.
+- **Privacy-aware controls** - Added admin controls for analytics ingestion, event feed visibility, IP anonymization, search query logging, and retention days.
+- **Built-in instrumentation** - Added search response-time and webhook delivery metrics.
+
+## [4.87.1] - 2026-05-25
+
+### Added
+
+- **Maintenance readiness** - Added `GET /api/admin/maintenance/report` with safe-upgrade checks for database health, backup reminder, migration readiness, write-traffic mode, and background-task pause state.
+- **Maintenance cleanup queues** - Added stale session, orphaned asset, old failed export, and old failed webhook cleanup metadata with dry-run-first task execution.
+- **Background task pause flag** - Added an admin-controlled `background_tasks_paused` mode for workers and plugins to honor during maintenance windows.
+- **Runbook links** - Added direct runbook links to maintenance and operations admin pages.
+- **Maintenance tests** - Added API regression tests for maintenance and read-only mode behavior.
+
+## [4.87.0] - 2026-05-25
+
+### Added
+
+- **Operations dashboard** - Added `/admin/operations` for service health, queues, jobs, metrics, slow pages, failed webhooks, imports, exports, plugin errors, database health, and production triage.
+- **Operations API** - Added `GET /api/admin/operations` with redacted instance metadata and `?bundle=1` support bundle download for admins.
+- **Service health cards** - Added database, Prisma, storage, AI provider, webhook, search, and background-job health summaries.
+- **Admin alert acknowledgements** - Added browser-local acknowledgement state for operations alerts without creating a new persistence requirement.
+- **Operations contract docs** - Added `src/lib/operations-dashboard.ts`, `/api/customization` metadata, docs, and tests for the operations dashboard contract.
+
+## [4.86.2] - 2026-05-25
+
+### Added
+
+- **Webhook reliability contract** - Added timestamped HMAC signing, retry, replay-protection, delivery-log, redelivery, test-sender, failure-alert, and event-schema metadata.
+- **Hardened dispatcher** - Updated webhook dispatch to skip unsupported events, add Arkivel delivery/timestamp/signature headers, retry transient failures, and log delivery attempts.
+- **Admin webhook testing** - Added `POST /api/webhooks/test` and `POST /api/webhooks/deliveries/:id/redeliver`.
+- **Webhook event schemas** - Added article, category, review, claim, export, import, plugin, customization, and user event groups.
+- **Webhook docs and tests** - Added `docs/webhook-reliability.md` and regression tests for signatures, replay windows, retry decisions, and event schemas.
+
+## [4.86.1] - 2026-05-25
+
+### Added
+
+- **SDK-ready types** - Added shared TypeScript payload names for REST responses, webhook events, customization manifests, marketplace packs, plugin manifests, and export bundle manifests.
+- **SDK metadata endpoint** - Added `GET /api/v1/sdk` and exposed `sdkTypes` through `/api/customization`.
+- **Typed API key scopes** - Added read/write scope metadata for articles, categories, tags, revisions, search, customization, marketplace, plugins, webhooks, exports, and health.
+- **Generated examples and scripts** - Added Node, browser, curl, and webhook snippets plus sample backup, import, search, content-audit, and webhook-test scripts under `examples/api/`.
+- **SDK docs** - Added `docs/sdk-types.md` and updated API docs with v1 SDK contract references.
+
+## [4.86.0] - 2026-05-25
+
+### Added
+
+- **Public API v1 freeze** - Added a versioned public API v1 contract for articles, categories, tags, revisions, search, customization, marketplace, plugins, webhooks, exports, and health.
+- **OpenAPI schema endpoint** - Added `GET /api/v1/openapi.json` plus `GET /api/v1/contract` for SDKs, plugins, dashboards, and schema checks.
+- **Standard headers and errors** - Added v1 schema/rate-limit headers and a shared `{ error, code }` error helper to current API-key v1 routes.
+- **Fixture responses** - Added stable article and search fixture responses for API contract tests.
+- **Migration guide** - Added `docs/api-v1-migration.md` for pre-v5 API clients and self-host automation.
+
+## [4.85.2] - 2026-05-25
+
+### Added
+
+- **Collaboration UX contract** - Added shared metadata for live connection states, presence indicators, cursor names, conflict warnings, reconnect/offline states, and last-saved copy.
+- **Live editor status polish** - Expanded the collaborative editor toolbar with connection status, collaborator names, overflow handling, remote-change warnings, and defensive last-saved formatting.
+- **Inline review planning** - Added comment anchor, suggestion mode, inline note, and resolved-thread history planning metadata.
+- **Notification routing metadata** - Published mention, assignment, review-change, and watched-article update routing rules through `/api/customization`.
+- **Mobile and accessibility QA** - Added collaboration-specific mobile editor checkpoints and accessibility requirements plus `docs/collaboration-ux.md`.
+
+## [4.85.1] - 2026-05-25
+
+### Added
+
+- **Reusable editor controls** - Added shared editor primitives for insert trays, review trays, outline trays, table controls, selection actions, inspector panels, and command palette metadata.
+- **Editor extension points** - Published plugin command, toolbar group, slash command, and side-panel extension point metadata through `/api/customization`.
+- **Block template registry** - Added reusable callout, metadata table, timeline, infobox, decision log, research note, and worldbuilding entry templates.
+- **Keyboard shortcut registry** - Added scoped shortcut metadata for global, editor, selection, table, and plugin-safe command surfaces.
+- **Editor primitive docs and catalog entries** - Added `docs/editor-controls.md` and registered editor primitives in the reusable UI component catalog.
+
+## [4.85.0] - 2026-05-25
+
+### Added
+
+- **Editor reliability contract** - Added shared metadata for collaborative sync, draft recovery, offline warnings, autosave repair, paste cleanup, embed handling, and large-document checks.
+- **Recoverable snapshots** - Expanded article snapshots with read, compare, restore, and discard flows; restore preserves the current article as a "Before restore" snapshot.
+- **Editor diagnostics** - Added helpers for extension load failures, schema conflicts, storage availability, offline state, and large-document pressure.
+- **Large-document fixtures** - Added focused fixtures for tables, code blocks, footnotes, images, and wiki links.
+- **Troubleshooting docs** - Added `docs/editor-troubleshooting.md` and exposed `editorReliability` through `/api/customization`.
+
+## [4.84.2] - 2026-05-25
+
+### Added
+
+- **Stable search API contract** - Added typed search result shapes for articles, categories, tags, discussions, revisions, and marketplace items.
+- **Search contract endpoint** - Added `/api/search/contract` and exposed `searchApi` through `/api/customization` for plugins, widgets, dashboards, external tools, and mobile clients.
+- **Search privacy metadata** - Added query analytics retention, IP anonymization, opt-out planning, and public-client redaction fields.
+- **Search webhook planning** - Added planned webhook event metadata for saved search hits and important content changes.
+- **Search plugin docs** - Added `docs/search-powered-plugins.md` for building against the search API contract.
+
+## [4.84.1] - 2026-05-25
+
+### Added
+
+- **Discovery engines** - Added duplicate-page, unresolved-question, canon-conflict, glossary-gap, and orphan-topic detection helpers.
+- **Topic clusters** - Added category/tag-based topic clusters with continue-reading entries for related trail modules.
+- **Discovery report API** - Added `/api/discovery` with contract metadata, opportunities, clusters, dashboard widgets, and admin action descriptors.
+- **Discovery customization metadata** - Published the discovery engine contract through `/api/customization`.
+- **Discovery tests and docs** - Added discovery fixtures and `docs/discovery-engines.md`.
+
+## [4.84.0] - 2026-05-25
+
+### Added
+
+- **Search relevance v2** - Added shared relevance weights for exact title, phrase, alias, redirect, freshness, draft, review, and verification signals.
+- **Search contract metadata** - Published saved-filter, facet, synonym, alias, redirect, stemming, phrase-ranking, explain-mode, and migration metadata through `/api/customization`.
+- **Search facets** - Added category, tag, and status facet summaries to `/api/search` responses.
+- **Admin explain mode** - Added admin-only `explain=1` scoring explanations with matched terms, signal contributions, and weights.
+- **Search quality tests** - Added fixtures for wiki-style synonyms, stemming, stale/review/verification signals, explain payloads, and facets.
+
+## [4.83.2] - 2026-05-25
+
+### Added
+
+- **Moderation contract** - Added discussion moderation statuses, reviewer-only visibility, report metadata, suggestion queue actions, and public contribution anti-spam planning metadata.
+- **Discussion moderation tools** - Added report and admin moderation paths for discussion threads with status, visibility, reason, moderator, and audit events.
+- **Suggestion review queue** - Expanded edit suggestions with accept, reject, comment, assign, and convert-to-task actions plus assignee, reviewer comment, task URL, spam score, moderation state, and IP metadata.
+- **Public contribution scoring** - Added shared spam-score helpers for short content, excessive links, blocked phrases, anonymous authors, and invalid email shape.
+- **Moderation docs** - Added `docs/moderation.md` and exposed the moderation contract through `/api/customization`.
+
+## [4.83.1] - 2026-05-25
+
+### Added
+
+- **Audit trail expansion** - Added workspace, severity, actor type, success state, IP, user-agent, and retention metadata to immutable audit events.
+- **Audit filtering and export** - Expanded `/api/admin/audit-log` with actor, action, target, workspace, severity, success, and date filters plus downloadable JSON exports.
+- **Privacy redaction** - Added summary, standard, strict, and full audit export redaction modes for sensitive metadata and actor/network fields.
+- **Alert hooks** - Added shared audit alert rules and trigger helpers for suspicious activity, failed admin operations, critical admin actions, and plugin hook failures.
+- **Audit documentation** - Added `docs/audit-trail.md` and published the audit contract through `/api/customization`.
+
+## [4.83.0] - 2026-05-25
+
+### Added
+
+- **Editorial governance contract** - Added review governance, claim queues, verification stamp metadata, ownership/escalation paths, and dashboard card metadata.
+- **Review governance fields** - Added review due dates, required reviewers, approval thresholds, change-request cycle counts, decision notes, and constrained status transitions.
+- **Claim queue metadata** - Added claim evidence and expiration fields plus queue grouping for disputed, needs-source, stale, rejected, and unreviewed claims.
+- **Verification stamps** - Added verification reviewer, evidence, and expiration metadata to article verification stamps.
+- **Governance dashboard summary** - Added `/api/admin/editorial-governance/summary` for release blockers, editorial risk, claim queues, verification renewals, and owner gaps.
+
+## [4.82.2] - 2026-05-25
+
+### Added
+
+- **Collaboration controls contract** - Added workspace-aware metadata for co-authors, edit locks, review assignments, comments, mentions, notifications, workspace activity digests, and per-user contribution summaries.
+- **Workspace collaboration routing** - Scoped review assignment candidates, mention notifications, edit locks, and co-author management to active workspace members where applicable.
+- **Profile preference expansion** - Expanded user preference defaults for avatar URL, notification digest cadence, timezone, and default editor preferences.
+- **Public surface visibility checks** - Restricted RSS, Atom, sitemap, `/api/sitemap`, and API v1 article/search reads to public, owned, active-member, or legacy unscoped content as appropriate.
+- **Private team docs** - Added `docs/private-team-knowledge-base.md` for running Arkivel as a private team knowledge base.
+
+## [4.82.1] - 2026-05-25
+
+### Added
+
+- **Role template contract** - Added personal admin, team owner, docs maintainer, editor, reviewer, contributor, viewer, and public reader templates.
+- **Permission matrix metadata** - Added page, API, export, webhook, plugin, customization, and marketplace permission levels for docs and future UI surfaces.
+- **Invitation resend/revoke flow** - Expanded workspace invitations with resend and revoke actions plus audit events for create/resend/revoke.
+- **Recovery guidance** - Added self-host admin and account recovery guidance for `ADMIN_SECRET`, database promotion, session revocation, and API-key cleanup.
+- **Role regression tests** - Added admin/editor/viewer/API-key behavior tests for permission surfaces and role-template defaults.
+
+## [4.82.0] - 2026-05-25
+
+### Added
+
+- **Workspace model hardening** - Expanded the existing `Wiki` workspace entity with visibility, default role, navigation mode, bootstrap profile, marketplace selections, membership status, and invitation persistence.
+- **Workspace bootstrap profiles** - Added personal, team, public docs, private archive, and demo workspace plans with starter spaces, tags, settings, navigation defaults, and migration notes.
+- **Workspace-scoped APIs** - Added `workspaceId`/`wikiId` query and `X-Arkivel-Workspace` header scoping for articles, search, categories, and tags, with `includeGlobal=1` for legacy single-workspace migration windows.
+- **Workspace invitations API** - Added `/api/wikis/:id/invitations` for admin-managed invitation review and creation.
+- **Isolation tests and docs** - Added workspace contract tests, data-isolation scenarios, `/api/customization` metadata, and documentation for migrating single-workspace installs.
+
+## [4.81.2] - 2026-05-25
+
+### Added
+
+- **Import rehearsal contract** - Added dry-run-only import rehearsal metadata for conflict categories, recommended actions, blocked changes, and rollback plans before any write flow.
+- **Conflict handling options** - Added contract coverage for duplicate slugs, category merges, tag merges, user mapping, asset mapping, revision preservation, unsupported schemas, and permission gaps.
+- **Import rehearsal API** - Added `/api/import/rehearsal` to expose the rehearsal contract and preview dry-run reports.
+- **Fixture profiles** - Added small wiki, large archive, docs portal, and worldbuilding atlas fixture profiles for import rehearsal planning.
+- **Safe rehearsal docs** - Added `docs/import-rehearsal.md` and `docs/import-fixtures/README.md`.
+
+## [4.81.1] - 2026-05-25
+
+### Added
+
+- **Export manifests** - Added export manifest metadata for file counts, byte counts, checksums, warnings, omitted private data, privacy filters, scope, format, and status.
+- **Export history** - Added `ExportHistory` persistence plus `/api/export/history` for admin review and downloadable JSON reports.
+- **Export workflow metadata** - Added shared status/progress contract for Markdown, HTML, JSON, CSV, ZIP, MediaWiki, and database-shaped exports, including cancellation, retry, and error stages for long-running flows.
+- **Export endpoint hardening** - Added checksum and manifest headers to Markdown, HTML, JSON, and ZIP exports while recording history when persistence is available.
+- **Export tests** - Added coverage for manifest correctness, private-data omissions, checksum generation, lifecycle statuses, and downloadable history fields.
+
+## [4.81.0] - 2026-05-25
+
+### Added
+
+- **Portable bundle contract** - Added the v1 full-site bundle manifest for articles, revisions, categories, tags, users, settings, plugin state, maps, comments, discussions, assets, customizations, and explicit sessions/API-key/analytics exclusions.
+- **Bundle checksums and scope** - Added schema version, app version, source instance metadata, created-at, export scope, SHA-256 checksum fields, and default privacy filters.
+- **Import dry-run shape** - Added dry-run report groups for conflicts, missing assets, unsupported schemas, duplicate slugs, permission gaps, blocked changes, and recommended actions.
+- **Compatibility promise** - Documented pre-v5 portable bundle compatibility expectations in `docs/portable-bundles.md`.
+- **Customization API metadata** - Exposed the portable bundle contract through `/api/customization`.
+
+## [4.80.3] - 2026-05-25
+
+### Added
+
+- **Plugin starter kit** - Added `examples/plugins/starter-plugin/` with a manifest, route, dashboard widget, setting schema, hook, job, and smoke-test notes.
+- **Plugin manifest CLI** - Added `npm run plugin:validate` to validate `plugin.json` files and list supported plugin surfaces, permissions, hooks, webhook events, schema fields, and compatibility metadata.
+- **Plugin author docs** - Added `docs/plugin-authoring.md` with trusted-local setup, validation, compatibility, security boundaries, and smoke-test guidance.
+- **Marketplace listing template** - Added `examples/plugins/marketplace-listing-template.json` for plugin authors preparing local marketplace submissions.
+- **Author workflow docs** - Updated product and in-app docs with starter kit, CLI, and plugin smoke-test references.
+
+## [4.80.2] - 2026-05-25
+
+### Added
+
+- **Plugin permission prompts** - Added reusable prompts and risk labels for article read/write, category read/write, user read, settings write, webhook send, file read, and job execution scopes.
+- **Plugin audit coverage** - Added audit actions for plugin install, enable, disable, settings change, route access, job run, and hook failure, with enable/disable and render-hook failure logging wired into the runtime surfaces.
+- **Plugin health metadata** - Expanded plugin API/admin metadata with last load, last error, permissions, routes, widgets, version, compatibility, and source details.
+- **Trusted plugin security docs** - Documented why v1 remains trusted-local and manifest-first, with no remote arbitrary-code loading.
+- **Permission tests** - Added role and actor coverage for admin, editor, viewer, API key, and anonymous plugin permission decisions.
+
+## [4.80.1] - 2026-05-25
+
+### Added
+
+- **Trusted local plugin loader** - Added a disabled-by-default manifest discovery path gated by `ARKIVEL_ENABLE_TRUSTED_PLUGINS=true` and an absolute `ARKIVEL_TRUSTED_PLUGIN_DIR`.
+- **Admin permission review** - Expanded `/admin/plugins` and `/api/plugins` to show trusted local plugin source, compatibility, permissions, routes, widgets, hooks, loader status, and load errors before enabling a plugin.
+- **Loader safety boundaries** - Kept v4.80.1 discovery manifest-only: plugin code is not imported or executed, routes must stay under `/plugins`, and invalid manifests are reported without crashing the base app.
+- **Loader tests** - Added coverage for disabled discovery, missing/relative plugin directories, valid manifests, invalid manifests, and non-executed plugin code.
+- **Customization API metadata** - Exposed the trusted local loader env contract and execution boundary through `/api/customization`.
+
+## [4.80.0] - 2026-05-25
+
+### Added
+
+- **Plugin manifest schema** - Added the v1 `plugin.json` contract for identity, version, compatibility, permissions, routes, settings, widgets, hooks, jobs, storage, API scopes, and webhooks.
+- **Manifest validation** - Added actionable fielded validation errors for unsafe routes, unsupported hooks, unsupported permissions, literal webhook URLs, storage issues, and plugin API incompatibility.
+- **Plugin compatibility matrix** - Added Arkivel/plugin API compatibility metadata for the v4.80 beta line and the v5.0 target.
+- **Planned plugin examples** - Added preview-safe manifest examples for web clipper, import adapter, export adapter, dashboard widget, editor command, and notification bridge plugins.
+- **Customization API metadata** - Exposed the plugin manifest schema, examples, compatibility matrix, and validation summary through `/api/customization`.
+
+## [4.79.3] - 2026-05-25
+
+### Added
+
+- **Space governance persistence** - Added category-level governance records for owner, reviewer, default visibility, review cadence, stale-page thresholds, and required health signals.
+- **Governance inheritance** - Added global-to-parent-to-space governance resolution with public badges and widget metadata for stale pages, unreviewed claims, orphaned content, and broken links.
+- **Governance APIs and audit** - Added `/api/categories/:id/governance` plus admin summary data at `/api/admin/space-governance/summary`, and audit events for customization/governance updates.
+- **Governance UI hooks** - Added inherited governance badges on article pages and a space governance summary panel on the admin dashboard.
+- **Permission coverage** - Added tests for admin, editor, viewer, and legacy no-admin-secret governance edit permissions.
+
+## [4.79.2] - 2026-05-25
+
+### Added
+
+- **Space template contract** - Added preview-safe space template manifests for category trees, article templates, metadata schema, default tags, infobox fields, layout intent, and recommended component packs.
+- **Built-in space templates** - Added personal wiki, team handbook, product docs, worldbuilding bible, research notebook, reading archive, and project knowledge base templates.
+- **Template preview API** - Added `/api/space-templates` for registry reads and preview-only JSON import/export validation before any future apply flow.
+- **Template author docs** - Added `docs/space-templates.md` for shareable space-template structure, validation, and safety guidance.
+
+## [4.79.1] - 2026-05-25
+
+### Added
+
+- **Space customization editor** - Added a category admin editor for persisted space overrides across style, color theme, layout, component pack, template pack, navigation, and metadata schema.
+- **Inheritance preview controls** - Added effective-value previews, source badges, reset-to-parent, reset-to-global, and private-draft redaction status for category spaces.
+- **Space landing previews** - Added article-list, metadata/navigation, theme/layout, warning, and responsive QA preview panels for customized spaces.
+
+## [4.79.0] - 2026-05-25
+
+### Added
+
+- **Space customization persistence** - Added `SpaceCustomization` and `ArticleCustomizationOverride` models for per-category and per-article style, color theme, layout, component pack, template pack, navigation, metadata schema, and private draft settings.
+- **Customization inheritance contract** - Added validation and resolution helpers for global-to-parent-to-child-to-article inheritance, with public redaction of private draft config.
+- **Space customization APIs** - Added admin-only update endpoints and public read endpoints at `/api/categories/:id/customization` and `/api/articles/:id/customization`.
+- **Self-host migration docs** - Documented the v4.79.0 Prisma generate/db push flow and rollback notes through `/api/customization` metadata and product docs.
+
+## [4.78.3] - 2026-05-25
+
+### Added
+
+- **Component-pack generator** - Added `npm run marketplace:generate-component-pack` to scaffold a local component-pack manifest, component docs, screenshots folder, tests folder, and README stub.
+- **Pack validation command** - Added `npm run marketplace:validate-pack` for CI and pack authors to validate preview manifests and slot ids.
+- **Component-pack sample** - Added `examples/marketplace/component-pack` with manifest, component notes, screenshots guidance, compatibility notes, and test checklist.
+- **Preview harness planning** - Added `docs/component-pack-preview-harness.md` with route-based preview goals, planned surfaces, fixture coverage, and validation output expectations.
+- **Typed fixtures** - Added component-pack fixture data for article card, metadata panel, dashboard widget, homepage section, and editor panel previews.
+
+## [4.78.2] - 2026-05-25
+
+### Added
+
+- **Layout composition hooks** - Added layout metadata for shell density, homepage module order, article columns, right-rail behavior, dashboard modules, category landing pages, and layout-specific CSS hooks.
+- **Studio layout preview** - Added preview-only layout composition details to Customization Studio for the selected layout preset.
+- **Customization API metadata** - Exposed layout composition hooks through `/api/customization` and attached active composition metadata to layout marketplace entries.
+- **Layout regression tests** - Added tests for built-in layout hook coverage, active layout metadata, and fallback behavior for unknown layouts.
+
+## [4.78.1] - 2026-05-25
+
+### Added
+
+- **Built-in component packs** - Added default wiki, docs portal, team knowledge base, worldbuilding atlas, and research notebook component packs to the local marketplace registry.
+- **Pack component metadata** - Added slot-specific component definitions, descriptions, and recommended layout metadata for built-in packs.
+- **Marketplace detail support** - Surfaced component lists and recommended layouts in marketplace item details and filters.
+- **Component-pack tests** - Added registry coverage for the required v4.78.1 packs and their named component affordances.
+
+## [4.78.0] - 2026-05-25
+
+### Added
+
+- **Component slot registry** - Added stable slot contracts for article cards, article headers, metadata panels, infobox layouts, dashboard widgets, homepage sections, search results, editor panels, space navigation, and admin summaries.
+- **Slot fallback metadata** - Added props, data boundaries, loading states, error states, permission notes, and default fallback component names for every slot.
+- **Customization API slot metadata** - Exposed component slot contracts through `/api/customization` alongside marketplace component packs.
+- **Slot validation tests** - Added tests for slot contract coverage, fallback declarations, and incompatible component-pack slot rejection.
+
+## [4.77.3] - 2026-05-25
+
+### Added
+
+- **Marketplace contribution guide** - Added `docs/marketplace-contributions.md` with supported pack types, required files, naming rules, semantic versioning guidance, review checklist, and submission flow.
+- **Sample marketplace packs** - Added `examples/marketplace/` sample folders for theme packs and plugin manifests with README files, manifests, screenshot expectations, compatibility notes, and test notes.
+- **Marketplace issue templates** - Added GitHub issue templates for marketplace submissions and marketplace pack bug reports.
+- **Contributor docs sync** - Updated contributor, design, architecture, help, feature, and README references for the preview-safe marketplace contribution workflow.
+
+## [4.77.2] - 2026-05-25
+
+### Added
+
+- **Marketplace detail pages** - Added a detail panel for every catalog item with overview, screenshots, compatibility, permissions, author, license, changelog, docs links, source metadata, and checksums.
+- **Marketplace copy actions** - Added copy-ready env vars, pack JSON, plugin manifest JSON, and installation notes for self-host admins and pack authors.
+- **Marketplace faceting** - Added filters for kind, status, slot, permission, compatibility, layout, style, and tag, plus local-registry empty states for self-host builds.
+- **Status vocabulary** - Extended marketplace status support to built-in, planned, experimental, local-only, deprecated, and blocked listings.
+
+## [4.77.1] - 2026-05-25
+
+### Added
+
+- **Pack import preview** - Added paste/upload preview for theme packs, layout packs, component packs, and plugin manifests directly in `/admin/marketplace`.
+- **Import safety contract** - Added `src/lib/marketplace-import.ts` with preview-only schema metadata, sample packs, parsed metadata summaries, required files/env vars, permissions, hooks, routes, widgets, and compatibility warnings.
+- **Token diff review** - Added theme-token diffs against built-in pack tokens so admins can see added, changed, removed, and unchanged values before installation exists.
+- **Import hardening** - Blocked executable payload fields, remote code references, path traversal, unsafe plugin permissions, malformed JSON, unsupported kinds, and unsupported schema versions.
+- **Customization API metadata** - Exposed marketplace import-preview schema, supported kinds, contract, and examples through `/api/customization`.
+
+## [4.77.0] - 2026-05-25
+
+### Added
+
+- **Local marketplace registry contract** - Converted built-in marketplace listings into a versioned local registry with stable id, kind, version, compatibility, author, license, source, status, screenshot, and checksum metadata.
+- **Registry validation** - Added registry checks for duplicate ids, unsupported kinds, incompatible Arkivel versions, missing screenshots, unsafe plugin permissions, invalid licenses, missing checksums, and remote sources.
+- **Marketplace health panel** - Upgraded `/admin/marketplace` with registry version, schema version, local catalog source, validation counts, kind totals, and issue reporting.
+- **Marketplace API metadata** - Extended `/api/customization` with registry version, schema version, catalog source, registry contract, validation summary, supported kinds, and supported licenses.
+- **Registry tests** - Expanded marketplace unit coverage across every item kind and the full v4.77.0 failure-mode set.
+
+## [4.76.3] - 2026-05-24
+
+### Added
+
+- **Studio accessibility polish** - Added roving keyboard tab navigation, ARIA tab/panel wiring, live screen-reader summaries, labelled preview regions, and stronger focus-visible styling to `/admin/customization`.
+- **Responsive studio QA** - Added mobile, tablet, laptop, and wide-desktop preview checklist metadata and UI so self-host admins can review customization layouts before deployment.
+- **Polish diagnostics** - Added warning states for one-note palettes, dark-theme contrast review, and custom brand asset size review.
+- **Reusable studio primitives** - Registered tab, stat, switch, and screen-reader-only primitives in the UI catalog and migrated studio summary metrics to shared stat cards.
+- **Admin shell polish** - Seeded the client admin context from server auth state so admin-only studio surfaces do not flash the logged-out fallback during local and self-host previews.
+
+## [4.76.2] - 2026-05-24
+
+### Added
+
+- **Browser-local customization drafts** - Added a Drafts tab to `/admin/customization` with localStorage-backed saved drafts for preview combinations that should not change runtime config yet.
+- **Named starter presets** - Added personal wiki, team handbook, docs portal, worldbuilding atlas, research notebook, and read-only archive draft presets.
+- **Draft diff and reset flows** - Added active-vs-draft comparison plus confirmable reset-to-active and reset-to-default actions.
+
+## [4.76.1] - 2026-05-24
+
+### Added
+
+- **Customization diagnostics** - Added a Diagnostics tab to `/admin/customization` with pass, warning, and error checks for brand copy, logo paths, app icon, base URL, selected style, color theme, layout, map readiness, and alternate-palette contrast review.
+- **Diagnostics export** - Added downloadable diagnostics JSON so self-host admins can attach the active report to support requests, GitHub issues, and release reviews without exposing secret runtime config.
+- **Reusable diagnostics helper** - Added `src/lib/customization-diagnostics.ts` with unit tests for valid drafts, missing assets, invalid URLs, unknown presets, planned layouts, and alternate color-theme review prompts.
+
+## [4.76.0] - 2026-05-24
+
+### Added
+
+- **Customization Studio workbench** - Rebuilt `/admin/customization` as a tabbed admin workbench for brand copy, logos, style presets, color themes, layouts, feature flags, previews, deployment output, and theme-pack validation.
+- **Deployment output modes** - Added copy-ready `.env`, `.env.local`, Vercel, and Docker Compose output formats generated from the same draft customization values.
+- **Preview and source mapping** - Added homepage, article reader, editor, dashboard, marketplace, and mobile shell preview panels, plus source badges that identify default, env-driven, and unsaved draft values.
+
+## [4.75.3] - 2026-05-24
+
+### Changed
+
+- **Patch-level stable roadmap** - Expanded the pre-v5 roadmap into detailed `v4.x.y` release batches from v4.76.0 through v4.99.99, with more feature work, QA gates, and documentation expectations assigned to each release.
+- **Final beta ladder** - Added explicit late-stage correction windows for v4.99.90, v4.99.95, and v4.99.99 before promoting the exact passing codebase to v5.0.0.
+
+## [4.75.2] - 2026-05-24
+
+### Changed
+
+- **Pre-5.0 roadmap** - Added a milestone roadmap from v4.76.x through v4.99.99, reserving v4.99.99 as the final beta candidate and v5.0.0 as the first stable release gate.
+- **Release planning** - Defined the major workstreams for customization, marketplace, component packs, plugins, data portability, multi-user hardening, governance, search, editor stability, APIs, operations, security, testing, documentation, and release-candidate hardening.
+
+## [4.75.1] - 2026-05-24
+
+### Changed
+
+- **Customization Studio optimization** - Added selectable preview presets, draft-based `.env` output, and in-page theme-pack JSON validation so admins can test combinations before editing deployment config.
+- **Marketplace optimization** - Added catalog health metrics, search/filtering, kind-specific metadata, status tones, safer load errors, and integrity validation surfaced through `/api/customization`.
+- **Contract hardening** - Enforced unique marketplace ids, stricter theme/plugin validation rules, layout env-value preservation, and expanded marketplace tests.
+
+## [4.75.0] - 2026-05-24
+
+### Added
+
+- **Customization Studio** - Added `/admin/customization`, an env-first preview surface for branding, style presets, color themes, layout presets, feature flags, theme pack schema, and copy-ready `.env` output.
+- **Built-in Marketplace** - Added `/admin/marketplace` for built-in and planned styles, color themes, layouts, component packs, plugin manifests, and theme packs without remote code fetching.
+- **Theme and plugin pack contracts** - Added theme pack schema metadata, plugin manifest validation, component-pack slot declarations, layout presets, and per-space customization preview metadata to `/api/customization`.
+- **Layout preset config** - Added `NEXT_PUBLIC_ARKIVEL_LAYOUT` with `classic-wiki`, `docs-portal`, `team-knowledge-base`, `worldbuilding-atlas`, and `research-notebook` preset metadata.
+
+## [4.74.9] - 2026-05-24
+
+### Changed
+
+- **Settings page primitives** - Migrated settings, keyboard shortcuts, and editor snippets pages to shared form, panel, table, empty-state, code, and button primitives.
+- **Editor cleanup** - Removed an unused collaboration import so the editor surface stays leaner while the settings UI migration lands.
+
+## [4.74.8] - 2026-05-24
+
+### Changed
+
+- **Auth and capture page primitives** - Migrated login, registration, bookmarklet, and clipper-extension pages to shared page, form, button, code, and panel primitives for a more reusable open-source UI surface.
+
+## [4.74.7] - 2026-05-24
+
+### Changed
+
+- **Read-only admin controls** - Migrated the read-only admin page to shared UI primitives and added explicit loading/error states for status reads and updates.
+- **Read-only API resilience** - Wrapped read-only status reads and writes with service-unavailable responses when the backing state cannot be reached.
+
+## [4.74.6] - 2026-05-24
+
+### Added
+
+- **Color theme presets** - Added `NEXT_PUBLIC_ARKIVEL_COLOR_THEME`, built-in `standard`, `forest`, and `ember` palettes, layout `data-color-theme` hooks, and marketplace metadata for palette packs.
+- **Customization docs** - Updated environment template, README, architecture/design notes, help/features pages, API docs, roadmap, tests, and version metadata for color themes.
+
+## [4.74.5] - 2026-05-24
+
+### Added
+
+- **Self-host customization manifest** - Added typed customization groups for brand, features, limits, map, and integrations, with `/api/customization` exposing current values, supported env vars, reusable UI catalog metadata, and theme hooks.
+- **Style presets and marketplace foundation** - Added `NEXT_PUBLIC_ARKIVEL_STYLE`, built-in `classic-wiki` and `atlas-modern` style presets, and marketplace-ready metadata for future style, component-pack, and plugin listings.
+- **Config compatibility layer** - Preserved existing flat `config.name`, `config.mapEnabled`, and similar aliases while adding nested customization objects for open-source forks and plugin tooling.
+- **Customization docs sync** - Updated README, architecture/design notes, API docs, help/features docs, in-app Help/Features pages, environment template, tests, roadmap, changelog, and package metadata.
+
+## [4.74.4] - 2026-05-24
+
+### Changed
+
+- **Persistent documentation/versioning rule** - Added a standing `AGENTS.md` policy requiring every agent and contributor to update relevant root docs, markdown docs, in-app reference pages, changelog/roadmap entries, and package metadata with user-visible or release-note-worthy changes.
+- **Commit message standard** - Documented the repository's historical `vX.Y.Z: imperative summary` release-commit pattern, plus exceptions for dependency automation, merge commits, and short non-version fixes.
+- **Contributor docs sync** - Mirrored the rule across README, architecture, design, contributing, help, and feature references so humans and agents see the same release discipline.
+- **Version metadata** - Bumped package metadata to 4.74.4 for the process-policy update.
+
+## [4.74.3] - 2026-05-23
+
+### Changed
+
+- **Full-width app shell** - Removed the global `max-w-6xl` content cap so dashboards, Studio, and grid-heavy pages do not leave a large unused right-side strip.
+- **Cleaner sidebar** - Removed the repeated Arkivel brand block from the sidebar so the top header owns app identity and the sidebar starts directly with navigation.
+- **Title format** - Standardized browser titles to `Arkivel - Page Name`, including route-driven fallback titles for pages that do not export metadata yet.
+
+## [4.74.2] - 2026-05-23
+
+### Changed
+
+- **Desktop main menu toggle** - Made the top-left three-line main-menu button available on desktop and tablet too, with a remembered collapsed/expanded sidebar state.
+- **Full-width reading shell** - Let the content area expand cleanly when the desktop sidebar is collapsed, including right-docked sidebar layouts.
+- **Responsive coverage** - Added shell coverage for the desktop main-menu toggle so fullscreen navigation stays testable.
+
+## [4.74.1] - 2026-05-22
+
+### Changed
+
+- **Simplified main menu** - Reworked the sidebar into Main, Discover, Work, More, Admin, and Categories sections so primary routes are visible without the older long menu stack.
+- **Mobile hamburger menu** - Made the top-left three-line button the consistent mobile main-menu trigger and removed the bottom Browse tab from the mobile nav.
+- **Sidebar docking polish** - Replaced the tiny swap affordance with a labeled Dock left/right control and fixed borders/layout when the sidebar is moved to the right side.
+- **Slug hardening** - Normalized accented Latin characters in generated slugs and encoded category sidebar links from a safe path segment.
+
+## [4.74.0] - 2026-05-22
+
+### Added
+
+- **Arkivel Studio** - Added `/studio`, a live workspace that turns published articles, wiki links, semantic relations, review pressure, taxonomy gaps, freshness, and engagement into a generated command board.
+- **Base-style operating lanes** - Added Studio views for review pressure, stubs, orphaned pages, taxonomy gaps, and stale work so the wiki feels closer to a visual knowledge operating system.
+- **Studio feeds and JSON Canvas export** - Added `/api/studio` plus `/api/studio/canvas` for portable board data and `.canvas`-compatible visual knowledge workflows.
+- **Studio navigation and docs** - Wired Studio into the sidebar, main page, command palette, sitemap, API docs, help/features pages, README, architecture notes, and responsive shell coverage.
+
+## [4.73.1] - 2026-05-22
+
+### Changed
+
+- **Theme-aware Arkivel mark** - Replaced fixed-image shell branding with an inline SVG mark that inherits theme colors while preserving custom logo-mark image overrides.
+- **Icon-only header treatment** - Removed the badge-style logo block so the Arkivel mark reads as a clean icon in the sidebar and mobile top bar.
+- **Responsive top-bar alignment** - Made mobile header spacing reserve room for the sidebar toggle only on focused workspace routes where that toggle is present.
+- **Branding documentation sync** - Bumped the app/package version to 4.73.1 and updated the changelog, environment example, README, and architecture notes for the SVG logo default.
+
+## [4.73.0] - 2026-05-21
+
+### Added
+
+- **Claim Review Mode** - Added persistent review records for editor-marked claims so each claim can be approved, marked as needing a source, disputed, or rejected directly from the article claims panel.
+- **Claim review API and audit trail** - Added `/api/articles/[id]/claim-reviews`, the `ClaimReview` Prisma model, reviewer attribution, author notifications, and activity events for claim-level decisions.
+- **Documentation/version discipline** - Bumped the app/package version to 4.73.0 and documented Claim Review Mode across roadmap, feature references, help guides, architecture, design guidance, README, backlog, and in-app product pages.
+
+## [4.72.3] - 2026-05-21
+
+### Changed
+
+- **Cleaner editor chrome** - Reduced the editor header to identity, three feature trays, and Markdown mode so the writing surface feels calmer by default.
+- **Quieter toolbar** - Kept only core formatting visible, moved quote/table and heavier commands behind More, and changed the toolbar to compact icon-first controls.
+- **Lighter feature trays** - Grouped Insert actions, folded grammar and writing coach into Review disclosures, and simplified Outline so advanced tools stay available without taking over the page.
+
+## [4.72.2] - 2026-05-21
+
+### Changed
+
+- **Simplified editor surface** - Replaced the always-visible cockpit with a calmer writing-first editor, compact toolbar, and progressive Insert/Review/Outline/Coach trays.
+- **Progressive editor controls** - Kept everyday formatting visible while moving advanced text, knowledge, AI, claim, color, voice, and shortcut tools behind a single More disclosure.
+- **Editor responsive QA** - Updated scratchpad coverage to open feature trays on desktop and phone widths and assert no horizontal overflow.
+
+## [4.72.1] - 2026-05-21
+
+### Added
+
+- **Review Requests workflow** - Completed the article-level review request path with a Request review action, reviewer picker, active-review linking, and a dedicated `/reviews/[id]` workspace for draft preview, comments, assignment, approvals, change requests, rejection, and resubmission.
+- **Review governance API hardening** - Added reviewer lookup, editor/admin reviewer validation, duplicate active-review protection, decision permissions, notification fan-out, activity logging, and automatic article status transitions from draft to review to published or back to draft.
+- **Documentation/version discipline** - Bumped the app/package version to 4.72.1 and documented the completed workflow across roadmap, feature references, help guides, architecture, design guidance, and product surfaces.
+
+## [4.71.1] - 2026-05-21
+
+### Fixed
+
+- **Presentation mode layout** - Rebuilt `/present/[slug]` around fixed progress, topbar, scrollable slide stage, and footer control regions so slide titles, body content, hints, dots, and navigation buttons no longer overlap.
+- **Responsive deck controls** - Made the overview button, slide counter, dot rail, keyboard hint, and previous/next controls wrap or stack cleanly on phone, tablet, laptop, and wide desktop widths.
+- **Rich slide containment** - Added presentation-specific containment for long titles, tall content, code blocks, tables, images, videos, and embeds so article content scrolls inside the slide stage instead of pushing through the deck chrome.
+- **Command palette shortcut** - Made the `Ctrl+K` / `Cmd+K` listener case-insensitive and stabilized the e2e shortcut check against client hydration timing.
+- **CI regression coverage** - Updated homepage shell tests for the compact search trigger and phone Browse navigation, mocked alias lookups in wiki-link tests, and added a mocked `/present/[slug]` responsive test with explicit chrome-overlap assertions.
+
+## [4.71.0] - 2026-05-21
+
+### Added
+
+- **Canon Trails** - Added `/trails`, a reader-facing route system that builds guided paths through published wiki articles from live links, backlinks, categories, freshness, depth, and engagement signals.
+- **Trail route engine** - Added canon, fresh, deep, repair, and starter trails so the page can guide real reading paths while empty local databases still present a useful setup route.
+- **Trails JSON feed** - Added `/api/trails` for the same route model so demos, automations, and future clients can consume guided reading paths without scraping the UI.
+- **Reader-first navigation** - Wired Canon Trails into the primary sidebar, home page actions, browse directory, command palette, sitemap, docs, and responsive shell coverage.
+- **README documentation front page** - Reworked the README into a real product documentation entry with logo treatment, badge/button links, quickstart, deployment, configuration, core experiences, feature map, architecture, and API references.
+
+## [4.70.0] - 2026-05-21
+
+### Added
+
+- **Canon Atlas** - Added `/atlas`, a flagship wiki atlas that turns published content into territories, article signals, story threads, a featured dossier, continuity pressure, and next atlas moves.
+- **Atlas JSON feed** - Added `/api/atlas` so the same territory, dossier, thread, continuity, and action model can power integrations or external product demos.
+- **Starter atlas fallback** - Added starter territories and signal routes so fresh or database-empty local environments still render an impressive atlas without inventing published article data.
+- **Primary sidebar placement** - Moved the Knowledge Command Center into the main Browse section as “Knowledge cockpit” and added the Canon Atlas beside it so both are immediately visible.
+- **Atlas navigation and QA** - Wired the atlas into home actions, the browse directory, command palette destinations, sitemap, documentation, and responsive shell tests.
+
+## [4.69.0] - 2026-05-21
+
+### Added
+
+- **Knowledge cockpit upgrade** - Rebuilt `/intelligence` around a live cockpit surface with a real article constellation, readiness radar, and impact simulator instead of only static engine cards.
+- **Article constellation graph** - Added top connected article nodes and live wiki-link edges to the intelligence report, with selected-node readouts and direct article navigation.
+- **Readiness radar model** - Added readiness, graph, structure, freshness, trust, audience, and momentum axes to `/api/intelligence` and the command-center UI.
+- **Impact simulator** - Added interactive cleanup levers for stubs, orphans, broken links, stale pages, taxonomy debt, and verification debt so editors can see projected readiness gains before choosing work.
+- **Command-center prominence** - Promoted the command center into the home page action cluster and expanded responsive shell coverage for the new cockpit surface.
+
+## [4.68.0] - 2026-05-21
+
+### Added
+
+- **Knowledge Command Center** - Added `/intelligence`, a live operations surface with 20 intelligence engines spanning mission readiness, content velocity, editorial pressure, stale canon, graph health, broken links, stubs, longform candidates, taxonomy debt, tag constellations, featured canon, infobox coverage, translation surface, conversation heat, reader demand, verification debt, and cleanup flags.
+- **Next-best-work queue** - Added prioritized action rows that route editors toward the highest leverage fixes: expanding stubs, repairing wiki links, refreshing stale pages, organizing taxonomy gaps, and clearing review pressure.
+- **Intelligence JSON feed** - Added `/api/intelligence` so the same command-center report can power integrations, dashboards, automation, or external monitoring.
+- **Discovery integration** - Wired the command center into the sidebar, homepage browse directory, command palette destination registry, sitemap, and responsive shell test matrix.
+- **Responsive command-center shell** - Added compact serif-first score panels, summary grids, action rows, and intelligence cards that adapt across phone, tablet, laptop, and wide desktop widths.
+
+## [4.67.1] - 2026-05-21
+
+### Changed
+
+- **Preliminary logo integration** - Added the Arkivel logo artwork as public brand assets, wired the mark into the sidebar and mobile top bar, and exposed the app icon in metadata and the web app manifest.
+- **Header search simplification** - Replaced the always-visible header search field with a compact trigger that expands into a focused search form, reducing top-bar crowding on narrow layouts.
+- **Browse affordance polish** - Updated the mobile sidebar affordance from a generic menu icon to a Browse grid treatment so navigation reads as wiki discovery rather than another utility control.
+- **Local shell fallbacks** - Made public announcement, article, category, and tag list APIs return empty collections when the local database is unavailable so app-shell verification stays quiet in fresh development environments.
+- **Branding documentation sync** - Documented the logo, mark, and app-icon configuration alongside the patch version bump.
+
+## [4.67.0] - 2026-05-21
+
+### Changed
+
+- **Main page redesign** - Reworked the wiki home page into a dense front page with live article/category/tag/revision stats, a featured article lead, quick actions, a browse directory, recent updates, and compact sidebar modules.
+- **Shared page shell standard** - Added reusable page header, dek, action, compact list, category tree, and home layout CSS primitives so browse, search, dashboard, help, features, and downstream portal pages share the same compact wiki language.
+- **Core browse page refresh** - Updated Articles, Categories, Search, Dashboard, Help, and Features to use the new page header pattern with right-aligned actions and responsive wrapping.
+- **Home sidebar module polish** - Restyled New Articles, On This Day, and Trending panels into consistent portal/list modules without unicode arrows or oversized standalone headings.
+
+## [4.66.2] - 2026-05-21
+
+### Changed
+
+- **Article action rail rethink** - Reworked the article action panel into a slim primary action rail with Navigate, Collect, and Share visible by default while Read and Tools open as compact disclosure menus.
+- **Article tabs separation** - Moved article section navigation onto dedicated `article-tabbar` styles so it no longer inherits the in-content `.wiki-tabs` block styling or fights the article shell border.
+- **Reading typography default** - Made serif the default article body font and updated the font preference control to offer Serif, Sans, and Mono without a confusing non-serif Default option.
+- **Dek wrapping polish** - Let article excerpts use more of the header width with pretty wrapping so the dek no longer breaks halfway across wide article shells.
+
+## [4.66.1] - 2026-05-21
+
+### Fixed
+
+- **Article action panel polish** - Replaced the oversized tiled article action grid with a compact wrapping toolbar so short groups no longer create dead empty rows or heavy block geometry.
+- **Reading controls overflow** - Constrained select controls inside the Read group so font preferences no longer force the panel to clip or push past the article shell.
+- **Responsive action grouping** - Added tighter mobile stacking and divider rules for article action groups while keeping desktop, tablet, and wide layouts dense and scannable.
+
+## [4.66.0] - 2026-05-21
+
+### Changed
+
+- **Article page shell refresh** - Refactored the article display route around a dedicated hero header, grouped action panel, and taxonomy footer so title metadata, badges, controls, and category/tag context scan cleanly without overwhelming the reading surface.
+- **Article action redesign** - Replaced the stacked toolbar rows with a responsive grouped action panel for Navigate, Collect, Share, Read, and Tools actions while preserving the existing article workflows.
+- **Reading surface polish** - Restyled in-brief summaries, article flags, review/pinned notices, backlinks, fork actions, and taxonomy chips to use shared UI primitives and semantic theme tokens.
+- **Responsive article layout** - Added article-specific responsive rules for tabs, infoboxes, table of contents, action groups, link chips, and narrow-screen typography so article pages stay readable across phone, tablet, laptop, and wide desktop widths.
+
+## [4.65.0] - 2026-05-21
+
+### Changed
+
+- **Unified search response handling** — Added a shared client-safe search response normalizer and rewired the header search, full search page, command palette, wiki-link suggester, split-view article pickers, and article edit fallback so they all understand the current `/api/search` object response shape.
+- **Command and navigation consistency** — Added a central navigation registry for command destinations and focused-workspace route detection, expanded command palette destinations across discovery/personal/reference/admin surfaces, and fixed stale canonical article links from `/wiki/*` to `/articles/*`.
+- **Responsive discovery surfaces** — Reworked search and article-list discovery layouts so advanced filters, semantic results, article filter chips, batch bars, and tables wrap or scroll intentionally across phone, tablet, laptop, and wide desktop widths.
+- **Responsive QA guardrails** — Added Playwright coverage for core shell routes at phone, tablet, laptop, and wide desktop breakpoints, plus unit tests for the search response and navigation registries.
+
+## [4.64.3] - 2026-05-21
+
+### Documentation
+
+- **Responsive shell documentation sync** — Updated the architecture, design standards, README, roadmap, feature reference, help guide, and in-app help/features pages to describe the responsive app shell, mobile bottom navigation, focused-workspace navigation behavior, responsive overlay standards, and cross-breakpoint QA expectations.
+- **Version discipline** — Bumped app/package version from 4.64.2 to 4.64.3 so documentation-only product surface updates still carry an explicit release marker.
+
+## [4.64.2] - 2026-05-20
+
+### Changed
+
+- **Mobile bottom navigation** — Added a persistent phone navigation bar for Home, Search, Create, Recent, and Menu, with sidebar state synchronized through layout events and same-route close behavior.
+- **Focused workspace handling** — Hid the bottom navigation on dense workspace routes like `/ask`, `/graph`, `/split`, `/map`, and `/present/*`, keeping the compact top menu available where the primary canvas needs full height.
+- **Responsive overlay hardening** — Clamped dropdowns, tables, notifications, AI chat, synthesis, speed-reader, quiz, and article Q&A controls so long labels and narrow viewports wrap instead of overlapping.
+- **Map shell refinement** — Reworked the map page container to avoid mobile sideways bleed while preserving the full-height workspace feel.
+- **QA coverage** — Verified sampled mobile, tablet, and desktop routes for horizontal overflow, clipped controls, and covered interactive targets.
+
+## [4.64.1] - 2026-05-20
+
+### Fixed
+
+- **Responsive overlap pass** — Fixed post-restandardization overflow issues in the app shell, article pages, canvas, search, and home surfaces.
+- **Header and search fit** — Tightened header/search sizing and sidebar sizing so compact viewports no longer push controls into adjacent content.
+- **Mobile content breathing room** — Added responsive spacing and wrapping rules for key page chrome after the v4.64 UI standardization.
+
+## [4.64.0] - 2026-05-20
+
+### Changed
+
+- **UI restandardization** — Added shared UI primitives for page titles, compact buttons, icon buttons, inputs, selects, toolbars, panels, dropdowns, chips, tables, and empty states; refitted the app shell, sidebar, search, article action bars, article cards, article lists, category pages, auth forms, and key article tools to use the same compact wiki styling.
+- **Typography and chrome cleanup** — Removed letter-spacing utilities from app surfaces, tightened oversized radii, normalized dropdown/modal controls, and moved status treatment toward semantic CSS variables instead of one-off Tailwind color classes.
+- **Version bump** — Bumped app/package version from 4.63.0 to 4.64.0.
+
+## [4.63.0] - 2026-04-09
+
+### New Features
+
+- **Wiki Health Dashboard** — `/health` page audits all articles for quality issues: stubs (< 100 words), outdated (1+ year), missing excerpt, uncategorized, untagged, broken wiki links, very long articles (> 5000 words); shows overall health score 0–100 with colour coding; filter by issue type; direct "Fix" links to edit pages; sidebar link added
+- **AI Auto-fill from Title** — On the new article page, type a title and pick a template type (Person / Event / Place / Concept / Organization / Product); AI generates a complete encyclopedia-style HTML article with appropriate sections; auto-fill button appears as soon as title is 3+ characters
+- **Category Overview Generator** — "Generate overview" button on every category page; AI reads all published articles in the category and writes a 2–4 paragraph encyclopedic introduction covering scope, range, and article relationships; collapsible display with regenerate option
+- **Article Audio Narration** — "Listen" button on every article page uses the browser's Web Speech API to narrate the full article text; inline progress bar; pause/resume/stop controls; auto-removes footnotes and code blocks from narration; no API key required
+- **AI Fact-Check** — "Fact-check" button on article pages analyzes the 3–6 most significant factual claims using Claude AI; each claim shows a verdict (Verified / Plausible / Uncertain / Questionable), brief explanation, and confidence bar; disclaimer that results are based on AI training knowledge
+- **Smart Editor Suggestions** — "Suggestions" panel in the article editor (new and edit pages); detects articles mentioned in text that aren't wiki-linked, lists related articles by keyword overlap, and uses AI to suggest missing sections or underdeveloped areas; auto-refreshes every 30 seconds while open
+
+### Technical
+
+- `src/app/api/health/wiki/route.ts` (new) — GET; computes per-article issue list and overall health score weighted across 7 quality dimensions
+- `src/app/health/page.tsx` (new) — Health dashboard client page with score gauge, stat grid, issue filter tabs, and article list
+- `src/app/api/ai/autofill/route.ts` (new) — POST `{ title, template }`; 6 article templates; returns `{ html }` from Claude Haiku
+- `src/app/api/ai/category-overview/route.ts` (new) — POST `{ categoryId }`; returns `{ overview }` prose text
+- `src/components/CategoryOverviewGenerator.tsx` (new) — Client component with generate/show/hide toggle on category pages
+- `src/components/article/AudioNarration.tsx` (new) — Browser SpeechSynthesis-based narration player with chunked playback and progress tracking
+- `src/app/api/ai/factcheck/route.ts` (new) — POST `{ html }`; returns `{ results }` array with claim/verdict/explanation/confidence
+- `src/components/article/FactCheckPanel.tsx` (new) — Collapsible fact-check results panel with colour-coded verdict badges
+- `src/app/api/ai/editor-suggestions/route.ts` (new) — POST `{ title, html }`; returns wiki-link gaps, related articles, and AI-suggested missing sections
+- `src/components/editor/SmartSuggestions.tsx` (new) — Editor sidebar panel; auto-refreshes; shows link suggestions, related articles, and AI section ideas
+
+## [4.62.0] - 2026-04-09
+
+### New Features
+
+- **Daily Digest** — Personalised in-app briefing at `/digest`; sections: Article of the Day (unread pick), Review Queue (spaced repetition due today), Watched Category Updates (articles edited this week), Did You Know (3 AI-extracted facts from random articles), On This Day (articles created on today's date in past years), and a Thinking Prompt (AI-generated open-ended question); linked from sidebar
+- **Image → Wiki Article** — Upload a photo of handwritten notes, a whiteboard, a book page, or a screenshot on the import page; Claude Vision reads the image and formats the content as a structured HTML wiki article with inferred title; "Open in editor" pre-fills the new article page
+- **YouTube → Wiki Article** — Paste any YouTube URL on the import page; AI fetches the auto-generated transcript, strips conversational filler, restructures the content into sections, and generates a draft article; supports youtube.com and youtu.be URL formats
+- **Historical Timeline** — `/timeline/historical` page extracts years mentioned in article content and renders a vertical event timeline; decade scrubber for zoom navigation; filter by category or search by title; colour-coded category lanes; linked from sidebar
+- **Semantic Search Toggle** — Search page gains a "Semantic" toggle button that activates vector-embedding-based search (`?semantic=1`); finds conceptually related articles beyond keyword matches; filters and semantic mode stack correctly
+- **AI Tutor Mode** — "Tutor me" button on every article page opens a chat modal; Socratic AI tutor asks probing questions about the article content, gives feedback on answers, tests comprehension, and summarises mastery after ~5 exchanges; powered by Claude Haiku
+
+### Technical
+
+- `src/app/api/digest/daily/route.ts` (new) — GET; returns dueReviews, recentInWatched, dykFacts (AI), articleOfDay, writingPrompt (AI), onThisDay
+- `src/app/digest/page.tsx` (new) — client digest UI with section cards
+- `src/app/api/import/image/route.ts` (new) — POST multipart; Claude vision via AI SDK image content; returns `{ title, html }`
+- `src/app/api/import/youtube/route.ts` (new) — POST; extracts YouTube video ID, fetches caption XML via timedtext API, AI reformats as article
+- `src/app/api/timeline/historical/route.ts` (new) — GET; extracts years from article HTML via regex, groups by century/decade
+- `src/app/timeline/historical/page.tsx` (new) — interactive timeline with decade scrubber, category filter, and search
+- `src/app/api/tutor/route.ts` (new) — POST; Socratic tutor with article context, multi-turn message history
+- `src/components/article/TutorButton.tsx` (new) — floating chat modal with typing indicator and restart
+- `src/app/search/page.tsx` — added semantic mode toggle button, wired `?semantic=1` param
+
+## [4.61.0] - 2026-04-05
+
+### New Features
+
+- **Adaptive Reading Level** — Reading mode toggle on every article page rewrites content at Beginner, Technical, or ELI5 level using Claude; original content is preserved; a banner shows the active mode with one-click restore; powered by `POST /api/ai/reading-level`
+- **Spaced Repetition Review Queue** — SM-2 algorithm surfaces enrolled articles for re-reading at optimal intervals; "Review later" button on article pages; full review session UI at `/review` with flip-card interaction and quality rating (Blank / Hard / Good / Easy); enrolled articles list with next-review dates; linked from sidebar
+- **Import from URL** — Paste any public URL into the import page and AI fetches, cleans, and reformats the content as a structured wiki article draft; "Open in editor" pre-fills the new article page via sessionStorage; powered by `POST /api/import/url`
+- **Knowledge Coverage Map** — Visual dashboard at `/coverage` showing every category as a colour-coded card (Empty → Sparse → Growing → Solid → Rich) with coverage scores; grid/table views; filter by status; click any category to get AI-generated gap suggestions; broken wiki-link gaps listed below; linked from sidebar
+- **Structured Claims** — Editor toolbar buttons mark selected text as Certain / Probable / Disputed; claim marks render with colour-coded underlines and hover tooltips; a collapsible `ClaimsPanel` below each article lists all claims grouped by confidence; stored as `<span data-claim="...">` in HTML
+- **Real-time Collaborative Editing** — Live multi-user editing in the article edit page; "Enable live editing" toggle activates Yjs-backed sync via `POST /api/collab/[articleId]`; polling sync every 2 seconds merges remote changes; presence indicators show other editors as coloured avatars; last-synced timestamp displayed
+
+### Technical
+
+- `src/app/api/ai/reading-level/route.ts` (new) — POST; accepts `{ articleId, level }`; rewrites article HTML via Claude Haiku at requested reading level
+- `src/components/article/ArticleBodyWithReadingLevel.tsx` (new) — client wrapper replacing direct `SpecialBlocksRenderer` usage; hosts reading level button and adaptive banner
+- `src/components/article/ReadingLevelButton.tsx` (new) — dropdown with Standard/Beginner/Technical/ELI5 options; shows loading spinner and active state
+- `prisma/schema.prisma` — added `SpacedRepetitionItem` model with SM-2 fields (ease, interval, repetitions, nextReviewAt)
+- `src/app/api/spaced-repetition/route.ts` (new) — GET (due items / all items), POST (enroll / review / unenroll)
+- `src/app/review/page.tsx` (new) — full review session UI with progress bar, flip cards, quality rating buttons
+- `src/components/article/ReviewEnrollButton.tsx` (new) — per-article enroll/unenroll button
+- `src/app/api/import/url/route.ts` (new) — POST; fetches URL, strips boilerplate HTML, AI formats as wiki article
+- `src/app/api/coverage/route.ts` (new) — GET; computes coverage score for each category (article count, avg words, recency)
+- `src/app/coverage/page.tsx` (new) — Knowledge Coverage Map page
+- `src/components/editor/ClaimMarkExtension.ts` (new) — Tiptap Mark extension with `certain/probable/disputed` attribute
+- `src/components/article/ClaimsPanel.tsx` (new) — extracts `data-claim` spans from HTML and renders a collapsible claims list
+- `src/app/api/collab/[articleId]/route.ts` (new) — GET/POST/DELETE; Yjs state storage and merge via `CollaborationSession` table
+- `src/app/api/collab/[articleId]/presence/route.ts` (new) — POST/DELETE; in-memory presence tracking with 30s expiry
+- `src/components/editor/CollaborativeEditor.tsx` (new) — wraps TiptapEditor with sync loop, presence polling, and live indicator
+
+## [4.60.0] - 2026-04-05
+
+### New Features
+
+- **Ask my wiki — streaming AI oracle** — Dedicated `/ask` page: a full-page conversational interface over the entire knowledge base; semantic search (vector embeddings) finds the most relevant articles per query; AI answers stream token-by-token via SSE; source article chips shown above each reply; prompted starter questions on the empty state; multi-turn conversation history; linked from sidebar
+- **Knowledge synthesis** — "Synthesize" button on every category page (appears when ≥ 2 articles); calls `/api/ai/synthesize` to read all articles in the category and have AI write a comprehensive overview; preview modal shows generated content + source list; "Create as new article" one-click opens the editor pre-filled with the synthesised content via sessionStorage
+- **Cinematic presentation mode** — Full rewrite of `/present/[slug]`: animated slide transitions, progress bar, slide-overview grid (G key), dot navigation, fullscreen (F key), keyboard shortcuts (← → Space Esc G F); serif typography on dark background; "Present" button added to article tools bar
+
+### Technical
+
+- `src/app/api/ask/route.ts` (new) — POST; SSE streaming endpoint; semantic search via `semanticSearch()` with keyword fallback; emits `{"type":"sources"}` event then `{"type":"token"}` events; streams via `streamText()` text stream
+- `src/app/ask/page.tsx` (new) — full-page streaming chat UI; custom markdown renderer; animated typing indicator; suggested openers on empty state
+- `src/app/api/ai/synthesize/route.ts` (new) — POST; accepts `categoryId` or `articleIds[]`; reads up to 20 articles; returns `{ title, html, articleTitles }`
+- `src/components/SynthesizeButton.tsx` (new) — client component; modal with loading/preview/create states; passes draft to new article page via sessionStorage
+- `src/app/categories/[slug]/page.tsx` — added `SynthesizeButton`
+- `src/app/articles/new/page.tsx` — reads `wiki_synthesize_draft` from sessionStorage when `?from=synthesize`; pre-fills title and editor content
+- `src/app/present/[slug]/page.tsx` — full rewrite; `@keyframes presentSlideIn` animation; overview grid; dot nav; keyboard shortcuts; fullscreen API
+- `src/components/layout/Sidebar.tsx` — "Ask my wiki" link added
+- `src/app/articles/[slug]/page.tsx` — "Present" link added to tools bar
+
+## [4.59.0] - 2026-04-05
+
+### New Features
+
+- **Button / CTA blocks** — `/button` slash command inserts a call-to-action button with configurable label, URL, and style (primary / secondary / outline); styled via `.wiki-cta`, `.wiki-cta-btn`, `.wiki-cta-primary/secondary/outline` CSS classes
+- **Divider with label blocks** — `/divider` slash command inserts a horizontal rule; optionally prompts for a label, rendering it as a centered rule-with-text via `.wiki-divider-labeled` (flexbox `::before`/`::after` pseudo-elements)
+- **AI revision summary generation** — "AI summarize" button next to the edit summary field; compares old vs. new article content using AI and auto-fills a one-sentence edit summary; powered by `/api/ai/revision-summary`
+- **Article quiz mode** — "Quiz me" button in article tools bar; calls `/api/ai/quiz` to generate 5 multiple-choice questions from article content; full flashcard UI with answer reveal, score tracking, and result screen; quiz attempts recorded via `/api/quiz-attempts`
+
+### Technical
+
+- `globals.css` — `.wiki-cta`, `.wiki-cta-btn`, `.wiki-cta-primary`, `.wiki-cta-secondary`, `.wiki-cta-outline`, `.wiki-divider`, `.wiki-divider-labeled` CSS blocks
+- `SlashCommandExtension.ts` — "Button" and "Divider" slash commands added with prompt-driven configuration
+- `ArticleQuizMode.tsx` (new) — client component; floating modal with question/option/reveal/score flow; records attempt to DB on completion
+- `api/ai/revision-summary/route.ts` (new) — POST endpoint; strips HTML, sends old/new text to AI, returns concise edit summary sentence
+- `articles/[slug]/page.tsx` — imports `ArticleQuizMode`; adds "Quiz me" button to tools bar
+- `articles/[slug]/edit/page.tsx` — `handleAiSummary` function; `generatingSummary` state; "AI summarize" button in edit summary row
+
+## [4.58.0] - 2026-03-30
+
+### New Features
+
+- **Tabbed content blocks** — `/tabs` slash command inserts an interactive two-tab block; named via prompts; tab buttons switch panels; panels stack in the editor for easy editing; CSS in `globals.css`
+- **Gallery grid blocks** — `/gallery` slash command inserts a responsive image grid with three placeholder items; `auto-fill` CSS grid layout with hover zoom; each item has an editable caption
+- **Conversational AI wiki assistant** — floating chat button on every article page; opens a panel where readers can ask questions about the current article or the whole wiki; context-aware (searches related articles); conversation history preserved per session; powered by `/api/ai/chat`
+- **AI article generation from outline** — "AI Generate" toolbar button in editor; reads all headings in the document and calls `/api/ai/generate-article` to fill in encyclopedic paragraph content under each section; replaces document with generated content
+
+### Technical
+
+- `globals.css` — `.wiki-tabs`, `.wiki-tabs-nav`, `.wiki-tab-btn`, `.wiki-tab-panel`, `.wiki-gallery`, `.wiki-gallery-item`, `.wiki-gallery-caption` CSS blocks
+- `SlashCommandExtension.ts` — "Tabs" and "Gallery" slash commands added
+- `TabsActivator.tsx` (new) — client component that wires click handlers to `.wiki-tabs` after mount
+- `WikiChatAssistant.tsx` (new) — floating chat UI component with message history and source links
+- `api/ai/chat/route.ts` (new) — POST endpoint; finds context articles via keyword search; multi-turn with `history`
+- `api/ai/generate-article/route.ts` (new) — POST endpoint; takes title + headings array; returns full article HTML
+- `EditorToolbar.tsx` — `onAiGenerate` prop; "AI Generate" button
+- `TiptapEditor.tsx` — `handleAiGenerate` async function; extracts headings, calls endpoint, replaces content
+- `articles/[slug]/page.tsx` — imports and renders `TabsActivator` and `WikiChatAssistant`
+
+## [4.57.0] - 2026-03-30
+
+### New Features
+
+- **Smart URL paste → auto-link** — pasting a plain HTTP/HTTPS URL in the editor now auto-creates a hyperlink; if text is selected the URL becomes its `href`, otherwise the URL is inserted as linked text
+- **Typewriter scrolling mode** — new "Typewriter" toggle button in the editor toolbar; when active the cursor is kept vertically centred in the viewport as you type; preference persisted to `localStorage`
+- **Short-article merger suggestions** — admin page at `/admin/short-articles`; lists all published articles under 100 words and pairs each with up to 3 suggested merge targets from the same category, sorted by word count
+- **Sidebar position preference** — small swap icon in the sidebar footer toggles the sidebar between left and right; preference persisted to `localStorage` and applied instantly via a client layout shell
+
+### Technical
+
+- `TiptapEditor.tsx` — `isUrl()` helper; URL branch in `handlePaste` before image check; `typewriterMode` state + `useEffect` using `coordsAtPos` + `requestAnimationFrame`; new `typewriterMode`/`onTypewriterToggle` props wired to `EditorToolbar`
+- `EditorToolbar.tsx` — two new props; "Typewriter" toggle button with active highlight
+- `LayoutShell.tsx` (new) — client wrapper reading `wiki_sidebar_position` from `localStorage` and listening for `sidebar-position-change` custom event; applies `flex-row-reverse` when "right"
+- `layout.tsx` — flex container replaced with `<LayoutShell>`
+- `Sidebar.tsx` — footer swap icon dispatches `sidebar-position-change`; new "Short article merges" admin link
+- `admin/short-articles/page.tsx` (new) — server component, word-count filter < 100, same-category candidate lookup
+
+## [4.56.0] - 2026-03-30
+
+### Enhancements
+
+- **Article byline redesign** — metadata and action bar restructured into three distinct sections: a metadata row (source, edit date, editor, freshness/verified badges), a stats chip row (word count, char count, reading time, reading level, view history), and a grouped action toolbar with labeled rows (Page / Read / Tools)
+- **Sticky article header** — changed from a full-width top bar to a compact floating pill anchored to the top-right corner on medium+ screens
+- **ArticleViewHistory** — accepts `className` prop for consistent chip styling; label changed to "Read X ago"
+
+### Technical
+
+- Removed `WordCount`, `CharacterCount`, `ArticleReadingETA` component imports; stats now computed inline as chips in the page component
+- `plainTextChars` computed alongside `plainTextWords` from the same stripped text pass
+
+## [4.55.0] - 2026-03-28
+
+### New Features
+
+- **Top referrers dashboard** — `/admin/referrers`; shows top 30 referrer domains over 7/30/90-day windows with traffic bar and percentage; linked from admin sidebar
+- **Tag usage trends** — `/admin/tag-trends`; heat-map table showing new articles per tag per month over the last 12 months; top 30 tags by total count
+- **Analytics CSV export** — `/api/export/analytics`; admin-only download of all published articles with read counts, reaction counts, revision counts, category, and dates
+
+### Technical
+
+- `admin/referrers/page.tsx` — client component fetching `/api/admin/referrers` (existing endpoint); time-range buttons for 7/30/90d; accent-colored progress bars
+- `admin/tag-trends/page.tsx` — server component; monthly bucket calculation with inline opacity styling
+- `api/export/analytics/route.ts` — CSV builder using `ArticleRead` and `ArticleReaction` groupBy; proper RFC 4180 escaping; `Content-Disposition: attachment`
+
+## [4.54.0] - 2026-03-28
+
+### New Features
+
+- **Long article suggestions** — `/admin/long-articles`; lists published articles exceeding a configurable word threshold (default 5,000); sorted by length descending; threshold adjustable via URL param; linked from admin sidebar
+- **Random article** — `/api/random` redirects to a random published article; accepts optional `?category=slug` query param to restrict to a category; "Random article" link in sidebar Discover section; "Random" button on category pages
+- **New articles feed widget** — homepage sidebar widget showing the 5 most recently *created* published articles (by `createdAt`), separate from "Recently updated"
+
+### Technical
+
+- `src/app/admin/long-articles/page.tsx` — server page with configurable threshold form; `force-dynamic`
+- `src/app/api/random/route.ts` — GET handler using `prisma.article.count` + random `skip` offset; redirects to `/articles/[slug]`
+- `src/components/RandomArticleButton.tsx` — client `<a>` component linking to `/api/random` with optional category filter and shuffle SVG icon
+- `src/components/NewArticles.tsx` — async server component fetching last N articles by `createdAt`; null-renders when empty
+
+## [4.53.0] - 2026-03-28
+
+### New Features
+
+- **Orphan article finder** — `/admin/orphans`; lists published articles that no other article links to (checks both `/articles/slug` hrefs and `data-wiki-link="title"` attributes); groups results by category; linked from admin sidebar
+- **Writing session goal** — set a word-count target directly in the editor status bar; tracks words written in real time with a progress bar, elapsed timer, and green completion state
+
+### Technical
+
+- `WritingSessionGoal.tsx` client component listens to Tiptap `update` events; snapshots baseline word count on start; displayed inline in the editor status bar between the word/character count and the save state
+- `OrphansPage` server component concatenates all published article content and string-searches for each article's slug and title; `force-dynamic`
+
+## [4.52.0] - 2026-03-28
+
+### New Features
+
+- **Editor zen mode** — new "Zen" toggle above the editor content label; hides sidebar, header, and tabs; widens the editor to full width; press Esc to exit; SVG icon changes between expand and compress states
+- **Word frequency cloud** — client-side component at the bottom of every article page; strips HTML, removes stop words, renders top-40 words sized and faded proportionally by frequency
+- **Dead-end article finder** — `/admin/dead-ends`; lists published articles with no outgoing `[[wiki links]]`; linked from admin sidebar
+- **Duplicate content detector** — `/admin/duplicate-content`; Jaccard word-set similarity for all published articles (first 300); shows pairs ≥ 55% similar with Edit links
+
+### Technical
+
+- `ZenModeToggle.tsx` injects/removes a `<style>` tag and toggles `body.editor-zen` class; works across any layout
+- `WordFrequencyCloud.tsx` is a pure client `useMemo` component with 150+ English stop words
+- Dead-ends and duplicate-content pages are server-only (`force-dynamic`), no new API routes needed
+
+## [4.51.0] - 2026-03-28
+
+### New Features
+
+- **Vertical timeline blocks** — new `/timeline` slash command inserts a visual chronological timeline with date labels and dot connectors; fully CSS-driven using `.wiki-timeline` classes
+- **Twitter / X embed blocks** — new `/twitter` slash command inserts a styled card with the post URL; prompts for the URL and renders a `.wiki-tweet` container
+- **Series table of contents** — `SeriesTableOfContents` component appears above series navigation on article pages; collapsible panel showing all entries with read indicators (✓) and current article highlighted
+- **Bulk JSON article import** — new `/api/admin/import` POST endpoint + import UI section on `/admin/import`; accepts up to 500 articles per batch with auto-create tags, category resolution, and duplicate-slug skipping
+
+### Technical
+
+- `.wiki-timeline` and `.wiki-tweet` CSS added to `globals.css`
+- `SeriesTableOfContents` component reads `wiki_view_history` from localStorage for read-state indicators
+- Import API creates revision snapshots for each imported article
+- FEATURES_BACKLOG.md: major audit — marked ~50 already-shipped features as `[x]`
+
+## [4.50.0] - 2026-03-28
+
+### New Features
+
+- **Bulk JSON export** — `/api/export/json` downloads all articles as a structured JSON file (admin only); includes title, slug, content, contentRaw, category, tags, status, infobox
+- **Per-article analytics tab** — `/articles/[slug]/analytics` (admin only) shows 30-day view chart + summary cards (views, reads, reactions, revisions)
+- **Series progress tracker** — `ArticleSeriesNav` now shows "X of N read" based on browser reading history (localStorage)
+
+## [4.49.0] - 2026-03-28
+
+### New Features
+
+- **Image lightbox** — clicking any image inside article content opens it full-size in an overlay; close with Esc or click outside; caption shown if alt text is present
+- **AI expand section** — "AI Expand" button in the editor toolbar; select a paragraph and click to expand it into more detail via AI; replaces the selection with the expanded text
+- `/api/ai/expand` — new POST endpoint; takes `text` and optional `context`; returns expanded prose via `gpt-4o-mini`
+
+### Technical
+
+- `onAiExpand` prop added to EditorToolbar; `handleAiExpand` handler in TiptapEditor
+
+## [4.48.0] - 2026-03-28
+
+### New Features
+
+- **Article width preference** — narrow/default/full reading width toggle in article toolbar; persisted to localStorage; applies via injected CSS on `#article-content`
+- **Local timezone timestamps** — `LocalDate` component renders dates in the user's browser timezone (client-side, suppresses hydration mismatch)
+- **Category growth chart** — admin page at `/admin/category-growth` shows new articles per category per month (last 12 months, stacked bar chart, top 8 categories)
+
+### Technical
+
+- `/api/admin/category-growth` GET: returns articles grouped by category × month for the last 12 months
+
+## [4.47.0] - 2026-03-28
+
+### New Features
+
+- **Auto-save indicator** — article edit form auto-saves content to localStorage after 2 s of inactivity; "Unsaved changes" / "Draft saved" status shown above the editor; draft cleared on successful save
+- **Character count** — displayed alongside word count in the article byline (e.g. "1.2k chars"); abbreviated for long articles
+- **Did-you-mean suggestions** — when a search returns 0 results, compares query words against all article titles and suggests the closest match as a clickable link
+- **Tag cloud page** — new `/tags/cloud` page shows all tags sized proportionally by article count; linked from the All Tags page
+
+### Technical
+
+- Added `onUpdate?: () => void` prop to TiptapEditor; fires on every editor content change
+- Tag cloud page uses `_count.articles` for sizing with logarithmic scaling between 0.8rem–2.4rem
+
+## [4.46.0] - 2026-03-28
+
+### New Features
+
+- **Featured article badge** — admins can mark any article as "Featured"; gold star badge shown in the article title area
+- **AI title suggestions** — "AI suggest" button on article edit form calls `/api/ai/suggest-title` and displays 5 clickable alternative titles; click any to apply
+- `isFeatured` field added to Article model; wired into edit form, PUT API, and article display
+
+## [4.42.1] - 2026-03-28
+
+### Rebrand
+
+- Renamed product from **Wiki App** to **Arkivel**
+- Updated `package.json` name to `arkivel`
+- Renamed env vars `NEXT_PUBLIC_WIKI_*` → `NEXT_PUBLIC_ARKIVEL_*`; old `NEXT_PUBLIC_WIKI_*` vars still work as fallbacks for backwards compatibility
+- Updated default values: name `Arkivel`, tagline `The self-hosted knowledge platform`, description and welcome text updated to match new positioning
+- Updated all docs (README, ARCHITECTURE, CONTRIBUTING, DESIGN, ROADMAP) to reflect new name
+- Updated Vercel deploy button, Docker image names, and clone URLs in README
+
+## [4.45.0] - 2026-03-28
+
+### New Features
+
+- **Session management** — logged-in users can view all active sessions at `/settings/sessions` with device/IP info; revoke individual sessions or all other sessions at once
+- **AI tag suggestions** — "AI suggest" button on article edit form calls `/api/ai/suggest-tags` and auto-adds suggested tags (falls back to keyword-match without AI key)
+- **AI category suggestions** — "AI suggest" button on category picker calls `/api/ai/suggest-category` to pick the best-fit category
+- **Writing velocity** — admin chart at `/admin/writing-velocity` shows words added per week over the last 12 weeks (from revision history)
+
+### Technical
+
+- `userAgent` and `ipAddress` fields added to Session model; login route captures them; `prisma db push` applied
+- `/api/sessions` GET: list current user's unexpired sessions
+- `/api/sessions/[id]` DELETE: revoke session (must belong to caller or admin)
+- `/api/ai/suggest-tags` POST: keyword fallback or OpenAI completion against existing tag names; excludes already-applied tags
+- `/api/ai/suggest-category` POST: OpenAI picks best-fit category from list; no-op if API key absent
+- `/api/admin/writing-velocity` GET: groups revision word counts by ISO week into 12-week array
+- `/admin/writing-velocity` page: bar chart with weekly totals and 12-week/average summary cards
+- Sidebar link added for "Active sessions" and "Writing velocity"
+
+## [4.44.0] - 2026-03-28
+
+### New Features
+
+- **Scheduled announcements** — admins set a future "Go live at" datetime on announcements; they are hidden from users until that time arrives
+- **Read-only mode** — admin toggle at `/admin/read-only`; shows a blue site-wide banner blocking edits for non-admin users when active
+- **Revision pruning** — admin tool at `/admin/prune-revisions`; preview (dry-run) then delete revisions older than the latest N per article; configurable threshold
+- **User activity log** — admin page at `/admin/user-activity`; select any user to see their revision history (article, summary, date); user list sorted by join date with edit counts
+
+### Technical
+
+- `scheduledAt DateTime?` added to Announcement model; `prisma db push` applied; `/api/announcements` filters by `scheduledAt IS NULL OR scheduledAt <= now()`
+- `ReadOnlyBanner`: server component with lock SVG icon; rendered in `RootLayout` when `PluginState.id = "read_only_mode"` is enabled
+- `/api/admin/read-only` GET/POST: reads/upserts `PluginState`; admin-only
+- `/api/admin/prune-revisions` GET preview + POST execute: keeps latest N revisions per article; deletes oldest
+- `/api/admin/user-activity` GET: list users with revision counts; `?userId=X` returns latest 100 revisions for that user
+- Sidebar links added for read-only mode, prune revisions, user activity log
+
+## [4.43.0] - 2026-03-28
+
+### New Features
+
+- **Cleanup tags** — admins mark articles with attention flags (Needs Images, Needs Expansion, Needs Citations, Needs Review, Stub, Outdated); shown as an orange notice banner on the article page
+- **Article adoption** — admins mark an article as abandoned; article page shows a banner; logged-in admin can adopt (clears the flag via API)
+- **Copy as plain text** — button in article toolbar strips HTML and copies article text to clipboard
+
+### Technical
+
+- `CleanupTagsBanner`: server component; maps tag keys to human-readable labels; displays orange wiki-notice with shield icon
+- `ArticleAdoptionBanner`: client component; calls `PUT /api/articles/[id]` with `{ isAbandoned: false }` to adopt; hides on success
+- `CopyPlainTextButton`: client component; uses `div.innerHTML` + `innerText` to strip HTML; clipboard API
+- `cleanupTags String[]` added to Article Prisma model; `prisma db push` applied
+- `isAbandoned` and `cleanupTags` wired into edit form (checkboxes), PUT API handler, and article page display
+
+## [4.42.0] - 2026-03-28
+
+### New Features
+
+- **Theme customizer** — floating color-swatch button in the article toolbar opens an HSL hue slider (0–359); sets `--accent-hue` CSS custom property live; saved to `localStorage`
+- **Font preference** — dropdown in article toolbar to choose article body font: Default, Serif (Georgia), Sans (Segoe UI), or Mono (Courier New); injects override style targeting `#article-content`; persisted to `localStorage`
+- **Article quick notes** — collapsible private note panel per article; saved only in browser `localStorage`; styled with accent when a note exists; Save/Delete controls
+- **Maintenance mode** — admin toggle at `/admin/maintenance`; displays a yellow site-wide banner when active; stored in `PluginState` table (no schema change)
+
+### Technical
+
+- `ThemeCustomizer`: click-away-to-close dropdown using `useRef`; rainbow gradient preview bar; resets to hue 220
+- `FontPreference`: four presets with CSS font stacks; injects/removes `<style id="wiki-font-pref-style">` on `#article-content`
+- `ArticleQuickNote`: per-article `wiki_quick_note_{id}` localStorage key; auto-loads on mount; button accent-styled when note exists
+- `MaintenanceBanner`: server component; rendered in `RootLayout` when `PluginState.id = "maintenance_mode"` is enabled
+- `/api/admin/maintenance` GET/POST: reads/upserts `PluginState` row; admin-only via `isAdmin()`
+- `/admin/maintenance` page: toggle switch with live feedback; linked in admin sidebar
+
+## [4.41.0] - 2026-03-28
+
+### New Features
+
+- **High-contrast accessibility mode** — toggle in article toolbar applies a pure black/white/yellow high-contrast theme for users with visual impairments; persisted to `localStorage`
+- **Text-only mode** — toggle in article toolbar hides all images, figures, videos, and iframes from the article content; persisted to `localStorage`
+- **Content warning tags** — admins can add CW tags (spoilers, violence, mature, sensitive-topics, strong-language, medical) to any article; shown as a dismissible amber banner before the article body
+- **Content gap analysis** — admin page at `/admin/content-gaps` shows zero-result and low-result (1–3) searches from `SearchQueryLog`, grouped and ranked by frequency; helps identify missing wiki topics
+
+### Technical
+
+- `HighContrastToggle`: CSS class toggle on `<html>` with pure black background and yellow accent; globals.css `html.high-contrast` block
+- `TextOnlyToggle`: dynamically injects/removes a `<style>` tag hiding media elements in `#article-content`
+- `ContentWarningBanner`: dismissible amber banner; labels map from key → human-readable string
+- `contentWarnings String[]` and `isAbandoned Boolean` added to Article Prisma model; `prisma db push` applied
+- `contentWarnings` wired into article edit form (checkboxes), PUT API handler, and article page display
+- `/admin/content-gaps` queries `SearchQueryLog.groupBy` for zero-result and low-result searches; linked in admin sidebar
+
+## [4.40.0] - 2026-03-28
+
+### New Features
+
+- **Reading ETA** — `~X min left` label in the article byline that dynamically updates as you scroll; disappears when you finish
+- **Night reading mode** — warm sepia-toned dark theme toggled via a moon/sun button in the article reading toolbar; persisted to `localStorage`
+- **Search history** — last 20 successful searches stored in `localStorage`; shown as clickable chips below the search bar when no query is entered; Clear button wipes history
+
+### Technical
+
+- `ArticleReadingETA`: client component tracking `#article-content` scroll offset to compute remaining reading time at 200 WPM
+- `NightModeToggle`: toggles `night-reading` class on `<html>`; CSS variables in `globals.css` define warm sepia palette
+- `SearchHistory` + `recordSearch()`: localStorage-backed; max 20 entries, deduplicated; shown only when query is empty; `recordSearch` called when search returns non-empty results
+
+## [4.39.1] - 2026-03-28
+
+### Design Fixes
+
+- Standardised page headings across 11 inconsistent pages — all now use `text-[1.7rem] font-normal text-heading` with a serif font and `border-b` underline, matching the established wiki aesthetic
+- Removed rogue breadcrumb navbars (`Wiki / Page`) from leaderboard, popular, discussions, and compare pages — breadcrumbs were not part of the design system and broke visual consistency
+- Removed `max-w-*xl mx-auto px-4 py-*` content-width constraints from leaderboard, popular, discussions, series, series detail, history, learning paths, timeline, and compare pages — content now fills the column width like all other wiki pages
+- Replaced all `text-muted-foreground` (Tailwind/shadcn token) with `text-muted` (design system token) across affected pages
+- Replaced `text-sm` / `text-2xl font-semibold` / `text-xl` heading classes with design-system equivalents (`text-[13px]`, `text-[1.7rem] font-normal`)
+- Removed single-item wiki-tabs wrapper from bookmarks and collections pages; both now use the standard heading with inline action button
+- Standardised "Create" / "New" action buttons on collections and learning paths to the shared button token (`h-6 px-2 text-[11px] border border-border rounded`)
+
+## [4.39.0] - 2026-03-27
+
+### New Features
+
+- **Speed reader (RSVP)** — "Speed read" button in the article toolbar opens a modal that flashes one word at a time at 150/250/400/600 WPM; ORP (Optimal Recognition Point) highlights the pivot character in accent colour; progress bar; Start/Pause/Resume/Reset controls
+- **Article blame view** — `/articles/[slug]/blame` tab shows every paragraph colour-coded by the revision that first introduced it; sidebar per-paragraph displays editor name, date, edit summary, and a link to the revision
+- **Article polls** — admins can attach multiple polls to any article; readers vote on options (one vote per session, via session ID); vote counts and percentage bars revealed after voting or when poll is closed; admins can close/reopen/delete polls; polls persist to `ArticlePoll` and `PollVote` DB tables
+
+### Technical
+
+- `ArticlePoll` and `PollVote` Prisma models added; `prisma db push` applied; `prisma generate` run
+- `GET/POST /api/articles/[id]/polls` — list polls with vote counts; create poll (admin only)
+- `POST/DELETE/PATCH /api/articles/[id]/polls/[pollId]` — cast vote (session-based upsert), delete poll, close/reopen poll
+- `GET /api/articles/[id]/blame` — paragraph-level blame extraction from revision history (oldest-first, cap 200 revisions)
+- `SpeedReader` component: extracts plain text from `#article-content`; ORP at `floor(len/3)-1`; `setTimeout` loop; 4 WPM speeds
+- `ArticlePollWidget`: fetches polls; vote-to-reveal results pattern; localStorage vote memory; admin create-poll inline form
+- Blame tab link added to article tabs
+
+## [4.38.0] - 2026-03-28
+
+### New Features
+
+- **Font size preference** — S/M/L/XL font size selector in the article reading toolbar; applies a Tailwind text-size class to `#article-content`; persisted to `localStorage`
+- **Focus paragraph mode** — "Focus" toggle button in the reading toolbar; when active, non-hovered paragraphs in the article are dimmed to 30% opacity for distraction-free reading; persisted to `localStorage`
+- **Saved search alerts** — `alertEnabled` boolean added to `SavedSearch` model; daily cron at `GET /api/cron/search-alerts` checks for new published articles matching the saved query since last check; creates an in-app notification per user per alert
+- **Saved searches settings page** — list and manage saved searches at `/settings/saved-searches`; toggle alerts per search with a pill switch; delete searches; linked from sidebar Personal section
+
+### Technical
+
+- `SavedSearch` Prisma model: added `alertEnabled Boolean @default(false)` and `lastAlertAt DateTime?` fields; `prisma db push` applied
+- `PATCH /api/saved-searches?id=...`: toggles or sets `alertEnabled` for the authenticated user's saved search
+- `GET /api/cron/search-alerts`: requires `Authorization: Bearer CRON_SECRET`; creates `Notification` records with `type="search_alert"`
+- `FontSizeControl`: four buttons S/M/L/XL; removes/adds Tailwind size class on `#article-content`
+- `FocusModeToggle`: injects/removes a `<style>` tag with CSS hover dimming; sun icon button
+
+## [4.37.0] - 2026-03-28
+
+### New Features
+
+- **PWA manifest** — `src/app/manifest.ts` generates a web app manifest at `/manifest.webmanifest`; makes the wiki installable on mobile and desktop home screens; uses `config.name` and `config.description` dynamically
+- **External link click tracking** — `ExternalLinkTracker` component uses `navigator.sendBeacon` to log outbound link clicks to `POST /api/analytics/external-link`; aggregated view at `/admin/external-links` showing top URLs by click count
+- **Prefetch on hover** — `PrefetchArticleLinks` component intercepts `mouseover` on internal article links and calls `router.prefetch(href)`; deduplicates prefetches; attached to all article pages
+
+### Technical
+
+- `POST /api/analytics/external-link`: normalises URL to `hostname + pathname`; stores as `MetricLog` with `type="external_link_click"` and `metadata.articleId`
+- `GET /api/admin/external-links`: groups MetricLog by path for external_link_click type; returns top 100 URLs
+- `ExternalLinkTracker`: event-delegation on `#article-content`; only fires for cross-origin anchors
+
+## [4.36.0] - 2026-03-27
+
+### New Features
+
+- **AI grammar check panel** — collapsible "Grammar & style" panel below the editor; sends text to `POST /api/ai/grammar` (GPT-4o-mini when `OPENAI_API_KEY` is set, heuristic fallback otherwise); shows issues by severity (error/warning/style) with inline Apply buttons; issue count shown in panel header
+- **Bulk tag operations** — "Add tag" and "Remove tag" actions added to the article list batch action bar; tags dropdown shown on selection; backed by new `addTag`/`removeTag` cases in `/api/articles/batch` (PUT)
+- **Scroll position memory** — `ScrollPositionRestorer` component saves article scroll position to `localStorage` every 500 ms; restores it on return visits after a brief render delay; capped at 50 entries
+
+### Technical
+
+- `GrammarCheckPanel` component: open/close toggle, Check now button, severity-coded issue cards, Apply suggestion directly into editor via `setTextSelection` + `insertContent`
+- `ScrollPositionRestorer`: throttled `scroll` listener + `setTimeout` restore; `wiki_scroll_positions` localStorage key
+- `POST /api/ai/grammar`: OpenAI GPT-4o-mini returns JSON array of `{offset, length, message, suggestion, severity}` issues; falls back to heuristic double-space and repeated-word checks
+
+## [4.35.0] - 2026-03-27
+
+### New Features
+
+- **Satisfaction rating widget** — 5-star rating on every article page; per-session upsert with avg + count display; interactive hover preview; your rating shown after voting
+- **Hot articles widget** — "Trending this week" panel on the homepage sidebar showing top-5 articles by view count in the last 7 days; backed by `GET /api/articles/hot`
+- **Article todo list** — per-article editor checklist panel; readers can check off tasks, admins can add/delete tasks; shows completion progress (N/M done)
+- **Tag management admin page** — inline rename + recolor + delete for all tags at `/admin/tags`; filterable list with article count; hover-reveal action buttons
+- **Word-count range filter in search** — min/max word count inputs in the Advanced search sidebar; filters results post-fetch based on stripped HTML word count
+
+### Technical
+
+- `ArticleRating` Prisma model (added in v4.35 schema prep): per-session upsert, avg/count aggregate via `GET /api/articles/[id]/rating`
+- `ArticleTodo` Prisma model: CRUD at `/api/articles/[id]/todos` (list/create) and `/api/articles/[id]/todos/[todoId]` (patch/delete)
+- `GET /api/articles/hot` — groups `ArticleView` by articleId for last N days, joins to published articles
+- `/admin/tags` page: client-side inline edit row, optimistic update, confirm-before-delete
+- Search API: `wordCountMin` / `wordCountMax` params applied as post-fetch filter on `content` field
+
+## [4.34.0] - 2026-03-27
+
+### New Features
+
+- **Superscript / subscript** — new toolbar buttons (x² / x₂) and keyboard support via `@tiptap/extension-superscript` and `@tiptap/extension-subscript`
+- **Text highlighting** — colour picker in toolbar with 6 preset highlight colours (yellow, green, blue, pink, orange, purple) and clear option; powered by `@tiptap/extension-highlight` with multicolor mode
+- **Accordion / FAQ blocks** — `/accordion` slash command inserts a native `<details><summary>` collapsible block with styled CSS
+- **Two-column layout** — `/two-column layout` slash command inserts a responsive CSS grid two-column block (`wiki-2col`)
+- **YouTube / Vimeo embeds** — `/youtube` slash command prompts for a video URL, auto-converts watch URLs to embed URLs, inserts a responsive 16:9 iframe wrapper
+- **GitHub Gist embeds** — `/github gist` slash command inserts a linked Gist block with the Gist ID
+
+### Technical
+
+- Installed `@tiptap/extension-superscript`, `@tiptap/extension-subscript`, `@tiptap/extension-highlight`
+- `HighlightColorPicker` component: popover with 6 color swatches + unset button; closes on outside click
+- CSS classes: `.wiki-accordion`, `.wiki-2col`, `.wiki-embed-video`, `.wiki-gist` added to `globals.css`
+
+## [4.33.0] - 2026-03-27
+
+### New Features
+
+- **Edit suggestions** — "Suggest edit" button on every article opens an inline form for readers to propose corrections; admin review page at `/admin/suggestions` with accept/reject/delete and optional admin notes
+- **Reader retention analytics** — admin page at `/admin/retention` shows per-article scroll depth distribution as a horizontal bar chart with milestone % cards (25/50/75/90/100% reached)
+- **Referrer tracking** — `ReferrerTracker` records `document.referrer` (hostname-normalised) per article per day; `GET /api/admin/referrers` aggregates top traffic sources over a configurable number of days
+
+### Technical
+
+- `EditSuggestion` Prisma model: `id, articleId, author, email?, suggestion, status, adminNote?, createdAt, updatedAt`
+- `ArticleReferrer` Prisma model: `id, articleId, referrer, date, count`; composite unique on `(articleId, referrer, date)` for upsert
+- `POST /api/suggestions` — public submit; `GET /api/suggestions?status=` — admin list; `PATCH /api/suggestions/[id]` — status update; `DELETE /api/suggestions/[id]`
+- `POST /api/analytics/referrer` — upserts `ArticleReferrer` row; `GET /api/admin/referrers?days=30` — aggregates by domain
+- `GET /api/admin/retention` — groups `ScrollDepthLog` by article and returns bucket distributions
+- `ReferrerTracker` renders null, fires single fetch on mount
+
+## [4.32.0] - 2026-03-27
+
+### New Features
+
+- **Outline builder** — collapsible panel in the editor generates a structured section outline (H2/H3 headings) from the article title; three style modes: Encyclopedic, Tutorial, Reference; AI-powered when `AI_API_KEY` is set, otherwise uses a smart template
+- **AI alt-text suggestions** — when uploading an image in the editor the alt-text input is pre-filled by `POST /api/ai/alt-text` (AI-powered from filename, or heuristic if AI not configured)
+- **Article Q&A widget** — collapsible "Ask a question" panel at the bottom of every article; uses `POST /api/ai/qa` to answer questions grounded in wiki content with cited sources; works across the entire wiki, not just the current article
+
+### Technical
+
+- `POST /api/ai/outline` — takes `{title, summary?, style?}`, returns `{outline: string[], source: "ai"|"template"}`; template fallback covers all three style modes without AI
+- `POST /api/ai/alt-text` — takes `{filename, caption?}`, derives readable description from filename heuristic, calls Claude Haiku when AI configured
+- `OutlineBuilderPanel` component rendered below `WritingCoachPanel` in editor; chevron-toggle, live preview of generated headings, "Insert into article" injects heading HTML into editor
+- `ArticleQA` client component: collapsible, keyboard-submittable, shows answer + source links; shows no-answer state gracefully
+- `articleTitle` prop added to `TiptapEditor` and forwarded to `OutlineBuilderPanel`
+
+## [4.31.0] - 2026-03-27
+
+### New Features
+
+- **Reading history** — browser-local list of the last 50 articles you visited, accessible at `/history`; entries show relative timestamps; "Clear history" button wipes the list
+- **Article view history badge** — article header shows "· You read this X ago" on return visits, recorded in `localStorage` without any server round-trip
+- **Sticky article header** — a slim bar fixed to the top of the viewport slides in after scrolling past the article title; shows the article title and quick Edit / Top links
+- **Smart typography** — `SmartTypographyExtension` converts `--` → `—` (em dash), `...` → `…` (ellipsis), and straight `"` / `'` to context-aware curly quotes as you type
+
+### Technical
+
+- `ArticleViewHistory` client component: reads/writes `wiki_view_history` key in `localStorage`; max 50 entries (FIFO)
+- `StickyArticleHeader` uses `IntersectionObserver` on `#article-h1` to toggle visibility
+- History page at `src/app/history/page.tsx`; purely client-side, no Prisma calls
+- SmartTypography ProseMirror plugin uses `handleTextInput` prop to intercept keystrokes and dispatch replacement transactions
+
+## [4.30.0] - 2026-03-27
+
+### New Features
+
+- **Heading permalink links** — hovering over any heading in an article reveals a ¶ link; clicking copies the anchor URL to the clipboard
+- **Category statistics** — admin page at `/admin/category-stats` shows article count, total words, average words, and last-edit date per category; sortable by any column
+- **In Brief summary box** — when an article has a `summaryShort` value, a highlighted callout box is shown at the top of the article content
+- **On This Day fix** — removed stale `published: true` field from `OnThisDay` query (field doesn't exist in schema)
+
+### Technical
+
+- `HeadingPermalinks` client component uses `useEffect` to inject ¶ anchors into heading DOM nodes after mount
+- Category stats API at `GET /api/admin/category-stats` returns word totals computed from HTML-stripped content
+- `.wiki-in-brief` CSS class: left-accent border with soft accent background
+- `.heading-permalink` CSS: hidden by default, shown on heading hover
+
+## [4.29.0] - 2026-03-27
+
+### New Features
+
+- **Glossary system** — `GlossaryTerm` model with term, definition, aliases; admin CRUD at `/admin/glossary`; public A-Z browse at `/glossary` (grouped by first letter with letter-index navigation); `GET /api/glossary`, `POST /api/glossary`, `PATCH /api/glossary/[id]`, `DELETE /api/glossary/[id]`
+- **Glossary hover cards** — terms are matched in article HTML server-side via `resolveGlossaryTerms()` in `src/lib/glossary.ts`; `GlossaryTooltipLayer` client component uses event delegation to show floating hover cards on mouseover of any `[data-glossary-term]` span
+- **Reading level badge** — `ReadingLevelBadge` component computes Flesch Reading Ease score from article plain text and shows a colour-coded badge (Very Easy → Very Complex) in the article header
+- **Pull quote blocks** — `PullQuoteExtension` Tiptap node renders `<blockquote data-pull-quote>` with large centred serif styling; accessible via `/pull quote` slash command or `Mod+Shift+Q` keyboard shortcut
+- **Glossary sidebar links** — Glossary added to Browse section and Admin section of sidebar
+
+### Technical
+
+- `resolveGlossaryTerms()` splits HTML on tag boundaries, skips tags, and injects `data-glossary-term`/`data-glossary-def` attributes on matched text
+- `GlossaryTooltipLayer` uses document-level `mouseover`/`mouseout` event delegation with 150ms hide delay
+- `PullQuote` Tiptap Node includes `declare module "@tiptap/core"` augmentation for `setPullQuote` / `togglePullQuote` commands
+- Pull quote CSS: borderless blockquote with top/bottom accent borders, centred serif font at 1.35rem
+
+## [4.28.0] - 2026-03-27
+
+### New Features
+
+- **Command palette** — wired `CommandPalette` component into root layout; press `Cmd+K` / `Ctrl+K` from anywhere to fuzzy-search articles and trigger actions
+- **Find & replace in editor** — `FindReplace` ProseMirror plugin highlights all matches inline as you type; `FindReplacePanel` shows match count, Replace, and Replace All; opened via new toolbar "Find" button or `Ctrl+H`; highlights cleared on panel close
+- **Copy as Markdown** — "Copy MD" button in article toolbar copies the article title + raw Markdown to clipboard; only shown when `contentRaw` is present
+- **500-feature backlog** — `FEATURES_BACKLOG.md` at project root documents 500 planned features organised by theme (Editor, Organisation, Discovery, Collaboration, Analytics, Admin, UX, API, Performance, Content Types, Multilingual, Gamification, Security, AI, Platform)
+
+### Technical
+
+- Added `find-highlight` CSS class (yellow in light, dark amber in dark mode) to `globals.css`
+- `FindReplace` Tiptap extension decorates matching text ranges via ProseMirror plugin
+- `EditorToolbar` now accepts `onFindReplace` prop
+
+## [4.27.0] - 2026-03-27
+
+### New Features
+
+- **Category merge tool** — admin page at `/admin/categories` with source/target dropdowns; `POST /api/admin/categories/merge` reassigns all articles and sub-categories from the source into the target, then deletes the source category
+- **Word-count distribution chart** — admin page at `/admin/word-count` shows a horizontal bar chart bucketing published articles by word count, plus longest/shortest article tables and summary stats (total, average, max, min)
+- **Keyboard shortcut customization** — new `/settings/shortcuts` page lets users remap the two-key navigation chords (gh, ga, gn, gs, gr, gg) stored in localStorage; `KeyboardShortcuts` component reads overrides at runtime; settings page links to it
+- **Wiki creation timeline** — `/timeline` page displays all published articles grouped by year and month in chronological order, with category filters
+
+## [4.26.0] - 2026-03-26
+
+### New Features
+
+- **Article freshness badge** — each article shows a colour-coded badge (Fresh/Recent/Aging/Stale) next to the "Last edited" metadata, based on days since last update (green ≤30d, blue ≤90d, yellow ≤180d, red >180d)
+- **Reading streak tracker** — visiting articles records a daily streak; users see their current streak on the `/dashboard` as a new "Reading streak" widget; `POST /api/reading-streak` records today's read; `GET /api/reading-streak` returns current streak
+- **Category watchlist** — "Watch" button on every category page; toggles via `POST /api/category-watch`; per-user watch state fetched client-side
+- **Inline AI text rewrite** — "AI Rewrite" button in the editor toolbar; select text, optionally give an instruction, and the selection is replaced by the AI-rewritten version via `POST /api/ai/rewrite` (requires `OPENAI_API_KEY`)
+
+### Schema Changes
+
+- Added `CategoryWatch` model (`userId`, `categoryId`, composite PK)
+- Added `ReadingStreakLog` model (`userId`, `date` string, composite unique)
+
+## [4.25.0] - 2026-03-26
+
+### New Features
+
+- **Site-wide announcement banner** — admin page at `/admin/announcements` to create/manage banners; banners appear at the top of the content area for all users (dismissible per session); supports info/warning/success/error types and optional expiry
+- **Per-article 30-day view sparkline** — article stats panel now shows a mini bar chart of daily page views for the past 30 days, powered by `MetricLog` data; total shown as "X views/30d"
+- **TOC generator button in editor** — toolbar button "TOC" extracts all headings from the document and inserts a nested ordered-list table of contents at the cursor position
+- **Custom editor snippets** — users can create named reusable HTML content blocks at `/settings/snippets`; type `/snippet` in the editor to insert one via the slash-command menu
+
+### Schema Changes
+
+- Added `Announcement` model with `message`, `type`, `active`, `expiresAt`, `createdAt`, `updatedAt`
+- Added `Snippet` model with `userId`, `name`, `content`, unique on `[userId, name]`
+
+## [4.24.0] - 2026-03-26
+
+### New Features
+
+- **Search analytics** — every search query is logged (fire-and-forget) to a new `SearchQueryLog` table; new admin page at `/admin/search-analytics` shows daily volume bar chart, top queries with average result counts, and zero-result queries to surface content gaps
+- **Image captions** — images in the Tiptap editor now support an optional caption stored as the `title` attribute; at render time the image is wrapped in `<figure class="wiki-figure"><figcaption>` for styled captions; caption is prompted on upload
+- **Bulk export as ZIP** — new `GET /api/export/zip` endpoint produces a downloadable `.zip` with one Markdown file per article (YAML front-matter + raw markdown), organised in category-slug subfolders; added "ZIP archive" option to the export page
+
+### Schema Changes
+
+- Added `SearchQueryLog` model with `query`, `resultCount`, `userId?`, `createdAt` fields and indexes on `createdAt` and `query`
+
+## [4.23.0] - 2026-03-26
+
+### New Features
+
+- **Category cover image** — optional banner image on every category page; set the URL in the category manager; displayed as a 144px-tall banner above the breadcrumb
+- **Article duplicate** — "Duplicate" button in the article toolbar (admin only) clones the article as a new draft, preserving content, infobox, cover image, category, and tags; lands on the new article's edit page
+- **Password-protected articles** — set an `accessPassword` in the article edit form; non-admin readers see a password gate that unlocks for the session; admins always bypass; `POST /api/articles/[id]/check-password` validates
+- **Enhanced print stylesheet** — comprehensive `@media print` rules: hides all chrome (header, sidebar, tabs, buttons, reaction bars), expands content to full width, clean typography at 12pt, prints full URLs after external links, proper page-break rules, clean table borders
+
+### Schema Changes
+
+- Added `coverImage String?` to `Category` model
+- Added `accessPassword String?` to `Article` model
+
+## [4.22.0] - 2026-03-17
+
+### New Features
+
+- **Admin user management** — new `/admin/users` page lists all users with article/edit counts and a role dropdown (viewer / editor / admin); changes are saved instantly via PATCH `/api/users`
+- Added Users link to Admin sidebar section
+
+## [4.21.0] - 2026-03-17
+
+### Enhancements
+
+- **Unified auth** — removed legacy `ADMIN_SECRET` password-only login path; admin access now requires a User account with `role: "admin"`; `isAdmin()` only checks session-based auth; legacy `admin_token` cookie no longer issued or checked
+- **`/admin` page** — replaced inline password form with a "Log in" redirect prompt for unauthenticated users
+- **UserMenu** — removed "Admin login" link; guests now see only Log in and Sign up
+
+## [4.20.0] - 2026-03-17
+
+### Enhancements
+
+- **UserMenu** — profile icon button in the header with dropdown: shows Login / Sign up / Admin login for guests; shows username, dashboard, settings, admin panel, and logout for logged-in users; initials avatar when logged in
+- **AdminContext** — extended to expose `loggedIn` boolean alongside `admin`; added `useLoggedIn()` hook; `useAdmin()` unchanged
+- **Sidebar completeness** — added previously unreachable pages: `/compare` (Compare revisions) in Tools, `/categories` (All categories index) in Categories, and five missing admin sub-pages: Series manager, Redirects, Stubs, Content quality, Calendar
+- Login, Sign up, Admin login, and Settings links removed from sidebar — all now accessible via the header UserMenu
+
+## [4.19.0] - 2026-03-16
+
+### Enhancements
+
+- **Navigation overhaul** — restructured sidebar from 5 loose sections into 8 purposeful ones: Browse (core content), Discover (exploration + stats), Community (collab features, collapsed by default), Personal (user account), Tools (utilities + integrations, collapsed by default), Contribute (admin), Admin (admin, collapsed), Categories
+- Added previously unreachable pages to sidebar: `/popular`, `/series`, `/leaderboard`, `/stats`, `/discussions`, `/users`, `/mentions`, `/present`, `/features`
+- Moved Bookmarklet, Clipper extension, Whiteboards, Present, Help, and Features into Tools section where they logically belong
+- Change digest is now an indented sub-link under Watchlist
+- Community section (Change requests, Reviews, Bounties, Forks, Users) separated from Discover to clarify intent
+
+## [4.18.1] - 2026-03-16
+
+### Bug Fixes
+
+- **CI e2e crash: duplicate dynamic segment** — `[revId]` and `[revisionId]` coexisted under `revisions/`, causing Next.js to throw "You cannot use different slug names for the same dynamic path" at startup; moved restore route into the existing `[revisionId]` subtree and updated all param references
+- **OnThisDay resilience** — added `.catch(() => [])` so a DB connection failure in the "On this day" sidebar widget doesn't crash the homepage
+
+## [4.18.0] - 2026-03-16
+
+### New Features
+
+- **Keyboard shortcuts overlay** — press `?` anywhere to open a categorized modal listing navigation, article, editor, and general shortcuts; enhanced `KeyboardShortcuts` component with grouped two-column layout
+- **Reading mode** — distraction-free reading toggle on article pages; hides header, sidebar, and tabs; widens content column to 720 px; toggled via toolbar button or `R` hotkey; persists in `localStorage`; `ReadingModeToggle` component + `data-reading-mode` CSS attribute in `globals.css`
+- **Activity heat map** — GitHub-style 52-week contribution calendar on `/activity` showing colour-coded daily edit intensity; `ActivityHeatmap` client component + `/api/activity/heatmap` API route
+- **Wiki stats page** — public `/stats` page with total articles, total words, categories, tags, contributors, revisions, weekly active users, and a top-5 all-time contributor leaderboard
+- **Article lock** — `ArticleLock` model; opening the editor acquires a 10-minute lock (auto-refreshed every 5 minutes); other users see a yellow "Being edited by X" warning banner with dismiss and admin force-unlock; `ArticleLockGuard` component + `/api/articles/[id]/lock` GET/POST/DELETE
+- **Revision restore** — "restore" button on the article history page; `POST /api/articles/[id]/revisions/[revId]/restore` snapshots the current content then applies the selected revision; `RestoreRevisionButton` client component replaces the old plain-form revert button
+- **Mentions feed** — `/mentions` page lists all discussion threads containing `@username` for the logged-in user; sorted by recency; requires auth
+- **Cover image focal point** — `coverFocalX` / `coverFocalY` Float fields on Article; interactive `FocalPointPicker` component in the article edit form; `InfoboxDisplay` applies `object-position` from the stored values
+
+### Schema Changes
+
+- Added `coverFocalX Float?` and `coverFocalY Float?` fields to `Article` model
+- Added `locks ArticleLock[]` relation to `Article` and `articleLocks ArticleLock[]` relation to `User`
+- New model: `ArticleLock`
+
+## [4.17.0] - 2026-03-10
+
+### New Features
+
+- **Discussion index** — `/discussions` page lists all top-level threads across every article; filterable by article slug and author; shows reply counts
+- **Tag synonyms** — `TagSynonym` model stores alternate aliases per tag; API at `/api/tags/[id]/synonyms` (GET/POST/DELETE); search and tag pages can match on aliases
+- **Named article snapshots** — `ArticleSnapshot` model; `POST /api/articles/[id]/snapshots` creates a labeled manual snapshot; `DELETE` removes one (admin only)
+- **Article co-authors** — `ArticleCoAuthor` model; `POST /api/articles/[id]/co-authors` links additional contributors; co-author names shown in the article byline
+- **Article flags** — `flags String[]` on Article; `PUT /api/articles/[id]/flags` replaces the array; `ArticleFlags` component renders orange badge chips near the title
+- **Floating table of contents** — `TableOfContentsFloat` client component uses `IntersectionObserver` to track the active section; visible as a fixed sidebar on `xl:` screens
+- **Article stats panel** — `ArticleStatsPanel` collapsible component shows reads, reactions, word count, article age, and quality score on every article page
+- **Revision history export** — `GET /api/articles/[id]/revisions/export` downloads full revision history as a CSV (admin only)
+
+### Schema Changes
+
+- Added `flags String[] @default([])` to `Article` model
+- Added `coAuthors ArticleCoAuthor[]` and `snapshots ArticleSnapshot[]` relations to `Article`
+- Added `coAuthoredArticles ArticleCoAuthor[]` and `articleSnapshots ArticleSnapshot[]` relations to `User`
+- Added `synonyms TagSynonym[]` relation to `Tag`
+- New models: `TagSynonym`, `ArticleSnapshot`, `ArticleCoAuthor`
+
+## [4.16.0] - 2026-03-10
+
+### New Features
+
+- **Reading time estimator** — "~X min read" displayed inline in every article's metadata line, computed from word count at 200 wpm
+- **Draft share links** — `shareToken` field on Article; `POST /api/articles/[id]/share-token` generates a secret token; `/share/[token]` public preview page lets anyone with the link read a draft without auth
+- **Article comparison view** — `/compare?a=slug1&b=slug2` renders two live articles side by side in scrollable columns
+- **Popularity leaderboard** — `/popular` page ranks published articles by combined read × 2 + reaction score; shows top 50 with per-article stats
+- **Expiry warning banner** — yellow inline banner on articles whose `reviewDueAt` is within 30 days, prompting editors to review
+- **"You might also like" recommendations** — `YouMightAlsoLike` server component on article pages suggests up to 5 articles sharing tags
+- **Mark as verified** — `lastVerifiedAt` field on Article; `POST /api/articles/[id]/verify` stamps the current timestamp; `VerifyButton` shown to admins; verified date displayed in the article byline
+- **Contributor leaderboard** — `/leaderboard` page ranks users by total revision count with gold/silver/bronze rank highlights
+
+### Schema Changes
+
+- Added `shareToken String? @unique` to `Article` model (draft share links)
+- Added `lastVerifiedAt DateTime?` to `Article` model (mark as verified)
+
+## [4.15.0] - 2026-03-10
+
+### New Features
+
+- **Article series** — `ArticleSeries` + `ArticleSeriesMember` models; series index at `/series`; detail at `/series/[slug]`; `ArticleSeriesNav` prev/next component on article pages; admin CRUD at `/admin/series`; API at `/api/series` and `/api/series/[id]`
+- **Article duplication** — `POST /api/articles/[id]/duplicate` copies an article as a draft with a unique slug
+- **Article word goal** — `wordGoal` field on Article; `WordGoalBadge` progress bar shown on article pages
+- **Auto-tagging** — `POST /api/articles/[id]/suggest-tags` returns AI-suggested tags via Claude Haiku
+- **Content calendar** — `/admin/calendar` monthly grid of scheduled and published articles with month navigation
+- **Pinned discussion comments** — `isPinned` on Discussion model; `POST /api/discussions/[id]/pin` toggles pin (max 3 per article)
+- **"See also" curated links** — `SeeAlso` model; API at `/api/articles/[id]/see-also`; `SeeAlsoSection` server component on article pages
+- **Article changelog panel** — `ArticleChangelogPanel` collapsible component shows last 5 edits with diff links on every article page
+
+### Schema Changes
+
+- Added `ArticleSeries` model (name, slug, description, members)
+- Added `ArticleSeriesMember` model (seriesId, articleId, position)
+- Added `SeeAlso` model (articleId, targetSlug, label, position)
+- Added `isPinned` boolean to `Discussion` model
+- Added `wordGoal` integer and `seriesMembers`/`seeAlso` relations to `Article`
+
+## [4.14.0] - 2026-03-10
+
+### New Features
+
+- **Smart redirects** — new `Redirect` Prisma model; article slug renames auto-create redirect records; article page checks `Redirect` table on 404 and redirects; admin management at `/admin/redirects`
+- **Article stub tracker** — `/admin/stubs` lists articles below a configurable word threshold with stub badges and direct "Expand" links; threshold controlled via `?threshold=N` query param
+- **Article quality score** — composite 0–100 score computed from word count, internal links, images, freshness, and excerpt presence; API at `/api/articles/[id]/quality-score`; `ArticleQualityBadge` client component; admin overview at `/admin/quality`
+- **AI revision summaries** — "What changed?" button on history page calls `/api/articles/[id]/revisions/summarize` (Claude Haiku); shows a 2-3 sentence plain-English diff summary inline via `RevisionSummaryButton`
+- **Reading goals** — `/api/reading-goals` GET/PUT; weekly article reading target stored in `UserPreference.data.readingGoal`; `ReadingGoalWidget` SVG progress arc with streak counter
+- **Bulk article operations** — `/api/articles/bulk` supports `setStatus`, `setCategory`, `addTag`, `removeTag` across multiple article IDs; `BulkActionBar` sticky UI component for multi-select workflows
+- **Article transclusion** — `{{embed:slug}}` syntax resolved at render time by new `resolveTransclusions()` in `src/lib/wikilinks.ts`; expands to a bordered block showing the target article's full content
+- **Inline text annotations** — new `Annotation` Prisma model; highlight any article text and save private or shared margin notes; `AnnotationLayer` client component on all article pages; API at `/api/annotations`
+
+### Schema Changes
+
+- Added `Redirect` model (`fromSlug` unique, `toSlug`, `createdAt`)
+- Added `Annotation` model (`articleId`, `userId`, `selector` JSON, `note`, `isShared`, timestamps)
+- Added `annotations` relation to `Article` and `User` models
+
+## [4.13.0] - 2026-03-10
+
+### New Features
+
+- **Scheduled review reminders cron** — `/api/cron/review-reminders` finds articles where `reviewDueAt` has passed and status is not "published"; notifies the article author and all watchers with a "review-due" notification; deduplicates within 24-hour windows to prevent spam
+
+### Housekeeping
+
+- **Roadmap v4.12 archived** — all shipped items moved to `docs/archive/ROADMAP-v4.12.md`; ROADMAP.md reset to blank slate for v4.13+
+
+## [4.12.0] - 2026-03-10
+
+### Housekeeping
+
+- **Roadmap archived** — completed items (v1.0–v4.11) moved to `docs/archive/ROADMAP-v1-v4.md`
+- **Fresh roadmap** — `ROADMAP.md` reset to active planned items only, starting from v4.12
+
+## [4.11.0] - 2026-03-10
+
+### New Features
+
+- **Features page** — new `/features` page with a complete organized overview of all wiki capabilities grouped by area (writing, organization, discovery, learning, collaboration, AI, web clipping, import/export, APIs, map, accessibility, administration)
+- **`docs/features.md`** — markdown version of the features page kept in sync
+- **Help page updated** — added Web Clipping section (bookmarklet + browser extension), Whiteboards section, Personal Dashboard section; added federated search, GraphQL API, Confluence import, all missing admin pages (`/admin/macros`, `/admin/content-schedule`, `/admin/kanban`, `/admin/audit-log`, `/admin/metadata-schemas`, `/admin/federated-peers`, `/admin/import`) to relevant sections; added Tools navigation subsection (Whiteboards, Timeline, Bookmarklet, Clipper extension); cross-link to new Features page
+- **`docs/help.md`** — fully synced with updated help page
+
+## [4.10.9] - 2026-03-10
+
+### New Features
+
+- **Web clipper browser extension** — Manifest V3 Chrome/Edge/Brave extension in `extension/`; popup shows pre-filled title and selected text, configurable wiki URL, saves draft via `POST /api/bookmarklet`, offers "Open editor" on success
+- `/clipper-extension` install guide page with step-by-step instructions; cross-links to the bookmarklet alternative
+- Sidebar link added alongside the bookmarklet link
+
+## [4.10.8] - 2026-03-06
+
+### New Features
+
+- **Save to wiki bookmarklet** — `/bookmarklet` page provides a drag-to-install bookmarklet and copy-to-clipboard fallback
+- Clicking the bookmarklet on any page saves the URL + title (or selected text) as a draft via POST `/api/bookmarklet`
+- Selected text wrapped in `<blockquote>` with source link; full-page HTML has nav/header/footer/scripts stripped
+- Unique slug generation with collision handling
+- Sidebar link added
+
+## [4.10.7] - 2026-03-06
+
+### New Features
+
+- **Confluence import** — POST `/api/import/confluence` accepts a Confluence HTML export body; extracts title from `<title>`/`<h1 id="title">`, extracts content from `#main-content` div, strips Confluence macros/metadata, imports as draft article
+- Admin UI at `/admin/import`: upload `.html` file or paste HTML directly, optional category ID, shows link to drafted article on success
+- Also surfaces existing Notion and Obsidian import endpoints in the UI
+- Sidebar link added under admin section
+
+## [4.10.6] - 2026-03-06
+
+### New Features
+
+- **GraphQL API** — `/api/graphql` powered by `graphql-yoga`; supports GET (GraphiQL playground) and POST (queries/mutations)
+- Schema covers: `Article`, `Category`, `Tag`, `Revision`, `SearchResult`, `WikiStats`
+- Queries: `article(slug)`, `articles(limit, offset, categorySlug, status)`, `category(slug)`, `categories`, `tag(slug)`, `tags`, `search(q, limit)`, `revisions(articleSlug, limit)`, `stats`
+- Category type includes nested `articles(limit, offset)` resolver
+- Auth context forwarded via `getSession()` for future mutation/permission expansion
+
+## [4.10.5] - 2026-03-06
+
+### New Features
+
+- **Custom user homepage / dashboard** — `/dashboard` shows a personalizable widget grid; drag cards to reorder, toggle widgets on/off via "Customize" mode; layout saved to user preferences
+- Available widgets: Recent articles, Watchlist, Recent edits, Random article, Scratchpad preview, Wiki stats, Notifications
+- GET `/api/articles/random` — returns a random published article for the random-article widget
+- GET `/api/revisions?limit=N` — returns recent article revisions for the recent-edits widget
+- Widget order and visibility persisted via existing `/api/preferences` (`dashboardWidgets` key)
+- Sidebar link added to top of Personal section
+
+## [4.10.4] - 2026-03-06
+
+### New Features
+
+- **Cross-wiki federated search** — search results page fans out queries to configured peer wikis and shows their results under "Results from other wikis"
+- `FederatedPeer` model (name, baseUrl, optional apiKey, enabled toggle)
+- GET `/api/federated-search?q=` fans out to all enabled peers' `/api/v1/articles` endpoint with a 5-second timeout per peer; results merged from all fulfilled responses
+- Admin page at `/admin/federated-peers`: add/edit/delete peer wikis, toggle enabled per peer; sidebar link added
+
+## [4.10.3] - 2026-03-06
+
+### New Features
+
+- **Excalidraw whiteboards** — create and edit live drawing canvases at `/whiteboards`; canvases auto-save to the database 2 seconds after each change; titles editable inline
+- `Whiteboard` model (slug, title, `data` JSON for Excalidraw scene); GET/POST `/api/whiteboards` and GET/PUT/DELETE `/api/whiteboards/[id]`
+- Whiteboard list page and individual editor page; Excalidraw loaded dynamically (no SSR) with `@excalidraw/excalidraw`
+- Sidebar link added under navigation section
+
+## [4.10.2] - 2026-03-06
+
+### New Features
+
+- **Custom metadata schemas** — admins define typed fields (text, number, date, boolean, select) per category at `/admin/metadata-schemas`; fields appear in the article editor when the article belongs to that category; values stored in the article's `infobox` JSON
+- `MetadataSchema` model added (one schema per category, `fields` JSON array); relation added to `Category`
+- GET `/api/metadata-schemas` lists all schemas; POST creates/updates (upsert); GET `/api/metadata-schemas/by-category/[categoryId]` returns the schema for a given category
+- Article edit form fetches the schema when category changes and renders the appropriate inputs (text, number, date, checkbox for boolean, select for enum)
+- Sidebar link added under admin section
+
+## [4.10.1] - 2026-03-06
+
+### New Features
+
+- **Per-article change digest** — `/watchlist/digest` shows all edits to watched articles in the past 7 days, grouped by article with editor names and edit counts
+- GET `/api/watchlist/digest` queries revisions for the authenticated user's watchlist articles in the 7-day window
+- POST `/api/cron/digest` (protected by `CRON_SECRET`) creates in-app Notification rows for watchers; deduplicated to one digest notification per article per week
+- "Generate digest now" button lets users trigger digest on demand; sidebar link added under personal section
+
+## [4.10.0] - 2026-03-06
+
+### New Features
+
+- **Macro / shortcode system** — admins define reusable HTML snippets at `/admin/macros`; authors embed them in articles with `{{macroName|arg}}` syntax; expanded at display time with `{{{body}}}` / `{{{1}}}` / `{{{2}}}` template variables
+- GET/POST `/api/macros` and PUT/DELETE `/api/macros/[id]` for CRUD; cache invalidated on every save
+- Three built-in presets: `warning` (yellow), `note` (blue), `tip` (green) — available as quick-add buttons
+- Live HTML preview shown in the admin editor before saving
+- Macros expanded in article content via `expandMacros()` in `src/lib/macros.ts`, called before wiki-link resolution
+
+## [4.9.9] - 2026-03-04
+
+### New Features
+
+- **Natural language Q&A in search** — question-pattern queries (starting with what/who/when/where/why/how/is/are/can/does/did/was/were, or ending with ?) trigger an AI-powered direct answer panel above search results
+- POST `/api/ai/qa` keyword-searches up to 5 relevant articles, sends excerpts to Claude Haiku, and returns a concise 1–3 sentence answer with source links
+- Q&A panel shows "Searching for an answer…" while loading, then displays the answer and linked article sources; only appears when `AI_API_KEY` is configured
+
+## [4.9.8] - 2026-03-05
+
+### New Features
+
+- **Concept map per category** — force-directed mind-map at `/categories/[slug]/concept-map` showing all articles in a category and their wiki-link relationships; zoomable, draggable, clickable nodes
+- GET `/api/categories/[id]/concept-map` parses `data-wiki-link` attributes from article HTML to derive intra-category edges
+- Concept map link added to category page footer
+
+## [4.9.7] - 2026-03-05
+
+### New Features
+
+- **Graph clustering** — label-propagation community detection on the knowledge graph; "Show clusters" toggle in Graph Controls colors nodes by cluster and draws translucent convex hull outlines around each community
+- Clusters recomputed each time graph data changes; hull outlines update on every simulation tick
+
+## [4.9.6] - 2026-03-05
+
+### New Features
+
+- **Timeline view** — articles plotted chronologically at `/timeline`; grouped by year with a vertical spine, dot-per-article layout, category label, and status badge
+- Category filter and title search filter
+- GET `/api/timeline` returns articles ordered by createdAt with optional categoryId filter
+- Added Timeline link to sidebar navigation section
+
+## [4.9.5] - 2026-03-04
+
+### New Features
+
+- **Article expiry / auto-archive** — set an `Expires on` date on any article; POST `/api/cron/expire-articles` auto-archives (status → draft) all articles past their expiry date
+- **Scheduled review reminders** — set a `Review due by` date; overdue articles surface in the Content Schedule admin page
+- Added `expiresAt` and `reviewDueAt` optional DateTime fields to `Article` model
+- Article edit form now shows "Expires on" and "Review due by" date pickers
+- GET `/api/admin/content-schedule` returns expired, expiring-soon, review-overdue, and review-due-soon articles
+- Admin page `/admin/content-schedule` shows four categorised tables with "Run auto-archive" button
+- Added Content schedule link to admin sidebar
+
+## [4.9.4] - 2026-03-04
+
+### New Features
+
+- **Kanban article pipeline** — drag-and-drop board at `/admin/kanban` showing all articles in Draft / In Review / Published columns
+- Drag cards between columns or use inline promote/demote buttons to change article status
+- Cards show article title (linked), category, and edit link
+- Added "Article pipeline" link to admin sidebar section
+
+## [4.9.3] - 2026-03-04
+
+### New Features
+
+- **Admin audit log** — immutable log of destructive admin actions at `/admin/audit-log`
+- Added `AuditLog` Prisma model (userId, username, action, entityType, entityId, entityLabel, metadata, createdAt)
+- `logAudit()` helper in `src/lib/audit.ts` — fire-and-forget, never throws
+- Hooked into: article DELETE, category DELETE, revision revert (POST), discussion DELETE
+- GET `/api/admin/audit-log` with action filter and page-50 pagination
+- Admin page shows colour-coded action table, action dropdown filter, and pagination
+- Added "Audit log" link in admin sidebar section
+
+## [4.9.2] - 2026-03-04
+
+### New Features
+
+- **Personal scratchpad** — private per-user notes page at `/scratchpad`; content never appears in search or article listings
+- Added `Scratchpad` model to Prisma schema (userId unique, content Text, updatedAt auto-updated)
+- Added `scratchpad` relation to User model
+- GET/PUT `/api/scratchpad` — upserts content for the authenticated user
+- Scratchpad page uses TiptapEditor with 2-second debounced autosave and manual save button; shows last-saved time
+- Added "Scratchpad" link in sidebar Personal section
+
+## [4.9.1] - 2026-03-04
+
+### New Features
+
+- **@mentions in discussions** — typing `@username` in a comment body automatically notifies the mentioned user via the existing in-app notification system (type: "mention")
+- Mention parsing runs server-side on POST; looks up all matched usernames in the User table and bulk-creates Notification rows
+- `@username` tokens render highlighted in accent colour in the comment display
+
+## [4.9.0] - 2026-03-04
+
+### New Features
+
+- **Nested discussion threads** — discussion comments now support threaded replies up to 3 levels deep; each comment shows a "reply" button that opens an inline reply form
+- Added `parentId` self-relation to `Discussion` model in Prisma schema
+- Updated GET /api/articles/[id]/discussions to return top-level comments with nested `replies` (2 levels deep)
+- Updated POST endpoint to accept optional `parentId` for reply creation
+- Rewrote discussion page UI with recursive `Comment` component supporting collapse/expand, reply forms, and comment count in heading
+- Regrouped ROADMAP planned items into logical sections; moved all completed v4.0+ items into a separate collapsible "Completed (v4.0+)" section
+
+## [4.8.9] - 2026-03-04
+
+### Bug Fixes
+
+- Fixed homepage crash in CI: wrapped `getRecentArticles()` and `getFeaturedArticle()` in try/catch so the page renders the empty state instead of an error page when DB is unavailable
+- Fixed e2e accessibility failure: added `text-decoration: underline` for inline prose links (`.wiki-portal-body a`, `p a`) to satisfy axe `link-in-text-block` contrast rule
+
+## [4.8.8] - 2026-03-04
+
+### CI Fixes
+
+- Added log capture for `next start` (`> /tmp/next.log 2>&1`) so crash output is visible when wait-on times out
+- Switched wait-on from `http://localhost:3000` to `tcp:3000` to avoid IPv4/IPv6 ambiguity in Node 20
+
+## [4.8.7] - 2026-03-04
+
+### CI Fixes
+
+- Fixed e2e timeout: replaced `npm run dev` with `npm run build && next start` so the server starts in ~2s instead of waiting for Turbopack to compile from scratch in CI
+
+## [4.8.6] - 2026-03-04
+
+### CI Fixes
+
+- Added `wait-on` as devDependency so CI doesn't re-download it on every e2e run
+- Added `--timeout 60000` to `wait-on` so it fails fast instead of hanging indefinitely
+
+## [4.8.5] - 2026-03-04
+
+### CI Fixes
+
+- Fixed e2e job: added `npm run dev &` and `npx wait-on http://localhost:3000` before `npx playwright test` so the app server is running when Playwright connects
+
+## [4.8.4] - 2026-03-04
+
+### CI Fixes
+
+- Fixed build prerender failures: added `export const dynamic = "force-dynamic"` to all 148 route handlers and pages that query Prisma, so Next.js doesn't attempt static prerendering without a real database
+- Fixed root layout DB calls crashing `/_not-found` prerender: wrapped `getCategories()` and `article.count()` in try/catch with empty-array/0 fallbacks
+- Fixed `sitemap.ts` prerender failure with same `force-dynamic` opt-out
+
+## [4.8.3] - 2026-03-04
+
+### CI Fixes
+
+- Fixed `npm ci` failure: added `overrides` in `package.json` to resolve `@auth/core`'s pinned `preact@10.11.3` dep consistently with the root `preact@10.24.3`; regenerated `package-lock.json` from scratch
+- Fixed build step in CI: moved `prisma db push` to `vercel.json` `buildCommand` so CI runs `next build` only (no database required); `npm run build` now runs just `next build`
+- Fixed failing `truncateText` test: function now always reserves 3 chars for suffix and skips word-boundary trimming for custom suffixes
+
+## [4.8.2] - 2026-03-03
+
+### Home Page
+
+- Redesigned home page with clean magazine/dashboard layout
+- Featured article displayed as a prominent borderless hero section (large serif title, excerpt up to 400 chars, category + date metadata)
+- Recently updated articles shown as a 2-column ArticleCard grid (6 articles, excludes featured article)
+- On This Day moved to right sidebar column alongside recently updated grid
+- Removed: Welcome portal, stat badges, action buttons, category list, Explore quick links, tips notice
+
+## [4.8.1] - 2026-03-03
+
+### Categories
+
+- Removed `icon` field from categories — emoji/unicode symbols no longer rendered in sidebar, article cards, search, command palette, or any other UI
+- Dropped `icon` column from `Category` database table
+- Removed `icon` from all Prisma selects, TypeScript types, and render expressions across `Sidebar.tsx`, `CategorySelect.tsx`, `InfoboxDisplay.tsx`, `articles/page.tsx`, `search/page.tsx`, `articles/new/page.tsx`, `articles/[slug]/edit/page.tsx`, `api/v1/categories/route.ts`, `api/v2/categories/route.ts`
+
+### Lint / CI
+
+- Fixed all ESLint errors and TypeScript errors — CI now passes clean (0 errors)
+- Added `eslint-disable-next-line react-hooks/purity` for `Date.now()` / `Math.random()` in async server components (`admin/health`, `admin/staleness`, `explore`)
+- Fixed `prefer-const` error in `explore/page.tsx`
+
+## [4.8.0] - 2026-03-03
+
+### Navigation
+
+- Redesigned sidebar with comprehensive section coverage — all app pages now listed
+- Replaced all unicode symbols (▶ ▼ ✕ ☰) with inline SVG icons per design standards
+- Added animated SVG chevrons (`transition-transform`) for section collapse/expand
+- Reorganised into six logical sections: Navigation, Discover, Personal, Tools, Contribute (admin), Admin (admin)
+- **Navigation**: added `/tags` page
+- **Discover**: added `/activity`, `/change-requests`, `/reviews`, `/bounties`, `/forks`
+- **Personal**: added `/watchlist`, `/settings`
+- **Contribute** (admin): added `/import/obsidian` and `/import/notion` as indented sub-items
+- **Admin** (admin): added `/admin/analytics`, `/admin/health`, `/admin/webhooks`, `/admin/templates`, `/admin/theme`, `/admin/lint`, `/admin/knowledge-gaps`, `/admin/embeddings`, `/admin/search-gaps`, `/admin/staleness`
+- Admin section defaults to collapsed to keep sidebar compact
+- Mobile toggle button upgraded to SVG hamburger/close icons with `aria-label` and `aria-pressed`
+
+## [4.7.1] - 2026-03-03
+
+### Bug Fixes
+
+- Fixed duplicate `link` Tiptap extension warning: disabled Link from StarterKit (`link: false`) since it's registered manually with custom `parseHTML` rules
+- Fixed `You should provide an instance of lowlight` Tiptap error: `MermaidBlock` (which extends `CodeBlockLowlight`) now receives the `lowlight` instance via `.configure({ lowlight })`
+- Both fixes resolve editor crash and `TypeError: Cannot read properties of undefined (reading 'length')` cascade error
+
+## [4.7.0] - 2026-03-03
+
+### Accessibility & Internationalisation
+
+- Added `dir` field (`"ltr"` / `"rtl"`) to Article model for per-article text direction
+- Added `src/lib/translation.ts` — machine translation via DeepL or Google Translate API (env-gated)
+- Added `src/lib/tts.ts` — optional ElevenLabs speech synthesis + browser TTS fallback
+- Added `/api/articles/[id]/translate` — POST to create machine-translated draft ArticleTranslation
+- Added `/api/articles/[id]/narrate` — GET to stream audio via ElevenLabs; returns 501 instructing client to use browser TTS when key not set
+- Added `AudioNarrationPlayer` component — play/pause/stop/speed controls; uses ElevenLabs API when available, falls back to browser `speechSynthesis`
+- Added `DyslexiaToggle` component — toggles `data-dyslexia` on `<html>`; persists to localStorage
+- Added `RTLToggle` component — per-article toggle overriding text direction without page reload
+- Added `TranslateButton` component — locale picker triggering POST to translate API with inline status
+- Added dyslexia-friendly CSS: OpenDyslexic font stack, increased letter/word spacing, warm background tint
+- Added RTL CSS: mirrored infobox and TOC floats, right-aligned text, `direction: rtl` on breadcrumb
+- Added skip-to-content link (`<a href="#main-content">`) at top of body for keyboard navigation
+- Added `id="main-content"` to `<main>` element in layout
+- Added `id="article-content"` wrapper div with `dir` attribute on article content
+- Updated article page action bar with DyslexiaToggle, RTLToggle, TranslateButton, AudioNarrationPlayer
+- Bumped version 4.6.0 → 4.7.0
+
+## [4.6.0] - 2026-03-03
+
+### Analytics & Health
+
+- Added `ScrollDepthLog` model — tracks max scroll depth per session per article
+- Added `ReaderPathEvent` model — logs article-to-article navigation for path analysis
+- Added `ContributorAchievement` model — automated badge awards for edit milestones and streaks
+- Added `/api/analytics/scroll` — POST to log scroll depth, GET to retrieve bucketed heatmap data
+- Added `/api/analytics/paths` — POST to log navigation events, GET top next-pages for a given article
+- Added `/api/analytics/search-gaps` — aggregates zero-result search queries from MetricLog
+- Added `/api/analytics/staleness` — lists published articles not updated in N days (default 180)
+- Added `/api/achievements` — GET user's achievements, POST to trigger check for a userId
+- Added `src/lib/achievements.ts` — `checkAndAwardAchievements(userId)` with SM-2 streak detection
+- Added `ScrollDepthTracker` client component — IntersectionObserver-based, debounced POST
+- Added `ReaderPathTracker` client component — logs article navigation via sessionStorage
+- Added `/admin/analytics` page — overview: avg scroll depth, top navigation paths, search gap count
+- Added `/admin/search-gaps` page — zero-result queries table with "Create article" shortcuts
+- Added `/admin/staleness` page — stale articles sorted oldest first with inline Edit links
+- Added `/admin/health` page — wiki health score card with grade (A–F) and metric breakdown
+- Wired `checkAndAwardAchievements` into article PUT route (fire-and-forget)
+- Updated search route to log zero-result queries as `MetricLog` entries
+- Bumped version 4.5.0 → 4.6.0
+
+## [4.5.0] - 2026-03-03
+
+### Integrations & Export
+
+- Added `IssueLink` model — attach GitHub/Jira/Linear issue URLs to articles with live status refresh via GitHub API
+- Added `EmbedToken` model — generate secure tokens for embedding articles on external sites
+- Added ePub export (`/api/export/epub`) — single-article ePub 3 with valid container, OPF, and nav
+- Added DOCX export (`/api/export/docx`) — Word document with headings, paragraphs, and metadata
+- Added category ZIP export (`/api/export/category`) — all published articles as Markdown files in a zip
+- Added Obsidian vault import (`/api/import/obsidian`) — .md or .zip vault; front matter, tags, `[[wikilinks]]` converted
+- Added Notion page import (`/api/import/notion`) — fetch via integration token, blocks converted to HTML
+- Added Slack bot (`/api/integrations/slack`) — `/wiki <query>` slash command with signature verification
+- Added Discord bot (`/api/integrations/discord`) — `/wiki` interaction command with Ed25519 signature verification
+- Added embed token API (`/api/embed/token`) — create tokens, serve articles at `/embed/[token]` (minimal iframe view)
+- Added `ArticleExportMenu` component — ePub, DOCX, PDF (print) export dropdown replacing export buttons
+- Added `IssueLinkBadge` component — inline badges showing issue status with provider icon on article pages
+- Added `/import/obsidian` page — drag-drop vault upload UI with import preview
+- Added `/import/notion` page — integration token + page ID form
+- Updated import index page with Obsidian and Notion import cards
+- Bumped version 4.4.0 → 4.5.0
+
+## [4.4.0] - 2026-03-03
+
+### Build Fixes (v4.2.0 regression)
+
+- Fixed `ssr: false` not allowed in Server Components: replaced `src/lib/renderSpecialBlocks.tsx` with `SpecialBlocksRenderer` client component
+- Fixed Tiptap custom commands type errors: added `declare module "@tiptap/core"` augmentations to MermaidExtension, KaTeXExtension, DataTableExtension, DecisionTreeExtension
+- Fixed `VoiceDictationButton` `SpeechRecognitionEvent` type not found: replaced with inline interface
+- Fixed `DataTable` `sourceType` required prop: made optional with `"csv"` default
+- Fixed digest route: removed invalid `where` clause inside relation `include`; filter applied post-query
+
+### Collaboration 2.0
+
+- Added `ExpertBadge` model — admins designate domain experts per category; badge highlighted on article bylines
+- Added `KnowledgeBounty` model — users request articles; editors claim/fulfill; linked from fulfilled article
+- Added `ArticleFork` model — branch a full article rewrite; propose merge when ready; admin accept/reject with diff
+- Added `ArticleReaction` model — helpful/insightful/outdated/confusing reaction strip per article
+- Added `certified` + `certifiedAt` fields to `Article` — set after ≥2 expert review approvals
+- Added `GET|POST /api/expert-badges`, `DELETE /api/expert-badges/[id]` — admin grants/revokes expert badges
+- Added `GET|POST /api/bounties`, `GET|PUT /api/bounties/[id]` — bounty lifecycle (open→claimed→fulfilled→closed)
+- Added `GET|POST /api/articles/[id]/fork`, `GET|PUT|POST /api/forks/[id]` — fork CRUD + admin merge/reject
+- Added `GET|POST /api/articles/[id]/react` — reaction counts and voting
+- Added `POST /api/articles/[id]/certify` — verifies ≥2 approved reviews, sets certified flag
+- Added `/bounties` page — list open/claimed/fulfilled bounties + request form
+- Added `/forks` admin page — proposed forks with merge/reject buttons
+- Added `ArticleReactionBar` client component — emoji reaction strip with live counts
+- Added `CertifiedBadge` component — "✓ Verified" badge shown in article header
+- Modified article page — added `ArticleReactionBar`, `CertifiedBadge`, "Fork this article" link
+- Added `SpecialBlocksRenderer` client component to handle special block rendering safely
+
+## [4.3.0] - 2026-03-03
+
+### Discovery & Navigation
+
+- Added `SmartCollection` model — live collection defined by tag/category/author/date query; auto-updates as articles change
+- Added `Bookmark` model — per-user article bookmarks with optional private note
+- Added `ReadingList` + `ReadingListItem` models — named, ordered article lists with public share token
+- Added `TILPost` model — "Today I Learned" snippets (max 280 chars) with tag support
+- Added `GET|POST /api/smart-collections`, `GET|PUT|DELETE /api/smart-collections/[id]` — CRUD + live article query execution
+- Added `GET|POST|DELETE /api/bookmarks` — bookmark management with per-article notes
+- Added `GET|POST /api/reading-lists`, `GET|PUT|DELETE /api/reading-lists/[id]`, `GET|POST|DELETE /api/reading-lists/[id]/items`
+- Added `GET|POST /api/til`, `DELETE /api/til/[id]` — TIL feed with tag filtering and 280-char validation
+- Added `/collections` and `/collections/[id]` — smart collection browse + live article list
+- Added `/bookmarks` — personal bookmark list with inline search
+- Added `/reading-lists` and `/reading-lists/[id]` — list browse + ordered articles with share link
+- Added `/til` — community TIL board with post form, tag filter, character counter
+- Added `/explore` — guided semantic-walk "take me somewhere interesting" (fallback to random)
+- Added `SessionReadingTrail` — collapsible "you were here" breadcrumb in article pages (sessionStorage-backed)
+- Added `BookmarkButton` — bookmark button with note popover for article action bar
+- Added `AddToReadingList` — reading-list picker dropdown for article action bar
+- Added Discover sidebar section with links to all new features
+- Modified article page — added `SessionReadingTrail`, `BookmarkButton`, `AddToReadingList`
+
+## [4.2.0] - 2026-03-03
+
+### Rich Content Blocks
+
+- Added `MermaidExtension` Tiptap extension — renders ` ```mermaid ``` ` code blocks as `data-mermaid` placeholders; client-side `MermaidBlock` calls `mermaid.render()` on mount
+- Added `KaTeXExtension` — `InlineMath` Mark (`$...$`) and `BlockMath` Node (`$$...$$`) store raw LaTeX; client `KaTeXBlock` renders via `katex.render()`
+- Added `DataTableExtension` — paste CSV/JSON into a block stored as base64 `data-table`; client `DataTable` provides sortable/filterable table with CSV download
+- Added `DecisionTreeExtension` — branching yes/no tree stored as JSON; `DecisionTreeDisplay` renders recursive expand/collapse tree
+- Added `VoiceDictationButton` — Web Speech API dictation at cursor; hidden when browser lacks support
+- Added `/present/[slug]` page — Reveal.js-style slideshow splitting article by headings; keyboard nav, dot indicators, exit link
+- Added `GET /api/articles/[id]/present` — parses article HTML into slide array
+- Added `src/lib/renderSpecialBlocks.tsx` — replaces special block HTML with lazy-loaded React client components
+- Modified `TiptapEditor` — registered MermaidBlock, InlineMath, BlockMath, DataTable, DecisionTree extensions
+- Modified `EditorToolbar` — added Σ (KaTeX) button and VoiceDictationButton
+- Modified `SlashCommandExtension` — added Mermaid Diagram, Math (KaTeX), Data Table, Decision Tree slash commands
+- Modified article display page — renders special blocks via `renderSpecialBlocks`; added "Present" button
+- Installed `mermaid`, `katex`, `reveal.js`, `@types/katex`
+
+## [4.1.0] - 2026-03-03
+
+### Learning & Retention
+
+- Added `LearningPath`, `LearningPathArticle`, `LearningPathProgress`, `Flashcard`, `QuizAttempt`, `ArticleRead` Prisma models
+- Added `src/lib/sm2.ts` — SM-2 spaced repetition algorithm with interval/ease-factor/repetition tracking
+- Added `src/lib/readability.ts` — re-exports from writing-coach for easy import
+- Added `GET|POST /api/learning-paths`, `GET|PUT|DELETE /api/learning-paths/[id]`, `GET|POST /api/learning-paths/[id]/progress`
+- Added `GET|POST /api/flashcards`, `POST /api/flashcards/[id]/review` (SM-2 grade application)
+- Added `GET /api/ai/quiz?articleId=` — Claude Haiku generates 5 MCQs from article
+- Added `POST /api/quiz-attempts`, `GET /api/quiz-attempts` — persist and retrieve quiz attempt results
+- Added `POST|GET /api/reading-progress` — mark articles as read; reading stats per category
+- Added `POST /api/digest` — cron-triggerable daily digest mailer via nodemailer (gated on `SMTP_HOST`)
+- Added `/learning-paths` browse page with enroll buttons
+- Added `/learning-paths/[id]` path detail with progress bar
+- Added `/learning-paths/new` path creation form
+- Added `/flashcards` spaced-repetition review UI with SM-2 grade buttons (0–5)
+- Added `ArticleComplexityBadge` component — reading time + grade level badge
+- Added `ReadingProgressRing` component — SVG progress ring for category pages
+- Modified `src/lib/preferences.ts` — added `digestEnabled`, `digestTime`, `digestTimezone` defaults
+- Installed `nodemailer` and `@types/nodemailer`
+
+## [4.0.0] - 2026-03-03
+
+### AI Intelligence Layer
+
+- Added `ArticleEmbedding` model for storing article embeddings (Float[]) with `pgvector`-compatible schema
+- Added `summary` and `summaryShort` fields to `Article` for AI-generated descriptions
+- Added `src/lib/embeddings.ts` — `generateEmbedding()`, `cosineSimilarity()`, `upsertArticleEmbedding()`, `semanticSearch()` via OpenAI `text-embedding-3-small` (gated on `OPENAI_API_KEY`)
+- Added `src/lib/writing-coach.ts` — pure-JS Flesch-Kincaid readability, passive-voice detection, long-sentence analysis, `analyzeWriting()` and `computeReadability()`
+- Added `POST /api/articles/[id]/summarize` — generate and persist `summary` + `summaryShort` via Claude Haiku
+- Added `GET|POST /api/ai/embeddings` — generate article embeddings; list articles missing embeddings
+- Added `GET /api/ai/semantic-search` — cosine-rank articles by query embedding
+- Added `GET /api/ai/knowledge-gaps` — find wiki-link references with no backing article, sorted by reference count
+- Added `POST /api/ai/check-duplicate` — compare new content against existing embeddings to detect near-duplicates
+- Added `POST /api/ai/writing-coach` — readability analysis + optional Claude suggestions
+- Added `GET /api/ai/category-gaps` — Claude-generated list of missing sub-topics for a category
+- Added `WritingCoachPanel` component — collapsible analysis panel below editor with score meter and issue list
+- Added `/admin/knowledge-gaps` page — table of missing topics with "Create article" shortcut
+- Added `/admin/embeddings` page — embedding coverage dashboard with "Generate all" button
+- Modified `PUT /api/articles/[id]` — background-fires summarise and embedding generation after save
+- Modified `GET /api/articles/preview` — includes `summaryShort` in response
+- Modified `GET /api/search` — blends semantic results when `?semantic=1` and `OPENAI_API_KEY` is set
+- Modified article page metadata — uses `summaryShort` as OG/meta description when available
+- Installed `pgvector` and `@ai-sdk/openai` packages
+
+## [3.0.3] - 2026-03-03
+
+### Fixed
+- Fixed `WikiMembership` orderBy using non-existent `createdAt` field — changed to `id`
+- Fixed `activity.ts` metadata JSON field type error — cast `Record<string, unknown>` to `Prisma.InputJsonValue`
+- Re-ran `prisma generate` to include `ArticleEmbedding` model missing from previous client generation
+- Confirmed zero TypeScript errors via `tsc --noEmit` before pushing
+
+## [3.0.2] - 2026-03-03
+
+### Fixed
+- Fixed TypeScript build errors in `/api/saved-searches/route.ts` and `/api/search-history/route.ts` — cast `filters` to `Prisma.InputJsonValue | undefined` for Prisma JSON field compatibility
+
+## [3.0.1] - 2026-03-03
+
+### Fixed
+- Fixed TypeScript build error in `/api/preferences/route.ts` — cast `merged` to `Prisma.InputJsonValue` to satisfy Prisma's JSON field type constraint
+
+## [3.0.0] - 2026-03-03
+
+Complete implementation of all roadmap features — 40 items across 10 phases.
+
+### Phase 1: Testing Infrastructure
+- Added Vitest unit test suite for `utils.ts`, `auth.ts`, `wikilinks.ts`, `config.ts`, `relations.ts`
+- Added integration tests for article CRUD and auth flows in `src/app/api/__tests__/`
+- Added Playwright E2E tests for homepage, navigation, and critical user journeys in `e2e/`
+- Added axe-core accessibility audit tests via `@axe-core/playwright` on key pages
+- Updated CI pipeline with separate `test` and `e2e` jobs in GitHub Actions
+- Added `"test"`, `"test:watch"`, `"test:e2e"` scripts to `package.json`
+
+### Phase 2: Editor Improvements
+- Added slash command menu (`/` trigger) via new `SlashCommandExtension.ts` + `SlashCommandMenu.tsx` with 10+ block types
+- Added inline comments and annotations via new `InlineCommentExtension.ts` Tiptap mark
+- Added collapsible/toggle blocks via new `CollapsibleBlockExtension.ts` rendering `<details><summary>` HTML
+- Added Markdown paste detection — pasting Markdown text auto-converts to rich text using `marked`
+- Extended `TiptapEditor.tsx` to use all new extensions
+
+### Phase 3: Content Features
+- Added article templates marketplace with `ArticleTemplate` model, `/api/templates` route, and `/admin/templates` management page
+- Added scheduled publishing with `publishAt` field on Article and `/api/articles/[id]/schedule` endpoint
+- Added article archival with `archivedAt` field and restore capability
+- Added content linting system in `src/lib/linting.ts` — checks broken links, missing excerpts, orphaned articles, short content, no tags/category
+- Added `/api/articles/lint` bulk lint endpoint and `/admin/lint` report page
+- Added bulk tag editing via `POST /api/tags/bulk-assign` supporting add/remove operations
+
+### Phase 4: Search & Discovery
+- Added PostgreSQL `tsvector` full-text search in `src/lib/search.ts` with `tsvectorSearch()` — GIN-indexed, trigger-updated, falls back to LIKE on failure
+- Added trigram fuzzy matching via `pg_trgm` extension; migration in `prisma/migrations/add_tsvector/`
+- Added saved searches with `SavedSearch` model and `/api/saved-searches` endpoints
+- Added search history with `SearchHistory` model and `/api/search-history` endpoints
+- Added author and status filters to search page via `/api/users/contributors` endpoint
+
+### Phase 5: User Experience
+- Added bottom mobile navigation bar (`MobileNavigation.tsx`) — 5 tabs, active state, safe area support
+- Added VS Code-style command palette (`CommandPalette.tsx`) — Ctrl+K, fuzzy filtering, 18 commands, article search
+- Added `src/lib/commands.ts` command registry with navigation, action, and admin command groups
+- Added inline article link previews (`WikiLinkPreview.tsx`) — 300ms hover delay, cached, portal-rendered
+- Added `/api/articles/preview` lightweight preview endpoint
+- Added user settings page at `/settings` with editor, notifications, display, and locale sections
+- Added `UserPreference` model, `/api/preferences` endpoint, `src/lib/preferences.ts`
+
+### Phase 6: Collaboration
+- Added activity feed system with `ActivityEvent` model, `src/lib/activity.ts` `logActivity()` utility, `/api/activity` paginated API, and `/activity` page
+- Added article review workflow with `ReviewRequest` + `ReviewComment` models, `/api/reviews` CRUD endpoints, review comments, and `/reviews` dashboard
+- Added change request (suggestion) mode with `ChangeRequest` model, `/api/change-requests` CRUD endpoints, accept-applies-content flow, and `/change-requests` page
+- Added real-time collaborative editing via `server/collab-server.ts` (standalone WebSocket server) and `src/lib/collaboration/provider.ts` client
+- WebSocket server uses Yjs CRDT + y-protocols for sync and awareness
+
+### Phase 7: Infrastructure
+- Added S3/R2 storage provider in `src/lib/storage.ts` — `StorageProvider` interface, `VercelBlobStorage` and `S3Storage` implementations, config via `STORAGE_PROVIDER` env var
+- Added Redis caching layer in `src/lib/cache.ts` — ioredis singleton, `cacheGet`/`cacheSet`/`cacheInvalidate`/`cacheDel`, graceful degradation
+- Added database read replica support in `src/lib/prisma-replica.ts` — `prismaRead` client, falls back to primary
+- Added Incremental Static Regeneration to article pages — `revalidate = 300` + `revalidatePath()` calls on article update/delete
+
+### Phase 8: API & Integrations
+- Added API v2 at `/api/v2/` — cursor-based pagination, field selection, consistent `{ data, meta }` envelope
+  - Endpoints: `articles`, `articles/[id]`, `search`, `categories`, `tags`
+- Added OAuth2 login via NextAuth v4 — Google and GitHub providers, `src/lib/oauth.ts`, `/api/auth/[...nextauth]` route, links accounts by email
+- Added `OAuthAccount` model for storing provider tokens
+- Added Zapier/Make integration — subscribe/unsubscribe REST hooks at `/api/webhooks/zapier`, polling trigger at `/api/webhooks/zapier/poll`
+- Added CLI tool in `cli/` — `wiki articles list|get|create`, `wiki search`, `wiki export`, `wiki import` — uses API v2, reads config from `~/.wiki-cli.json`
+
+### Phase 9: Advanced Features
+- Added fine-grained RBAC with `PermissionGrant` model and `src/lib/permissions.ts` — per-category and per-article `view`/`edit`/`admin` permissions
+- Added `/api/permissions` admin endpoints for granting/revoking permissions
+- Added custom theme builder at `/admin/theme` — color pickers for all CSS variables, live preview panel, save/load/export/import themes
+- Added `ThemeConfig` model and `/api/themes` CRUD endpoints
+- Added AI-assisted features via Vercel AI SDK + Anthropic (`claude-haiku-4-5`):
+  - `src/lib/ai.ts` with `summarizeArticle()`, `suggestRelatedTopics()`, `generateContent()`
+  - `/api/ai` dispatcher and `/api/ai/summarize` article summarizer
+  - Gated by `AI_API_KEY` env var, returns 501 when not configured
+- Added multi-wiki support with `Wiki` + `WikiMembership` models, `/api/wikis` CRUD, member management
+- Added full offline mode: `public/sw.js` service worker with cache-first strategy, IndexedDB sync queue, background sync
+- Added `public/offline.html` fallback page
+
+### Schema Changes (v3.0.0)
+12 new Prisma models: `SavedSearch`, `SearchHistory`, `UserPreference`, `ReviewRequest`, `ReviewComment`, `ChangeRequest`, `ActivityEvent`, `OAuthAccount`, `PermissionGrant`, `ThemeConfig`, `Wiki`, `WikiMembership`, `ArticleTemplate`
+Modified: `Article` (added `publishAt`, `archivedAt`, `wikiId`), `User` (added all new relations)
+
+### Dependencies Added
+`@tiptap/suggestion`, `ioredis`, `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner`, `next-auth`, `@auth/prisma-adapter`, `ai`, `@ai-sdk/anthropic`, `yjs`, `y-prosemirror`, `y-protocols`, `ws`, `diff`
+Dev: `vitest`, `@vitejs/plugin-react`, `happy-dom`, `@playwright/test`, `@axe-core/playwright`
+
+## [2.5.0] - 2026-03-03
+
+Advanced features: fine-grained RBAC, theme builder, AI integration, multi-wiki support, offline service worker, and contributor API.
+
+### Permissions (Fine-grained RBAC)
+- Added `src/lib/permissions.ts` with `checkPermission()`, `grantPermission()`, `revokePermission()`, `getUserPermissions()`, `getResourcePermissions()`, and `checkSessionPermission()` helpers
+- `checkPermission()` checks explicit `PermissionGrant` rows first, falls back to role-based defaults; admin role always passes all checks
+- Added `GET/POST/DELETE /api/permissions` for listing, granting, and revoking resource permissions (admin only)
+
+### Theme Builder
+- Added `src/app/admin/theme/page.tsx` — client-side visual theme builder at `/admin/theme`
+- Color pickers for six CSS variables: `--color-accent`, `--color-background`, `--color-surface`, `--color-foreground`, `--color-muted`, `--color-border`
+- Live preview panel showing article card, button variants, badges, color swatches, and a form input; preview uses inline CSS variable injection
+- Save theme, load from saved-themes dropdown, export as JSON, import from JSON file, and reset to defaults
+- Added `GET /api/themes` listing global and user-owned themes (no auth required for global themes)
+- Added `POST /api/themes` for creating/saving themes (auth required); handles `isDefault` unset logic
+- Added `GET/PUT/DELETE /api/themes/[id]` for single-theme retrieval, update (own theme or admin), and delete
+
+### AI Integration
+- Added `src/lib/ai.ts` using Vercel AI SDK (`ai`) + Anthropic provider (`@ai-sdk/anthropic`)
+- `summarizeArticle(content)` — strips HTML, limits to 3000 chars, prompts for 2-3 sentence summary
+- `suggestRelatedTopics(title, content, existingTags)` — returns up to 5 suggested article topic titles
+- `generateContent(prompt, existingContent?)` — generates or continues article content; wraps prompt differently when existing content provided
+- All functions check `AI_API_KEY` env var and return null/empty gracefully when not configured
+- Added `POST /api/ai` dispatcher for `action: "summarize"|"suggest"|"generate"` (auth required; 501 when AI not configured; 400 for unknown action)
+- Added `POST /api/ai/summarize` that fetches an article by ID, enforces visibility, and returns AI summary (auth required)
+
+### Multi-Wiki Support
+- Added `GET /api/wikis` listing wikis the user owns or is a member of
+- Added `POST /api/wikis` for creating wikis with slug format + uniqueness validation; creator auto-added as admin member via nested create
+- Added `GET/PUT/DELETE /api/wikis/[id]` — single wiki with member/article counts; PUT requires wiki admin role; DELETE requires owner
+- Added `GET/POST/DELETE /api/wikis/[id]/members` — list members, add (upsert with role), remove members; wiki admin required; owner removal blocked
+
+### Offline Service Worker
+- Added `public/sw.js` — vanilla JS service worker with install-time precaching, network-first strategy, and background sync
+- Precaches `/`, `/help`, `/search`, and `/offline` on install; activates immediately via `skipWaiting()`
+- Caches successful GET responses for `/api/articles/*` and `/articles/*` routes
+- Non-GET requests queued in IndexedDB `wiki-sync` → `syncQueue` store when offline; returns 202 Accepted with `queued: true`
+- Replays queued mutations on Background Sync `sync` event (`wiki-sync-mutations` tag) or explicit `REPLAY_QUEUE` message
+- Shows `/offline` cached HTML page for failed HTML navigation requests
+- Added `public/offline.html` — minimal offline page with "You're offline" message, cached-content notice, "Try again" reload button, and footer nav links; respects `prefers-color-scheme` for dark mode
+
+### Contributors API
+- Updated `GET /api/users/contributors` to filter only users with at least one published article, return `{ contributors: [...] }` wrapper shape, and include proper try/catch error handling
+
+## [2.4.0] - 2026-03-03
+
+API v2 routes with cursor pagination, OAuth/NextAuth stub, Zapier webhooks, and CLI tool.
+
+### New API Routes — v2 (cursor-based pagination)
+- Added `GET /api/v2/articles` — cursor-paginated article listing with API key or session auth, field selection via `?fields=`, filters for category/tag/status/search, admin-gated visibility for non-published articles; response shape `{ data, meta: { hasMore, nextCursor, total } }`
+- Added `GET /api/v2/articles/:id` — fetch article by id or slug with field selection; includes category, tags, and revision count; non-admins blocked from non-published articles
+- Added `GET /api/v2/search` — cursor-paginated, relevance-ranked full-text search; scores: exact title=100, starts-with=80, contains=60, content-only=10; response includes `highlightedExcerpt` and `totalEstimate`
+- Added `GET /api/v2/categories` — public hierarchical category tree (recursive build from flat list) with article counts per node, sorted by `sortOrder` at each level
+- Added `GET /api/v2/tags` — cursor-paginated tag listing sorted alphabetically with article counts; no auth required
+- Cursor format for articles/search: `base64url("<createdAt ISO>|<id>")`, for tags: `base64url("<name>|<id>")`
+
+### OAuth / NextAuth Integration (stub)
+- Added `src/lib/oauth.ts` exporting `authOptions` for NextAuth v4 with Google and GitHub providers
+- `signIn` callback links OAuth accounts to existing wiki users by email or creates new viewer-role users; stores `OAuthAccount` record with access/refresh tokens
+- `session` callback augments the NextAuth session with wiki user `id`, `role`, `username`, and `displayName`
+- Generates unique usernames from provider display name with numeric suffix on collision
+- Added `src/app/api/auth/[...nextauth]/route.ts` — NextAuth catch-all handler exporting GET and POST
+
+### Zapier / Make Webhook Integration
+- Added `GET /api/webhooks/zapier` — list Zapier subscriptions (Webhook rows with `zapier:`-prefixed events) for the authenticated API key
+- Added `POST /api/webhooks/zapier` — subscribe to an event (`article.created`, `article.updated`, `article.deleted`, `article.published`, `comment.created`); body `{ hookUrl, event }`; returns 409 on duplicate
+- Added `DELETE /api/webhooks/zapier` — unsubscribe by `hookUrl` (body or query param); returns 404 if no matching subscription
+- Added `GET /api/webhooks/zapier/poll` — Zapier polling trigger; returns array of recently created published articles (default last 15 min); returns sample object when empty so Zapier can map fields during setup
+
+### CLI Tool (`cli/`)
+- Added `cli/package.json` and `cli/index.js` — standalone ESM CLI using only Node.js 18+ built-ins (no npm dependencies)
+- Config stored at `~/.wiki-cli.json` or read from `WIKI_URL` + `WIKI_API_KEY` env vars
+- Commands: `config set/show`, `articles list/get/create`, `search`, `export`, `import`, `help`
+- `articles list` uses v2 cursor API by default; falls back to v1 page-based when `--page` is passed
+- `export` paginates through all articles and writes `.md` (with YAML frontmatter) or `.html` files
+- `import` parses YAML frontmatter from Markdown files and POSTs to `/api/articles`
+- Pretty-printed aligned tables with ANSI colour (disabled when stdout is not a TTY)
+
+## [2.3.0] - 2026-03-02
+
+Infrastructure features: storage abstraction, Redis cache, read replica, and full-text search.
+
+### New Infrastructure
+- Added `StorageProvider` interface in `src/lib/storage.ts` with `upload()`, `delete()`, and `getSignedUrl()` methods
+- Implemented `VercelBlobStorage` provider using `@vercel/blob` (default)
+- Implemented `S3Storage` provider using `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` for S3/R2/MinIO
+- Storage provider selected via `STORAGE_PROVIDER` env var (`"vercel-blob"` or `"s3"`)
+- Added Redis caching layer in `src/lib/cache.ts` with `cacheGet()`, `cacheSet()`, `cacheInvalidate()`, and `cacheDel()`
+- Redis client is singleton with lazy connect, exponential back-off reconnect, and graceful degradation when `REDIS_URL` is not set
+- Cache invalidation uses SCAN-based pattern matching to avoid blocking Redis on large key sets
+- Added read replica support in `src/lib/prisma-replica.ts` exporting `prismaRead` PrismaClient
+- Replica client uses `DATABASE_REPLICA_URL` env var; falls back to primary when not configured
+- Replica client cached on `globalThis` in development to survive hot-reload
+
+### Migrations
+- Added `prisma/migrations/add_tsvector/migration.sql` for PostgreSQL full-text search
+- Enables `pg_trgm` extension for fuzzy matching
+- Adds `searchVector` tsvector column to Article table with GIN index
+- Adds trigram GIN index on Article title for fuzzy title matching
+- Creates trigger to auto-update search vector on Article insert/update
+- Backfills existing articles with weighted search vectors (title A, excerpt B, content C)
+
+### Changes
+- Updated `src/app/api/upload/route.ts` to use `getStorage()` abstraction instead of direct `@vercel/blob` usage
+
+## [2.2.0] - 2026-03-02
+
+User experience features: mobile navigation, command palette, wiki link previews, user preferences, and settings page.
+
+### New Features
+- Added `MobileNavigation` bottom bar component with 5 icons (Home, Search, Create, Recent, Menu) visible only on mobile
+- Added `CommandPalette` component (Ctrl+K / Cmd+K) with filterable commands grouped by Navigation, Actions, and Admin
+- Added `WikiLinkPreview` component for inline article previews on `.wiki-link` hover with 300ms delay and caching
+- Added user settings page (`/settings`) with Editor, Notifications, Display, and Locale sections
+- Added preferences API route (`/api/preferences`) with GET/PUT for authenticated user preferences
+- Added command registry (`src/lib/commands.ts`) with 18 commands including admin-only commands
+- Added preference utilities (`src/lib/preferences.ts`) with defaults and merge function
+
+### Styles
+- Added CSS styles for command palette overlay, input, item groups, keyboard navigation, and active states
+- Added CSS styles for wiki link preview floating card with image, excerpt, category, and broken-link state
+
+## [2.1.1] - 2026-03-02
+
+Directory cleanup and documentation overhaul.
+
+### Cleanup
+- Removed 5 unused Next.js scaffold SVGs from `public/` (file.svg, globe.svg, next.svg, vercel.svg, window.svg)
+- Moved `help.md` to `docs/help.md` to separate reference docs from project root
+- Fixed `package.json` prisma seed command referencing nonexistent `prisma/seed.ts` (now correctly points to `prisma/seed.mjs`)
+
+### Documentation
+- Rewrote `ARCHITECTURE.md` to reflect current state: dual auth system, all 20 API route groups, 22 database models, complete directory structure, and all key patterns (semantic links, graph, feeds, plugins, footnotes)
+- Refreshed `ROADMAP.md` with new forward-looking goals (testing, slash commands, search filters, mobile UX, OAuth, AI features) and archived completed items in a collapsible section
+- Updated `CONTRIBUTING.md` with `requireRole()` auth pattern and CI pipeline mention
+- Added 5 missing environment variables to `README.md` (locale, articles per page, upload size, registration, discussions)
+- Updated help page and `docs/help.md` with: hierarchical tags, multi-user auth in admin section, multiple maps with layers, semantic links/relations section, multi-language translations section, breadcrumbs, reading progress bar
+
+## [2.1.0] - 2026-03-02
+
+Improvements across utilities, config, CSS, components, API routes, pages, sidebar, editor, and SEO.
+
+### Utility Functions
+- Added `formatRelativeDate()` for human-readable relative timestamps ("5 minutes ago", "2 days ago")
+- Added `truncateText()` for safe text truncation at word boundaries
+- Added `wordCount()` and `readingTime()` for content statistics
+- Added `stripHtml()` to remove HTML tags and decode entities
+- Added `debounce()` and `throttle()` utility functions
+- Added `copyToClipboard()` async clipboard utility
+- Added `formatFileSize()` for human-readable byte sizes (KB, MB, GB)
+- Added `formatNumber()` for comma-formatted numbers
+- Added `isExternalUrl()` to detect external links
+- Added `generateExcerpt()` for smart excerpt generation at sentence boundaries
+- Added `getInitials()` for user avatar initials
+- Added `pluralize()` for count-aware singular/plural text
+- Added `classNames()` for conditional CSS class joining
+
+### Configuration
+- Added `NEXT_PUBLIC_DEFAULT_LOCALE` config (default: "en")
+- Added `NEXT_PUBLIC_ARTICLES_PER_PAGE` config (default: 20)
+- Added `NEXT_PUBLIC_MAX_UPLOAD_SIZE` config (default: 5MB)
+- Added `NEXT_PUBLIC_ENABLE_REGISTRATION` config (default: true)
+- Added `NEXT_PUBLIC_ENABLE_DISCUSSIONS` config (default: true)
+
+### CSS & Theme
+- Added print styles hiding navigation/UI, expanding content, and showing link URLs
+- Added `:focus-visible` styles for keyboard accessibility
+- Added skeleton loading animations with text, title, and avatar variants
+- Added toast notification styles with slide-up animation and success/error/warning/info variants
+- Added badge/pill styles with semantic color variants and dark mode support
+- Added breadcrumb navigation styles
+- Added tooltip styles with pure CSS hover reveal
+- Added modal/dialog styles with overlay and fade-in animation
+- Added empty state layout styles
+- Added progress bar and reading progress bar styles
+- Added alert/banner styles (info, success, warning, error)
+- Added card hover effect with shadow transition
+- Added `<kbd>` styles for keyboard shortcut display
+- Added tag cloud styles with size variants (lg, md, sm)
+- Added back-to-top button styles with visibility animation
+
+### New Components 
+- Created `Breadcrumb` component with Home link and configurable crumb items
+- Created `Pagination` component with ellipsis, prev/next, and URL builder
+- Created `Toast` notification system with React context provider and auto-dismiss
+- Created `LoadingSkeleton` components: `SkeletonText`, `SkeletonArticleCard`, `SkeletonTable`
+- Created `EmptyState` component with icon, title, description, and action link
+- Created `ConfirmDialog` modal with Escape key, focus management, and danger mode
+- Created `Badge` component with 5 color variants and 2 sizes
+- Created `Tooltip` component with top/bottom positioning
+- Created `ReadingProgress` scroll-based progress bar
+- Created `BackToTop` button appearing after 400px scroll
+- Created `CopyButton` with clipboard API and fallback
+- Created `WordCount` displaying word count and reading time
+- Created `TimeAgo` live-updating relative timestamp component
+- Created `ArticleStatusBadge` mapping status to colored badges
+- Created `UserAvatar` with deterministic color from name hash
+- Created `ShareButton` with Web Share API and clipboard fallback
+- Created `PrintButton` for triggering browser print
+- Created `ScrollSpy` fixed sidebar ToC with IntersectionObserver
+- Created `Collapsible` expandable/collapsible section
+- Created `KeyboardShortcuts` overlay with `?` toggle, `g+*` navigation, `/` search focus
+
+### API Routes
+- Added `GET /api/articles/[id]/word-count` for article word/character/reading time stats
+- Added `GET /api/stats` public endpoint for wiki-wide statistics
+- Added `GET /api/articles/[id]/backlinks` for article backlink queries
+- Added `GET /api/sitemap` generating XML sitemap
+- Added `GET /api/articles/recent` with configurable limit
+- Added `GET /api/categories/tree` returning full nested hierarchy
+- Added `GET /api/tags/popular` sorted by article count
+- Added `GET /api/articles/[id]/related` finding related articles by category/tag overlap
+- Added `GET /api/users` (admin only) for user listing with contribution counts
+- Added `POST/GET /api/articles/[id]/views` for view count tracking via MetricLog
+- Added `PATCH /api/articles/[id]/status` for quick status changes
+- Added `GET /api/articles/orphans` (admin) for articles with no incoming links
+- Added `GET /api/articles/dead-links` (admin) for broken wiki link detection
+- Added `GET /api/articles/[id]/rating` for article rating aggregation
+- Added `GET /api/articles/[id]/export` for single-article Markdown/HTML export
+
+### Page & UX Improvements
+- Added keyboard shortcuts overlay (press `?` anywhere) with navigation and search shortcuts
+- Added word count and reading time display on article pages
+- Added "last edited by" user attribution with link to user profile
+- Added breadcrumb navigation on article pages showing category hierarchy
+- Added Copy Link, Share, and Print buttons on article pages
+- Added back-to-top floating button globally
+- Added reading progress bar at top of article pages
+- Added ArticleStatusBadge inline on article listing page
+- Added OnThisDay section on homepage showing articles created on this date in past years
+- Added keyboard shortcut hint in homepage tip section
+- Updated category description display on category detail pages
+- Created tag cloud page at `/tags` with size-scaled tags
+- Added "Articles needing review" queue on admin page with status badges
+- Integrated ToastProvider in root layout for app-wide toast notifications
+
+### Sidebar & Navigation
+- Made sidebar section headers collapsible with toggle arrows and saved state
+- Added total published article count next to "All articles" in sidebar
+- Added RSS Feed link in sidebar Tools section
+- Added footer links section (API Docs, RSS Feed) at bottom of sidebar
+- Moved version label below footer links with border separator
+
+### Editor Improvements
+- Added word count, character count, and paragraph count status bar below editor
+- Added unsaved changes indicator ("Unsaved changes" / "No changes") in editor status bar
+- Added keyboard shortcuts help button (`?`) to editor toolbar
+- Added "Insert date" button to editor toolbar inserting current date in long format
+
+### SEO & Meta
+- Added Open Graph meta tags for article pages (title, description, image, URL)
+- Added Twitter card meta tags (summary card) for social sharing
+- Added canonical URL meta tags via `alternates.canonical`
+- Added JSON-LD structured data (`schema.org/Article`) with headline, dates, category
+- Created `robots.ts` generating `robots.txt` with crawl rules
+- Created `sitemap.ts` generating dynamic `sitemap.xml` with articles and categories
+
+## [2.0.0] - 2026-03-02
+
+Complete roadmap implementation — 39 features across 8 phases.
+
+### Editor Improvements (Phase 1)
+- Added undo/redo buttons to editor toolbar with keyboard shortcut indicators
+- Added code block syntax highlighting via lowlight + highlight.js with dark mode support
+- Added drag-and-drop and paste image upload directly into editor
+- Added footnotes and citations via custom Tiptap extension (Ctrl+Shift+F) with auto-numbered superscripts and footnote section
+- Added merge/split cells, toggle header row/column buttons to table editor
+- Added auto-generated table of contents from headings on article pages (hidden if <3 headings)
+- Added word-level inline diff view with toggle between line-diff and inline modes
+- Added related articles section below content, ranked by shared category/tag overlap
+
+### Organization & Content (Phase 2)
+- Article templates auto-apply based on category selection (person, place, event, thing, group)
+- Added article status workflow: draft → review → published with status selector in edit page
+- Added pinned/featured articles per category, shown at top with pin icon
+- Added custom sort order for articles within categories
+- Added multi-language support with ArticleTranslation model, translations API, and LanguageSwitcher component
+- Random article link in sidebar navigation
+
+### Tag Hierarchy & Management
+- Updated Tags API (`/api/tags`) to return nested hierarchy with parent/children relations
+- Added PUT and DELETE endpoints at `/api/tags/[id]` for editing and deleting tags
+- Created TagManager client component with create, edit, delete, parent assignment, and color picker
+- TagManager added to the `/categories` page below CategoryManager
+
+### Article Reorder API
+- Improved `/api/articles/reorder` POST endpoint to use Prisma transactions for atomic sort order updates
+
+### Translations API
+- New `GET/POST /api/articles/[id]/translations` for listing and creating article translations
+- New `GET/PUT/DELETE /api/articles/[id]/translations/[locale]` for per-locale translation management
+- Created LanguageSwitcher client component with locale dropdown and `?locale=xx` URL switching
+
+### Advanced Search
+- Added category, tag, date range filters to `/api/search` endpoint
+- Added search result highlighting with `<mark>` tags around matching terms
+- Redesigned search page as client component with "Advanced search" toggle
+- Filter sidebar includes category dropdown, tag multi-select with checkboxes, and date range inputs
+- Highlighted excerpts rendered with `dangerouslySetInnerHTML`
+
+### Multi-user Authentication
+- Added `POST /api/auth/register` with bcryptjs password hashing and validation
+- Extended `POST /api/auth/login` to support both legacy admin password and username/password session auth
+- Added `getSession()` and `requireRole()` to `src/lib/auth.ts` with backward-compatible `isAdmin()`
+- Session-based auth with 30-day expiry stored in `Session` table
+- Updated `/api/auth/check` to return session user info alongside admin status
+- Updated `/api/auth/logout` to clear both admin and session cookies
+- Created `/register` page with account creation form and auto-login
+- Created `/login` page with username/password form
+- Created `/users/[username]` user profile page showing articles created, edit history, and discussions
+
+### Watchlist & Notifications
+- New `GET/POST/DELETE /api/watchlist` for managing watched articles (session-authenticated)
+- New `GET/PUT /api/notifications` for listing and marking notifications as read
+- Created `/watchlist` page showing watched articles with unwatch controls
+- Created NotificationBell component with unread count badge, dropdown list, and mark-all-read
+- NotificationBell added to site header next to theme toggle
+- Article PUT now notifies all watchers (except the editor) when an article is edited
+- Article revisions now record the editing user's ID for attribution
+
+### RSS/Atom Feeds
+- Added RSS 2.0 feed at `/feed.xml` with last 50 published articles
+- Added Atom feed at `/feed/atom` with matching content
+- Added `<link rel="alternate">` tags in HTML head for RSS and Atom autodiscovery
+
+### Public REST API v1
+- Added API key authentication via `X-API-Key` header validated against `ApiKey` table
+- New `GET /api/v1/articles` endpoint with pagination, category/tag filters
+- New `GET /api/v1/categories` endpoint listing all categories with counts
+- New `GET /api/v1/tags` endpoint listing all tags with counts
+- New `GET /api/v1/search` endpoint with relevance-ranked search
+- Added API documentation page at `/api-docs` with endpoint reference and curl examples
+
+### Webhooks
+- Added `dispatchWebhook()` fire-and-forget function with HMAC-SHA256 signing
+- New `GET/POST /api/webhooks` for listing and creating webhooks (admin only)
+- New `PUT/DELETE /api/webhooks/[id]` for updating and deleting webhooks
+- Added admin webhook management UI at `/admin/webhooks` with delivery log
+- Webhook deliveries logged in `WebhookDelivery` table with status and response code
+
+### MediaWiki Import
+- Added `parseMediaWikiXml()` function parsing MediaWiki XML export format
+- Converts basic wikitext to HTML (headings, bold, italic, wiki links, lists)
+- Import page and API now accept `.xml` files alongside existing formats
+- Installed `fast-xml-parser` dependency
+
+### Semantic Wiki Links
+- Added relation types system with labeled, invertible semantic link types
+- New `SemanticRelations` server component displaying grouped outgoing/incoming links
+- New `GET/POST /api/articles/[id]/links` endpoint for managing semantic links
+- Seven relation types: related-to, is-part-of, contains, preceded-by, followed-by, see-also, derived-from
+
+### Article Graph Visualization
+- Added `GET /api/graph` endpoint returning nodes and edges from wiki links and semantic links
+- Supports `?center=slug&depth=N` for local subgraph extraction via BFS
+- New full-page graph page at `/graph` with D3 force-directed layout
+- Nodes colored by category, with drag, zoom/pan, hover tooltips, and click navigation
+- Graph controls panel with category filter, depth slider, and node/edge stats
+- Added "Article graph" link to sidebar navigation
+- Installed `d3` and `@types/d3` dependencies
+
+### Export System
+- Added wiki export page at `/export` with scope (entire wiki or by category) and format (Markdown or HTML) selection
+- New `/api/export/markdown` endpoint generates downloadable `.md` file with table of contents
+- New `/api/export/html` endpoint generates styled HTML document with TOC and wiki-style CSS
+- Uses `contentRaw` (Markdown) when available, falls back to HTML-to-text stripping
+- Added "Export" link in sidebar under Tools section
+
+### CI/CD Pipeline
+- Added GitHub Actions CI workflow (`.github/workflows/ci.yml`) with lint, type-check, and build jobs
+- Lint and type-check job runs ESLint and `tsc --noEmit` after Prisma generate
+- Build job depends on lint passing, uses fake DATABASE_URL for static build validation
+- Added Dependabot configuration for weekly npm and GitHub Actions dependency updates
+- Minor/patch updates grouped into single PRs to reduce noise
+
+### Docker Setup
+- Added multi-stage Dockerfile: deps, builder, and runner stages for optimized production images
+- Added `docker-compose.yml` with PostgreSQL 16 and app services with health checks
+- Added `.dockerignore` to exclude node_modules, .next, .git, and other dev files
+- Docker CMD runs `prisma db push` before starting the app server
+
+### Performance Monitoring
+- Added `/api/health` endpoint returning status, uptime, DB connectivity, version, and article count
+- Added `/api/metrics` endpoint (admin only) with comprehensive dashboard data
+- New `src/lib/metrics.ts` with `getMetricsSummary()` aggregating articles, categories, tags, revisions, discussions, and recent activity
+- Added admin metrics dashboard at `/admin/metrics` with stat cards, bar charts for top categories and articles by month
+- Added "Metrics" link in sidebar Tools section (admin only)
+
+### Map Enhancements
+- Added multiple maps support with `MapConfig` management via `/api/maps` endpoints (GET, POST)
+- Per-map CRUD at `/api/maps/[mapId]` (PUT, DELETE) with cascading cleanup of layers, detail levels, and markers
+- Map layer system via `/api/maps/[mapId]/layers` with create/list and per-layer update/delete
+- Map detail levels via `/api/maps/[mapId]/detail-levels` for zoom-dependent imagery
+- New `MapSelector` component showing tabs/links for switching between maps
+- New `MapManager` admin component for creating, editing, and deleting map configurations
+- New `LayerControl` overlay with visibility toggles and opacity sliders per layer
+- New `MapSearch` overlay for filtering markers by label or linked article name
+- Added `/map/[mapId]` dynamic route page with map selector, layers, and search integration
+
+### Plugin System
+- Defined `WikiPlugin` and `PluginManifest` interfaces in `src/lib/plugins/types.ts`
+- Created plugin registry with `registerPlugin()`, `loadPlugins()`, `getEnabledPlugins()`, and `runArticleRenderHooks()`
+- Plugin state persisted in `PluginState` database table with enable/disable toggle
+- Added `/api/plugins` endpoint (admin only) for listing plugins (GET) and toggling state (PUT)
+- Added admin plugin management page at `/admin/plugins` with enable/disable controls per plugin
+- Added "Plugins" link in sidebar Tools section (admin only)
+
+## [1.9.0] - 2026-02-25
+
+- Added category edit and delete functionality for admin users
+- New API route `/api/categories/[id]` with PUT (rename, reparent, update description) and DELETE
+- Delete is blocked if category has articles or subcategories (must reassign first)
+- CategoryManager redesigned with inline edit/delete controls per category
+- Category list shows article count, description, and nested hierarchy
+
+## [1.8.0] - 2026-02-25
+
+- Added subcategory-specific infobox schemas modeled after Wikipedia infobox templates
+- Leaders: reign, predecessor, successor, dynasty, coronation
+- Artists: medium, style, notable works, influences, patron
+- Scientists: fields, institutions, alma mater, doctoral advisor
+- Warriors: allegiance, rank, unit, commands, battles fought
+- Merchants: guild, trade goods, trade routes, wealth
+- Cities: country, region, demonym, elevation, landmarks
+- Regions: capital, borders, terrain, resources, major cities
+- Landmarks: elevation, span, significance
+- Buildings: architect, style, floors, purpose
+- Governments: head of state, legislature, ideology, currency
+- Military: branch, strength, equipment, engagements, motto
+- Religious orgs: deity, scripture, holy sites, practices
+- Guilds: trade, ranks, services, rivals
+- Battles: belligerents, commanders, strength, casualties per side
+- Ceremonies: frequency, traditions, significance
+- Discoveries: discoverer, field, method
+- Disasters: deaths, injuries, damage, aftermath
+- Weapons: smith, length, weight, wielders, battles
+- Artifacts: powers, age, previous owners
+- Documents: author, language, pages, copies, significance
+- Tools: used for, used by
+- Magic: source, requirements, limitations, applications
+- Religions: deities, holy text, clergy, core beliefs
+- Laws: jurisdiction, penalties, enforced by, supersedes
+- Languages: family, writing system, ancestor language, speakers
+- Seed script now updates icons on re-run instead of skipping existing records
+
+## [1.7.1](https://github.com/mohammed-alsalhi/wiki-app/commit/b31dd22) - 2026-02-25
+
+- Added ARCHITECTURE.md documenting stack, directory structure, database models, key patterns, and API routes
+- Added CONTRIBUTING.md with setup guide, development workflow, code style, and contribution guidelines
+- Added ROADMAP.md with planned features organized by near-term, medium-term, and long-term goals
+
+## [1.7.0](https://github.com/mohammed-alsalhi/wiki-app/commit/eb6f0a8) - 2026-02-25
+
+- Added category-specific infobox fields: each root category (People, Places, Organizations, Events, Things, Concepts) has its own field schema
+- Infobox fields include text, textarea, number, wikilink, and list types with placeholders
+- Subcategories inherit their parent's infobox schema via parent chain walk
+- InfoboxEditor component shows relevant fields when a category is selected on new/edit pages
+- InfoboxDisplay component renders filled fields above standard rows (Category, Tags, Created, Updated)
+- Wikilink fields render as clickable article links; list fields display as comma-separated items
+- Added `infobox` JSON field to Article and ArticleRevision models in Prisma schema
+- API routes (POST/PUT) now accept and store infobox data; revisions snapshot infobox state
+- CategorySelect now accepts optional external `categories` prop to avoid duplicate fetches
+- Added 24 subcategories across all 6 root categories in seed file (Leaders, Cities, Guilds, Battles, Weapons, Magic, etc.)
+- Fixed "Detect Links" potential link marks persisting in saved content and showing to viewers
+- Existing articles without infobox data continue to display correctly (backward compatible)
+
+## [1.6.0](https://github.com/mohammed-alsalhi/wiki-app/commit/3890f0f) - 2026-02-25
+
+- Redesigned home page with improved layout and visual hierarchy
+- Added stat badges showing article/category/tag counts with links
+- Added styled action buttons (Create, Browse, Search, Map)
+- Added "Featured article" section highlighting the longest published article with excerpt
+- Recent changes list now shows excerpts, category badges, and better spacing
+- Replaced plain Statistics table and Getting started notice with "Explore" quick-links grid
+- Added "View all" links in portal headers for Recent changes and Categories
+- Home page now only counts published articles in stats
+- Added CSS for `.home-stat-badge` and `.home-action-btn` components
+
+## [1.5.0](https://github.com/mohammed-alsalhi/wiki-app/commit/33312e4) - 2026-02-25
+
+- Added full map area editing: select existing areas, edit label/article/color, and save changes
+- Added draggable polygon vertex handles for reshaping areas in real-time
+- Added color picker with 8 preset colors and custom color input for map areas
+- New area form also supports color selection
+- Hover tint on map areas in view mode uses stored area color
+- Click-to-select areas in edit mode replaces popups with a side panel form
+- Click empty map space to deselect current area
+- Fixed link editing bubble: now appears on hover instead of requiring a click
+- Added NodeSelection detection for wiki link atoms in the editor
+- Prevented accidental navigation when clicking links inside the editor
+- Dismiss timer with 200ms delay allows moving mouse from link to bubble
+- Updated help page and help.md with map editing and link hover documentation
+
+## [1.4.0](https://github.com/mohammed-alsalhi/wiki-app/commit/4308e71) - 2026-02-25
+
+- Added link editing bubble: floating Edit/Remove tooltip appears when cursor is on a link
+- Edit mode for regular links (change URL) and wiki links (change target article title)
+- Remove option keeps text in place but strips the link
+- Updated help page and help.md with documentation for tables, link editing, redirects, discussions, and batch operations
+- Added Table button to editor toolbar documentation
+
+## [1.3.0](https://github.com/mohammed-alsalhi/wiki-app/commit/ba616cd) - 2026-02-25
+
+- Added batch operations on articles list page (admin only)
+- Checkbox column for selecting articles, with select-all toggle
+- Batch action bar with Set Category, Publish, Unpublish, and Delete actions
+- Category dropdown appears when "Set Category" is selected
+- Delete requires confirmation dialog before proceeding
+- Converted articles page from server component to client component
+- New `/api/articles/batch` endpoint for bulk PUT (category/publish) and DELETE
+- Wrapped page in Suspense boundary for `useSearchParams` compatibility
+
+## [1.2.0](https://github.com/mohammed-alsalhi/wiki-app/commit/f507fdf) - 2026-02-25
+
+- Added table support in Tiptap editor using TableKit extension
+- Toolbar shows Insert Table button, plus row/col add/delete when cursor is inside a table
+- Added table CSS styles for both editor and article display (borders, header highlighting, selected cell)
+- Added redirect pages: articles can redirect to another article via `redirectTo` field
+- Redirect field in article edit page with slug input and preview
+- Server-side redirect in article display page when `redirectTo` is set
+- Added per-article discussion/talk pages with comment threads
+- Discussion tab added to all article sub-pages (article, edit, history, diff)
+- Anyone can post comments with optional author name; admin can delete comments
+- New Discussion model in Prisma schema with article relation
+- New API endpoint `/api/articles/[id]/discussions` (GET, POST, DELETE)
+
+## [1.1.3](https://github.com/mohammed-alsalhi/wiki-app/commit/d6938e5) - 2026-02-25
+
+- Fixed self-referencing commit link for 1.1.2 in CHANGELOG.md
+
+## [1.1.2](https://github.com/mohammed-alsalhi/wiki-app/commit/a529355) - 2026-02-25
+
+- Added commit links to every version heading in CHANGELOG.md
+- Version headers now link to the corresponding commit on GitHub
+
+## [1.1.1](https://github.com/mohammed-alsalhi/wiki-app/commit/d8de900) - 2026-02-25
+
+- Added in-app Help page (`/help`) documenting all features, editor tricks, and keyboard shortcuts
+- Added `help.md` for GitHub with the same content in markdown format
+- Added "Help" link to sidebar navigation
+
+## [1.1.0](https://github.com/mohammed-alsalhi/wiki-app/commit/5d47196) - 2026-02-25
+
+- Added wiki link suggester: typing `[[` in the editor opens an autocomplete dropdown
+- Dropdown searches existing articles with debounced queries, keyboard navigation, and click selection
+- Added "Detect Links" toolbar button that scans text for phrases matching existing article titles
+- Detected links shown with dashed underline; clicking converts them to wiki links
+- Count badge on toolbar button shows number of detected potential links
+- Created PotentialLink Tiptap mark extension for detected link highlighting
+- Created `/api/articles/titles` lightweight endpoint for fetching all article titles
+- Longer title matches take priority; word boundary checking prevents partial matches
+
+## [1.0.4](https://github.com/mohammed-alsalhi/wiki-app/commit/2d62cd6) - 2026-02-25
+
+- Widened content area max-width from 1024px to 1152px
+- Redesigned theme toggle as clean sun/moon icon button in header
+- Added global transition class so all elements change theme at the same rate
+- Cleaned up search bar: replaced label/Go button with search icon and placeholder
+- Removed rounded corners from search bar to match wiki style
+- Aligned header right edge with content area padding
+
+## [1.0.3](https://github.com/mohammed-alsalhi/wiki-app/commit/e557aa8) - 2026-02-25
+
+- Fixed bold and italic lost when switching from markdown mode back to rich text
+- Added `**bold**` → `<strong>` and `*italic*` → `<em>` conversion in basicMarkdownToHtml
+- Inline formatting now applied to both paragraph and heading content
+
+## [1.0.2](https://github.com/mohammed-alsalhi/wiki-app/commit/8d4753c) - 2026-02-25
+
+- Fixed markdown-to-rich-text conversion eating paragraphs into headings
+- Headings now always produce separate blocks (double newline after headings in markdown output)
+- Rewrote basicMarkdownToHtml to parse line-by-line instead of splitting by double newlines
+- Single newline after a heading no longer merges the following paragraph into the heading
+
+## [1.0.1](https://github.com/mohammed-alsalhi/wiki-app/commit/e84d1d6) - 2026-02-23
+
+- Added delete button with confirmation dialog on article edit page
+- Added editable slug field with live URL path preview
+- API now validates slug uniqueness on update and returns error if taken
+
+## [1.0.0](https://github.com/mohammed-alsalhi/wiki-app/commit/bf95767) - 2026-02-23
+
+- Added article import feature with CLI and UI
+- Drag-and-drop multi-file import page at /import (admin only)
+- CLI bulk import script with --draft, --category, --dry-run flags
+- Supports Markdown (.md), Text (.txt), HTML (.html), JSON (.json)
+- Markdown frontmatter support for title extraction
+- JSON supports single objects or arrays for multi-article import
+- Added `marked` dependency for Markdown-to-HTML conversion
+- Added `npm run import` convenience script
+
+## [0.9.0](https://github.com/mohammed-alsalhi/wiki-app/commit/8617d86) - 2026-02-23
+
+- Added version label at bottom of sidebar, reading from package.json at build time
+- Exposed `NEXT_PUBLIC_APP_VERSION` via next.config.ts
+
+## [0.8.0](https://github.com/mohammed-alsalhi/wiki-app/commit/ac6de47) - 2026-02-23
+
+- Added custom display text for wiki links (`[[Title|Display Text]]` syntax)
+- Added InputRules for auto-converting `[[Title]]` and `[[Title|Label]]` while typing
+- Fixed wiki link round-trip between rich text and markdown modes
+- Fixed Link extension conflict by excluding `a[data-wiki-link]` from parseHTML
+- Added text selection support for wiki link toolbar button and keyboard shortcut
+- Changed wiki link keyboard shortcut to Ctrl+Shift+L
+
+## [0.7.2](https://github.com/mohammed-alsalhi/wiki-app/commit/92faed0) - 2026-02-23
+
+- Fixed wiki link typing: `[[Article Name]]` now auto-creates wiki link nodes via InputRule
+- Fixed markdown mode: wiki links preserved when switching between rich text and markdown
+
+## [0.7.1](https://github.com/mohammed-alsalhi/wiki-app/commit/ec5bc04) - 2026-02-23
+
+- Added Vercel Web Analytics integration
+
+## [0.7.0](https://github.com/mohammed-alsalhi/wiki-app/commit/f6d63ad) - 2026-02-23
+
+- Replaced map pin markers with clickable polygon areas
+- Areas are invisible overlays; tooltip appears on hover, click navigates to linked article
+- Edit mode: draw polygon vertices on map, finish with double-click or button
+- Existing areas shown with dashed outlines in edit mode with delete option
+- Removed emoji icon system (map image provides visual symbols)
+
+## [0.6.3](https://github.com/mohammed-alsalhi/wiki-app/commit/019a861) - 2026-02-23
+
+- Updated favicon
+
+## [0.6.2](https://github.com/mohammed-alsalhi/wiki-app/commit/c35a2cd) - 2026-02-23
+
+- Updated world map image
+
+## [0.6.1](https://github.com/mohammed-alsalhi/wiki-app/commit/c000fa1) - 2026-02-23
+
+- Added MIT License
+- Added README with deploy instructions
+- Added CLAUDE.md with architecture documentation
+
+## [0.6.0](https://github.com/mohammed-alsalhi/wiki-app/commit/acc5709) - 2026-02-23
+
+- Productized wiki with environment variable configuration
+- All branding driven by `NEXT_PUBLIC_*` env vars with sensible defaults
+- Made article templates generic (Person, Place, Event, Thing, Group)
+- Made seed categories generic (People, Places, Organizations, Events, Things, Concepts)
+- Added empty-state onboarding page for fresh deployments
+- Map feature hidden by default, enabled via `NEXT_PUBLIC_MAP_ENABLED`
+- Created .env.example documenting all environment variables
+
+## [0.5.0](https://github.com/mohammed-alsalhi/wiki-app/commit/196a80a) - 2026-02-23
+
+- Added sub-category management with parent assignment
+- Category tree display with indented subcategories
+- Admin-only category creation with parent selector
+
+## [0.4.0](https://github.com/mohammed-alsalhi/wiki-app/commit/2205b82) - 2026-02-23
+
+- Improved search with relevance-based ranking (exact title > starts with > contains > content-only)
+- Multi-word queries use AND logic (each word must appear somewhere)
+- Trimmed whitespace from search queries
+- Clear search input on navigation and result clicks
+
+## [0.3.2](https://github.com/mohammed-alsalhi/wiki-app/commit/10ac684) - 2026-02-23
+
+- Fixed dark mode: changed `@theme inline` to `@theme` so CSS variable overrides work
+
+## [0.3.1](https://github.com/mohammed-alsalhi/wiki-app/commit/7aafdbb) - 2026-02-23
+
+- Fixed dark mode by replacing ~13 hardcoded `bg-white` instances with `bg-surface`
+- Replaced hardcoded colors in SearchBar and admin page with theme variables
+
+## [0.3.0](https://github.com/mohammed-alsalhi/wiki-app/commit/a9bd57b) - 2026-02-23
+
+- Added article revision history with content snapshots and diff viewer
+- Added nested sub-categories with collapsible sidebar tree
+- Added dark mode with CSS variable theming and localStorage persistence
+- Added Recent Changes page with timeline grouped by date
+- Added disambiguation pages with similar title detection
+- Added 6 article templates (Character, Location, Event, Item, Faction, Blank)
+- Added Export to PDF (browser print) and Export to Markdown (file download)
+
+## [0.2.0](https://github.com/mohammed-alsalhi/wiki-app/commit/b7eaf40) - 2026-02-23
+
+- Added cookie-based admin authentication with `ADMIN_SECRET` env var
+- Protected all write API routes with admin check
+- Created login/logout/check API endpoints and /admin page
+- Hidden edit UI for non-admin users
+- No auth required in local dev when `ADMIN_SECRET` is unset
+
+## [0.1.1](https://github.com/mohammed-alsalhi/wiki-app/commit/b3d87be) - 2026-02-23
+
+- Switched image uploads from local filesystem to @vercel/blob cloud storage
+- Added postinstall script for Prisma generate during Vercel build
+- Updated build script to run prisma db push before next build
+
+## [0.1.0](https://github.com/mohammed-alsalhi/wiki-app/commit/e6bfb5b) - 2026-02-23
+
+- Initial release
+- Next.js 16 App Router with React 19, TypeScript, Prisma 7, PostgreSQL
+- Tiptap rich text editor with wiki link support (`[[Article Name]]`)
+- Article CRUD with slug-based routing
+- Category system for organizing articles
+- Full-text search
+- Interactive world map with Leaflet (CRS.Simple pixel coordinates)
+- Map markers linked to articles

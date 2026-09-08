@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Wiki Clipper",
+  "version": "1.0.0",
+  "description": "Clip any web page or selection directly into your wiki as a draft article.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Clip to wiki"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
