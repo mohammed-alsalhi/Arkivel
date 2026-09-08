@@ -1,0 +1,1641 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Article {
+  id               String   @id @default(cuid())
+  title            String
+  slug             String   @unique
+  content          String   @db.Text
+  contentRaw       String?  @db.Text
+  excerpt          String?  @db.Text
+  coverImage       String?
+  published        Boolean  @default(true)
+  isDisambiguation Boolean  @default(false)
+  redirectTo       String?
+  infobox          Json?
+  categoryId       String?
+  category         Category? @relation(fields: [categoryId], references: [id])
+  tags             ArticleTag[]
+  mapMarkers       MapMarker[]
+  revisions        ArticleRevision[]
+  discussions      Discussion[]
+  translations     ArticleTranslation[]
+  outgoingLinks    ArticleLink[] @relation("OutgoingLinks")
+  watchedBy        Watchlist[]
+  notifications    Notification[]
+  customizationOverride ArticleCustomizationOverride?
+
+  // Phase 2 additions
+  sortOrder        Int      @default(0)
+  status           String   @default("published") // "draft", "review", "published"
+  isPinned         Boolean  @default(false)
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id])
+
+  // v3.0 additions
+  publishAt        DateTime?
+  archivedAt       DateTime?
+  wikiId           String?
+  wiki             Wiki?    @relation(fields: [wikiId], references: [id])
+
+  reviews          ReviewRequest[]
+  changeRequests   ChangeRequest[]
+  activityEvents   ActivityEvent[]
+
+  // v4.0 additions
+  summary          String?  @db.Text
+  summaryShort     String?
+
+  embedding        ArticleEmbedding?
+
+  // v4.1 additions
+  learningPaths    LearningPathArticle[]
+  flashcards       Flashcard[]
+  quizAttempts     QuizAttempt[]
+  reads            ArticleRead[]
+  spacedRepetition SpacedRepetitionItem[]
+
+  // v4.3 additions
+  bookmarks        Bookmark[]
+  readingListItems ReadingListItem[]
+  tilPosts         TILPost[]
+
+  // v4.4 additions
+  certified        Boolean  @default(false)
+  certifiedAt      DateTime?
+  forks            ArticleFork[]
+  reactions        ArticleReaction[]
+  bounties         KnowledgeBounty[]
+
+  // v4.5 additions
+  issueLinks       IssueLink[]
+  embedTokens      EmbedToken[]
+
+  // v4.6 additions
+  scrollDepthLogs  ScrollDepthLog[]
+
+  // v4.7 additions
+  dir              String   @default("ltr")  // "ltr" | "rtl"
+
+  // v4.9 additions
+  expiresAt        DateTime?   // auto-archive when this date passes
+  reviewDueAt      DateTime?   // remind editors to review by this date
+
+  // v4.13 additions
+  annotations      Annotation[]
+
+  // v4.14 additions
+  wordGoal         Int?
+  seriesMembers    ArticleSeriesMember[]
+  seeAlso          SeeAlso[]
+
+  // v4.16 additions
+  shareToken       String?  @unique  // secret token for draft share links
+  lastVerifiedAt   DateTime?         // when an admin last verified this article
+  lastVerifiedById String?
+  verificationEvidence String? @db.Text
+  verificationExpiresAt DateTime?
+
+  // v4.17 additions
+  flags            String[] @default([])  // custom admin labels e.g. ["Needs images", "Outdated"]
+  coAuthors        ArticleCoAuthor[]
+  snapshots        ArticleSnapshot[]
+
+  // v4.18 additions
+  coverFocalX      Float?   // focal point X% (0–100) for cover image object-position
+  coverFocalY      Float?   // focal point Y% (0–100) for cover image object-position
+  locks            ArticleLock[]
+
+  // v4.23 additions
+  accessPassword   String?  // optional plain-text password to gate non-admin readers
+
+  // v4.25 additions
+  pageViews        ArticleView[]
+
+  // v4.33 additions
+  editSuggestions  EditSuggestion[]
+  referrers        ArticleReferrer[]
+
+  // v4.35 additions
+  ratings          ArticleRating[]
+  todos            ArticleTodo[]
+  polls            ArticlePoll[]
+  claimReviews     ClaimReview[]
+
+  // v4.41 additions
+  contentWarnings  String[] @default([])  // e.g. ["spoilers", "violence", "mature"]
+  isAbandoned      Boolean  @default(false)  // article awaiting adoption
+  adoptedBy        String?  // userId who claimed this article
+
+  // v4.43 additions
+  cleanupTags      String[] @default([])  // e.g. ["needs-images", "needs-expansion", "stub"]
+
+  // v4.46 additions
+  isFeatured       Boolean  @default(false)  // good/featured article badge
+
+  // v4.64 additions
+  aliases          Alias[]
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([status])
+  @@index([userId])
+  @@index([wikiId])
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  coverImage  String?    // optional banner image URL shown at the top of the category page
+  sortOrder   Int        @default(0)
+  parentId     String?
+  parent       Category?   @relation("CategoryTree", fields: [parentId], references: [id])
+  children     Category[]  @relation("CategoryTree")
+  articles        Article[]
+  expertBadges    ExpertBadge[]
+  metadataSchema  MetadataSchema?
+  customization   SpaceCustomization?
+  governance      SpaceGovernance?
+  watchers        CategoryWatch[]
+  createdAt       DateTime    @default(now())
+
+  @@index([parentId])
+}
+
+// ── v4.79: Per-space customization persistence ──
+model SpaceCustomization {
+  id               String   @id @default(cuid())
+  categoryId       String   @unique
+  category         Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  styleId          String?
+  colorThemeId     String?
+  layoutId         String?
+  componentPackId  String?
+  templatePackId   String?
+  navigationMode   String?
+  metadataSchemaId String?
+  privateDraftConfig Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([layoutId])
+  @@index([componentPackId])
+}
+
+// ── v4.79: Per-space governance hooks ──
+model SpaceGovernance {
+  id                    String   @id @default(cuid())
+  categoryId            String   @unique
+  category              Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  ownerId               String?
+  ownerLabel            String?
+  reviewerId            String?
+  reviewerLabel         String?
+  defaultVisibility     String?
+  reviewCadenceDays     Int?
+  healthStaleDays       Int?
+  healthRequiredSignals Json?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([ownerId])
+  @@index([reviewerId])
+  @@index([defaultVisibility])
+}
+
+model ArticleCustomizationOverride {
+  id               String   @id @default(cuid())
+  articleId        String   @unique
+  article          Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  styleId          String?
+  colorThemeId     String?
+  layoutId         String?
+  componentPackId  String?
+  templatePackId   String?
+  navigationMode   String?
+  metadataSchemaId String?
+  privateDraftConfig Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([layoutId])
+  @@index([componentPackId])
+}
+
+model Tag {
+  id       String       @id @default(cuid())
+  name     String       @unique
+  slug     String       @unique
+  color    String?
+  parentId String?
+  parent   Tag?         @relation("TagTree", fields: [parentId], references: [id])
+  children Tag[]        @relation("TagTree")
+  articles ArticleTag[]
+  synonyms TagSynonym[]
+
+  @@index([parentId])
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+  @@index([tagId])
+}
+
+model ArticleRevision {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  content     String   @db.Text
+  contentRaw  String?  @db.Text
+  title       String
+  infobox     Json?
+  editSummary String?
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([articleId])
+  @@index([createdAt])
+  @@index([userId])
+}
+
+model Discussion {
+  id        String       @id @default(cuid())
+  articleId String
+  article   Article      @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  author    String       @default("Anonymous")
+  content   String       @db.Text
+  userId    String?
+  user      User?        @relation(fields: [userId], references: [id])
+  parentId  String?
+  parent    Discussion?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Discussion[] @relation("Replies")
+  isPinned  Boolean      @default(false)
+  status    String       @default("visible") // "visible" | "hidden" | "reported" | "removed"
+  visibility String      @default("public") // "public" | "reviewers"
+  reportCount Int        @default(0)
+  reportReason String?
+  reportedAt DateTime?
+  moderationReason String?
+  moderatedAt DateTime?
+  moderatedById String?
+  createdAt DateTime     @default(now())
+
+  @@index([articleId])
+  @@index([createdAt])
+  @@index([parentId])
+  @@index([status])
+  @@index([visibility])
+}
+
+model MapMarker {
+  id        String   @id @default(cuid())
+  label     String
+  polygon   Json
+  color     String?
+  mapId     String   @default("default")
+  articleId String?
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  minZoom   Float?
+  maxZoom   Float?
+  createdAt DateTime @default(now())
+
+  @@index([mapId])
+}
+
+// ── Multi-language support ──
+model ArticleTranslation {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  locale     String   // e.g. "en", "fr", "ar"
+  title      String
+  content    String   @db.Text
+  contentRaw String?  @db.Text
+  excerpt    String?  @db.Text
+  updatedAt  DateTime @updatedAt
+
+  @@unique([articleId, locale])
+  @@index([articleId])
+  @@index([locale])
+}
+
+// ── User system ──
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  email        String    @unique
+  passwordHash String
+  displayName  String?
+  role         String    @default("viewer") // "admin", "editor", "viewer"
+  articles        Article[]
+  revisions       ArticleRevision[]
+  discussions     Discussion[]
+  sessions        Session[]
+  watchlist       Watchlist[]
+  notifications   Notification[]
+  apiKeys         ApiKey[]
+
+  // v3.0 additions
+  savedSearches    SavedSearch[]
+  searchHistory    SearchHistory[]
+  preferences      UserPreference?
+  oauthAccounts    OAuthAccount[]
+  reviewsAuthored  ReviewRequest[]   @relation("ReviewAuthor")
+  reviewsAssigned  ReviewRequest[]   @relation("ReviewAssigned")
+  reviewComments   ReviewComment[]
+  changeRequests   ChangeRequest[]
+  activityEvents   ActivityEvent[]
+  permissionGrants PermissionGrant[]
+  themeConfigs     ThemeConfig[]
+  ownedWikis       Wiki[]
+  wikiMemberships  WikiMembership[]
+
+  // v4.1 additions
+  learningPaths    LearningPath[]
+  learningProgress LearningPathProgress[]
+  flashcards       Flashcard[]
+  quizAttempts     QuizAttempt[]
+  articleReads     ArticleRead[]
+  spacedRepetition SpacedRepetitionItem[]
+
+  // v4.3 additions
+  smartCollections SmartCollection[]
+  bookmarks        Bookmark[]
+  readingLists     ReadingList[]
+  tilPosts         TILPost[]
+
+  // v4.4 additions
+  expertBadges     ExpertBadge[]
+  bountiesRequested KnowledgeBounty[] @relation("BountiesRequested")
+  bountiesClaimed  KnowledgeBounty[] @relation("BountiesClaimed")
+  forks            ArticleFork[]
+  reactions        ArticleReaction[]
+
+  // v4.6 additions
+  achievements     ContributorAchievement[]
+
+  // v4.9 additions
+  scratchpad       Scratchpad?
+
+  // v4.17 additions
+  coAuthoredArticles ArticleCoAuthor[]
+  articleSnapshots   ArticleSnapshot[]
+
+  // v4.13 additions
+  annotations      Annotation[]
+
+  // v4.18 additions
+  articleLocks     ArticleLock[]
+
+  // v4.25 additions
+  snippets         Snippet[]
+
+  // v4.26 additions
+  readingStreakLogs ReadingStreakLog[]
+  categoryWatches   CategoryWatch[]
+
+  // v4.64 additions
+  canvases         Canvas[]
+  workspaces       Workspace[]
+  assets           Asset[]
+  claimReviews     ClaimReview[]
+  workspaceInvitesSent WorkspaceInvitation[] @relation("WorkspaceInvitesSent")
+  workspaceInvitesAccepted WorkspaceInvitation[] @relation("WorkspaceInvitesAccepted")
+
+  createdAt    DateTime  @default(now())
+
+  @@index([role])
+}
+
+model Session {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token       String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  userAgent   String?
+  ipAddress   String?
+
+  @@index([token])
+  @@index([userId])
+}
+
+// ── Watchlist & Notifications ──
+model Watchlist {
+  userId    String
+  articleId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, articleId])
+  @@index([userId])
+  @@index([articleId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId String?
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  type      String   // "edit", "reply", "mention"
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+  @@index([articleId])
+}
+
+// ── Public API ──
+model ApiKey {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key        String   @unique
+  name       String
+  lastUsedAt DateTime?
+  createdAt  DateTime @default(now())
+
+  @@index([key])
+  @@index([userId])
+}
+
+// ── Webhooks ──
+model Webhook {
+  id         String   @id @default(cuid())
+  url        String
+  events     String[] // ["article.created", "article.updated", "article.deleted"]
+  secret     String?
+  active     Boolean  @default(true)
+  deliveries WebhookDelivery[]
+  createdAt  DateTime @default(now())
+}
+
+model WebhookDelivery {
+  id           String   @id @default(cuid())
+  webhookId    String
+  webhook      Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event        String
+  payload      Json
+  status       String   // "success", "failed"
+  responseCode Int?
+  createdAt    DateTime @default(now())
+
+  @@index([webhookId])
+  @@index([createdAt])
+}
+
+// ── Semantic wiki links ──
+model ArticleLink {
+  id         String   @id @default(cuid())
+  sourceId   String
+  targetSlug String
+  relation   String   @default("related-to")
+  source     Article  @relation("OutgoingLinks", fields: [sourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([sourceId, targetSlug, relation])
+  @@index([sourceId])
+  @@index([targetSlug])
+  @@index([relation])
+}
+
+// ── Plugin system ──
+model PluginState {
+  id        String   @id // Plugin ID from manifest
+  enabled   Boolean  @default(false)
+  config    Json?
+  updatedAt DateTime @updatedAt
+}
+
+// ── Performance monitoring ──
+model MetricLog {
+  id        String   @id @default(cuid())
+  type      String   // "api_request", "page_view", "error"
+  path      String
+  duration  Int      // milliseconds
+  status    Int?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([createdAt])
+  @@index([path])
+}
+
+// ── Map system ──
+model MapConfig {
+  id          String   @id @default(cuid())
+  mapId       String   @unique
+  name        String
+  description String?
+  imageUrl    String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([sortOrder])
+}
+
+model MapLayer {
+  id        String   @id @default(cuid())
+  mapId     String
+  name      String
+  imageUrl  String
+  opacity   Float    @default(0.7)
+  sortOrder Int      @default(0)
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([mapId])
+}
+
+model MapDetailLevel {
+  id       String @id @default(cuid())
+  mapId    String
+  minZoom  Float
+  maxZoom  Float
+  imageUrl String
+  bounds   Json   // [[y1,x1],[y2,x2]]
+
+  @@index([mapId])
+}
+
+// ── Collaboration ──
+model CollaborationSession {
+  id        String   @id @default(cuid())
+  articleId String   @unique
+  ydoc      Bytes
+  updatedAt DateTime @updatedAt
+
+  @@index([articleId])
+}
+
+// ── v3.0: Search ──
+model SavedSearch {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  query        String
+  filters      Json?
+  alertEnabled Boolean   @default(false)
+  lastAlertAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model SearchHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  query     String
+  filters   Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ── v4.24: Global search query analytics ──
+model SearchQueryLog {
+  id          String   @id @default(cuid())
+  query       String
+  resultCount Int
+  userId      String?  // null for anonymous
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([query])
+}
+
+// ── v3.0: User Preferences ──
+model UserPreference {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data   Json   // { dashboardWidgets, editorMode, notifications, locale, theme, etc. }
+
+  @@index([userId])
+}
+
+// ── v3.0: Review Workflow ──
+model ReviewRequest {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User     @relation("ReviewAuthor", fields: [authorId], references: [id])
+  reviewerId  String?
+  reviewer    User?    @relation("ReviewAssigned", fields: [reviewerId], references: [id])
+  status      String   @default("pending") // "pending", "in_review", "approved", "changes_requested", "rejected"
+  message     String?  @db.Text
+  dueAt       DateTime?
+  requiredReviewerIds String[] @default([])
+  approvalThreshold Int @default(1)
+  cycleCount  Int      @default(0)
+  decisionNote String? @db.Text
+  comments    ReviewComment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([authorId])
+  @@index([reviewerId])
+  @@index([status])
+}
+
+model ReviewComment {
+  id              String        @id @default(cuid())
+  reviewRequestId String
+  reviewRequest   ReviewRequest @relation(fields: [reviewRequestId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  content         String        @db.Text
+  selector        String?       // JSON: text range for inline comments
+  resolved        Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+
+  @@index([reviewRequestId])
+  @@index([userId])
+}
+
+// ── v4.73: Claim Review Mode ──
+model ClaimReview {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  claimHash   String
+  claimText   String   @db.Text
+  status      String   @default("unreviewed") // "unreviewed", "approved", "needs_source", "disputed", "rejected"
+  note        String?  @db.Text
+  evidence    String?  @db.Text
+  expiresAt   DateTime?
+  reviewerId  String?
+  reviewer    User?    @relation(fields: [reviewerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([articleId, claimHash])
+  @@index([articleId])
+  @@index([reviewerId])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+// ── v3.0: Change Requests ──
+model ChangeRequest {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  title       String
+  description String?  @db.Text
+  content     String   @db.Text
+  status      String   @default("open") // "open", "accepted", "rejected", "withdrawn"
+  reviewedBy  String?
+  reviewNote  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([authorId])
+  @@index([status])
+}
+
+// ── v3.0: Activity Feed ──
+model ActivityEvent {
+  id        String   @id @default(cuid())
+  type      String   // "article_created", "article_edited", "article_published", etc.
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  articleId String?
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([userId])
+  @@index([articleId])
+  @@index([createdAt])
+}
+
+// ── v3.0: OAuth ──
+model OAuthAccount {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider          String   // "google", "github"
+  providerAccountId String
+  accessToken       String?  @db.Text
+  refreshToken      String?  @db.Text
+  expiresAt         Int?
+  createdAt         DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+// ── v3.0: Fine-grained RBAC ──
+model PermissionGrant {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resourceType String   // "category", "article"
+  resourceId   String
+  permission   String   // "view", "edit", "admin"
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, resourceType, resourceId, permission])
+  @@index([userId])
+  @@index([resourceType, resourceId])
+}
+
+// ── v3.0: Theme Builder ──
+model ThemeConfig {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  variables Json     // CSS variable overrides
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ── v3.0: Multi-Wiki ──
+model Wiki {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  settings    Json?
+  visibility  String   @default("private") // "private", "members", "public"
+  defaultRole String   @default("viewer")  // default role for invitations and public joins
+  navigationMode String @default("standard") // "standard", "docs", "archive", "demo"
+  bootstrapProfile String @default("personal") // personal, team, public-docs, private-archive, demo
+  marketplaceSelections Json?
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  articles    Article[]
+  memberships WikiMembership[]
+  invitations WorkspaceInvitation[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([ownerId])
+  @@index([visibility])
+  @@index([bootstrapProfile])
+}
+
+model WikiMembership {
+  id     String @id @default(cuid())
+  wikiId String
+  wiki   Wiki   @relation(fields: [wikiId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   String @default("viewer") // "admin", "editor", "viewer"
+  status String @default("active") // "active", "invited", "suspended"
+  invitedAt DateTime?
+  joinedAt  DateTime @default(now())
+
+  @@unique([wikiId, userId])
+  @@index([wikiId])
+  @@index([userId])
+  @@index([role])
+  @@index([status])
+}
+
+model WorkspaceInvitation {
+  id          String   @id @default(cuid())
+  wikiId      String
+  wiki        Wiki     @relation(fields: [wikiId], references: [id], onDelete: Cascade)
+  email       String
+  role        String   @default("viewer")
+  token       String   @unique
+  status      String   @default("pending") // "pending", "accepted", "revoked", "expired"
+  invitedById String?
+  invitedBy   User?    @relation("WorkspaceInvitesSent", fields: [invitedById], references: [id])
+  acceptedById String?
+  acceptedBy   User?   @relation("WorkspaceInvitesAccepted", fields: [acceptedById], references: [id])
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([wikiId])
+  @@index([email])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+// ── v4.1: Learning & Retention ──
+model LearningPath {
+  id          String                @id @default(cuid())
+  name        String
+  description String?               @db.Text
+  authorId    String?
+  isPublic    Boolean               @default(true)
+  articles    LearningPathArticle[]
+  progress    LearningPathProgress[]
+  createdAt   DateTime              @default(now())
+  author      User?                 @relation(fields: [authorId], references: [id])
+
+  @@index([authorId])
+}
+
+model LearningPathArticle {
+  id        String       @id @default(cuid())
+  pathId    String
+  articleId String
+  order     Int
+  path      LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  article   Article      @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([pathId, articleId])
+  @@index([pathId])
+}
+
+model LearningPathProgress {
+  id                  String       @id @default(cuid())
+  userId              String
+  pathId              String
+  completedArticleIds String[]
+  updatedAt           DateTime     @updatedAt
+  path                LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  user                User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pathId])
+  @@index([userId])
+}
+
+model Flashcard {
+  id          String   @id @default(cuid())
+  userId      String
+  articleId   String?
+  front       String   @db.Text
+  back        String   @db.Text
+  nextDue     DateTime @default(now())
+  interval    Int      @default(1)
+  easeFactor  Float    @default(2.5)
+  repetitions Int      @default(0)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article     Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  @@index([userId, nextDue])
+}
+
+model QuizAttempt {
+  id             String   @id @default(cuid())
+  userId         String
+  articleId      String
+  score          Int
+  totalQuestions Int
+  answers        Json
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article        Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([articleId])
+}
+
+model ArticleRead {
+  id        String   @id @default(cuid())
+  userId    String
+  articleId String
+  readAt    DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([userId])
+}
+
+// ── v4.0: AI Embeddings ──
+model ArticleEmbedding {
+  id        String   @id @default(cuid())
+  articleId String   @unique
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  embedding Float[]
+  updatedAt DateTime @updatedAt
+
+  @@index([articleId])
+}
+
+// ── v3.0: Article Templates ──
+model ArticleTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  content     String   @db.Text
+  categoryId  String?
+  authorId    String?
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ── v4.3: Discovery & Navigation ──
+
+model SmartCollection {
+  id         String   @id @default(cuid())
+  name       String
+  query      Json     // { tags?, categoryId?, authorId?, status?, dateFrom?, dateTo? }
+  userId     String
+  isPublic   Boolean  @default(false)
+  shareToken String?  @unique
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  articleId String
+  note      String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([userId])
+}
+
+model ReadingList {
+  id          String           @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  isPublic    Boolean          @default(false)
+  shareToken  String           @unique @default(cuid())
+  items       ReadingListItem[]
+  createdAt   DateTime         @default(now())
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model ReadingListItem {
+  id        String      @id @default(cuid())
+  listId    String
+  articleId String
+  order     Int
+  list      ReadingList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  article   Article     @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+
+  @@unique([listId, articleId])
+  @@index([listId])
+}
+
+model TILPost {
+  id         String    @id @default(cuid())
+  userId     String
+  content    String    @db.VarChar(280)
+  articleId  String?
+  tags       String[]
+  archivedAt DateTime?
+  createdAt  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article    Article?  @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([userId])
+}
+
+// ── v4.4: Collaboration 2.0 ──
+
+model ExpertBadge {
+  id         String   @id @default(cuid())
+  userId     String
+  categoryId String
+  grantedBy  String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId])
+  @@index([categoryId])
+}
+
+model KnowledgeBounty {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  requesterId String
+  claimedBy   String?
+  articleId   String?
+  status      String   @default("open")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  requester   User     @relation("BountiesRequested", fields: [requesterId], references: [id])
+  claimer     User?    @relation("BountiesClaimed", fields: [claimedBy], references: [id])
+  article     Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([requesterId])
+}
+
+model ArticleFork {
+  id                String   @id @default(cuid())
+  originalArticleId String
+  authorId          String
+  title             String
+  content           String   @db.Text
+  contentRaw        String?  @db.Text
+  message           String?
+  status            String   @default("draft")
+  reviewNote        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  original          Article  @relation(fields: [originalArticleId], references: [id], onDelete: Cascade)
+  author            User     @relation(fields: [authorId], references: [id])
+
+  @@index([originalArticleId])
+  @@index([authorId])
+  @@index([status])
+}
+
+model ArticleReaction {
+  id        String   @id @default(cuid())
+  articleId String
+  userId    String?
+  sessionId String?
+  reaction  String
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([articleId, userId])
+  @@index([articleId])
+}
+
+// v4.5 models
+
+model IssueLink {
+  id            String    @id @default(cuid())
+  articleId     String
+  url           String
+  provider      String    // github | jira | linear
+  issueId       String
+  title         String?
+  status        String?   // open | closed | in_progress
+  lastCheckedAt DateTime?
+  createdAt     DateTime  @default(now())
+  article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+}
+
+model EmbedToken {
+  id        String   @id @default(cuid())
+  articleId String
+  token     String   @unique @default(cuid())
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+}
+
+// v4.6 models
+
+model ScrollDepthLog {
+  id        String   @id @default(cuid())
+  articleId String
+  userId    String?
+  sessionId String
+  depth     Int      // 0-100 percentage
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+  @@index([createdAt])
+}
+
+model ReaderPathEvent {
+  id        String   @id @default(cuid())
+  fromSlug  String
+  toSlug    String
+  userId    String?
+  sessionId String
+  createdAt DateTime @default(now())
+
+  @@index([fromSlug])
+  @@index([createdAt])
+}
+
+model ContributorAchievement {
+  id       String   @id @default(cuid())
+  userId   String
+  badge    String
+  metadata Json?
+  earnedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badge])
+  @@index([userId])
+}
+
+model Scratchpad {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String   @db.Text @default("")
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  username    String?
+  action      String   // e.g. "article.delete", "user.role_change", "category.delete"
+  entityType  String   // "article", "category", "user", "revision"
+  entityId    String?
+  entityLabel String?
+  workspaceId String?
+  severity    String   @default("info") // "info", "warning", "critical"
+  actorType   String   @default("user") // "user", "api-key", "system", "anonymous"
+  ipAddress   String?
+  userAgent   String?
+  success     Boolean  @default(true)
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([action])
+  @@index([userId])
+  @@index([workspaceId])
+  @@index([severity])
+  @@index([entityType])
+  @@index([success])
+}
+
+// ── v4.10: Custom Metadata Schemas ──
+model MetadataSchema {
+  id          String   @id @default(cuid())
+  categoryId  String   @unique
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  // JSON array of field definitions: [{name, label, type, options?, required?}]
+  fields      Json     @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+// ── v4.10: Excalidraw Whiteboards ──
+model Whiteboard {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  data        Json     @default("{}") // Excalidraw scene JSON
+  isPublic    Boolean  @default(true)
+  authorId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([authorId])
+}
+
+// ── v4.10: Federated Search Peers ──
+model FederatedPeer {
+  id        String   @id @default(cuid())
+  name      String   // Display name for the remote wiki
+  baseUrl   String   // e.g. "https://otherwiki.example.com"
+  apiKey    String?  // Optional X-API-Key for private wikis
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([enabled])
+}
+
+// ── v4.10: Macros / Shortcodes ──
+model Macro {
+  id          String   @id @default(cuid())
+  name        String   @unique  // e.g. "warning", "note", "tip"
+  description String?
+  template    String   @db.Text // HTML template; use {{{1}}}, {{{2}}}, {{{body}}} for params
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([name])
+}
+
+// ── v4.13: Smart Redirects ──
+model Redirect {
+  id        String   @id @default(cuid())
+  fromSlug  String   @unique  // old slug that was renamed
+  toSlug    String             // new slug to redirect to
+  createdAt DateTime @default(now())
+
+  @@index([fromSlug])
+}
+
+// ── v4.14: Article Series ──
+model ArticleSeries {
+  id          String              @id @default(cuid())
+  name        String              @unique
+  slug        String              @unique
+  description String?
+  authorId    String?
+  members     ArticleSeriesMember[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([slug])
+}
+
+model ArticleSeriesMember {
+  id        String        @id @default(cuid())
+  seriesId  String
+  series    ArticleSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  articleId String
+  article   Article       @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  position  Int           @default(0)
+
+  @@unique([seriesId, articleId])
+  @@index([seriesId])
+  @@index([articleId])
+}
+
+// ── v4.14: See Also Curated Links ──
+model SeeAlso {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  targetSlug String
+  label      String?
+  position   Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([articleId])
+}
+
+// ── v4.13: Inline Text Annotations ──
+model Annotation {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // JSON selector: { start: string, end: string, text: string } — XPath/text range
+  selector  Json
+  note      String   @db.Text
+  isShared  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([userId])
+}
+
+// ── v4.17: Tag synonyms ──
+model TagSynonym {
+  id        String   @id @default(cuid())
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  alias     String   @unique  // e.g. "JS" for tag "JavaScript"
+  createdAt DateTime @default(now())
+
+  @@index([tagId])
+}
+
+// ── v4.17: Named article snapshots ──
+model ArticleSnapshot {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  label      String              // e.g. "v1.0 – before major rewrite"
+  content    String   @db.Text
+  contentRaw String?  @db.Text
+  infobox    Json?
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+
+  @@index([articleId])
+  @@index([userId])
+}
+
+// ── v4.17: Article co-authors ──
+model ArticleCoAuthor {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  addedAt   DateTime @default(now())
+
+  @@unique([articleId, userId])
+  @@index([articleId])
+  @@index([userId])
+}
+
+// ── v4.25: Editor snippets ──
+model Snippet {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String   // trigger keyword shown in slash menu
+  content   String   @db.Text  // HTML to insert
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+// ── v4.26: Category watchlist ──
+model CategoryWatch {
+  userId     String
+  categoryId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([userId, categoryId])
+  @@index([userId])
+  @@index([categoryId])
+}
+
+// ── v4.26: Reading streak ──
+model ReadingStreakLog {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date   String   // ISO date "YYYY-MM-DD"
+
+  @@unique([userId, date])
+  @@index([userId])
+}
+
+// ── v4.25: Site-wide announcement banner ──
+model Announcement {
+  id          String    @id @default(cuid())
+  message     String    @db.Text
+  type        String    @default("info") // "info", "warning", "success", "error"
+  active      Boolean   @default(true)
+  expiresAt   DateTime?
+  scheduledAt DateTime? // if set, only show after this date/time
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([active])
+}
+
+// ── v4.18: Article editor lock ──
+model ArticleLock {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime // auto-expire after 10 minutes; editor refreshes every 5 min
+  createdAt DateTime @default(now())
+
+  @@unique([articleId])   // only one active lock per article
+  @@index([articleId])
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ── v4.25: Daily article page-view counts for sparklines ──
+model ArticleView {
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  date      String   // "YYYY-MM-DD"
+  count     Int      @default(1)
+
+  @@id([articleId, date])
+  @@index([articleId])
+  @@index([date])
+}
+
+// ── v4.33: Edit Suggestions ──
+model EditSuggestion {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  author      String   @default("Anonymous")
+  email       String?
+  suggestion  String   @db.Text
+  status      String   @default("pending")  // "pending" | "accepted" | "rejected" | "commented" | "assigned" | "converted"
+  adminNote   String?
+  assigneeId  String?
+  reviewerComment String?
+  convertedTaskUrl String?
+  sourceType  String   @default("edit-suggestion") // "edit-suggestion" | "public-contribution"
+  spamScore   Int      @default(0)
+  moderationState String @default("open") // "open" | "needs_review" | "blocked"
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([articleId])
+  @@index([status])
+  @@index([assigneeId])
+  @@index([moderationState])
+}
+
+// ── v4.33: Referrer Tracking ──
+model ArticleReferrer {
+  id          String   @id @default(cuid())
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  referrer    String   // the referrer URL or domain, or "" for direct
+  date        String   // "YYYY-MM-DD"
+  count       Int      @default(1)
+
+  @@unique([articleId, referrer, date])
+  @@index([articleId])
+  @@index([date])
+}
+
+// ── v4.35: Satisfaction ratings ──
+model ArticleRating {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  sessionId String
+  rating    Int      // 1–5
+  createdAt DateTime @default(now())
+
+  @@unique([articleId, sessionId])
+  @@index([articleId])
+}
+
+// ── v4.35: Article todo list ──
+model ArticleTodo {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  text      String
+  done      Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([articleId])
+}
+
+// ── v4.39: Polls ──
+model ArticlePoll {
+  id        String       @id @default(cuid())
+  articleId String
+  article   Article      @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  question  String
+  options   String[]     // poll option labels
+  closed    Boolean      @default(false)
+  votes     PollVote[]
+  createdAt DateTime     @default(now())
+
+  @@index([articleId])
+}
+
+model PollVote {
+  id         String      @id @default(cuid())
+  pollId     String
+  poll       ArticlePoll @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  optionIndex Int        // 0-based index into poll.options
+  sessionId  String
+  createdAt  DateTime    @default(now())
+
+  @@unique([pollId, sessionId])
+  @@index([pollId])
+}
+
+// ── v4.29: Glossary ──
+model GlossaryTerm {
+  id         String   @id @default(cuid())
+  term       String   @unique
+  definition String   @db.Text
+  aliases    String[] @default([])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([term])
+}
+
+// ── v4.64: Aliases ──
+model Alias {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  alias     String   @unique
+  createdAt DateTime @default(now())
+
+  @@index([articleId])
+}
+
+// ── v4.64: Canvas ──
+model Canvas {
+  id        String   @id @default(cuid())
+  name      String
+  state     Json     @default("{}")  // nodes/edges JSON
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ── v4.64: Workspace ──
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  state     Json     @default("{}")  // open panes, sidebar state, layout config
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ── v4.64: Asset Library ──
+model Asset {
+  id        String   @id @default(cuid())
+  filename  String
+  mimeType  String
+  url       String
+  size      Int      // bytes
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([mimeType])
+}
+
+// ── v4.61: Spaced Repetition ──
+model SpacedRepetitionItem {
+  id           String    @id @default(cuid())
+  userId       String
+  articleId    String
+  ease         Float     @default(2.5)   // SM-2 ease factor
+  interval     Int       @default(1)     // days until next review
+  repetitions  Int       @default(0)     // number of successful reviews
+  nextReviewAt DateTime  @default(now())
+  lastReviewAt DateTime?
+  createdAt    DateTime  @default(now())
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article      Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([userId, nextReviewAt])
+}
+
+// ── v4.81: Export hardening ──
+model ExportHistory {
+  id          String    @id @default(cuid())
+  format      String
+  scope       Json      @default("{}")
+  status      String
+  manifest    Json      @default("{}")
+  warnings    String[]  @default([])
+  omittedData String[]  @default([])
+  fileCount   Int       @default(0)
+  byteCount   Int       @default(0)
+  checksum    String?
+  userId      String?
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([createdAt])
+  @@index([format])
+  @@index([status])
+  @@index([userId])
+}

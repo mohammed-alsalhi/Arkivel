@@ -1,0 +1,219 @@
+/* ── Category browse tree ── */
+.category-tree {
+  max-width: 54rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.category-tree-row {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.45rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-top: 0.45rem;
+  padding-right: 0.65rem;
+  padding-bottom: 0.45rem;
+}
+
+.category-tree-row:last-child {
+  border-bottom: 0;
+}
+
+.category-tree-row:hover {
+  background: var(--color-surface-hover);
+}
+
+.category-tree-depth {
+  flex: 0 0 auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-left: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.category-tree-title {
+  min-width: 0;
+  color: var(--color-wiki-link);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.category-tree-count {
+  flex: 0 0 auto;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+}
+
+.category-tree-description {
+  min-width: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+/* ── Wiki notice/message box ── */
+.wiki-notice {
+  border: 1px solid var(--color-border-light);
+  background: var(--color-background);
+  padding: 0.6rem 0.75rem;
+  margin: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+/* ── Diff styles ── */
+.diff-added {
+  background: var(--color-diff-added);
+}
+.diff-removed {
+  background: var(--color-diff-removed);
+  text-decoration: line-through;
+}
+.diff-inline-added {
+  background: var(--color-diff-added);
+  padding: 0.1rem 0;
+}
+.diff-inline-removed {
+  background: var(--color-diff-removed);
+  text-decoration: line-through;
+  padding: 0.1rem 0;
+}
+
+/* ── Search result highlighting ── */
+mark, .search-highlight {
+  background: rgba(255, 215, 0, 0.35);
+  padding: 0.1rem 0.15rem;
+  border-radius: 2px;
+}
+html[data-theme="dark"] mark,
+html[data-theme="dark"] .search-highlight {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+/* ── Disambiguation notice ── */
+.wiki-disambiguation-notice {
+  border: 1px solid var(--color-border-light);
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-accent-soft);
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+/* ── Wiki Link Suggester dropdown ── */
+.wiki-link-suggester {
+  min-width: 240px;
+  max-width: 360px;
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 0.85rem;
+}
+.wiki-link-suggester-hint {
+  padding: 0.5rem 0.75rem;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+.wiki-link-suggester-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.35rem 0.75rem;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-foreground);
+  font-size: 0.85rem;
+}
+.wiki-link-suggester-item:hover,
+.wiki-link-suggester-item-active {
+  background: var(--color-surface-hover);
+}
+.wiki-link-suggester-title {
+  color: var(--color-wiki-link);
+}
+.wiki-link-suggester-category {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ── Potential link highlights (from Detect Links) ── */
+.potential-link {
+  border-bottom: 2px dashed var(--color-accent);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.potential-link:hover {
+  background: var(--color-accent-soft);
+}
+
+/* ── Home page stat badges ── */
+.home-stat-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-background);
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: var(--color-foreground);
+  transition: background-color 0.15s;
+}
+.home-stat-badge:hover {
+  background: var(--color-surface-hover);
+  text-decoration: none;
+}
+.home-stat-number {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-accent);
+}
+.home-stat-label {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+/* ── Home page action buttons ── */
+.home-action-btn {
+  display: inline-block;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-hover);
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.home-action-btn:hover {
+  background: var(--color-background);
+  text-decoration: none;
+}
+.home-action-btn-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+.home-action-btn-primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* ── Theme transition (applied briefly when toggling dark/light) ── */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, fill 0.3s, stroke 0.3s !important;
+}

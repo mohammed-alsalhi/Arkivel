@@ -1,0 +1,64 @@
+{
+  "apiScopes": ["article:read", "article:write", "category:read", "job:execute"],
+  "author": "Example Author",
+  "compatibility": {
+    "arkivel": ">=4.80.0 <5.0.0",
+    "node": ">=20",
+    "pluginApi": "arkivel.plugin-api.v1"
+  },
+  "description": "Starter plugin manifest showing a route, dashboard widget, setting, hook, job, storage, and webhook-safe boundaries.",
+  "hooks": ["article.render"],
+  "id": "starter-plugin",
+  "identity": {
+    "homepage": "example.local/starter-plugin",
+    "name": "Starter Plugin",
+    "slug": "starter-plugin"
+  },
+  "jobs": [
+    {
+      "id": "starter-refresh",
+      "permission": "job:execute",
+      "schedule": "manual",
+      "title": "Refresh Starter Data"
+    }
+  ],
+  "kind": "plugin",
+  "license": "MIT",
+  "permissions": ["article:read", "article:write", "category:read", "job:execute"],
+  "routes": [
+    {
+      "adminOnly": true,
+      "id": "starter-admin",
+      "label": "Starter Plugin",
+      "path": "/plugins/starter-plugin",
+      "title": "Starter Plugin"
+    }
+  ],
+  "schemaVersion": "arkivel.plugin.v1",
+  "settings": [
+    {
+      "defaultValue": "draft",
+      "description": "Default article status for starter plugin writes.",
+      "key": "defaultStatus",
+      "label": "Default status",
+      "options": ["draft", "review"],
+      "required": true,
+      "type": "select"
+    }
+  ],
+  "storage": {
+    "namespace": "starter-plugin",
+    "quotaKb": 512,
+    "retention": "persistent",
+    "schemaVersion": "1.0.0"
+  },
+  "version": "0.1.0",
+  "webhooks": [],
+  "widgets": [
+    {
+      "id": "starter-dashboard",
+      "placement": "admin-dashboard",
+      "title": "Starter Dashboard"
+    }
+  ]
+}
