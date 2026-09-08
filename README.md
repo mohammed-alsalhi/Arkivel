@@ -11,6 +11,8 @@ One repository serves two independent deployments:
 
 Each deployment keeps its own domains, environment variables, database, and blob credentials.
 
+Vercel builds use its native Next.js adapter. Self-hosted builds produce a standalone server; the Docker image runs the pinned Prisma migrations before starting it.
+
 Wiki deployments default to the lowercase, full-viewport `folio` skin. Set `NEXT_PUBLIC_ARKIVEL_SKIN=wiki` to make the classic framed wiki skin the site default; signed-in readers can override either default from the appearance section in settings. Press `⌘K` / `Ctrl+K` anywhere for the command palette.
 
 ## core

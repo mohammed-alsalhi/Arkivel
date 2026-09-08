@@ -2,6 +2,7 @@
 
 ## 6.5.0
 
+- aligned build output with each host: vercel uses its native adapter, while containers and browser ci run the standalone server
 - added a course workspace starter kit with linked courses and coursework, source identity, deadlines, scores, and separate completion evidence on the existing collections engine
 - added preview and repeatable import of the course scraper's metadata export; concurrent imports and edits preserve manual work, partial refreshes retain verified fields, and older snapshots cannot overwrite newer records
 - implemented shared table, board, list, and calendar views with inline property editing, search, filters, sorting, and complete pagination in both folio and wiki

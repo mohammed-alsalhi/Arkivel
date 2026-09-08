@@ -111,7 +111,9 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Start Arkivel
         run: |
-          npm run start > /tmp/arkivel-next.log 2>&1 &
+          cp -r public .next/standalone/
+          cp -r .next/static .next/standalone/.next/
+          HOSTNAME=127.0.0.1 PORT=3000 node .next/standalone/server.js > /tmp/arkivel-next.log 2>&1 &
           echo $! > /tmp/arkivel-next.pid
       - name: Wait for Arkivel
         run: |
