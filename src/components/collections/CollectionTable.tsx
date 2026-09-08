@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
-import { Button, DataTable, EmptyState, Input, Select } from "@/components/ui";
+import { Button, DataTable, EmptyState, Input } from "@/components/ui";
 import { NavIcon, PagesIcon, PlusIcon, SearchIcon } from "@/components/icons";
+import type { IconName } from "@/modules/types";
 import type { CollectionDTO, ItemDTO, ItemPage, PersonOption, ViewDTO } from "@/modules/collections/model";
 import {
   applyView,
@@ -24,6 +25,7 @@ import { PropertiesPanel } from "./PropertiesPanel";
 import { EditableProperty, PropertyEditor } from "./PropertyEditor";
 import { ViewSettingsPanel } from "./ViewSettingsPanel";
 import { CollectionCalendar } from "./CollectionCalendar";
+import { ChoicePicker } from "./ChoicePicker";
 import { fetchLabel } from "./labels";
 
 type Props = {
@@ -45,16 +47,30 @@ export function itemHref(slug: string, itemId: string) {
   return `/collections/${encodeURIComponent(slug)}/items/${encodeURIComponent(itemId)}`;
 }
 
-const COLUMN_WIDTHS: Partial<Record<PropertyDefinition["type"], string>> = {
-  title: "20rem",
-  checkbox: "6rem",
-  number: "7rem",
-  date: "10rem",
-  select: "10rem",
-  person: "10rem",
-  relation: "12rem",
-  created_time: "10rem",
-  updated_time: "10rem",
+const COLUMN_WIDTHS: Record<PropertyDefinition["type"], number> = {
+  title: 18,
+  text: 14,
+  url: 14,
+  page: 14,
+  checkbox: 4.5,
+  number: 7,
+  date: 9,
+  select: 9,
+  multi_select: 12,
+  person: 9,
+  relation: 8.5,
+  created_time: 10,
+  updated_time: 10,
+};
+
+const PROPERTY_ICONS: Partial<Record<PropertyDefinition["type"], IconName>> = {
+  title: "pages",
+  text: "pages",
+  page: "pages",
+  select: "tag",
+  multi_select: "tag",
+  relation: "graph",
+  url: "graph",
 };
 
 /** All four layouts use the same items, saved view rules, and property editors. */
@@ -264,11 +280,12 @@ export function CollectionTable({ collection, view: initialView, page, users, ca
       onChange={(next) => commit(item, property, next)}
       context={context}
       compact
-      readOnly={!canEdit || savingItems.has(item.id)}
+      readOnly={!canEdit}
+      disabled={savingItems.has(item.id)}
     />
   );
   const renderTitle = (item: ItemDTO) => (
-    <Link href={itemHref(collection.slug, item.id)} className="collections-item-link">
+    <Link href={itemHref(collection.slug, item.id)} className="collections-item-link" title={item.title}>
       <PagesIcon />
       <span>{item.title}</span>
     </Link>
@@ -276,7 +293,11 @@ export function CollectionTable({ collection, view: initialView, page, users, ca
   const renderRow = (item: ItemDTO) => (
     <tr key={item.id} aria-busy={savingItems.has(item.id)}>
       {columns.map((property) => (
-        <td key={property.id} className={clsx("collections-cell", `collections-cell-${property.type}`)}>
+        <td
+          key={property.id}
+          className={clsx("collections-cell", `collections-cell-${property.type}`)}
+          title={property.type === "text" || property.type === "url" ? String(propertyValue(item, property) ?? "") : undefined}
+        >
           {property.type === "title" ? renderTitle(item) : renderProperty(item, property)}
         </td>
       ))}
@@ -352,7 +373,7 @@ export function CollectionTable({ collection, view: initialView, page, users, ca
           <input
             type="search"
             aria-label={`search ${collection.name}`}
-            placeholder="Search this collection…"
+            placeholder="Search items…"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -377,13 +398,15 @@ export function CollectionTable({ collection, view: initialView, page, users, ca
             value={viewName}
             onChange={(event) => setViewName(event.target.value)}
           />
-          <Select aria-label="view layout" value={viewKind} onChange={(event) => setViewKind(event.target.value as ViewKind)}>
-            {VIEW_KINDS.map((kind) => (
-              <option key={kind} value={kind}>
-                {kind}
-              </option>
-            ))}
-          </Select>
+          <ChoicePicker
+            label="view layout"
+            selected={[viewKind]}
+            options={VIEW_KINDS.map((id) => ({ id, label: id }))}
+            onPick={(option) => {
+              if (option) setViewKind(option.id as ViewKind);
+            }}
+            clearable={false}
+          />
           <Button type="submit" variant="primary" disabled={addingView || !viewName.trim()}>
             {addingView ? "creating…" : "create view"}
           </Button>
@@ -441,7 +464,7 @@ export function CollectionTable({ collection, view: initialView, page, users, ca
                     value={newProperties[property.id] ?? null}
                     onChange={(value) => setNewProperties((current) => ({ ...current, [property.id]: value }))}
                     context={context}
-                    readOnly={creating}
+                    disabled={creating}
                   />
                 </div>
               ))}
@@ -558,35 +581,40 @@ export function CollectionTable({ collection, view: initialView, page, users, ca
           ))}
         </div>
       ) : (
-        <DataTable
-          className="collections-table"
-          aria-label={`${collection.name} table`}
-          style={{ minWidth: `${Math.max(640, columns.length * 140)}px` }}
-        >
-          <colgroup>
-            {columns.map((property) => (
-              <col key={property.id} style={{ width: COLUMN_WIDTHS[property.type] ?? "12rem" }} />
-            ))}
-          </colgroup>
-          <thead>
-            <tr>
+        <div className="collections-table-region">
+          <DataTable
+            className="collections-table"
+            aria-label={`${collection.name} table`}
+            style={{ minWidth: `${columns.reduce((width, property) => width + COLUMN_WIDTHS[property.type], 0)}rem` }}
+          >
+            <colgroup>
               {columns.map((property) => (
-                <th key={property.id} scope="col">
-                  {property.name}
-                </th>
+                <col key={property.id} style={property.type === "title" ? undefined : { width: `${COLUMN_WIDTHS[property.type]}rem` }} />
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {result.groups
-              ? result.groups.map((group) => (
-                  <GroupRows key={group.key ?? "none"} label={group.label} count={group.items.length} columnCount={columns.length}>
-                    {group.items.map(renderRow)}
-                  </GroupRows>
-                ))
-              : result.items.map(renderRow)}
-          </tbody>
-        </DataTable>
+            </colgroup>
+            <thead>
+              <tr>
+                {columns.map((property) => (
+                  <th key={property.id} scope="col" className={clsx(property.type === "title" && "collections-title-header")}>
+                    <span className="collections-property-heading" title={`${property.name} · ${property.type.replaceAll("_", " ")}`}>
+                      <NavIcon name={PROPERTY_ICONS[property.type] ?? "table"} />
+                      <span>{property.name}</span>
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {result.groups
+                ? result.groups.map((group) => (
+                    <GroupRows key={group.key ?? "none"} label={group.label} count={group.items.length} columnCount={columns.length}>
+                      {group.items.map(renderRow)}
+                    </GroupRows>
+                  ))
+                : result.items.map(renderRow)}
+            </tbody>
+          </DataTable>
+        </div>
       )}
       {canEdit && view.kind !== "board" && (
         <Button className="collections-add-item" onClick={() => openNew()}>

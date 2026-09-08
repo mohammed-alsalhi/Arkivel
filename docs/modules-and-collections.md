@@ -124,7 +124,9 @@ View config: `{ filters: Filter[], sorts: Sort[], groupBy?: propertyId, visible:
 
 Routes: `/collections` (index), `/collections/[slug]` (default view), `/collections/[slug]/[view]`, `/collections/[slug]/items/[id]` (item page: the linked article when there is one, otherwise the property form). API under `/api/collections/**` mirrors it. Collections appear in the sidebar under their space (or a "collections" section when unspaced), in the palette, and in search.
 
-The table view is the shared `DataTable` (fixed 2.25rem rows, pinned header) with inline property editing; views never introduce a second table look.
+The table view uses the shared `DataTable` with 44px edit targets, compact property columns, a pinned header, and a pinned title column on desktop. It scrolls horizontally on narrow screens. Folio and Wiki use the same structure and editing behavior with their own surface tokens.
+
+Collection choice fields use a shared searchable label picker: option colors stay consistent in cells, forms, filters, and property settings. Arrow keys and Enter select an option; Escape dismisses the picker and returns focus. Multiple selections remain open while saving, and page/relation searches distinguish loading, empty results, and retryable errors. Text and number cells save on blur or Enter; Escape cancels their draft. Dates retain the native date input.
 
 ## starter kits
 

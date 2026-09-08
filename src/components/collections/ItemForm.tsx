@@ -113,7 +113,8 @@ export function ItemForm({ collection, item: initial, users, canEdit }: Props) {
                 value={valueFor(property)}
                 onChange={(value) => change(property, value)}
                 context={context}
-                readOnly={!canEdit || saving}
+                readOnly={!canEdit}
+                disabled={saving}
               />
             </dd>
           </div>
@@ -132,7 +133,7 @@ export function ItemForm({ collection, item: initial, users, canEdit }: Props) {
                 value={articleId}
                 onChange={(value) => setArticleId(typeof value === "string" ? value : null)}
                 context={context}
-                readOnly={saving}
+                disabled={saving}
               />
             ) : item.article ? (
               <Link href={`/articles/${encodeURIComponent(item.article.slug)}`}>{item.article.title}</Link>

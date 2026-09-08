@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button, DataTable, EmptyState, Field, Input, Select } from "@/components/ui";
+import { Button, DataTable, EmptyState, Field, Input } from "@/components/ui";
 import { formatDate } from "@/lib/utils";
 import type { CollectionDTO, CollectionSummary } from "@/modules/collections/model";
 import { COLLECTION_TEMPLATES, type TemplateId } from "@/modules/collections/templates";
 import { api } from "./api";
+import { ChoicePicker } from "./ChoicePicker";
 
 type Props = {
   collections: CollectionSummary[];
@@ -66,23 +67,14 @@ export function CollectionsIndex({ collections, categories, canEdit }: Props) {
               <Input id="collection-name" value={name} autoFocus onChange={(event) => setName(event.target.value)} placeholder="tasks" />
             </Field>
             <Field label="space" htmlFor="collection-space" error={error?.fields.categoryId}>
-              <Select id="collection-space" value={categoryId} onChange={(event) => setCategoryId(event.target.value)}>
-                <option value="">none</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </Select>
+              <ChoicePicker id="collection-space" label="space" selected={[categoryId]} clearable={false} disabled={saving}
+                options={[{ id: "", label: "none" }, ...categories.map((category) => ({ id: category.id, label: category.name }))]}
+                onPick={(option) => setCategoryId(option?.id ?? "")} />
             </Field>
             <Field label="start from" htmlFor="collection-template" hint={chosen?.description}>
-              <Select id="collection-template" value={template} onChange={(event) => setTemplate(event.target.value as TemplateId)}>
-                {COLLECTION_TEMPLATES.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
-                    {entry.name}
-                  </option>
-                ))}
-              </Select>
+              <ChoicePicker id="collection-template" label="start from" selected={[template]} clearable={false} disabled={saving}
+                options={COLLECTION_TEMPLATES.map((entry) => ({ id: entry.id, label: entry.name }))}
+                onPick={(option) => { if (option) setTemplate(option.id as TemplateId); }} />
             </Field>
             <div className="collections-index-form-actions">
               <Button type="submit" variant="primary" disabled={saving || !name.trim()}>

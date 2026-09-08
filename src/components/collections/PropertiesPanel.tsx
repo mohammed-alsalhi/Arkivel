@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Select } from "@/components/ui";
+import { Button, Input } from "@/components/ui";
 import type { CollectionSummary } from "@/modules/collections/model";
 import {
   PROPERTY_TONES,
@@ -14,6 +14,7 @@ import {
   type SelectOption,
 } from "@/modules/collections/properties";
 import { api, describeFailure } from "./api";
+import { ChoicePicker } from "./ChoicePicker";
 
 type Props = {
   collectionId: string;
@@ -154,26 +155,23 @@ export function PropertiesPanel({ collectionId, schema, onSaved, onClose }: Prop
                         )
                       }
                     />
-                    <Select
-                      aria-label={`${option.label} tone`}
-                      value={option.tone}
-                      onChange={(event) =>
+                    <ChoicePicker
+                      label={`${option.label} tone`}
+                      options={PROPERTY_TONES.map((tone) => ({ id: tone, label: tone, tone }))}
+                      selected={[option.tone]}
+                      clearable={false}
+                      onPick={(picked) => {
+                        if (!picked) return;
                         update(property.id, (current) =>
                           withOptions(
                             current,
                             property.options.map((entry) =>
-                              entry.id === option.id ? { ...entry, tone: event.target.value as PropertyTone } : entry,
+                              entry.id === option.id ? { ...entry, tone: picked.id as PropertyTone } : entry,
                             ),
                           )
-                        )
-                      }
-                    >
-                      {PROPERTY_TONES.map((tone) => (
-                        <option key={tone} value={tone}>
-                          {tone}
-                        </option>
-                      ))}
-                    </Select>
+                        );
+                      }}
+                    />
                     <Button
                       aria-label={`remove option ${option.label}`}
                       onClick={() =>
@@ -209,31 +207,28 @@ export function PropertiesPanel({ collectionId, schema, onSaved, onClose }: Prop
           }}
           className="collections-panel-name"
         />
-        <Select
-          aria-label="new property type"
-          value={newType}
-          onChange={(event) => {
-            const type = event.target.value as PropertyType;
+        <ChoicePicker
+          label="new property type"
+          options={ADDABLE_TYPES.map((type) => ({ id: type, label: TYPE_LABELS[type] }))}
+          selected={[newType]}
+          clearable={false}
+          onPick={(option) => {
+            if (!option || option.id === newType) return;
+            const type = option.id as PropertyType;
             setNewType(type);
             if (type === "relation") loadTargets();
           }}
           className="collections-panel-type-select"
-        >
-          {ADDABLE_TYPES.map((type) => (
-            <option key={type} value={type}>
-              {TYPE_LABELS[type]}
-            </option>
-          ))}
-        </Select>
+        />
         {newType === "relation" && (
-          <Select aria-label="relation target" value={newTarget} onChange={(event) => setNewTarget(event.target.value)} className="collections-panel-type-select">
-            <option value="">{targets === null ? "loading…" : "collection…"}</option>
-            {(targets ?? []).map((target) => (
-              <option key={target.id} value={target.id}>
-                {target.name}
-              </option>
-            ))}
-          </Select>
+          <ChoicePicker
+            label="relation target"
+            options={[{ id: "", label: targets === null ? "loading…" : "collection…" }, ...(targets ?? []).map((target) => ({ id: target.id, label: target.name }))]}
+            selected={[newTarget]}
+            clearable={false}
+            onPick={(option) => { if (option) setNewTarget(option.id); }}
+            className="collections-panel-type-select"
+          />
         )}
         <Button onClick={addProperty} disabled={!newName.trim()}>
           add

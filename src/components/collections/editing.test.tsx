@@ -1,7 +1,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
-import { DeferredInput } from "./PropertyEditor";
+import { DeferredInput, PropertyEditor } from "./PropertyEditor";
 import { calendarDay, calendarDays } from "./CollectionCalendar";
 import { fetchLabel } from "./labels";
 import { ItemForm } from "./ItemForm";
@@ -66,6 +66,79 @@ it("does not cache a failed relation lookup as an opaque storage id", async () =
     expect(await fetchLabel("item:test-courses", "test-retry-course")).toBe("CS225");
     expect(fetchMock).toHaveBeenCalledTimes(2);
   } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
+it("reselects the current single value without saving and restores focus", async () => {
+  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const onChange = vi.fn();
+  try {
+    await act(async () => root.render(
+      <PropertyEditor
+        property={{ id: "status", name: "status", type: "select", options: [{ id: "done", label: "Done", tone: "success" }, { id: "todo", label: "To do", tone: "default" }] }}
+        value="done"
+        onChange={onChange}
+        context={{ collectionId: "tasks", users: [] }}
+      />,
+    ));
+    const popover = container.querySelector<HTMLDivElement>("[popover]")!;
+    const close = vi.fn();
+    popover.hidePopover = close;
+    const trigger = container.querySelector<HTMLButtonElement>(".collections-choice-trigger")!;
+    const choices = container.querySelectorAll<HTMLElement>('[role="option"]');
+    await act(async () => choices[0].click());
+    expect(onChange).not.toHaveBeenCalled();
+    expect(close).toHaveBeenCalledOnce();
+    expect(document.activeElement).toBe(trigger);
+
+    await act(async () => choices[1].click());
+    expect(onChange).toHaveBeenCalledExactlyOnceWith("todo");
+  } finally {
+    await act(async () => root.unmount());
+    container.remove();
+  }
+});
+
+it("removes an unavailable relation without clearing another selected item", async () => {
+  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+  const fetchMock = vi.fn(async (url: string) => url.endsWith("/valid-target")
+    ? { ok: true, json: async () => ({ title: "Algorithms" }) }
+    : { ok: false });
+  vi.stubGlobal("fetch", fetchMock);
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const onChange = vi.fn();
+  const editor = (disabled = false) => (
+    <PropertyEditor
+      property={{ id: "courses", name: "courses", type: "relation", collectionId: "relation-removal-test" }}
+      value={["valid-target", "deleted-target"]}
+      onChange={onChange}
+      context={{ collectionId: "tasks", users: [] }}
+      disabled={disabled}
+    />
+  );
+  try {
+    await act(async () => root.render(editor()));
+    const remove = container.querySelector<HTMLButtonElement>('button[aria-label="Remove unavailable item"]')!;
+    expect(remove).not.toBeNull();
+    expect(remove.closest("[popover]")).not.toBeNull();
+    expect(container.querySelector('button[aria-label="Remove Algorithms"]')).not.toBeNull();
+    await act(async () => remove.click());
+    expect(onChange).toHaveBeenCalledExactlyOnceWith(["valid-target"]);
+    expect(document.activeElement?.getAttribute("role")).toBe("combobox");
+
+    onChange.mockClear();
+    await act(async () => root.render(editor(true)));
+    await act(async () => remove.click());
+    expect(onChange).not.toHaveBeenCalled();
+  } finally {
+    await act(async () => root.unmount());
+    container.remove();
     vi.unstubAllGlobals();
   }
 });

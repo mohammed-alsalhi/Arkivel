@@ -1,12 +1,12 @@
 "use client";
 
-import clsx from "clsx";
-import { useId, useRef, useState, type InputHTMLAttributes, type KeyboardEvent } from "react";
+import { useId, useMemo, useRef, useState, type InputHTMLAttributes, type KeyboardEvent } from "react";
 import { Chip } from "@/components/ui";
 import { formatDate } from "@/lib/utils";
 import type { PersonOption } from "@/modules/collections/model";
-import type { PropertyDefinition, PropertyValue, SelectOption } from "@/modules/collections/properties";
+import type { PropertyDefinition, PropertyValue } from "@/modules/collections/properties";
 import { rememberLabel, useLabel } from "./labels";
+import { ChoicePicker, type Choice } from "./ChoicePicker";
 
 export type EditorContext = {
   users: PersonOption[];
@@ -19,15 +19,15 @@ type EditorProps = {
   value: PropertyValue;
   onChange: (value: PropertyValue) => void;
   context: EditorContext;
-  /** In a 2.25rem table cell: borderless controls that fill the cell. */
+  /** Borderless controls that fill a collection cell. */
   compact?: boolean;
   readOnly?: boolean;
+  disabled?: boolean;
   id?: string;
   autoFocus?: boolean;
 };
 
-const controlClass = (compact: boolean | undefined, kind: "input" | "select") =>
-  compact ? clsx("collections-cell-control", kind === "select" && "collections-cell-select") : kind === "input" ? "ui-input" : "ui-select";
+const controlClass = (compact: boolean | undefined) => compact ? "collections-cell-control" : "ui-input";
 
 type DeferredInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> & {
   value: string;
@@ -73,277 +73,100 @@ export function DeferredInput({ value, onCommit, onKeyDown, deferred = true, ...
 }
 
 /** A yyyy-mm-dd value is a calendar day, not an instant: format it in local time so it never shifts a day. */
-function formatDay(day: string) {
-  return formatDate(new Date(`${day}T00:00:00`));
+function formatDay(day: string, compact = false) {
+  const date = new Date(`${day}T00:00:00`);
+  return compact ? date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : formatDate(date);
 }
 
-function toneOf(options: SelectOption[], id: string | null) {
-  return options.find((option) => option.id === id)?.tone ?? "default";
-}
-
-type SearchResult = { id: string; label: string };
-
-type SearchPickerProps = {
-  id?: string;
-  value: string | null;
-  label: string;
-  placeholder: string;
-  search: (query: string) => Promise<SearchResult[]>;
-  onPick: (result: SearchResult | null) => void;
-  compact?: boolean;
-  autoFocus?: boolean;
-};
-
-/**
- * Search-as-you-type over a native datalist: no floating card of our own. Picking a
- * suggestion (or typing an exact label) commits; clearing the field clears the value.
- */
-function SearchPicker({ id, value, label, placeholder, search, onPick, compact, autoFocus }: SearchPickerProps) {
-  const listId = useId();
-  const [query, setQuery] = useState(label);
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const latest = useRef(0);
-  const cancelBlur = useRef(false);
-
-  // Keep the field in step when the resolved label arrives after mount.
-  const [seenLabel, setSeenLabel] = useState(label);
-  if (seenLabel !== label) {
-    setSeenLabel(label);
-    setQuery(label);
-  }
-
-  const runSearch = (text: string) => {
-    const ticket = ++latest.current;
-    if (!text.trim()) {
-      setResults([]);
-      return;
-    }
-    search(text).then((found) => {
-      if (ticket === latest.current) setResults(found);
-    });
-  };
-
-  const pickExact = (text: string) => {
-    const match = results.find((result) => result.label === text);
-    if (match) {
-      onPick(match);
-      return true;
-    }
-    return false;
-  };
-
-  return (
-    <>
-      <input
-        id={id}
-        list={listId}
-        className={controlClass(compact, "input")}
-        value={query}
-        placeholder={placeholder}
-        aria-label={placeholder.replace("…", "")}
-        autoComplete="off"
-        autoFocus={autoFocus}
-        onChange={(event) => {
-          const text = event.target.value;
-          setQuery(text);
-          if (!pickExact(text)) runSearch(text);
-        }}
-        onBlur={() => {
-          if (cancelBlur.current) {
-            cancelBlur.current = false;
-            return;
-          }
-          if (!query.trim() && value) onPick(null);
-          else if (query !== label && !pickExact(query)) setQuery(label);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            cancelBlur.current = true;
-            if (!query.trim()) onPick(null);
-            else if (!pickExact(query)) {
-              if (results[0]) onPick(results[0]);
-              else setQuery(label);
-            }
-            event.currentTarget.blur();
-          } else if (event.key === "Escape") {
-            cancelBlur.current = true;
-            setQuery(label);
-            event.currentTarget.blur();
-          }
-        }}
-      />
-      <datalist id={listId}>
-        {results.map((result) => (
-          <option key={result.id} value={result.label} />
-        ))}
-      </datalist>
-    </>
-  );
-}
-
-async function searchPages(query: string): Promise<SearchResult[]> {
-  try {
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=8`);
-    if (!res.ok) return [];
-    const data = (await res.json()) as { results?: { id: string; title: string }[] };
-    return (data.results ?? []).map((article) => ({ id: article.id, label: article.title }));
-  } catch {
-    return [];
-  }
+async function searchPages(query: string): Promise<Choice[]> {
+  if (!query.trim()) return [];
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=8`);
+  if (!res.ok) throw new Error("Couldn't load pages");
+  const data = (await res.json()) as { results?: { id: string; title: string }[] };
+  return (data.results ?? []).map((article) => ({ id: article.id, label: article.title }));
 }
 
 function searchItems(collectionId: string) {
-  return async (query: string): Promise<SearchResult[]> => {
-    try {
-      const res = await fetch(`/api/collections/${encodeURIComponent(collectionId)}/items?q=${encodeURIComponent(query)}`);
-      if (!res.ok) return [];
-      const data = (await res.json()) as { items?: { id: string; title: string }[] };
-      return (data.items ?? []).slice(0, 8).map((item) => ({ id: item.id, label: item.title }));
-    } catch {
-      return [];
-    }
+  return async (query: string): Promise<Choice[]> => {
+    const res = await fetch(`/api/collections/${encodeURIComponent(collectionId)}/items?q=${encodeURIComponent(query)}`);
+    if (!res.ok) throw new Error("Couldn't load items");
+    const data = (await res.json()) as { items?: { id: string; title: string }[] };
+    return (data.items ?? []).map((item) => ({ id: item.id, label: item.title }));
   };
 }
 
-function PageEditor({ value, onChange, compact, readOnly, id, autoFocus }: Omit<EditorProps, "property" | "context">) {
+function PageEditor({ value, onChange, compact, readOnly, disabled, id, label: fieldLabel }: Omit<EditorProps, "property" | "context"> & { label: string }) {
   const articleId = typeof value === "string" ? value : null;
   const label = useLabel("page", articleId);
   if (readOnly) return articleId ? <span>{label}</span> : <span className="ui-muted">—</span>;
   return (
-    <SearchPicker
-      id={id}
-      compact={compact}
-      autoFocus={autoFocus}
-      value={articleId}
-      label={articleId ? label : ""}
-      placeholder="search pages…"
-      search={searchPages}
+    <ChoicePicker id={id} label={fieldLabel} compact={compact} disabled={disabled} selected={articleId ? [articleId] : []} loadOptions={searchPages}
       onPick={(result) => {
         if (result) rememberLabel("page", result.id, result.label);
         onChange(result ? result.id : null);
-      }}
-    />
+      }}>
+      {articleId ? <span>{label}</span> : <span className="collections-choice-placeholder">Link a page</span>}
+    </ChoicePicker>
   );
 }
 
-function RelationChip({ collectionId, itemId, onRemove }: { collectionId: string; itemId: string; onRemove?: () => void }) {
+function RelationChip({ collectionId, itemId, onRemove, disabled }: { collectionId: string; itemId: string; onRemove?: () => void; disabled?: boolean }) {
   const label = useLabel(`item:${collectionId}`, itemId);
+  if (!onRemove) return <Chip>{label}</Chip>;
   return (
-    <Chip>
-      {label}
-      {onRemove && (
-        <button type="button" className="collections-chip-remove" aria-label={`remove ${label}`} onClick={onRemove}>
-          ×
-        </button>
-      )}
-    </Chip>
+    <div className="collections-choice-selected-item">
+      <Chip>{label}</Chip>
+      <button type="button" className="collections-choice-remove" aria-label={`Remove ${label}`} disabled={disabled} onClick={onRemove}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg>
+      </button>
+    </div>
   );
 }
 
-function RelationEditor({
-  property,
-  value,
-  onChange,
-  compact,
-  readOnly,
-  id,
-  autoFocus,
-}: EditorProps & { property: Extract<PropertyDefinition, { type: "relation" }> }) {
+function RelationEditor({ property, value, onChange, compact, readOnly, disabled, id }: EditorProps & { property: Extract<PropertyDefinition, { type: "relation" }> }) {
   const ids = Array.isArray(value) ? value : [];
-  const kind = `item:${property.collectionId}` as const;
+  const loadOptions = useMemo(() => searchItems(property.collectionId), [property.collectionId]);
+  const labels = ids.map((itemId) => <RelationChip key={itemId} collectionId={property.collectionId} itemId={itemId} />);
+  if (readOnly) return <span className="collections-chips">{ids.length ? labels : <span className="ui-muted">—</span>}</span>;
   return (
-    <span className="collections-chips">
-      {ids.map((itemId) => (
-        <RelationChip
-          key={itemId}
-          collectionId={property.collectionId}
-          itemId={itemId}
-          onRemove={readOnly ? undefined : () => onChange(ids.filter((entry) => entry !== itemId))}
-        />
-      ))}
-      {ids.length === 0 && readOnly && <span className="ui-muted">—</span>}
-      {!readOnly && (
-        <SearchPicker
-          id={id}
-          autoFocus={autoFocus}
-          compact={compact}
-          value={null}
-          label=""
-          placeholder={`add ${property.name}…`}
-          search={searchItems(property.collectionId)}
-          onPick={(result) => {
-            if (!result || ids.includes(result.id)) return;
-            rememberLabel(kind, result.id, result.label);
-            onChange([...ids, result.id]);
-          }}
-        />
-      )}
-    </span>
+    <ChoicePicker id={id} label={property.name} compact={compact} disabled={disabled} multiple selected={ids} loadOptions={loadOptions}
+      selection={ids.length > 0 ? ids.map((itemId) => (
+        <RelationChip key={itemId} collectionId={property.collectionId} itemId={itemId} disabled={disabled}
+          onRemove={() => onChange(ids.filter((id) => id !== itemId))} />
+      )) : undefined}
+      onPick={(result) => {
+        if (!result) { onChange([]); return; }
+        rememberLabel(`item:${property.collectionId}`, result.id, result.label);
+        onChange(ids.includes(result.id) ? ids.filter((id) => id !== result.id) : [...ids, result.id]);
+      }}>
+      {ids.length ? labels : <span className="collections-choice-placeholder">Link {property.name}</span>}
+    </ChoicePicker>
   );
 }
 
-function MultiSelectEditor({
-  property,
-  value,
-  onChange,
-  compact,
-  readOnly,
-  id,
-  autoFocus,
-}: EditorProps & { property: Extract<PropertyDefinition, { type: "multi_select" }> }) {
+function MultiSelectEditor({ property, value, onChange, compact, readOnly, disabled, id }: EditorProps & { property: Extract<PropertyDefinition, { type: "multi_select" }> }) {
   const ids = Array.isArray(value) ? value : [];
-  const remaining = property.options.filter((option) => !ids.includes(option.id));
+  const labels = ids.map((optionId) => {
+    const option = property.options.find((entry) => entry.id === optionId);
+    return <Chip key={optionId} tone={option?.tone ?? "default"}>{option?.label ?? "Unavailable option"}</Chip>;
+  });
+  if (readOnly) return <span className="collections-chips">{ids.length ? labels : <span className="ui-muted">—</span>}</span>;
   return (
-    <span className="collections-chips">
-      {ids.map((optionId) => {
-        const option = property.options.find((entry) => entry.id === optionId);
-        return (
-          <Chip key={optionId} tone={option?.tone ?? "default"}>
-            {option?.label ?? optionId}
-            {!readOnly && (
-              <button
-                type="button"
-                className="collections-chip-remove"
-                aria-label={`remove ${option?.label ?? optionId}`}
-                onClick={() => onChange(ids.filter((entry) => entry !== optionId))}
-              >
-                ×
-              </button>
-            )}
-          </Chip>
-        );
-      })}
-      {ids.length === 0 && readOnly && <span className="ui-muted">—</span>}
-      {!readOnly && remaining.length > 0 && (
-        <select
-          id={id}
-          autoFocus={autoFocus}
-          className={clsx(controlClass(compact, "select"), "collections-chip-add")}
-          value=""
-          aria-label={`add ${property.name}`}
-          onChange={(event) => {
-            if (event.target.value) onChange([...ids, event.target.value]);
-          }}
-        >
-          <option value="">add…</option>
-          {remaining.map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      )}
-    </span>
+    <ChoicePicker id={id} label={property.name} compact={compact} disabled={disabled} multiple selected={ids} options={property.options.map((option) => ({ ...option, tone: option.tone ?? "default" }))}
+      onPick={(option) => onChange(!option ? [] : ids.includes(option.id) ? ids.filter((id) => id !== option.id) : [...ids, option.id])}>
+      {ids.length ? labels : <span className="collections-choice-placeholder">Empty</span>}
+    </ChoicePicker>
   );
 }
 
-/** Content first, with a native editor on click or keyboard activation. */
+/** Choice fields stay label-shaped while editing; text fields reveal an input on activation. */
 export function EditableProperty(props: EditorProps) {
   const [editing, setEditing] = useState(false);
+  const valueId = useId();
+  const trigger = useRef<HTMLButtonElement>(null);
   const { property, value, readOnly } = props;
   const computed = property.type === "created_time" || property.type === "updated_time";
-  if (readOnly || computed || property.type === "checkbox" || property.type === "title") return <PropertyEditor {...props} />;
+  if (readOnly || computed || ["checkbox", "title", "select", "multi_select", "person", "page", "relation"].includes(property.type)) return <PropertyEditor {...props} />;
   return (
     <div
       className="collections-editable"
@@ -351,18 +174,23 @@ export function EditableProperty(props: EditorProps) {
         if (!event.currentTarget.contains(event.relatedTarget)) setEditing(false);
       }}
       onKeyDown={(event) => {
-        if (event.key === "Escape") setEditing(false);
+        if (event.key === "Escape" || event.key === "Enter") {
+          setEditing(false);
+          requestAnimationFrame(() => trigger.current?.focus());
+        }
       }}
     >
       {editing ? (
         <PropertyEditor {...props} autoFocus />
       ) : (
-        <button type="button" className="collections-value-button" aria-label={`edit ${property.name}`} onClick={() => setEditing(true)}>
-          {property.type === "url" ? (
-            <span className="collections-url-label">{String(value || "—")}</span>
-          ) : (
-            <PropertyEditor {...props} readOnly />
-          )}
+        <button ref={trigger} disabled={props.disabled} type="button" className="collections-value-button" aria-label={`edit ${property.name}`} aria-describedby={valueId} onClick={() => setEditing(true)}>
+          <span id={valueId}>
+            {property.type === "url" ? (
+              <span className="collections-url-label">{String(value || "—")}</span>
+            ) : (
+              <PropertyEditor {...props} readOnly />
+            )}
+          </span>
         </button>
       )}
     </div>
@@ -371,9 +199,8 @@ export function EditableProperty(props: EditorProps) {
 
 /** One editor per property type; the same component serves table cells (`compact`) and the item form. */
 export function PropertyEditor(props: EditorProps) {
-  const { property, value, onChange, context, compact, readOnly, id, autoFocus } = props;
-  const inputClass = controlClass(compact, "input");
-  const selectClass = controlClass(compact, "select");
+  const { property, value, onChange, context, compact, readOnly, disabled, id, autoFocus } = props;
+  const inputClass = controlClass(compact);
 
   switch (property.type) {
     case "title":
@@ -389,6 +216,7 @@ export function PropertyEditor(props: EditorProps) {
           className={inputClass}
           value={text}
           autoFocus={autoFocus}
+          disabled={disabled}
           placeholder={property.type === "title" ? "untitled" : ""}
           onCommit={(next) => onChange(compact ? next.trim() || (property.type === "title" ? text : null) : next)}
         />
@@ -409,6 +237,7 @@ export function PropertyEditor(props: EditorProps) {
           className={inputClass}
           value={number}
           autoFocus={autoFocus}
+          disabled={disabled}
           onCommit={(next) => {
             const parsed = Number.parseFloat(next);
             onChange(next.trim() === "" || Number.isNaN(parsed) ? null : parsed);
@@ -437,6 +266,7 @@ export function PropertyEditor(props: EditorProps) {
           className={inputClass}
           value={url}
           autoFocus={autoFocus}
+          disabled={disabled}
           placeholder="https://"
           onCommit={(next) => onChange(compact ? next.trim() || null : next)}
         />
@@ -444,7 +274,7 @@ export function PropertyEditor(props: EditorProps) {
     }
     case "date": {
       const date = typeof value === "string" ? value : "";
-      if (readOnly) return date ? <span>{formatDay(date)}</span> : <span className="ui-muted">—</span>;
+      if (readOnly) return date ? <time dateTime={date} title={formatDay(date)}>{formatDay(date, compact)}</time> : <span className="ui-muted">—</span>;
       return (
         <input
           id={id}
@@ -453,6 +283,7 @@ export function PropertyEditor(props: EditorProps) {
           className={inputClass}
           value={date}
           autoFocus={autoFocus}
+          disabled={disabled}
           onChange={(event) => onChange(event.target.value || null)}
         />
       );
@@ -465,7 +296,7 @@ export function PropertyEditor(props: EditorProps) {
           type="checkbox"
           className="collections-checkbox"
           checked={checked}
-          disabled={readOnly}
+          disabled={readOnly || disabled}
           aria-label={property.name}
           onChange={(event) => onChange(event.target.checked)}
         />
@@ -476,21 +307,9 @@ export function PropertyEditor(props: EditorProps) {
       const option = property.options.find((entry) => entry.id === selected);
       if (readOnly) return option ? <Chip tone={option.tone}>{option.label}</Chip> : <span className="ui-muted">—</span>;
       return (
-        <select
-          id={id}
-          className={clsx(selectClass, `collections-tone-${toneOf(property.options, selected || null)}`)}
-          aria-label={property.name}
-          value={selected}
-          autoFocus={autoFocus}
-          onChange={(event) => onChange(event.target.value || null)}
-        >
-          <option value="">—</option>
-          {property.options.map((entry) => (
-            <option key={entry.id} value={entry.id}>
-              {entry.label}
-            </option>
-          ))}
-        </select>
+        <ChoicePicker id={id} label={property.name} compact={compact} disabled={disabled} selected={selected ? [selected] : []}
+          options={property.options.map((option) => ({ ...option, tone: option.tone ?? "default" }))}
+          onPick={(option) => onChange(option?.id ?? null)} />
       );
     }
     case "multi_select":
@@ -502,31 +321,17 @@ export function PropertyEditor(props: EditorProps) {
         return person ? (
           <span>{person.label}</span>
         ) : selected ? (
-          <span className="ui-muted">{selected}</span>
+          <span className="ui-muted">Unavailable person</span>
         ) : (
           <span className="ui-muted">—</span>
         );
       return (
-        <select
-          id={id}
-          aria-label={property.name}
-          className={selectClass}
-          value={selected}
-          autoFocus={autoFocus}
-          onChange={(event) => onChange(event.target.value || null)}
-        >
-          <option value="">—</option>
-          {selected && !person && <option value={selected}>{selected}</option>}
-          {context.users.map((user) => (
-            <option key={user.id} value={user.id}>
-              {user.label}
-            </option>
-          ))}
-        </select>
+        <ChoicePicker id={id} label={property.name} compact={compact} disabled={disabled} selected={selected ? [selected] : []}
+          options={context.users} onPick={(option) => onChange(option?.id ?? null)} placeholder={selected ? "Unavailable person" : "Unassigned"} />
       );
     }
     case "page":
-      return <PageEditor value={value} onChange={onChange} compact={compact} readOnly={readOnly} id={id} autoFocus={autoFocus} />;
+      return <PageEditor value={value} onChange={onChange} compact={compact} readOnly={readOnly} disabled={disabled} id={id} label={property.name} />;
     case "relation":
       return <RelationEditor {...props} property={property} />;
     case "created_time":

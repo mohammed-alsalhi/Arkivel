@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, Select } from "@/components/ui";
+import { Button, Input } from "@/components/ui";
 import type { ViewDTO } from "@/modules/collections/model";
 import { VIEW_KINDS, type Filter, type PropertySchema, type ViewConfig, type ViewKind } from "@/modules/collections/properties";
 import { api, describeFailure } from "./api";
+import { ChoicePicker } from "./ChoicePicker";
 
 type Props = {
   collectionId: string;
@@ -96,22 +97,20 @@ export function ViewSettingsPanel({ collectionId, schema, view, viewCount, onSav
         <label className="ui-label" htmlFor="collections-view-kind">
           layout
         </label>
-        <Select
+        <ChoicePicker
           id="collections-view-kind"
-          value={kind}
-          onChange={(event) => {
-            const next = event.target.value as ViewKind;
+          label="layout"
+          options={VIEW_KINDS.map((entry) => ({ id: entry, label: entry }))}
+          selected={[kind]}
+          clearable={false}
+          onPick={(option) => {
+            if (!option || option.id === kind) return;
+            const next = option.id as ViewKind;
             setKind(next);
             const group = schema.find((property) => property.type === (next === "calendar" ? "date" : "select"));
             setConfig((current) => ({ ...current, groupBy: next === "calendar" || next === "board" ? group?.id : undefined }));
           }}
-        >
-          {VIEW_KINDS.map((entry) => (
-            <option key={entry} value={entry}>
-              {entry}
-            </option>
-          ))}
-        </Select>
+        />
 
         <span className="ui-label">columns</span>
         <ul className="collections-panel-checks">
@@ -134,61 +133,54 @@ export function ViewSettingsPanel({ collectionId, schema, view, viewCount, onSav
           sort
         </label>
         <div className="collections-panel-inline">
-          <Select
+          <ChoicePicker
             id="collections-view-sort"
-            value={sort?.property ?? ""}
-            onChange={(event) =>
+            label="sort"
+            options={[{ id: "", label: "none" }, ...schema.map((property) => ({ id: property.id, label: property.name }))]}
+            selected={[sort?.property ?? ""]}
+            clearable={false}
+            onPick={(option) => {
+              if (!option || option.id === (sort?.property ?? "")) return;
               setConfig((current) => ({
                 ...current,
-                sorts: event.target.value ? [{ property: event.target.value, direction: sort?.direction ?? "asc" }] : [],
-              }))
-            }
-          >
-            <option value="">none</option>
-            {schema.map((property) => (
-              <option key={property.id} value={property.id}>
-                {property.name}
-              </option>
-            ))}
-          </Select>
-          <Select
-            aria-label="sort direction"
-            value={sort?.direction ?? "asc"}
+                sorts: option.id ? [{ property: option.id, direction: sort?.direction ?? "asc" }] : [],
+              }));
+            }}
+          />
+          <ChoicePicker
+            label="sort direction"
+            options={[{ id: "asc", label: "ascending" }, { id: "desc", label: "descending" }]}
+            selected={[sort?.direction ?? "asc"]}
+            clearable={false}
             disabled={!sort}
-            onChange={(event) =>
+            onPick={(option) => {
+              if (!option || option.id === sort?.direction) return;
               setConfig((current) => ({
                 ...current,
-                sorts: sort ? [{ property: sort.property, direction: event.target.value as "asc" | "desc" }] : [],
-              }))
-            }
-          >
-            <option value="asc">ascending</option>
-            <option value="desc">descending</option>
-          </Select>
+                sorts: sort ? [{ property: sort.property, direction: option.id as "asc" | "desc" }] : [],
+              }));
+            }}
+          />
         </div>
 
         <label className="ui-label" htmlFor="collections-view-group">
           {kind === "calendar" ? "date property" : "group by"}
         </label>
-        <Select
+        <ChoicePicker
           id="collections-view-group"
-          value={config.groupBy ?? ""}
-          onChange={(event) =>
+          label={kind === "calendar" ? "date property" : "group by"}
+          options={[{ id: "", label: "none" }, ...groupable.map((property) => ({ id: property.id, label: property.name }))]}
+          selected={[config.groupBy ?? ""]}
+          clearable={false}
+          onPick={(option) =>
             setConfig((current) => {
               const next = { ...current };
-              if (event.target.value) next.groupBy = event.target.value;
+              if (option?.id) next.groupBy = option.id;
               else delete next.groupBy;
               return next;
             })
           }
-        >
-          <option value="">none</option>
-          {groupable.map((property) => (
-            <option key={property.id} value={property.id}>
-              {property.name}
-            </option>
-          ))}
-        </Select>
+        />
 
         <span className="ui-label">default</span>
         <label>
@@ -213,6 +205,7 @@ export function ViewSettingsPanel({ collectionId, schema, view, viewCount, onSav
         {config.filters.length === 0 && <p className="ui-muted">All items are included in this view.</p>}
         {config.filters.map((filter, index) => {
           const property = schema.find((entry) => entry.id === filter.property);
+          const filterValue = String(filter.value ?? "");
           const update = (patch: Partial<Filter>) =>
             setConfig((current) => ({
               ...current,
@@ -220,23 +213,16 @@ export function ViewSettingsPanel({ collectionId, schema, view, viewCount, onSav
             }));
           return (
             <div className="collections-filter-row" key={index}>
-              <Select
-                aria-label={`filter ${index + 1} property`}
-                value={filter.property}
-                onChange={(event) => update({ property: event.target.value, value: undefined, op: "not_empty" })}
-              >
-                {schema.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
-                    {entry.name}
-                  </option>
-                ))}
-              </Select>
-              <Select
-                aria-label={`filter ${index + 1} condition`}
-                value={filter.op}
-                onChange={(event) => update({ op: event.target.value as Filter["op"] })}
-              >
-                {[
+              <ChoicePicker
+                label={`filter ${index + 1} property`}
+                options={schema.map((entry) => ({ id: entry.id, label: entry.name }))}
+                selected={[filter.property]}
+                clearable={false}
+                onPick={(option) => { if (option && option.id !== filter.property) update({ property: option.id, value: undefined, op: "not_empty" }); }}
+              />
+              <ChoicePicker
+                label={`filter ${index + 1} condition`}
+                options={[
                   ["eq", "is"],
                   ["neq", "is not"],
                   ["contains", "contains"],
@@ -244,41 +230,39 @@ export function ViewSettingsPanel({ collectionId, schema, view, viewCount, onSav
                   ["not_empty", "is not empty"],
                   ["gt", "is after / greater than"],
                   ["lt", "is before / less than"],
-                ].map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </Select>
+                ].map(([id, label]) => ({ id, label }))}
+                selected={[filter.op]}
+                clearable={false}
+                onPick={(option) => { if (option) update({ op: option.id as Filter["op"] }); }}
+              />
               {!["empty", "not_empty"].includes(filter.op) &&
-                (property?.type === "select" ? (
-                  <Select
-                    aria-label={`filter ${index + 1} value`}
-                    value={String(filter.value ?? "")}
-                    onChange={(event) => update({ value: event.target.value })}
-                  >
-                    <option value="">choose value</option>
-                    {property.options.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </Select>
+                (property?.type === "select" || (property?.type === "multi_select" && ["eq", "neq"].includes(filter.op)) ? (
+                  <ChoicePicker
+                    label={`filter ${index + 1} value`}
+                    options={[
+                      { id: "", label: "choose value" },
+                      ...property.options,
+                      ...(filterValue && !property.options.some((option) => option.id === filterValue)
+                        ? [{ id: filterValue, label: filterValue }]
+                        : []),
+                    ]}
+                    selected={[filterValue]}
+                    clearable={false}
+                    onPick={(option) => { if (option && option.id !== filterValue) update({ value: option.id }); }}
+                  />
                 ) : property?.type === "checkbox" ? (
-                  <Select
-                    aria-label={`filter ${index + 1} value`}
-                    value={String(filter.value ?? "")}
-                    onChange={(event) => update({ value: event.target.value === "true" })}
-                  >
-                    <option value="">choose value</option>
-                    <option value="true">checked</option>
-                    <option value="false">unchecked</option>
-                  </Select>
+                  <ChoicePicker
+                    label={`filter ${index + 1} value`}
+                    options={[{ id: "", label: "choose value" }, { id: "true", label: "checked" }, { id: "false", label: "unchecked" }]}
+                    selected={[filterValue]}
+                    clearable={false}
+                    onPick={(option) => { if (option && option.id !== filterValue) update({ value: option.id === "true" }); }}
+                  />
                 ) : (
                   <Input
                     aria-label={`filter ${index + 1} value`}
                     type={property?.type === "number" ? "number" : property?.type === "date" ? "date" : "text"}
-                    value={String(filter.value ?? "")}
+                    value={filterValue}
                     onChange={(event) =>
                       update({
                         value:
