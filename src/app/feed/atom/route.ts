@@ -33,7 +33,7 @@ export async function GET() {
     },
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = config.baseUrl;
   const now = new Date().toISOString();
 
   const entries = articles

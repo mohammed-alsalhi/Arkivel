@@ -11,7 +11,7 @@ One repository serves two independent deployments:
 
 Each deployment keeps its own domains, environment variables, database, and blob credentials.
 
-Vercel builds use its native Next.js adapter. Self-hosted builds produce a standalone server; the Docker image runs the pinned Prisma migrations before starting it.
+Vercel builds use its native Next.js adapter. Self-hosted builds produce a standalone server; wiki containers run the pinned Prisma migrations before starting it. Product containers skip database migrations.
 
 Wiki deployments default to the lowercase, full-viewport `folio` skin. Set `NEXT_PUBLIC_ARKIVEL_SKIN=wiki` to make the classic framed wiki skin the site default; signed-in readers can override either default from the appearance section in settings. Press `⌘K` / `Ctrl+K` anywhere for the command palette.
 
@@ -61,6 +61,20 @@ ARKIVEL_SITE_MODE=wiki
 ```
 
 Optional variables include OAuth credentials, `BLOB_READ_WRITE_TOKEN`, and public brand assets. See [.env.example](.env.example).
+
+Set `ARKIVEL_SITE_MODE` and every `NEXT_PUBLIC_*` value before building. Public URLs, branding, the default skin, and generated metadata must use the same values at build time and runtime. Rebuild after changing them. Database credentials, `ADMIN_SECRET`, module selection, upload credentials, and OAuth secrets remain runtime settings. GitHub OAuth uses `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`; outside Compose, set `NEXTAUTH_URL` to the public origin when enabling OAuth.
+
+## docker compose
+
+Copy `.env.example` to `.env` and edit the deployment settings, then run:
+
+```bash
+docker compose up --build -d
+```
+
+Compose passes the public settings to both the image build and the running app, starts its bundled PostgreSQL service, and applies pending wiki migrations before serving on port 3000. It uses the bundled database URL instead of `.env`'s `DATABASE_URL`; that value is for running the app directly against your own database. OAuth's `NEXTAUTH_URL` defaults to `NEXT_PUBLIC_BASE_URL` in Compose. Set a separate Compose project name with `docker compose -p <instance> ...` for each instance so their database volumes stay separate.
+
+After changing public settings, rerun `docker compose up --build -d`; restarting an old image does not update its compiled settings. For direct `docker build`, provide the same public values with `--build-arg`; the image retains them as runtime defaults. An image built with `--build-arg ARKIVEL_SITE_MODE=product` can run without a database. `docker compose down` stops the services while retaining the database volume.
 
 ## commands
 

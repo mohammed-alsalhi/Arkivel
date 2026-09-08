@@ -13,7 +13,7 @@ function read(env: Env, key: string, fallback: string): string {
   return env[key]?.trim() || fallback;
 }
 
-export function createConfig(env: Env = process.env) {
+export function createConfig(env: Env) {
   const name = read(env, "NEXT_PUBLIC_ARKIVEL_NAME", "Arkivel");
 
   return {
@@ -30,4 +30,15 @@ export function createConfig(env: Env = process.env) {
   };
 }
 
-export const config = createConfig();
+// Next.js only inlines public variables referenced directly at build time.
+export const config = createConfig({
+  ARKIVEL_SITE_MODE: process.env.ARKIVEL_SITE_MODE,
+  NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+  NEXT_PUBLIC_ARKIVEL_NAME: process.env.NEXT_PUBLIC_ARKIVEL_NAME,
+  NEXT_PUBLIC_ARKIVEL_DESCRIPTION: process.env.NEXT_PUBLIC_ARKIVEL_DESCRIPTION,
+  NEXT_PUBLIC_ARKIVEL_WELCOME_TEXT: process.env.NEXT_PUBLIC_ARKIVEL_WELCOME_TEXT,
+  NEXT_PUBLIC_ARKIVEL_LOGO: process.env.NEXT_PUBLIC_ARKIVEL_LOGO,
+  NEXT_PUBLIC_ARKIVEL_LOGO_MARK: process.env.NEXT_PUBLIC_ARKIVEL_LOGO_MARK,
+  NEXT_PUBLIC_ARKIVEL_APP_ICON: process.env.NEXT_PUBLIC_ARKIVEL_APP_ICON,
+  NEXT_PUBLIC_ARKIVEL_SKIN: process.env.NEXT_PUBLIC_ARKIVEL_SKIN,
+});
